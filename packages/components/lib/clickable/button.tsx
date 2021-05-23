@@ -14,9 +14,13 @@ import { wrap } from "./util"
 export const Button: React.FC<LinkProps | ButtonProps> = (
   props,
 ): JSX.Element => {
-
   return wrap(
     props,
-    <DefaultButtonStyle label={props.label} type={props.type} size={props.size} prefix={props.prefix} />,
+    <DefaultButtonStyle
+      label={props.label}
+      type={props.type}
+      size={props.size}
+      prefix={props.prefix}
+    />,
   )
 }

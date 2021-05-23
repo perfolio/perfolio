@@ -4,11 +4,7 @@ import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
 import { ThemeSwitch } from "../switch/themeSwitch"
 import { Logo } from "../logo/logo"
-import {
-  BellIcon,
-  AdjustmentsIcon,
-  DotsVerticalIcon,
-} from "@heroicons/react/outline"
+import { BellIcon, AdjustmentsIcon } from "@heroicons/react/outline"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({
   items,
@@ -16,11 +12,11 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
-        <li className="flex items-center w-4/5">
+        <li className="flex items-center w-4/5 space-x-12">
           <Logo
             withName
-            imageColor="text-primary-darker dark:text-secondary-light"
-            textColor="text-black dark:text-gray-lighter"
+            imageColor="text-primary-lighter dark:text-secondary-light"
+            textColor="text-primary-lighter dark:text-secondary-lighter"
           />
           <div className="2xl:ml-14">
             <ul className="flex items-center">
@@ -63,13 +59,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({
                 </div>
               </a>
             </li>
-            <li>
-              <a href="#">
-                <div className="pb-1 xl:ml-6 2xl:ml-9 ">
-                  <DotsVerticalIcon className="w-6 h-6 text-white" />
-                </div>
-              </a>
-            </li>
+
             <li>
               <div className="pb-1 xl:ml-6 2xl:ml-9 ">
                 <ThemeSwitch />

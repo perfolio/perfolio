@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "bootstrap": "yarn install && yarn lerna bootstrap",
+    "bootstrap": "yarn install && npx lerna bootstrap --scope=@perfolio/*",
     "dev:app": "lerna run --scope=@perfolio/app --stream dev",
     "storybook": "lerna run --scope=@perfolio/components --stream storybook",
     "tsc": "tsc --pretty --noEmit",
     "format": "prettier --loglevel warn --write .",
     "lint": "eslint . --ext .ts,.tsx,.js --fix",
-    "fmt": "yarn lint && yarn format"
+    "fmt": "yarn lint && yarn format",
+    "build": "yarn lerna run --scope=@perfolio/app --stream build"
   },
   "workspaces": [
     "./packages/*"
@@ -38,7 +39,7 @@
     "@types/react-query": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
-    "autoprefixer": "^9",
+    "autoprefixer": "^10.2.5",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsdoc": "^34.8.2",
@@ -47,9 +48,9 @@
     "husky": "^6.0.0",
     "lerna": "^4.0.0",
     "lint-staged": "^11.0.0",
-    "postcss": "^7",
+    "postcss": "^8.3.0",
     "prettier": "^2.3.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4"
   }
 }

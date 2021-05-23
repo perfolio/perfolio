@@ -13,10 +13,13 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   return (
     <nav className="flex items-center justify-between w-full">
       <div>
-        <Logo />
+        <Logo imageColor="text-primary-lighter" />
       </div>
       <div>
-        <div className="w-6 h-6 cursor-pointer" onClick={() => setOpen(!open)}>
+        <div
+          className="w-6 h-6 cursor-pointer text-gray-lighter"
+          onClick={() => setOpen(!open)}
+        >
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </div>
         <Transition

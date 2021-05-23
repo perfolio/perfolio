@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header Stories primaryshould match snapshot 1`] = `
+<body>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th
+            class="
+                text-left
+                px-6 py-4 text-xs font-medium leading-4 tracking-wider text-gray-700 uppercase bg-gray-100"
+          >
+            Name
+          </th>
+          <th
+            class="
+                text-right
+                px-6 py-4 text-xs font-medium leading-4 tracking-wider text-gray-700 uppercase bg-gray-100"
+          >
+            Surname
+          </th>
+          <th
+            class="
+                text-right
+                px-6 py-4 text-xs font-medium leading-4 tracking-wider text-gray-700 uppercase bg-gray-100"
+          >
+            Email
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</body>
+`;

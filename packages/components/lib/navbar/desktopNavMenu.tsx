@@ -37,15 +37,15 @@ export const DesktopNavMenu: React.FC<MenuProps> = ({
             leaveTo="opacity-0 translate-y-1"
           >
             <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-md">
-              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="relative gap-8 bg-white p-7">
+              <div className="overflow-hidden rounded-sm shadow-xl ring-1 ring-black ring-opacity-5">
+                <div className="relative p-4 space-y-8 bg-white">
                   {menu.map((item) => (
                     <Link href={item.href} key={item.name}>
-                      <a className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                        <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-primary-dark dark:text-secondary-dark sm:h-12 sm:w-12">
+                      <a className="flex items-center p-2 space-x-4 transition duration-150 ease-in-out rounded-sm hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 hover:bg-gray-lightest">
+                        <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 p-2 text-white rounded-sm rounded-smsm:h-12 sm:w-12 sm:h-12 bg-gradient-to-tr from-primary-darker to-primary-dark dark:from-error-dark dark:to-secondary-dark">
                           {item.icon}
                         </div>
-                        <div className="ml-4">
+                        <div>
                           <p className="text-sm font-medium text-gray-900">
                             {item.name}
                           </p>

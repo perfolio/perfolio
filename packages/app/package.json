@@ -5,6 +5,7 @@
   "author": "Andreas Thomas <dev@chronark.com>",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "rm -rf ../components/node_modules && yarn --cwd=../components install && sed -i 's/DOMAttributesAdaptChildEvent<P, T>/DOMAttributesAdaptChildEvent<any, any>/g' ../components/node_modules/recharts/types/polar/Radar.d.ts",
     "build": "next build",
     "start": "next start"
   },

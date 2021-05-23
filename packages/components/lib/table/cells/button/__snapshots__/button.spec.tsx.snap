@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button Stories primaryshould match snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="px-3 py-2 whitespace-no-wrap"
+    >
+      <button
+        class="focus:outline-none undefined"
+      >
+        <span />
+        <span
+          class="text-sm"
+        >
+          Label
+        </span>
+      </button>
+    </div>
+  </div>
+</body>
+`;
