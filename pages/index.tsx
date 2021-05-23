@@ -1,12 +1,11 @@
 import React from "react"
 import { NextPage } from "next"
 import { AssetTable, LineChart, PieChart } from "pkg/components"
+import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 /**
  * / page.
  */
 const Page: NextPage = () => {
-  console.log("XXXXXXXXX")
-
   return (
     <div className="px-4 xl:px-0 ">
       <div className="container mx-auto">
@@ -114,4 +113,4 @@ const Page: NextPage = () => {
   )
 }
 
-export default Page
+export default withPageAuthRequired(Page)
