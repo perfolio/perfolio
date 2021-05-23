@@ -1,0 +1,55 @@
+{
+  "name": "perfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "bootstrap": "yarn install && yarn lerna bootstrap",
+    "dev:app": "lerna run --scope=@perfolio/app --stream dev",
+    "storybook": "lerna run --scope=@perfolio/components --stream storybook",
+    "tsc": "tsc --pretty --noEmit",
+    "format": "prettier --loglevel warn --write .",
+    "lint": "eslint . --ext .ts,.tsx,.js --fix",
+    "fmt": "yarn lint && yarn format"
+  },
+  "workspaces": [
+    "./packages/*"
+  ],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "**.{ts,tsx}": [
+      "yarn prettier --write",
+      "yarn eslint --fix"
+    ],
+    "**.{json,md,mdx,css,html,js}": [
+      "yarn prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@tailwindcss/jit": "^0.1.18",
+    "@types/node": "^15.6.0",
+    "@types/react": "^17.0.6",
+    "@types/react-dom": "^17.0.5",
+    "@types/react-query": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "autoprefixer": "^9",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^34.8.2",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "husky": "^6.0.0",
+    "lerna": "^4.0.0",
+    "lint-staged": "^11.0.0",
+    "postcss": "^7",
+    "prettier": "^2.3.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "typescript": "^4.2.4"
+  }
+}

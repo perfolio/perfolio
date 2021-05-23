@@ -1,0 +1,32 @@
+{
+  "name": "@perfolio/components",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Andreas Thomas <dev@chronark.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "./index.ts",
+  "dependencies": {
+    "@headlessui/react": "^1.2.0",
+    "@heroicons/react": "^1.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@storybook/addon-a11y": "^6.2.9",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-docs": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/addon-storyshots": "^6.2.9",
+    "@storybook/react": "^6.2.9",
+    "babel-loader": "^8.2.2",
+    "postcss": "^8.3.0",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  }
+}
