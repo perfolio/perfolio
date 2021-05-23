@@ -29,7 +29,7 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
 
   return (
     <text
-      className="bg-white rounded-sm text-gray-dark border-gray-lighter"
+      className="bg-white rounded-sm text-gray-700 border-gray-50"
       x={x}
       y={y}
       textAnchor={x > cx ? "start" : "end"}

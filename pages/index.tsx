@@ -7,35 +7,35 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0"
  */
 const Page: NextPage = () => {
   return (
-    <div className="px-4 xl:px-0 ">
-      <div className="container mx-auto">
+    <div className="px-4 xl:px-0 dark:bg-gray-800">
+      <div className="container mx-auto ">
         <div className="xl:flex">
           <div className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-64">
-            <div className="py-4 pl-4 rounded-tl-lg rounded-tr-lg shadow bg-gray-lighter md:pl-10 md:py-7">
-              <p className="text-base font-bold leading-normal text-gray-800 sm:text-lg md:text-xl lg:text-2xl">
+            <div className="py-4 rounded-t-sm shadow dark:text-gray-50 dark:bg-gray-700 bg-gray-50 md:pl-10 md:py-7">
+              <p className="text-base font-bold leading-normal text-gray-800 dark:text-gray-100 sm:text-lg md:text-xl lg:text-2xl">
                 Overview
               </p>
             </div>
-            <div className="px-4 pb-8 bg-white divide-y shadow-lg md:px-8 xl:px-10 divide-gray-light">
+            <div className="px-4 pb-8 bg-white divide-y divide-gray-300 shadow-lg dark:divide-gray-700 md:px-8 xl:px-10 dark:bg-gray-900">
               <div className="py-4 sm:py-6 md:py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
                   <div className="flex justify-center">
                     <div className="flex flex-col space-y-3">
-                      <h4 className="text-xs font-medium leading-none uppercase text-gray-darker md:text-sm">
+                      <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
                         Total Assets
                       </h4>
-                      <span className="text-lg font-bold leading-3 text-gray-800 sm:text-xl md:text-2xl lg:text-3xl">
+                      <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
                         $ 27,815
                       </span>
                     </div>
                   </div>
                   <div className="flex justify-center">
                     <div className="flex flex-col space-y-3">
-                      <h4 className="text-xs font-medium leading-none uppercase text-gray-darker md:text-sm">
+                      <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
                         Last Year
                       </h4>
 
-                      <span className="text-lg font-bold leading-3 text-gray-800 text-success-dark whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
+                      <span className="text-lg font-bold leading-3 dark:text-success-500 text-success-700 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
                         + $ 8,566
                       </span>
                     </div>
@@ -43,11 +43,11 @@ const Page: NextPage = () => {
 
                   <div className="flex justify-center ">
                     <div className="flex flex-col space-y-3">
-                      <h4 className="text-xs font-medium leading-none uppercase text-gray-darker md:text-sm">
+                      <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
                         Last Month
                       </h4>
 
-                      <span className="text-lg font-bold leading-3 text-gray-800 text-error-dark whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
+                      <span className="text-lg font-bold leading-3 dark:text-error-500 text-error-700 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
                         - $ 156
                       </span>
                     </div>
@@ -60,7 +60,7 @@ const Page: NextPage = () => {
               </div>
               <div className="mt-5 rounded-sm md:mt-10">
                 <div className="py-4 pl-4 md:py-6 md:pl-6">
-                  <p className="text-base font-bold leading-tight text-gray-darker md:text-lg lg:text-xl">
+                  <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">
                     Current Assets
                   </p>
                 </div>
@@ -79,7 +79,7 @@ const Page: NextPage = () => {
               <p className="text-base font-semibold text-gray-800">
                 Recent Activity
               </p>
-              <ul className="mt-4 text-sm divide-y divide-gray-light text-gray-dark">
+              <ul className="mt-4 text-sm text-gray-700 divide-y divide-gray-300">
                 <li className="py-4 ">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-black">

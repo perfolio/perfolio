@@ -14,7 +14,7 @@ export const Switch: React.FC<SwitchProps> = ({ onChange }): JSX.Element => {
         setEnabled(v)
         onChange(v)
       }}
-      className={`${enabled ? "bg-secondary-dark" : "bg-gray-dark"}
+      className={`${enabled ? "bg-secondary-700" : "bg-gray-700"}
           relative inline-flex flex-shrink-0 h-5 w-9 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
     >
       <span className="sr-only">Use dark mode</span>

@@ -11,10 +11,10 @@ export const Table = ({ columnNames, rows }: TableProps) => {
     <div className="flex flex-col ">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <div className="overflow-hidden border border-gray-light sm:rounded">
+          <div className="overflow-hidden border border-gray-300 sm:rounded">
             <table className="min-w-full ">
               {<Header labels={columnNames} />}
-              <tbody className="bg-white divide-y divide-gray-light">
+              <tbody className="bg-white divide-y divide-gray-300">
                 {rows}
               </tbody>
             </table>

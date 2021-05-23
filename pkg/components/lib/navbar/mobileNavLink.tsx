@@ -9,7 +9,7 @@ export const MobileNavLink: React.FC<NavLinkProps> = ({
 }): JSX.Element => {
   return (
     <Link href={href}>
-      <a className="flex items-center p-4 space-x-4 text-gray-darker">
+      <a className="flex items-center p-4 space-x-4 text-gray-900">
         <div className="w-6 h-6">{icon}</div>
         <p className="cursor-pointer">{label}</p>
       </a>

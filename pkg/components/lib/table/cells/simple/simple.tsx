@@ -9,7 +9,7 @@ export interface SimpleProps {
 export const Simple = ({ label }: SimpleProps) => {
   return (
     <Wrapper>
-      <span className="text-sm leading-5 text-right text-gray-darker">
+      <span className="text-sm leading-5 text-right text-gray-900">
         {label}
       </span>
     </Wrapper>

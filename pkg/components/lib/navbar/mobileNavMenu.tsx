@@ -17,7 +17,7 @@ export const MobileNavMenu: React.FC<MenuProps> = ({
           {({ open }) => (
             <>
               <Disclosure.Button className="flex justify-between w-full p-4 focus:outline-none ">
-                <a className="flex items-center space-x-4 text-gray-darker">
+                <a className="flex items-center space-x-4 text-gray-900">
                   <div className="w-6 h-6">{icon}</div>
                   <p className="cursor-pointer">{label}</p>
                 </a>
@@ -35,7 +35,7 @@ export const MobileNavMenu: React.FC<MenuProps> = ({
                 leaveFrom="transform opacity-100"
                 leaveTo="transform  opacity-0"
               >
-                <Disclosure.Panel className="p-4 space-y-4 text-sm text-gray-500 rounded-sm bg-gray-lighter">
+                <Disclosure.Panel className="p-4 space-y-4 text-sm text-gray-500 rounded-sm bg-gray-50">
                   {menu.map((item) => (
                     <Link href={item.href} key={item.name}>
                       <a className="flex items-center ml-10 focus:outline-none ">
