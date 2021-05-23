@@ -37,19 +37,19 @@ export const DesktopNavMenu: React.FC<MenuProps> = ({
             leaveTo="opacity-0 translate-y-1"
           >
             <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-md">
-              <div className="overflow-hidden rounded-sm shadow-xl ring-1 ring-black ring-opacity-5">
-                <div className="relative p-4 space-y-8 bg-white">
+              <div className="overflow-hidden rounded-sm shadow-xl dark:shadow-none dark:border dark:border-gray-700">
+                <div className="relative p-4 space-y-8 bg-gray-100 dark:bg-gray-900 ">
                   {menu.map((item) => (
                     <Link href={item.href} key={item.name}>
-                      <a className="flex items-center p-2 space-x-4 transition duration-150 ease-in-out rounded-sm hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 hover:bg-gray-lightest">
-                        <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 p-2 text-white rounded-sm rounded-smsm:h-12 sm:w-12 sm:h-12 bg-gradient-to-tr from-primary-darker to-primary-dark dark:from-error-dark dark:to-secondary-dark">
+                      <a className="flex items-center p-2 space-x-4 transition duration-150 ease-in-out rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 hover:bg-gray-300est">
+                        <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 p-2 text-white rounded-sm rounded-smsm:h-12 sm:w-12 sm:h-12 bg-gradient-to-tr from-primary-900 to-primary-700 dark:from-error-700 dark:to-secondary-700">
                           {item.icon}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {item.name}
                           </p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             {item.description}
                           </p>
                         </div>

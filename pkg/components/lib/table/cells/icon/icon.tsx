@@ -28,13 +28,13 @@ export const Icon = ({ icon, color, label, content, align }: IconProps) => {
         <div className="flex flex-col items-start pl-2">
           {typeof label !== "undefined" ? (
             label === "" ? (
-              <span className="w-16 h-4 rounded-sm bg-gray-light animate-pulse"></span>
+              <span className="w-16 h-4 rounded-sm bg-gray-300 animate-pulse"></span>
             ) : (
-              <span className="text-sm text-gray-darker">{label}</span>
+              <span className="text-sm text-gray-900">{label}</span>
             )
           ) : null}
           {content ? (
-            <span className="text-xs text-gray-dark whitespace-nowrap">
+            <span className="text-xs text-gray-700 whitespace-nowrap">
               {content}
             </span>
           ) : null}

@@ -64,7 +64,7 @@ const colors = (type: Type): string => {
 
   const options: Record<Type, string> = {
     primary:
-      "bg-gradient-to-tr from-black to-gray-darker text-gray-lighter hover:border-gray-dark border border-transparent hover:from-gray-light hover:to-white hover:text-black",
+      "bg-gradient-to-tr from-black to-gray-900 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-300 hover:to-white hover:text-black",
     secondary:
       "bg-transparent border border-gray-100 text-gray-900 hover:border-gray-400 hover:text-black",
     alert:

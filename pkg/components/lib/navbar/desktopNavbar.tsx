@@ -15,8 +15,8 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({
         <li className="flex items-center w-4/5 space-x-12">
           <Logo
             withName
-            imageColor="text-primary-lighter dark:text-secondary-light"
-            textColor="text-primary-lighter dark:text-secondary-lighter"
+            imageColor="text-primary-50 dark:text-secondary-300"
+            textColor="text-primary-50 dark:text-secondary-50"
           />
           <div className="2xl:ml-14">
             <ul className="flex items-center">
