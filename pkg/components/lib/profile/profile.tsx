@@ -1,6 +1,8 @@
 import React from "react"
+import { useUser } from "@auth0/nextjs-auth0"
 
 export const Profile: React.FC = (): JSX.Element => {
+  const { user } = useUser()
   return (
     <div className="flex-wrap items-center xl:ml-32 xl:flex">
       {/* Displace the profile to fit main content */}
@@ -10,13 +12,13 @@ export const Profile: React.FC = (): JSX.Element => {
           <div className="flex items-center space-x-4">
             <div className="flex flex-col items-end">
               <span className="font-semibold text-gray-lighter">
-                Andreas Thomas
+                {user?.nickname}
               </span>
               <span className="text-xs font-semibold text-white">Premium</span>
             </div>
             <img
               className="w-12 h-12 rounded"
-              src="https://avatars.githubusercontent.com/u/18246773?v=4"
+              src={user?.picture ?? ""}
               alt="profile"
             />
           </div>
