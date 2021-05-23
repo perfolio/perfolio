@@ -1,10 +1,12 @@
 import React from "react"
 import { NextPage } from "next"
-import { AssetTable, LineChart, PieChart } from "@perfolio/components"
+import { AssetTable, LineChart, PieChart } from "pkg/components"
 /**
  * / page.
  */
 const Page: NextPage = () => {
+  console.log("XXXXXXXXX")
+
   return (
     <div className="px-4 xl:px-0 ">
       <div className="container mx-auto">

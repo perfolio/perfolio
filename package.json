@@ -3,18 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "bootstrap": "yarn install && npx lerna bootstrap --scope=@perfolio/*",
-    "dev:app": "lerna run --scope=@perfolio/app --stream dev",
-    "storybook": "lerna run --scope=@perfolio/components --stream storybook",
+    "dev": "next dev",
+    "start": "next start",
+    "build": "next build",
     "tsc": "tsc --pretty --noEmit",
     "format": "prettier --loglevel warn --write .",
     "lint": "eslint . --ext .ts,.tsx,.js --fix",
     "fmt": "yarn lint && yarn format",
-    "build": "yarn lerna run --scope=@perfolio/app --stream build"
+    "postinstall": "sed -i 's/DOMAttributesAdaptChildEvent<P, T>/DOMAttributesAdaptChildEvent<any, any>/g' ./node_modules/recharts/types/polar/Radar.d.ts"
   },
-  "workspaces": [
-    "./packages/*"
-  ],
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -28,6 +25,21 @@
     "**.{json,md,mdx,css,html,js}": [
       "yarn prettier --write"
     ]
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.2.0",
+    "@heroicons/react": "^1.0.1",
+    "@radix-ui/react-switch": "^0.0.13",
+    "@sentry/nextjs": "^6.4.1",
+    "classnames": "^2.3.1",
+    "next": "^10.2.2",
+    "next-themes": "^0.0.14",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.6.5",
+    "react-query": "^3.16.0",
+    "recharts": "^2.0.9",
+    "webpack": "^5.37.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",

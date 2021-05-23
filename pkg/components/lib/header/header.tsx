@@ -1,7 +1,10 @@
 import React from "react"
-import { BookOpenIcon } from "@heroicons/react/outline"
 import { DesktopNavbar, MobileNavbar } from "../navbar"
-import { ChartSquareBarIcon, PlusIcon } from "@heroicons/react/outline"
+import {
+  ChartSquareBarIcon,
+  PlusIcon,
+  BookOpenIcon,
+} from "@heroicons/react/outline"
 import { Profile } from "../profile/profile"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}

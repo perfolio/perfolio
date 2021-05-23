@@ -3,7 +3,6 @@ import { Table } from "./table"
 import { Simple } from "./cells/simple/simple"
 import { Icon } from "./cells/icon/icon"
 import Tag from "./cells/tag/tag"
-import { v4 as uuid } from "uuid"
 
 interface Asset {
   id: string
@@ -20,7 +19,7 @@ const Row = ({ asset }: { asset: Asset }) => {
       <td className="text-left">
         <Icon
           label={asset.id}
-          content={uuid()}
+          content="hello"
           align="justify-start"
           icon={
             <img
@@ -53,15 +52,15 @@ export const AssetTable = () => {
   const assets = [
     {
       id: "TSLA",
-      value: Math.random() * 5_000,
-      cost: Math.random() * 5_000,
-      quantity: Math.floor(Math.random() * 100),
+      value: 4152,
+      cost: 2151,
+      quantity: 42,
     },
     {
       id: "MSFT",
-      value: Math.random() * 5_000,
-      cost: Math.random() * 5_000,
-      quantity: Math.floor(Math.random() * 100),
+      value: 6236,
+      cost: 1310,
+      quantity: 11515,
     },
   ]
 
@@ -76,7 +75,6 @@ export const AssetTable = () => {
   const rows = assets.map((asset) => {
     return <Row key={asset.id} asset={asset} />
   })
-  console.log(columnNames, rows)
   return (
     <div>
       <Table columnNames={columnNames} rows={rows} />

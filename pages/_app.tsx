@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/nextjs"
 import { Integrations } from "@sentry/tracing"
 import { AppProps } from "next/app"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { Header } from "@perfolio/components"
+import { Header } from "pkg/components"
 Sentry.init({
   dsn: process.env["NEXT_PUBLIC_SENTRY_DSN"],
   integrations: [new Integrations.BrowserTracing()],
