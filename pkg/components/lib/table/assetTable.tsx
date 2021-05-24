@@ -48,7 +48,7 @@ const Row = ({ asset }: { asset: Asset }) => {
   )
 }
 
-export const AssetTable = () => {
+export const AssetTable = (): JSX.Element => {
   const assets = [
     {
       id: "TSLA",

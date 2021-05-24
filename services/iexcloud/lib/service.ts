@@ -2,19 +2,15 @@ import {
   IEXService,
   GetCompanyRequest,
   GetCompanyResponse,
-  GetPriceRequest,
   GetPricesRequest,
-  GetPriceResponse,
   GetPricesResponse,
-  GetSymbolRequest,
-  GetSymbolResponse,
-  GetCurrentValueRequest,
-  GetCurrentValueResponse,
+  GetPriceRequest,
 } from "./interface"
+import { Price } from "@prisma/client"
 import { Cache } from "./cache/cache"
 import { Cloud } from "./cloud/cloud"
 import { Repository } from "./cache/interface"
-import { Price } from "@prisma/client"
+import { Time } from "pkg/time"
 
 export class IEXCloud implements IEXService {
   private cache: Repository
@@ -29,17 +25,24 @@ export class IEXCloud implements IEXService {
   }
 
   public async getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse> {
-    const { symbol } = req
+    const symbol = req.symbol.toLowerCase()
     let company = await this.cache.getCompany(symbol).catch((err) => {
       throw new Error(`Unable to load company from cache: [ ${err} ]`)
     })
     if (company === null) {
-      company = await this.cloud.getCompany(symbol).catch((err) => {
-        throw new Error(`Unable to load company from cloud: [ ${err} ]`)
-      })
-      await this.cache.setCompany(company).catch((err) => {
-        throw new Error(`Unable to store company in cache: [ ${err} ]`)
-      })
+      const newCompany = await this.cloud
+        .getCompany({ symbol })
+        .catch((err) => {
+          throw new Error(`Unable to load company from cloud: [ ${err} ]`)
+        })
+      if (newCompany) {
+        company = await this.cache.setCompany(newCompany).catch((err) => {
+          throw new Error(`Unable to store company in cache: [ ${err} ]`)
+        })
+      }
+    }
+    if (!company) {
+      throw new Error(`Unable to find a company for: ${req.symbol}`)
     }
     return { company }
   }
@@ -48,97 +51,51 @@ export class IEXCloud implements IEXService {
      *  Cache
      */
     const symbol = req.symbol.toLowerCase()
-    const foundPrices = await this.cache
-      .getPrices(symbol, req.begin, req.end)
-      .catch((err) => {
-        throw new Error(`Unable to load prices from cache: [ ${err} ]`)
-      })
 
-    // UNIX timestamp as key
-    const prices: Map<number, number> = new Map()
-    const ctx = `getPrices(${symbol})`
-    console.time(ctx)
+    const priceRequests: Time[] = []
     for (
-      let time = req.begin;
-      time.unix() < req.end.unix();
-      time = time.nextDay()
+      let day = req.begin;
+      day.unix() <= req.end.unix();
+      day = day.nextDay()
     ) {
-      console.timeLog(ctx, time.toString())
-      let price = foundPrices.find((p) => p.time.getTime() === time.unix())
-
-      if (!price) {
-        const { value } = await this.getPrice({ symbol, time })
-
-        price = { time: time.toDate(), value } as Price
-      }
-      prices.set(price.time.getTime(), price.value)
-    }
-    console.timeEnd(ctx)
-    return { prices }
-  }
-  public async getPrice(req: GetPriceRequest): Promise<GetPriceResponse> {
-    const symbol = req.symbol.toLowerCase()
-
-    let price = await this.cache.getPrice(symbol, req.time).catch((err) => {
-      throw new Error(`Unable to load price from cache: [ ${err} ]`)
-    })
-
-    // Check if no prices for this company are stored yet
-    const pricesExist = await this.cache
-      .findPricesForCompany(symbol)
-      .catch((err) => {
-        throw new Error(`Unable to load prices from cache: [ ${err} ]`)
-      })
-    if (!pricesExist) {
-      const prices = await this.cloud.getHistory(symbol).catch((err) => {
-        throw new Error(`Unable to load history from cloud: [ ${err} ]`)
-      })
-
-      await this.cache.setPrices(prices).catch((err) => {
-        throw new Error(`Unable to store prices in cache: [ ${err} ]`)
-      })
+      priceRequests.push(day)
     }
 
-    price = await this.cloud.getClosingPrice(symbol, req.time).catch((err) => {
-      throw new Error(`Unable to load closing price from cloud: [ ${err} ]`)
-    })
-    await this.cache.setPrices([price]).catch((err) => {
-      throw new Error(`Unable to store prices in cache: [ ${err} ]`)
-    })
-
-    return { value: price.value }
+    const prices = await Promise.all(
+      priceRequests.map((time) => {
+        return this.getPrice({ symbol, time })
+      }),
+    )
+    /**
+     * Has the format:
+     * [unixTImestamp]: value.
+     */
+    const priceMap: Record<number, number> = {}
+    prices
+      .filter((p) => p.value > 0)
+      .forEach((price) => {
+        priceMap[price.time] = price.value
+      })
+    return { prices: priceMap }
   }
 
   /**
-   * Request the symbol associated with a given ISIN.
-   *
-   * @param req
-   * @returns The found symbol or null.
-   * @throws Only throws when something goes wrong.
+   * Load price for a single symbol on a single day.
    */
-  public async getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse> {
-    const symbol = await this.cache.getSymbol(req.isin).catch((err) => {
-      throw new Error(`Unable to load symbol from cache: [ ${err} ]`)
+  private async getPrice(req: GetPriceRequest): Promise<Price> {
+    const symbol = req.symbol.toLowerCase()
+    const price = await this.cache.getPrice(symbol, req.time).catch((err) => {
+      throw new Error(`Unable to load price from cache: [ ${err} ]`)
     })
-    if (symbol !== null) {
-      return { symbol }
+    if (price) {
+      return price
     }
-
-    const map = await this.cloud.getIsin(req.isin).catch((err) => {
-      throw new Error(`Unable to fetch isin from cloud: [ ${err} ]`)
+    const newPrice = await this.cloud.getPrice(req).catch((err) => {
+      throw new Error(`Unable to load closing price from cloud: ${err}`)
     })
-    await this.cache.setIsinMap(map).catch((err) => {
-      throw new Error(`Unable to store isinMap in cache: [ ${err} ]`)
+    console.log({ newPrice })
+    return this.cache.setPrice(newPrice).catch((err) => {
+      throw new Error(`Unable to store prices in cache: ${err}`)
     })
-    return { symbol: map.symbol }
-  }
-  public async getCurrentValue(
-    req: GetCurrentValueRequest,
-  ): Promise<GetCurrentValueResponse> {
-    const value = await this.cloud.getCurrentValue(req.symbol).catch((err) => {
-      throw new Error(`Unable to fetch current value: [ ${err} ]`)
-    })
-
-    return { value }
   }
 }

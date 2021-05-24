@@ -9,10 +9,10 @@ export class Time {
     this.year = year
   }
   /**
-   * Returns a unix timestamp with nanosecond precission.
+   * Returns a unix timestamp with second precission.
    */
   public unix(): number {
-    return this.toDate().getTime()
+    return Math.floor(this.toDate().getTime() / 1000)
   }
   public static fromDate(d: Date): Time {
     return new Time(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate())
@@ -23,10 +23,18 @@ export class Time {
       `${padded.year}-${padded.month}-${padded.day}T00:00:00+0000`,
     )
   }
+  /**
+   * From unix timestamp with second precision.
+   */
   public static fromTimestamp(n: number): Time {
-    return Time.fromDate(new Date(n))
+    return Time.fromDate(new Date(n * 1000))
   }
 
+  /**.
+   * Pads times with leading zeros
+   *
+   * @returns 2020 01 05
+   */
   public pad(): { year: string; month: string; day: string } {
     return {
       year: this.year.toString().padStart(4, "0"),
@@ -34,23 +42,38 @@ export class Time {
       day: this.day.toString().padStart(2, "0"),
     }
   }
-
+  /**
+   * Return a new Time instance where 1 day has been added.
+   */
   public nextDay(): Time {
-    return Time.fromTimestamp(this.toDate().getTime() + 24 * 60 * 60 * 1000)
+    return Time.fromTimestamp(
+      Math.floor(this.toDate().getTime() / 1000) + 24 * 60 * 60,
+    )
   }
 
   public toString(): string {
     const padded = this.pad()
     return `${padded.day}-${padded.month}-${padded.year}`
   }
+  /**
+   * Create a new Time instance initialized to the time right now.
+   */
   public static today(): Time {
     return Time.fromDate(new Date())
   }
+
+  /**
+   * Check if two times are equal.
+   */
   public equals(other: Time): boolean {
     return (
       this.day === other.day &&
       this.month === other.month &&
       this.year === other.year
     )
+  }
+
+  public toJson(): number {
+    return this.unix()
   }
 }

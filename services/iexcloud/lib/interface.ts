@@ -2,10 +2,7 @@ import { Company } from "@prisma/client"
 import { Time } from "pkg/time"
 export interface IEXService {
   getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse>
-  getPrice(req: GetPriceRequest): Promise<GetPriceResponse>
   getPrices(req: GetPricesRequest): Promise<GetPricesResponse>
-  getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse>
-  getCurrentValue(req: GetCurrentValueRequest): Promise<GetCurrentValueResponse>
 }
 
 export type GetCompanyRequest = {
@@ -15,13 +12,6 @@ export type GetCompanyResponse = {
   company: Company
 }
 
-export type GetPriceRequest = {
-  symbol: string
-  time: Time
-}
-export type GetPriceResponse = {
-  value: number
-}
 export type GetSymbolRequest = {
   isin: string
 }
@@ -41,7 +31,17 @@ export type GetPricesRequest = {
   end: Time
 }
 export type GetPricesResponse = {
-  // Key is a unix timestamp with nanosecond precision
+  // Key is a unix timestamp with second precision
   // Value is the actual price
-  prices: Map<number, number>
+  prices: Record<number, number>
+}
+
+export type GetPriceRequest = {
+  symbol: string
+  time: Time
+}
+export type GetPriceResponse = {
+  symbol: string
+  time: Time
+  value: number
 }

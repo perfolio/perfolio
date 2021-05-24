@@ -6,7 +6,7 @@ export interface TableProps {
   rows: React.ReactNode[]
 }
 
-export const Table = ({ columnNames, rows }: TableProps) => {
+export const Table = ({ columnNames, rows }: TableProps): JSX.Element => {
   return (
     <div className="flex flex-col ">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

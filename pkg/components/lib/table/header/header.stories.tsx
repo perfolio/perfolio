@@ -6,7 +6,7 @@ export default {
   title: "components/table/Header",
 }
 
-export const primary = () => {
+export const primary = (): JSX.Element => {
   /* eslint-disable-next-line */
   const props: HeaderProps = {
     labels: ["Name", "Surname", "Email"],

@@ -41,7 +41,7 @@ model Price {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   symbol    String
-  time      DateTime
+  time      Int
   value     Float
   @@unique([symbol, time], name: "Price_symbol_time_unique_constraint")
 }
@@ -68,5 +68,5 @@ model Transaction {
   assetID    String
   quantity   Float
   value      Float
-  executedAt DateTime
+  executedAt Int
 }
