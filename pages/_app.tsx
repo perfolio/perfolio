@@ -48,4 +48,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default withPageAuthRequired(MyApp)
+export default MyApp

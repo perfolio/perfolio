@@ -113,4 +113,6 @@ const Page: NextPage = () => {
   )
 }
 
-export default withPageAuthRequired(Page)
+export default Page
+
+export const getServerSideProps = withPageAuthRequired()

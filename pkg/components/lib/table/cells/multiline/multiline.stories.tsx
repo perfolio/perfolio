@@ -6,7 +6,7 @@ export default {
   title: "components/table/cell/Multiline",
 }
 
-export const primary = () => {
+export const primary = (): JSX.Element => {
   const props: MultilineProps = {
     title: "Title",
     content: "Content",
