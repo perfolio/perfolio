@@ -12,7 +12,7 @@ export const Tag = ({ label, color }: TagProps): JSX.Element => {
 
   return (
     <Wrapper>
-      <span className={`inline-flex px-2 text-sm rounded-sm ${colors}`}>
+      <span className={`inline-flex px-2 text-sm rounded ${colors}`}>
         {label}
       </span>
     </Wrapper>

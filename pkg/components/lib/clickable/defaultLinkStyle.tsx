@@ -35,7 +35,7 @@ export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
         transition
         duration-250
         flex
-        rounded-sm
+        rounded
         items-center
         whitespace-nowrap
         justify-${justify} 

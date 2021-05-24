@@ -21,7 +21,7 @@ export const Profile: React.FC = (): JSX.Element => {
             />
           </div>
         </div>
-        <div className="w-full p-4 space-y-2 bg-white rounded-sm ">
+        <div className="w-full p-4 space-y-2 bg-white rounded ">
           <span className="text-sm text-gray-700">Total Investment</span>
           <div className="flex items-center justify-between">
             <span className="text-xl font-semibold leading-none text-black">
@@ -35,7 +35,7 @@ export const Profile: React.FC = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full rounded-full mt-3.5 h-1.5 bg-gray-300">
-            <div className="w-2/3 h-1.5 bg-indigo-800  rounded-full" />
+            <div className="w-2/3 h-1.5 bg-primary-900  rounded-full" />
           </div>
         </div>
       </div>

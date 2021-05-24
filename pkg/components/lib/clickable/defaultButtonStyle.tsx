@@ -34,7 +34,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         transition
         duration-250
         flex
-        rounded-sm
+        rounded
         items-center
         whitespace-nowrap
         justify-${justify} 
@@ -64,12 +64,12 @@ const colors = (type: Type): string => {
 
   const options: Record<Type, string> = {
     primary:
-      "bg-gradient-to-tr from-black to-gray-900 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-300 hover:to-white hover:text-black",
+      "bg-gradient-to-tr from-black to-gray-900 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
     secondary:
-      "bg-transparent border border-gray-100 text-gray-900 hover:border-gray-400 hover:text-black",
+      "bg-transparent border border-gray-200 text-gray-900 hover:border-gray-400 hover:text-black",
     alert:
       "bg-gradient-to-tr from-orange-500 to-red-500 text-white hover:to-red-400",
-    cta: "from-orange-600 to-yellow-500 text-white justify-center w-full text-sm text-center rounded-sm bg-gradient-to-tr sm:text-base md:text-lg hover:from-orange-600 hover:to-yellow-300 duration-200 hover:text-black",
+    cta: "from-orange-600 to-yellow-500 text-white justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:from-orange-600 hover:to-yellow-300 duration-200 hover:text-black",
     plain:
       "bg-transparent shadow-none hover:shadow-none hover:text-gray-900 text-gray-800 hover:font-medium",
   }
