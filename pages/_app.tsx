@@ -8,11 +8,12 @@ import { AppProps } from "next/app"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { Header } from "pkg/components"
 import { UserProvider } from "@auth0/nextjs-auth0"
+import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 Sentry.init({
   dsn: process.env["NEXT_PUBLIC_SENTRY_DSN"],
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1,
-  release: process.env["RELEASE"] ?? "dev",
+  release: process.env["VERCEL_GIT_COMMIT_REF"] ?? "localdevelopment",
 })
 
 /**
@@ -47,4 +48,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default withPageAuthRequired(MyApp)
