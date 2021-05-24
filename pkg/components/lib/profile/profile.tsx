@@ -35,7 +35,7 @@ export const Profile: React.FC = (): JSX.Element => {
             </div>
           </div>
           <div className="w-full rounded-full mt-3.5 h-1.5 bg-gray-300">
-            <div className="w-2/3 h-1.5 bg-primary-700  rounded-full" />
+            <div className="w-2/3 h-1.5 bg-indigo-800  rounded-full" />
           </div>
         </div>
       </div>

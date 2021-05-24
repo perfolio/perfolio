@@ -7,7 +7,7 @@ export interface MultilineProps {
   content: string | number
 }
 
-export const Multiline = ({ title, content }: MultilineProps) => {
+export const Multiline = ({ title, content }: MultilineProps): JSX.Element => {
   return (
     <Wrapper>
       <span className="text-lg font-medium text-gray-900">{title}</span>
