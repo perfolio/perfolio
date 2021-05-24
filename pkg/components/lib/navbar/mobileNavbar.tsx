@@ -23,7 +23,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </div>
         <Transition
-          className="absolute top-0 left-0 z-20 w-full mt-20 bg-white rounded-sm shadow-xl"
+          className="absolute top-0 left-0 z-20 w-full mt-20 bg-white rounded shadow-xl"
           show={open}
           enter="transition duration-500 ease-out"
           enterFrom="transform opacity-0 translate-y-full"

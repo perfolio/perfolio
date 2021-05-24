@@ -92,7 +92,7 @@ const Page: NextPage = () => {
       <div className="w-full h-56 pt-8">
         <LineChart />
       </div>
-      <div className="mt-5 rounded-sm md:mt-10">
+      <div className="mt-5 rounded md:mt-10">
         <div className="py-4 pl-4 md:py-6 md:pl-6">
           <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">
             Current Assets

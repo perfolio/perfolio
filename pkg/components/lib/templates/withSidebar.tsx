@@ -2,7 +2,7 @@ import React from "react"
 
 export interface WithSidebarProps {
   title: string
-  sidebar: React.ReactNode | React.ReactNodeArray
+  sidebar?: React.ReactNode | React.ReactNodeArray
 }
 
 /**
@@ -18,7 +18,7 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
       <div className="container mx-auto ">
         <div className="xl:flex">
           <div className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-64">
-            <div className="py-4 rounded-t-sm shadow dark:text-gray-50 dark:bg-gray-700 bg-gray-50 md:pl-10 md:py-7">
+            <div className="py-4 rounded-t shadow dark:text-gray-50 dark:bg-gray-700 bg-gray-50 md:pl-10 md:py-7">
               <p className="text-base font-bold leading-normal text-gray-800 dark:text-gray-100 sm:text-lg md:text-xl lg:text-2xl">
                 {title}
               </p>
