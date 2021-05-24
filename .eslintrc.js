@@ -26,6 +26,12 @@ module.exports = {
   plugins: ["react", "@typescript-eslint", "prettier", "jsdoc"],
   rules: {
     "prettier/prettier": "error",
+
+    /**
+     * There are plenty of legitimate occasions where I use it after checking
+     * manually.
+     */
+    "@typescript-eslint/no-non-null-assertion": "off",
     /**
      * This project is using typescript, thus we can ignore prop types.
      */

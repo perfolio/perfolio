@@ -3,6 +3,10 @@ import { Spinner } from "../spinner/spinner"
 type Justify = "start" | "center" | "end" | "between" | "around"
 type Size = "small" | "medium" | "large" | "auto"
 export interface DefaultLinkStyleProps {
+  /**
+   * The type must be defined but is actually never used.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type?: any
   label?: React.ReactNode
   justify?: Justify

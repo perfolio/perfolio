@@ -5,7 +5,7 @@ export interface HeaderProps {
   labels: string[]
 }
 
-export const Header = ({ labels }: HeaderProps) => {
+export const Header: React.FC<HeaderProps> = ({ labels }): JSX.Element => {
   return (
     <thead>
       <tr>

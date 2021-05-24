@@ -7,6 +7,33 @@ describe("constructor()", () => {
   })
 })
 
+describe("converts to and from unix correctly", () => {
+  const testCases: {
+    unix: number
+    day: [number, number, number]
+  }[] = [
+    {
+      unix: 1621814400,
+      day: [2021, 5, 24],
+    },
+  ]
+
+  for (const tc of testCases) {
+    it("converts from unix with correct precission", () => {
+      const time = Time.fromTimestamp(tc.unix)
+
+      expect(time.year).toBe(tc.day[0])
+      expect(time.month).toBe(tc.day[1])
+      expect(time.day).toBe(tc.day[2])
+    })
+
+    it("converts from unix with correct precission", () => {
+      const time = new Time(...tc.day)
+      expect(time.unix()).toBe(tc.unix)
+    })
+  }
+})
+
 describe("nextDay()", () => {
   const testCases: {
     name: string
@@ -46,4 +73,9 @@ describe("nextDay()", () => {
       })
     })
   }
+})
+
+it("serializes to unix timestamp with second precission", () => {
+  const time = new Time(2000, 1, 31)
+  expect(time.toJson()).toBe(949276800)
 })

@@ -6,7 +6,7 @@ export default {
   title: "components/table/cell/Wrapper",
 }
 
-export const primary = () => {
+export const primary = (): JSX.Element => {
   return (
     <Wrapper>
       <span>Hello World</span>

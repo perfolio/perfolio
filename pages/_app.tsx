@@ -8,7 +8,6 @@ import { AppProps } from "next/app"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { Header } from "pkg/components"
 import { UserProvider } from "@auth0/nextjs-auth0"
-import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 Sentry.init({
   dsn: process.env["NEXT_PUBLIC_SENTRY_DSN"],
   integrations: [new Integrations.BrowserTracing()],

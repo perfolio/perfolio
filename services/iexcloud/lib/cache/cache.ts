@@ -1,4 +1,4 @@
-import { PrismaClient, Company, Price, Prisma, Isin } from "@prisma/client"
+import { PrismaClient, Company, Price, Prisma } from "@prisma/client"
 import { Repository } from "./interface"
 import { Time } from "pkg/time"
 
@@ -24,9 +24,9 @@ export class Cache implements Repository {
     return err
   }
 
-  public async getCompany(symbol: string): Promise<Company> {
+  public async getCompany(symbol: string): Promise<Company | null> {
     symbol = symbol.toLowerCase()
-    let company: Company
+    let company: Company | null
     try {
       company = await this.db.company.findFirst({
         where: { symbol: symbol },
@@ -34,43 +34,35 @@ export class Cache implements Repository {
     } catch (err) {
       throw this.escalate(err)
     }
+
     return company
   }
-  public async setCompany(company: Prisma.CompanyCreateInput): Promise<void> {
+  public async setCompany(
+    company: Prisma.CompanyCreateInput,
+  ): Promise<Company> {
     company.symbol = company.symbol.toLowerCase()
-    try {
-      await this.db.company.upsert({
+    return await this.db.company
+      .upsert({
         where: { symbol: company.symbol },
         update: company,
         create: company,
       })
-    } catch (err) {
-      throw this.escalate(err)
-    }
-  }
-
-  public async findPricesForCompany(symbol: string): Promise<boolean> {
-    symbol = symbol.toLowerCase()
-    try {
-      const prices = await this.db.price.findMany({
-        where: { symbol },
+      .catch((err) => {
+        throw this.escalate(err)
       })
-      return prices.length !== 0
-    } catch (err) {
-      throw this.escalate(err)
-    }
   }
 
-  public async getPrice(symbol: string, time: Time): Promise<Price> {
+  public async getPrice(symbol: string, time: Time): Promise<Price | null> {
     symbol = symbol.toLowerCase()
-    let price: Price
+    let price: Price | null
     try {
       price = await this.db.price.findFirst({
-        where: { symbol, time: time.toDate() },
+        where: { symbol, time: time.unix() },
       })
     } catch (err) {
       throw this.escalate(err)
     }
+
     return price
   }
 
@@ -80,45 +72,34 @@ export class Cache implements Repository {
     end: Time,
   ): Promise<Price[]> {
     symbol = symbol.toLowerCase()
-    let prices: Price[]
-    try {
-      prices = await this.db.price.findMany({
+
+    return await this.db.price
+      .findMany({
         where: {
           AND: {
             symbol: {
               equals: symbol,
             },
             time: {
-              gte: begin.toDate(),
-              lte: end.toDate(),
+              gte: begin.unix(),
+              lte: end.unix(),
             },
           },
         },
       })
-    } catch (err) {
-      throw this.escalate(err)
-    }
-    return prices
-  }
-  private async setPrice(price: Prisma.PriceCreateInput): Promise<void> {
-    price.symbol = price.symbol.toLowerCase()
-    try {
-      const savedPrice = await this.db.price.findFirst({
-        where: { time: price.time, symbol: price.symbol },
+      .catch((err) => {
+        throw this.escalate(err)
       })
-
-      if (savedPrice) {
-        await this.db.price.update({
-          where: { id: savedPrice.id },
-          data: price,
-        })
-      } else {
-        await this.db.price.create({ data: price })
-      }
-    } catch (err) {
-      throw this.escalate(err)
-    }
-    return
+  }
+  /**
+   * Store a single price.
+   *
+   * This does not check if a price is already in the db.
+   */
+  public async setPrice(price: Prisma.PriceCreateInput): Promise<Price> {
+    return this.db.price.create({ data: price }).catch((err) => {
+      throw new Error(`Unable to set price: ${err}`)
+    })
   }
   /**
    * Bulk insert prices in a single transaction.
@@ -126,41 +107,42 @@ export class Cache implements Repository {
    *
    * @param prices
    */
-  public async setPrices(prices: Prisma.PriceCreateInput[]): Promise<void> {
-    prices = prices.map((price) => {
-      return {
-        ...price,
-        symbol: price.symbol.toLowerCase(),
-      }
-    })
-    try {
-      await this.db.price.createMany({
-        data: prices,
-        skipDuplicates: false,
-      })
-    } catch (err) {
-      for (const price of prices) {
-        try {
-          await this.setPrice(price)
-        } catch (err) {
-          throw this.escalate(err)
+  public async setPrices(prices: Prisma.PriceCreateInput[]): Promise<Price[]> {
+    return Promise.all(
+      prices.map(async (price) => {
+        const foundPrice = await this.db.price.findFirst({
+          where: {
+            AND: {
+              symbol: price.symbol,
+              time: price.time,
+            },
+          },
+        })
+        if (foundPrice) {
+          return await this.db.price.update({
+            where: {
+              id: foundPrice.id,
+            },
+            data: price,
+          })
+        } else {
+          return await this.db.price.create({ data: price })
         }
-      }
-    }
+      }),
+    )
   }
   /**
    * Return the corresponding symbol for an isin.
    */
-  public async getSymbol(isin: string): Promise<string> {
-    let map: Isin
-    try {
-      map = await this.db.isin.findUnique({
+  public async getSymbol(isin: string): Promise<string | null> {
+    const map = await this.db.isin
+      .findUnique({
         where: { isin },
       })
-      return map?.symbol || null
-    } catch (err) {
-      throw this.escalate(err)
-    }
+      .catch((err) => {
+        throw this.escalate(err)
+      })
+    return map?.symbol || null
   }
   public async setIsinMap(isin: Prisma.IsinCreateInput): Promise<void> {
     try {

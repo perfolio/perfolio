@@ -1,19 +1,15 @@
 import { Company, Price, Prisma } from "@prisma/client"
-import { Time } from "@perfolio/time"
+import { Time } from "pkg/time"
 export interface Repository {
   /**
    * Close the connection after you are done.
    */
   close: () => void
-  getCompany: (symbol: string) => Promise<Company>
-  setCompany: (company: Company) => Promise<void>
+  getCompany: (symbol: string) => Promise<Company | null>
+  setCompany: (company: Prisma.CompanyCreateInput) => Promise<Company>
 
-  getPrice(symbol: string, time: Time): Promise<Price>
+  getPrice(symbol: string, time: Time): Promise<Price | null>
   getPrices(symbol: string, begin: Time, end: Time): Promise<Price[]>
-  setPrices(prices: Price[]): Promise<void>
-  findPricesForCompany(symbol: string): Promise<boolean>
-
-  getSymbol(isin: string): Promise<string>
-
-  setIsinMap(isin: Prisma.IsinCreateInput): Promise<void>
+  setPrice(price: Prisma.PriceCreateInput): Promise<Price>
+  setPrices(prices: Prisma.PriceCreateInput[]): Promise<Price[]>
 }
