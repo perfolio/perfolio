@@ -2,14 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { IEXCloud } from "services/iexcloud"
 import { validateRequest } from "pkg/util"
 import { Time } from "pkg/time"
+import { withSentry } from "@sentry/nextjs"
 
 /**
  * HTTP Endpoint for IEXCloud.getPrices().
  */
-export default async function GetPrices(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+const GetPrices = async (req: NextApiRequest, res: NextApiResponse) => {
   const [message, valid] = validateRequest(req, ["symbol", "begin", "end"])
   if (!valid) {
     console.error(message)
@@ -37,3 +35,5 @@ export default async function GetPrices(
     res.end()
   }
 }
+
+export default withSentry(GetPrices)

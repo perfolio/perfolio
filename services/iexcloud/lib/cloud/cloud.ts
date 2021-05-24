@@ -5,9 +5,18 @@ import {
   GetLogoCloudRequest,
   GetPriceCloudRequest,
   GetPriceCloudResponse,
+  GetHistoryCloudRequest,
+  GetHistoryCloudResponse,
 } from "./interface"
 import { Prisma } from "@prisma/client"
 import { ApiConfig, GetRequest } from "./types"
+import { Time } from "pkg/time"
+
+export class ErrorHTTP400 extends Error {
+  constructor(message: string) {
+    super(message)
+  }
+}
 
 /**
  * SDK for IEXCloud resources.
@@ -61,6 +70,14 @@ export class Cloud {
         console.debug(`IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
         await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
+      }
+      /**
+       * We need to handle some 400 errors specifically.
+       */
+      if (res.status === 400) {
+        throw new ErrorHTTP400(
+          `Unable to GET endpoint ${path}, failed with status: ${res.status}`,
+        )
       }
 
       if (res.status !== 200) {
@@ -136,20 +153,66 @@ export class Cloud {
   public async getPrice(
     req: GetPriceCloudRequest,
   ): Promise<Prisma.PriceCreateInput> {
+    console.debug(`Loading ${req.symbol} for ${req.time}`)
     const { year, month, day } = req.time.pad()
     const symbol = req.symbol.toLowerCase()
-    const res = (await this.get({
+    const res = await this.get({
       path: `/stock/${symbol}/chart/date/${year}${month}${day}`,
       parameters: {
         chartByDay: "true",
         chartCloseOnly: "true",
       },
-    })) as GetPriceCloudResponse[]
+    }).catch((err) => {
+      /**
+       * Just return -1 if the request was in the past where no price data was availabe.
+       */
+      if (
+        err instanceof ErrorHTTP400 &&
+        req.time.unix() <= Time.today().unix()
+      ) {
+        return {
+          symbol: req.symbol,
+          time: req.time.unix(),
+          value: -1,
+        }
+      } else {
+        throw err
+      }
+    })
+
+    const price = res as GetPriceCloudResponse[]
 
     return {
       symbol: req.symbol,
       time: req.time.unix(),
-      value: res[0]?.close ?? -1,
+      value: price[0]?.close ?? -1,
     }
+  }
+
+  /**
+   * Load all prices for a specific symbol.
+   */
+  public async getHistory(
+    req: GetHistoryCloudRequest,
+  ): Promise<Prisma.PriceCreateInput[]> {
+    const symbol = req.symbol.toLowerCase()
+    const res = (await this.get({
+      path: `/stock/${symbol}/chart/max`,
+      parameters: {
+        chartCloseOnly: "true",
+      },
+    })) as GetHistoryCloudResponse
+
+    return res.map((p) => {
+      const date = p.date.split("-")
+      const year = Number(date[0])
+      const month = Number(date[1])
+      const day = Number(date[2])
+      return {
+        symbol: req.symbol,
+        time: new Time(year, month, day).unix(),
+        value: res[0]?.close ?? -1,
+      }
+    })
   }
 }
