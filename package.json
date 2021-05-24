@@ -10,7 +10,12 @@
     "format": "prettier --loglevel warn --write .",
     "lint": "eslint . --ext .ts,.tsx,.js --fix",
     "fmt": "yarn lint && yarn format",
-    "postinstall": "sed -i 's/DOMAttributesAdaptChildEvent<P, T>/DOMAttributesAdaptChildEvent<any, any>/g' ./node_modules/recharts/types/polar/Radar.d.ts"
+    "test": "jest",
+    "postinstall": "sed -i 's/DOMAttributesAdaptChildEvent<P, T>/DOMAttributesAdaptChildEvent<any, any>/g' ./node_modules/recharts/types/polar/Radar.d.ts",
+    "db:studio": "yarn prisma studio --schema ./pkg/prisma/schema.prisma",
+    "db:migrate": "yarn prisma migrate dev --preview-feature --schema ./pkg/prisma/schema.prisma",
+    "db:push": "yarn prisma db push --preview-feature --schema ./pkg/prisma/schema.prisma",
+    "db:generate": "yarn prisma generate --schema ./pkg/prisma/schema.prisma"
   },
   "commitlint": {
     "extends": [
@@ -30,8 +35,11 @@
     "@auth0/nextjs-auth0": "^1.3.1",
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
+    "@prisma/client": "^2.23.0",
     "@sentry/nextjs": "^6.4.1",
+    "axios": "^0.21.1",
     "classnames": "^2.3.1",
+    "jest": "^26.6.3",
     "next": "^10.2.2",
     "next-themes": "^0.0.14",
     "react": "^17.0.2",
@@ -45,6 +53,7 @@
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@tailwindcss/jit": "^0.1.18",
+    "@types/jest": "^26.0.23",
     "@types/node": "^15.6.0",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
@@ -52,16 +61,19 @@
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "autoprefixer": "^10.2.5",
+    "dotenv": "^10.0.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsdoc": "^34.8.2",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "husky": "^6.0.0",
+    "jest-watch-typeahead": "^0.6.3",
     "lerna": "^4.0.0",
     "lint-staged": "^11.0.0",
     "postcss": "^8.3.0",
     "prettier": "^2.3.0",
+    "prisma": "^2.23.0",
     "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4"
   }

@@ -11,9 +11,7 @@ export const Profile: React.FC = (): JSX.Element => {
         <div className="items-center justify-end hidden w-full xl:flex">
           <div className="flex items-center space-x-4">
             <div className="flex flex-col items-end">
-              <span className="font-semibold text-gray-50">
-                {user?.nickname}
-              </span>
+              <span className="font-semibold text-gray-50">{user?.name}</span>
               <span className="text-xs font-semibold text-white">Premium</span>
             </div>
             <img

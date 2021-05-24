@@ -1,0 +1,72 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+}
+
+
+model Company {
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  // Symbol is not necessarily anything in the real world but an
+  // iexcloud Cloud identifier
+  symbol         String   @unique
+  logo           String
+  name           String?
+  exchange       String?
+  industry       String?
+  website        String?
+  description    String?
+  ceo            String?
+  issueType      String?
+  sector         String?
+  employees      Int?
+  securityName   String?
+  primarySICCode Int?
+  address        String?
+  address2       String?
+  state          String?
+  city           String?
+  zip            String?
+  country        String?
+  phone          String?
+}
+
+model Price {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  symbol    String
+  time      DateTime
+  value     Float
+  @@unique([symbol, time], name: "Price_symbol_time_unique_constraint")
+}
+
+model Isin {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // ISIN number
+  isin      String   @unique
+  // The ticker
+  symbol    String   @unique
+  // An identifier of where the symbol is listed
+  exchange  String
+  // The geographic identifier where the symbol is listed
+  region    String
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userID     String
+  assetID    String
+  quantity   Float
+  value      Float
+  executedAt DateTime
+}
