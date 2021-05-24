@@ -37,13 +37,12 @@ model Company {
 }
 
 model Price {
-  id        String   @id @default(uuid())
+  @@id([symbol,time])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   symbol    String
   time      Int
   value     Float
-  @@unique([symbol, time], name: "Price_symbol_time_unique_constraint")
 }
 
 model Isin {

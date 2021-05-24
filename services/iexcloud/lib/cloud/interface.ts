@@ -3,6 +3,7 @@ import { Time } from "pkg/time"
 export interface IEXService {
   getCompany(req: GetCompanyCloudRequest): Promise<GetCompanyCloudResponse>
   getLogo(req: GetLogoCloudRequest): Promise<GetLogoCloudResponse>
+  getHistory(req: GetHistoryCloudRequest): Promise<GetHistoryCloudResponse>
 }
 
 export interface GetCompanyCloudRequest {
@@ -161,3 +162,25 @@ export interface GetPriceCloudResponse {
    */
   volume: number
 }
+
+export interface GetHistoryCloudRequest {
+  /**
+   * Ticker of the company.
+   */
+  symbol: string
+}
+
+export type GetHistoryCloudResponse = {
+  /**
+   * Date of the closing price.
+   */
+  date: string
+  /**
+   * Actual closing price.
+   */
+  close: number
+  /**
+   * Volume traded that day.
+   */
+  volume: number
+}[]

@@ -9,7 +9,12 @@ export interface ButtonProps {
   onClick: () => void
 }
 
-export const Button = ({ color, label, icon, onClick }: ButtonProps) => {
+export const Button = ({
+  color,
+  label,
+  icon,
+  onClick,
+}: ButtonProps): JSX.Element => {
   return (
     <Wrapper>
       <button onClick={onClick} className={`focus:outline-none ${color}`}>

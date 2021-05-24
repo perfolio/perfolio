@@ -127,7 +127,6 @@ describe("prices", () => {
         })
         expect(savedPrice).not.toBeNull()
         expect(savedPrice!.createdAt).not.toBeNull()
-        expect(savedPrice!.id).not.toBeNull()
         expect(savedPrice!.symbol).toEqual(price.symbol)
         expect(savedPrice!.updatedAt).not.toBeNull()
         expect(savedPrice!.value).toBe(1)

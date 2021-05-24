@@ -7,7 +7,7 @@ export interface TagProps {
   color: string
 }
 
-export const Tag = ({ label, color }: TagProps) => {
+export const Tag = ({ label, color }: TagProps): JSX.Element => {
   const colors = `text-${color}-700 bg-${color}-50`
 
   return (

@@ -103,31 +103,22 @@ export class Cache implements Repository {
   }
   /**
    * Bulk insert prices in a single transaction.
-   * If uniqueness constraints are violated this falls back to upserting every price separately.
    *
    * @param prices
    */
   public async setPrices(prices: Prisma.PriceCreateInput[]): Promise<Price[]> {
     return Promise.all(
       prices.map(async (price) => {
-        const foundPrice = await this.db.price.findFirst({
+        return this.db.price.upsert({
           where: {
-            AND: {
+            symbol_time: {
               symbol: price.symbol,
               time: price.time,
             },
           },
+          update: price,
+          create: price,
         })
-        if (foundPrice) {
-          return await this.db.price.update({
-            where: {
-              id: foundPrice.id,
-            },
-            data: price,
-          })
-        } else {
-          return await this.db.price.create({ data: price })
-        }
       }),
     )
   }

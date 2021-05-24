@@ -13,7 +13,13 @@ export interface IconProps {
  *
  * Set label to emtpy string ("") to display it in a loading state.
  */
-export const Icon = ({ icon, color, label, content, align }: IconProps) => {
+export const Icon = ({
+  icon,
+  color,
+  label,
+  content,
+  align,
+}: IconProps): JSX.Element => {
   align = align ?? "justify-center"
   const colors = color ? `text-${color}-800 bg-${color}-200` : ""
 
@@ -28,7 +34,7 @@ export const Icon = ({ icon, color, label, content, align }: IconProps) => {
         <div className="flex flex-col items-start pl-2">
           {typeof label !== "undefined" ? (
             label === "" ? (
-              <span className="w-16 h-4 rounded-sm bg-gray-300 animate-pulse"></span>
+              <span className="w-16 h-4 bg-gray-300 rounded-sm animate-pulse"></span>
             ) : (
               <span className="text-sm text-gray-900">{label}</span>
             )
