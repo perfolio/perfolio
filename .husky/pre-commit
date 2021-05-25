@@ -1,8 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn tsc
-yarn test
-
-yarn lint-staged
-
+npx lint-staged
+npx pretty-quick --staged
