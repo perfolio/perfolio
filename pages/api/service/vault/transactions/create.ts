@@ -33,7 +33,7 @@ const GetPrices = async (req: NextApiRequest, res: NextApiResponse) => {
       value: req.body.value as number,
       quantity: req.body.quantity as number,
       executedAt: req.body.executedAt as number,
-    }
+    } as Prisma.TransactionCreateInput
     console.log({ newTx })
 
     const transaction = await svc.addTransaction(newTx)
