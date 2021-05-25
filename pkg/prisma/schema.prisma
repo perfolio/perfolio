@@ -4,9 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
-
 
 model Company {
   id             String   @id @default(uuid())
@@ -37,12 +36,13 @@ model Company {
 }
 
 model Price {
-  @@id([symbol,time])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   symbol    String
   time      Int
   value     Float
+
+  @@id([symbol, time])
 }
 
 model Isin {
@@ -63,9 +63,12 @@ model Transaction {
   id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  userID     String
-  assetID    String
+  userId     String
+  // For stocks this will be the isin itself
+  assetId    String
   quantity   Float
   value      Float
+  
+  // Unix timestamp with second precission
   executedAt Int
 }

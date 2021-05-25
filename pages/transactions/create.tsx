@@ -11,7 +11,7 @@ import {
 } from "pkg/components"
 import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 import { useForm } from "react-hook-form"
-import { usePrice, useCompany } from "pkg/hooks"
+import { usePrice, useCompany, useAddTransaction } from "pkg/hooks"
 import { Time } from "pkg/time"
 
 interface FormData {
@@ -20,7 +20,6 @@ interface FormData {
   price: number
   shares: number
   date: Date
-  time: Date
 }
 
 /**
@@ -36,12 +35,8 @@ const Page: NextPage = () => {
     formState: { errors },
   } = useForm<FormData>({ mode: "all", defaultValues: { date: new Date() } })
 
-  /**
-   * Submit the data.
-   */
-  async function onSubmit(data: FormData) {
-    console.debug(data)
-  }
+  const addTransaction = useAddTransaction()
+
   const data = watch()
   const { data: price, isLoading: priceLoading } = usePrice({
     isin: data.isin,
@@ -56,10 +51,7 @@ const Page: NextPage = () => {
     <WithSidebar title="Add a transaction">
       <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
         <div className="w-full">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col py-6 space-y-4"
-          >
+          <form className="flex flex-col py-6 space-y-4">
             <Radio
               updateValue={(buy) => setValue("buy", buy)}
               options={["Buy", "Sell"]}
@@ -124,7 +116,19 @@ const Page: NextPage = () => {
               size="auto"
               type="primary"
               label="Add Transaction"
-              onClick={handleSubmit(onSubmit)}
+              onClick={handleSubmit(async (data: FormData) => {
+                console.log({ data })
+                if (!price) {
+                  throw new Error("Wait for price to load")
+                }
+                await addTransaction.mutateAsync({
+                  assetId: data.isin,
+                  quantity: data.shares * (data.buy ? 1 : -1),
+                  value: price,
+                  executedAt: Time.fromDate(new Date(data.date)).unix(),
+                })
+                console.log("done")
+              })}
             />
           </form>
         </div>

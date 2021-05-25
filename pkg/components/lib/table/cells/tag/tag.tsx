@@ -18,5 +18,3 @@ export const Tag = ({ label, color }: TagProps): JSX.Element => {
     </Wrapper>
   )
 }
-
-export default Tag
