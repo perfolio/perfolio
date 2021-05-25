@@ -137,9 +137,9 @@ export interface GetLogoResponse {
 
 export interface GetPriceRequest {
   /**
-   * Ticker of the company.
+   * Isin of the company.
    */
-  symbol: string
+  isin: string
   /**
    * Date to fetch.
    */
@@ -155,9 +155,9 @@ export interface GetPriceResponse {
 
 export interface GetHistoryRequest {
   /**
-   * Ticker of the company.
+   * Isin of the company.
    */
-  symbol: string
+  isin: string
 }
 
 export type GetHistoryResponse = {

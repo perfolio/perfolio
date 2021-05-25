@@ -14,34 +14,31 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ isin, time }) => {
     const cloud = new Cloud()
-    const { symbol } = await cloud.getSymbol({ isin })
 
     let price = await db.price.findUnique({
-      where: { symbol_time: { symbol: symbol.toLowerCase(), time } },
+      where: { isin_time: { isin: isin.toLowerCase(), time } },
     })
     if (price) {
       return price
     }
 
-    const newPrice = await cloud
-      .getPrice({ symbol, time: Time.fromTimestamp(time) })
-      .catch((err) => {
-        throw new Error(`Unable to load closing price from cloud: ${err}`)
-      })
+    const newPrice = await cloud.getPrice({ isin, time: Time.fromTimestamp(time) }).catch((err) => {
+      throw new Error(`Unable to load closing price from cloud: ${err}`)
+    })
     price = await db.price
       .upsert({
         where: {
-          symbol_time: { symbol, time },
+          isin_time: { isin, time },
         },
         create: {
-          symbol,
+          isin,
           time,
           value: newPrice.value,
         },
         update: { value: newPrice.value },
       })
       .catch((err) => {
-        throw new Error(`Unable to store price for ${symbol}@${time} in database: ${err}`)
+        throw new Error(`Unable to store price for ${isin}@${time} in database: ${err}`)
       })
 
     if (!price) throw new NotFoundError()

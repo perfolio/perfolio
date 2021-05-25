@@ -129,7 +129,7 @@ export class Cloud implements IEXService {
    */
   public async getPrice(req: GetPriceRequest): Promise<GetPriceResponse> {
     const { year, month, day } = req.time.pad()
-    const symbol = req.symbol.toLowerCase()
+    const symbol = (await this.getSymbol(req)).symbol
     const res = await this.get({
       path: `/stock/${symbol}/chart/date/${year}${month}${day}`,
       parameters: {
@@ -142,7 +142,7 @@ export class Cloud implements IEXService {
        */
       if (err instanceof ErrorHTTP400 && req.time.unix() <= Time.today().unix()) {
         return {
-          symbol: req.symbol,
+          symbol,
           time: req.time.unix(),
           value: -1,
         }
@@ -161,7 +161,7 @@ export class Cloud implements IEXService {
    * Load all prices for a specific symbol.
    */
   public async getHistory(req: GetHistoryRequest): Promise<GetHistoryResponse> {
-    const symbol = req.symbol.toLowerCase()
+    const symbol = (await this.getSymbol(req)).symbol
     const res = (await this.get({
       path: `/stock/${symbol}/chart/max`,
       parameters: {

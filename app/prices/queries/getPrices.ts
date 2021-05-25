@@ -1,12 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { paginate, resolver } from "blitz"
-import db, { Prisma } from "db"
+import { resolver } from "blitz"
+import db from "db"
 import { Cloud } from "integrations/iexcloud"
 import { Time } from "pkg/time"
 import * as z from "zod"
 import getPrice from "./getPrice"
 const GetStockPrices = z.object({
-  symbol: z.string(),
+  isin: z.string(),
   begin: z.number(),
   end: z.number(),
 })
@@ -14,15 +13,15 @@ const GetStockPrices = z.object({
 export default resolver.pipe(
   resolver.zod(GetStockPrices),
   resolver.authorize(),
-  async ({ symbol, begin, end }, ctx) => {
-    symbol = symbol.toLowerCase()
+  async ({ isin, begin, end }, ctx) => {
+    isin = isin.toLowerCase()
 
     const cloud = new Cloud()
     let cachedPrices = await db.price.findMany({
       where: {
         AND: {
-          symbol: {
-            equals: symbol,
+          isin: {
+            equals: isin,
           },
           time: {
             gte: begin,
@@ -37,20 +36,20 @@ export default resolver.pipe(
      * because we are certain there are no dates missing.
      */
     if (cachedPrices.length === 0) {
-      console.debug(`No prices for ${symbol} found. Bulk importing from iex...`)
-      const allPrices = await cloud.getHistory({ symbol })
-      console.debug(`Processing ${allPrices.length} new prices for ${symbol}`)
+      console.debug(`No prices for ${isin} found. Bulk importing from iex...`)
+      const allPrices = await cloud.getHistory({ isin })
+      console.debug(`Processing ${allPrices.length} new prices for ${isin}`)
       cachedPrices = await Promise.all(
         allPrices.map(async (price) => {
           return db.price.upsert({
             where: {
-              symbol_time: {
-                symbol,
+              isin_time: {
+                isin,
                 time: price.time.unix(),
               },
             },
             update: { time: price.time.unix(), value: price.value },
-            create: { symbol, time: price.time.unix(), value: price.value },
+            create: { isin, time: price.time.unix(), value: price.value },
           })
         }),
       )
@@ -78,7 +77,7 @@ export default resolver.pipe(
 
     const newPrices = await Promise.all(
       priceRequests.map((time) => {
-        return getPrice({ symbol, time: time.unix() }, ctx)
+        return getPrice({ isin, time: time.unix() }, ctx)
       }),
     )
 

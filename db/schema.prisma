@@ -102,9 +102,9 @@ model Transaction {
 model Price {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  symbol    String
+  isin      String
   time      Int
   value     Float
 
-  @@id([symbol, time])
+  @@id([isin, time])
 }
