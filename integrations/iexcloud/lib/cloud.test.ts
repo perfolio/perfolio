@@ -56,6 +56,7 @@ describe("getLogo()", () => {
 })
 describe("getPrice()", () => {
   describe("when used with a valid symbol and time", () => {
+    const time = new Time(2020, 5, 11)
     const testCases = [
       {
         name: "with lower case symbol",
@@ -63,15 +64,15 @@ describe("getPrice()", () => {
       },
       {
         name: "with upper case symbol",
-        symbol: "msft",
+        symbol: "MSFT",
       },
     ]
     testCases.forEach((tc) => {
-      describe(tc.name, () => {
+      describe(`with ${tc.symbol} on ${time}`, () => {
         it("returns the correct price", async () => {
           const price = await api.getPrice({
             symbol: tc.symbol,
-            time: new Time(2020, 5, 11),
+            time,
           })
           expect(price.value).toBeGreaterThan(0)
         })

@@ -1,6 +1,4 @@
-import { useMutation } from "blitz"
 import { Input, AsyncButton } from "app/core/components"
-import resetPassword from "app/auth/mutations/resetPassword"
 import { useForm } from "react-hook-form"
 import React from "react"
 interface FormData {
@@ -19,9 +17,6 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSubmit }
     watch,
     formState: { errors },
   } = useForm<FormData>({ mode: "onBlur" })
-
-  const emailRegex =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   const password = watch("password")
   return (

@@ -126,7 +126,6 @@ export class Cloud implements IEXService {
    * Load the closing price for a specific date.
    */
   public async getPrice(req: GetPriceRequest): Promise<GetPriceResponse> {
-    console.debug(`Loading ${req.symbol} for ${req.time}`)
     const { year, month, day } = req.time.pad()
     const symbol = req.symbol.toLowerCase()
     const res = await this.get({
@@ -149,11 +148,10 @@ export class Cloud implements IEXService {
         throw err
       }
     })
-
-    const price = res as { close: number }
+    const price = res as { close: number }[]
 
     return {
-      value: price?.close ?? -1,
+      value: price?.[0]?.close ?? -1,
     }
   }
 
