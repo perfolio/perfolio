@@ -8,7 +8,7 @@ import {
   GetHistoryCloudRequest,
   GetHistoryCloudResponse,
 } from "./interface"
-import { Prisma } from "@prisma/client"
+import { Prisma, Isin } from "@prisma/client"
 import { ApiConfig, GetRequest } from "./types"
 import { Time } from "pkg/time"
 
@@ -214,5 +214,40 @@ export class Cloud {
         value: res[0]?.close ?? -1,
       }
     })
+  }
+
+  /**.
+   * Https://iexcloud.io/docs/api/#isin-mapping
+   *
+   * @param isin - https://www.investopedia.com/terms/i/isin.asp
+   */
+  public async getIsin(isin: string): Promise<Isin> {
+    const res = await this.get({
+      path: "/ref-data/isin",
+      parameters: {
+        isin,
+      },
+    })
+    const isinMap = res as Isin[]
+    for (const map of isinMap) {
+      if (isin.startsWith(map.region)) {
+        const company = await this.getCompany({ symbol: map.symbol }).catch(
+          (err) => {
+            return new Error(`Unable to fetch company: [ ${err} ]`)
+          },
+        )
+        if (company.name !== "") {
+          // iex also ships a`.iexId` field that is always null and causes issues when
+          // saving to the database, so we clean it up a little and inject the isin as well.
+          return {
+            isin: isin,
+            symbol: map.symbol,
+            exchange: map.exchange,
+            region: map.region,
+          } as Isin
+        }
+      }
+    }
+    throw new Error(`No correct isin found for: ${isin}. IEX returned: ${res}.`)
   }
 }

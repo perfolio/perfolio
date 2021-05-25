@@ -1,12 +1,21 @@
 import React from "react"
 import { NextPage } from "next"
-import { Button, WithSidebar } from "pkg/components"
+import {
+  Button,
+  WithSidebar,
+  Radio,
+  AsyncButton,
+  Input,
+  Value,
+  Spinner,
+} from "pkg/components"
 import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 import { useForm } from "react-hook-form"
-import { AsyncButton, Input } from "pkg/components"
-import { SaveIcon } from "@heroicons/react/outline"
+import { usePrice, useCompany } from "pkg/hooks"
+import { Time } from "pkg/time"
 
 interface FormData {
+  buy: boolean
   isin: string
   price: number
   shares: number
@@ -20,158 +29,183 @@ interface FormData {
 const Page: NextPage = () => {
   const {
     register,
+    setValue,
+    trigger,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<FormData>()
+  } = useForm<FormData>({ mode: "all", defaultValues: { date: new Date() } })
 
   /**
    * Submit the data.
    */
   async function onSubmit(data: FormData) {
-    console.log(data)
+    console.debug(data)
   }
+  const data = watch()
+  const { data: price, isLoading: priceLoading } = usePrice({
+    isin: data.isin,
+    time: Time.fromDate(new Date(data.date)),
+  })
+
+  const { data: company, isLoading: companyLoading } = useCompany({
+    isin: data.isin,
+  })
 
   return (
     <WithSidebar title="Add a transaction">
-      <div className="flex space-x-8">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            type="text"
-            label="Isin"
-            register={register("isin", {
-              required: "What did you buy or sell?",
-              pattern: {
-                value: /[A-Z]{2}[a-zA-Z0-9]{10}/,
-                message: "Please enter a valid isin",
-              },
-            })}
-            error={errors.isin?.message}
-          />
-          <Input
-            type="number"
-            label="Price per share"
-            register={register("price", {
-              required: "Please enter a price",
-              min: { value: 0, message: "Must be positive" },
-            })}
-            error={errors.price?.message}
-          />
-          <Input
-            type="number"
-            label="How many shares?"
-            register={register("shares", {
-              required: "How many shares did you buy or sell?",
-            })}
-            error={errors.shares?.message}
-          />
-          <div className="flex items-center justify-between space-x-4">
+      <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
+        <div className="w-full">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col py-6 space-y-4"
+          >
+            <Radio
+              updateValue={(buy) => setValue("buy", buy)}
+              options={["Buy", "Sell"]}
+            />
+
+            <Input
+              type="text"
+              label="Isin"
+              placeholder="US0123456789"
+              iconLeft={
+                company ? (
+                  <img src={company.logo} />
+                ) : companyLoading ? (
+                  <Spinner />
+                ) : null
+              }
+              register={register("isin", {
+                required: "What did you buy or sell?",
+                pattern: {
+                  value: /[A-Z]{2}[a-zA-Z0-9]{10}/,
+                  message: "Please enter a valid isin",
+                },
+              })}
+              error={errors.isin?.message}
+            />
             <Input
               type="date"
               label="Date of transaction"
               register={register("date", {
-                required: "When did you buy or sell?",
+                required: `When did you ${data.buy ? "buy" : "sell"}?`,
               })}
               error={errors.date?.message}
             />
-            <Input
-              type="time"
-              label="Time of transaction"
-              register={register("time", {
-                required: "When did you buy or sell?",
-              })}
-              error={errors.time?.message}
-            />
-          </div>
-          <AsyncButton
-            type="primary"
-            label="Sign in"
-            onClick={handleSubmit(onSubmit)}
-          />
-        </form>
-        <div className="w-1/2">
-          <div className="relative">
-            <div className="md:px-5 xl:px-10">
-              <div className="pb-8 border-b border-gray-200">
-                <div className="flex items-center text-base sm:text-lg md:text-xl lg:text-2xl">
-                  <p className="pl-3 font-bold leading-normal text-gray-800">
-                    Suggestions
-                  </p>
-                </div>
-              </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Input
+                type="number"
+                label="How many shares?"
+                register={register("shares", {
+                  required: `How many shares did you ${
+                    data.buy ? "buy" : "sell"
+                  }?`,
+                })}
+                error={errors.shares?.message}
+              />
+              <Value
+                label="Price per share"
+                value={price && price > 0 ? price : ""}
+                tooltip="Automatically fetched when all data is entered correctly"
+                iconLeft={
+                  price ? (
+                    <div className="flex items-center justify-center w-full h-full">
+                      <span className="font-medium text-gray-700">$</span>
+                    </div>
+                  ) : priceLoading ? (
+                    <Spinner />
+                  ) : null
+                }
+              />
             </div>
-            <div className="w-full mt-6 md:px-5 xl:px-10">
-              <div className="space-y-8">
-                <div className="flex items-center justify-start space-x-4">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                      <img
-                        className="rounded-full"
-                        src="https://storage.googleapis.com/iex/api/logos/TSLA.png"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-base font-medium leading-none text-gray-800">
-                        Tesla Inc.
-                      </p>
-                      <p className="pl-3 text-xs leading-3 text-gray-500">
-                        2 min ago
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-4 text-sm">
-                      <span className="text-gray-600">$ 499.41</span>
-                      <span className="px-2 py-1 text-xs rounded-full text-success-700 bg-success-100">
-                        +6,45 (+1,36 %)
+            <AsyncButton
+              size="auto"
+              type="primary"
+              label="Add Transaction"
+              onClick={handleSubmit(onSubmit)}
+            />
+          </form>
+        </div>
+        <div className="w-full">
+          <div className="flex items-center justify-between px-6 py-6">
+            <p className="text-sm font-semibold leading-tight text-gray-800 lg:text-xl">
+              Suggestions
+            </p>
+          </div>
+          <div className="px-6 pt-6 overflow-x-auto">
+            <div className="w-full whitespace-nowrap">
+              <ul className="flex flex-col divide-y divide-gray-100">
+                <li className="flex items-center justify-between py-3">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      className="w-10 h-10 rounded"
+                      src="https://storage.googleapis.com/iex/api/logos/TSLA.png"
+                    />
+                    <div className="flex flex-col items-start ">
+                      <div className="flex items-center space-x-3 text-sm leading-none">
+                        <span className="font-semibold text-gray-800">
+                          Tesla Inc.
+                        </span>
+                        <span className="text-sm text-gray-700">$3015.24</span>
+                      </div>
+                      <span className="text-xs leading-none text-gray-600 md:text-sm">
+                        US88160R1014
                       </span>
                     </div>
                   </div>
-                  <Button
-                    size="small"
-                    prefix={<SaveIcon />}
-                    type="secondary"
-                    label="Import"
-                    onClick={() => {
-                      console.log("a")
-                    }}
-                  />
-                </div>
-                <div className="flex items-center justify-start space-x-4">
-                  <div>
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                      <img
-                        className="rounded-full"
-                        src="https://storage.googleapis.com/iex/api/logos/MSFT.png"
-                      />
-                    </div>
+                  <div className="flex flex-col items-end space-y-1">
+                    <span className="text-sm text-right text-gray-600">
+                      Added 1 month ago
+                    </span>
+                    <Button
+                      label="Add"
+                      type="secondary"
+                      size="small"
+                      onClick={() => {
+                        setValue("isin", "US88160R1014")
+                        setValue("shares", data.shares ?? 1)
+                        trigger("isin")
+                      }}
+                    />
                   </div>
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-base font-medium leading-none text-gray-800">
-                        Microsoft Inc.
-                      </p>
-                      <p className="pl-3 text-xs leading-3 text-gray-500">
-                        4 hours ago
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-4 text-sm">
-                      <span className="text-gray-600">$ 1412.19</span>
-                      <span className="px-2 py-1 text-xs rounded-full text-error-700 bg-error-100">
-                        -5.51 (-2,36 %)
+                </li>
+                <li className="flex items-center justify-between py-3">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      className="w-10 h-10 rounded"
+                      src="https://storage.googleapis.com/iex/api/logos/AAPL.png"
+                    />
+                    <div className="flex flex-col items-start ">
+                      <div className="flex items-center space-x-3 text-sm leading-none">
+                        <span className="font-semibold text-gray-800">
+                          Apple
+                        </span>
+                        <span className="text-sm text-gray-700">$152.12</span>
+                      </div>
+                      <span className="text-xs leading-none text-gray-600 md:text-sm">
+                        US0378331005
                       </span>
                     </div>
                   </div>
-                  <Button
-                    size="small"
-                    prefix={<SaveIcon />}
-                    type="secondary"
-                    label="Import"
-                    onClick={() => {
-                      console.log("a")
-                    }}
-                  />
-                </div>
-              </div>
+                  <div className="flex flex-col items-end space-y-1">
+                    <span className="text-sm text-right text-gray-600">
+                      Added 2 weeks ago
+                    </span>
+                    <Button
+                      label="Add"
+                      type="secondary"
+                      size="small"
+                      onClick={() => {
+                        setValue("isin", "US0378331005")
+                        setValue("shares", data.shares ?? 1)
+                        trigger("isin")
+                      }}
+                    />
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
