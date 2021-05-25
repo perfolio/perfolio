@@ -3,7 +3,7 @@ import Wrapper from "../wrapper/wrapper"
 
 /* eslint-disable-next-line */
 export interface SimpleProps {
-  label: string | number
+  label: React.ReactNode
 }
 
 export const Simple: React.FC<SimpleProps> = ({ label }): JSX.Element => {

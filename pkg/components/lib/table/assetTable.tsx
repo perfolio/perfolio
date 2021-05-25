@@ -2,7 +2,7 @@ import React from "react"
 import { Table } from "./table"
 import { Simple } from "./cells/simple/simple"
 import { Icon } from "./cells/icon/icon"
-import Tag from "./cells/tag/tag"
+import { Tag } from "./cells/tag/tag"
 
 interface Asset {
   id: string

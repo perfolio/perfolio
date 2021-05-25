@@ -5,8 +5,8 @@ import Wrapper from "../wrapper/wrapper"
 export interface IconProps {
   icon: React.ReactNode
   color?: string
-  label?: string
-  content?: string
+  label?: React.ReactNode
+  content?: React.ReactNode
   align?: string
 }
 /**
