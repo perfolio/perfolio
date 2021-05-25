@@ -1,87 +1,63 @@
 {
   "name": "perfolio",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "prebuild": "yarn db:generate",
-    "build": "next build",
-    "tsc": "tsc --pretty --noEmit",
-    "format": "prettier --loglevel warn --write .",
-    "lint": "eslint . --ext .ts,.tsx,.js --fix",
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "studio": "blitz prisma studio",
     "fmt": "yarn lint && yarn format",
+    "lint": "eslint --ignore-path .gitignore  --ext .js,.ts,.tsx .",
+    "format": "prettier --loglevel warn --write .",
     "test": "jest",
-    "postinstall": "sed -i 's/DOMAttributesAdaptChildEvent<P, T>/DOMAttributesAdaptChildEvent<any, any>/g' ./node_modules/recharts/types/polar/Radar.d.ts",
-    "db:studio": "yarn prisma studio --schema ./pkg/prisma/schema.prisma",
-    "db:migrate": "yarn prisma migrate dev --preview-feature --schema ./pkg/prisma/schema.prisma",
-    "db:push": "yarn prisma db push --preview-feature --schema ./pkg/prisma/schema.prisma",
-    "db:generate": "yarn prisma generate --schema ./pkg/prisma/schema.prisma"
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "singleQuote": false,
+    "trailingComma": "all"
   },
   "lint-staged": {
-    "**.{ts,tsx}": [
-      "yarn prettier --write",
-      "yarn eslint --fix"
-    ],
-    "**.{json,md,mdx,css,html,js}": [
-      "yarn prettier --write"
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
     ]
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^1.3.1",
-    "@headlessui/react": "^1.2.0",
-    "@heroicons/react": "^1.0.1",
-    "@prisma/client": "^2.23.0",
-    "@radix-ui/react-tooltip": "^0.0.18",
-    "@sentry/nextjs": "^6.4.1",
-    "axios": "^0.21.1",
-    "classnames": "^2.3.1",
-    "jest": "^26.6.3",
-    "next": "^10.2.2",
-    "next-themes": "^0.0.14",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-hook-form": "^7.6.6",
-    "react-query": "^3.16.0",
-    "recharts": "^2.0.9",
-    "webpack": "^5.37.1"
+    "@headlessui/react": "1.2.0",
+    "@heroicons/react": "1.0.1",
+    "@hookform/resolvers": "2.5.1",
+    "@prisma/client": "~2.20",
+    "@radix-ui/react-tooltip": "0.0.18",
+    "@types/preview-email": "2.0.0",
+    "@types/react": "17.0.7",
+    "autoprefixer": "10.2.5",
+    "blitz": "0.35.0",
+    "eslint": "7.27.0",
+    "husky": "6.0.0",
+    "lint-staged": "10.5.4",
+    "next-themes": "0.0.14",
+    "postcss": "8.3.0",
+    "prettier": "2.3.0",
+    "prettier-plugin-prisma": "0.7.0",
+    "pretty-quick": "3.1.0",
+    "preview-email": "3.0.4",
+    "prisma": "~2.20",
+    "react": "0.0.0-experimental-6a589ad71",
+    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react-error-boundary": "3.1.3",
+    "react-hook-form": "7.6.6",
+    "recharts": "2.0.9",
+    "tailwindcss": "2.1.2",
+    "typescript": "~4.2",
+    "zod": "1.11.17"
   },
+  "private": true,
   "devDependencies": {
-    "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
-    "@tailwindcss/jit": "^0.1.18",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.6.0",
-    "@types/react": "^17.0.6",
-    "@types/react-dom": "^17.0.5",
-    "@types/react-query": "^1.1.2",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
-    "autoprefixer": "^10.2.5",
-    "dotenv": "^10.0.0",
-    "eslint": "^7.27.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jsdoc": "^34.8.2",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.23.2",
-    "husky": "^6.0.0",
-    "jest-fetch-mock": "^3.0.3",
-    "jest-watch-typeahead": "^0.6.3",
-    "lerna": "^4.0.0",
-    "lint-staged": "^11.0.0",
-    "node-fetch": "^2.6.1",
-    "postcss": "^8.3.0",
-    "prettier": "^2.3.0",
-    "prisma": "^2.23.0",
-    "tailwindcss": "^2.1.2",
-    "typescript": "^4.2.4"
-  },
-  "prisma": {
-    "schema": "pkg/prisma/schema.prisma"
+    "@tailwindcss/jit": "0.1.18"
   }
 }
