@@ -5,6 +5,8 @@ import {
   GetPricesRequest,
   GetPricesResponse,
   GetPriceRequest,
+  GetSymbolRequest,
+  GetSymbolResponse,
 } from "./interface"
 import { Price } from "@prisma/client"
 import { Cache } from "./cache/cache"
@@ -86,7 +88,6 @@ export class IEXCloud implements IEXService {
     cachedPrices.forEach((price) => {
       priceMap[price.time] = price.value
     })
-    console.log("cachedPrices:", Object.keys(priceMap).length)
 
     const priceRequests: Time[] = []
     for (
@@ -95,7 +96,6 @@ export class IEXCloud implements IEXService {
       day = day.nextDay()
     ) {
       if (!priceMap[day.unix()]) {
-        console.log(`${day} is not cached yet`)
         priceRequests.push(day)
       }
     }
@@ -127,7 +127,7 @@ export class IEXCloud implements IEXService {
   /**
    * Load price for a single symbol on a single day.
    */
-  private async getPrice(req: GetPriceRequest): Promise<Price> {
+  public async getPrice(req: GetPriceRequest): Promise<Price> {
     const symbol = req.symbol.toLowerCase()
     const price = await this.cache.getPrice(symbol, req.time).catch((err) => {
       throw new Error(`Unable to load price from cache: [ ${err} ]`)
@@ -141,5 +141,20 @@ export class IEXCloud implements IEXService {
     return this.cache.setPrice(newPrice).catch((err) => {
       throw new Error(`Unable to store prices in cache: ${err}`)
     })
+  }
+
+  /**
+   * Request the symbol associated with a given ISIN.
+   *
+   * @param req
+   * @returns The found symbol or null.
+   * @throws Only throws when something goes wrong.
+   */
+  public async getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse> {
+    const map = await this.cloud.getIsin(req.isin).catch((err) => {
+      throw new Error(`Unable to fetch isin from cloud: [ ${err} ]`)
+    })
+
+    return { symbol: map.symbol }
   }
 }

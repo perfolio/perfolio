@@ -56,8 +56,13 @@ export class Cache implements Repository {
     symbol = symbol.toLowerCase()
     let price: Price | null
     try {
-      price = await this.db.price.findFirst({
-        where: { symbol, time: time.unix() },
+      price = await this.db.price.findUnique({
+        where: {
+          symbol_time: {
+            symbol,
+            time: time.unix(),
+          },
+        },
       })
     } catch (err) {
       throw this.escalate(err)
@@ -97,9 +102,15 @@ export class Cache implements Repository {
    * This does not check if a price is already in the db.
    */
   public async setPrice(price: Prisma.PriceCreateInput): Promise<Price> {
-    return this.db.price.create({ data: price }).catch((err) => {
-      throw new Error(`Unable to set price: ${err}`)
-    })
+    return this.db.price
+      .upsert({
+        where: { symbol_time: { symbol: price.symbol, time: price.time } },
+        update: price,
+        create: price,
+      })
+      .catch((err) => {
+        throw new Error(`Unable to set price: ${err}`)
+      })
   }
   /**
    * Bulk insert prices in a single transaction.

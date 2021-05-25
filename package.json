@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
+    "prebuild": "rm -rf .next",
     "build": "next build",
     "tsc": "tsc --pretty --noEmit",
     "format": "prettier --loglevel warn --write .",
@@ -36,6 +37,7 @@
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@prisma/client": "^2.23.0",
+    "@radix-ui/react-tooltip": "^0.0.18",
     "@sentry/nextjs": "^6.4.1",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",

@@ -31,10 +31,13 @@ type Type =
 
 export interface InputProps {
   type: Type
-  label: string
+  value?: string | number
+  label?: string
   placeholder?: string
   register: UseFormRegisterReturn
   error?: string
+  disabled?: boolean
+  iconLeft?: React.ReactNode
 }
 
 /**
@@ -44,32 +47,49 @@ export interface InputProps {
 export function Input({
   type,
   // rename to labelName because it collides with the HTMLElement <label>
-  label: labelName,
+  label,
   placeholder,
   register,
+  value,
+  disabled,
   error,
+  iconLeft,
 }: InputProps): React.ReactElement {
   return (
     <div className="w-full space-y-1">
       <label
         htmlFor={register.name}
-        className="block text-xs font-medium text-gray-700 uppercase"
+        className="block text-xs font-medium text-gray-800 uppercase"
       >
-        {labelName}
+        {label}
       </label>
-      <input
-        type={type}
-        id={register.name}
-        className={classNames(
-          "w-full p-3 placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
-          {
-            "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
-            "border-error-400 focus:border-error-700 focus:bg-error-50": error,
-          },
-        )}
-        placeholder={placeholder}
-        {...register}
-      />
+      <div className="relative ">
+        {iconLeft ? (
+          <div className="absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-l pointer-events-none">
+            <span className="w-12 h-12 overflow-hidden border rounded-l">
+              {iconLeft}
+            </span>
+          </div>
+        ) : null}
+        <input
+          disabled={disabled}
+          type={type}
+          value={value}
+          id={register.name}
+          className={classNames(
+            "text-center h-12 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+            {
+              "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
+              "border-error-400 focus:border-error-700 focus:bg-error-50":
+                error,
+              "appearance-none bg-transparent": disabled,
+              "px-14": !!iconLeft,
+            },
+          )}
+          placeholder={placeholder}
+          {...register}
+        />
+      </div>
       {error ? (
         <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error-500">
           <ExclamationCircleIcon className="w-4 h-4" />

@@ -3,6 +3,7 @@ import { Time } from "pkg/time"
 export interface IEXService {
   getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse>
   getPrices(req: GetPricesRequest): Promise<GetPricesResponse>
+  getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse>
 }
 
 export type GetCompanyRequest = {
@@ -12,12 +13,6 @@ export type GetCompanyResponse = {
   company: Company
 }
 
-export type GetSymbolRequest = {
-  isin: string
-}
-export type GetSymbolResponse = {
-  symbol: string
-}
 export type GetCurrentValueRequest = {
   symbol: string
 }
@@ -44,4 +39,11 @@ export type GetPriceResponse = {
   symbol: string
   time: Time
   value: number
+}
+
+export type GetSymbolRequest = {
+  isin: string
+}
+export type GetSymbolResponse = {
+  symbol: string
 }
