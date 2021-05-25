@@ -55,6 +55,44 @@ export function Input({
   error,
   iconLeft,
 }: InputProps): React.ReactElement {
+  if (type === "checkbox") {
+    return (
+      <div className="w-full space-y-1">
+        <label
+          htmlFor={register.name}
+          className="block text-xs font-medium text-gray-800 uppercase"
+        >
+          {label}
+        </label>
+        <input
+          disabled={disabled}
+          type={type}
+          value={value}
+          id={register.name}
+          className={classNames(
+            "px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+            {
+              "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
+              "border-error-400 focus:border-error-700 focus:bg-error-50": error,
+              "appearance-none bg-transparent": disabled,
+              "px-14": !!iconLeft,
+            },
+          )}
+          placeholder={placeholder}
+          {...register}
+        />
+        {error ? (
+          <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error-500">
+            <ExclamationCircleIcon className="w-4 h-4" />
+            <p>
+              <span className="font-semibold">Error:</span> {error}
+            </p>
+          </div>
+        ) : null}
+      </div>
+    )
+  }
+
   return (
     <div className="w-full space-y-1">
       <label htmlFor={register.name} className="block text-xs font-medium text-gray-800 uppercase">
