@@ -1,5 +1,5 @@
 import React from "react"
-import { PieChart as Chart, Cell, Pie, ResponsiveContainer } from "recharts"
+import { PieChart, Cell, Pie, ResponsiveContainer } from "recharts"
 
 const data = [
   "Energy",
@@ -29,7 +29,7 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
 
   return (
     <text
-      className="bg-white rounded text-gray-700 border-gray-50"
+      className="text-gray-700 bg-white rounded border-gray-50"
       x={x}
       y={y}
       textAnchor={x > cx ? "start" : "end"}
@@ -38,7 +38,7 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
     </text>
   )
 }
-export const PieChart: React.FC = (): JSX.Element => {
+export const DiversityChart: React.FC = (): JSX.Element => {
   const COLORS = [
     "#EEF2FF",
     "#E0E7FF",
@@ -54,7 +54,7 @@ export const PieChart: React.FC = (): JSX.Element => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <Chart width={400} height={400}>
+      <PieChart width={400} height={400}>
         <Pie
           label={renderLabel}
           data={data}
@@ -71,7 +71,7 @@ export const PieChart: React.FC = (): JSX.Element => {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-      </Chart>
+      </PieChart>
     </ResponsiveContainer>
   )
 }

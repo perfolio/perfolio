@@ -1,7 +1,8 @@
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import React from "react"
-import { useSession } from "blitz"
 export const Profile: React.FC = (): JSX.Element => {
-  const sess = useSession()
+  const user = useCurrentUser()
+  console.log({ user })
   return (
     <div className="flex-wrap items-center xl:ml-32 xl:flex">
       {/* Displace the profile to fit main content */}
@@ -10,10 +11,10 @@ export const Profile: React.FC = (): JSX.Element => {
         <div className="items-center justify-end hidden w-full xl:flex">
           <div className="flex items-center space-x-4">
             <div className="flex flex-col items-end">
-              <span className="font-semibold text-gray-50">{sess.userId}</span>
+              <span className="font-semibold text-gray-50">{user?.email}</span>
               <span className="text-xs font-semibold text-white">Premium</span>
             </div>
-            <img className="w-12 h-12 rounded" src={""} alt="profile" />
+            {/* <img className="w-12 h-12 rounded" src={""} alt="profile" /> */}
           </div>
         </div>
         <div className="w-full p-4 space-y-2 bg-white rounded ">

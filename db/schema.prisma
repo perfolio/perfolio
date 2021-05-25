@@ -13,7 +13,7 @@ generator client {
 // --------------------------------------
 
 model User {
-  id             Int      @id @default(autoincrement())
+  id             String   @id @default(uuid())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   name           String?
@@ -36,12 +36,12 @@ model Session {
   publicData         String?
   privateData        String?
 
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 model Token {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   hashedToken String
@@ -49,8 +49,8 @@ model Token {
   expiresAt   DateTime
   sentTo      String
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   @@unique([hashedToken, type])
 }
@@ -84,4 +84,27 @@ model Company {
   zip            String?
   country        String?
   phone          String?
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     String
+  // For stocks this will be the isin itself
+  assetId    String
+  quantity   Float
+  value      Float
+  // Unix timestamp with second precission
+  executedAt Int
+}
+
+model Price {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  symbol    String
+  time      Int
+  value     Float
+
+  @@id([symbol, time])
 }

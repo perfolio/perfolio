@@ -1,8 +1,8 @@
 import React from "react"
 
-import { AreaChart as Chart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
+import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
 
-export const LineChart: React.FC = (): JSX.Element => {
+export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
   let currentValue = 1_000
   let currentUnix = 1590255007000
   const data: { value: number; date: string }[] = []
@@ -18,7 +18,7 @@ export const LineChart: React.FC = (): JSX.Element => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <Chart data={data}>
+      <AreaChart data={data}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
             <stop offset="30%" stopColor="#059669" stopOpacity={0.2} />
@@ -28,7 +28,7 @@ export const LineChart: React.FC = (): JSX.Element => {
         <Tooltip />
         <Area type="monotone" dataKey="value" stroke="#059669" fill="url(#colorUv)" />
         <XAxis dataKey="date" minTickGap={100} />
-      </Chart>
+      </AreaChart>
     </ResponsiveContainer>
   )
 }

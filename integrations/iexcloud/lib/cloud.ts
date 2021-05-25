@@ -9,6 +9,8 @@ import {
   GetHistoryResponse,
   GetSymbolRequest,
   GetSymbolResponse,
+  GetCurrentPriceRequest,
+  GetCurrentPriceResponse,
   IEXService,
 } from "./interface"
 import { ApiConfig, GetRequest } from "./types"
@@ -207,5 +209,16 @@ export class Cloud implements IEXService {
       }
     }
     throw new Error(`No correct isin found for: ${req.isin}. IEX returned: ${res}.`)
+  }
+  public async getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse> {
+    const symbol = (await this.getSymbol(req)).symbol
+
+    const res = await this.get({
+      path: `/stock/${symbol}/price`,
+    })
+    if (typeof res !== "number") {
+      throw new Error("IEX did not return a value")
+    }
+    return { value: res }
   }
 }

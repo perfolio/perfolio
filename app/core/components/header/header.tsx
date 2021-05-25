@@ -2,6 +2,7 @@ import React from "react"
 import { DesktopNavbar, MobileNavbar } from "../navbar"
 import { ChartSquareBarIcon, PlusIcon, BookOpenIcon } from "@heroicons/react/outline"
 import { Profile } from "../profile/profile"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}
 
@@ -24,7 +25,7 @@ const menu = {
         },
         {
           name: "Add manually",
-          href: "/transactions/create",
+          href: "/transactions/new",
           icon: <PlusIcon />,
           description: "Add a transaction by entering data yourself",
         },

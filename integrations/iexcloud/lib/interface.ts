@@ -5,6 +5,7 @@ export interface IEXService {
   getLogo(req: GetLogoRequest): Promise<GetLogoResponse>
   getHistory(req: GetHistoryRequest): Promise<GetHistoryResponse>
   getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse>
+  getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse>
 }
 
 export type GetCompanyRequest =
@@ -176,4 +177,12 @@ export type GetSymbolRequest = {
 
 export type GetSymbolResponse = {
   symbol: string
+}
+
+export type GetCurrentPriceRequest = {
+  isin: string
+}
+
+export type GetCurrentPriceResponse = {
+  value: number
 }
