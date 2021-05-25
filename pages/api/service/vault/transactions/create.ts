@@ -3,7 +3,7 @@ import { validateRequest } from "pkg/util"
 import { withSentry } from "@sentry/nextjs"
 import { Vault } from "services/vault/service"
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0"
-
+import { Prisma } from "@prisma/client"
 /**
  * HTTP Endpoint for IEXCloud.getPrices().
  */
@@ -27,7 +27,7 @@ const GetPrices = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = sess?.user
     const userId = user!["sub"]
 
-    const newTx = {
+    const newTx: Prisma.TransactionCreateInput = {
       userId: userId! as string,
       assetId: req.body.assetId! as string,
       value: req.body.value as number,
