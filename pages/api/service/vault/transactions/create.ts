@@ -28,8 +28,8 @@ const GetPrices = async (req: NextApiRequest, res: NextApiResponse) => {
     const userId = user!["sub"]
 
     const newTx = {
-      userId,
-      assetId: req.body.assetId as string,
+      userId: userId!,
+      assetId: req.body.assetId! as string,
       value: req.body.value,
       quantity: req.body.quantity,
       executedAt: req.body.executedAt,
