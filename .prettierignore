@@ -1,6 +1,7 @@
-node_modules
+.gitkeep
+.env*
+*.ico
+*.lock
+db/migrations
 .next
-yarn.lock
-package-lock.json
-public
-cdk.out
+.blitz
