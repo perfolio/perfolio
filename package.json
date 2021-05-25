@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
-    "prebuild": "rm -rf .next",
+    "prebuild": "rm -rf .next && yarn db:generate",
     "build": "next build",
     "tsc": "tsc --pretty --noEmit",
     "format": "prettier --loglevel warn --write .",
