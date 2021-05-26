@@ -1,6 +1,5 @@
 import { useMutation, Link, Routes } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
+import { LabeledTextField, Form, FORM_ERROR } from "app/core/components"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
 import { MailIcon, LockClosedIcon, UserIcon } from "@heroicons/react/outline"

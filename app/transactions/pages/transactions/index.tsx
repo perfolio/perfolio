@@ -1,6 +1,6 @@
 import React from "react"
 import { WithSidebar } from "app/core/components"
-import { BlitzPage } from "@blitzjs/core"
+import { BlitzPage, Routes } from "@blitzjs/core"
 import { TransactionsTable } from "app/core/components/transactionsTable/transactionsTable"
 /**
  * / page.
@@ -14,5 +14,5 @@ const TransactionsPage: BlitzPage = () => {
 }
 
 TransactionsPage.suppressFirstRenderFlicker = true
-
+TransactionsPage.authenticate = { redirectTo: Routes.LoginPage().pathname }
 export default TransactionsPage

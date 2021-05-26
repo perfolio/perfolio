@@ -1,4 +1,4 @@
-import { BlitzPage } from "blitz"
+import { BlitzPage, Routes } from "blitz"
 import { WithSidebar } from "app/core/components"
 import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
 import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
@@ -100,6 +100,6 @@ const Home: BlitzPage = () => {
 }
 
 Home.suppressFirstRenderFlicker = true
-Home.authenticate = true
+Home.authenticate = { redirectTo: Routes.LoginPage().pathname }
 
 export default Home

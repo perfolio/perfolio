@@ -21,7 +21,7 @@ export const ButtonController: React.FC<ButtonControllerProps> = ({
   children,
 }): JSX.Element => {
   return (
-    <button type={type} onClick={onClick} className="w-full focus:outline-none">
+    <button type={type} onClick={onClick} className="focus:outline-none">
       {children}
     </button>
   )

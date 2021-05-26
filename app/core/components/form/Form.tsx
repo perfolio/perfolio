@@ -1,5 +1,5 @@
-import { useState, ReactNode, PropsWithoutRef } from "react"
-import { FormProvider, useForm, UseFormProps } from "react-hook-form"
+import { useState, ReactNode, PropsWithoutRef, useEffect } from "react"
+import { FormProvider, useForm, UseFormProps, FormState } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { ExclamationCircleIcon } from "@heroicons/react/outline"
@@ -12,6 +12,7 @@ export interface FormProps<S extends z.ZodType<any, any>>
   submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
+  watch: (watcher: any) => any
   initialValues?: UseFormProps<z.infer<S>>["defaultValues"]
 }
 
@@ -28,6 +29,7 @@ export function Form<S extends z.ZodType<any, any>>({
   schema,
   initialValues,
   onSubmit,
+  watch,
   ...props
 }: FormProps<S>) {
   const ctx = useForm<z.infer<S>>({
@@ -35,6 +37,7 @@ export function Form<S extends z.ZodType<any, any>>({
     resolver: schema ? zodResolver(schema) : undefined,
     defaultValues: initialValues,
   })
+
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const submit = ctx.handleSubmit(async (values) => {
@@ -54,7 +57,14 @@ export function Form<S extends z.ZodType<any, any>>({
   })
   return (
     <FormProvider {...ctx}>
-      <form className="w-full space-y-4 form" {...props} onSubmit={submit}>
+      <form
+        className="w-full space-y-4 form"
+        {...props}
+        onSubmit={(e) => {
+          console.log(e)
+          submit(e)
+        }}
+      >
         {/* Form fields supplied as children are rendered here */}
         {children}
 
