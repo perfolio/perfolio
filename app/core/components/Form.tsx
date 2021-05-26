@@ -2,7 +2,8 @@ import { useState, ReactNode, PropsWithoutRef } from "react"
 import { FormProvider, useForm, UseFormProps } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-
+import { ExclamationCircleIcon } from "@heroicons/react/outline"
+import { AsyncButton } from "app/core/components"
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
   /** All your form fields */
@@ -38,43 +39,43 @@ export function Form<S extends z.ZodType<any, any>>({
 
   return (
     <FormProvider {...ctx}>
-      <form
-        onSubmit={ctx.handleSubmit(async (values) => {
-          const result = (await onSubmit(values)) || {}
-          for (const [key, value] of Object.entries(result)) {
-            if (key === FORM_ERROR) {
-              setFormError(value)
-            } else {
-              ctx.setError(key as any, {
-                type: "submit",
-                message: value,
-              })
-            }
-          }
-        })}
-        className="form"
-        {...props}
-      >
+      <form className="w-full space-y-4 form" {...props}>
         {/* Form fields supplied as children are rendered here */}
         {children}
 
-        {formError && (
-          <div role="alert" style={{ color: "red" }}>
-            {formError}
+        {formError ? (
+          <div
+            role="alert"
+            className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error-500"
+          >
+            <ExclamationCircleIcon className="w-4 h-4" />
+            <p>
+              <span className="font-semibold">Error:</span> {formError}
+            </p>
           </div>
-        )}
-
-        {submitText && (
-          <button type="submit" disabled={ctx.formState.isSubmitting}>
-            {submitText}
-          </button>
-        )}
-
-        <style global jsx>{`
-          .form > * + * {
-            margin-top: 1rem;
-          }
-        `}</style>
+        ) : null}
+        <div className="w-full">
+          <AsyncButton
+            onClick={ctx.handleSubmit(async (values) => {
+              const result = (await onSubmit(values)) || {}
+              for (const [key, value] of Object.entries(result)) {
+                if (key === FORM_ERROR) {
+                  setFormError(value)
+                } else {
+                  ctx.setError(key as any, {
+                    type: "submit",
+                    message: value,
+                  })
+                }
+              }
+            })}
+            kind="primary"
+            size="auto"
+            label={submitText}
+            type="submit"
+            disabled={ctx.formState.isSubmitting}
+          />
+        </div>
       </form>
     </FormProvider>
   )

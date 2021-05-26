@@ -1,7 +1,5 @@
 import { resolver, NotFoundError } from "blitz"
-import db from "db"
 import { Cloud } from "integrations/iexcloud"
-import { Time } from "pkg/time"
 import * as z from "zod"
 
 const GetCurrentPrice = z.object({

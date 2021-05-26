@@ -16,7 +16,7 @@ export const Button: React.FC<LinkProps | ButtonProps> = (props): JSX.Element =>
     props,
     <DefaultButtonStyle
       label={props.label}
-      type={props.type}
+      kind={props.kind}
       size={props.size}
       prefix={props.prefix}
     />,

@@ -45,7 +45,7 @@ describe("forgotPassword mutation", () => {
 
     // delete's existing tokens
     expect(tokens.length).toBe(1)
-    expect(token).not.toBeNull()
+    expect(token).not.toBe(null)
     expect(token!.id).not.toBe(user.tokens[0]!.id)
     expect(token!.type).toBe("RESET_PASSWORD")
     expect(token!.sentTo).toBe(user.email)

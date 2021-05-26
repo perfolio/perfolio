@@ -10,11 +10,13 @@ import { Spinner } from "../spinner/spinner"
  *
  */
 export const AsyncButton: React.FC<ButtonProps> = ({
+  type,
   onClick,
   label,
-  type,
+  kind,
   size,
   prefix,
+  disabled,
 }): JSX.Element => {
   const [isLoading, setLoading] = useState(false)
 
@@ -28,12 +30,16 @@ export const AsyncButton: React.FC<ButtonProps> = ({
     <ButtonController
       onClick={(e) => {
         e!.preventDefault()
+        if (disabled) {
+          return
+        }
         handleClick()
       }}
     >
       <DefaultButtonStyle
+        disabled={disabled}
         label={isLoading ? <Spinner /> : label}
-        type={type}
+        kind={kind}
         size={size}
         prefix={prefix}
       />
