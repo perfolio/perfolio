@@ -7,10 +7,8 @@ import getCompany from "app/companies/queries/getCompany"
 import { Time } from "pkg/time"
 import { BlitzPage, useMutation } from "@blitzjs/core"
 import createTransaction from "app/transactions/mutations/createTransaction"
-import { UserAddIcon } from "@heroicons/react/outline"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getTransactions from "app/transactions/queries/getTransactions"
-import { textChangeRangeIsUnchanged } from "typescript"
 
 const Suggestion: React.FC<{
   assetId: string
@@ -41,7 +39,7 @@ const Suggestion: React.FC<{
         <span className="text-sm text-right text-gray-600">Added 1 month ago</span>
         <Button
           label="Add"
-          type="secondary"
+          kind="secondary"
           size="small"
           onClick={() => {
             setValue("isin", assetId)
@@ -170,7 +168,7 @@ const NewTransactionPage: BlitzPage = () => {
             </div>
             <AsyncButton
               size="auto"
-              type="primary"
+              kind="primary"
               label="Add Transaction"
               onClick={handleSubmit(async (data: FormData) => {
                 console.log({ data })

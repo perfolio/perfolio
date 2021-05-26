@@ -1,27 +1,28 @@
 import React from "react"
 import { Spinner } from "../spinner/spinner"
-type Type = "primary" | "secondary" | "alert" | "cta" | "plain"
+type Kind = "primary" | "secondary" | "alert" | "cta" | "plain"
 type Justify = "start" | "center" | "end" | "between" | "around"
 type Size = "small" | "medium" | "large" | "auto"
 
 export interface DefaultButtonStyleProps {
   label: React.ReactNode
-  type: Type
+  kind: Kind
   justify?: Justify
   loading?: boolean
   prefix?: React.ReactNode
   suffix?: React.ReactNode
   size?: Size
+  disabled?: boolean
 }
 
 /**
- * Default style for an element that looks like a button.
+ * Default kind for an element that looks like a button.
  *
  * Controller logic should be done in a parent component by wrapping DefaultButtonStyle.
  */
 export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
   label,
-  type = "primary",
+  kind = "primary",
   justify = "center",
   loading,
   prefix,
@@ -38,8 +39,8 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         items-center
         whitespace-nowrap
         justify-${justify} 
-        ${shadow(type, size)}
-        ${colors(type)}
+        ${shadow(kind, size)}
+        ${colors(kind)}
         ${spacing(size)} 
         ${dimensions(size)}  
       `}
@@ -59,10 +60,14 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
   )
 }
 
-const colors = (type: Type): string => {
+const colors = (kind: Kind, disabled?: boolean): string => {
+  if (disabled) {
+    return "bg-gray-300"
+  }
+
   const common = ""
 
-  const options: Record<Type, string> = {
+  const options: Record<Kind, string> = {
     primary:
       "bg-gradient-to-tr from-black to-gray-900 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
     secondary:
@@ -73,7 +78,7 @@ const colors = (type: Type): string => {
       "bg-transparent shadow-none hover:shadow-none hover:text-gray-900 text-gray-800 hover:font-medium",
   }
 
-  return [common, options[type]].join(" ")
+  return [common, options[kind]].join(" ")
 }
 
 const spacing = (size: Size): string => {
@@ -105,8 +110,8 @@ const text = (size: Size): string => {
   }
   return options[size]
 }
-const shadow = (type: Type, size: Size): string => {
-  if (type === "plain") {
+const shadow = (kind: Kind, size: Size): string => {
+  if (kind === "plain") {
     return ""
   }
   return {

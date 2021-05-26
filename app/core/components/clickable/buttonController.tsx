@@ -1,6 +1,7 @@
 import React, { MouseEvent } from "react"
 
 export interface ButtonControllerProps {
+  type?: "submit" | "button"
   /**
    * Gets called when the user clicks on the button.
    */
@@ -16,10 +17,11 @@ export interface ButtonControllerProps {
  */
 export const ButtonController: React.FC<ButtonControllerProps> = ({
   onClick,
+  type = "button",
   children,
 }): JSX.Element => {
   return (
-    <button type="button" onClick={onClick} className="focus:outline-none">
+    <button type={type} onClick={onClick} className="w-full focus:outline-none">
       {children}
     </button>
   )

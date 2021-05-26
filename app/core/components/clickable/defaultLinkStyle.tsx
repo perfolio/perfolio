@@ -7,7 +7,7 @@ export interface DefaultLinkStyleProps {
    * The type must be defined but is actually never used.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type?: any
+  kind?: any
   label?: React.ReactNode
   justify?: Justify
   loading?: boolean
