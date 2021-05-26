@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "blitz dev",
-    "prebuild": "blitz prisma generate",
+    "prebuild": "yarn install && blitz prisma generate",
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",

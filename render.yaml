@@ -8,8 +8,7 @@ services:
     region: frankfurt
     healthCheckPath: /
     domains:
-      - perfolio.render.com
-      - perfol.io
+      - perfolio.onrender.com
     buildCommand: |
       yarn  &&
       blitz build &&
