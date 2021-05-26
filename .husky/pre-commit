@@ -1,5 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+
+yarn fmt
+yarn tsc
+yarn build
+
 npx lint-staged
-npx pretty-quick --staged
