@@ -1,8 +1,10 @@
 services:
   - type: web
-    name: webapp
+    name: perfolio-web
     env: node
     plan: starter
+    region: frankfurt
+    healthCheckPath: /
     buildCommand: |
       yarn  &&
       blitz build &&
@@ -17,7 +19,13 @@ services:
           property: connectionString
       - key: SESSION_SECRET_KEY
         generateValue: true
-
+      - key: IEX_BASE_URL
+        fromGroup: perfolio-prod
+      - key: IEX_TOKEN
+        fromGroup: perfolio-prod
+      - key: SENDGRID_TOKEN
+        fromGroup: perfolio-prod
 databases:
   - name: perfolio-db
+    region: frankfurt
     plan: starter
