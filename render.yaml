@@ -1,3 +1,27 @@
+previewsEnabled: true
+previewsExpireAfterDays: 3
+services:
+  - type: web
+    name: perfolio-web
+    env: node
+    plan: starter
+    region: frankfurt
+    healthCheckPath: /
+    buildCommand: |
+      yarn  &&
+      blitz build &&
+      blitz prisma migrate deploy
+    startCommand: blitz start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: perfolio-db
+          property: connectionString
+      - key: SESSION_SECRET_KEY
+        generateValue: true
+      - fromGroup: perfolio-prod
 databases:
   - name: perfolio-db
     region: frankfurt
