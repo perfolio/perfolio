@@ -12,7 +12,6 @@ export interface FormProps<S extends z.ZodType<any, any>>
   submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
-  watch: (watcher: any) => any
   initialValues?: UseFormProps<z.infer<S>>["defaultValues"]
 }
 
@@ -29,7 +28,6 @@ export function Form<S extends z.ZodType<any, any>>({
   schema,
   initialValues,
   onSubmit,
-  watch,
   ...props
 }: FormProps<S>) {
   const ctx = useForm<z.infer<S>>({
