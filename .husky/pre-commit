@@ -3,7 +3,6 @@
 
 
 yarn fmt
-yarn tsc
 yarn build
 
 npx lint-staged
