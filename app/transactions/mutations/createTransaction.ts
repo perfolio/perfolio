@@ -1,4 +1,3 @@
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import { resolver } from "blitz"
 import db from "db"
 import { CreateTransaction } from "../validation"
