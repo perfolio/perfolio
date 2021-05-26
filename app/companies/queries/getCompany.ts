@@ -3,7 +3,7 @@ import db from "db"
 import * as z from "zod"
 import { Cloud } from "integrations/iexcloud"
 const GetCompany = z.object({
-  isin: z.string(),
+  isin: z.string().regex(/[A-Z]{2}[a-zA-Z0-9]{10}/),
 })
 
 export default resolver.pipe(resolver.zod(GetCompany), resolver.authorize(), async ({ isin }) => {

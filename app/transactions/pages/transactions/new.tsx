@@ -9,43 +9,46 @@ import { BlitzPage, Routes, invalidateQuery, useMutation } from "@blitzjs/core"
 import createTransaction from "app/transactions/mutations/createTransaction"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getTransactions from "app/transactions/queries/getTransactions"
+import { ActivityFeed } from "app/core/components"
+import { Transaction } from "db"
 
 const Suggestion: React.FC<{
-  assetId: string
+  tx: Transaction
   setValue: (key: "isin", val: string) => void
   trigger: () => void
-}> = ({ assetId, setValue, trigger }): JSX.Element => {
+}> = ({ tx, setValue, trigger }): JSX.Element => {
   const [company] = useQuery(
     getCompany,
     {
-      isin: assetId,
+      isin: tx.assetId,
     },
     { suspense: false },
   )
 
   return (
-    <li key={assetId} className="flex items-center justify-between py-3">
+    <li className="flex items-center justify-between py-3">
       <div className="flex items-center space-x-3">
         <img className="w-10 h-10 rounded" alt={`Logo of ${company?.name}`} src={company?.logo} />
         <div className="flex flex-col items-start ">
-          <div className="flex items-center space-x-3 text-sm leading-none">
-            <span className="font-semibold text-gray-800">{company?.name}</span>
-            <span className="text-sm text-gray-700">$3015.24</span>
-          </div>
-          <span className="text-xs leading-none text-gray-600 md:text-sm">{assetId}</span>
+          <span className="font-medium text-gray-800">{company?.name}</span>
+          <span className="text-xs text-gray-600 md:text-sm">{tx.assetId}</span>
         </div>
       </div>
       <div className="flex flex-col items-end space-y-1">
-        <span className="text-sm text-right text-gray-600">Added 1 month ago</span>
-        <Button
-          label="Add"
-          kind="secondary"
-          size="small"
-          onClick={() => {
-            setValue("isin", assetId)
-            trigger()
-          }}
-        />
+        <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
+          tx.createdAt.getTime() / 1000,
+        )}`}</span>
+        <div>
+          <Button
+            label="Add"
+            kind="secondary"
+            size="small"
+            onClick={() => {
+              setValue("isin", tx.assetId)
+              trigger()
+            }}
+          />
+        </div>
       </div>
     </li>
   )
@@ -85,14 +88,14 @@ const NewTransactionPage: BlitzPage = () => {
     },
     { enabled: !!user, suspense: false },
   )
-  const uniqueAssets: Record<string, boolean> = {}
-  transactions?.forEach((tx) => {
-    if (!(tx.assetId in uniqueAssets)) {
-      uniqueAssets[tx.assetId] = true
-    }
-  })
-  console.log({ uniqueAssets })
-
+  const uniqueAssets: Record<string, Transaction> = {}
+  transactions
+    ?.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .forEach((tx) => {
+      if (!(tx.assetId in uniqueAssets)) {
+        uniqueAssets[tx.assetId] = tx
+      }
+    })
   const data = watch()
   const [price, { isLoading: priceLoading }] = useQuery(
     getPrice,
@@ -112,7 +115,7 @@ const NewTransactionPage: BlitzPage = () => {
   )
 
   return (
-    <WithSidebar title="Add a transaction">
+    <WithSidebar title="Add a transaction" sidebar={<ActivityFeed />}>
       <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
         <div className="w-full">
           <form className="flex flex-col py-6 space-y-4">
@@ -175,7 +178,6 @@ const NewTransactionPage: BlitzPage = () => {
               kind="primary"
               label="Add Transaction"
               onClick={handleSubmit(async (data: FormData) => {
-                console.log({ data })
                 if (!price) {
                   throw new Error("Wait for price to load")
                 }
@@ -185,7 +187,6 @@ const NewTransactionPage: BlitzPage = () => {
                   value: price.value,
                   executedAt: Time.fromDate(new Date(data.date)).unix(),
                 })
-                console.log("done")
               })}
             />
           </form>
@@ -199,10 +200,11 @@ const NewTransactionPage: BlitzPage = () => {
           <div className="px-6 pt-6 overflow-x-auto">
             <div className="w-full whitespace-nowrap">
               <ul className="flex flex-col divide-y divide-gray-100">
-                {Object.keys(uniqueAssets).map((assetId) => {
+                {Object.values(uniqueAssets).map((tx) => {
                   return (
                     <Suggestion
-                      assetId={assetId}
+                      key={tx.id}
+                      tx={tx}
                       trigger={() => trigger("isin")}
                       setValue={setValue}
                     />

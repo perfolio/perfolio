@@ -15,9 +15,13 @@ export default resolver.pipe(
   async ({ isin, time }) => {
     const cloud = new Cloud()
 
-    let price = await db.price.findUnique({
-      where: { isin_time: { isin: isin.toLowerCase(), time } },
-    })
+    let price = await db.price
+      .findUnique({
+        where: { isin_time: { isin: isin.toLowerCase(), time } },
+      })
+      .catch((err) => {
+        console.error("ERR:", err)
+      })
     if (price) {
       return price
     }
@@ -37,7 +41,7 @@ export default resolver.pipe(
         },
         update: { value: newPrice.value },
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         throw new Error(`Unable to store price for ${isin}@${time} in database: ${err}`)
       })
 

@@ -1,5 +1,5 @@
 import React from "react"
-import { WithSidebar } from "app/core/components"
+import { WithSidebar, ActivityFeed } from "app/core/components"
 import { BlitzPage, Routes } from "@blitzjs/core"
 import { TransactionsTable } from "app/core/components/transactionsTable/transactionsTable"
 /**
@@ -7,7 +7,7 @@ import { TransactionsTable } from "app/core/components/transactionsTable/transac
  */
 const TransactionsPage: BlitzPage = () => {
   return (
-    <WithSidebar title="My Transactions">
+    <WithSidebar title="My Transactions" sidebar={<ActivityFeed />}>
       <TransactionsTable />
     </WithSidebar>
   )

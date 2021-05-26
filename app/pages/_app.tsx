@@ -7,10 +7,10 @@ import {
   ErrorFallbackProps,
   useQueryErrorResetBoundary,
 } from "blitz"
-import { LoginForm } from "app/auth/components/LoginForm"
 import { ThemeProvider } from "next-themes"
 import { ErrorBoundary } from "react-error-boundary"
 import { Suspense } from "react"
+import { FullscreenSpinner } from "app/core/components"
 import "tailwindcss/tailwind.css"
 import SignupForm from "app/auth/components/SignupForm"
 export default function App({ Component, pageProps }: AppProps) {
@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider>
-      <Suspense fallback="Loading...">
+      <Suspense fallback={<FullscreenSpinner />}>
         <ErrorBoundary
           FallbackComponent={RootErrorFallback}
           resetKeys={[router.asPath]}
@@ -32,7 +32,6 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
-  const router = useRouter()
   if (error instanceof AuthenticationError) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
