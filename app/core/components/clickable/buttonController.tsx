@@ -5,7 +5,7 @@ export interface ButtonControllerProps {
   /**
    * Gets called when the user clicks on the button.
    */
-  onClick: (e?: MouseEvent<HTMLButtonElement>) => void | Promise<void>
+  onClick?: (e?: MouseEvent<HTMLButtonElement>) => void | Promise<void>
 }
 /**
  * ButtonController for arbitrary elements.

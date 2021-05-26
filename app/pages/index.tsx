@@ -1,8 +1,7 @@
-import { BlitzPage, useSession } from "blitz"
+import { BlitzPage } from "blitz"
 import { WithSidebar } from "app/core/components"
 import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
 import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
-import { useCompany } from "app/companies/hooks/useCompany"
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.

@@ -3,7 +3,7 @@ import { FormProvider, useForm, UseFormProps } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { ExclamationCircleIcon } from "@heroicons/react/outline"
-import { AsyncButton } from "app/core/components"
+import { Button } from "app/core/components"
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
   /** All your form fields */
@@ -36,10 +36,25 @@ export function Form<S extends z.ZodType<any, any>>({
     defaultValues: initialValues,
   })
   const [formError, setFormError] = useState<string | null>(null)
-
+  const [submitting, setSubmitting] = useState(false)
+  const submit = ctx.handleSubmit(async (values) => {
+    setSubmitting(true)
+    const result = (await onSubmit(values)) || {}
+    for (const [key, value] of Object.entries(result)) {
+      if (key === FORM_ERROR) {
+        setFormError(value)
+      } else {
+        ctx.setError(key as any, {
+          type: "submit",
+          message: value,
+        })
+      }
+    }
+    setSubmitting(false)
+  })
   return (
     <FormProvider {...ctx}>
-      <form className="w-full space-y-4 form" {...props}>
+      <form className="w-full space-y-4 form" {...props} onSubmit={submit}>
         {/* Form fields supplied as children are rendered here */}
         {children}
 
@@ -55,20 +70,9 @@ export function Form<S extends z.ZodType<any, any>>({
           </div>
         ) : null}
         <div className="w-full">
-          <AsyncButton
-            onClick={ctx.handleSubmit(async (values) => {
-              const result = (await onSubmit(values)) || {}
-              for (const [key, value] of Object.entries(result)) {
-                if (key === FORM_ERROR) {
-                  setFormError(value)
-                } else {
-                  ctx.setError(key as any, {
-                    type: "submit",
-                    message: value,
-                  })
-                }
-              }
-            })}
+          <Button
+            loading={submitting}
+            onClick={submit}
             kind="primary"
             size="auto"
             label={submitText}

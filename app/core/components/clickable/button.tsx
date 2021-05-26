@@ -15,6 +15,7 @@ export const Button: React.FC<LinkProps | ButtonProps> = (props): JSX.Element =>
   return wrap(
     props,
     <DefaultButtonStyle
+      loading={props.loading}
       label={props.label}
       kind={props.kind}
       size={props.size}

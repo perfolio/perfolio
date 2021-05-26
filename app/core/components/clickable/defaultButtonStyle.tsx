@@ -45,17 +45,11 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         ${dimensions(size)}  
       `}
     >
-      {loading ? (
-        <span className="w-4 h-4 text-yellow-400">
-          <Spinner />
-        </span>
-      ) : (
-        <>
-          {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
-          {label ? <span className={text(size)}>{label}</span> : null}
-          {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
-        </>
-      )}
+      <>
+        {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
+        {label ? <span className={text(size)}>{loading ? <Spinner /> : label}</span> : null}
+        {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
+      </>
     </div>
   )
 }
@@ -127,7 +121,7 @@ const dimensions = (size: Size): string => {
     small: "w-20 h-6",
     medium: "w-32 h-8",
     large: "w-40 h-10",
-    auto: "p-2 w-full",
+    auto: "p-2 w-full h-10",
   }
 
   return options[size]
