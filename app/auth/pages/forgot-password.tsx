@@ -1,6 +1,5 @@
 import { BlitzPage, useMutation, Link, Routes } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/form/Form"
+import { Form, FORM_ERROR, LabeledTextField } from "app/core/components/form/Form"
 import { ForgotPassword } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
 import { AuthPageTemplate } from "../components/template"
