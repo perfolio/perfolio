@@ -22,7 +22,9 @@ export const AsyncButton: React.FC<ButtonProps> = ({
 
   const handleClick = useCallback(async () => {
     setLoading(true)
-    await onClick()
+    if (onClick) {
+      await onClick()
+    }
     setLoading(false)
   }, [onClick])
 
