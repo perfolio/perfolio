@@ -1,9 +1,7 @@
-import classNames from "classnames"
 import React, { MouseEvent } from "react"
 
 export interface ButtonControllerProps {
   type?: "submit" | "button"
-  size?: string
   /**
    * Gets called when the user clicks on the button.
    */
@@ -21,7 +19,6 @@ export const ButtonController: React.FC<ButtonControllerProps> = ({
   onClick,
   type = "button",
   children,
-  size,
 }): JSX.Element => {
   return (
     <button type={type} onClick={onClick} className="w-full focus:outline-none">

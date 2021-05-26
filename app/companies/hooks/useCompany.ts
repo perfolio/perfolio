@@ -7,7 +7,7 @@ export const useCompany = (isin: string) => {
     getCompany,
     { isin },
     {
-      enabled: !!sess.userId,
+      enabled: !!sess.userId && RegExp(/[A-Z]{2}[a-zA-Z0-9]{10}/).test(isin),
       suspense: false,
     },
   )

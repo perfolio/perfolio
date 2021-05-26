@@ -2,6 +2,7 @@ import { BlitzPage, Routes } from "blitz"
 import { WithSidebar } from "app/core/components"
 import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
 import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
+import { ActivityFeed } from "app/core/components/activity/activityFeed"
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.
@@ -20,28 +21,7 @@ const Home: BlitzPage = () => {
             </div>
           </div>
           <div className="w-full md:w-full sm:w-1/2">
-            <p className="text-base font-semibold text-gray-800">Recent Activity</p>
-            <ul className="mt-4 text-sm text-gray-700 divide-y divide-gray-300">
-              <li className="py-4 ">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-black">Automatic Import</span>
-                  <span className="text-xs">45 min ago</span>
-                </div>
-                <p>
-                  You bought 3.41 <span className="font-semibold">TSLA</span> shares at $13,311 per
-                  share.
-                </p>
-              </li>
-              <li className="py-2 ">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-black">Dividend received</span>
-                  <span className="text-xs">2 days ago</span>
-                </div>
-                <p>
-                  You received $14,24 dividends from <span className="font-semibold">MSFT</span>
-                </p>
-              </li>
-            </ul>
+            <ActivityFeed />
           </div>
         </>
       }

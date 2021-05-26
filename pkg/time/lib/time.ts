@@ -68,4 +68,29 @@ export class Time {
   public toJson(): number {
     return this.unix()
   }
+
+  /**
+   * Print a human readabe time difference
+   * @param unix - Second precision
+   */
+  public static ago(unix: number): string {
+    const SECOND = 1
+    const MINUTE = 60 * SECOND
+    const HOUR = 60 * MINUTE
+    const DAY = 24 * HOUR
+    const YEAR = 365 * DAY
+
+    const diff = Date.now() / 1000 - unix
+    if (diff < MINUTE) {
+      return `${diff.toFixed(0)}s ago`
+    } else if (diff < HOUR) {
+      return `${(diff / MINUTE).toFixed(0)} minutes ago`
+    } else if (diff < DAY) {
+      return `${(diff / HOUR).toFixed(0)} hours ago`
+    } else if (diff < YEAR) {
+      return `${(diff / DAY).toFixed(0)} days ago`
+    } else {
+      return `${(diff / YEAR).toFixed()} years ago`
+    }
+  }
 }
