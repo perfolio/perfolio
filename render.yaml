@@ -1,9 +1,10 @@
 services:
   - type: web
-    name: blitzapp
+    name: webapp
     env: node
     plan: starter
-    buildCommand: yarn --frozen-lockfile --prod=false &&
+    buildCommand: |
+      yarn  &&
       blitz build &&
       blitz prisma migrate deploy
     startCommand: blitz start
@@ -12,11 +13,11 @@ services:
         value: production
       - key: DATABASE_URL
         fromDatabase:
-          name: blitzapp-db
+          name: perfolio-db
           property: connectionString
       - key: SESSION_SECRET_KEY
         generateValue: true
 
 databases:
-  - name: blitzapp-db
+  - name: perfolio-db
     plan: starter
