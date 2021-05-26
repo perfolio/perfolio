@@ -1,6 +1,6 @@
 import { BlitzPage, useRouterQuery, useMutation } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
+import { LabeledTextField, Form, FORM_ERROR } from "app/core/components"
+
 import * as z from "zod"
 
 import { AuthPageTemplate } from "app/auth/components/template"

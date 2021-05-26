@@ -12,6 +12,7 @@ import { ThemeProvider } from "next-themes"
 import { ErrorBoundary } from "react-error-boundary"
 import { Suspense } from "react"
 import "tailwindcss/tailwind.css"
+import SignupForm from "app/auth/components/SignupForm"
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
 
@@ -31,10 +32,11 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+  const router = useRouter()
   if (error instanceof AuthenticationError) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
-        <LoginForm onSuccess={resetErrorBoundary} />
+        <SignupForm onSuccess={resetErrorBoundary} />
       </div>
     )
   } else if (error instanceof AuthorizationError) {

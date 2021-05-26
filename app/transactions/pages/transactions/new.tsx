@@ -5,7 +5,7 @@ import { useQuery } from "blitz"
 import getPrice from "app/prices/queries/getPrice"
 import getCompany from "app/companies/queries/getCompany"
 import { Time } from "pkg/time"
-import { BlitzPage, useMutation } from "@blitzjs/core"
+import { BlitzPage, Routes, invalidateQuery, useMutation } from "@blitzjs/core"
 import createTransaction from "app/transactions/mutations/createTransaction"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getTransactions from "app/transactions/queries/getTransactions"
@@ -73,7 +73,11 @@ const NewTransactionPage: BlitzPage = () => {
     formState: { errors },
   } = useForm<FormData>({ mode: "all", defaultValues: { date: new Date() } })
 
-  const [addTransaction] = useMutation(createTransaction)
+  const [addTransaction] = useMutation(createTransaction, {
+    onSuccess: () => {
+      invalidateQuery(getTransactions)
+    },
+  })
   const [transactions] = useQuery(
     getTransactions,
     {
@@ -81,12 +85,13 @@ const NewTransactionPage: BlitzPage = () => {
     },
     { enabled: !!user, suspense: false },
   )
-  const uniqueAssets: string[] = []
+  const uniqueAssets: Record<string, boolean> = {}
   transactions?.forEach((tx) => {
     if (!(tx.assetId in uniqueAssets)) {
-      uniqueAssets.push(tx.assetId)
+      uniqueAssets[tx.assetId] = true
     }
   })
+  console.log({ uniqueAssets })
 
   const data = watch()
   const [price, { isLoading: priceLoading }] = useQuery(
@@ -112,7 +117,6 @@ const NewTransactionPage: BlitzPage = () => {
         <div className="w-full">
           <form className="flex flex-col py-6 space-y-4">
             <Radio updateValue={(buy) => setValue("buy", buy)} options={["Buy", "Sell"]} />
-
             <Input
               type="text"
               label="Isin"
@@ -176,7 +180,6 @@ const NewTransactionPage: BlitzPage = () => {
                   throw new Error("Wait for price to load")
                 }
                 await addTransaction({
-                  userId: user!.id,
                   assetId: data.isin,
                   quantity: data.shares * (data.buy ? 1 : -1),
                   value: price.value,
@@ -196,7 +199,7 @@ const NewTransactionPage: BlitzPage = () => {
           <div className="px-6 pt-6 overflow-x-auto">
             <div className="w-full whitespace-nowrap">
               <ul className="flex flex-col divide-y divide-gray-100">
-                {uniqueAssets?.map((assetId) => {
+                {Object.keys(uniqueAssets).map((assetId) => {
                   return (
                     <Suggestion
                       assetId={assetId}
@@ -213,5 +216,6 @@ const NewTransactionPage: BlitzPage = () => {
     </WithSidebar>
   )
 }
+NewTransactionsPage.authenticate = { redirectTo: Routes.LoginPage().pathname }
 
 export default NewTransactionPage

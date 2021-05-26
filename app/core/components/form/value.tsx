@@ -32,8 +32,10 @@ export function Value({ label, value, tooltip, iconLeft }: ValueProps): React.Re
       </label>
       <div className="relative">
         {iconLeft ? (
-          <div className="absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-l pointer-events-none bg-gray-50">
-            <span className="w-12 h-12 overflow-hidden border rounded-l">{iconLeft}</span>
+          <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
+            <span className="flex items-center justify-center w-12 h-12 p-3 overflow-hidden border-r rounded-l">
+              {iconLeft}
+            </span>
           </div>
         ) : null}
         <div
