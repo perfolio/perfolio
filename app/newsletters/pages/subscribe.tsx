@@ -12,7 +12,6 @@ const Validation = z.object({
 })
 
 const ResetPasswordPage: BlitzPage = () => {
-  const query = useRouterQuery()
   const [subscribeMutation, { isSuccess }] = useMutation(createSubscription)
 
   return (

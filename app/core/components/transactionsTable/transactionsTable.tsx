@@ -6,11 +6,9 @@ import { Transaction } from ".prisma/client"
 import { Spinner } from "../spinner/spinner"
 import { useQuery } from "blitz"
 import { Time } from "pkg/time"
-import getPrice from "app/prices/queries/getPrice"
 import getTransactions from "app/transactions/queries/getTransactions"
 import getCompany from "app/companies/queries/getCompany"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import getCurrentUser from "app/users/queries/getCurrentUser"
 import getCurrentPrice from "app/prices/queries/getCurrentPrice"
 
 const Row: React.FC<{ tx: Transaction }> = ({ tx }) => {

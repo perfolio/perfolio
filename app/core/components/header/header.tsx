@@ -2,7 +2,6 @@ import React from "react"
 import { DesktopNavbar, MobileNavbar } from "../navbar"
 import { ChartSquareBarIcon, PlusIcon, BookOpenIcon } from "@heroicons/react/outline"
 import { Profile } from "../profile/profile"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}
 

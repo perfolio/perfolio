@@ -1,6 +1,4 @@
 import React from "react"
-import { SignupForm } from "../components/SignupForm"
-import { useRouter, Routes, BlitzPage } from "blitz"
 
 export interface AuthPageTemplateProps {
   h1: React.ReactNode
