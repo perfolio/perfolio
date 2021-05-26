@@ -216,6 +216,6 @@ const NewTransactionPage: BlitzPage = () => {
     </WithSidebar>
   )
 }
-NewTransactionsPage.authenticate = { redirectTo: Routes.LoginPage().pathname }
+NewTransactionPage.authenticate = { redirectTo: Routes.LoginPage().pathname }
 
 export default NewTransactionPage
