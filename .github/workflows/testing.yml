@@ -50,7 +50,9 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Codegen
-        run: yarn blitz codegen
+        run: |
+          yarn blitz codegen
+          yarn blitz prisma generate
 
       # Lint Code
       - name: Lint

@@ -80,7 +80,7 @@ model Transaction {
   updatedAt  DateTime @updatedAt
   userId     String
   assetId    String
-  volume   Float
+  volume     Float
   value      Float
   executedAt Int
 }
