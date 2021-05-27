@@ -10,8 +10,9 @@ services:
       - perfol.io
     buildCommand: |
       yarn  &&
-      blitz build &&
-      blitz prisma db push --preview-feature
+      yarn blitz prisma generate &&
+      yarn blitz build &&
+      yarn blitz prisma db push --preview-feature
     startCommand: blitz start
     envVars:
       - key: NODE_ENV
