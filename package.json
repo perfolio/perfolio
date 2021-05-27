@@ -38,7 +38,7 @@
     "@types/preview-email": "2.0.0",
     "@types/react": "17.0.7",
     "autoprefixer": "10.2.5",
-    "blitz": "0.35.0",
+    "blitz": "0.35.2",
     "classnames": "2.3.1",
     "eslint": "7.27.0",
     "husky": "6.0.0",
