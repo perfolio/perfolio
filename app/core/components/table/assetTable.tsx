@@ -8,7 +8,7 @@ interface Asset {
   id: string
   value: number
   cost: number
-  quantity: number
+  volume: number
 }
 
 const Row = ({ asset }: { asset: Asset }) => {
@@ -31,7 +31,7 @@ const Row = ({ asset }: { asset: Asset }) => {
         />
       </td>
       <td className="text-right">
-        <Simple label={asset.quantity.toFixed(2)} />
+        <Simple label={asset.volume.toFixed(2)} />
       </td>
       <td className="text-right">
         <Simple label={`$${asset.cost.toFixed(2)}`} />
@@ -52,13 +52,13 @@ export const AssetTable = (): JSX.Element => {
       id: "TSLA",
       value: 4152,
       cost: 2151,
-      quantity: 42,
+      volume: 42,
     },
     {
       id: "MSFT",
       value: 6236,
       cost: 1310,
-      quantity: 11515,
+      volume: 11515,
     },
   ]
 

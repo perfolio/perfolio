@@ -183,7 +183,7 @@ const NewTransactionPage: BlitzPage = () => {
                 }
                 await addTransaction({
                   assetId: data.isin,
-                  quantity: data.shares * (data.buy ? 1 : -1),
+                  volume: data.shares * (data.buy ? 1 : -1),
                   value: price.value,
                   executedAt: Time.fromDate(new Date(data.date)).unix(),
                 })
