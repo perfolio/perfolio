@@ -1,3 +1,5 @@
+previewsEnabled: true
+previewsExpireAfterDays: 3
 services:
   - type: web
     name: perfol.io
