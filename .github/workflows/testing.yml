@@ -4,9 +4,6 @@ on:
   pull_request:
 
 jobs:
-  ###############
-  # Lint & Test
-  ###############
   tests:
     name: Tests
     runs-on: ubuntu-latest
@@ -40,7 +37,7 @@ jobs:
       - name: Find yarn cache location
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: JS package cache
+      - name: Cache dependencies
         uses: actions/cache@v2
         with:
           path: |
@@ -51,6 +48,11 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install packages
         run: yarn install --frozen-lockfile
+
+      - name: Codegen
+        run: |
+          yarn blitz codegen
+          yarn blitz prisma generate
 
       # Lint Code
       - name: Lint
@@ -63,7 +65,6 @@ jobs:
       - name: Migrate DB & generate prisma client
         run: yarn blitz prisma migrate dev
 
-      # Jest Tests (API/Frontend)
       - name: Run Tests
         run: yarn test
         env:

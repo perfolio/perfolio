@@ -35,7 +35,6 @@ export function Form<S extends z.ZodType<any, any>>({
     resolver: schema ? zodResolver(schema) : undefined,
     defaultValues: initialValues,
   })
-
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const submit = ctx.handleSubmit(async (values) => {
