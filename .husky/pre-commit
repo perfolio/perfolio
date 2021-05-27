@@ -5,4 +5,4 @@
 yarn fmt
 yarn build
 
-npx lint-staged
+yarn lint-staged
