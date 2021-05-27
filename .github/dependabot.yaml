@@ -1,12 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    open-pull-requests-limit: 1
     directory: "/"
-    reviewers:
-      - chronark
-  - package-ecosystem: "npm"
-    open-pull-requests-limit: 1
-    directory: "/packages/*"
-    reviewers:
-      - chronark
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"

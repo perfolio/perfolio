@@ -52,5 +52,4 @@ const ForgotPasswordPage: BlitzPage = () => {
 }
 
 ForgotPasswordPage.redirectAuthenticatedTo = "/"
-
 export default ForgotPasswordPage

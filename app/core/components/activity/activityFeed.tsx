@@ -27,7 +27,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
             <span className="text-xs">{Time.ago(transaction.executedAt)}</span>
           </div>
           <p>
-            You {transaction.quantity > 0 ? "bought" : "sold"} {transaction.quantity}{" "}
+            You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
             <span className="font-semibold">{company?.symbol}</span> shares at ${transaction.value}{" "}
             per share.
           </p>

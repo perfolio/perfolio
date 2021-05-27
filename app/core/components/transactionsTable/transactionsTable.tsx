@@ -50,7 +50,7 @@ const Row: React.FC<{ tx: Transaction }> = ({ tx }) => {
         />
       </td>
       <td className="font-mono text-right">
-        <Simple label={tx.quantity.toFixed(2)} />
+        <Simple label={tx.volume.toFixed(2)} />
       </td>
       <td className="font-mono text-right">
         <Simple label={`$${tx.value.toFixed(2)}`} />
