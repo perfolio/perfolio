@@ -34,6 +34,7 @@
     "@hookform/resolvers": "2.5.1",
     "@prisma/client": "~2.20",
     "@radix-ui/react-tooltip": "0.0.18",
+    "@tailwindcss/jit": "0.1.18",
     "@types/preview-email": "2.0.0",
     "@types/react": "17.0.7",
     "autoprefixer": "10.2.5",
@@ -41,7 +42,7 @@
     "classnames": "2.3.1",
     "eslint": "7.27.0",
     "husky": "6.0.0",
-    "lint-staged": "10.5.4",
+    "lint-staged": "11.0.0",
     "next-themes": "0.0.14",
     "postcss": "8.3.0",
     "prettier": "2.3.0",
@@ -56,8 +57,7 @@
     "recharts": "2.0.9",
     "tailwindcss": "2.1.2",
     "typescript": "~4.2",
-    "zod": "1.11.17",
-    "@tailwindcss/jit": "0.1.18"
+    "zod": "1.11.17"
   },
   "private": true
 }
