@@ -24,7 +24,7 @@ const ResetPasswordPage: BlitzPage = () => {
       }
     >
       <div>
-        {true ? (
+        {isSuccess ? (
           <div className="flex items-center justify-center">
             <CheckIcon className="w-20 text-gray-800" />
           </div>
