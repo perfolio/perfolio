@@ -5,17 +5,18 @@ import { DesktopNavLink } from "./desktopNavLink"
 import { ThemeSwitch } from "../switch/themeSwitch"
 import { Logo } from "../logo/logo"
 import { BellIcon, AdjustmentsIcon } from "@heroicons/react/outline"
+import { Link, Routes } from "blitz"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
         <li className="flex items-center w-4/5 space-x-12">
-          <Logo
-            withName
-            imageColor="text-primary-50 dark:text-secondary-300"
-            textColor="text-primary-50 dark:text-secondary-50"
-          />
+          <Link href={Routes.Home()}>
+            <a className="text-gray-200 hover:text-gray-50">
+              <Logo withName />
+            </a>
+          </Link>
           <div className="2xl:ml-14">
             <ul className="flex items-center">
               {items.map((item) => (

@@ -1,4 +1,4 @@
-import { useRouter, BlitzPage } from "blitz"
+import { useRouter, BlitzPage, Routes } from "blitz"
 import { LoginForm } from "app/auth/components/LoginForm"
 import { AuthPageTemplate } from "../components/template"
 const LoginPage: BlitzPage = () => {
@@ -15,6 +15,6 @@ const LoginPage: BlitzPage = () => {
   )
 }
 
-LoginPage.redirectAuthenticatedTo = "/"
+LoginPage.redirectAuthenticatedTo = Routes.Home()
 
 export default LoginPage
