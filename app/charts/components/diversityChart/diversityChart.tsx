@@ -40,16 +40,13 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
 }
 export const DiversityChart: React.FC = (): JSX.Element => {
   const COLORS = [
-    "#EEF2FF",
-    "#E0E7FF",
-    "#C7D2FE",
-    "#A5B4FC",
-    "#818CF8",
-    "#6366F1",
-    "#4F46E5",
-    "#4338CA",
-    "#3730A3",
-    "#312E81",
+    "#E5E0F8",
+    "#A498D8",
+    "#49407D",
+    "#362E6B",
+    "#262059",
+    "#191448",
+    "#100C3B",
   ].reverse()
 
   return (

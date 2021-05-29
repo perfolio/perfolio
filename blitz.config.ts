@@ -8,8 +8,6 @@ const SentryWebpackPlugin = require("@sentry/webpack-plugin")
 const { SENTRY_DSN, SENTRY_ORG, SENTRY_PROJECT, SENTRY_AUTH_TOKEN, NODE_ENV, RENDER_GIT_COMMIT } =
   process.env
 
-const COMMIT_SHA = RENDER_GIT_COMMIT
-
 module.exports = withSourceMaps({
   env: {
     SENTRY_DSN,
@@ -54,7 +52,7 @@ module.exports = withSourceMaps({
       SENTRY_ORG &&
       SENTRY_PROJECT &&
       SENTRY_AUTH_TOKEN &&
-      COMMIT_SHA &&
+      RENDER_GIT_COMMIT &&
       NODE_ENV === "production"
     ) {
       config.plugins.push(
@@ -63,7 +61,7 @@ module.exports = withSourceMaps({
           ignore: ["node_modules"],
           stripPrefix: ["webpack://_N_E/"],
           urlPrefix: `~/_next`,
-          release: COMMIT_SHA,
+          release: RENDER_GIT_COMMIT,
         }),
       )
     }

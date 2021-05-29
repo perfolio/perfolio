@@ -1,17 +1,19 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { Button, WithSidebar, Radio, AsyncButton, Input, Value, Spinner } from "app/core/components"
 import { useForm } from "react-hook-form"
 import { useQuery } from "blitz"
 import getPrice from "app/prices/queries/getPrice"
 import getCompany from "app/companies/queries/getCompany"
 import { Time } from "pkg/time"
+import { Listbox, Transition } from "@headlessui/react"
 import { BlitzPage, Routes, invalidateQuery, useMutation } from "@blitzjs/core"
 import createTransaction from "app/transactions/mutations/createTransaction"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getTransactions from "app/transactions/queries/getTransactions"
 import { ActivityFeed } from "app/core/components"
 import { Transaction } from "db"
-
+import getPossibleSymbols from "app/companies/queries/getPossibleSymbols"
+import { SelectorIcon, CheckIcon } from "@heroicons/react/outline"
 const Suggestion: React.FC<{
   tx: Transaction
   setValue: (key: "isin", val: string) => void
@@ -57,6 +59,7 @@ const Suggestion: React.FC<{
 interface FormData {
   buy: boolean
   isin: string
+  symbol: string
   price: number
   shares: number
   date: Date
@@ -114,6 +117,12 @@ const NewTransactionPage: BlitzPage = () => {
     { enabled: !!data.isin, suspense: false },
   )
 
+  const [possibleSymbols] = useQuery(
+    getPossibleSymbols,
+    { isin: data.isin },
+    { enabled: !!data.isin, suspense: false },
+  )
+
   return (
     <WithSidebar title="Add a transaction" sidebar={<ActivityFeed />}>
       <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
@@ -140,6 +149,66 @@ const NewTransactionPage: BlitzPage = () => {
               })}
               error={errors.isin?.message}
             />
+            {possibleSymbols ? (
+              <div className="relative w-full">
+                <Listbox value={data.symbol} onChange={(e) => setValue("symbol", e)}>
+                  <Listbox.Button className="relative w-full h-12 px-3 text-center placeholder-gray-500 transition duration-300 border rounded focus:shadow focus:outline-none">
+                    <span className="block truncate">{data.symbol}</span>
+                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <SelectorIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute z-20 w-full mt-1 overflow-auto text-base origin-top-right bg-white rounded shadow-lg rigin-top-right max-h-96 ">
+                      {possibleSymbols.map((symbol) => (
+                        <Listbox.Option
+                          key={symbol.symbol}
+                          className={({ active }) =>
+                            `${active ? "text-gray-900 bg-gray-100" : "text-gray-900"}
+                          cursor-default select-none relative py-2 px-4`
+                          }
+                          value={symbol.symbol}
+                        >
+                          {({ selected, active }) => (
+                            <>
+                              <span
+                                className={`${
+                                  selected ? "font-medium" : "font-normal"
+                                } truncate flex justify-between items-center font-mono`}
+                              >
+                                <div>
+                                  <span className="text-xs text-gray-600">Symbol: </span>
+                                  <span className="font-medium text-gray-900">{symbol.symbol}</span>
+                                </div>
+                                <div>
+                                  <span className="text-xs text-gray-600">Exchange: </span>
+                                  <span className="font-medium text-gray-900">
+                                    {symbol.exchange}
+                                  </span>
+                                </div>
+                              </span>
+                              {selected ? (
+                                <span
+                                  className={`${active ? "text-primary-600" : "text-primary-600"}
+                                absolute inset-y-0 left-0 flex items-center pl-3`}
+                                >
+                                  <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                </span>
+                              ) : null}
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </Listbox>
+              </div>
+            ) : null}
             <Input
               type="date"
               label="Date of transaction"

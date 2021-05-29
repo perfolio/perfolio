@@ -10,7 +10,7 @@ const menu = {
     {
       label: "Dashboard",
       icon: <ChartSquareBarIcon />,
-      href: "/",
+      href: "/app",
     },
     {
       label: "Transactions",
@@ -18,13 +18,13 @@ const menu = {
       menu: [
         {
           name: "My Transactions",
-          href: "/transactions",
+          href: "/app/transactions",
           icon: <BookOpenIcon />,
           description: "See your existing transactions",
         },
         {
           name: "Add manually",
-          href: "/transactions/new",
+          href: "/app/transactions/new",
           icon: <PlusIcon />,
           description: "Add a transaction by entering data yourself",
         },
