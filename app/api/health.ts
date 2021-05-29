@@ -1,5 +1,4 @@
-
-import {BlitzApiRequest, BlitzApiResponse} from "blitz"
+import { BlitzApiRequest, BlitzApiResponse } from "blitz"
 
 const handler = (req: BlitzApiRequest, res: BlitzApiResponse) => {
   res.statusCode = 200
