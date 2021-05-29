@@ -6,7 +6,7 @@ services:
     env: node
     plan: starter
     region: frankfurt
-    healthCheckPath: /
+    healthCheckPath: /api/health
     pullRequestPreviewsEnabled: true
     domains:
       - perfol.io
