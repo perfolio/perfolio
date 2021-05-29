@@ -17,6 +17,7 @@ export const SignupForm = (props: SignupFormProps) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
+
             await signupMutation(values)
             props.onSuccess?.()
           } catch (error) {
