@@ -17,7 +17,6 @@ import { FullscreenSpinner } from "app/core/components"
 import "tailwindcss/tailwind.css"
 import LoginForm from "app/auth/components/LoginForm"
 
-
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const session = useSession({ suspense: false })
@@ -31,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Suspense fallback={<FullscreenSpinner />}>
         <ErrorBoundary
           onError={(error, componentStack) => {
+            console.log("capturing sentry error")
             Sentry.captureException(error, { contexts: { react: { componentStack } } })
           }}
           FallbackComponent={RootErrorFallback}
@@ -64,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+  console.log("rooterrording")
   if (error instanceof AuthenticationError) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">

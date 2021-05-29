@@ -12,6 +12,8 @@ import {
   GetCurrentPriceRequest,
   GetCurrentPriceResponse,
   IEXService,
+  GetPossibleSymbolsRequest,
+  GetPossibleSymbolsResponse,
 } from "./interface"
 import { ApiConfig, GetRequest } from "./types"
 import { Time } from "pkg/time"
@@ -208,7 +210,9 @@ export class Cloud implements IEXService {
         }
       }
     }
-    throw new Error(`No correct isin found for: ${req.isin}. IEX returned: ${res}.`)
+    throw new Error(
+      `No correct isin found for: ${req.isin}. IEX returned: ${JSON.stringify(res, null, "  ")}.`,
+    )
   }
   public async getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse> {
     const symbol = (await this.getSymbol(req)).symbol
@@ -220,5 +224,22 @@ export class Cloud implements IEXService {
       throw new Error("IEX did not return a value")
     }
     return { value: res }
+  }
+
+  /**.
+   * Https://iexcloud.io/docs/api/#isin-mapping
+   *
+   * @param isin - https://www.investopedia.com/terms/i/isin.asp
+   */
+  public async getPossibleSymbols(
+    req: GetPossibleSymbolsRequest,
+  ): Promise<GetPossibleSymbolsResponse> {
+    const res = await this.get({
+      path: "/ref-data/isin",
+      parameters: {
+        isin: req.isin,
+      },
+    })
+    return res as GetPossibleSymbolsResponse
   }
 }

@@ -28,6 +28,7 @@ type Type =
   | "time"
   | "url"
   | "week"
+  | "select"
 
 export interface InputProps {
   type: Type
