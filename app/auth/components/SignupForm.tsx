@@ -9,7 +9,6 @@ type SignupFormProps = {
 
 export const SignupForm = (props: SignupFormProps) => {
   const [signupMutation] = useMutation(signup)
-
   return (
     <div>
       <Form
@@ -18,6 +17,7 @@ export const SignupForm = (props: SignupFormProps) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
+
             await signupMutation(values)
             props.onSuccess?.()
           } catch (error) {
