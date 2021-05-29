@@ -20,7 +20,7 @@ blitz-log.log
 .DS_Store
 
 # local env files
-.env
+.env*
 
 # Logs
 logs
