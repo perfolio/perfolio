@@ -17,7 +17,6 @@ import { FullscreenSpinner } from "app/core/components"
 import "tailwindcss/tailwind.css"
 import LoginForm from "app/auth/components/LoginForm"
 
-
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const session = useSession({ suspense: false })
