@@ -8805,14 +8805,14 @@ raw-body@2.4.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-react-dom@17.0.2:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
-  integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
+react-dom@0.0.0-experimental-6a589ad71:
+  version "0.0.0-experimental-6a589ad71"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-6a589ad71.tgz#24ace0c6b0464bdafbc42ebcec783a99aa40d175"
+  integrity sha512-BMJnyJtnqU/1kzcTS2DHwHZDgy2xKijcFtY48KzuZ+0a2dTW4oe5CWPe5O3D7kfP9hLfyPlUt5aWPNv+myxkmA==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    scheduler "^0.20.2"
+    scheduler "0.0.0-experimental-6a589ad71"
 
 react-error-boundary@3.1.3:
   version "3.1.3"
@@ -9335,7 +9335,15 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.20.1, scheduler@^0.20.2:
+scheduler@0.0.0-experimental-6a589ad71:
+  version "0.0.0-experimental-6a589ad71"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-experimental-6a589ad71.tgz#7eb02e050b4334704a3e89d699b7f8ee7c43812b"
+  integrity sha512-68ixKn+3Q6nWUuyMQXpsDaR4HbE+28qPwgOJ85gyj6ZxNuXpQCf7u9bIuDVxPibqssqf9nOICttpCA0iKuTvlA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.20.1:
   version "0.20.2"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.20.2.tgz#4baee39436e34aa93b4874bddcbf0fe8b8b50e91"
   integrity sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==
