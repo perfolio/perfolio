@@ -43,7 +43,7 @@
     "@types/react": "17.0.8",
     "@zeit/next-source-maps": "0.0.3",
     "autoprefixer": "10.2.6",
-    "blitz": "0.35.2",
+    "blitz": "0.36.3",
     "classnames": "2.3.1",
     "eslint": "7.27.0",
     "husky": "6.0.0",
