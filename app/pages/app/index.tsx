@@ -44,7 +44,7 @@ const Home: BlitzPage = () => {
                 Last Year
               </h4>
 
-              <span className="text-lg font-bold leading-3 dark:text-success-500 text-success-700 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
+              <span className="text-lg font-bold leading-3 dark:text-success-500 text-success-500 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
                 + $ 8,566
               </span>
             </div>
@@ -56,7 +56,7 @@ const Home: BlitzPage = () => {
                 Last Month
               </h4>
 
-              <span className="text-lg font-bold leading-3 dark:text-error-500 text-error-700 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
+              <span className="text-lg font-bold leading-3 dark:text-error-500 text-error-600 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl">
                 - $ 156
               </span>
             </div>

@@ -30,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Suspense fallback={<FullscreenSpinner />}>
         <ErrorBoundary
           onError={(error, componentStack) => {
+            console.log("capturing sentry error")
             Sentry.captureException(error, { contexts: { react: { componentStack } } })
           }}
           FallbackComponent={RootErrorFallback}
@@ -63,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+  console.log("rooterrording")
   if (error instanceof AuthenticationError) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
