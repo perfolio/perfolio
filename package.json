@@ -31,7 +31,7 @@
   "dependencies": {
     "@headlessui/react": "1.2.0",
     "@heroicons/react": "1.0.1",
-    "@hookform/resolvers": "2.5.1",
+    "@hookform/resolvers": "2.5.2",
     "@prisma/client": "2.23.0",
     "@radix-ui/react-tooltip": "0.0.18",
     "@sentry/browser": "6.4.1",
