@@ -4,7 +4,7 @@ import { Simple } from "../table/cells/simple/simple"
 import { Icon } from "../table/cells/icon/icon"
 import { Transaction } from ".prisma/client"
 import { Spinner } from "../spinner/spinner"
-import { invalidateQuery, useMutation } from "blitz"
+import { Image, invalidateQuery, useMutation } from "blitz"
 import { Time } from "pkg/time"
 import getTransactions from "app/transactions/queries/getTransactions"
 import deleteTransactionMutation from "app/transactions/mutations/deleteTransaction"
@@ -37,7 +37,7 @@ const Row: React.FC<{ tx: Transaction }> = ({ tx }) => {
             companyLoading ? (
               <Spinner />
             ) : (
-              <img
+              <Image
                 alt={`Logo of ${company?.name}`}
                 className="rounded-full"
                 src={company?.logo ?? ""}
