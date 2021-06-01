@@ -34,7 +34,7 @@
     "@hookform/resolvers": "2.5.2",
     "@prisma/client": "2.23.0",
     "@radix-ui/react-tooltip": "0.0.18",
-    "@sentry/browser": "6.4.1",
+    "@sentry/browser": "6.5.0",
     "@sentry/integrations": "6.4.1",
     "@sentry/node": "6.4.1",
     "@sentry/webpack-plugin": "1.15.1",
