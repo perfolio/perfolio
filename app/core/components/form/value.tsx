@@ -13,7 +13,12 @@ export interface ValueProps {
  * General purpose Value field including a label.
  * Displays data and blends in nicely.
  */
-export function Value({ label, value, tooltip, iconLeft }: ValueProps): React.ReactElement {
+export function Value({
+  label,
+  value,
+  tooltip,
+  iconLeft,
+}: ValueProps): React.ReactElement {
   return (
     <div className="w-full space-y-1">
       <label

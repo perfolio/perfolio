@@ -14,7 +14,9 @@ export const Table = ({ columnNames, rows }: TableProps): JSX.Element => {
           <div className="overflow-hidden border border-gray-300 sm:rounded">
             <table className="min-w-full ">
               {<Header labels={columnNames} />}
-              <tbody className="bg-white divide-y divide-gray-300">{rows}</tbody>
+              <tbody className="bg-white divide-y divide-gray-300">
+                {rows}
+              </tbody>
             </table>
           </div>
         </div>

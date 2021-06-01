@@ -59,7 +59,10 @@ export function Input({
 }: InputProps): React.ReactElement {
   return (
     <div className="w-full space-y-1">
-      <label htmlFor={register.name} className="block text-xs font-medium text-gray-800 uppercase">
+      <label
+        htmlFor={register.name}
+        className="block text-xs font-medium text-gray-800 uppercase"
+      >
         {label}
       </label>
       <div className="relative ">
@@ -79,7 +82,8 @@ export function Input({
             "text-center h-12 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
             {
               "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
-              "border-error-400 focus:border-error-700 focus:bg-error-50": error,
+              "border-error-400 focus:border-error-700 focus:bg-error-50":
+                error,
               "appearance-none bg-transparent": disabled,
               "px-14": !!iconLeft,
             },

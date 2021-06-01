@@ -7,7 +7,9 @@ import { Logo } from "../logo/logo"
 import { BellIcon, AdjustmentsIcon } from "@heroicons/react/outline"
 import { Link, Routes } from "blitz"
 
-export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
+export const DesktopNavbar: React.FC<NavbarProps> = ({
+  items,
+}): JSX.Element => {
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -22,9 +24,17 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
               {items.map((item) => (
                 <li key={item.label}>
                   {item.menu ? (
-                    <DesktopNavMenu label={item.label} icon={item.icon} menu={item.menu} />
+                    <DesktopNavMenu
+                      label={item.label}
+                      icon={item.icon}
+                      menu={item.menu}
+                    />
                   ) : (
-                    <DesktopNavLink href={item.href!} label={item.label} icon={item.icon} />
+                    <DesktopNavLink
+                      href={item.href!}
+                      label={item.label}
+                      icon={item.icon}
+                    />
                   )}
                 </li>
               ))}
@@ -37,7 +47,9 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
               <div className="relative pb-1 cursor-pointer ">
                 <BellIcon className="w-6 h-6 text-white" />
                 <div className="w-4 h-4 rounded-full  bg-gray-800 flex items-center justify-center absolute top-0 right-0 -mr-1.5 -mt-0.5">
-                  <p className="text-xs font-bold text-center text-gray-50">1</p>
+                  <p className="text-xs font-bold text-center text-gray-50">
+                    1
+                  </p>
                 </div>
               </div>
             </li>

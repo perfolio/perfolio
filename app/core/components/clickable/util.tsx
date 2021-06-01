@@ -27,9 +27,14 @@ function isButton(props: ButtonProps | LinkProps): props is ButtonProps {
  * @param element - A JSXElement to display to the user.
  * @returns The element wrapped by the correct controller.
  */
-export const wrap = (props: LinkProps | ButtonProps, element: JSX.Element): JSX.Element => {
+export const wrap = (
+  props: LinkProps | ButtonProps,
+  element: JSX.Element,
+): JSX.Element => {
   if (isButton(props)) {
-    return <ButtonController onClick={props.onClick}>{element}</ButtonController>
+    return (
+      <ButtonController onClick={props.onClick}>{element}</ButtonController>
+    )
   }
 
   if (isLink(props)) {

@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "TokenType" AS ENUM ('RESET_PASSWORD');
 
+-- CreateEnum
+CREATE TYPE "Currency" AS ENUM ('USD');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -49,27 +52,26 @@ CREATE TABLE "Company" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "isin" TEXT NOT NULL,
-    "symbol" TEXT NOT NULL,
+    "symbolId" TEXT NOT NULL,
     "logo" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "exchange" TEXT,
-    "industry" TEXT,
-    "website" TEXT,
+    "exchange" TEXT NOT NULL,
+    "industry" TEXT NOT NULL,
+    "website" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "ceo" TEXT,
-    "issueType" TEXT,
-    "sector" TEXT,
-    "employees" INTEGER,
-    "securityName" TEXT,
-    "primarySICCode" INTEGER,
-    "address" TEXT,
-    "address2" TEXT,
-    "state" TEXT,
-    "city" TEXT,
-    "zip" TEXT,
-    "country" TEXT,
-    "phone" TEXT,
+    "ceo" TEXT NOT NULL,
+    "issueType" TEXT NOT NULL,
+    "sector" TEXT NOT NULL,
+    "employees" INTEGER NOT NULL,
+    "securityName" TEXT NOT NULL,
+    "primarySicCode" INTEGER NOT NULL,
+    "address" TEXT NOT NULL,
+    "address2" TEXT NOT NULL,
+    "state" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "zip" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -83,6 +85,7 @@ CREATE TABLE "Transaction" (
     "assetId" TEXT NOT NULL,
     "volume" DOUBLE PRECISION NOT NULL,
     "value" DOUBLE PRECISION NOT NULL,
+    "currency" "Currency" NOT NULL DEFAULT E'USD',
     "executedAt" INTEGER NOT NULL,
 
     PRIMARY KEY ("id")
@@ -90,13 +93,47 @@ CREATE TABLE "Transaction" (
 
 -- CreateTable
 CREATE TABLE "Price" (
+    "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "isin" TEXT NOT NULL,
+    "symbol" TEXT NOT NULL,
     "time" INTEGER NOT NULL,
     "value" DOUBLE PRECISION NOT NULL,
+    "currency" "Currency" NOT NULL DEFAULT E'USD'
+);
 
-    PRIMARY KEY ("isin","time")
+-- CreateTable
+CREATE TABLE "Exchange" (
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "mic" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    PRIMARY KEY ("mic")
+);
+
+-- CreateTable
+CREATE TABLE "Symbol" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "symbol" TEXT NOT NULL,
+    "isin" TEXT NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "VolumeTraded" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "date" INTEGER NOT NULL,
+    "volume" INTEGER NOT NULL,
+    "exchangeId" TEXT NOT NULL,
+    "symbolId" TEXT NOT NULL,
+
+    PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -109,13 +146,28 @@ CREATE UNIQUE INDEX "Session.handle_unique" ON "Session"("handle");
 CREATE UNIQUE INDEX "Token.hashedToken_type_unique" ON "Token"("hashedToken", "type");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Company.isin_unique" ON "Company"("isin");
+CREATE UNIQUE INDEX "Company_symbolId_unique" ON "Company"("symbolId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Company.symbol_unique" ON "Company"("symbol");
+CREATE UNIQUE INDEX "Price.symbol_time_currency_unique" ON "Price"("symbol", "time", "currency");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Symbol.symbol_unique" ON "Symbol"("symbol");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VolumeTraded.symbolId_exchangeId_unique" ON "VolumeTraded"("symbolId", "exchangeId");
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Company" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Token" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("exchangeId") REFERENCES "Exchange"("mic") ON DELETE CASCADE ON UPDATE CASCADE;
