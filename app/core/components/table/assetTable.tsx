@@ -3,7 +3,7 @@ import { Table } from "./table"
 import { Simple } from "./cells/simple/simple"
 import { Icon } from "./cells/icon/icon"
 import { Tag } from "./cells/tag/tag"
-import {Image} from "blitz"
+import { Image } from "blitz"
 
 interface Asset {
   id: string

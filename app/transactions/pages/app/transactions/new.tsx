@@ -130,7 +130,12 @@ const NewTransactionPage: BlitzPage = () => {
               placeholder="US0123456789"
               iconLeft={
                 company ? (
-                  <Image src={company?.logo??""} alt={`Logo of ${company?.name}`} width={64} height={64} />
+                  <Image
+                    src={company?.logo ?? ""}
+                    alt={`Logo of ${company?.name}`}
+                    width={64}
+                    height={64}
+                  />
                 ) : companyLoading ? (
                   <Spinner />
                 ) : null
