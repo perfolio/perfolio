@@ -14,7 +14,7 @@ services:
       yarn  &&
       yarn blitz prisma generate &&
       yarn blitz build &&
-      yarn blitz prisma db push --preview-feature
+      yarn blitz prisma migrate deploy
     startCommand: blitz start
     envVars:
       - key: NODE_ENV

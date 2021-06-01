@@ -6,34 +6,21 @@ import {
   ErrorFallbackProps,
   useQueryErrorResetBoundary,
   Head,
-  useSession,
+  ErrorComponent,
 } from "blitz"
-import ErrorComponent from "app/core/components/sentry/ErrorComponent"
-import Sentry from "integrations/sentry"
 import { ThemeProvider } from "next-themes"
 import { ErrorBoundary } from "react-error-boundary"
-import { Suspense, useEffect } from "react"
+import { Suspense } from "react"
 import { FullscreenSpinner } from "app/core/components"
 import "tailwindcss/tailwind.css"
 import LoginForm from "app/auth/components/LoginForm"
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
-  const session = useSession({ suspense: false })
-  useEffect(() => {
-    if (session.userId) {
-      Sentry.setUser({ id: session.userId.toString() })
-    }
-  }, [session])
   return (
     <ThemeProvider>
       <Suspense fallback={<FullscreenSpinner />}>
         <ErrorBoundary
-          onError={(error, componentStack) => {
-            Sentry.captureException(error, {
-              contexts: { react: { componentStack } },
-            })
-          }}
           FallbackComponent={RootErrorFallback}
           resetKeys={[router.asPath]}
           onReset={useQueryErrorResetBoundary().reset}
