@@ -6,11 +6,11 @@ import {
   ErrorFallbackProps,
   useQueryErrorResetBoundary,
   Head,
+  ErrorComponent,
 } from "blitz"
-import ErrorComponent from "app/core/components/sentry/ErrorComponent"
 import { ThemeProvider } from "next-themes"
 import { ErrorBoundary } from "react-error-boundary"
-import { Suspense, useEffect } from "react"
+import { Suspense } from "react"
 import { FullscreenSpinner } from "app/core/components"
 import "tailwindcss/tailwind.css"
 import LoginForm from "app/auth/components/LoginForm"
