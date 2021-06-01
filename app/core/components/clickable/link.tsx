@@ -15,6 +15,7 @@ export const Link: React.FC<LinkProps | ButtonProps> = (props): JSX.Element => {
   return wrap(
     props,
     <DefaultLinkStyle
+      kind={props.kind}
       size={props.size}
       label={props.label}
       prefix={props.prefix}
