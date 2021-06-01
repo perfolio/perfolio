@@ -196,7 +196,7 @@ const IndexPage: BlitzPage = () => {
           className="flex flex-col justify-center"
           id="team"
         >
-          <SectionTitle tag="Our Team" title="Who is behind this?"  />
+          <SectionTitle tag="Our Team" title="Who is behind this?" />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
