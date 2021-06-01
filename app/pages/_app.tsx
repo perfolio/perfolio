@@ -30,8 +30,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Suspense fallback={<FullscreenSpinner />}>
         <ErrorBoundary
           onError={(error, componentStack) => {
-            console.log("capturing sentry error")
-            Sentry.captureException(error, { contexts: { react: { componentStack } } })
+            Sentry.captureException(error, {
+              contexts: { react: { componentStack } },
+            })
           }}
           FallbackComponent={RootErrorFallback}
           resetKeys={[router.asPath]}
@@ -43,17 +44,46 @@ export default function App({ Component, pageProps }: AppProps) {
               name="description"
               content="Investment portfolio analytics, aggregating, analyzing and measuring performance of holdings such as stocks, bonds or real estate"
             />
-            <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
-            <link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-touch-icon.png"></link>
-            <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"></link>
-            <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"></link>
+            <link
+              rel="stylesheet"
+              href="https://rsms.me/inter/inter.css"
+            ></link>
+            <link
+              rel="apple-touch-icon"
+              sizes="180x180"
+              href="/fav/apple-touch-icon.png"
+            ></link>
+            <link
+              rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="/fav/favicon-32x32.png"
+            ></link>
+            <link
+              rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="/fav/favicon-16x16.png"
+            ></link>
             <link rel="manifest" href="/fav/site.webmanifest"></link>
-            <link rel="mask-icon" href="/fav/safari-pinned-tab.svg" color="#1A202C"></link>
+            <link
+              rel="mask-icon"
+              href="/fav/safari-pinned-tab.svg"
+              color="#1A202C"
+            ></link>
             <meta name="msapplication-TileColor" content="#1A202C"></meta>
             <meta name="theme-color" content="#1A202C"></meta>
 
-            <link rel="alternative" hrefLang="en" href="https://perfol.io"></link>
-            <link rel="alternative" hrefLang="de" href="https://perfol.io/de"></link>
+            <link
+              rel="alternative"
+              hrefLang="en"
+              href="https://perfol.io"
+            ></link>
+            <link
+              rel="alternative"
+              hrefLang="de"
+              href="https://perfol.io/de"
+            ></link>
           </Head>
 
           <Component {...pageProps} />
@@ -64,7 +94,6 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
-  console.log("rooterrording")
   if (error instanceof AuthenticationError) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
@@ -80,7 +109,10 @@ function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
     )
   } else {
     return (
-      <ErrorComponent statusCode={error.statusCode || 400} title={error.message || error.name} />
+      <ErrorComponent
+        statusCode={error.statusCode || 400}
+        title={error.message || error.name}
+      />
     )
   }
 }

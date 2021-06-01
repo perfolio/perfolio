@@ -7,3 +7,7 @@ export const CreateTransaction = z.object({
   value: z.number().positive(),
   executedAt: z.number().max(Time.today().unix()),
 })
+
+export const DeleteTransaction = z.object({
+  transactionId: z.string(),
+})

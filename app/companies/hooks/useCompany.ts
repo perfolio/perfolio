@@ -1,15 +1,14 @@
 import { useQuery, useSession } from "blitz"
 import getCompany from "app/companies/queries/getCompany"
 
-export const useCompany = (isin: string) => {
+export const useCompany = (symbol: string | undefined) => {
   const sess = useSession()
-  const [company, { isLoading: companyLoading }] = useQuery(
+
+  const [company, { isLoading, error }] = useQuery(
     getCompany,
-    { isin },
-    {
-      enabled: !!sess.userId && RegExp(/[A-Z]{2}[a-zA-Z0-9]{10}/).test(isin),
-      suspense: false,
-    },
+    { symbol: symbol! },
+    { enabled: !!sess.userId && !!symbol, suspense: false },
   )
-  return { company, companyLoading }
+
+  return { company: company?.company, isLoading, error }
 }

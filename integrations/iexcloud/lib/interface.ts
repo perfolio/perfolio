@@ -1,68 +1,60 @@
 import { Time } from "pkg/time"
-
+import * as z from "zod"
 export interface IEXService {
   getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse>
   getLogo(req: GetLogoRequest): Promise<GetLogoResponse>
   getHistory(req: GetHistoryRequest): Promise<GetHistoryResponse>
-  getPossibleSymbols(req: GetPossibleSymbolsRequest): Promise<GetPossibleSymbolsResponse>
+  getPossibleSymbols(
+    req: GetPossibleSymbolsRequest,
+  ): Promise<GetPossibleSymbolsResponse>
   getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse>
   getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse>
 }
 
-export type GetCompanyRequest =
-  | {
-      /**
-       * Ticker of the company.
-       */
-      symbol: string
-    }
-  | {
-      /**
-       * Isin of the company.
-       */
-      isin: string
-    }
-
-/**
- * Resonse from the `GET /stock/{symbol}/company` endpoint.
- */
-export interface GetCompanyResponse {
+export type GetCompanyRequest = {
   /**
    * Ticker of the company.
    */
   symbol: string
+}
+
+export const GetCompanyResponseValidator = z.object({
+  /**
+   * Ticker of the company.
+   */
+  symbol: z.string(),
   /**
    * Name of the company.
    */
-  companyName: string
+  companyName: z.string(),
   /**
    * Number of employees.
    */
-  employees: number
+  employees: z.number(),
   /**
    * Refers to Exchange using IEX Supported Exchanges list.
    */
-  exchange: string
+  exchange: z.string(),
   /**
    * Refers to the industry the company belongs to.
    */
-  industry: string
+  industry: z.string(),
   /**
    * Website of the company.
    */
-  website: string
+  website: z.string().url(),
   /**
    * Description for the company.
    */
-  description: string
+  description: z.string(),
   /**
    * Name of the CEO of the company.
    */
-  CEO: string
+  CEO: z.string(),
   /**
    * Name of the security.
    */
-  securityName: string
+  securityName: z.string(),
   /**
    * Refers to the common issue type of the stock.
    *
@@ -79,48 +71,65 @@ export interface GetCompanyResponse {
    * wt - Warrant
    * empty - Other.
    */
-  issueType?: "ad" | "cs" | "cef" | "et" | "oef" | "ps" | "rt" | "struct" | "ut" | "wi" | "wt"
+  issueType: z.enum([
+    "ad",
+    "cs",
+    "cef",
+    "et",
+    "oef",
+    "ps",
+    "rt",
+    "struct",
+    "ut",
+    "wi",
+    "wt",
+  ]),
   /**
    * Refers to the sector the company belongs to.
    */
-  sector: string
+  sector: z.string(),
   /**
    * Primary SIC Code for the symbol (if available).
    */
-  primarySicCode: number
+  primarySicCode: z.number(),
   /**
    * An array of strings used to classify the company.
    */
-  tags: string[]
+  tags: z.array(z.string()),
   /**
    * Street address of the company if available.
    */
-  address: string
+  address: z.string(),
   /**
    * Street address of the company if available.
    */
-  address2: string
+  address2: z.string(),
   /**
    * State of the company if available.
    */
-  state: string
+  state: z.string(),
   /**
    * City of the company if available.
    */
-  city: string
+  city: z.string(),
   /**
    * Zip code of the company if available.
    */
-  zip: string
+  zip: z.string(),
   /**
    * Country of the company if available.
    */
-  country: string
+  country: z.string(),
   /**
    * Phone number of the company if available.
    */
-  phone: string
-}
+  phone: z.string(),
+})
+
+/**
+ * Resonse from the `GET /stock/{symbol}/company` endpoint.
+ */
+export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator>
 
 export interface GetLogoRequest {
   /**
@@ -129,13 +138,10 @@ export interface GetLogoRequest {
   symbol: string
 }
 
-export interface GetLogoResponse {
-  /**
-   * URL of the image.
-   */
-  url: string
-}
-
+export const GetLogoResponseValidator = z.object({
+  url: z.string().url(),
+})
+export type GetLogoResponse = z.infer<typeof GetLogoResponseValidator>
 export interface GetPriceRequest {
   /**
    * Isin of the company.
@@ -147,12 +153,12 @@ export interface GetPriceRequest {
   time: Time
 }
 
-export interface GetPriceResponse {
-  /**
-   * Actual closing price.
-   */
-  value: number
-}
+export const GetClosingPriceResponseValidator = z.object({
+  close: z.number(),
+})
+export type GetClosingPriceResponse = z.infer<
+  typeof GetClosingPriceResponseValidator
+>
 
 export interface GetHistoryRequest {
   /**
@@ -196,4 +202,30 @@ export type GetPossibleSymbolsResponse = {
   symbol: string
   region: string
   exchange: string
+}[]
+
+export type GetVolumeByVenueRequest = {
+  symbol: string
+}
+export type GetVolumeByVenueResponse = {
+  /**
+   * Refers to the current day, 15 minute delayed volume
+   */
+  volume: number
+  /**
+   * Refers to the Market Identifier Code (MIC)
+   */
+  venue: string
+  /**
+   * Refers to a readable version of the venue defined by IEX
+   */
+  venueName: string
+  /**
+   *  Refers to the date the data was last updated in the format YYYY-MM-DD
+   */
+  date: string
+  /**
+   * Refers to the 15 minute delayed percent of total stock volume traded by the venue
+   */
+  marketPercent: number
 }[]

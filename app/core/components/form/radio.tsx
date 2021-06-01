@@ -9,7 +9,11 @@ export interface RadioProps {
   updateValue: (buy: boolean) => void
 }
 
-export const Radio: React.FC<RadioProps> = ({ options, label, updateValue }): JSX.Element => {
+export const Radio: React.FC<RadioProps> = ({
+  options,
+  label,
+  updateValue,
+}): JSX.Element => {
   const [selected, setSelected] = useState(options[0]!)
 
   useEffect(() => {
@@ -31,7 +35,8 @@ export const Radio: React.FC<RadioProps> = ({ options, label, updateValue }): JS
                 classNames(
                   "border-gray-200 focus:shadow focus:border-gray-700 focus:bg-gray-50 w-full p-3 placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
                   {
-                    "border-gray-400 focus:border-gray-700 focus:bg-gray-50": checked || active,
+                    "border-gray-400 focus:border-gray-700 focus:bg-gray-50":
+                      checked || active,
                   },
                 )
               }

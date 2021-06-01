@@ -5,7 +5,11 @@ import cn from "classnames"
 import React from "react"
 import { MenuProps } from "./types"
 
-export const MobileNavMenu: React.FC<MenuProps> = ({ label, icon, menu }): JSX.Element => {
+export const MobileNavMenu: React.FC<MenuProps> = ({
+  label,
+  icon,
+  menu,
+}): JSX.Element => {
   return (
     <div className="w-full">
       <div className="w-full">
@@ -34,7 +38,9 @@ export const MobileNavMenu: React.FC<MenuProps> = ({ label, icon, menu }): JSX.E
                 <Disclosure.Panel className="p-4 space-y-4 text-sm text-gray-500 rounded bg-gray-50">
                   {menu.map((item) => (
                     <Link href={item.href} key={item.name}>
-                      <a className="flex items-center ml-10 focus:outline-none ">{item.name}</a>
+                      <a className="flex items-center ml-10 focus:outline-none ">
+                        {item.name}
+                      </a>
                     </Link>
                   ))}
                 </Disclosure.Panel>

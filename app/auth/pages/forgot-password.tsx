@@ -33,12 +33,17 @@ const ForgotPasswordPage: BlitzPage = () => {
                   await forgotPasswordMutation(values)
                 } catch (error) {
                   return {
-                    [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
+                    [FORM_ERROR]:
+                      "Sorry, we had an unexpected error. Please try again.",
                   }
                 }
               }}
             >
-              <LabeledTextField name="email" label="Email" iconLeft={<MailIcon />} />
+              <LabeledTextField
+                name="email"
+                label="Email"
+                iconLeft={<MailIcon />}
+              />
             </Form>
             <div className="flex items-center justify-between mt-4 text-sm">
               <Link href={Routes.LoginPage()}>Log in</Link>

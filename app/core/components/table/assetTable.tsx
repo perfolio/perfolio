@@ -40,7 +40,10 @@ const Row = ({ asset }: { asset: Asset }) => {
         <Simple label={`$${asset.value.toFixed(2)}`} />
       </td>
       <td className="text-right">
-        <Tag color={change > 0 ? "success" : "error"} label={`${change.toFixed(2)}%`} />
+        <Tag
+          color={change > 0 ? "success" : "error"}
+          label={`${change.toFixed(2)}%`}
+        />
       </td>
     </tr>
   )
@@ -62,7 +65,13 @@ export const AssetTable = (): JSX.Element => {
     },
   ]
 
-  const columnNames = ["Asset", "Quantity", "Cost per share", "Price per share", "Change"]
+  const columnNames = [
+    "Asset",
+    "Quantity",
+    "Cost per share",
+    "Price per share",
+    "Change",
+  ]
 
   const rows = assets.map((asset) => {
     return <Row key={asset.id} asset={asset} />

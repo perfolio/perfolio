@@ -1,4 +1,4 @@
-import { useCompany } from "app/companies/hooks/useCompany"
+import { useSymbol } from "app/companies/hooks/useSymbol"
 import { useTransactions } from "app/transactions/hooks/useTransactions"
 import { Transaction } from "db"
 import { Time } from "pkg/time"
@@ -12,24 +12,27 @@ interface TransactionActivityItemProps {
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
 }): JSX.Element => {
-  const { company, companyLoading } = useCompany(transaction.assetId)
+  const { symbol, isLoading } = useSymbol(transaction.assetId)
 
   return (
     <li className="py-4 h-28">
-      {companyLoading ? (
+      {isLoading ? (
         <div className="flex items-center justify-center h-full">
           <Spinner />
         </div>
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-black">New Transaction</span>
+            <span className="text-sm font-semibold text-black">
+              New Transaction
+            </span>
             <span className="text-xs">{Time.ago(transaction.executedAt)}</span>
           </div>
           <p>
-            You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
-            <span className="font-semibold">{company?.symbol}</span> shares at ${transaction.value}{" "}
-            per share.
+            You {transaction.volume > 0 ? "bought" : "sold"}{" "}
+            {transaction.volume}{" "}
+            <span className="font-semibold">{symbol?.symbol}</span> shares at $
+            {transaction.value} per share.
           </p>
         </>
       )}

@@ -20,7 +20,10 @@ export const SignupForm = (props: SignupFormProps) => {
             await signupMutation(values)
             props.onSuccess?.()
           } catch (error) {
-            if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+            if (
+              error.code === "P2002" &&
+              error.meta?.target?.includes("email")
+            ) {
               // This error comes from Prisma
               return { email: "This email is already being used" }
             } else {
@@ -30,7 +33,11 @@ export const SignupForm = (props: SignupFormProps) => {
         }}
       >
         <LabeledTextField name="email" label="Email" iconLeft={<MailIcon />} />
-        <LabeledTextField name="name" label="Username" iconLeft={<UserIcon />} />
+        <LabeledTextField
+          name="name"
+          label="Username"
+          iconLeft={<UserIcon />}
+        />
         <LabeledTextField
           name="password"
           label="Password"

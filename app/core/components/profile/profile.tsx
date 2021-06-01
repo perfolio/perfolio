@@ -15,7 +15,10 @@ export const Profile: React.FC = (): JSX.Element => {
             <div className="flex flex-col items-end">
               <span className="font-semibold text-gray-50">{user?.name}</span>
               <span className="text-xs font-semibold text-white">Premium</span>
-              <button className="text-xs font-semibold text-white" onClick={() => logoutMutation()}>
+              <button
+                className="text-xs font-semibold text-white"
+                onClick={() => logoutMutation()}
+              >
                 Log out
               </button>
             </div>
@@ -25,10 +28,14 @@ export const Profile: React.FC = (): JSX.Element => {
         <div className="w-full p-4 space-y-2 bg-white rounded ">
           <span className="text-sm text-gray-700">Total Investment</span>
           <div className="flex items-center justify-between">
-            <span className="text-xl font-semibold leading-none text-black">$ 27,815</span>
+            <span className="text-xl font-semibold leading-none text-black">
+              $ 27,815
+            </span>
             <div className="flex items-center justify-end mt-1 space-x-2">
               <span className="text-xs leaditext-gray-700ng-3 ">Target:</span>
-              <span className="text-sm font-semibold text-gray-900">$50.000</span>
+              <span className="text-sm font-semibold text-gray-900">
+                $50.000
+              </span>
             </div>
           </div>
           <div className="w-full rounded-full mt-3.5 h-1.5 bg-gray-300">

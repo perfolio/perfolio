@@ -13,7 +13,13 @@ export interface IconProps {
  *
  * Set label to emtpy string ("") to display it in a loading state.
  */
-export const Icon = ({ icon, color, label, content, align }: IconProps): JSX.Element => {
+export const Icon = ({
+  icon,
+  color,
+  label,
+  content,
+  align,
+}: IconProps): JSX.Element => {
   align = align ?? "justify-center"
   const colors = color ? `text-${color}-800 bg-${color}-200` : ""
 
@@ -34,7 +40,9 @@ export const Icon = ({ icon, color, label, content, align }: IconProps): JSX.Ele
             )
           ) : null}
           {content ? (
-            <span className="text-xs text-gray-700 whitespace-nowrap">{content}</span>
+            <span className="text-xs text-gray-700 whitespace-nowrap">
+              {content}
+            </span>
           ) : null}
         </div>
       </div>
