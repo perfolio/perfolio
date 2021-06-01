@@ -47,7 +47,9 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
     >
       <>
         {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
-        {label ? <span className={text(size)}>{loading ? <Spinner /> : label}</span> : null}
+        {label ? (
+          <span className={text(size)}>{loading ? <Spinner /> : label}</span>
+        ) : null}
         {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
       </>
     </div>
@@ -66,7 +68,8 @@ const colors = (kind: Kind, disabled?: boolean): string => {
       " bg-gradient-to-tr shadow-evil from-black to-primary-900 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
     secondary:
       "bg-transparent border border-gray-200 text-primary-900 hover:border-gray-400 hover:text-black",
-    alert: "bg-gradient-to-tr from-orange-500 to-red-500 text-white hover:to-red-400",
+    alert:
+      "bg-gradient-to-tr from-orange-500 to-red-500 text-white hover:to-red-400",
     cta: "from-orange-600 to-yellow-500 text-white justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:from-orange-600 hover:to-yellow-300 duration-200 hover:text-black",
     plain:
       "bg-transparent shadow-none hover:shadow-none hover:text-primary-900 text-gray-800 hover:font-medium",

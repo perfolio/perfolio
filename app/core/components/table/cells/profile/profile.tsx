@@ -8,7 +8,11 @@ export interface MultilineProps {
   content: string | number
 }
 
-export const Multiline = ({ title, content, icon }: MultilineProps): JSX.Element => {
+export const Multiline = ({
+  title,
+  content,
+  icon,
+}: MultilineProps): JSX.Element => {
   return (
     <Wrapper>
       <div className="flex items-center ">

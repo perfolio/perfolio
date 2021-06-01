@@ -2,7 +2,12 @@ import React from "react"
 export const FullscreenSpinner: React.FC = () => {
   return (
     <div className="flex items-center justify-center w-screen h-screen text-gray-700">
-      <svg width="57" height="57" viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="57"
+        height="57"
+        viewBox="0 0 57 57"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <g fill="fill-current" fillRule="evenodd">
           <g transform="translate(1 1)" strokeWidth="2">
             <circle cx="5" cy="50" r="5">

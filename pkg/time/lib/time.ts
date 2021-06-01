@@ -19,7 +19,9 @@ export class Time {
   }
   public toDate(): Date {
     const padded = this.pad()
-    return new Date(`${padded.year}-${padded.month}-${padded.day}T00:00:00+0000`)
+    return new Date(
+      `${padded.year}-${padded.month}-${padded.day}T00:00:00+0000`,
+    )
   }
   /**
    * From unix timestamp with second precision.
@@ -44,7 +46,9 @@ export class Time {
    * Return a new Time instance where 1 day has been added.
    */
   public nextDay(): Time {
-    return Time.fromTimestamp(Math.floor(this.toDate().getTime() / 1000) + 24 * 60 * 60)
+    return Time.fromTimestamp(
+      Math.floor(this.toDate().getTime() / 1000) + 24 * 60 * 60,
+    )
   }
 
   public toString(): string {
@@ -62,7 +66,11 @@ export class Time {
    * Check if two times are equal.
    */
   public equals(other: Time): boolean {
-    return this.day === other.day && this.month === other.month && this.year === other.year
+    return (
+      this.day === other.day &&
+      this.month === other.month &&
+      this.year === other.year
+    )
   }
 
   public toJson(): number {

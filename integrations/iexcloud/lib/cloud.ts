@@ -1,30 +1,15 @@
-import {
-  GetCompanyRequest,
-  GetCompanyResponse,
-  GetLogoResponse,
-  GetLogoRequest,
-  GetPriceRequest,
-  GetPriceResponse,
-  GetHistoryRequest,
-  GetHistoryResponse,
-  GetSymbolRequest,
-  GetSymbolResponse,
-  GetCurrentPriceRequest,
-  GetCurrentPriceResponse,
-  IEXService,
-  GetPossibleSymbolsRequest,
-  GetPossibleSymbolsResponse,
-} from "./interface"
+import { GetHistoryRequest, GetHistoryResponse } from "./interface"
 import { ApiConfig, GetRequest } from "./types"
-import { Time } from "pkg/time"
+import { Logger } from "tslog"
 
 export class ErrorHTTP400 extends Error {}
 
 /**
  * SDK for IEXCloud resources.
  */
-export class Cloud implements IEXService {
+export class Client {
   private readonly baseUrl: string
+  private readonly logger: Logger
 
   /**
    * JWT to be used as default. Will be populated after running `login`.
@@ -45,6 +30,7 @@ export class Cloud implements IEXService {
       throw new Error("IEX_TOKEN must be defined")
     }
     this.token = token
+    this.logger = new Logger()
   }
 
   private async get({ path, parameters }: GetRequest): Promise<unknown> {
@@ -69,7 +55,9 @@ export class Cloud implements IEXService {
         method: "GET",
       })
       if (res.status === 429) {
-        console.debug(`IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
+        this.logger.debug(
+          `IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`,
+        )
         await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
       }
@@ -77,11 +65,15 @@ export class Cloud implements IEXService {
        * We need to handle some 400 errors specifically.
        */
       if (res.status === 400) {
-        throw new ErrorHTTP400(`Unable to GET endpoint ${path}, failed with status: ${res.status}`)
+        throw new ErrorHTTP400(
+          `Unable to GET endpoint ${path}, failed with status: ${res.status}`,
+        )
       }
 
       if (res.status !== 200) {
-        throw new Error(`Unable to GET endpoint ${path}, failed with status: ${res.status}`)
+        throw new Error(
+          `Unable to GET endpoint ${path}, failed with status: ${res.status}`,
+        )
       }
       return res.json().catch((err) => {
         throw new Error(`Unable to unmarshal response: ${err}`)
@@ -91,155 +83,27 @@ export class Cloud implements IEXService {
   }
 
   /**
-   * Load data for a specific company by its symbol.
-   */
-  public async getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse> {
-    let symbol: string
-    if ("symbol" in req) {
-      symbol = req.symbol.toLowerCase()
-    } else {
-      symbol = (await this.getSymbol({ isin: req.isin })).symbol
-    }
-
-    const res = (await this.get({
-      path: `/stock/${symbol}/company`,
-    })) as any
-
-    return {
-      ...res,
-      name: res.companyName,
-    }
-  }
-
-  /**
-   * Load logo for a specific company by its symbol.
-   */
-  public async getLogo(req: GetLogoRequest): Promise<GetLogoResponse> {
-    const symbol = req.symbol.toLowerCase()
-
-    const res = (await this.get({
-      path: `/stock/${symbol}/logo`,
-    })) as { url: string }
-    const url = res.url
-      ? res.url
-      : "https://avatars.githubusercontent.com/u/67603535?s=400&u=cb14061ee696c1d3ca79760fcc80dd00ad93d8d3&v=4"
-    return { url }
-  }
-
-  /**
-   * Load the closing price for a specific date.
-   */
-  public async getPrice(req: GetPriceRequest): Promise<GetPriceResponse> {
-    const { year, month, day } = req.time.pad()
-    const symbol = (await this.getSymbol(req)).symbol
-    const res = await this.get({
-      path: `/stock/${symbol}/chart/date/${year}${month}${day}`,
-      parameters: {
-        chartByDay: "true",
-        chartCloseOnly: "true",
-      },
-    }).catch((err) => {
-      /**
-       * Just return -1 if the request was in the past where no price data was availabe.
-       */
-      if (err instanceof ErrorHTTP400 && req.time.unix() <= Time.today().unix()) {
-        return {
-          symbol,
-          time: req.time.unix(),
-          value: -1,
-        }
-      } else {
-        throw err
-      }
-    })
-    const price = res as { close: number }[]
-
-    return {
-      value: price?.[0]?.close ?? -1,
-    }
-  }
-
-  /**
    * Load all prices for a specific symbol.
    */
   public async getHistory(req: GetHistoryRequest): Promise<GetHistoryResponse> {
-    const symbol = (await this.getSymbol(req)).symbol
-    const res = (await this.get({
-      path: `/stock/${symbol}/chart/max`,
-      parameters: {
-        chartCloseOnly: "true",
-      },
-    })) as { date: string; close: number }[]
+    // const symbol = (await this.getSymbol(req)).symbol
+    // const res = (await this.get({
+    //   path: `/stock/${symbol}/chart/max`,
+    //   parameters: {
+    //     chartCloseOnly: "true",
+    //   },
+    // })) as { date: string; close: number }[]
 
-    return res.map((p) => {
-      const date = p.date.split("-")
-      const year = Number(date[0])
-      const month = Number(date[1])
-      const day = Number(date[2])
-      return {
-        time: new Time(year, month, day),
-        value: res[0]?.close ?? -1,
-      }
-    })
-  }
-
-  /**.
-   * Https://iexcloud.io/docs/api/#isin-mapping
-   *
-   * @param isin - https://www.investopedia.com/terms/i/isin.asp
-   */
-  public async getSymbol(req: GetSymbolRequest): Promise<GetSymbolResponse> {
-    const res = await this.get({
-      path: "/ref-data/isin",
-      parameters: {
-        isin: req.isin,
-      },
-    })
-    const isinMap = res as { region: string; symbol: string }[]
-    for (const map of isinMap) {
-      if (req.isin.startsWith(map.region)) {
-        const company = await this.getCompany({ symbol: map.symbol }).catch((err) => {
-          throw new Error(`Unable to fetch company: [ ${err} ]`)
-        })
-        if (company.companyName !== "") {
-          // iex also ships a`.iexId` field that is always null and causes issues when
-          // saving to the database, so we clean it up a little and inject the isin as well.
-          return {
-            symbol: map.symbol,
-          }
-        }
-      }
-    }
-    throw new Error(
-      `No correct isin found for: ${req.isin}. IEX returned: ${JSON.stringify(res, null, "  ")}.`,
-    )
-  }
-  public async getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse> {
-    const symbol = (await this.getSymbol(req)).symbol
-
-    const res = await this.get({
-      path: `/stock/${symbol}/price`,
-    })
-    if (typeof res !== "number") {
-      throw new Error("IEX did not return a value")
-    }
-    return { value: res }
-  }
-
-  /**.
-   * Https://iexcloud.io/docs/api/#isin-mapping
-   *
-   * @param isin - https://www.investopedia.com/terms/i/isin.asp
-   */
-  public async getPossibleSymbols(
-    req: GetPossibleSymbolsRequest,
-  ): Promise<GetPossibleSymbolsResponse> {
-    const res = await this.get({
-      path: "/ref-data/isin",
-      parameters: {
-        isin: req.isin,
-      },
-    })
-    return res as GetPossibleSymbolsResponse
+    // return res.map((p) => {
+    //   const date = p.date.split("-")
+    //   const year = Number(date[0])
+    //   const month = Number(date[1])
+    //   const day = Number(date[2])
+    //   return {
+    //     time: new Time(year, month, day),
+    //     value: res[0]?.close ?? -1,
+    //   }
+    // })
+    return []
   }
 }

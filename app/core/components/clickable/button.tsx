@@ -11,7 +11,9 @@ import { wrap } from "./util"
  *
  * @param props - Either LinkProps or ButtonProps. Check out `types.ts` for details.
  */
-export const Button: React.FC<LinkProps | ButtonProps> = (props): JSX.Element => {
+export const Button: React.FC<LinkProps | ButtonProps> = (
+  props,
+): JSX.Element => {
   return wrap(
     props,
     <DefaultButtonStyle

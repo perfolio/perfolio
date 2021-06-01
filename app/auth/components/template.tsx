@@ -30,11 +30,15 @@ export const AuthPageTemplate: React.FC<AuthPageTemplateProps> = ({
               </svg>
             </div>
             <div className="z-50 flex flex-col items-center justify-center px-8 space-y-4 tracking-tight text-center md:text-left md:items-start md:justify-start md:max-w-3xl">
-              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">{h1}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">
+                {h1}
+              </h1>
               <h2 className="text-lg font-normal text-gray-500 ">{h2}</h2>
             </div>
           </div>
-          <div className="flex items-center justify-center px-6 mx-auto">{children}</div>
+          <div className="flex items-center justify-center px-6 mx-auto">
+            {children}
+          </div>
           <div className="absolute flex items-center justify-between w-full md:hidden top-12">
             <span className="w-4/5 border-b border-primary-600"></span>
 

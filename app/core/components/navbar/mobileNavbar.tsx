@@ -16,7 +16,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         <Logo imageColor="text-primary-50" />
       </div>
       <div>
-        <button className="w-6 h-6 cursor-pointer text-gray-50" onClick={() => setOpen(!open)}>
+        <button
+          className="w-6 h-6 cursor-pointer text-gray-50"
+          onClick={() => setOpen(!open)}
+        >
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </button>
         <Transition
@@ -33,9 +36,17 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
             {items.map((item) => (
               <li key={item.label}>
                 {item.menu ? (
-                  <MobileNavMenu label={item.label} icon={item.icon} menu={item.menu} />
+                  <MobileNavMenu
+                    label={item.label}
+                    icon={item.icon}
+                    menu={item.menu}
+                  />
                 ) : (
-                  <MobileNavLink href={item.href!} label={item.label} icon={item.icon} />
+                  <MobileNavLink
+                    href={item.href!}
+                    label={item.label}
+                    icon={item.icon}
+                  />
                 )}
               </li>
             ))}
