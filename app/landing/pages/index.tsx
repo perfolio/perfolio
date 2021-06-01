@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { BlitzPage, Routes, Image, useMutation } from "blitz"
+import React from "react"
+import { BlitzPage, Image, useMutation } from "blitz"
 import { Navbar } from "../components/navbar"
 import {
   Member,
@@ -11,10 +11,17 @@ import {
   LabeledTextField,
   Form,
   FORM_ERROR,
-  Button,
 } from "app/core/components"
 import * as z from "zod"
-import { CheckIcon, MailIcon } from "@heroicons/react/outline"
+import {
+  ChartSquareBarIcon,
+  CreditCardIcon,
+  DatabaseIcon,
+  FlagIcon,
+  HomeIcon,
+  MailIcon,
+  ShieldCheckIcon,
+} from "@heroicons/react/outline"
 import createSubscription from "app/newsletters/mutations/createSubscription"
 import { Footer } from "../components/footer"
 import { Price } from "../components/price"
@@ -59,91 +66,37 @@ const members: { name: string; title: string; image: string }[] = [
 const features = () => {
   return [
     {
-      icon: (
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"
-          />
-        </svg>
-      ),
+      icon: <FlagIcon />,
       title: "Independent",
       description:
         "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
     },
     {
-      icon: (
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
-      ),
+      icon: <ChartSquareBarIcon />,
       title: "Complex made easy",
       description:
         "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
     },
     {
-      icon: (
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          />
-        </svg>
-      ),
+      icon: <HomeIcon />,
       title: "All in one place",
       description:
         "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
     },
     {
-      icon: (
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
-          />
-        </svg>
-      ),
+      icon: <DatabaseIcon />,
       title: "Highest data quality",
       description:
         "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
     },
     {
-      icon: (
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-          />
-        </svg>
-      ),
+      icon: <ShieldCheckIcon />,
       title: "Privacy and Security",
       description:
         "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
     },
     {
-      icon: (
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-          />
-        </svg>
-      ),
+      icon: <CreditCardIcon />,
       title: "Fair pricing",
       description:
         "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
@@ -157,55 +110,11 @@ const IndexPage: BlitzPage = () => {
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
         <div className="fixed inset-x-0 top-0 z-20 bg-gray-50">
-          <Navbar
-            links={[
-              {
-                label: "Product",
-                href: "/#index",
-              },
-              {
-                label: "Features",
-                href: "/#features",
-              },
-              {
-                label: "Pricing",
-                href: "/#pricing",
-              },
-              {
-                label: "Team",
-                href: "/#team",
-              },
-            ]}
-          ></Navbar>
+          <Navbar />
         </div>
         <Section bg="bg-gray-50 " className="relative py-20" id="index">
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
-            <HeroSection
-              headline="Insights. For Everyone."
-              paragraph={
-                <p className="flex flex-col xl:flex-row">
-                  Keeping track of all your assets and their performance is
-                  hard. Perfolio brings all information to one place and gives
-                  you access to the latest analytics methods in science.
-                </p>
-              }
-              primaryButton={
-                <Button
-                  kind="primary"
-                  size="large"
-                  label="Sign up"
-                  href="/auth/signup"
-                />
-              }
-              secondaryButton={
-                <Button
-                  size="large"
-                  kind="secondary"
-                  label="Contact"
-                  href="mailto:info@perfol.io"
-                />
-              }
-            ></HeroSection>
+            <HeroSection />
 
             <div className="hidden max-w-screen-xl border rounded shadow-2xl lg:block">
               <Image
@@ -220,12 +129,11 @@ const IndexPage: BlitzPage = () => {
         <Section
           bg="bg-white"
           id="features"
-          className="flex flex-col justify-cente "
+          className="flex flex-col justify-center "
         >
           <SectionTitle
             tag="Why Perfolio?"
             title="Make decisions based on data"
-            onRight
           />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
@@ -252,7 +160,7 @@ const IndexPage: BlitzPage = () => {
             title="Start for free, cancel anytime!"
           />
 
-          <div className="flex flex-col justify-center w-full mt-4 space-y-8 leading-7 text-gray-900 border-0 border-gray-200 md:space-x-16 md:space-y-0 md:flex-row sm:mt-6 md:mt-8 ">
+          <div className="flex flex-col items-center justify-center md:flex-row">
             <Box>
               <Price
                 title="Try it for free"
@@ -288,7 +196,7 @@ const IndexPage: BlitzPage = () => {
           className="flex flex-col justify-center"
           id="team"
         >
-          <SectionTitle tag="Our Team" title="Who is behind this?" onRight />
+          <SectionTitle tag="Our Team" title="Who is behind this?"  />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
@@ -345,7 +253,7 @@ const IndexPage: BlitzPage = () => {
           </div>
         </Section>
         <Section bg="bg-gray-50" id="subscribe">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-center justify-between md:flex-row">
             <div>
               <h2 className="mb-3 font-semibold tracking-wide text-purple-800 uppercase sm:text-lg sm:leading-snug">
                 Get in touch
@@ -354,7 +262,7 @@ const IndexPage: BlitzPage = () => {
                 Curious for more?
               </p>
             </div>
-            <div className="">
+            <div>
               {isSuccess ? (
                 <div className="flex items-center justify-center">
                   Thank you, we'll be in touch.
