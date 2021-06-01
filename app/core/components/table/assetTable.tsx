@@ -3,6 +3,7 @@ import { Table } from "./table"
 import { Simple } from "./cells/simple/simple"
 import { Icon } from "./cells/icon/icon"
 import { Tag } from "./cells/tag/tag"
+import { Image } from "blitz"
 
 interface Asset {
   id: string
@@ -22,10 +23,12 @@ const Row = ({ asset }: { asset: Asset }) => {
           content="hello"
           align="justify-start"
           icon={
-            <img
+            <Image
               className="rounded-full"
               src={`https://storage.googleapis.com/iex/api/logos/${asset.id.toUpperCase()}.png`}
               alt={`Logo for company with isin: ${asset.id}`}
+              width={64}
+              height={64}
             />
           }
         />

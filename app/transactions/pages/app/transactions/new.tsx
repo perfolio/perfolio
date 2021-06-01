@@ -9,7 +9,7 @@ import {
   Spinner,
 } from "app/core/components"
 import { useForm } from "react-hook-form"
-import { useQuery } from "blitz"
+import { Image, useQuery } from "blitz"
 import { Time } from "pkg/time"
 import { BlitzPage, Routes, invalidateQuery, useMutation } from "@blitzjs/core"
 import createTransaction from "app/transactions/mutations/createTransaction"
@@ -31,10 +31,12 @@ const Suggestion: React.FC<{
   return (
     <li className="flex items-center justify-between py-3">
       <div className="flex items-center space-x-3">
-        <img
+        <Image
           className="w-10 h-10 rounded"
           alt={`Logo of ${company?.name}`}
-          src={company?.logo}
+          src={company?.logo ?? ""}
+          height={64}
+          width={64}
         />
         <div className="flex flex-col items-start truncate ">
           <span className="font-medium text-gray-800 ">{company?.name}</span>
@@ -128,7 +130,12 @@ const NewTransactionPage: BlitzPage = () => {
               placeholder="US0123456789"
               iconLeft={
                 company ? (
-                  <img src={company?.logo} alt={`Logo of ${company?.name}`} />
+                  <Image
+                    src={company?.logo ?? ""}
+                    alt={`Logo of ${company?.name}`}
+                    width={64}
+                    height={64}
+                  />
                 ) : companyLoading ? (
                   <Spinner />
                 ) : null
