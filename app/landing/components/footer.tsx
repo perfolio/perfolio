@@ -63,7 +63,6 @@ export const Footer = () => {
         </div>
         <div className="flex flex-row space-x-4 text-right md:items-center md:justify-between md:space-x-16">
           {footerLink("Perfolio", "https://perfol.io")}
-          {footerLink("Analytics", "https://app.perfol.io")}
           {footerLink("Contact", "mailto:info@perfol.io")}
         </div>
         <div className="flex flex-col items-center justify-between w-full space-y-2 text-sm md:space-y-0 md:flex-row">
