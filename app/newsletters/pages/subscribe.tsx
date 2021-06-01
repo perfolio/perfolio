@@ -34,12 +34,18 @@ const ResetPasswordPage: BlitzPage = () => {
                 await subscribeMutation(values)
               } catch (error) {
                 return {
-                  [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
+                  [FORM_ERROR]:
+                    "Sorry, we had an unexpected error. Please try again.",
                 }
               }
             }}
           >
-            <LabeledTextField name="email" label="Email" type="email" iconLeft={<MailIcon />} />
+            <LabeledTextField
+              name="email"
+              label="Email"
+              type="email"
+              iconLeft={<MailIcon />}
+            />
           </Form>
         )}
       </div>

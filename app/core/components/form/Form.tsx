@@ -58,7 +58,6 @@ export function Form<S extends z.ZodType<any, any>>({
         className="w-full space-y-4 form"
         {...props}
         onSubmit={(e) => {
-          console.log(e)
           submit(e)
         }}
       >

@@ -9,7 +9,9 @@ export interface SimpleProps {
 export const Simple: React.FC<SimpleProps> = ({ label }): JSX.Element => {
   return (
     <Wrapper>
-      <span className="text-sm leading-5 text-right text-gray-900">{label}</span>
+      <span className="text-sm leading-5 text-right text-gray-900">
+        {label}
+      </span>
     </Wrapper>
   )
 }

@@ -26,7 +26,8 @@ export const LoginForm = (props: LoginFormProps) => {
             } else {
               return {
                 [FORM_ERROR]:
-                  "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                  "Sorry, we had an unexpected error. Please try again. - " +
+                  error.toString(),
               }
             }
           }

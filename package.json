@@ -19,7 +19,7 @@
   },
   "prettier": {
     "semi": false,
-    "printWidth": 100,
+    "printWidth": 80,
     "singleQuote": false,
     "trailingComma": "all"
   },
@@ -62,7 +62,9 @@
     "recharts": "2.0.9",
     "tailwindcss": "2.1.2",
     "tailwindcss-textshadow": "2.1.3",
+    "tslog": "3.2.0",
     "typescript": "~4.3",
+    "uuid": "8.3.2",
     "zod": "1.11.17"
   },
   "private": true

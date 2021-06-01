@@ -35,7 +35,9 @@ export const LabeledTextField: React.FC<LabeledTextFieldProps> = ({
 
   return (
     <div className="w-full space-y-1 text-gray-800">
-      <label className="block text-xs font-medium text-gray-700 uppercase">{label}</label>
+      <label className="block text-xs font-medium text-gray-700 uppercase">
+        {label}
+      </label>
       <div className="relative ">
         {iconLeft ? (
           <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
@@ -52,7 +54,8 @@ export const LabeledTextField: React.FC<LabeledTextFieldProps> = ({
             "text-center h-12 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
             {
               "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
-              "border-error-400 focus:border-error-700 focus:bg-error-50": error,
+              "border-error-400 focus:border-error-700 focus:bg-error-50":
+                error,
               "appearance-none bg-transparent": isSubmitting,
               "px-14": !!iconLeft,
             },

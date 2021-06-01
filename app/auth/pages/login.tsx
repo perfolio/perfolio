@@ -7,7 +7,9 @@ const LoginPage: BlitzPage = () => {
     <AuthPageTemplate h1="Login" h2="Kevin ist ein frischer Hecht!">
       <LoginForm
         onSuccess={() => {
-          const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/app"
+          const next = router.query.next
+            ? decodeURIComponent(router.query.next as string)
+            : "/app"
           router.push(next)
         }}
       />
