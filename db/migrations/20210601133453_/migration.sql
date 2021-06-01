@@ -54,24 +54,24 @@ CREATE TABLE "Company" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "symbolId" TEXT NOT NULL,
     "logo" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "exchange" TEXT NOT NULL,
-    "industry" TEXT NOT NULL,
-    "website" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "ceo" TEXT NOT NULL,
-    "issueType" TEXT NOT NULL,
-    "sector" TEXT NOT NULL,
-    "employees" INTEGER NOT NULL,
-    "securityName" TEXT NOT NULL,
-    "primarySicCode" INTEGER NOT NULL,
-    "address" TEXT NOT NULL,
-    "address2" TEXT NOT NULL,
-    "state" TEXT NOT NULL,
-    "city" TEXT NOT NULL,
-    "zip" TEXT NOT NULL,
-    "country" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
+    "name" TEXT,
+    "exchange" TEXT,
+    "industry" TEXT,
+    "website" TEXT,
+    "description" TEXT,
+    "ceo" TEXT,
+    "issueType" TEXT,
+    "sector" TEXT,
+    "employees" INTEGER,
+    "securityName" TEXT,
+    "primarySicCode" INTEGER,
+    "address" TEXT,
+    "address2" TEXT,
+    "state" TEXT,
+    "city" TEXT,
+    "zip" TEXT,
+    "country" TEXT,
+    "phone" TEXT,
 
     PRIMARY KEY ("id")
 );
@@ -118,7 +118,7 @@ CREATE TABLE "Symbol" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "symbol" TEXT NOT NULL,
-    "isin" TEXT NOT NULL,
+    "isin" TEXT,
 
     PRIMARY KEY ("id")
 );
@@ -128,7 +128,7 @@ CREATE TABLE "VolumeTraded" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "date" INTEGER NOT NULL,
+    "date" INTEGER,
     "volume" INTEGER NOT NULL,
     "exchangeId" TEXT NOT NULL,
     "symbolId" TEXT NOT NULL,
@@ -146,7 +146,7 @@ CREATE UNIQUE INDEX "Session.handle_unique" ON "Session"("handle");
 CREATE UNIQUE INDEX "Token.hashedToken_type_unique" ON "Token"("hashedToken", "type");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Company_symbolId_unique" ON "Company"("symbolId");
+CREATE UNIQUE INDEX "Company.symbolId_unique" ON "Company"("symbolId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Price.symbol_time_currency_unique" ON "Price"("symbol", "time", "currency");
@@ -158,16 +158,16 @@ CREATE UNIQUE INDEX "Symbol.symbol_unique" ON "Symbol"("symbol");
 CREATE UNIQUE INDEX "VolumeTraded.symbolId_exchangeId_unique" ON "VolumeTraded"("symbolId", "exchangeId");
 
 -- AddForeignKey
-ALTER TABLE "Session" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Company" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("exchangeId") REFERENCES "Exchange"("mic") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Session" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Token" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("exchangeId") REFERENCES "Exchange"("mic") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Company" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
