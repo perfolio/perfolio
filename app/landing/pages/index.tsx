@@ -110,26 +110,7 @@ const IndexPage: BlitzPage = () => {
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
         <div className="fixed inset-x-0 top-0 z-20 bg-gray-50">
-          <Navbar
-            links={[
-              {
-                label: "Product",
-                href: "/#index",
-              },
-              {
-                label: "Features",
-                href: "/#features",
-              },
-              {
-                label: "Pricing",
-                href: "/#pricing",
-              },
-              {
-                label: "Team",
-                href: "/#team",
-              },
-            ]}
-          ></Navbar>
+          <Navbar />
         </div>
         <Section bg="bg-gray-50 " className="relative py-20" id="index">
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
@@ -153,7 +134,6 @@ const IndexPage: BlitzPage = () => {
           <SectionTitle
             tag="Why Perfolio?"
             title="Make decisions based on data"
-            onRight
           />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
@@ -180,7 +160,7 @@ const IndexPage: BlitzPage = () => {
             title="Start for free, cancel anytime!"
           />
 
-          <div className="flex flex-col justify-center w-full mt-4 space-y-8 leading-7 text-gray-900 border-0 border-gray-200 md:space-x-16 md:space-y-0 md:flex-row sm:mt-6 md:mt-8 ">
+          <div className="flex flex-col items-center justify-center md:flex-row">
             <Box>
               <Price
                 title="Try it for free"
@@ -216,7 +196,7 @@ const IndexPage: BlitzPage = () => {
           className="flex flex-col justify-center"
           id="team"
         >
-          <SectionTitle tag="Our Team" title="Who is behind this?" onRight />
+          <SectionTitle tag="Our Team" title="Who is behind this?"  />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
