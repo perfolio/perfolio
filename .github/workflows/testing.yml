@@ -124,7 +124,7 @@ jobs:
     name: Lighthouse
     needs: wait-for-vercel
     runs-on: ubuntu-latest
-    
+
     strategy:
       fail-fast: false
       matrix:
