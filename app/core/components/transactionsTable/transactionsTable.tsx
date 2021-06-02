@@ -17,7 +17,7 @@ import { useTransactions } from "app/transactions/hooks/useTransactions"
 const Row: React.FC<{ tx: Transaction }> = ({ tx }) => {
   const { symbol } = useSymbol(tx.assetId)
 
-  const { company, isLoading: companyLoading } = useCompany(symbol?.symbol)
+  const { company } = useCompany(symbol?.symbol)
   const { currentPrice, isLoading: currentPriceLoading } = useCurrentPrice(
     symbol?.symbol,
   )
@@ -34,13 +34,13 @@ const Row: React.FC<{ tx: Transaction }> = ({ tx }) => {
           content={company?.name ?? <div className="w-16"></div>}
           align="justify-start"
           icon={
-            companyLoading ? (
+            !company ? (
               <Spinner />
             ) : (
               <Image
-                alt={`Logo of ${company?.name}`}
+                alt={`Logo of ${company.name}`}
                 className="rounded-full"
-                src={company?.logo ?? ""}
+                src={company.logo}
                 width={64}
                 height={64}
               />
