@@ -3,7 +3,7 @@ import { Section } from "app/core/components"
 import { Navbar } from "../components/navbar"
 import { BlitzPage } from "@blitzjs/core"
 
-export const PrivacyPage: BlitzPage = () => {
+export const Privacy: BlitzPage = () => {
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -1191,4 +1191,4 @@ export const PrivacyPage: BlitzPage = () => {
   )
 }
 
-export default PrivacyPage
+export default Privacy

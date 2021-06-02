@@ -60,17 +60,6 @@ export default function App({ Component, pageProps }: AppProps) {
             ></link>
             <meta name="msapplication-TileColor" content="#1A202C"></meta>
             <meta name="theme-color" content="#1A202C"></meta>
-
-            <link
-              rel="alternative"
-              hrefLang="en"
-              href="https://perfol.io"
-            ></link>
-            <link
-              rel="alternative"
-              hrefLang="de"
-              href="https://perfol.io/de"
-            ></link>
           </Head>
 
           <Component {...pageProps} />
