@@ -12,7 +12,7 @@ export class Client {
   private readonly logger: Logger
 
   /**
-   * JWT to be used as default. Will be populated after running `login`.
+   * JWT to be used as default. Will be populated after running `signin`.
    */
   private token?: string
 

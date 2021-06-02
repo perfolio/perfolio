@@ -1,6 +1,6 @@
 import React from "react"
 import { Logo } from "app/core/components"
-import { Link } from "blitz"
+import { Link, Routes } from "blitz"
 /* eslint-disable-next-line */
 export interface FooterProps {}
 
@@ -52,8 +52,8 @@ export const Footer = () => {
     <footer className="border-t border-indigo-900 bg-gradient-to-t from-white to-gray-100 ">
       <div className="container flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800">
         <div className="flex items-center justify-between w-full md:flex-col md:space-y-8">
-          <Link href="/">
-            <a className="text-gray-900">
+          <Link href={Routes.Home().pathname}>
+            <a className="text-gray-900" aria-label="Home">
               <Logo />
             </a>
           </Link>
@@ -62,7 +62,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="flex flex-row space-x-4 text-right md:items-center md:justify-between md:space-x-16">
-          {footerLink("Perfolio", "https://perfol.io")}
+          {footerLink("Perfolio", Routes.Home().pathname)}
           {footerLink("Contact", "mailto:info@perfol.io")}
         </div>
         <div className="flex flex-col items-center justify-between w-full space-y-2 text-sm md:space-y-0 md:flex-row">
@@ -70,8 +70,8 @@ export const Footer = () => {
             {socialMedia()}
           </div>
           <div className="flex items-center justify-center space-x-4 md:w-1/3">
-            {footerLink("Imprint", "/imprint")}
-            {footerLink("Privacy", "/privacy")}
+            {footerLink("Imprint", Routes.Imprint().pathname)}
+            {footerLink("Privacy", Routes.Privacy().pathname)}
           </div>
           <div className="flex items-center justify-end md:w-1/3">
             <span>

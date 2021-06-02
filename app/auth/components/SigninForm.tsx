@@ -1,24 +1,24 @@
 import { AuthenticationError, Link, useMutation, Routes } from "blitz"
 import { LabeledTextField, Form, FORM_ERROR } from "app/core/components"
 
-import login from "app/auth/mutations/login"
-import { Login } from "app/auth/validations"
+import signin from "app/auth/mutations/signin"
+import { Signin } from "app/auth/validations"
 import { LockClosedIcon, MailIcon } from "@heroicons/react/outline"
-type LoginFormProps = {
+type SigninFormProps = {
   onSuccess?: () => void
 }
 
-export const LoginForm = (props: LoginFormProps) => {
-  const [loginMutation] = useMutation(login)
+export const SigninForm = (props: SigninFormProps) => {
+  const [signinMutation] = useMutation(signin)
   return (
     <div>
       <Form
-        submitText="Login"
-        schema={Login}
+        submitText="Signin"
+        schema={Signin}
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
-            await loginMutation(values)
+            await signinMutation(values)
             props.onSuccess?.()
           } catch (error) {
             if (error instanceof AuthenticationError) {
@@ -52,4 +52,4 @@ export const LoginForm = (props: LoginFormProps) => {
   )
 }
 
-export default LoginForm
+export default SigninForm

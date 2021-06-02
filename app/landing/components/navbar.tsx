@@ -28,8 +28,16 @@ export const Navbar: React.FC<NavbarProps> = ({ links = [] }) => {
 
         {/* Desktop */}
         <div className="relative items-center hidden space-x-3 md:inline-flex md:ml-5 lg:justify-end">
-          <Button href="/auth/signin" label="Sign in" kind="plain" />
-          <Button label="Start for free" kind="primary" href="/auth/signup" />
+          <Button
+            href={Routes.SigninPage().pathname}
+            label="Sign in"
+            kind="plain"
+          />
+          <Button
+            label="Start for free"
+            kind="primary"
+            href={Routes.SignupPage().pathname}
+          />
         </div>
         {/* Mobile */}
         <Transition

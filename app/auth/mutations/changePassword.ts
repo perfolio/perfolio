@@ -1,6 +1,6 @@
 import { NotFoundError, SecurePassword, resolver } from "blitz"
 import db from "db"
-import { authenticateUser } from "./login"
+import { authenticateUser } from "./signin"
 import { ChangePassword } from "../validations"
 
 export default resolver.pipe(
