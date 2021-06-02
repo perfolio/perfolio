@@ -73,34 +73,7 @@ jobs:
 
       - name: Build
         run: yarn build
-      # E2E Tests via Cypress
-      # - name: Run Cypress E2E Tests
-      #   uses: cypress-io/github-action@v2
-      #   with:
-      #     # we have already installed all dependencies above
-      #     install: false
-      #     start: yarn test:server --production
-      #     wait-on: "http://localhost:3099"
-      #     wait-on-timeout: 300
-      #   env:
-      #     NODE_ENV: test
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Upload Cypress Screenshots
-      #   uses: actions/upload-artifact@v1
-      #   # Only capture images on failure
-      #   if: failure()
-      #   with:
-      #     name: cypress-screenshots
-      #     path: cypress/screenshots
-      #     retention-days: 3
-      # - name: Upload Cypress Videos
-      #   uses: actions/upload-artifact@v1
-      #   # Test run video was always captured, so this action uses "always()" condition
-      #   if: always()
-      #   with:
-      #     name: cypress-videos
-      #     path: cypress/videos
-      #     retention-days: 3
+
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
@@ -165,7 +138,7 @@ jobs:
       - name: run Lighthouse CI
         run: npx @lhci/cli autorun --collect.url=${{ matrix.url }}
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_TOKEN }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lhci-all:
     name: LHCI OK
