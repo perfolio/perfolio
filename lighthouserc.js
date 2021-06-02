@@ -5,7 +5,7 @@ module.exports = {
         "http://localhost:3000/",
         "http://localhost:3000/imprint",
         "http://localhost:3000/privacy",
-        "http://localhost:3000/login",
+        "http://localhost:3000/signin",
         "http://localhost:3000/signup",
         "http://localhost:3000/subscribe",
         "http://localhost:3000/forgot-password",

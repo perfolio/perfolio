@@ -1,6 +1,6 @@
 import React from "react"
 import { Logo } from "app/core/components"
-import { Link } from "blitz"
+import { Link, Routes } from "blitz"
 /* eslint-disable-next-line */
 export interface FooterProps {}
 
@@ -52,7 +52,7 @@ export const Footer = () => {
     <footer className="border-t border-indigo-900 bg-gradient-to-t from-white to-gray-100 ">
       <div className="container flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800">
         <div className="flex items-center justify-between w-full md:flex-col md:space-y-8">
-          <Link href="/">
+          <Link href={Routes.Home().pathname}>
             <a className="text-gray-900">
               <Logo />
             </a>

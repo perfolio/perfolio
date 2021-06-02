@@ -69,20 +69,20 @@ perfolio
 │   ├── api/
 │   ├── auth/
 │   │   ├── components/
-│   │   │   ├── LoginForm.tsx
+│   │   │   ├── SigninForm.tsx
 │   │   │   └── SignupForm.tsx
 │   │   ├── mutations/
 │   │   │   ├── changePassword.ts
 │   │   │   ├── forgotPassword.test.ts
 │   │   │   ├── forgotPassword.ts
-│   │   │   ├── login.ts
+│   │   │   ├── signin.ts
 │   │   │   ├── logout.ts
 │   │   │   ├── resetPassword.test.ts
 │   │   │   ├── resetPassword.ts
 │   │   │   └── signup.ts
 │   │   ├── pages/
 │   │   │   ├── forgot-password.tsx
-│   │   │   ├── login.tsx
+│   │   │   ├── signin.tsx
 │   │   │   ├── reset-password.tsx
 │   │   │   └── signup.tsx
 │   │   └── validations.ts

@@ -13,7 +13,7 @@ import { ErrorBoundary } from "react-error-boundary"
 import { Suspense } from "react"
 import { FullscreenSpinner } from "app/core/components"
 import "tailwindcss/tailwind.css"
-import LoginForm from "app/auth/components/LoginForm"
+import SigninForm from "app/auth/components/SigninForm"
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -84,7 +84,7 @@ function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
-        <LoginForm onSuccess={resetErrorBoundary} />
+        <SigninForm onSuccess={resetErrorBoundary} />
       </div>
     )
   } else if (error instanceof AuthorizationError) {
