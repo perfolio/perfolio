@@ -2,7 +2,6 @@
   "name": "perfolio",
   "version": "1.0.0",
   "scripts": {
-    "predev": "blitz prisma migrate dev",
     "dev": "blitz dev",
     "prebuild": "yarn install && blitz prisma generate",
     "build": "blitz build",

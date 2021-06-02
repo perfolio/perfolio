@@ -16,7 +16,7 @@ export const GetPriceResponseValidator = z.array(
 /**
  * Load the closing price for a specific date.
  */
-export type GetPriceResponse = z.infer<typeof GetPriceResponseValidator>
+export type GetPriceResponse = { close: number }
 
 export async function getPrice(
   symbol: string,
@@ -25,6 +25,7 @@ export async function getPrice(
   symbol = symbol.toLowerCase()
 
   const { year, month, day } = time.pad()
+
   const res = await new Client()
     .get({
       path: `/stock/${symbol}/chart/date/${year}${month}${day}`,
@@ -45,20 +46,22 @@ export async function getPrice(
         throw err
       }
     })
-  return GetPriceResponseValidator.parse(res)
+  return GetPriceResponseValidator.parse(res)[0] ?? { close: -1 }
 }
 
 export const GetHistoryResponseValidator = z.array(
-  z.object({
-    /**
-     * Date of the closing price.
-     */
-    date: z.string(),
-    /**
-     * Actual closing price.
-     */
-    close: z.number(),
-  }),
+  z
+    .object({
+      /**
+       * Date of the closing price.
+       */
+      date: z.string(),
+      /**
+       * Actual closing price.
+       */
+      close: z.number(),
+    })
+    .nonstrict(),
 )
 
 export type GetHistoryResponse = z.infer<typeof GetHistoryResponseValidator>
