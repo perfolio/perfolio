@@ -1,9 +1,5 @@
 module.exports = {
   ci: {
-    collect: {
-      startServerCommand: "yarn start",
-      startServerReadyTimeout: 3 * 60 * 1000,
-    },
     upload: {
       target: "temporary-public-storage",
     },
