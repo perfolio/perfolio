@@ -1,4 +1,5 @@
 import { resolver, NotFoundError } from "blitz"
+import db from "db"
 import { getCurrentPrice } from "integrations/iexcloud"
 import * as z from "zod"
 
@@ -14,6 +15,7 @@ export default resolver.pipe(
 
     if (!price) throw new NotFoundError()
 
+    await db.$disconnect()
     return price
   },
 )

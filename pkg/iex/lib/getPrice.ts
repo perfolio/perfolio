@@ -1,7 +1,6 @@
 import { Currency, Price } from ".prisma/client"
 import db from "db"
 import { getPrice as getPriceFromCloud } from "integrations/iexcloud"
-import { NotFoundError } from "blitz"
 import * as z from "zod"
 import { Time } from "pkg/time"
 
@@ -39,18 +38,14 @@ export async function getPrice(
 
   if (!price) {
     const res = await getPriceFromCloud(symbol, Time.fromTimestamp(req.time))
-    if (res.length < 1) {
-      throw new NotFoundError()
-    }
 
     price = await db.price.create({
       data: {
         symbol,
         time: req.time,
-        value: res[0]!.close,
+        value: res.close,
       },
     })
   }
-
   return { price }
 }
