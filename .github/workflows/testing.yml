@@ -109,7 +109,6 @@ jobs:
 
   lhci:
     name: Lighthouse
-    needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
