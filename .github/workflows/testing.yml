@@ -73,63 +73,76 @@ jobs:
 
       - name: Build
         run: yarn build
-      # E2E Tests via Cypress
-      # - name: Run Cypress E2E Tests
-      #   uses: cypress-io/github-action@v2
-      #   with:
-      #     # we have already installed all dependencies above
-      #     install: false
-      #     start: yarn test:server --production
-      #     wait-on: "http://localhost:3099"
-      #     wait-on-timeout: 300
-      #   env:
-      #     NODE_ENV: test
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Upload Cypress Screenshots
-      #   uses: actions/upload-artifact@v1
-      #   # Only capture images on failure
-      #   if: failure()
-      #   with:
-      #     name: cypress-screenshots
-      #     path: cypress/screenshots
-      #     retention-days: 3
-      # - name: Upload Cypress Videos
-      #   uses: actions/upload-artifact@v1
-      #   # Test run video was always captured, so this action uses "always()" condition
-      #   if: always()
-      #   with:
-      #     name: cypress-videos
-      #     path: cypress/videos
-      #     retention-days: 3
-  # lhci:
-  #   name: Lighthouse
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 15.x
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 15.x
-  #     # Yarn cache/install
-  #     - name: Find yarn cache location
-  #       id: yarn-cache
-  #       run: echo "::set-output name=dir::$(yarn cache dir)"
-  #     - name: Cache dependencies
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: |
-  #           ${{ steps.yarn-cache.outputs.dir }}
-  #           **/node_modules
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
-  #     - name: Install packages
-  #       run: yarn install
-  #     - name: Build
-  #       run: yarn build
-  #       env:
-  #         NODE_ENV: production
-  #     - name: run Lighthouse CI
-  #       run: npx @lhci/cli autorun
-  #       env:
-  #         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_TOKEN }}
+
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        url:
+          [
+            "http://localhost:3000/",
+            "http://localhost:3000/imprint",
+            "http://localhost:3000/privacy",
+            "http://localhost:3000/signin",
+            "http://localhost:3000/signup",
+            "http://localhost:3000/subscribe",
+            "http://localhost:3000/forgot-password",
+            "http://localhost:3000/reset-password",
+          ]
+    env:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgres@localhost/test
+    services:
+      postgres:
+        image: postgres:12
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Make sure the database is ready before we use it
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+
+      # Yarn cache/install
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
+        run: yarn install
+      - name: Build
+        run: yarn build
+
+      - name: Push db schema
+        run: yarn blitz prisma db push
+        env:
+          NODE_ENV: production
+      - name: run Lighthouse CI
+        run: npx @lhci/cli autorun --collect.url=${{ matrix.url }}
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lhci-all:
+    name: LHCI OK
+    needs: lhci
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Success!
