@@ -60,7 +60,6 @@ export default function App({ Component, pageProps }: AppProps) {
             ></link>
             <meta name="msapplication-TileColor" content="#1A202C"></meta>
             <meta name="theme-color" content="#1A202C"></meta>
-
           </Head>
 
           <Component {...pageProps} />
