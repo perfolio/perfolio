@@ -107,47 +107,6 @@ jobs:
           IEX_BASE_URL: ${{ secrets.IEX_BASE_URL }}
           IEX_SANDBOX_TOKEN: ${{ secrets.IEX_SANDBOX_TOKEN}}
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 15.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 15.x
-
-      # Yarn cache/install
-      - name: Find yarn cache location
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install packages
-        run: yarn install
-      - name: Build
-        run: yarn build
-        env:
-          NODE_ENV: production
-
-      - name: Upload .blitz artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: .blitz
-          path: .blitz
-      - name: Upload .next artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: .next
-          path: .next
-
   lhci:
     name: Lighthouse
     needs: build
@@ -156,14 +115,14 @@ jobs:
       matrix:
         url:
           [
-            "http://localhost:3000/",
-            "http://localhost:3000/imprint",
-            "http://localhost:3000/privacy",
-            "http://localhost:3000/signin",
-            "http://localhost:3000/signup",
-            "http://localhost:3000/subscribe",
-            "http://localhost:3000/forgot-password",
-            "http://localhost:3000/reset-password",
+            "/",
+            "/imprint",
+            "/privacy",
+            "/signin",
+            "/signup",
+            "/subscribe",
+            "/forgot-password",
+            "/reset-password",
           ]
     env:
       NODE_ENV: production
@@ -188,39 +147,17 @@ jobs:
         with:
           node-version: 15.x
 
-      # Yarn cache/install
-      - name: Find yarn cache location
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache dependencies
-        uses: actions/cache@v2
+      - name: Waiting for 200 from the Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@master
+        id: waitFor200
         with:
-          path: |
-            ${{ steps.yarn-cache.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install packages
-        run: yarn install
-      - name: Download blitz artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: .blitz
-      - name: Download next artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: .next
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 1000
+      # access preview url
+      - run: echo ${{steps.waitFor200.outputs.url}}
 
-      - run: ls -al
-      - name: Build
-        run: yarn build
-      - name: Push db schema
-        run: yarn blitz prisma db push
-        env:
-          NODE_ENV: production
       - name: run Lighthouse CI
-        run: npx @lhci/cli autorun --collect.url=${{ matrix.url }}
+        run: npx @lhci/cli autorun --collect.url=${steps.waitFor200.outputs.url}}${{ matrix.url }}
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
