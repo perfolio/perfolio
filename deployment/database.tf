@@ -25,7 +25,7 @@ resource "digitalocean_database_connection_pool" "development" {
   cluster_id = digitalocean_database_cluster.perfolio.id
   name       = "development"
   mode       = "transaction"
-  size       = 20
+  size       = 10
   db_name    = digitalocean_database_db.development.name
   user       = digitalocean_database_cluster.perfolio.user
 }
@@ -62,7 +62,7 @@ resource "digitalocean_database_connection_pool" "production" {
   cluster_id = digitalocean_database_cluster.perfolio.id
   name       = "production"
   mode       = "transaction"
-  size       = 20
+  size       = 10
   db_name    = digitalocean_database_db.production.name
   user       = digitalocean_database_cluster.perfolio.user
 }
