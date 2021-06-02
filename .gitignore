@@ -54,3 +54,5 @@ lib-cov
 out/
 
 .lighthouseci/
+
+.vercel
