@@ -147,7 +147,7 @@ jobs:
         run: yarn build
 
       - name: Push db schema
-        run: yarn blitz db push
+        run: yarn blitz prisma db push
         env:
           NODE_ENV: production
       - name: run Lighthouse CI
