@@ -8,7 +8,7 @@ export const Signup = z.object({
   password,
 })
 
-export const Login = z.object({
+export const Signin = z.object({
   email: z.string().email(),
   password: z.string(),
 })

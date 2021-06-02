@@ -14,5 +14,5 @@ const TransactionsPage: BlitzPage = () => {
 }
 
 TransactionsPage.suppressFirstRenderFlicker = true
-TransactionsPage.authenticate = { redirectTo: Routes.LoginPage().pathname }
+TransactionsPage.authenticate = { redirectTo: Routes.SigninPage().pathname }
 export default TransactionsPage

@@ -1,5 +1,5 @@
 import React from "react"
-import { BlitzPage, Image, useMutation } from "blitz"
+import { BlitzPage, Image, Routes, useMutation } from "blitz"
 import { Navbar } from "../components/navbar"
 import {
   Member,
@@ -171,7 +171,7 @@ const IndexPage: BlitzPage = () => {
                   "Performance dashboard and key figures",
                   "Chart diagram of sectors",
                 ]}
-                href="/login"
+                href={Routes.SignupPage().pathname}
               />
             </Box>
             <Box>
@@ -185,7 +185,7 @@ const IndexPage: BlitzPage = () => {
                   "Performance dashboard and key figures",
                   "Chart diagram of sectors",
                 ]}
-                href="/login"
+                href={Routes.SignupPage().pathname}
                 highlighted
               />
             </Box>

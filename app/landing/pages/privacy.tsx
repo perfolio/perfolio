@@ -3,7 +3,7 @@ import { Section } from "app/core/components"
 import { Navbar } from "../components/navbar"
 import { BlitzPage } from "@blitzjs/core"
 
-export const PrivacyPage: BlitzPage = () => {
+export const Privacy: BlitzPage = () => {
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -337,10 +337,10 @@ export const PrivacyPage: BlitzPage = () => {
             die Informationen über einen Benutzer während oder nach seinem
             Besuch innerhalb eines Onlineangebotes zu speichern. Zu den
             gespeicherten Angaben können z.B. die Spracheinstellungen auf einer
-            Webseite, der Loginstatus, ein Warenkorb oder die Stelle, an der ein
-            Video geschaut wurde, gehören. Zu dem Begriff der Cookies zählen wir
-            ferner andere Technologien, die die gleichen Funktionen wie Cookies
-            erfüllen (z.B., wenn Angaben der Nutzer anhand pseudonymer
+            Webseite, der Signinstatus, ein Warenkorb oder die Stelle, an der
+            ein Video geschaut wurde, gehören. Zu dem Begriff der Cookies zählen
+            wir ferner andere Technologien, die die gleichen Funktionen wie
+            Cookies erfüllen (z.B., wenn Angaben der Nutzer anhand pseudonymer
             Onlinekennzeichnungen gespeichert werden, auch als "Nutzer-IDs"
             bezeichnet)
           </p>
@@ -360,7 +360,7 @@ export const PrivacyPage: BlitzPage = () => {
             <li>
               <strong>Permanente Cookies:</strong> Permanente Cookies bleiben
               auch nach dem Schließen des Browsers gespeichert. So kann
-              beispielsweise der Login-Status gespeichert oder bevorzugte
+              beispielsweise der Signin-Status gespeichert oder bevorzugte
               Inhalte direkt angezeigt werden, wenn der Nutzer eine Website
               erneut besucht. Ebenso können die Interessen von Nutzern, die zur
               Reichweitenmessung oder zu Marketingzwecken verwendet werden, in
@@ -381,7 +381,7 @@ export const PrivacyPage: BlitzPage = () => {
                 Cookies:
               </strong>{" "}
               Cookies können zum einen für den Betrieb einer Webseite unbedingt
-              erforderlich sein (z.B. um Logins oder andere Nutzereingaben zu
+              erforderlich sein (z.B. um Signins oder andere Nutzereingaben zu
               speichern oder aus Gründen der Sicherheit).
             </li>
             <li>
@@ -668,7 +668,7 @@ export const PrivacyPage: BlitzPage = () => {
             werden den Nutzern die erforderlichen Pflichtangaben mitgeteilt und
             zu Zwecken der Bereitstellung des Nutzerkontos auf Grundlage
             vertraglicher Pflichterfüllung verarbeitet. Zu den verarbeiteten
-            Daten gehören insbesondere die Login-Informationen (Name, Passwort
+            Daten gehören insbesondere die Signin-Informationen (Name, Passwort
             sowie eine E-Mail-Adresse). Die im Rahmen der Registrierung
             eingegebenen Daten werden für die Zwecke der Nutzung des
             Nutzerkontos und dessen Zwecks verwendet.{" "}
@@ -1191,4 +1191,4 @@ export const PrivacyPage: BlitzPage = () => {
   )
 }
 
-export default PrivacyPage
+export default Privacy

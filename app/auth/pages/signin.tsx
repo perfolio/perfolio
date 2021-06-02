@@ -1,11 +1,11 @@
 import { useRouter, BlitzPage, Routes } from "blitz"
-import { LoginForm } from "app/auth/components/LoginForm"
+import { SigninForm } from "app/auth/components/SigninForm"
 import { AuthPageTemplate } from "../components/template"
-const LoginPage: BlitzPage = () => {
+const SigninPage: BlitzPage = () => {
   const router = useRouter()
   return (
-    <AuthPageTemplate h1="Login" h2="Kevin ist ein frischer Hecht!">
-      <LoginForm
+    <AuthPageTemplate h1="Signin" h2="Kevin ist ein frischer Hecht!">
+      <SigninForm
         onSuccess={() => {
           const next = router.query.next
             ? decodeURIComponent(router.query.next as string)
@@ -17,6 +17,6 @@ const LoginPage: BlitzPage = () => {
   )
 }
 
-LoginPage.redirectAuthenticatedTo = Routes.Home()
+SigninPage.redirectAuthenticatedTo = Routes.Home()
 
-export default LoginPage
+export default SigninPage

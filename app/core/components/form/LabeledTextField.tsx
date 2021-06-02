@@ -35,7 +35,10 @@ export const LabeledTextField: React.FC<LabeledTextFieldProps> = ({
 
   return (
     <div className="w-full space-y-1 text-gray-800">
-      <label className="block text-xs font-medium text-gray-700 uppercase">
+      <label
+        htmlFor={name}
+        className="block text-xs font-medium text-gray-700 uppercase"
+      >
         {label}
       </label>
       <div className="relative ">
@@ -47,6 +50,7 @@ export const LabeledTextField: React.FC<LabeledTextFieldProps> = ({
           </div>
         ) : null}
         <input
+          id={name}
           disabled={isSubmitting}
           {...register(name)}
           type={type}
