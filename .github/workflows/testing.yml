@@ -104,9 +104,21 @@ jobs:
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        url:
+          [
+            "http://localhost:3000/",
+            "http://localhost:3000/imprint",
+            "http://localhost:3000/privacy",
+            "http://localhost:3000/signin",
+            "http://localhost:3000/signup",
+            "http://localhost:3000/subscribe",
+            "http://localhost:3000/forgot-password",
+            "http://localhost:3000/reset-password",
+          ]
     env:
-      NODE_ENV: test
+      NODE_ENV: production
       DATABASE_URL: postgresql://postgres:postgres@localhost/test
     services:
       postgres:
@@ -151,6 +163,13 @@ jobs:
         env:
           NODE_ENV: production
       - name: run Lighthouse CI
-        run: npx @lhci/cli autorun
+        run: npx @lhci/cli autorun --collect.url=${{ matrix.url }}
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_TOKEN }}
+
+  lhci-all:
+    name: LHCI OK
+    needs: lhci
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Success!
