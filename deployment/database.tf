@@ -10,7 +10,7 @@ provider "digitalocean" {
 resource "digitalocean_database_cluster" "perfolio" {
   name       = "perfolio"
   engine     = "pg"
-  version    = "12"
+  version    = "13"
   size       = "db-s-1vcpu-1gb"
   region     = "nyc1"
   node_count = 1
@@ -25,7 +25,7 @@ resource "digitalocean_database_connection_pool" "dev" {
   cluster_id = digitalocean_database_cluster.perfolio.id
   name       = "serverless_dev"
   mode       = "transaction"
-  size       = 12
+  size       = 20
   db_name    = digitalocean_database_db.dev.name
   user       = digitalocean_database_cluster.perfolio.user
 }
