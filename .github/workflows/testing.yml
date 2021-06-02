@@ -212,6 +212,9 @@ jobs:
         with:
           name: .next
 
+      - run: ls -al
+      - name: Build
+        run: yarn build
       - name: Push db schema
         run: yarn blitz prisma db push
         env:
