@@ -147,7 +147,7 @@ jobs:
       - name: run Lighthouse CI
         run: npx @lhci/cli autorun --collect.url=${{ needs.wait-for-vercel.outputs.url }}${{ matrix.url }}
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
   lhci-all:
     name: lhci pass
