@@ -63,7 +63,7 @@ jobs:
 
       # Migrate DB & generate prisma client
       - name: Migrate DB & generate prisma client
-        run: yarn blitz prisma migrate dev
+        run: yarn blitz prisma db push
 
       - name: Run Tests
         run: yarn test
@@ -71,41 +71,38 @@ jobs:
           IEX_BASE_URL: ${{ secrets.IEX_BASE_URL }}
           IEX_SANDBOX_TOKEN: ${{ secrets.IEX_SANDBOX_TOKEN}}
 
-      - name: Build
-        run: yarn build
+  wait-for-vercel:
+    name: Wait for Vercel Preview
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.waitFor200.outputs.url }}
+    steps:
+      - name: Waiting for 200 from the Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@master
+        id: waitFor200
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 600
 
   lhci:
     name: Lighthouse
+    needs: wait-for-vercel
     runs-on: ubuntu-latest
+
     strategy:
+      fail-fast: false
       matrix:
         url:
           [
-            "http://localhost:3000/",
-            "http://localhost:3000/imprint",
-            "http://localhost:3000/privacy",
-            "http://localhost:3000/signin",
-            "http://localhost:3000/signup",
-            "http://localhost:3000/subscribe",
-            "http://localhost:3000/forgot-password",
-            "http://localhost:3000/reset-password",
+            "/",
+            "/imprint",
+            "/privacy",
+            "/signin",
+            "/signup",
+            "/subscribe",
+            "/forgot-password",
+            "/reset-password",
           ]
-    env:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://postgres:postgres@localhost/test
-    services:
-      postgres:
-        image: postgres:12
-        ports: ["5432:5432"]
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Make sure the database is ready before we use it
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 15.x
@@ -113,35 +110,13 @@ jobs:
         with:
           node-version: 15.x
 
-      # Yarn cache/install
-      - name: Find yarn cache location
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install packages
-        run: yarn install
-      - name: Build
-        run: yarn build
-
-      - name: Push db schema
-        run: yarn blitz prisma db push
-        env:
-          NODE_ENV: production
       - name: run Lighthouse CI
-        run: npx @lhci/cli autorun --collect.url=${{ matrix.url }}
+        run: npx @lhci/cli autorun --collect.url=${{ needs.wait-for-vercel.outputs.url }}${{ matrix.url }}
         env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
   lhci-all:
-    name: LHCI OK
+    name: lhci pass
     needs: lhci
     runs-on: ubuntu-latest
     steps:
