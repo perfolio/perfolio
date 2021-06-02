@@ -63,7 +63,7 @@ jobs:
 
       # Migrate DB & generate prisma client
       - name: Migrate DB & generate prisma client
-        run: yarn blitz prisma migrate dev
+        run: yarn blitz prisma db push
 
       - name: Run Tests
         run: yarn test
@@ -71,11 +71,50 @@ jobs:
           IEX_BASE_URL: ${{ secrets.IEX_BASE_URL }}
           IEX_SANDBOX_TOKEN: ${{ secrets.IEX_SANDBOX_TOKEN}}
 
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+
+      # Yarn cache/install
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
+        run: yarn install
       - name: Build
         run: yarn build
+        env:
+          NODE_ENV: production
+
+      - name: Upload .blitz artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: .blitz
+          path: .blitz
+      - name: Upload .next artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: .next
+          path: .next
 
   lhci:
     name: Lighthouse
+    needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -128,8 +167,14 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install packages
         run: yarn install
-      - name: Build
-        run: yarn build
+      - name: Download blitz artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: .blitz
+      - name: Download next artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: .next
 
       - name: Push db schema
         run: yarn blitz prisma db push
