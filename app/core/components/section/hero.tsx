@@ -1,5 +1,6 @@
 import React from "react"
 import { Button } from "app/core/components"
+import { Routes } from ".blitz"
 
 export const HeroSection: React.FC = (): JSX.Element => {
   return (
@@ -18,7 +19,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
           kind="primary"
           size="auto"
           label="Sign up"
-          href="/auth/signup"
+          href={Routes.SignupPage().pathname}
         />
         <Button
           size="auto"
