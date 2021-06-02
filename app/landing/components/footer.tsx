@@ -53,7 +53,7 @@ export const Footer = () => {
       <div className="container flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800">
         <div className="flex items-center justify-between w-full md:flex-col md:space-y-8">
           <Link href={Routes.Home().pathname}>
-            <a className="text-gray-900">
+            <a className="text-gray-900" aria-label="Home">
               <Logo />
             </a>
           </Link>
