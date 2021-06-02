@@ -21,10 +21,6 @@ resource "digitalocean_database_db" "dev" {
   name       = "dev"
 }
 
-resource "digitalocean_database_db" "shadow" {
-  cluster_id = digitalocean_database_cluster.perfolio.id
-  name       = "shadow"
-}
 resource "digitalocean_database_connection_pool" "dev" {
   cluster_id = digitalocean_database_cluster.perfolio.id
   name       = "serverless_dev"
@@ -34,11 +30,22 @@ resource "digitalocean_database_connection_pool" "dev" {
   user       = digitalocean_database_cluster.perfolio.user
 }
 
+
+/**
+* Create a shadow database for prismas migrations
+*/
+resource "digitalocean_database_db" "shadow" {
+  cluster_id = digitalocean_database_cluster.perfolio.id
+  name       = "shadow"
+}
+
+
 resource "digitalocean_database_connection_pool" "shadow" {
   cluster_id = digitalocean_database_cluster.perfolio.id
   name       = "prisma_shadow_db"
   mode       = "transaction"
   size       = 2
-  db_name    = digitalocean_database_db.prod.name
-  user       = digitalocean_database_cluster.perfolio.user
+  db_name    = digitalocean_database_db.shadow.name
+
+  user = digitalocean_database_cluster.perfolio.user
 }
