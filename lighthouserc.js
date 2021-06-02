@@ -13,10 +13,17 @@ module.exports = {
       ],
       startServerCommand: "yarn start",
       startServerReadyTimeout: 3 * 60 * 1000,
-      // startServerReadyPattern: "started server on 0.0.0.0:3000"
     },
     upload: {
       target: "temporary-public-storage",
+    },
+  },
+  assert: {
+    assertions: {
+      "categories:performance": ["error", { minScore: 0.9 }],
+      "categories:accessibility": ["error", { minScore: 0.9 }],
+      "categories:best-practices": ["error", { minScore: 0.9 }],
+      "categories:seo": ["error", { minScore: 0.9 }],
     },
   },
 }
