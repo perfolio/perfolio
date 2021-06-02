@@ -49,3 +49,19 @@ resource "digitalocean_database_connection_pool" "shadow" {
 
   user = digitalocean_database_cluster.perfolio.user
 }
+
+
+
+resource "digitalocean_database_db" "prod" {
+  cluster_id = digitalocean_database_cluster.perfolio.id
+  name       = "prod"
+}
+
+resource "digitalocean_database_connection_pool" "prod" {
+  cluster_id = digitalocean_database_cluster.perfolio.id
+  name       = "serverless_prod"
+  mode       = "transaction"
+  size       = 20
+  db_name    = digitalocean_database_db.prod.name
+  user       = digitalocean_database_cluster.perfolio.user
+}
