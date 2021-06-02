@@ -186,7 +186,7 @@ jobs:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lhci-all:
-    name: LHCI OK
+    name: lhci pass
     needs: lhci
     runs-on: ubuntu-latest
     steps:
