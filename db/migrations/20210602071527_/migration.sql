@@ -158,6 +158,12 @@ CREATE UNIQUE INDEX "Symbol.symbol_unique" ON "Symbol"("symbol");
 CREATE UNIQUE INDEX "VolumeTraded.symbolId_exchangeId_unique" ON "VolumeTraded"("symbolId", "exchangeId");
 
 -- AddForeignKey
+ALTER TABLE "Token" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Company" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -165,9 +171,3 @@ ALTER TABLE "VolumeTraded" ADD FOREIGN KEY ("exchangeId") REFERENCES "Exchange"(
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Token" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Company" ADD FOREIGN KEY ("symbolId") REFERENCES "Symbol"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;
