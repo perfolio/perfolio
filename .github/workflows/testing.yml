@@ -111,7 +111,7 @@ jobs:
     name: Wait for Vercel Preview
     runs-on: ubuntu-latest
     outputs:
-      url: ${{ steps.wait.outputs.url }}
+      url: ${{ steps.waitFor200.outputs.url }}
     steps:
       - name: Waiting for 200 from the Vercel Preview
         uses: patrickedqvist/wait-for-vercel-preview@master
@@ -120,9 +120,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 600
 
-      - name: Set output variable
-        id: setOutputVariable
-        run: echo "::set-output name=url::${{ steps.waitFor200.outputs.url }}"
   lhci:
     name: Lighthouse
     needs: wait-for-vercel
@@ -146,7 +143,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-
 
       - name: run Lighthouse CI
         run: npx @lhci/cli autorun --collect.url=${{ needs.wait-for-vercel.outputs.url }}${{ matrix.url }}
