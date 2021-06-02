@@ -4,7 +4,7 @@ import { Button } from "app/core/components"
 export const HeroSection: React.FC = (): JSX.Element => {
   return (
     <div className="flex flex-col items-center w-full space-y-4 md:space-y-8 xl:space-y-12 ">
-      <h1 className="text-3xl font-extrabold text-transparent sm:text-center bg-clip-text bg-gradient-to-tr from-gray-900 to-primary-700 text-shadow-md sm:text-5xl lg:text-6xl">
+      <h1 className="py-3 -my-3 text-3xl font-extrabold text-transparent sm:text-center bg-clip-text bg-gradient-to-tr from-gray-900 to-primary-700 text-shadow-md sm:text-5xl lg:text-6xl">
         Insights. <br className="sm:hidden"></br> For Everyone.
       </h1>
       <p className="text-gray-600 sm:text-lg sm:mx-auto md:text-xl lg:mx-0 sm:text-center">
