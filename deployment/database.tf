@@ -47,5 +47,5 @@ resource "digitalocean_database_connection_pool" "shadow" {
   size       = 2
   db_name    = digitalocean_database_db.shadow.name
 
-  user       = digitalocean_database_cluster.perfolio.user
+  user = digitalocean_database_cluster.perfolio.user
 }
