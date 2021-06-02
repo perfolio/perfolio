@@ -137,19 +137,15 @@ async function getPossibleSymbols(isin: string): Promise<Symbol[]> {
   })
   if (symbols.length === 0) {
     const isinMap = await getIsinMappingFromCloud(isin)
-    await db.symbol.createMany({
-      data: isinMap.map((i) => {
-        return {
-          symbol: i.symbol,
-          isin,
-        }
-      }),
-    })
-    symbols = await db.symbol.findMany({
-      where: {
-        isin,
-      },
-    })
+    symbols = await Promise.all(
+      isinMap.map((i) =>
+        db.symbol.upsert({
+          where: { symbol: i.symbol },
+          update: { symbol: i.symbol, isin },
+          create: { symbol: i.symbol, isin },
+        }),
+      ),
+    )
   }
   if (!symbols) {
     throw NotFoundError

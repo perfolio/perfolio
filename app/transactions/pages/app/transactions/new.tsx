@@ -31,13 +31,15 @@ const Suggestion: React.FC<{
   return (
     <li className="flex items-center justify-between py-3">
       <div className="flex items-center space-x-3">
-        <Image
-          className="w-10 h-10 rounded"
-          alt={`Logo of ${company?.name}`}
-          src={company?.logo ?? ""}
-          height={64}
-          width={64}
-        />
+        {company ? (
+          <Image
+            className="w-10 h-10 rounded"
+            alt={`Logo of ${company?.name}`}
+            src={company?.logo ?? ""}
+            height={64}
+            width={64}
+          />
+        ) : null}
         <div className="flex flex-col items-start truncate ">
           <span className="font-medium text-gray-800 ">{company?.name}</span>
           <span className="text-xs text-gray-600 md:text-sm">{tx.assetId}</span>
@@ -131,7 +133,7 @@ const NewTransactionPage: BlitzPage = () => {
               iconLeft={
                 company ? (
                   <Image
-                    src={company?.logo ?? ""}
+                    src={company.logo}
                     alt={`Logo of ${company?.name}`}
                     width={64}
                     height={64}
