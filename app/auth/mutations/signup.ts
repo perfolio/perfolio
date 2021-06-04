@@ -1,22 +1,13 @@
-import { resolver, SecurePassword } from "blitz"
-import db from "db"
+import { resolver } from "blitz"
 import { Signup } from "app/auth/validations"
-import { Role } from "types"
+import { UserDocument } from "db"
 export default resolver.pipe(
   resolver.zod(Signup),
   async ({ email, name, password }, ctx) => {
-    const hashedPassword = await SecurePassword.hash(password.trim())
-    const user = await db.user.create({
-      data: {
-        email: email.toLowerCase().trim(),
-        name: name.trim(),
-        hashedPassword,
-        role: "USER",
-      },
-      select: { id: true, name: true, email: true, role: true },
-    })
+    const token = process.env.FAUNA_SERVER_KEY!
+    const user = await UserDocument.create({email,name,password, role:"USER" }, token)
 
-    await ctx.session.$create({ userId: user.id, role: user.role as Role })
+    await ctx.session.$create({ userId: user.id(), role: user.data.role })
     return user
   },
 )

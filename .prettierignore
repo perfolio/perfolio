@@ -5,3 +5,4 @@
 db/migrations
 .next
 .blitz
+.lighthouseci
