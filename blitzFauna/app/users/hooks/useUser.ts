@@ -11,6 +11,6 @@ export const useUser = () => {
     {
       enabled: !!sess.userId,
       suspense: false,
-    }
+    },
   )
 }

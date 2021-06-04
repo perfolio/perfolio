@@ -1,15 +1,7 @@
 import { sessionMiddleware, SessionModel, simpleRolesIsAuthorized } from "blitz"
-import {  SessionDocument } from "db"
-const faunaToken = process.env.FAUNA_SERVER_KEY!
+import { Session, fauna } from "db"
 
-const normalizeSession = (session: SessionDocument):SessionModel => {
-  console.log("NORMALIZE:", {session})
-  const { user, ...rest } = session.data
-  return {
-    ...rest,
-    userId: user.id(),
-  }
-}
+
 
 module.exports = {
   middleware: [
@@ -17,50 +9,40 @@ module.exports = {
       cookiePrefix: "blitz-fauna-example",
       isAuthorized: simpleRolesIsAuthorized,
       getSession: async (handle) => {
-        console.log("GET SESSION")
-        const session = await SessionDocument.fromHandle(handle, faunaToken)
+        const session = await fauna.session.fromHandle(handle)
         if (!session) return null
-        const { user, ...rest } = session.data
-        return {
-          ...rest,
-          userId: user.guid(),
-          user
-        }
+        return session.data
       },
       // getSessions: (userId) => getDb().session.findMany({ where: { userId } }),
       createSession: async (existingSession) => {
-        console.log("CREATE SESSION")
+
 
         const { userId, ...sessionInput } = existingSession
-        const sessionRes = await SessionDocument.create(
-          {
-            ...sessionInput,
-            userId: userId!,
-          },
-          faunaToken
-        ).catch((err) => {
-          throw new Error(`Unable to create session: ${err}`)
+
+
+        const session = await fauna.session.create({
+          ...sessionInput,
+          userId: userId!,
         })
-        console.log("created session:", {sessionRes})
 
-        return normalizeSession(sessionRes)
+
+        return session.data
       },
-      updateSession: async (sessionHandle, existingSession) => {
-        console.log("UPDATE SESSION")
+      updateSession: async (sessionHandle, update) => {
+        const session = await fauna.session.fromHandle(sessionHandle)
 
-        const session = await SessionDocument.fromHandle(sessionHandle, faunaToken)
-
-        await session!.update(existingSession)
-        return normalizeSession(session!)
+        await fauna.session.update(session!, update)
+        return session!.data
       },
       deleteSession: async (handle) => {
-        console.log("DELETE SESSION")
 
-        const session = await SessionDocument.fromHandle(handle, faunaToken)
+
+        const session = await fauna.session.fromHandle(handle)
+      
         if (!session) {
           return null as any
         }
-        await session.delete()
+        await fauna.session.delete(session)
         return session.data
       },
     }),

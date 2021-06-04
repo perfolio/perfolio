@@ -1,6 +1,5 @@
 import { resolver } from "blitz"
 import { CreateCompanyValidation, CompanyDocument } from "db"
-import { z } from "zod"
 
 export default resolver.pipe(
   resolver.zod(CreateCompanyValidation),

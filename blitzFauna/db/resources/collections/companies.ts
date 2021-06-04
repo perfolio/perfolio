@@ -1,3 +1,3 @@
 import { CreateCollection } from "faunadb"
-import {Company} from "db"
+import { Company } from "db"
 export default CreateCollection({ name: Company.collection })

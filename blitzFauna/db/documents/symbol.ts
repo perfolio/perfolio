@@ -7,7 +7,7 @@ export class Symbol extends Document<z.infer<typeof Symbol.validation>> {
   public static readonly collection = "symbols"
   public static readonly index = {
     bySymbol: "symbol_by_symbol",
-    byIsin: "symbol_by_isin"
+    byIsin: "symbol_by_isin",
   }
 
   /**

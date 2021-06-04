@@ -4,7 +4,9 @@ import Home from "./index"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 jest.mock("app/core/hooks/useCurrentUser")
-const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<typeof useCurrentUser>
+const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<
+  typeof useCurrentUser
+>
 
 test.skip("renders blitz documentation link", () => {
   // This is an example of how to ensure a specific item is in the document

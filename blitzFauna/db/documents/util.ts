@@ -1,5 +1,4 @@
 import { Client, Expr, query as q } from "faunadb"
-import { authenticatedClient } from "../client"
 import { z } from "zod"
 /**.
  * Create a document in a collection.
@@ -19,24 +18,19 @@ export async function createDocument<Schema>(
   collectionName: string,
   data: Schema,
 ): Promise<QueryResponse<Schema>> {
-  return await client.query<QueryResponse<Schema>>(
-    q.Create(q.Collection(collectionName), {
-      data: validator.parse(data),
-    }),
-  )
-}
-/**
- * Load a document by its collection and id.
- */
-export async function loadDocument<Schema>(
-  token: string,
-  collectionName: string,
-  id: string,
-): Promise<QueryResponse<Schema>> {
-  const client = authenticatedClient(token)
+  
+  try {
+    validator.parse(data)
+  } catch (err) {
+    throw new Error(
+      `Unable to save document to "${collectionName}": Schema validation failed: ${err}, received: ${data}`,
+    )
+  }
 
   return await client.query<QueryResponse<Schema>>(
-    q.Get(q.Ref(q.Collection(collectionName), id)),
+    q.Create(q.Collection(collectionName), {
+      data,
+    }),
   )
 }
 /**

@@ -49,11 +49,19 @@ export class Price extends Document<z.infer<typeof Price.validation>> {
   public static async fromSymbolAndTime(
     client: Client,
     symbol: string,
-    time: Time
+    time: Time,
   ): Promise<Price | null> {
     try {
       const res = await client
-        .query(q.Get(q.Match(q.Index(Price.index.bySymbolAndDate), symbol, time.toDate())))
+        .query(
+          q.Get(
+            q.Match(
+              q.Index(Price.index.bySymbolAndDate),
+              symbol,
+              time.toDate(),
+            ),
+          ),
+        )
         .catch(() => null)
 
       if (res === null) {

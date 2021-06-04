@@ -10,7 +10,7 @@ import logout from "app/auth/mutations/logout"
  */
 
 const UserInfo = () => {
-  const {data: user} = useUser()
+  const { data: user } = useUser()
   const [logoutMutation] = useMutation(logout)
 
   if (user) {
@@ -39,7 +39,7 @@ const UserInfo = () => {
             <strong>Sign Up</strong>
           </a>
         </Link>
-        <Link href={Routes.LoginPage()}>
+        <Link href={Routes.SigninPage()}>
           <a className="button small">
             <strong>Login</strong>
           </a>
@@ -57,9 +57,13 @@ const Home: BlitzPage = () => {
           <img src="/logo.png" alt="blitz.js" />
         </div>
         <p>
-          <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
+          <strong>Congrats!</strong> Your app is ready, including user sign-up
+          and log-in.
         </p>
-        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+        <div
+          className="buttons"
+          style={{ marginTop: "1rem", marginBottom: "1rem" }}
+        >
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
@@ -73,7 +77,9 @@ const Home: BlitzPage = () => {
         <pre>
           <code>blitz generate all project name:string</code>
         </pre>
-        <div style={{ marginBottom: "1rem" }}>(And select Yes to run prisma migrate)</div>
+        <div style={{ marginBottom: "1rem" }}>
+          (And select Yes to run prisma migrate)
+        </div>
         <div>
           <p>
             Then <strong>restart the server</strong>
@@ -136,8 +142,9 @@ const Home: BlitzPage = () => {
         body {
           padding: 0;
           margin: 0;
-          font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-            Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+          font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont,
+            Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+            Helvetica Neue, sans-serif;
         }
 
         * {
@@ -240,8 +247,8 @@ const Home: BlitzPage = () => {
         }
         code {
           font-size: 0.9rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-            Bitstream Vera Sans Mono, Courier New, monospace;
+          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
         }
 
         .grid {

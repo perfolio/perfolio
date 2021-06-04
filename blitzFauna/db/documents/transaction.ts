@@ -9,7 +9,7 @@ export class Transaction extends Document<
   public static readonly collection = "transactions"
   public static readonly index = {
     byUserId: "transactions_by_user_id",
-    byId: "transaction_by_id"
+    byId: "transaction_by_id",
   }
 
   /**

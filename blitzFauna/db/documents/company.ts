@@ -73,7 +73,6 @@ export class Company extends Document<z.infer<typeof Company.validation>> {
     }
   }
 
-
   /**.
    * Create a new company document.
    */

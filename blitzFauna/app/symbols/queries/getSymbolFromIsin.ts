@@ -1,4 +1,4 @@
-import { Symbol, SymbolDocument } from "db"
+import { Symbol } from "db"
 import {
   getIsinMapping as getIsinMappingFromCloud,
   GetVolumeByVenue,
@@ -30,7 +30,8 @@ export default resolver.pipe(
      * we could assume that's the main one.
      */
     const quickFind = possibleSymbols.find(
-      (symbol) => !symbol.data.symbol.includes("_") && !symbol.data.symbol.includes("-"),
+      (symbol) =>
+        !symbol.data.symbol.includes("_") && !symbol.data.symbol.includes("-"),
     )
     if (quickFind) {
       return quickFind
@@ -41,11 +42,10 @@ export default resolver.pipe(
 /**
  * Return all symbols associated with this isin.
  */
-async function getPossibleSymbols(isin: string): Promise<SymbolDocument[]> {
+async function getPossibleSymbols(isin: string): Promise<Symbol[]> {
   const token = process.env.FAUNA_SERVER_KEY!
   const isinMap = await getIsinMappingFromCloud(isin)
   return Promise.all(
-    isinMap.map((i) => SymbolDocument.create({ symbol: i.symbol, isin }, token)),
+    isinMap.map((i) => Symbol.create({ symbol: i.symbol, isin }, token)),
   )
-
 }

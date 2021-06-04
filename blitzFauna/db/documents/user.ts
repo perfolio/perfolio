@@ -84,6 +84,7 @@ export class User extends Document<z.infer<typeof User.validation>> {
        *
        * This returns a new user token which should be used from now on.
        */
+
       const res = await client.query(
         q.Let(
           {
@@ -97,15 +98,15 @@ export class User extends Document<z.infer<typeof User.validation>> {
              * }.
              */
             token: q.Do(
-              q.Create(q.Collection(this.collection), {
-                credentials: { password },
+              q.Create(Collection(User.collection), {
                 data,
-              }),
-              q.Login(
-                q.Match(q.Index(this.index.byEmail), q.Casefold(data.email)),
-                {
+                credentials: {
                   password,
                 },
+              }),
+              q.Login(
+                q.Match(q.Index(User.index.byEmail), q.Casefold(data.email)),
+                { password },
               ),
             ),
           },
@@ -122,7 +123,7 @@ export class User extends Document<z.infer<typeof User.validation>> {
 
       return new User(user)
     } catch (err) {
-      throw new Error(`Unable create company: ${err}`)
+      throw new Error(`Unable create user: ${err}`)
     }
   }
 
