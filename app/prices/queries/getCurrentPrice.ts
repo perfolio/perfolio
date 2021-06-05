@@ -1,21 +1,11 @@
-import { resolver, NotFoundError } from "blitz"
-import db from "db"
+import { resolver } from "blitz"
 import { getCurrentPrice } from "integrations/iexcloud"
-import * as z from "zod"
-
-const GetCurrentPrice = z.object({
-  symbol: z.string(),
-})
+import { z } from "zod"
 
 export default resolver.pipe(
-  resolver.zod(GetCurrentPrice),
+  resolver.zod(z.object({ symbol: z.string() })),
   resolver.authorize(),
   async ({ symbol }) => {
-    const price = await getCurrentPrice(symbol)
-
-    if (!price) throw new NotFoundError()
-
-    await db.$disconnect()
-    return price
+    return getCurrentPrice(symbol)
   },
 )

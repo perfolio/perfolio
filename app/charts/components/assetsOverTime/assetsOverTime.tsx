@@ -1,7 +1,7 @@
 import React from "react"
-import { useHistory } from "app/transactions/hooks/useHistory"
+import { useHistory } from "app/holdings/hooks/useHistory"
 import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
-import { Time } from "pkg/time"
+import { Time } from "app/time"
 import { Spinner } from "app/core/components"
 
 export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
@@ -27,6 +27,7 @@ export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
       value,
     }
   })
+  console.log({ data })
 
   // while (currentUnix < Date.now()) {
   //   currentValue += (currentValue * (Math.random() - 0.46)) / 3

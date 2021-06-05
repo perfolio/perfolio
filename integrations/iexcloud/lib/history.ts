@@ -1,4 +1,4 @@
-import { Time } from "pkg/time"
+import { Time } from "app/time"
 import * as z from "zod"
 import { Client, ErrorHTTP400 } from "./client"
 

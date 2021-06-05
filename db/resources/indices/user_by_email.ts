@@ -1,10 +1,9 @@
 import { Collection, CreateIndex } from "faunadb"
-import { COLLECTION_USERS } from "../collections/users"
-export const INDEX_USER_BY_EMAIL = "user_by_email"
+import { User } from "db"
 
 export default CreateIndex({
-  name: INDEX_USER_BY_EMAIL,
-  source: Collection(COLLECTION_USERS),
+  name: User.index.byEmail,
+  source: Collection(User.collection),
   terms: [
     {
       field: ["data", "email"],

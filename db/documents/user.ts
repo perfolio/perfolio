@@ -1,272 +1,210 @@
-import { authenticatedClient } from "../client"
+import { QueryResponse } from "./util"
 import { Document } from "./document"
-import { Expr, query as q } from "faunadb"
-import { QueryResponse } from "./schema"
-import { INDEX_USER_BY_EMAIL } from "../resources/indices/user_by_email"
-import { COLLECTION_USERS } from "../resources/collections/users"
+import { Client, Collection, Expr, query as q, Ref } from "faunadb"
 import { z } from "zod"
-import { RoleValidation } from "types"
-/**
- * Domain data schema.
- */
-export const UserValidation = z.object({
-  name: z.string(),
-  email: z.string().email(),
+
+export class User extends Document<z.infer<typeof User.schema>> {
+  public static readonly collection = "users"
+  public static readonly index = {
+    byEmail: "user_by_email",
+  }
+
   /**
-   * A fauna secret used to authenticate this user until they log out.
+   * Data type for users
    */
-  token: z.string().optional(),
-  role: RoleValidation,
-})
-export type User = z.infer<typeof UserValidation>
+  public static schema = z
+    .object({
+      name: z.string(),
+      email: z.string().email(),
+      role: z.string(),
+    })
+    .strict()
 
-/**
- * Required input data to create a new page.
- */
-const CreateUserValidation = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-  role: RoleValidation,
-})
-export type CreateUser = z.infer<typeof CreateUserValidation>
+  public static createValidation = User.schema
+    .extend({ password: z.string() })
+    .strict()
 
-/**
- * Possible fields to update.
- */
-const UpdateUserValidation = z.object({
-  name: z.string().optional(),
-  email: z.string().email().optional(),
-  role: RoleValidation.optional()
-})
-export type UpdateUser = z.infer<typeof UpdateUserValidation>
+  /**
+   * Required fields to sign in
+   */
+  public static signinValidation = z
+    .object({
+      email: z.string().email(),
+      password: z.string(),
+    })
+    .strict()
 
-/**
- * Database schema for pages.
- */
-const UserSchemaValidation = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  hashedPassword: z.string(),
-  role: RoleValidation,
-})
-export type UserSchema = z.infer<typeof UserSchemaValidation>
+  /**
+   * Load a user by its unique email
+   */
+  public static async fromEmail(
+    client: Client,
+    email: string,
+  ): Promise<User | null> {
+    try {
+      const res = await client
+        .query<QueryResponse<z.infer<typeof User.schema>>>(
+          q.Get(q.Match(q.Index(User.index.byEmail), email)),
+        )
+        .catch(() => null)
 
-const SigninValidation = z.object({
-  email: z.string().email(),
-  password: z.string(),
-})
+      if (res === null) {
+        return null
+      }
 
-/**
- * Handler for user documents.
- */
-export class UserDocument extends Document<User> {
-  public static async fromRef(token: string, ref: Expr): Promise<UserDocument> {
-    const client = authenticatedClient(token)
-    const res = await client.query<QueryResponse<UserSchema>>(q.Get(ref))
-    return new UserDocument(client, res.ref, res.ts, res.data)
+      return new User(res)
+    } catch (err) {
+      throw new Error(`Unable load user from email: ${err}`)
+    }
   }
 
-  public static async fromToken(token: string): Promise<UserDocument> {
-    const client = authenticatedClient(token)
-    const res = await client.query<QueryResponse<User>>(
-      q.Get(q.CurrentIdentity()),
-    )
+  /**
+   * Load a user by its unique email
+   */
+  public static async fromId(client: Client, id: string): Promise<User | null> {
+    try {
+      const res = await client
+        .query<QueryResponse<z.infer<typeof User.schema>>>(
+          q.Get(q.Collection(this.collection), id),
+        )
+        .catch(() => null)
 
-    return new UserDocument(client, res.ref, res.ts, res.data)
+      if (res === null) {
+        return null
+      }
+
+      return new User(res)
+    } catch (err) {
+      throw new Error(`Unable load user from id: ${err}`)
+    }
   }
-
   /**.
    * Create a new user document.
-   *
-   * Used to sign up new users
-   *
-   * @token - A server token to bootstrap the creation. The returned
-   * UserDocument will use a user scoped token that is returned from fauna
-   * during signup.
    */
   public static async create(
-    input: CreateUser,
-    token: string,
-  ): Promise<UserDocument> {
-    const client = authenticatedClient(token)
+    client: Client,
+    input: z.infer<typeof User.createValidation>,
+  ): Promise<User> {
+    try {
+      const { password, ...data } = this.createValidation.parse(input)
+      /**
+       * Creating an user is a special case because we have to handle the
+       * password specifically.
+       *
+       * First a new user is created and then logged in as a single atomic
+       * transaction.
+       *
+       * This returns a new user token which should be used from now on.
+       */
 
-    const validatedInput = CreateUserValidation.parse(input)
-
-    /**
-     * Transform the CreateUser input to UserSchema.
-     */
-    const data = {
-      name: validatedInput.name,
-      email: validatedInput.email,
-    }
-
-    /**
-     * Creating an user is a special case because we have to handle the
-     * password specifically.
-     *
-     * First a new user is created and then logged in as a single atomic
-     * transaction.
-     *
-     * This returns a new user token which should be used from now on.
-     */
-    const res = await client.query<{
-      secret: string
-      user: QueryResponse<UserSchema>
-    }>(
-      q.Let(
-        {
-          /**
-           * Login will return something like this:
-           * {
-           *    ref: Ref(Tokens(), "298752981921169927"),
-           *    ts: 1621171895875000,
-           *    instance: Ref(Collection("users"), "298480483928375813"),
-           *    secret: 'xxx'
-           * }.
-           */
-          token: q.Do(
-            q.Create(q.Collection(COLLECTION_USERS), {
-              credentials: { password: input.password },
-              data,
-            }),
-            q.Login(
-              q.Match(q.Index(INDEX_USER_BY_EMAIL), q.Casefold(input.email)),
-              { password: input.password },
+      const res = await client.query(
+        q.Let(
+          {
+            /**
+             * Login will return something like this:
+             * {
+             *    ref: Ref(Tokens(), "298752981921169927"),
+             *    ts: 1621171895875000,
+             *    instance: Ref(Collection("users"), "298480483928375813"),
+             *    secret: 'xxx'
+             * }.
+             */
+            token: q.Do(
+              q.Create(Collection(User.collection), {
+                data,
+                credentials: {
+                  password,
+                },
+              }),
+              q.Login(
+                q.Match(q.Index(User.index.byEmail), q.Casefold(data.email)),
+                { password },
+              ),
             ),
-          ),
-        },
-        {
-          secret: q.Select("secret", q.Var("token")),
-          user: q.Get(q.Select("instance", q.Var("token"))),
-        },
-      ),
-    )
+          },
+          {
+            secret: q.Select("secret", q.Var("token")),
+            user: q.Get(q.Select("instance", q.Var("token"))),
+          },
+        ),
+      )
 
-    /**
-     * Create a new fauna client with the user specific token.
-     */
-    const userScopedClient = authenticatedClient(res.secret)
-
-    /**
-     * Transform the fauna response into User.
-     */
-    const userData = UserValidation.parse({
-      ...res.user.data,
-      token: res.secret,
-    })
-
-    return new UserDocument(
-      userScopedClient,
-      res.user.ref,
-      res.user.ts,
-      userData,
-    )
+      const { user } = z
+        .object({
+          secret: z.string(),
+          user: z.object({
+            ref: z.instanceof(Expr),
+            ts: z.number().int(),
+            data: User.schema,
+          }),
+        })
+        .parse(res)
+      return new User(user)
+    } catch (err) {
+      throw new Error(`Unable create user: ${err}`)
+    }
   }
 
   /**
-   * Sign into an existing user.
-   *
-   * @param input
-   * @param input.email - The users email.
-   * @param input.password - The users password.
-   * @param token - A server token to bootstrap the signin. The returned
-   * UserDocument will use a user scoped token that is returned from fauna
-   * during signup.
+   * Sign in an existing user.
    */
   public static async signin(
-    input: { email: string; password: string },
-    token: string,
-  ): Promise<UserDocument> {
-    const validatedInput = SigninValidation.parse(input)
+    client: Client,
+    input: z.infer<typeof User.signinValidation>,
+  ): Promise<User> {
+    try {
+      const { email, password } = this.signinValidation.parse(input)
 
-    const client = authenticatedClient(token)
-
-    /**
-     * Authenticating a user is a special case because we have to handle the
-     * password specifically.
-     *
-     * This returns a new user token which should be used from now on.
-     */
-    const res = await client.query<{
-      secret: string
-      user: QueryResponse<UserSchema>
-    }>(
-      q.Let(
-        {
-          /**
-           * Login will return something like this:
-           * {
-           *    ref: Ref(Tokens(), "298752981921169927"),
-           *    ts: 1621171895875000,
-           *    instance: Ref(Collection("users"), "298480483928375813"),
-           *    secret: 'fnEEJWJBEwACBwQkalwtMAIFNGVSqWfjzChL-FWiliL6MQmTsyE'
-           * }.
-           */
-          token: q.Login(
-            q.Match(
-              q.Index(INDEX_USER_BY_EMAIL),
-              q.Casefold(validatedInput.email),
+      const res = await client.query(
+        q.Let(
+          {
+            /**
+             * Login will return something like this:
+             * {
+             *    ref: Ref(Tokens(), "298752981921169927"),
+             *    ts: 1621171895875000,
+             *    instance: Ref(Collection("users"), "298480483928375813"),
+             *    secret: 'xxx'
+             * }.
+             */
+            login: q.Login(
+              q.Match(q.Index(this.index.byEmail), q.Casefold(email)),
+              {
+                password,
+              },
             ),
-            {
-              password: validatedInput.password,
-            },
-          ),
-        },
+          },
+          {
+            secret: q.Select("secret", q.Var("login")),
+            user: q.Get(q.Select("instance", q.Var("login"))),
+          },
+        ),
+      )
 
-        {
-          secret: q.Select("secret", q.Var("token")),
-          user: q.Get(q.Select("instance", q.Var("token"))),
-        },
-      ),
-    )
-
-    /**
-     * Create a new fauna client with the user specific token.
-     */
-    const userScopedClient = authenticatedClient(res.secret)
-
-    /**
-     * Transform the fauna response into User.
-     */
-    const userData = UserValidation.parse({
-      ...res.user.data,
-      token: res.secret,
-    })
-
-    return new UserDocument(
-      userScopedClient,
-      res.user.ref,
-      res.user.ts,
-      userData,
-    )
-  }
-
-  public static async fromEmail(
-    email: string,
-    token: string,
-  ): Promise<UserDocument> {
-    const client = authenticatedClient(token)
-    const res = await client.query<QueryResponse<User>>(
-      q.Get(q.Match(q.Index(INDEX_USER_BY_EMAIL), email)),
-    )
-    return new UserDocument(client, res.ref, res.ts, res.data)
-  }
-
-  public async update(input: UpdateUser): Promise<void> {
-    const res = await this.client.query<QueryResponse<User>>(
-      q.Update(q.Ref(q.Collection(COLLECTION_USERS), this.ref), {
-        data: input,
-      }),
-    )
-    this.ts = res.ts
-    this.data = UserValidation.parse(res.data)
+      const { user } = z
+        .object({
+          secret: z.string(),
+          user: z.object({
+            ref: z.instanceof(Expr),
+            ts: z.number().int(),
+            data: User.schema,
+          }),
+        })
+        .parse(res)
+      return new User(user)
+    } catch (err) {
+      throw new Error(`Unable create company: ${err}`)
+    }
   }
 
   /**
-   * Delete this user
+   * Delete this company
    */
-  public async delete(): Promise<void> {
-    await this.client.query(q.Delete(this.ref))
+  public async delete(client: Client): Promise<void> {
+    await client
+      .query(q.Delete(Ref(Collection(User.collection), this.id)))
+      .catch((err) => {
+        throw new Error(`Unable to delete company: ${err}`)
+      })
   }
 }

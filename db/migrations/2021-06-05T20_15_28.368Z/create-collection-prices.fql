@@ -1,0 +1,4 @@
+CreateCollection({
+  "name": "prices",
+  "ttl_days": 30
+})

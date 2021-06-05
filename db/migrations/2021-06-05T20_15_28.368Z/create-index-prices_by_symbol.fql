@@ -1,0 +1,14 @@
+CreateIndex({
+  "name": "prices_by_symbol",
+  "source": Collection("prices"),
+  "terms": [{
+    "field": ["data", "symbol"]
+  }],
+  "values": [{
+    "field": ["data", "time"]
+  }, {
+    "field": "ref"
+  }],
+  "unique": false,
+  "serialized": true
+})

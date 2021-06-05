@@ -1,133 +1,122 @@
-import { authenticatedClient } from "../client"
-import { createDocument, Document } from "./document"
-import { Collection, query as q, Ref } from "faunadb"
-import { QueryResponse } from "./schema"
-import { COLLECTION_USERS } from "../resources/collections/users"
+import { Document } from "./document"
+import { Client, query as q } from "faunadb"
 import { z } from "zod"
-import { INDEX_SESSION_BY_HANDLE } from "db/resources/indices/session_by_handle"
-import { UserDocument } from "./user"
-import { COLLECTION_SESSIONS } from "db/resources/collections/sessions"
-/**
- * Domain data schema.
- */
-const SessionValidation = z.object({
-  expiresAt: z.date().optional(),
-  handle: z.string(),
-  user: z.instanceof(UserDocument),
-  hashedSessionToken: z.string().optional(),
-  antiCSRFToken: z.string().optional(),
-  publicData: z.string().optional(),
-  privateData: z.string().optional(),
-})
-export type Session = z.infer<typeof SessionValidation>
+import { QueryResponse } from "./util"
+import { Time } from "app/time"
 
-/**
- * Required input data to create a new session.
- */
-const CreateSessionValidation = z.object({
-  expiresAt: z.date().optional().nullable(),
-  handle: z.string(),
-  userId: z.string(),
-  hashedSessionToken: z.string().optional().nullable(),
-  antiCSRFToken: z.string().optional().nullable(),
-  publicData: z.string().optional().nullable(),
-  privateData: z.string().optional().nullable(),
-})
-export type CreateSession = z.infer<typeof CreateSessionValidation>
+export class Session extends Document<z.infer<typeof Session.schema>> {
+  public static readonly collection = "sessions"
+  public static readonly index = {
+    byHandle: "session_by_handle",
+  }
 
-/**
- * Possible fields to update.
- */
-const UpdateSessionValidation = z.object({
-  expiresAt: z.date().optional().nullable(),
-  handle: z.string().optional(),
-  hashedSessionToken: z.string().optional().nullable(),
-  antiCSRFToken: z.string().optional().nullable(),
-  publicData: z.string().optional().nullable(),
-  privateData: z.string().optional().nullable(),
-})
-export type UpdateSession = z.infer<typeof UpdateSessionValidation>
+  /**
+   * Document schema. How the data is stored in fauna.
+   */
+  public static readonly schema = z
+    .object({
+      handle: z.string(),
+      userId: z.string(),
+      expiresAt: z.number().int().optional().nullable(),
+      hashedSessionToken: z.string().optional().nullable(),
+      antiCSRFToken: z.string().optional().nullable(),
+      publicData: z.string().optional().nullable(),
+      privateData: z.string().optional().nullable(),
+    })
+    .strict()
 
-/**
- * Database schema for pages.
- */
-const SessionSchemaValidation = z.object({
-  expiresAt: z.date().optional(),
-  handle: z.string(),
-  userRef: z.any(),
-  hashedSessionToken: z.string().optional(),
-  antiCSRFToken: z.string().optional(),
-  publicData: z.string().optional(),
-  privateData: z.string().optional(),
-})
-type SessionSchema = z.infer<typeof SessionSchemaValidation>
+  /**
+   * Fields that can be updated.
+   */
+  public static readonly update = Session.schema
+    .omit({ handle: true, userId: true })
+    .partial()
 
-/**
- * Handler for user documents.
- */
-export class SessionDocument extends Document<Session> {
   /**
    * Load a session by its unique handle
    */
   public static async fromHandle(
+    client: Client,
     handle: string,
-    token: string,
-  ): Promise<SessionDocument> {
-    const client = authenticatedClient(token)
-    const res = await client.query<QueryResponse<Session>>(
-      q.Get(q.Match(q.Index(INDEX_SESSION_BY_HANDLE), handle)),
-    )
-    return new SessionDocument(client, res.ref, res.ts, res.data)
-  }
+  ): Promise<Session | null> {
+    try {
+      const res = await client
+        .query<QueryResponse<z.infer<typeof Session.schema>>>(
+          q.Get(q.Match(q.Index(Session.index.byHandle), handle)),
+        )
+        .catch(() => null)
 
-  /**.
-   * Create a new user document.
-   *
-   * Used to sign up new users
-   *
-   * @token - A server token to bootstrap the creation. The returned
-   * SessionDocument will use a user scoped token that is returned from fauna
-   * during signup.
-   */
-  public static async create(
-    input: CreateSession,
-    token: string,
-  ): Promise<SessionDocument> {
-    const validatedInput = CreateSessionValidation.parse(input)
-    const client = authenticatedClient(token)
+      if (res === null) {
+        return null
+      }
 
-    const data = SessionSchemaValidation.parse({
-      expiresAt: validatedInput.expiresAt,
-      handle: validatedInput.handle,
-      userRef: Ref(Collection(COLLECTION_USERS), validatedInput.userId),
-      hashedSessionToken: validatedInput.hashedSessionToken,
-      antiCSRFToken: validatedInput.antiCSRFToken,
-      publicData: validatedInput.publicData,
-      privateData: validatedInput.privateData,
-    })
-
-    const res = await createDocument(token, COLLECTION_SESSIONS, data)
-
-    return new SessionDocument(client, res.ref, res.ts, {
-      ...res.data,
-      user: await UserDocument.fromRef(token, data.userRef),
-    })
-  }
-
-  public async update(input: UpdateSession): Promise<void> {
-    const res = await this.client.query<QueryResponse<Session>>(
-      q.Update(q.Ref(q.Collection(COLLECTION_SESSIONS), this.ref), {
-        data: UpdateSessionValidation.parse(input),
-      }),
-    )
-    this.ts = res.ts
-    this.data = SessionValidation.parse(res.data)
+      return new Session(res)
+    } catch (err) {
+      throw new Error(`Unable load session from handle: ${err}`)
+    }
   }
 
   /**
-   * Delete this user
+   * Create a new session document.
    */
-  public async delete(): Promise<void> {
-    await this.client.query(q.Delete(this.ref))
+  public static async create(
+    client: Client,
+    input: z.infer<typeof Session.schema>,
+  ): Promise<Session> {
+    try {
+      const data = Session.schema.parse(input)
+
+      const res = await client
+        .query<QueryResponse<z.infer<typeof Session.schema>>>(
+          q.Create(q.Collection(Session.collection), {
+            data,
+          }),
+        )
+        .catch((err) => {
+          throw new Error(
+            `Unable to create document: ${err}, received: ${JSON.stringify(
+              data,
+              null,
+              "  ",
+            )}`,
+          )
+        })
+
+      return new Session(res)
+    } catch (err) {
+      throw new Error(`Unable create session: ${err}`)
+    }
+  }
+  /**
+   * Update a session document.
+   */
+  public async update(
+    client: Client,
+    input: z.infer<typeof Session.update>,
+  ): Promise<Session> {
+    try {
+      const data = Session.schema.parse(input)
+      const res = await client.query<
+        QueryResponse<z.infer<typeof Session.schema>>
+      >(
+        q.Update(q.Ref(q.Collection(Session.collection), this.id), {
+          data,
+        }),
+      )
+
+      return new Session(res)
+    } catch (err) {
+      throw new Error(`Unable to update session: ${err}`)
+    }
+  }
+  /**
+   * Delete this session
+   */
+  public async delete(client: Client): Promise<void> {
+    await client
+      .query(q.Delete(q.Ref(q.Collection(Session.collection), this.id)))
+      .catch((err) => {
+        throw new Error(`Unable to delete session: ${err}`)
+      })
   }
 }

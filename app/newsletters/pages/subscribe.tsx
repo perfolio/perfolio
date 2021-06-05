@@ -1,7 +1,7 @@
 import { BlitzPage, useMutation } from "blitz"
 import { LabeledTextField, Form, FORM_ERROR } from "app/core/components"
 
-import * as z from "zod"
+import { z } from "zod"
 
 import { AuthPageTemplate } from "app/auth/components/template"
 import { CheckIcon, MailIcon } from "@heroicons/react/outline"

@@ -1,0 +1,4 @@
+CreateCollection({
+  "name": "symbols",
+  "ttl_days": 30
+})

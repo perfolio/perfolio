@@ -1,4 +1,4 @@
-import { Time } from "pkg/time"
+import { Time } from "app/time"
 import * as z from "zod"
 export interface IEXService {
   getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse>

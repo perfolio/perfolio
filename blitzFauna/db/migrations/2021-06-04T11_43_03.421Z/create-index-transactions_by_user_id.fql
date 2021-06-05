@@ -1,9 +1,0 @@
-CreateIndex({
-  "name": "transactions_by_user_id",
-  "source": Collection("transactions"),
-  "terms": [{
-    "field": ["data", "userId"]
-  }],
-  "unique": true,
-  "serialized": true
-})

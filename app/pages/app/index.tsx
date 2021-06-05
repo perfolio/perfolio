@@ -1,8 +1,8 @@
 import { BlitzPage, Routes } from "blitz"
 import { WithSidebar } from "app/core/components"
 import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
-import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
-import { ActivityFeed } from "app/core/components/activity/activityFeed"
+// import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
+// import { ActivityFeed } from "app/core/components/activity/activityFeed"
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.
@@ -12,19 +12,19 @@ const Home: BlitzPage = () => {
   return (
     <WithSidebar
       title="Overview"
-      sidebar={
-        <>
-          <div className="w-full md:w-full sm:w-1/2">
-            <p className="text-base font-semibold text-gray-800">Diversity</p>
-            <div className="h-52">
-              <DiversityChart />
-            </div>
-          </div>
-          <div className="w-full md:w-full sm:w-1/2">
-            <ActivityFeed />
-          </div>
-        </>
-      }
+      sidebar={null}
+      //   <>
+      //     <div className="w-full md:w-full sm:w-1/2">
+      //       <p className="text-base font-semibold text-gray-800">Diversity</p>
+      //       <div className="h-52">
+      //         <DiversityChart />
+      //       </div>
+      //     </div>
+      //     <div className="w-full md:w-full sm:w-1/2">
+      //       <ActivityFeed />
+      //     </div>
+      //   </>
+      // }
     >
       <div className="py-4 sm:py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
@@ -64,9 +64,7 @@ const Home: BlitzPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-56 pt-8">
-        <AssetsOverTimeChart />
-      </div>
+      <div className="w-full h-56 pt-8">{<AssetsOverTimeChart />}</div>
       <div className="mt-5 rounded md:mt-10">
         <div className="py-4 pl-4 md:py-6 md:pl-6">
           <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">

@@ -1,10 +1,10 @@
-import * as z from "zod"
+import { z } from "zod"
 
-const password = z.string().min(8).max(100)
+const password = z.string().min(8).max(128)
 
 export const Signup = z.object({
   email: z.string().email(),
-  name: z.string().min(3),
+  name: z.string(),
   password,
 })
 
@@ -21,7 +21,6 @@ export const ResetPassword = z
   .object({
     password: password,
     passwordConfirmation: password,
-    token: z.string(),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
     message: "Passwords don't match",
@@ -29,6 +28,6 @@ export const ResetPassword = z
   })
 
 export const ChangePassword = z.object({
-  currentPassword: password,
+  currentPassword: z.string(),
   newPassword: password,
 })

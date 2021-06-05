@@ -1,16 +1,6 @@
+import { Time } from "app/time"
 import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
-import { Session, SessionDocument } from "db"
-const faunaToken = process.env.FAUNA_SERVER_KEY!
-
-const normalizeSession = (faunaSession) => {
-  if (!faunaSession) return null
-  const { user, expiresAt, ...rest } = faunaSession
-  return {
-    ...rest,
-    userId: user.id,
-    expiresAt: new Date(expiresAt),
-  }
-}
+import { db } from "db"
 
 module.exports = {
   middleware: [
@@ -18,39 +8,58 @@ module.exports = {
       cookiePrefix: "blitz-fauna-example",
       isAuthorized: simpleRolesIsAuthorized,
       getSession: async (handle) => {
-        const session = await SessionDocument.fromHandle(handle, faunaToken)
+        const session = await db.session.fromHandle(handle)
+
         if (!session) return null
-        const { user, ...rest } = session.data
         return {
-          ...rest,
-          userId: user.guid(),
+          ...session.data,
+          expiresAt: session.data.expiresAt
+            ? Time.fromTimestamp(session.data.expiresAt).toDate()
+            : undefined,
         }
       },
       // getSessions: (userId) => getDb().session.findMany({ where: { userId } }),
-      createSession: async (session: Session) => {
-        const { user, ...sessionInput } = session
-        const sessionRes = await SessionDocument.create(
-          {
-            ...sessionInput,
-            userId: user.id(),
-          },
-          faunaToken,
-        )
+      createSession: async (existingSession) => {
+        const session = await db.session.create({
+          ...existingSession,
+          userId: existingSession.userId!,
+          expiresAt: existingSession.expiresAt
+            ? Time.fromDate(existingSession.expiresAt).unix()
+            : undefined,
+        })
 
-        return normalizeSession(sessionRes)
+        return {
+          ...session.data,
+          expiresAt: session.data.expiresAt
+            ? Time.fromTimestamp(session.data.expiresAt).toDate()
+            : undefined,
+        }
       },
-      updateSession: async (sessionHandle, existingSession) => {
-        const session = await SessionDocument.fromHandle(
-          sessionHandle,
-          faunaToken,
-        )
-        await session.update(existingSession)
+      updateSession: async (sessionHandle, update) => {
+        const session = await db.session.fromHandle(sessionHandle)
 
-        return normalizeSession(session.data)
+        const updatedSession = await db.session.update(session!, {
+          ...update,
+          expiresAt: update.expiresAt
+            ? Time.fromDate(update.expiresAt).unix()
+            : undefined,
+        })
+
+        return {
+          ...updatedSession!.data,
+          expiresAt: updatedSession!.data.expiresAt
+            ? Time.fromTimestamp(updatedSession!.data.expiresAt).toDate()
+            : undefined,
+        }
       },
       deleteSession: async (handle) => {
-        const session = await SessionDocument.fromHandle(handle, faunaToken)
-        await session.delete()
+        const session = await db.session.fromHandle(handle)
+
+        if (!session) {
+          return null as any
+        }
+        await db.session.delete(session)
+
         return session.data
       },
     }),
