@@ -5,7 +5,9 @@ import { db } from "db"
 module.exports = {
   middleware: [
     sessionMiddleware({
-      cookiePrefix: "blitz-fauna-example",
+      cookiePrefix: `blitz-fauna-example-${
+        process.env.VERCEL_GIT_COMMIT_REF ?? "dev"
+      }`,
       isAuthorized: simpleRolesIsAuthorized,
       getSession: async (handle) => {
         const session = await db.session.fromHandle(handle)
