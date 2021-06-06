@@ -14,7 +14,6 @@ const Home: BlitzPage = () => {
   const { portfolio } = usePortfolio()
   let totalAssets = 0
   if (!!portfolio) {
-    console.log(portfolio)
     Object.values(portfolio).forEach((e) => {
       totalAssets += e.quantity * e.value
     })
@@ -78,7 +77,7 @@ const Home: BlitzPage = () => {
       <div className="mt-5 rounded md:mt-10">
         <div className="py-4 pl-4 md:py-6 md:pl-6">
           <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">
-            Current Assets
+            Current Assets (fake)
           </p>
         </div>
         <AssetTable />

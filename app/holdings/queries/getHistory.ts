@@ -14,18 +14,15 @@ export default resolver.pipe(
   ),
   resolver.authorize(),
   async ({ userId }, ctx) => {
-    console.time("getHistory")
     let transactions = await getTransactions({ userId }, ctx)
     if (!transactions || transactions.length === 0) {
       return {}
     }
-    console.time("prepareTransactions")
     transactions = transactions.sort(
       (a, b) => a.data.executedAt - b.data.executedAt,
     )
 
     const transactionsByAsset = groupTransactionsByAsset(transactions)
-    console.timeEnd("prepareTransactions")
 
     const history: {
       [assetId: string]: {
@@ -43,15 +40,12 @@ export default resolver.pipe(
      * {isin: symbol}
      */
     const isinToSymbol: { [isin: string]: string } = {}
-    console.time("loadSymbols")
     await Promise.all(
       Object.keys(transactionsByAsset).map(async (isin) => {
         const symbol = await getSymbol({ isin }, ctx)
         isinToSymbol[isin] = symbol.data.symbol
       }),
     )
-    console.timeEnd("loadSymbols")
-    console.time("loadPrices")
     const priceResponse = await Promise.all(
       Object.entries(isinToSymbol).map(async ([isin, symbol]) => {
         const txs = transactionsByAsset[isin]!
@@ -68,13 +62,11 @@ export default resolver.pipe(
     Object.keys(isinToSymbol).forEach((isin, i) => {
       prices[isin] = priceResponse[i]?.prices!
     })
-    console.timeEnd("loadPrices")
 
     /**
      * Build a timeline for each asset for each day.
      */
     const startDay = Time.fromTimestamp(transactions[0]!.data.executedAt)
-    console.time("aggregateHoldings")
     for (const [assetId, transactions] of Object.entries(transactionsByAsset)) {
       /**
        * How many shares does the user have on the current day
@@ -102,8 +94,6 @@ export default resolver.pipe(
         })
       }
     }
-    console.timeEnd("aggregateHoldings")
-    console.timeEnd("getHistory")
     return history
   },
 )

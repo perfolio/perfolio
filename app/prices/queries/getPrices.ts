@@ -20,18 +20,10 @@ export default resolver.pipe(
     if (symbol.includes("-")) {
       symbol = symbol.split("-")[0]!
     }
-    console.time("cachedPrices")
     let cachedPrices = await db.price.fromSymbol(
       symbol,
       Time.fromTimestamp(begin),
       Time.fromTimestamp(end),
-    )
-    console.timeEnd("cachedPrices")
-    console.log(
-      "cachedPrices:",
-      cachedPrices.length,
-      cachedPrices[0],
-      cachedPrices[cachedPrices.length - 1],
     )
     /**
      * In case this is a new company we load everything in bulk and return immediately
@@ -47,9 +39,7 @@ export default resolver.pipe(
      *   yet. In this case we are overfetching every time this data is needed
      */
     if (cachedPrices.length === 50) {
-      console.log("bulk import")
       const allPrices = await getHistoryFromCloud(symbol)
-      console.log(`Received ${allPrices.length} prices from cloud`)
       cachedPrices = await Promise.all(
         allPrices.map((price) =>
           createPrice(
@@ -85,7 +75,6 @@ export default resolver.pipe(
         priceRequests.push(day)
       }
     }
-    console.log("priceRequests:", priceRequests.length, priceRequests)
     const newPrices = await Promise.all(
       priceRequests.map(async (time) => {
         const price = await getPriceFromCloud(symbol, time)
