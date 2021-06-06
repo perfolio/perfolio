@@ -13,7 +13,6 @@ export type GetLogoResponse = z.infer<typeof GetLogoResponseValidator>
 
 export async function getLogo(symbol: string): Promise<GetLogoResponse> {
   const client = new Client()
-  symbol = symbol.toLowerCase()
 
   const res = await client
     .get({

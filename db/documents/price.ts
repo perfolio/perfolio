@@ -1,4 +1,3 @@
-import { createDocument } from "./util"
 import { Document } from "./document"
 import { QueryResponse } from "./util"
 import { Client, query as q, Expr } from "faunadb"
@@ -16,7 +15,7 @@ export class Price extends Document<z.infer<typeof Price.schema>> {
    * Document schema. How the data is stored in fauna.
    */
   public static readonly schema = z.object({
-    symbol: z.string().regex(/^[a-z]+$/),
+    symbol: z.string(),
     time: z.number().int(),
     value: z.number(),
   })
@@ -71,16 +70,13 @@ export class Price extends Document<z.infer<typeof Price.schema>> {
         q.Map(
           q.Paginate(
             q.Range(
-              q.Match(q.Index(this.index.bySymbol), q.Casefold(symbol)),
+              q.Match(q.Index(this.index.bySymbol), q.UpperCase(symbol)),
               begin.unix(),
               end.unix(),
             ),
+            { size: 100_000 },
           ),
-          q.Lambda("x", {
-            symbol: q.Select(0, q.Var("x")),
-            time: q.Select(1, q.Var("x")),
-            value: q.Select(2, q.Var("x")),
-          }),
+          q.Lambda("x", q.Get(q.Select(1, q.Var("x")))),
         ),
       )
       return res.data.map((price) => new Price(price))
@@ -105,7 +101,7 @@ export class Price extends Document<z.infer<typeof Price.schema>> {
     try {
       const data = Price.schema.parse(input)
       const match = q.Match(q.Index(Price.index.bySymbolAndTime), [
-        data.symbol,
+        q.UpperCase(data.symbol),
         data.time,
       ])
       const res = await client.query<
@@ -117,7 +113,7 @@ export class Price extends Document<z.infer<typeof Price.schema>> {
           q.Create(q.Collection(this.collection), {
             data: {
               ...data,
-              symbol: q.Casefold(data.symbol),
+              symbol: q.UpperCase(data.symbol),
             },
           }),
         ),

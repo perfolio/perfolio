@@ -1,30 +1,40 @@
 import { BlitzPage, Routes } from "blitz"
 import { WithSidebar } from "app/core/components"
 import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
-// import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
-// import { ActivityFeed } from "app/core/components/activity/activityFeed"
+import { usePortfolio } from "app/holdings/hooks/usePortfolio"
+import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
+import { ActivityFeed } from "app/core/components/activity/activityFeed"
+import { AssetTable } from "app/core/components"
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.
  */
 
 const Home: BlitzPage = () => {
+  const { portfolio } = usePortfolio()
+  let totalAssets = 0
+  if (!!portfolio) {
+    console.log(portfolio)
+    Object.values(portfolio).forEach((e) => {
+      totalAssets += e.quantity * e.value
+    })
+  }
   return (
     <WithSidebar
       title="Overview"
-      sidebar={null}
-      //   <>
-      //     <div className="w-full md:w-full sm:w-1/2">
-      //       <p className="text-base font-semibold text-gray-800">Diversity</p>
-      //       <div className="h-52">
-      //         <DiversityChart />
-      //       </div>
-      //     </div>
-      //     <div className="w-full md:w-full sm:w-1/2">
-      //       <ActivityFeed />
-      //     </div>
-      //   </>
-      // }
+      sidebar={
+        <>
+          <div className="w-full md:w-full sm:w-1/2">
+            <p className="text-base font-semibold text-gray-800">Diversity</p>
+            <div className="h-52">
+              <DiversityChart />
+            </div>
+          </div>
+          <div className="w-full md:w-full sm:w-1/2">
+            <ActivityFeed />
+          </div>
+        </>
+      }
     >
       <div className="py-4 sm:py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
@@ -34,7 +44,7 @@ const Home: BlitzPage = () => {
                 Total Assets
               </h4>
               <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                $ 27,815
+                ${totalAssets.toFixed()}
               </span>
             </div>
           </div>
@@ -71,7 +81,7 @@ const Home: BlitzPage = () => {
             Current Assets
           </p>
         </div>
-        {/* <AssetTable /> */}
+        <AssetTable />
       </div>
     </WithSidebar>
   )

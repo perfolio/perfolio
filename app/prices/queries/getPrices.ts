@@ -14,7 +14,6 @@ export default resolver.pipe(
   ),
   resolver.authorize(),
   async ({ symbol, begin, end }, ctx) => {
-    symbol = symbol.toLowerCase()
     if (symbol.includes("_")) {
       symbol = symbol.split("_")[1]!
     }
@@ -28,14 +27,29 @@ export default resolver.pipe(
       Time.fromTimestamp(end),
     )
     console.timeEnd("cachedPrices")
-    console.log("cachedPrices:", cachedPrices.length, cachedPrices[0], cachedPrices[cachedPrices.length-1])
+    console.log(
+      "cachedPrices:",
+      cachedPrices.length,
+      cachedPrices[0],
+      cachedPrices[cachedPrices.length - 1],
+    )
     /**
      * In case this is a new company we load everything in bulk and return immediately
      * because we are certain there are no dates missing.
+     *
+     * TODO: I have to play with the length a bit.
+     *
+     * The idea is to get the right number to fetch the least amount of data from iex.
+     * Considerations:
+     * - Due to the entry of a transaction there probably are already a few entries, so
+     *   I set it to 50 as a start.
+     * - The only real issue I see is when a company does not have 50 days worth of prices
+     *   yet. In this case we are overfetching every time this data is needed
      */
-    if (cachedPrices.length < 100) {
+    if (cachedPrices.length === 50) {
       console.log("bulk import")
       const allPrices = await getHistoryFromCloud(symbol)
+      console.log(`Received ${allPrices.length} prices from cloud`)
       cachedPrices = await Promise.all(
         allPrices.map((price) =>
           createPrice(
@@ -71,7 +85,7 @@ export default resolver.pipe(
         priceRequests.push(day)
       }
     }
-    console.log("priceRequests:", priceRequests.length)
+    console.log("priceRequests:", priceRequests.length, priceRequests)
     const newPrices = await Promise.all(
       priceRequests.map(async (time) => {
         const price = await getPriceFromCloud(symbol, time)
@@ -84,11 +98,9 @@ export default resolver.pipe(
           },
           ctx,
         )
-        console.log({ saved })
         return saved
       }),
     )
-    console.log({ newPrices })
 
     newPrices.forEach((price) => {
       priceMap[price.data.time] = price.data.value

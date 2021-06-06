@@ -1,4 +1,4 @@
-import { createDocument, QueryResponse } from "./util"
+import { QueryResponse } from "./util"
 import { Document } from "./document"
 import { Client, query as q } from "faunadb"
 import { z } from "zod"
@@ -30,7 +30,7 @@ export class Symbol extends Document<z.infer<typeof Symbol.schema>> {
     try {
       const res = await client
         .query<QueryResponse<z.infer<typeof Symbol.schema>>>(
-          q.Get(q.Match(q.Index(Symbol.index.bySymbol), q.Casefold(symbol))),
+          q.Get(q.Match(q.Index(Symbol.index.bySymbol), q.UpperCase(symbol))),
         )
         .catch(() => null)
 
@@ -53,7 +53,7 @@ export class Symbol extends Document<z.infer<typeof Symbol.schema>> {
     try {
       const res = await client
         .query<QueryResponse<z.infer<typeof Symbol.schema>>>(
-          q.Get(q.Match(q.Index(Symbol.index.byIsin), q.Casefold(isin))),
+          q.Get(q.Match(q.Index(Symbol.index.byIsin), q.UpperCase(isin))),
         )
         .catch(() => null)
 
@@ -69,25 +69,33 @@ export class Symbol extends Document<z.infer<typeof Symbol.schema>> {
 
   /**.
    * Create a new symbol document.
+   *
+   * Skips creation If one already exists.
    */
   public static async create(
     client: Client,
     input: z.infer<typeof Symbol.schema>,
   ): Promise<Symbol> {
-    const data = Symbol.schema.parse(input)
-
     try {
+      const data = Symbol.schema.parse(input)
+      const match = q.Match(
+        q.Index(Symbol.index.bySymbol),
+        q.UpperCase(data.symbol),
+      )
       const res = await client.query<
         QueryResponse<z.infer<typeof Symbol.schema>>
       >(
-        q.Create(q.Collection(Symbol.collection), {
-          data: {
-            isin: q.Casefold(data.isin),
-            symbol: q.Casefold(data.symbol),
-          },
-        }),
+        q.If(
+          q.Exists(match),
+          q.Get(match),
+          q.Create(q.Collection(this.collection), {
+            data: {
+              isin: q.UpperCase(data.isin),
+              symbol: q.UpperCase(data.symbol),
+            },
+          }),
+        ),
       )
-
       return new Symbol(res)
     } catch (err) {
       throw new Error(`Unable create symbol: ${err}`)

@@ -1,8 +1,7 @@
-import { createDocument, QueryResponse } from "./util"
+import { QueryResponse } from "./util"
 import { Document } from "./document"
 import { Client, Expr, query as q } from "faunadb"
 import { z } from "zod"
-import { data } from "autoprefixer"
 
 export class Transaction extends Document<z.infer<typeof Transaction.schema>> {
   public static readonly collection = "transactions"
@@ -66,7 +65,9 @@ export class Transaction extends Document<z.infer<typeof Transaction.schema>> {
         }[]
       }>(
         q.Map(
-          q.Paginate(q.Match(q.Index(Transaction.index.byUserId), userId)),
+          q.Paginate(q.Match(q.Index(Transaction.index.byUserId), userId), {
+            size: 100_000,
+          }),
           q.Lambda("transactionRef", q.Get(q.Var("transactionRef"))),
         ),
       )
@@ -92,7 +93,7 @@ export class Transaction extends Document<z.infer<typeof Transaction.schema>> {
         q.Create(q.Collection(Transaction.collection), {
           data: {
             ...data,
-            assetId: q.Casefold(data.assetId),
+            assetId: q.UpperCase(data.assetId),
           },
         }),
       )

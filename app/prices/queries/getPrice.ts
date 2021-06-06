@@ -9,7 +9,6 @@ export default resolver.pipe(
   resolver.zod(z.object({ symbol: z.string(), time: z.number().int() })),
   resolver.authorize(),
   async ({ symbol, time: ts }, ctx) => {
-    symbol = symbol.toLowerCase()
     const time = Time.fromTimestamp(ts)
 
     let price = await db.price.fromSymbolAndTime(symbol, time)

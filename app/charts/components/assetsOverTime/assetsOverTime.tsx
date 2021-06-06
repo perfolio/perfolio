@@ -2,7 +2,24 @@ import React from "react"
 import { useHistory } from "app/holdings/hooks/useHistory"
 import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
 import { Time } from "app/time"
-import { Spinner } from "app/core/components"
+import { Box, Spinner } from "app/core/components"
+
+const CustomTooltip = ({ active, payload }) => {
+  if (active) {
+    const { time, value } = payload[0]?.payload as {
+      time: string
+      value: number
+    }
+    return (
+      <Box className="flex flex-col p-4 text-center bg-gray-50">
+        <span className="text-xl font-medium">${value.toFixed(2)}</span>
+        <span className="text-sm text-gray-700">{time}</span>
+      </Box>
+    )
+  }
+
+  return null
+}
 
 export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
   const { history, isLoading } = useHistory()
@@ -27,7 +44,6 @@ export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
       value,
     }
   })
-  console.log({ data })
 
   // while (currentUnix < Date.now()) {
   //   currentValue += (currentValue * (Math.random() - 0.46)) / 3
@@ -52,7 +68,11 @@ export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
               <stop offset="100%" stopColor="#262059" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <Tooltip />
+          <Tooltip
+            content={({ active, payload }) => (
+              <CustomTooltip active={active} payload={payload} />
+            )}
+          />
           <Area
             type="monotone"
             dataKey="value"

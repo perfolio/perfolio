@@ -10,10 +10,9 @@ export default CreateIndex({
     },
   ],
   values: [
-    { field: ["data", "symbol"] },
     { field: ["data", "time"] },
     {
-      field: ["data", "value"],
+      field: "ref",
     },
   ],
   unique: false,

@@ -47,9 +47,9 @@ export async function getIsinMapping(
   const validatedResponse = GetIsinMappingResponseValidator.parse(res)
   return validatedResponse.map((res) => {
     return {
-      exchange: res.exchange.toLowerCase(),
-      region: res.region.toLowerCase(),
-      symbol: res.symbol.toLowerCase(),
+      exchange: res.exchange,
+      region: res.region,
+      symbol: res.symbol,
     }
   })
 }

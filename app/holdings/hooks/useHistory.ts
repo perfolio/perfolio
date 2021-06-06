@@ -3,7 +3,7 @@ import getHistory from "../queries/getHistory"
 
 export const useHistory = () => {
   const sess = useAuthenticatedSession()
-  const [history, { isLoading, error }] = useQuery(
+  const [history, meta] = useQuery(
     getHistory,
     { userId: sess.userId },
     {
@@ -11,6 +11,5 @@ export const useHistory = () => {
       suspense: false,
     },
   )
-
-  return { history, isLoading, error }
+  return { history, ...meta }
 }

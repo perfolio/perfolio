@@ -2,7 +2,6 @@ import { Document } from "./document"
 import { Client, query as q } from "faunadb"
 import { z } from "zod"
 import { QueryResponse } from "./util"
-import { Time } from "app/time"
 
 export class Session extends Document<z.infer<typeof Session.schema>> {
   public static readonly collection = "sessions"

@@ -2,8 +2,7 @@ import { useQuery, useSession } from "blitz"
 import getSymbolFromIsin from "../queries/getSymbolFromIsin"
 export const useSymbol = (isin: string) => {
   const sess = useSession()
-
-  const [symbol, { isLoading, error }] = useQuery(
+  const [symbol, meta] = useQuery(
     getSymbolFromIsin,
     { isin },
     {
@@ -11,5 +10,5 @@ export const useSymbol = (isin: string) => {
       suspense: false,
     },
   )
-  return { symbol, isLoading, error }
+  return { symbol, ...meta }
 }
