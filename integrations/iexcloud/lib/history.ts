@@ -1,4 +1,4 @@
-import { Time } from "pkg/time"
+import { Time } from "app/time"
 import * as z from "zod"
 import { Client, ErrorHTTP400 } from "./client"
 
@@ -22,8 +22,6 @@ export async function getPrice(
   symbol: string,
   time: Time,
 ): Promise<GetPriceResponse> {
-  symbol = symbol.toLowerCase()
-
   const { year, month, day } = time.pad()
 
   const res = await new Client()
@@ -67,8 +65,6 @@ export const GetHistoryResponseValidator = z.array(
 export type GetHistoryResponse = z.infer<typeof GetHistoryResponseValidator>
 
 export async function getHistory(symbol: string): Promise<GetHistoryResponse> {
-  symbol = symbol.toLowerCase()
-
   const res = await new Client().get({
     path: `/stock/${symbol}/chart/max`,
     parameters: {

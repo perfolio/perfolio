@@ -2,7 +2,7 @@
 
 This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 
-# **perfolio**
+# **blitzFauna**
 
 ## Getting Started
 
@@ -19,13 +19,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Ensure the `.env.local` file has required environment variables:
 
 ```
-DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/perfolio
+DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/blitzFauna
 ```
 
 Ensure the `.env.test.local` file has required environment variables:
 
 ```
-DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/perfolio_test
+DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/blitzFauna_test
 ```
 
 ## Tests
@@ -64,12 +64,12 @@ You can read more about it on the [CLI Overview](https://blitzjs.com/docs/cli-ov
 Here is the starting structure of your app.
 
 ```
-perfolio
+blitzFauna
 ├── app/
 │   ├── api/
 │   ├── auth/
 │   │   ├── components/
-│   │   │   ├── SigninForm.tsx
+│   │   │   ├── LoginForm.tsx
 │   │   │   └── SignupForm.tsx
 │   │   ├── mutations/
 │   │   │   ├── changePassword.ts

@@ -1,9 +1,8 @@
 import { DefaultCtx, SessionContext, SimpleRolesIsAuthorized } from "blitz"
-import { User } from "db"
+import { z } from "zod"
 
-// Note: You should switch to Postgres and then use a DB enum for role type
-export type Role = "ADMIN" | "USER"
-
+export const RoleValidation = z.enum(["ADMIN", "USER"])
+export type Role = z.infer<typeof RoleValidation>
 declare module "blitz" {
   export interface Ctx extends DefaultCtx {
     session: SessionContext
@@ -11,7 +10,7 @@ declare module "blitz" {
   export interface Session {
     isAuthorized: SimpleRolesIsAuthorized<Role>
     PublicData: {
-      userId: User["id"]
+      userId: string
       role: Role
     }
   }

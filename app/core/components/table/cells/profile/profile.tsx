@@ -2,17 +2,17 @@ import React from "react"
 import { Wrapper } from "../wrapper/wrapper"
 
 /* eslint-disable-next-line */
-export interface MultilineProps {
+export interface ProfileProps {
   icon: React.ReactNode
   title: string | number
   content: string | number
 }
 
-export const Multiline = ({
+export const Profile = ({
   title,
   content,
   icon,
-}: MultilineProps): JSX.Element => {
+}: ProfileProps): JSX.Element => {
   return (
     <Wrapper>
       <div className="flex items-center ">
@@ -25,5 +25,3 @@ export const Multiline = ({
     </Wrapper>
   )
 }
-
-export default Multiline

@@ -1,0 +1,4 @@
+CreateCollection({
+  "name": "companies",
+  "ttl_days": 30
+})
