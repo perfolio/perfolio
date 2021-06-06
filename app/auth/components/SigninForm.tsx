@@ -44,9 +44,9 @@ export const SigninForm = (props: SigninFormProps) => {
 
       <div className="flex items-center justify-between mt-4 text-sm">
         <Link href={Routes.SignupPage()}>Sign Up</Link>
-        <Link href={Routes.ForgotPasswordPage()}>
+        {/* <Link href={Routes.ForgotPasswordPage()}>
           <a>Forgot your password?</a>
-        </Link>
+        </Link> */}
       </div>
     </div>
   )

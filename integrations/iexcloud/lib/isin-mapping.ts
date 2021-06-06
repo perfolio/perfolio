@@ -43,5 +43,13 @@ export async function getIsinMapping(
     .catch((err) => {
       throw new Error(`Unable to load ref-data for isin: "${isin}": ${err}`)
     })
-  return GetIsinMappingResponseValidator.parse(res)
+
+  const validatedResponse = GetIsinMappingResponseValidator.parse(res)
+  return validatedResponse.map((res) => {
+    return {
+      exchange: res.exchange,
+      region: res.region,
+      symbol: res.symbol,
+    }
+  })
 }

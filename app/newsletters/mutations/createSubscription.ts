@@ -1,14 +1,12 @@
 import { resolver } from "blitz"
-import * as z from "zod"
-
-const CreateSubscription = z
-  .object({
-    email: z.string().email(),
-  })
-  .nonstrict()
+import { z } from "zod"
 
 export default resolver.pipe(
-  resolver.zod(CreateSubscription),
+  resolver.zod(
+    z.object({
+      email: z.string().email(),
+    }),
+  ),
   async ({ email }) => {
     const apiKey = process.env["SENDGRID_TOKEN"]
 

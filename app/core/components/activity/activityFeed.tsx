@@ -1,7 +1,7 @@
 import { useSymbol } from "app/companies/hooks/useSymbol"
 import { useTransactions } from "app/transactions/hooks/useTransactions"
 import { Transaction } from "db"
-import { Time } from "pkg/time"
+import { Time } from "app/time"
 import React from "react"
 import { Spinner } from "../spinner/spinner"
 
@@ -12,7 +12,7 @@ interface TransactionActivityItemProps {
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
 }): JSX.Element => {
-  const { symbol, isLoading } = useSymbol(transaction.assetId)
+  const [symbol, { isLoading }] = useSymbol(transaction.data.assetId)
 
   return (
     <li className="py-4 h-28">
@@ -26,13 +26,15 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
             <span className="text-sm font-semibold text-black">
               New Transaction
             </span>
-            <span className="text-xs">{Time.ago(transaction.executedAt)}</span>
+            <span className="text-xs">
+              {Time.ago(transaction.data.executedAt)}
+            </span>
           </div>
           <p>
-            You {transaction.volume > 0 ? "bought" : "sold"}{" "}
-            {transaction.volume}{" "}
-            <span className="font-semibold">{symbol?.symbol}</span> shares at $
-            {transaction.value} per share.
+            You {transaction.data.volume > 0 ? "bought" : "sold"}{" "}
+            {transaction.data.volume}{" "}
+            <span className="font-semibold">{symbol?.data.symbol}</span> shares
+            at ${transaction.data.value} per share.
           </p>
         </>
       )}
@@ -41,11 +43,11 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const { transactions } = useTransactions()
+  const [transactions] = useTransactions()
 
   const last3Transactions = (transactions ?? [])
-    .sort((a, b) => b.executedAt - a.executedAt)
-    .slice(0, 3)
+    .sort((a, b) => b.data.executedAt - a.data.executedAt)
+    .slice(0, 5)
 
   return (
     <>
