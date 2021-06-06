@@ -64,17 +64,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        url:
-          [
-            "/",
-            "/imprint",
-            "/privacy",
-            "/signin",
-            "/signup",
-            "/subscribe",
-            "/forgot-password",
-            "/reset-password",
-          ]
+        url: ["/", "/imprint", "/privacy", "/signin", "/signup", "/subscribe"]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 15.x
