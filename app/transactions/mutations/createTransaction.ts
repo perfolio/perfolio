@@ -1,12 +1,15 @@
 import { resolver } from "blitz"
-import db from "db"
-import { CreateTransaction } from "../validation"
+import { db, Transaction } from "db"
 export default resolver.pipe(
-  resolver.zod(CreateTransaction),
+  resolver.zod(Transaction.schema.omit({ userId: true })),
   resolver.authorize(),
   async ({ value, assetId, executedAt, volume }, ctx) => {
     return await db.transaction.create({
-      data: { userId: ctx.session.userId, value, assetId, executedAt, volume },
+      userId: ctx.session.userId,
+      value,
+      assetId,
+      executedAt,
+      volume,
     })
   },
 )

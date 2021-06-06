@@ -1,0 +1,9 @@
+CreateIndex({
+  "name": "company_by_symbol",
+  "source": Collection("companies"),
+  "terms": [{
+    "field": ["data", "symbol"]
+  }],
+  "unique": true,
+  "serialized": true
+})

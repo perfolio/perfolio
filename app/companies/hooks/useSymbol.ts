@@ -1,9 +1,9 @@
-import { useQuery, useSession } from "blitz"
-import getSymbolFromIsin from "../queries/getSymbolFromIsin"
+import { useQuery, useAuthenticatedSession } from "blitz"
+import getSymbolFromIsin from "app/symbols/queries/getSymbolFromIsin"
 export const useSymbol = (isin: string) => {
-  const sess = useSession()
+  const sess = useAuthenticatedSession()
 
-  const [symbol, { isLoading, error }] = useQuery(
+  return useQuery(
     getSymbolFromIsin,
     { isin },
     {
@@ -11,5 +11,4 @@ export const useSymbol = (isin: string) => {
       suspense: false,
     },
   )
-  return { symbol: symbol?.symbol, isLoading, error }
 }

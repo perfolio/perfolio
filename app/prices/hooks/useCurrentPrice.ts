@@ -1,9 +1,9 @@
-import { useQuery, useSession } from "blitz"
+import { useQuery, useAuthenticatedSession } from "blitz"
 import getCurrentPrice from "../queries/getCurrentPrice"
 
 export const useCurrentPrice = (symbol: string | undefined) => {
-  const sess = useSession()
-  const [currentPrice, { isLoading, error }] = useQuery(
+  const sess = useAuthenticatedSession()
+  return useQuery(
     getCurrentPrice,
     {
       symbol: symbol!,
@@ -13,5 +13,4 @@ export const useCurrentPrice = (symbol: string | undefined) => {
       suspense: false,
     },
   )
-  return { currentPrice, isLoading, error }
 }

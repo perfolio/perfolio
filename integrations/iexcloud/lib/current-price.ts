@@ -9,8 +9,6 @@ export type GetCurrentPriceResponse = z.infer<
 export async function getCurrentPrice(
   symbol: string,
 ): Promise<GetCurrentPriceResponse> {
-  symbol = symbol.toLowerCase()
-
   const res = await new Client().get({
     path: `/stock/${symbol}/price`,
   })

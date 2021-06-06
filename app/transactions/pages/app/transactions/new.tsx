@@ -9,15 +9,14 @@ import {
   Spinner,
 } from "app/core/components"
 import { useForm } from "react-hook-form"
-import { Image, useQuery } from "blitz"
-import { Time } from "pkg/time"
+import { Image } from "blitz"
+import { Time } from "app/time"
 import { BlitzPage, Routes, invalidateQuery, useMutation } from "@blitzjs/core"
 import createTransaction from "app/transactions/mutations/createTransaction"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
+import { useTransactions } from "app/transactions/hooks/useTransactions"
 import getTransactions from "app/transactions/queries/getTransactions"
-import { ActivityFeed } from "app/core/components"
 import { Transaction } from "db"
-import { useSymbol } from "app/companies/hooks/useSymbol"
+import { useSymbol } from "app/symbols/hooks/useSymbol"
 import { usePrice } from "app/prices/hooks/usePrice"
 import { useCompany } from "app/companies/hooks/useCompany"
 const Suggestion: React.FC<{
@@ -25,8 +24,8 @@ const Suggestion: React.FC<{
   setValue: (key: "isin", val: string) => void
   trigger: () => void
 }> = ({ tx, setValue, trigger }): JSX.Element => {
-  const { symbol } = useSymbol(tx.assetId)
-  const { company } = useCompany(symbol?.symbol)
+  const { symbol } = useSymbol(tx.data.assetId)
+  const [company] = useCompany(symbol?.data.symbol)
 
   return (
     <li className="flex items-center justify-between py-3">
@@ -34,20 +33,24 @@ const Suggestion: React.FC<{
         {company ? (
           <Image
             className="w-10 h-10 rounded"
-            alt={`Logo of ${company?.name}`}
-            src={company?.logo ?? ""}
+            alt={`Logo of ${company?.data.name}`}
+            src={company?.data.logo ?? ""}
             height={64}
             width={64}
           />
         ) : null}
         <div className="flex flex-col items-start truncate ">
-          <span className="font-medium text-gray-800 ">{company?.name}</span>
-          <span className="text-xs text-gray-600 md:text-sm">{tx.assetId}</span>
+          <span className="font-medium text-gray-800 ">
+            {company?.data.name}
+          </span>
+          <span className="text-xs text-gray-600 md:text-sm">
+            {tx.data.assetId}
+          </span>
         </div>
       </div>
       <div className="flex flex-col items-end space-y-1">
         <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
-          tx.createdAt.getTime() / 1000,
+          tx.ts / 1_000_000,
         )}`}</span>
         <div>
           <Button
@@ -55,7 +58,7 @@ const Suggestion: React.FC<{
             kind="secondary"
             size="small"
             onClick={() => {
-              setValue("isin", tx.assetId)
+              setValue("isin", tx.data.assetId)
               trigger()
             }}
           />
@@ -77,7 +80,6 @@ interface FormData {
  * / page.
  */
 const NewTransactionPage: BlitzPage = () => {
-  const user = useCurrentUser()
   const {
     register,
     setValue,
@@ -92,33 +94,29 @@ const NewTransactionPage: BlitzPage = () => {
       invalidateQuery(getTransactions)
     },
   })
-  const [transactions] = useQuery(
-    getTransactions,
-    {
-      userId: user!.id,
-    },
-    { enabled: !!user, suspense: false },
-  )
+  const [transactions] = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
   transactions
-    ?.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    ?.sort((a, b) => b.ts - a.ts)
     .forEach((tx) => {
-      if (!(tx.assetId in uniqueAssets)) {
-        uniqueAssets[tx.assetId] = tx
+      if (!(tx.data.assetId in uniqueAssets)) {
+        uniqueAssets[tx.data.assetId] = tx
       }
     })
   const data = watch()
   const { symbol } = useSymbol(data.isin)
 
-  const { price, isLoading: priceLoading } = usePrice(
-    symbol?.symbol,
+  const [price, { isLoading: priceLoading }] = usePrice(
+    symbol?.data.symbol,
     data.date ? Time.fromDate(new Date(data.date)) : undefined,
   )
 
-  const { company, isLoading: companyLoading } = useCompany(symbol?.symbol)
+  const [company, { isLoading: companyLoading }] = useCompany(
+    symbol?.data.symbol,
+  )
 
   return (
-    <WithSidebar title="Add a transaction" sidebar={<ActivityFeed />}>
+    <WithSidebar title="Add a transaction" sidebar={null}>
       <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
         <div className="w-full">
           <form className="flex flex-col py-6 space-y-4">
@@ -133,8 +131,8 @@ const NewTransactionPage: BlitzPage = () => {
               iconLeft={
                 company ? (
                   <Image
-                    src={company.logo}
-                    alt={`Logo of ${company?.name}`}
+                    src={company.data.logo}
+                    alt={`Logo of ${company.data.name}`}
                     width={64}
                     height={64}
                   />
@@ -175,7 +173,11 @@ const NewTransactionPage: BlitzPage = () => {
               />
               <Value
                 label="Price per share"
-                value={price && price > 0 ? price.toFixed(2) : ""}
+                value={
+                  price && price.data.value > 0
+                    ? price.data.value.toFixed(2)
+                    : ""
+                }
                 tooltip="Automatically fetched when all data is entered correctly"
                 iconLeft={
                   price ? (
@@ -199,7 +201,7 @@ const NewTransactionPage: BlitzPage = () => {
                 await addTransaction({
                   assetId: data.isin.trim(),
                   volume: data.shares * (data.buy ? 1 : -1),
-                  value: price,
+                  value: price.data.value,
                   executedAt: Time.fromDate(new Date(data.date)).unix(),
                 })
               })}

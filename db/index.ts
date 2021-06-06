@@ -1,7 +1,8 @@
-import { enhancePrisma } from "blitz"
-import { PrismaClient } from "@prisma/client"
+export * from "./documents/session"
+export * from "./documents/company"
+export * from "./documents/symbol"
+export * from "./documents/price"
+export * from "./documents/transaction"
+export * from "./documents/user"
 
-const EnhancedPrisma = enhancePrisma(PrismaClient)
-
-export * from "@prisma/client"
-export default new EnhancedPrisma()
+export { fauna as db } from "./fauna"
