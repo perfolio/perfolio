@@ -1,5 +1,5 @@
 import { resolver } from "blitz"
-import { getTransactions } from "pkg/holdings"
+import { db } from "db"
 import * as z from "zod"
 
 const GetTransactions = z.object({
@@ -10,8 +10,6 @@ export default resolver.pipe(
   resolver.zod(GetTransactions),
   resolver.authorize(),
   async ({ userId }) => {
-    const { transactions } = await getTransactions({ userId })
-
-    return transactions
+    return await db.transaction.fromUser(userId)
   },
 )

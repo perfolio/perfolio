@@ -2,11 +2,11 @@ import React from "react"
 import { Wrapper } from "../wrapper/wrapper"
 
 /* eslint-disable-next-line */
-export interface MultilineProps {
+export interface ProgressProps {
   progress: number
 }
 
-export const Multiline = ({ progress }: MultilineProps): JSX.Element => {
+export const Progress = ({ progress }: ProgressProps): JSX.Element => {
   return (
     <Wrapper>
       <p className="text-sm font-medium leading-none text-gray-800">
@@ -18,5 +18,3 @@ export const Multiline = ({ progress }: MultilineProps): JSX.Element => {
     </Wrapper>
   )
 }
-
-export default Multiline

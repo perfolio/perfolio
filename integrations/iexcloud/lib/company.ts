@@ -118,7 +118,6 @@ export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator>
 
 export async function getCompany(symbol: string): Promise<GetCompanyResponse> {
   const client = new Client()
-  symbol = symbol.toLowerCase()
 
   const res = await client.get({
     path: `/stock/${symbol}/company`,

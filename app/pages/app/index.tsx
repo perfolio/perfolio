@@ -1,14 +1,23 @@
 import { BlitzPage, Routes } from "blitz"
 import { WithSidebar } from "app/core/components"
 import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
+import { usePortfolio } from "app/holdings/hooks/usePortfolio"
 import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
 import { ActivityFeed } from "app/core/components/activity/activityFeed"
+import { AssetTable } from "app/core/components"
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.
  */
 
 const Home: BlitzPage = () => {
+  const { portfolio } = usePortfolio()
+  let totalAssets = 0
+  if (!!portfolio) {
+    Object.values(portfolio).forEach((e) => {
+      totalAssets += e.quantity * e.value
+    })
+  }
   return (
     <WithSidebar
       title="Overview"
@@ -34,7 +43,7 @@ const Home: BlitzPage = () => {
                 Total Assets
               </h4>
               <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                $ 27,815
+                ${totalAssets.toFixed()}
               </span>
             </div>
           </div>
@@ -64,16 +73,14 @@ const Home: BlitzPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-56 pt-8">
-        <AssetsOverTimeChart />
-      </div>
+      <div className="w-full h-56 pt-8">{<AssetsOverTimeChart />}</div>
       <div className="mt-5 rounded md:mt-10">
         <div className="py-4 pl-4 md:py-6 md:pl-6">
           <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">
-            Current Assets
+            Current Assets (fake)
           </p>
         </div>
-        {/* <AssetTable /> */}
+        <AssetTable />
       </div>
     </WithSidebar>
   )
