@@ -33,7 +33,7 @@
     "@types/preview-email": "2.0.0",
     "@types/react": "17.0.9",
     "autoprefixer": "10.2.6",
-    "blitz": "0.36.3",
+    "blitz": "0.36.4",
     "classnames": "2.3.1",
     "eslint": "7.27.0",
     "faunadb": "4.3.0",
