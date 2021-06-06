@@ -58,7 +58,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@lhci/cli": "0.7.2",
+    "@lhci/cli": "0.8.0",
     "fauna-schema-migrate": "2.1.2",
     "vercel": "23.0.0"
   }
