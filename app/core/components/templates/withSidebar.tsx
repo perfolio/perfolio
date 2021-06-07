@@ -1,5 +1,6 @@
 import React from "react"
 import { Header } from "../header/header"
+import { Profile } from "../profile/profile"
 
 export interface WithSidebarProps {
   title: string
@@ -16,11 +17,13 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
 }): JSX.Element => {
   return (
     <>
-      <Header />
+      <div className="h-60">
+        <Header />
+      </div>
       <div className="px-4 xl:px-0 dark:bg-gray-800">
         <div className="container mx-auto ">
           <div className="xl:flex">
-            <div className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-56">
+            <div className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-28">
               <div className="p-4 bg-gray-100 rounded-t shadow dark:text-gray-50 dark:bg-gray-700 md:p-6">
                 <p className="text-base font-bold leading-normal text-gray-800 dark:text-gray-100 sm:text-lg md:text-xl lg:text-2xl">
                   {title}
@@ -30,7 +33,10 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
                 {children}
               </div>
             </div>
-            <div className="flex flex-col w-full pl-4 pr-4 xl:w-1/4 2xl:w-1/5 pt-7 xl:pl-8 pb-7 lg:flex-col md:flex-row xl:pr-0">
+            <div className="ml-6 xl:w-1/4 2xl:w-1/5">
+              <div className="w-full mb-8 -mt-8 xl:-mt-28 xl:mb-28">
+                <Profile />
+              </div>
               {sidebar}
             </div>
           </div>

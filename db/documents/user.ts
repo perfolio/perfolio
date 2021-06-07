@@ -65,7 +65,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
     try {
       const res = await client
         .query<QueryResponse<z.infer<typeof User.schema>>>(
-          q.Get(q.Collection(this.collection), id),
+          q.Get(q.Ref(q.Collection(this.collection), id)),
         )
         .catch(() => null)
 
