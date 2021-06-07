@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-      - run: yarn build
+      - run: yarn install && yarn build
       - name: run Lighthouse CI
         run: npx @lhci/cli autorun
         env:
