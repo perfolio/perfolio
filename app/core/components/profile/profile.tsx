@@ -1,48 +1,69 @@
-import { useUser } from "app/users/hooks/useUser"
-import logout from "app/auth/mutations/logout"
 import React from "react"
-import { useMutation } from "@blitzjs/core"
+import { AreaChart, Area, ResponsiveContainer } from "recharts"
+import { useHistory } from "app/holdings/hooks/useHistory"
+import { Time } from "app/time"
+import { Spinner } from "app/core/components"
+import { useCurrentValue } from "app/holdings/hooks/useCurrentValue"
+
 export const Profile: React.FC = (): JSX.Element => {
-  const [user] = useUser()
-  const [logoutMutation] = useMutation(logout)
+  const { history, isLoading } = useHistory()
+  const { currentValue } = useCurrentValue()
+  const valueMap: Record<number, number> = {}
+
+  if (!!history && Object.keys(history).length >= 1) {
+    Object.values(history).forEach((asset) => {
+      asset.forEach((day) => {
+        if (day.value > 0) {
+          if (!valueMap[day.time]) {
+            valueMap[day.time] = 0
+          }
+          valueMap[day.time] += day.value * day.quantity
+        }
+      })
+    })
+  }
+  const data = Object.entries(valueMap).map(([time, value]) => {
+    return {
+      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
+      value,
+    }
+  })
+  console.log({ data })
+
   return (
-    <div className="flex-wrap items-center xl:ml-32 xl:flex">
-      {/* Displace the profile to fit main content */}
-      <div className="xl:w-3/4 2xl:w-4/5"></div>
-      <div className="flex flex-col py-16 space-y-8 xl:w-1/4 2xl:w-1/5 md:py-12">
-        <div className="items-center justify-end hidden w-full xl:flex">
-          <div className="flex items-center space-x-4">
-            <div className="flex flex-col items-end">
-              <span className="font-semibold text-gray-50">
-                {user?.data.name}
-              </span>
-              <span className="text-xs font-semibold text-white">Premium</span>
-              <button
-                className="text-xs font-semibold text-white"
-                onClick={() => logoutMutation()}
-              >
-                Log out
-              </button>
+    <div className="flex-col justify-center hidden w-full h-20 space-y-8 bg-gray-100 rounded xl:flex">
+      <div className="relative w-full h-20">
+        <ResponsiveContainer width="100%" height="100%">
+          {isLoading ? (
+            <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
+              <Spinner />
             </div>
-            {/* <img className="w-12 h-12 rounded" src={""} alt="profile" /> */}
-          </div>
-        </div>
-        <div className="w-full p-4 space-y-2 bg-white rounded ">
-          <span className="text-sm text-gray-700">Total Investment</span>
-          <div className="flex items-center justify-between">
-            <span className="text-xl font-semibold leading-none text-black">
-              $ 27,815
-            </span>
-            <div className="flex items-center justify-end mt-1 space-x-2">
-              <span className="text-xs leaditext-gray-700ng-3 ">Target:</span>
-              <span className="text-sm font-semibold text-gray-900">
-                $50.000
-              </span>
-            </div>
-          </div>
-          <div className="w-full rounded-full mt-3.5 h-1.5 bg-gray-300">
-            <div className="w-2/3 h-1.5 bg-primary-900  rounded-full" />
-          </div>
+          ) : (
+            <AreaChart
+              data={data}
+              margin={{ top: 0, left: 0, bottom: 0, right: 0 }}
+            >
+              <defs>
+                <linearGradient id="profileCard" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#262059" stopOpacity={0.1} />
+                  <stop offset="100%" stopColor="#262059" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#262059"
+                strokeWidth={2}
+                fill="url(#profileCard)"
+              />
+            </AreaChart>
+          )}
+        </ResponsiveContainer>
+        <div className="absolute bottom-0 right-0 p-4">
+          <span className="text-lg font-semibold text-primary-600">
+            ${currentValue.toFixed(2)}
+          </span>
         </div>
       </div>
     </div>

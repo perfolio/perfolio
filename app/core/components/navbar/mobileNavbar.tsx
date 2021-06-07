@@ -2,14 +2,24 @@ import React, { useState } from "react"
 import { MobileNavLink } from "./mobileNavLink"
 import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
-import { BellIcon, DotsVerticalIcon, XIcon } from "@heroicons/react/outline"
+import {
+  BellIcon,
+  DotsVerticalIcon,
+  XIcon,
+  LogoutIcon,
+} from "@heroicons/react/outline"
 import { Logo } from "../logo/logo"
 import { Transition } from "@headlessui/react"
+import logoutMutation from "app/auth/mutations/logout"
+
 import { Link } from "../clickable"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 import { ThemeSwitch } from "../switch/themeSwitch"
+import { useMutation } from "blitz"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
+  const [logout] = useMutation(logoutMutation)
+
   return (
     <nav className="flex items-center justify-between w-full">
       <div>
@@ -63,6 +73,11 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
             </li>
             <li>
               <ThemeSwitch />
+            </li>
+            <li>
+              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={logout}>
+                <LogoutIcon className="w-6 h-6 text-white" />
+              </button>
             </li>
           </ul>
         </Transition>
