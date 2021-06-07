@@ -6,7 +6,9 @@ import slugify from "slugify"
 const cookiePrefix =
   process.env.VERCEL_ENV === "production"
     ? "perfolio"
-    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev")}`
+    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev", {
+        remove: /[().:]/g,
+      })}`
 console.log({ cookiePrefix })
 
 module.exports = {
