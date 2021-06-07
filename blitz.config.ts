@@ -3,9 +3,10 @@ import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 import { db } from "db"
 import slugify from "slugify"
 
-const cookiePrefix = `blitz-fauna-example-${slugify(
-  process.env.VERCEL_GIT_COMMIT_REF ?? "dev",
-)}`
+const cookiePrefix =
+  process.env.VERCEL_ENV === "production"
+    ? "perfolio"
+    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev")}`
 console.log({ cookiePrefix })
 
 module.exports = {
