@@ -3,7 +3,7 @@ import getCurrentPrice from "../queries/getCurrentPrice"
 
 export const useCurrentPrice = (symbol: string | undefined) => {
   const sess = useAuthenticatedSession()
-  return useQuery(
+  const [currentPrice, meta] = useQuery(
     getCurrentPrice,
     {
       symbol: symbol!,
@@ -13,4 +13,5 @@ export const useCurrentPrice = (symbol: string | undefined) => {
       suspense: false,
     },
   )
+  return { currentPrice, ...meta }
 }
