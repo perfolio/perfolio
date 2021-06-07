@@ -5,7 +5,6 @@ import {
   PlusIcon,
   BookOpenIcon,
 } from "@heroicons/react/outline"
-import { Profile } from "../profile/profile"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}
 
@@ -39,21 +38,15 @@ const menu = {
 
 export const Header: React.FC<HeaderProps> = (): JSX.Element => {
   return (
-    <div>
-      {/* header starts here */}
-      <div className="pt-6 bg-gray-900 md:pt-8 xl:pt-12">
-        <div className="container px-4 mx-auto xl:px-0">
-          <div className="hidden xl:flex">
-            <DesktopNavbar items={menu.items} />
-          </div>
-          <div className="xl:hidden">
-            <MobileNavbar items={menu.items} />
-          </div>
-
-          <Profile />
+    <div className="h-full pt-6 bg-gray-900 md:pt-8 xl:pt-12">
+      <div className="container px-4 mx-auto xl:px-0">
+        <div className="hidden xl:flex">
+          <DesktopNavbar items={menu.items} />
+        </div>
+        <div className="xl:hidden">
+          <MobileNavbar items={menu.items} />
         </div>
       </div>
-      {/* header ends here */}
     </div>
   )
 }
