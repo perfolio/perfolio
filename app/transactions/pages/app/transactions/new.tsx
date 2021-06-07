@@ -11,14 +11,13 @@ import {
 import { useForm } from "react-hook-form"
 import { Image } from "blitz"
 import { Time } from "app/time"
-import { BlitzPage, Routes, invalidateQuery, useMutation } from "@blitzjs/core"
-import createTransaction from "app/transactions/mutations/createTransaction"
+import { BlitzPage, Routes } from "@blitzjs/core"
 import { useTransactions } from "app/transactions/hooks/useTransactions"
-import getTransactions from "app/transactions/queries/getTransactions"
 import { Transaction } from "db"
 import { useSymbol } from "app/symbols/hooks/useSymbol"
 import { usePrice } from "app/prices/hooks/usePrice"
 import { useCompany } from "app/companies/hooks/useCompany"
+import { useCreateTransaction } from "app/transactions/hooks/useCreateTransaction"
 const Suggestion: React.FC<{
   tx: Transaction
   setValue: (key: "isin", val: string) => void
@@ -89,11 +88,7 @@ const NewTransactionPage: BlitzPage = () => {
     formState: { errors },
   } = useForm<FormData>({ mode: "all", defaultValues: { date: new Date() } })
 
-  const [addTransaction] = useMutation(createTransaction, {
-    onSuccess: () => {
-      invalidateQuery(getTransactions)
-    },
-  })
+  const { createTransaction } = useCreateTransaction()
   const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
   transactions
@@ -196,7 +191,7 @@ const NewTransactionPage: BlitzPage = () => {
                 if (!price) {
                   throw new Error("Wait for price to load")
                 }
-                await addTransaction({
+                await createTransaction({
                   assetId: data.isin.trim(),
                   volume: data.shares * (data.buy ? 1 : -1),
                   value: price.data.value,

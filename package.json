@@ -10,6 +10,7 @@
     "format": "prettier --loglevel warn --write .",
     "test": "jest",
     "test:watch": "jest --watch",
+    "check:all": "yarn install && yarn fmt && yarn build && lhci autorun",
     "prepare": "husky install"
   },
   "prettier": {
