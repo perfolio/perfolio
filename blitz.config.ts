@@ -1,14 +1,22 @@
 import { Time } from "app/time"
 import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 import { db } from "db"
-import slugify from "slugify"
+
+const slugify = (str: string): string => {
+  str = str.toLowerCase()
+  let out: string = ""
+  for (let i = 0; i < str.length; i++) {
+    if (new RegExp(/[a-z0-9]/).test(str[i]!)) {
+      out += str[i]
+    }
+  }
+  return out
+}
 
 const cookiePrefix =
   process.env.VERCEL_ENV === "production"
     ? "perfolio"
-    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev", {
-        remove: /[().:]/g,
-      })}`
+    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev")}`
 console.log({ cookiePrefix })
 
 module.exports = {
