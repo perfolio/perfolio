@@ -3,7 +3,7 @@ import getUser from "../queries/getUser"
 
 export const useUser = () => {
   const sess = useAuthenticatedSession()
-  return useQuery(
+  const [user, meta] = useQuery(
     getUser,
     { userId: sess.userId },
     {
@@ -11,4 +11,5 @@ export const useUser = () => {
       suspense: false,
     },
   )
+  return { user, ...meta }
 }

@@ -19,9 +19,9 @@ export const ThemeSwitch: React.FC = (): JSX.Element => {
     >
       <span aria-hidden="true" className="inline-block">
         {darkMode ? (
-          <MoonIcon className="text-info-300" />
+          <MoonIcon className="text-info-300 hover:text-info-100" />
         ) : (
-          <SunIcon className="text-secondary-300" />
+          <SunIcon className="text-secondary-300 hover:text-secondary-100" />
         )}
       </span>
     </button>
