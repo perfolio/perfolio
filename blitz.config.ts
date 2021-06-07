@@ -11,6 +11,10 @@ const getCookiePrefix = (): string => {
 
   let out: string = ""
   for (let i = 0; i < name.length; i++) {
+    if (["_", "-", " "].includes(name[i]!)) {
+      out += "-"
+      continue
+    }
     if (new RegExp(/[a-z0-9]/).test(name[i]!)) {
       out += name[i]
     }
