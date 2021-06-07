@@ -2,30 +2,21 @@ import { Time } from "app/time"
 import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 import { db } from "db"
 
-const getCookiePrefix = (): string => {
-  const name = (
-    process.env.VERCEL_ENV === "production"
-      ? "perfolio"
-      : `perfolio-${process.env.VERCEL_GIT_COMMIT_REF ?? "dev"}`
-  ).toLowerCase()
+let cookiePrefix = (
+  process.env.VERCEL_ENV === "production"
+    ? "perfolio"
+    : `perfolio-${process.env.VERCEL_GIT_COMMIT_REF ?? "dev"}`
+).toLowerCase()
 
-  let out: string = ""
-  for (let i = 0; i < name.length; i++) {
-    if (["_", "-", " "].includes(name[i]!)) {
-      out += "-"
-      continue
-    }
-    if (new RegExp(/[a-z0-9]/).test(name[i]!)) {
-      out += name[i]
-    }
-  }
-  return out
-}
+cookiePrefix = cookiePrefix.replace(/[\s.]/g, "-").replace(/[^-a-z0-9]/g, "")
 
 module.exports = {
+  future: {
+    webpack5: true,
+  },
   middleware: [
     sessionMiddleware({
-      cookiePrefix: getCookiePrefix(),
+      cookiePrefix,
       isAuthorized: simpleRolesIsAuthorized,
       getSession: async (handle) => {
         const session = await db.session.fromHandle(handle)
