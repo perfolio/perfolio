@@ -1,15 +1,19 @@
 import { Time } from "app/time"
 import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 import { db } from "db"
-import slugify from "slugify"
 
-const cookiePrefix =
+let cookiePrefix = (
   process.env.VERCEL_ENV === "production"
     ? "perfolio"
-    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev")}`
-console.log({ cookiePrefix })
+    : `perfolio-${process.env.VERCEL_GIT_COMMIT_REF ?? "dev"}`
+).toLowerCase()
+
+cookiePrefix = cookiePrefix.replace(/[\s.]/g, "-").replace(/[^-a-z0-9]/g, "")
 
 module.exports = {
+  future: {
+    webpack5: true,
+  },
   middleware: [
     sessionMiddleware({
       cookiePrefix,
