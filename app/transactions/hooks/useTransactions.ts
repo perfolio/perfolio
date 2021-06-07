@@ -3,7 +3,7 @@ import getTransactions from "app/transactions/queries/getTransactions"
 
 export const useTransactions = () => {
   const sess = useAuthenticatedSession()
-  return useQuery(
+  const [transactions, meta] = useQuery(
     getTransactions,
     { userId: sess.userId },
     {
@@ -11,4 +11,5 @@ export const useTransactions = () => {
       suspense: false,
     },
   )
+  return { transactions, ...meta }
 }

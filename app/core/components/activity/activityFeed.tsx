@@ -12,7 +12,7 @@ interface TransactionActivityItemProps {
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
 }): JSX.Element => {
-  const [symbol, { isLoading }] = useSymbol(transaction.data.assetId)
+  const { symbol, isLoading } = useSymbol(transaction.data.assetId)
 
   return (
     <li className="py-4 h-28">
@@ -43,9 +43,9 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const [transactions] = useTransactions()
+  const { transactions } = useTransactions()
 
-  const last3Transactions = (transactions ?? [])
+  const last5Transactions = (transactions ?? [])
     .sort((a, b) => b.data.executedAt - a.data.executedAt)
     .slice(0, 5)
 
@@ -53,7 +53,7 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
     <>
       <p className="text-base font-semibold text-gray-800">Recent Activity</p>
       <ul className="mt-4 text-sm text-gray-700 divide-y divide-gray-300">
-        {last3Transactions?.map((tx) => (
+        {last5Transactions?.map((tx) => (
           <TransactionActivityItem key={tx.id} transaction={tx} />
         ))}
       </ul>
