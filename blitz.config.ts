@@ -2,27 +2,26 @@ import { Time } from "app/time"
 import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 import { db } from "db"
 
-const slugify = (str: string): string => {
-  str = str.toLowerCase()
+const getCookiePrefix = (): string => {
+  const name = (
+    process.env.VERCEL_ENV === "production"
+      ? "perfolio"
+      : `perfolio-${process.env.VERCEL_GIT_COMMIT_REF ?? "dev"}`
+  ).toLowerCase()
+
   let out: string = ""
-  for (let i = 0; i < str.length; i++) {
-    if (new RegExp(/[a-z0-9]/).test(str[i]!)) {
-      out += str[i]
+  for (let i = 0; i < name.length; i++) {
+    if (new RegExp(/[a-z0-9]/).test(name[i]!)) {
+      out += name[i]
     }
   }
   return out
 }
 
-const cookiePrefix =
-  process.env.VERCEL_ENV === "production"
-    ? "perfolio"
-    : `perfolio-${slugify(process.env.VERCEL_GIT_COMMIT_REF ?? "dev")}`
-console.log({ cookiePrefix })
-
 module.exports = {
   middleware: [
     sessionMiddleware({
-      cookiePrefix,
+      cookiePrefix: getCookiePrefix(),
       isAuthorized: simpleRolesIsAuthorized,
       getSession: async (handle) => {
         const session = await db.session.fromHandle(handle)
