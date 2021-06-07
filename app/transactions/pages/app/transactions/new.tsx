@@ -25,7 +25,7 @@ const Suggestion: React.FC<{
   trigger: () => void
 }> = ({ tx, setValue, trigger }): JSX.Element => {
   const { symbol } = useSymbol(tx.data.assetId)
-  const [company] = useCompany(symbol?.data.symbol)
+  const { company } = useCompany(symbol?.data.symbol)
 
   return (
     <li className="flex items-center justify-between py-3">
@@ -94,7 +94,7 @@ const NewTransactionPage: BlitzPage = () => {
       invalidateQuery(getTransactions)
     },
   })
-  const [transactions] = useTransactions()
+  const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
   transactions
     ?.sort((a, b) => b.ts - a.ts)
@@ -111,9 +111,7 @@ const NewTransactionPage: BlitzPage = () => {
     data.date ? Time.fromDate(new Date(data.date)) : undefined,
   )
 
-  const [company, { isLoading: companyLoading }] = useCompany(
-    symbol?.data.symbol,
-  )
+  const { company, isLoading: companyLoading } = useCompany(symbol?.data.symbol)
 
   return (
     <WithSidebar title="Add a transaction" sidebar={null}>
