@@ -3,7 +3,7 @@ import getSymbolFromIsin from "app/symbols/queries/getSymbolFromIsin"
 export const useSymbol = (isin: string) => {
   const sess = useAuthenticatedSession()
 
-  return useQuery(
+  const [symbol, meta] = useQuery(
     getSymbolFromIsin,
     { isin },
     {
@@ -11,4 +11,5 @@ export const useSymbol = (isin: string) => {
       suspense: false,
     },
   )
+  return { symbol, ...meta }
 }
