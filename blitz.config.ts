@@ -23,6 +23,9 @@ const getCookiePrefix = (): string => {
 }
 
 module.exports = {
+  future: {
+    webpack5: true,
+  },
   middleware: [
     sessionMiddleware({
       cookiePrefix: getCookiePrefix(),
