@@ -1,5 +1,9 @@
 module.exports = {
   ci: {
+    collect: {
+      staticDistDir: ".next/server/pages",
+      maxAutodiscoverUrls: 0,
+    },
     upload: {
       target: "temporary-public-storage",
     },
