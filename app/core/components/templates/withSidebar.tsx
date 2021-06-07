@@ -20,7 +20,7 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
       <div className="px-4 xl:px-0 dark:bg-gray-800">
         <div className="container mx-auto ">
           <div className="xl:flex">
-            <div className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-64">
+            <div className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-56">
               <div className="p-4 bg-gray-100 rounded-t shadow dark:text-gray-50 dark:bg-gray-700 md:p-6">
                 <p className="text-base font-bold leading-normal text-gray-800 dark:text-gray-100 sm:text-lg md:text-xl lg:text-2xl">
                   {title}

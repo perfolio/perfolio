@@ -43,43 +43,35 @@ jobs:
       - name: Check types
         run: yarn tsc
 
-  wait-for-vercel:
-    name: Wait for Vercel Preview
-    runs-on: ubuntu-latest
-    outputs:
-      url: ${{ steps.waitFor200.outputs.url }}
-    steps:
-      - name: Waiting for 200 from the Vercel Preview
-        uses: patrickedqvist/wait-for-vercel-preview@master
-        id: waitFor200
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 600
-
   lhci:
     name: Lighthouse
-    needs: wait-for-vercel
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        url: ["/", "/imprint", "/privacy", "/signin", "/signup", "/subscribe"]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 15.x
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
+        env:
+          FAUNA_SERVER_KEY: dummy
       - name: run Lighthouse CI
-        run: npx @lhci/cli autorun --collect.url=${{ needs.wait-for-vercel.outputs.url }}${{ matrix.url }}
+        run: npx @lhci/cli autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-  lhci-all:
-    name: lhci pass
-    needs: lhci
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo Success!
