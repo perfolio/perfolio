@@ -6,7 +6,7 @@ export default resolver.pipe(
   resolver.zod(Signin),
   async ({ email, password }, ctx) => {
     const user = await db.user.signin({ email, password })
-    console.log(JSON.stringify(ctx, null, "  "))
+    console.log(user, ctx)
     await ctx.session.$create({ userId: user.id, role: "USER" })
     return user
   },
