@@ -9,7 +9,7 @@ let cookiePrefix = (
 ).toLowerCase()
 
 cookiePrefix = cookiePrefix.replace(/[\s.]/g, "-").replace(/[^-a-z0-9]/g, "")
-
+console.log({ cookiePrefix })
 module.exports = {
   future: {
     webpack5: true,
