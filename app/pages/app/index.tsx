@@ -87,6 +87,6 @@ const Home: BlitzPage = () => {
 }
 
 Home.suppressFirstRenderFlicker = true
-Home.authenticate = { redirectTo: Routes.SigninPage().pathname }
+Home.authenticate = true
 
 export default Home

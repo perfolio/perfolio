@@ -66,7 +66,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button onClick={logout}>
+              <button onClick={() => logout()}>
                 <LogoutIcon className="w-6 h-6" />
               </button>
             </li>

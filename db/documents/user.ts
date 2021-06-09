@@ -141,7 +141,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
         .parse(res)
       return new User(user)
     } catch (err) {
-      throw new Error(`Unable create user: ${err}`)
+      throw new Error(`Unable to create user: ${err}`)
     }
   }
 
@@ -193,18 +193,18 @@ export class User extends Document<z.infer<typeof User.schema>> {
         .parse(res)
       return new User(user)
     } catch (err) {
-      throw new Error(`Unable create company: ${err}`)
+      throw new Error(`Unable to sign in user: ${err}`)
     }
   }
 
   /**
-   * Delete this company
+   * Delete this user
    */
   public async delete(client: Client): Promise<void> {
     await client
       .query(q.Delete(Ref(Collection(User.collection), this.id)))
       .catch((err) => {
-        throw new Error(`Unable to delete company: ${err}`)
+        throw new Error(`Unable to delete user: ${err}`)
       })
   }
 }
