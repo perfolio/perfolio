@@ -80,8 +80,9 @@ async function signin(
 /**
  * Remove the token from context and clear all required queries
  */
-async function signout(accessToken: string) {
-  await request({ token: accessToken, path: '/api/auth/signout' });
+async function signout(ctx: IAuthContext) {
+  await request({ token: ctx.getToken(), path: '/api/auth/signout' });
+  ctx.setToken(undefined)
 }
 
 /**
@@ -121,6 +122,6 @@ export function useAuth(): AuthHook {
     signin: (username: string, password: string) =>
       signin(username, password, ctx),
       signup:(email:string,username:string,password:string) => signup(email,username,password, ctx),
-    signout: () => signout(ctx.getToken()),
+    signout: () => signout(ctx),
   };
 }

@@ -14,14 +14,14 @@ import { Ref } from 'react';
  *
  * This mainly injects the token.
  */
-class Fauna {
+export class Fauna {
   public readonly client: Client;
 
   constructor(token?: string) {
-    token = token ?? process.env['FAUNA_SERVER_KEY'];
+    token = token ?? process.env['NX_FAUNA_SERVER_KEY'];
 
     if (!token || token === '') {
-      throw new Error(`FAUNA_SERVER_KEY must be defined`);
+      throw new Error(`NX_FAUNA_SERVER_KEY must be defined`);
     }
 
     this.client = new Client({ secret: token });
@@ -88,4 +88,5 @@ class Fauna {
   }
 }
 
-export const fauna = new Fauna();
+
+export const db = ()=>new Fauna()

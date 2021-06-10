@@ -7,7 +7,7 @@ const signin = async (
 ): Promise<void> => {
   const user = JWT.verify(req.headers.authorization);
 
-  db.refreshToken.deleteFromUser(user.userId);
+  db().refreshToken.deleteFromUser(user.userId);
 
   removeAuthCookie(res);
   res.json({});

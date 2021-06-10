@@ -14,6 +14,7 @@ export const payload = z.object({
   username: z.string(),
 });
 
+export type Claims = z.infer<typeof payload>
 export class JWT {
   private static readonly issuer = 'perfolio';
   private static readonly audience = 'perfolio';
@@ -30,7 +31,7 @@ export class JWT {
     });
   }
 
-  public static verify(encoded: string): z.infer<typeof payload> {
+  public static verify(encoded: string):Claims{
     const decoded = jwt.verify(encoded, JWT.secret, {
       audience: JWT.audience,
       issuer: JWT.issuer,

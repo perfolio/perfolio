@@ -13,7 +13,7 @@ const signup = async (
     })
     .parse(req.body);
 
-  await db.user.create({ username, email, password, role: 'USER' });
+  await db().user.create({ username, email, password, role: 'USER' });
     res.json({})
   res.end();
 };

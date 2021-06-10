@@ -13,6 +13,7 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
       "@perfolio/db": ["libs/db/src/index.ts"],

@@ -129,14 +129,18 @@ export function withAuthentication(
       request<{ accessToken: string }>({
         path: '/api/auth/refresh',
       })
-        .then(({accessToken}) => setToken(accessToken))
+        .then(({accessToken}) => {
+
+          console.log({accessToken})
+          setToken(accessToken)
+        })
         .catch((err) => setError(err))
         .finally(() => setLoading(false));
     }, [setToken, token]);
 
     if (error) {
       console.error(error);
-      window.location.assign(opts?.returnTo ?? '/');
+      window.location.assign(opts?.returnTo ?? '/auth/signin');
     }
 
     if (loading) {

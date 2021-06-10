@@ -15,9 +15,9 @@ const signin = async (
     })
     .parse(req.body);
 
-  const user = await db.user.signin({ email, password });
+  const user = await db().user.signin({ email, password });
   const newRefreshToken = uuid();
-  await db.refreshToken.create({
+  await db().refreshToken.create({
     userId: user.id,
     hashedToken: createHmac('sha256', newRefreshToken).digest("hex").toString(),
     expiresAt: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 days
