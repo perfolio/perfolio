@@ -1,0 +1,48 @@
+{
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "affected": {
+    "defaultBase": "master"
+  },
+  "npmScope": "perfolio",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "YjAyY2Q1YTMtYTAzNy00Yzk4LWEwMDMtNzg4M2NlMzJhZmQ2fHJlYWQtd3JpdGU=",
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
+      }
+    }
+  },
+  "projects": {
+    "app": {
+      "tags": []
+    },
+    "app-e2e": {
+      "tags": [],
+      "implicitDependencies": ["app"]
+    },
+    "db": {
+      "tags": []
+    },
+    "auth": {
+      "tags": []
+    },
+    "components": {
+      "tags": []
+    },
+    "api": {
+      "tags": []
+    },
+    "time": {
+      "tags": []
+    }
+  }
+}

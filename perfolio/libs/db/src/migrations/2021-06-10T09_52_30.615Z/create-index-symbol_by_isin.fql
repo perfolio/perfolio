@@ -1,0 +1,9 @@
+CreateIndex({
+  "name": "symbol_by_isin",
+  "source": Collection("symbols"),
+  "terms": [{
+    "field": ["data", "isin"]
+  }],
+  "unique": true,
+  "serialized": true
+})
