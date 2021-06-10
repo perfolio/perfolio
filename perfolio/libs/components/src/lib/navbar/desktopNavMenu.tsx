@@ -1,9 +1,9 @@
-import { Popover, Transition } from "@headlessui/react"
-import { ChevronDownIcon } from "@heroicons/react/outline"
-import Link from "next/link"
-import { NavLink } from "./navLink"
-import React, { Fragment } from "react"
-import { MenuProps } from "./types"
+import { Popover, Transition } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
+import { NavLink } from './navLink';
+import React, { Fragment } from 'react';
+import { MenuProps } from './types';
 export const DesktopNavMenu: React.FC<MenuProps> = ({
   label,
   icon,
@@ -50,5 +50,5 @@ export const DesktopNavMenu: React.FC<MenuProps> = ({
         </Transition>
       </>
     </Popover>
-  )
-}
+  );
+};

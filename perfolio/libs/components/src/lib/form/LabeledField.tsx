@@ -2,9 +2,9 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import classNames from 'classnames';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
-export interface LabeledTextFieldProps {
+export interface LabeledFieldProps {
   /**
-   * Field name.
+   * Field name. Make sure this matches your schema.
    */
   name: string;
   /**
@@ -19,7 +19,7 @@ export interface LabeledTextFieldProps {
   iconLeft?: React.ReactNode;
 }
 
-export const LabeledTextField: React.FC<LabeledTextFieldProps> = ({
+export const LabeledField: React.FC<LabeledFieldProps> = ({
   label,
   name,
   iconLeft,
@@ -78,4 +78,4 @@ export const LabeledTextField: React.FC<LabeledTextFieldProps> = ({
   );
 };
 
-export default LabeledTextField;
+export default LabeledField;

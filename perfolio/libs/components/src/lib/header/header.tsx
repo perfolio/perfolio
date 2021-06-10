@@ -1,40 +1,40 @@
-import React from "react"
-import { DesktopNavbar, MobileNavbar } from "../navbar"
+import React from 'react';
+import { DesktopNavbar, MobileNavbar } from '../navbar';
 import {
   ChartSquareBarIcon,
   PlusIcon,
   BookOpenIcon,
-} from "@heroicons/react/outline"
+} from '@heroicons/react/outline';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}
 
 const menu = {
   items: [
     {
-      label: "Dashboard",
+      label: 'Dashboard',
       icon: <ChartSquareBarIcon />,
-      href: "/app",
+      href: '/app',
     },
     {
-      label: "Transactions",
+      label: 'Transactions',
       icon: <BookOpenIcon />,
       menu: [
         {
-          name: "My Transactions",
-          href: "/app/transactions",
+          name: 'My Transactions',
+          href: '/app/transactions',
           icon: <BookOpenIcon />,
-          description: "See your existing transactions",
+          description: 'See your existing transactions',
         },
         {
-          name: "Add manually",
-          href: "/app/transactions/new",
+          name: 'Add manually',
+          href: '/app/transactions/new',
           icon: <PlusIcon />,
-          description: "Add a transaction by entering data yourself",
+          description: 'Add a transaction by entering data yourself',
         },
       ],
     },
   ],
-}
+};
 
 export const Header: React.FC<HeaderProps> = (): JSX.Element => {
   return (
@@ -48,5 +48,5 @@ export const Header: React.FC<HeaderProps> = (): JSX.Element => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

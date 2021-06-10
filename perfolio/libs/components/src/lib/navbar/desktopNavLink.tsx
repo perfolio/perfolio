@@ -1,7 +1,7 @@
-import React from "react"
-import Link from "next/link"
-import { NavLink } from "./navLink"
-import { NavLinkProps } from "./types"
+import React from 'react';
+import Link from 'next/link';
+import { NavLink } from './navLink';
+import { NavLinkProps } from './types';
 export const DesktopNavLink: React.FC<NavLinkProps> = ({
   href,
   label,
@@ -13,5 +13,5 @@ export const DesktopNavLink: React.FC<NavLinkProps> = ({
         <NavLink prefix={icon} label={label} />
       </a>
     </Link>
-  )
-}
+  );
+};

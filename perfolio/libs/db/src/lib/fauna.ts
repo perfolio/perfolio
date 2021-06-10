@@ -88,5 +88,4 @@ export class Fauna {
   }
 }
 
-
-export const db = ()=>new Fauna()
+export const db = () => new Fauna();

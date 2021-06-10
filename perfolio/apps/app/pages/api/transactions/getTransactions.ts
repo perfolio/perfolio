@@ -1,7 +1,15 @@
-import {
-  withMiddleware,
-  getTransactionApiHandler,
-  GetTransactionsRequestValidation,
-} from '@perfolio/api';
+import { withMiddleware } from '@perfolio/api';
 
-export default withMiddleware(getTransactionApiHandler, GetTransactionsRequestValidation);
+import { db } from '@perfolio/db';
+import { z } from 'zod';
+import { Claims } from '@perfolio/auth';
+export const GetTransactionsRequestValidation = z.any();
+
+export async function getTransactionApiHandler(_: void, claims: Claims) {
+  return await db().transaction.fromUser(claims.userId);
+}
+
+export default withMiddleware(
+  getTransactionApiHandler,
+  GetTransactionsRequestValidation
+);

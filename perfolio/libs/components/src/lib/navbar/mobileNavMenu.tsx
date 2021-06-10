@@ -1,9 +1,9 @@
-import { Disclosure, Transition } from "@headlessui/react"
-import { ChevronUpIcon } from "@heroicons/react/outline"
-import Link from "next/link"
-import cn from "classnames"
-import React from "react"
-import { MenuProps } from "./types"
+import { Disclosure, Transition } from '@headlessui/react';
+import { ChevronUpIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
+import cn from 'classnames';
+import React from 'react';
+import { MenuProps } from './types';
 
 export const MobileNavMenu: React.FC<MenuProps> = ({
   label,
@@ -22,8 +22,8 @@ export const MobileNavMenu: React.FC<MenuProps> = ({
                   <p className="cursor-pointer">{label}</p>
                 </a>
                 <ChevronUpIcon
-                  className={cn("w-5 h-5 transform duration-100", {
-                    "-rotate-180": open,
+                  className={cn('w-5 h-5 transform duration-100', {
+                    '-rotate-180': open,
                   })}
                 />
               </Disclosure.Button>
@@ -50,5 +50,5 @@ export const MobileNavMenu: React.FC<MenuProps> = ({
         </Disclosure>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -18,7 +18,7 @@ export class Transaction extends Document<z.infer<typeof Transaction.schema>> {
       /**
        * Isin for stock assets
        */
-      assetId: z.string(),
+      assetId: z.string().regex(/[A-Z]{2}[a-zA-Z0-9]{10}/, 'Invalid isin'),
       userId: z.string(),
       volume: z.number(),
       value: z.number().positive(),

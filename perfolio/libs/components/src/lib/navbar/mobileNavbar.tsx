@@ -1,23 +1,23 @@
-import React, { useState } from "react"
-import { MobileNavLink } from "./mobileNavLink"
-import { MobileNavMenu } from "./mobileNavMenu"
-import { NavbarProps } from "./types"
+import React, { useState } from 'react';
+import { MobileNavLink } from './mobileNavLink';
+import { MobileNavMenu } from './mobileNavMenu';
+import { NavbarProps } from './types';
 import {
   BellIcon,
   DotsVerticalIcon,
   XIcon,
   LogoutIcon,
-} from "@heroicons/react/outline"
-import { Logo } from "../logo/logo"
-import { Transition } from "@headlessui/react"
-import {useAuth} from "@perfolio/auth"
+} from '@heroicons/react/outline';
+import { Logo } from '../logo/logo';
+import { Transition } from '@headlessui/react';
+import { useAuth } from '@perfolio/auth';
 
-import { Link } from "../clickable"
-import { AdjustmentsIcon } from "@heroicons/react/solid"
-import { ThemeSwitch } from "../switch/themeSwitch"
+import { Link } from '../clickable';
+import { AdjustmentsIcon } from '@heroicons/react/solid';
+import { ThemeSwitch } from '../switch/themeSwitch';
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
-  const [open, setOpen] = useState(false)
-  const {signout} = useAuth()
+  const [open, setOpen] = useState(false);
+  const { signout } = useAuth();
 
   return (
     <nav className="flex items-center justify-between w-full">
@@ -82,5 +82,5 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         </Transition>
       </div>
     </nav>
-  )
-}
+  );
+};

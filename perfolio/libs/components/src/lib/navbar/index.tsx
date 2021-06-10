@@ -1,2 +1,2 @@
-export * from "./desktopNavbar"
-export * from "./mobileNavbar"
+export * from './desktopNavbar';
+export * from './mobileNavbar';

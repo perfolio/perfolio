@@ -1,10 +1,10 @@
-import React, { useState } from "react"
-import { SunIcon, MoonIcon } from "@heroicons/react/solid"
-import { useTheme } from "next-themes"
+import React, { useState } from 'react';
+import { SunIcon, MoonIcon } from '@heroicons/react/solid';
+import { useTheme } from 'next-themes';
 
 export const ThemeSwitch: React.FC = (): JSX.Element => {
-  const [darkMode, setDarkMode] = useState(false)
-  const { setTheme } = useTheme()
+  const [darkMode, setDarkMode] = useState(false);
+  const { setTheme } = useTheme();
   return (
     <button
       type="button"
@@ -12,8 +12,8 @@ export const ThemeSwitch: React.FC = (): JSX.Element => {
         /**
          * If currently in darkmode, set to light.
          */
-        setTheme(darkMode ? "light" : "dark")
-        setDarkMode(!darkMode)
+        setTheme(darkMode ? 'light' : 'dark');
+        setDarkMode(!darkMode);
       }}
       className="w-6 h-6 focus:outline-none"
     >
@@ -25,5 +25,5 @@ export const ThemeSwitch: React.FC = (): JSX.Element => {
         )}
       </span>
     </button>
-  )
-}
+  );
+};

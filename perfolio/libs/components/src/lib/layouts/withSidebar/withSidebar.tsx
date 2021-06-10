@@ -1,10 +1,10 @@
-import React from "react"
-import { Header } from "../../header/header"
+import React from 'react';
+import { Header } from '../../header/header';
 // import { Profile } from "../profile/profile"
 
 export interface WithSidebarProps {
-  title: string
-  sidebar?: React.ReactNode | React.ReactNodeArray
+  title: string;
+  sidebar?: React.ReactNode | React.ReactNodeArray;
 }
 
 /**
@@ -18,7 +18,7 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
   return (
     <>
       <div className="h-60">
-         <Header />
+        <Header />
       </div>
       <div className="px-4 xl:px-0 dark:bg-gray-800">
         <div className="container mx-auto ">
@@ -43,5 +43,5 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};

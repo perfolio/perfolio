@@ -67,6 +67,6 @@ export function getTokenFromCookies(
       : (arg0 as GetServerSidePropsContext).req.cookies;
 
   const token = cookies[TOKEN_NAME];
- 
+
   return token;
 }

@@ -41,7 +41,7 @@ export class RefreshToken extends Document<
       const res = await client.query<
         QueryResponse<z.infer<typeof RefreshToken.schema>>
       >(q.Get(q.Match(q.Index(this.index.byHash), token)));
-      console.log({res})
+      console.log({ res });
       if (res === null) {
         return null;
       }

@@ -1,9 +1,9 @@
-import React from "react"
+import React from 'react';
 
 export interface NavLinkProps {
-  label: string
-  prefix?: React.ReactNode
-  postfix?: React.ReactNode
+  label: string;
+  prefix?: React.ReactNode;
+  postfix?: React.ReactNode;
 }
 
 export const NavLink: React.FC<NavLinkProps> = ({
@@ -17,5 +17,5 @@ export const NavLink: React.FC<NavLinkProps> = ({
       <span>{label}</span>
       <div className="w-5 h-5">{postfix}</div>
     </div>
-  )
-}
+  );
+};

@@ -45,8 +45,8 @@ async function signup(
   password: string,
   ctx: IAuthContext
 ): Promise<void> {
-  console.log({username})
- await request({
+  console.log({ username });
+  await request({
     token: ctx.getToken(),
     path: '/api/auth/signup',
     body: {
@@ -55,7 +55,7 @@ async function signup(
       password,
     },
   });
-  return signin(email, password,ctx)
+  return signin(email, password, ctx);
 }
 
 async function signin(
@@ -82,7 +82,7 @@ async function signin(
  */
 async function signout(ctx: IAuthContext) {
   await request({ token: ctx.getToken(), path: '/api/auth/signout' });
-  ctx.setToken(undefined)
+  ctx.setToken(undefined);
 }
 
 /**
@@ -121,7 +121,8 @@ export function useAuth(): AuthHook {
     isAuthenticated,
     signin: (username: string, password: string) =>
       signin(username, password, ctx),
-      signup:(email:string,username:string,password:string) => signup(email,username,password, ctx),
+    signup: (email: string, username: string, password: string) =>
+      signup(email, username, password, ctx),
     signout: () => signout(ctx),
   };
 }

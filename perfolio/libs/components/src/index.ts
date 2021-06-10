@@ -4,4 +4,4 @@ export * from './lib/clickable/link';
 export * from './lib/logo/logo';
 export * from './lib/spinner/spinner';
 export * from './lib/form/index';
-export * from "./lib/layouts/withSidebar/withSidebar"
+export * from './lib/layouts/withSidebar/withSidebar';

@@ -1,7 +1,7 @@
-import React from "react"
-import Link from "next/link"
+import React from 'react';
+import Link from 'next/link';
 
-import { NavLinkProps } from "./types"
+import { NavLinkProps } from './types';
 export const MobileNavLink: React.FC<NavLinkProps> = ({
   href,
   label,
@@ -14,5 +14,5 @@ export const MobileNavLink: React.FC<NavLinkProps> = ({
         <p className="cursor-pointer">{label}</p>
       </a>
     </Link>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import { Logo } from "@perfolio/components";
+import { Logo } from '@perfolio/components';
 import React from 'react';
 
 export interface AuthPageTemplateProps {

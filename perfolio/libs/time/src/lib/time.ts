@@ -1,33 +1,33 @@
 export class Time {
-  public readonly day: number
-  public readonly month: number
-  public readonly year: number
+  public readonly day: number;
+  public readonly month: number;
+  public readonly year: number;
 
   constructor(year: number, month: number, day: number) {
-    this.day = day
-    this.month = month
-    this.year = year
+    this.day = day;
+    this.month = month;
+    this.year = year;
   }
   /**
    * Returns a unix timestamp with second precission.
    */
   public unix(): number {
-    return Math.floor(this.toDate().getTime() / 1000)
+    return Math.floor(this.toDate().getTime() / 1000);
   }
   public static fromDate(d: Date): Time {
-    return new Time(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate())
+    return new Time(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate());
   }
   public toDate(): Date {
-    const padded = this.pad()
+    const padded = this.pad();
     return new Date(
-      `${padded.year}-${padded.month}-${padded.day}T00:00:00+0000`,
-    )
+      `${padded.year}-${padded.month}-${padded.day}T00:00:00+0000`
+    );
   }
   /**
    * From unix timestamp with second precision.
    */
   public static fromTimestamp(n: number): Time {
-    return Time.fromDate(new Date(n * 1000))
+    return Time.fromDate(new Date(n * 1000));
   }
 
   /**.
@@ -37,29 +37,29 @@ export class Time {
    */
   public pad(): { year: string; month: string; day: string } {
     return {
-      year: this.year.toString().padStart(4, "0"),
-      month: this.month.toString().padStart(2, "0"),
-      day: this.day.toString().padStart(2, "0"),
-    }
+      year: this.year.toString().padStart(4, '0'),
+      month: this.month.toString().padStart(2, '0'),
+      day: this.day.toString().padStart(2, '0'),
+    };
   }
   /**
    * Return a new Time instance where 1 day has been added.
    */
   public nextDay(): Time {
     return Time.fromTimestamp(
-      Math.floor(this.toDate().getTime() / 1000) + 24 * 60 * 60,
-    )
+      Math.floor(this.toDate().getTime() / 1000) + 24 * 60 * 60
+    );
   }
 
   public toString(): string {
-    const padded = this.pad()
-    return `${padded.day}-${padded.month}-${padded.year}`
+    const padded = this.pad();
+    return `${padded.day}-${padded.month}-${padded.year}`;
   }
   /**
    * Create a new Time instance initialized to the time right now.
    */
   public static today(): Time {
-    return Time.fromDate(new Date())
+    return Time.fromDate(new Date());
   }
 
   /**
@@ -70,11 +70,11 @@ export class Time {
       this.day === other.day &&
       this.month === other.month &&
       this.year === other.year
-    )
+    );
   }
 
   public toJson(): number {
-    return this.unix()
+    return this.unix();
   }
 
   /**
@@ -82,23 +82,23 @@ export class Time {
    * @param unix - Second precision
    */
   public static ago(unix: number): string {
-    const SECOND = 1
-    const MINUTE = 60 * SECOND
-    const HOUR = 60 * MINUTE
-    const DAY = 24 * HOUR
-    const YEAR = 365 * DAY
+    const SECOND = 1;
+    const MINUTE = 60 * SECOND;
+    const HOUR = 60 * MINUTE;
+    const DAY = 24 * HOUR;
+    const YEAR = 365 * DAY;
 
-    const diff = Date.now() / 1000 - unix
+    const diff = Date.now() / 1000 - unix;
     if (diff < MINUTE) {
-      return `${diff.toFixed(0)}s ago`
+      return `${diff.toFixed(0)}s ago`;
     } else if (diff < HOUR) {
-      return `${(diff / MINUTE).toFixed(0)} minutes ago`
+      return `${(diff / MINUTE).toFixed(0)} minutes ago`;
     } else if (diff < DAY) {
-      return `${(diff / HOUR).toFixed(0)} hours ago`
+      return `${(diff / HOUR).toFixed(0)} hours ago`;
     } else if (diff < YEAR) {
-      return `${(diff / DAY).toFixed(0)} days ago`
+      return `${(diff / DAY).toFixed(0)} days ago`;
     } else {
-      return `${(diff / YEAR).toFixed()} years ago`
+      return `${(diff / YEAR).toFixed()} years ago`;
     }
   }
 }

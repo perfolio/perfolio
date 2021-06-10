@@ -3,12 +3,10 @@ import { z } from 'zod';
 import { db, RefreshToken } from '@perfolio/db';
 import { JWT, getTokenFromCookies } from '@perfolio/auth';
 import { createHmac } from 'crypto';
-import { Logger } from 'tslog';
 const refresh = async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
-  const logger = new Logger({ name: 'api/auth/refresh' });
   try {
     await z
       .object({
@@ -38,7 +36,7 @@ const refresh = async (
       throw new Error(`No refresh token found, please log in again`);
     }
 
-    const user = await db.user.fromId(refreshToken.data.userId);
+    const user = await db().user.fromId(refreshToken.data.userId);
     if (!user) {
       res.status(500);
       throw new Error(`No user found, please create an account`);
@@ -51,7 +49,7 @@ const refresh = async (
 
     res.json({ accessToken });
   } catch (err) {
-    logger.error(err.message);
+    console.error(err.message);
   } finally {
     res.end();
   }

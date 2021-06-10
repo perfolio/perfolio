@@ -19,7 +19,7 @@ const signin = async (
   const newRefreshToken = uuid();
   await db().refreshToken.create({
     userId: user.id,
-    hashedToken: createHmac('sha256', newRefreshToken).digest("hex").toString(),
+    hashedToken: createHmac('sha256', newRefreshToken).digest('hex').toString(),
     expiresAt: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 days
   });
 

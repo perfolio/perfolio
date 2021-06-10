@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LabeledTextField, Form, FORM_ERROR } from '@perfolio/components';
+import { LabeledField, Form, FORM_ERROR } from '@perfolio/components';
 
 import { z } from 'zod';
 import { LockClosedIcon, MailIcon } from '@heroicons/react/outline';
@@ -12,32 +12,30 @@ export const Signin = z.object({
   password: z.string().min(8).max(128),
 });
 export const SigninForm = (props: SigninFormProps) => {
-  const {signin} = useAuth()
+  const { signin } = useAuth();
   return (
     <div>
       <Form
         submitText="Signin"
         schema={Signin}
         initialValues={{ email: '', password: '' }}
-        onSubmit={async ({email,password}) => {
+        onSubmit={async ({ email, password }) => {
           try {
-            console.log("Hello")
-            await signin(email,password);
+            console.log('Hello');
+            await signin(email, password);
             props.onSuccess?.();
           } catch (error) {
-
-              return {
-                [FORM_ERROR]:
-                  'Sorry, we had an unexpected error. Please try again. - ' +
-                  error.toString(),
-              };
-
+            return {
+              [FORM_ERROR]:
+                'Sorry, we had an unexpected error. Please try again. - ' +
+                error.toString(),
+            };
           }
-          return
+          return;
         }}
       >
-        <LabeledTextField name="email" label="Email" iconLeft={<MailIcon />} />
-        <LabeledTextField
+        <LabeledField name="email" label="Email" iconLeft={<MailIcon />} />
+        <LabeledField
           name="password"
           label="Password"
           type="password"

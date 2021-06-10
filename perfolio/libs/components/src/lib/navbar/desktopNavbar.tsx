@@ -1,17 +1,21 @@
-import React from "react"
-import { NavbarProps } from "./types"
-import { DesktopNavMenu } from "./desktopNavMenu"
-import { DesktopNavLink } from "./desktopNavLink"
-import { ThemeSwitch } from "../switch/themeSwitch"
-import { Logo } from "../logo/logo"
-import {useAuth} from "@perfolio/auth"
-import { BellIcon, AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
-import Link from "next/link"
+import React from 'react';
+import { NavbarProps } from './types';
+import { DesktopNavMenu } from './desktopNavMenu';
+import { DesktopNavLink } from './desktopNavLink';
+import { ThemeSwitch } from '../switch/themeSwitch';
+import { Logo } from '../logo/logo';
+import { useAuth } from '@perfolio/auth';
+import {
+  BellIcon,
+  AdjustmentsIcon,
+  LogoutIcon,
+} from '@heroicons/react/outline';
+import Link from 'next/link';
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({
   items,
 }): JSX.Element => {
-  const {signout} = useAuth()
+  const { signout } = useAuth();
 
   return (
     <nav className="w-full">
@@ -74,5 +78,5 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({
         </li>
       </ul>
     </nav>
-  )
-}
+  );
+};

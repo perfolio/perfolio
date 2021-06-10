@@ -5,8 +5,8 @@ const ERROR_AUTH_PROVIDER_NOT_INITIALIZED = new Error(
 );
 
 export interface IAuthContext {
-  setToken: (token: string|undefined) => void;
-  getToken: () => string | undefined
+  setToken: (token: string | undefined) => void;
+  getToken: () => string | undefined;
 }
 
 /**

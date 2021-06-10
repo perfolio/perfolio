@@ -20,7 +20,8 @@
       "@perfolio/auth": ["libs/auth/src/index.tsx"],
       "@perfolio/components": ["libs/components/src/index.ts"],
       "@perfolio/api": ["libs/api/src/index.ts"],
-      "@perfolio/time": ["libs/time/src/index.ts"]
+      "@perfolio/time": ["libs/time/src/index.ts"],
+      "@perfolio/iexcloud": ["libs/iexcloud/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

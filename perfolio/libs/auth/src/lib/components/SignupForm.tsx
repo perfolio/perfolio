@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LabeledTextField, Form, FORM_ERROR } from '@perfolio/components';
+import { LabeledField, Form, FORM_ERROR } from '@perfolio/components';
 import { MailIcon, LockClosedIcon, UserIcon } from '@heroicons/react/outline';
 import { z } from 'zod';
 import { useAuth } from '../hooks/auth';
@@ -38,13 +38,13 @@ export const SignupForm = (props: SignupFormProps) => {
           }
         }}
       >
-        <LabeledTextField name="email" label="Email" iconLeft={<MailIcon />} />
-        <LabeledTextField
+        <LabeledField name="email" label="Email" iconLeft={<MailIcon />} />
+        <LabeledField
           name="username"
           label="Username"
           iconLeft={<UserIcon />}
         />
-        <LabeledTextField
+        <LabeledField
           name="password"
           label="Password"
           type="password"

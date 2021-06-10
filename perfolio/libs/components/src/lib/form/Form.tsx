@@ -38,6 +38,7 @@ export function Form<S extends z.ZodType<any, any>>({
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const submit = ctx.handleSubmit(async (values) => {
+    console.log('Submitting');
     setSubmitting(true);
     const result = (await onSubmit(values)) || {};
     for (const [key, value] of Object.entries(result)) {

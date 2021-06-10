@@ -6,5 +6,6 @@ module.exports = {
     '<rootDir>/libs/components',
     '<rootDir>/libs/api',
     '<rootDir>/libs/time',
+    '<rootDir>/libs/iexcloud',
   ],
 };

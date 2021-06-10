@@ -129,10 +129,9 @@ export function withAuthentication(
       request<{ accessToken: string }>({
         path: '/api/auth/refresh',
       })
-        .then(({accessToken}) => {
-
-          console.log({accessToken})
-          setToken(accessToken)
+        .then(({ accessToken }) => {
+          console.log({ accessToken });
+          setToken(accessToken);
         })
         .catch((err) => setError(err))
         .finally(() => setLoading(false));

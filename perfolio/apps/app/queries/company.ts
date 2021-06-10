@@ -1,19 +1,11 @@
-import { db } from '@perfolio/db';
-import { z } from 'zod';
-import { Company } from '@perfolio/db';
-import { request } from '../api';
-import { useAuth } from '@perfolio/auth';
+import { request } from '@perfolio/api';
 import { useQuery } from 'react-query';
-
-export const GetCompanyRequestValidation = z.object({
-  symbol: z.string(),
-});
-
-export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>;
-
-export async function getCompanyApiHandler({ symbol }: GetCompanyRequest) {
-  return await db().company.fromSymbol(symbol);
-}
+import {
+  GetCompanyRequest,
+  GetCompanyRequestValidation,
+} from '../pages/api/companies/getCompany';
+import { Company } from '@perfolio/db';
+import { useAuth } from '@perfolio/auth';
 
 export function useCompany(req: GetCompanyRequest) {
   const { getToken } = useAuth();

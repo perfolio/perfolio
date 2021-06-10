@@ -1,12 +1,11 @@
-import { NextPage} from "next"
-import { WithSidebar } from "@perfolio/components"
-import { withAuthentication } from "@perfolio/auth"
+import { NextPage } from 'next';
+import { WithSidebar } from '@perfolio/components';
+import { withAuthentication } from '@perfolio/auth';
 // import { AssetsOverTimeChart } from "app/charts/components/assetsOverTime/assetsOverTime"
 // import { usePortfolio } from "app/holdings/hooks/usePortfolio"
 // import { DiversityChart } from "app/charts/components/diversityChart/diversityChart"
 // import { ActivityFeed } from "app/core/components/activity/activityFeed"
 // import { AssetTable } from "app/core/components"
-
 
 const App: NextPage = () => {
   // const { portfolio } = usePortfolio()
@@ -23,9 +22,7 @@ const App: NextPage = () => {
         <>
           <div className="w-full md:w-full sm:w-1/2">
             <p className="text-base font-semibold text-gray-800">Diversity</p>
-            <div className="h-52">
-              {/* <DiversityChart /> */}
-            </div>
+            <div className="h-52">{/* <DiversityChart /> */}</div>
           </div>
           <div className="w-full md:w-full sm:w-1/2">
             {/* <ActivityFeed /> */}
@@ -81,6 +78,6 @@ const App: NextPage = () => {
         {/* <AssetTable /> */}
       </div>
     </WithSidebar>
-  )
-}
-export default withAuthentication(App)
+  );
+};
+export default withAuthentication(App);

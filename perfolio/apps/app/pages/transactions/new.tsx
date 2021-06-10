@@ -1,5 +1,9 @@
 import React from 'react';
+import { z } from 'zod';
 import {
+  LabeledField,
+  Form,
+  FORM_ERROR,
   Button,
   WithSidebar,
   Radio,
@@ -15,12 +19,13 @@ import { NextPage } from 'next';
 import { Transaction } from '@perfolio/db';
 import {
   useTransactions,
-  useCreateTransaction,
   usePrice,
   useCompany,
   useSymbol,
-} from '@perfolio/api';
+} from '../../queries';
+import { useCreateTransaction } from '../../mutations';
 import { withAuthentication } from '@perfolio/auth';
+
 const Suggestion: React.FC<{
   tx: Transaction;
   setValue: (key: 'isin', val: string) => void;
@@ -93,7 +98,7 @@ const NewTransactionPage: NextPage = () => {
 
   const { mutateAsync: createTransaction } = useCreateTransaction();
   const { data: transactions } = useTransactions();
-  console.log({transactions})
+  console.log({ transactions });
   const uniqueAssets: Record<string, Transaction> = {};
   transactions
     ?.sort((a, b) => b.ts - a.ts)
@@ -105,11 +110,6 @@ const NewTransactionPage: NextPage = () => {
   const data = watch();
   const { data: symbol } = useSymbol({ isin: data.isin });
 
-  const { data: price, isLoading: priceLoading } = usePrice({
-    symbol: symbol?.data.symbol,
-    time: data.date ? Time.fromDate(new Date(data.date)).unix() : undefined,
-  });
-
   const { data: company, isLoading: companyLoading } = useCompany({
     symbol: symbol?.data.symbol,
   });
@@ -118,15 +118,42 @@ const NewTransactionPage: NextPage = () => {
     <WithSidebar title="Add a transaction" sidebar={null}>
       <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
         <div className="w-full">
-          <form className="flex flex-col py-6 space-y-4">
-            {/* <Radio
-              updateValue={(buy) => setValue('buy', buy)}
-              options={['Buy', 'Sell']}
-            /> */}
-            <Input
-              type="text"
+          <Form
+            submitText="Add Transaction"
+            /**
+             * HTML input elements return a string, if not using `valueAsNumber`
+             * Since that is non trivial to do with the current setup, we let zod transform
+             * the data.
+             */
+            schema={z.object({
+              assetId: z
+                .string()
+                .regex(/[A-Z]{2}[a-zA-Z0-9]{10}/, 'This is not a valid isin.'),
+              volume: z.string().transform((x: string) => parseInt(x)),
+              value: z.string().transform((x: string) => parseInt(x)),
+              executedAt: z
+                .string()
+                .transform((x: string) => Time.fromDate(new Date(x)).unix()),
+            })}
+            // initialValues={{assetId: "", executedAt: Time.today().unix()}}
+            onSubmit={async (tx) => {
+              console.log({ tx });
+              try {
+                console.log('Hello');
+                await createTransaction(tx);
+              } catch (error) {
+                return {
+                  [FORM_ERROR]:
+                    'Sorry, we had an unexpected error. Please try again. - ' +
+                    error.toString(),
+                };
+              }
+              return;
+            }}
+          >
+            <LabeledField
+              name="assetId"
               label="Isin"
-              placeholder="US0123456789"
               iconLeft={
                 company ? (
                   <Image
@@ -139,73 +166,33 @@ const NewTransactionPage: NextPage = () => {
                   <Spinner />
                 ) : null
               }
-              register={register('isin', {
-                required: 'What did you buy or sell?',
-
-                pattern: {
-                  value: /[A-Z]{2}[a-zA-Z0-9]{10}/,
-                  message: 'Please enter a valid isin',
-                },
-              })}
-              error={errors.isin?.message}
             />
-
-            <Input
-              type="date"
+            <LabeledField
+              name="executedAt"
               label="Date of transaction"
-              register={register('date', {
-                required: `When did you ${data.buy ? 'buy' : 'sell'}?`,
-              })}
-              error={errors.date?.message}
+              type="date"
+              // iconLeft={<MailIcon />}
             />
 
             <div className="grid grid-cols-2 gap-2">
-              <Input
+              <LabeledField
+                name="volume"
+                label="How many shares"
                 type="number"
-                label="How many shares?"
-                register={register('shares', {
-                  required: `How many shares did you ${
-                    data.buy ? 'buy' : 'sell'
-                  }?`,
-                })}
-                error={errors.shares?.message}
+                // iconLeft={<LockClosedIcon />}
               />
-              <Value
-                label="Price per share"
-                value={
-                  price && price.data.value > 0
-                    ? price.data.value.toFixed(2)
-                    : ''
-                }
-                tooltip="Automatically fetched when all data is entered correctly"
+              <LabeledField
+                name="value"
+                label="Cost per share"
+                type="number"
                 iconLeft={
-                  price ? (
-                    <div className="flex items-center justify-center w-full h-full">
-                      <span className="font-medium text-gray-700">$</span>
-                    </div>
-                  ) : priceLoading ? (
-                    <Spinner />
-                  ) : null
+                  <div className="flex items-center justify-center w-full h-full">
+                    <span className="font-medium text-gray-700">$</span>
+                  </div>
                 }
               />
             </div>
-            <AsyncButton
-              size="auto"
-              kind="primary"
-              label="Add Transaction"
-              onClick={handleSubmit(async (data: FormData) => {
-                if (!price) {
-                  throw new Error('Wait for price to load');
-                }
-                await createTransaction({
-                  assetId: data.isin.trim(),
-                  volume: data.shares * (data.buy ? 1 : -1),
-                  value: price.data.value,
-                  executedAt: Time.fromDate(new Date(data.date)).unix(),
-                });
-              })}
-            />
-          </form>
+          </Form>
         </div>
         <div className="w-full">
           <div className="flex items-center justify-between px-6 py-6">

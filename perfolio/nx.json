@@ -43,6 +43,9 @@
     },
     "time": {
       "tags": []
+    },
+    "iexcloud": {
+      "tags": []
     }
   }
 }
