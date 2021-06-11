@@ -2,7 +2,6 @@
 const withNx = require("@nrwl/next/plugins/with-nx")
 
 module.exports = withNx({
-  target: 'experimental-serverless-trace',
   nx: {
     // Set this to false if you do not want to use SVGR
     // See: https://github.com/gregberge/svgr
