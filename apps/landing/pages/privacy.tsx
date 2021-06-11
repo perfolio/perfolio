@@ -1,9 +1,8 @@
 import React from "react"
-import { Section } from "app/core/components"
-import { Navbar } from "../components/navbar"
-import { BlitzPage } from "@blitzjs/core"
+import { Navbar,Section } from "../components"
+import { NextPage } from "next"
 
-export const Privacy: BlitzPage = () => {
+export const Privacy: NextPage = () => {
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
