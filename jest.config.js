@@ -7,5 +7,7 @@ module.exports = {
     "<rootDir>/libs/api",
     "<rootDir>/libs/time",
     "<rootDir>/libs/iexcloud",
+    "<rootDir>/apps/landing",
+    "<rootDir>/libs/email",
   ],
 }
