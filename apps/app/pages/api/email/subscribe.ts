@@ -1,8 +1,5 @@
 import { withMiddleware } from "@perfolio/api"
-import { db } from "@perfolio/db"
 import { z } from "zod"
-import { getPrice } from "@perfolio/iexcloud"
-import { Time } from "@perfolio/time"
 
 export const SubscribeRequestValidation = z.object({
   email: z.string().email(),

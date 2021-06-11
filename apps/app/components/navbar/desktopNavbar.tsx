@@ -26,7 +26,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
                   {item.menu ? (
                     <DesktopNavMenu label={item.label} icon={item.icon} menu={item.menu} />
                   ) : (
-                    <DesktopNavLink href={item.href!} label={item.label} icon={item.icon} />
+                    <DesktopNavLink href={item.href ?? ""} label={item.label} icon={item.icon} />
                   )}
                 </li>
               ))}

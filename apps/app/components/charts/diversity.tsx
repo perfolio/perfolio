@@ -1,6 +1,6 @@
-import React from "react"
-import { PieChart, Cell, Pie, ResponsiveContainer } from "recharts"
-
+import { usePortfolio } from "../../queries"
+import React, { useState } from "react"
+import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 const data = [
   "Energy",
   "Materials",
@@ -38,32 +38,90 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
     </text>
   )
 }
+
+const renderActiveShape = ({
+  cx,
+  cy,
+  name,
+  innerRadius,
+  outerRadius,
+  startAngle,
+  endAngle,
+  fill,
+  percent,
+}: any) => {
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={innerRadius - 7}
+        outerRadius={innerRadius - 5}
+        fill={fill}
+      />
+      <defs>
+        <filter x="0" y="0" width="1" height="1" id="solid">
+          <feFlood floodColor="white" result="bg" />
+          <feMerge>
+            <feMergeNode in="bg" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <text filter="url(#solid)" x={cx} y={cy} dy={16} className="text-sm" textAnchor="middle">
+        {data[name].sector}
+      </text>
+      <text x={cx} y={cy} dy={-2} textAnchor="middle" className="text-4xl font-semibold">
+        {(percent * 100).toFixed(0)}%
+      </text>
+    </g>
+  )
+}
+const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
+  () => Math.random() - 0.5,
+)
 export const DiversityChart: React.FC = (): JSX.Element => {
-  const COLORS = [
-    "#E5E0F8",
-    "#A498D8",
-    "#49407D",
-    "#362E6B",
-    "#262059",
-    "#191448",
-    "#100C3B",
-  ].reverse()
+  const { portfolio } = usePortfolio()
+  console.log({ portfolio })
+
+  const [activeIndex, setActiveIndex] = useState(-1)
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <PieChart width={400} height={400}>
+      <PieChart>
         <Pie
-          label={renderLabel}
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
           data={data}
+          paddingAngle={1}
           cx="50%"
           cy="50%"
-          innerRadius={50}
-          outerRadius={70}
-          labelLine={false}
-          fill="#8884d8"
+          innerRadius="80%"
+          outerRadius="100%"
           dataKey="value"
+          onMouseEnter={(_, index) => setActiveIndex(index)}
+          onMouseLeave={(e) =>
+            setTimeout(() => {
+              /**
+               * Do not remove the tooltip if the user has hovered a different part
+               */
+              if (e.name === activeIndex) {
+                setActiveIndex(-1)
+              }
+            }, 300)
+          }
         >
-          {" "}
           {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}

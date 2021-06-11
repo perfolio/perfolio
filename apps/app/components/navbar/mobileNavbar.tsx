@@ -37,7 +37,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                 {item.menu ? (
                   <MobileNavMenu label={item.label} icon={item.icon} menu={item.menu} />
                 ) : (
-                  <MobileNavLink href={item.href!} label={item.label} icon={item.icon} />
+                  <MobileNavLink href={item.href ?? "/"} label={item.label} icon={item.icon} />
                 )}
               </li>
             ))}
