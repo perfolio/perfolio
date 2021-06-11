@@ -13,7 +13,7 @@ module.exports = {
           "errors-in-console": ["off"],
           "no-vulnerable-libraries": ["off"],
           "non-composited-animations": ["off"],
-          "categories:accessibility": ["error", { minScore: 1.0 }],
+          "categories:accessibility": ["error", { minScore: 0.7 }],
           "categories:best-practices": ["error", { minScore: 0.85 }],
           "categories:seo": ["error", { minScore: 0.9 }],
         },
