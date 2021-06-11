@@ -92,6 +92,7 @@
     "eslint-plugin-react": "7.23.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "fauna-schema-migrate": "^2.1.2",
+    "husky": "^6.0.0",
     "jest": "26.2.2",
     "postcss": "^8.3.1",
     "prettier": "2.2.1",
