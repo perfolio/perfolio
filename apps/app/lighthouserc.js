@@ -14,7 +14,7 @@ module.exports = {
           "no-vulnerable-libraries": ["off"],
           "non-composited-animations": ["off"],
           "categories:accessibility": ["error", { minScore: 0.7 }],
-          "categories:best-practices": ["error", { minScore: 0.85 }],
+          "categories:best-practices": ["error", { minScore: 0.7 }],
           "categories:seo": ["error", { minScore: 0.9 }],
         },
       },
