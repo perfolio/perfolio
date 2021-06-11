@@ -74,9 +74,6 @@ jobs:
           version: latest
           run_install: true
 
-      - name: Build
-        run: pnpm nx build ${{ matrix.app }}
-
       - name: run Lighthouse CI
         run: pnpm nx run ${{ matrix.app }}:lhci
         env:
