@@ -21,15 +21,15 @@ const App: NextPage = () => {
     <WithSidebar
       title="Overview"
       sidebar={
-        <>
-          <div className="w-full md:w-full sm:w-1/2">
+        <div className="flex flex-col divide-y">
+          <div className="w-full pb-4 md:w-full sm:w-1/2">
             <p className="text-base font-semibold text-gray-800">Diversity</p>
-            <div className="h-52">{<DiversityChart />}</div>
+            <div className="w-full h-60">{<DiversityChart />}</div>
           </div>
-          <div className="w-full md:w-full sm:w-1/2">
+          <div className="w-full py-4 md:w-full sm:w-1/2">
             <ActivityFeed />
           </div>
-        </>
+        </div>
       }
     >
       <div className="py-4 sm:py-6 md:py-8">

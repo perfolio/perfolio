@@ -4,7 +4,7 @@ import { NavLink } from "./navLink"
 import { NavLinkProps } from "./types"
 export const DesktopNavLink: React.FC<NavLinkProps> = ({ href, label, icon }): JSX.Element => {
   return (
-    <Link href={href}>
+    <Link href={href ?? ""}>
       <a className="focus:outline-none">
         <NavLink prefix={icon} label={label} />
       </a>
