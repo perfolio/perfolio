@@ -42,22 +42,6 @@ jobs:
         run: pnpm run tsc
 
 
-  echo-apps:
-    runs-on: ubuntu-latest
-    
-      
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Node
-        uses: actions/setup-node@v2.1.5
-        with:
-          node-version: 14
-      - name: Echo apps
-        id: set-matrix
-        run: echo "::set-output name=matrix::$(npx nx affected:apps --files=package.json --plain)"
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   lhci:
     name: Lighthouse
@@ -65,7 +49,7 @@ jobs:
     needs: echo-apps
     strategy:
       matrix:
-        app: ${{ fromJson(needs.echo-apps.outputs.matrix) }}
+        app: ["app"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
