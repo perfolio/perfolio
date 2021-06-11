@@ -1,9 +1,0 @@
-CreateIndex({
-  "name": "symbol_by_symbol",
-  "source": Collection("symbols"),
-  "terms": [{
-    "field": ["data", "symbol"]
-  }],
-  "unique": true,
-  "serialized": true
-})

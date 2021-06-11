@@ -1,6 +1,6 @@
 module.exports = {
   directories: {
-    root: "db",
+    root: "libs/db/src",
     resources: "resources",
     migrations: "migrations",
     children: "dbs",

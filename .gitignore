@@ -1,53 +1,14 @@
-# dependencies
+/dist
+/tmp
+/out-tsc
+
 node_modules
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.pnp.*
-.npm
-web_modules/
 
-# blitz
-/.blitz/
-/.next/
-*.sqlite
-*.sqlite-journal
-.now
-.blitz-console-history
-blitz-log.log
+.vscode/*
 
-# misc
-.DS_Store
+/ccoverage
+yarn-error.log
 
-# local env files
 .env*
-
-# Logs
-logs
-*.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Testing
-.coverage
-*.lcov
-.nyc_output
-lib-cov
-
-# Caches
-*.tsbuildinfo
-.eslintcache
-.node_repl_history
-.yarn-integrity
-
-# Serverless directories
-.serverless/
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-.lighthouseci
+.next/
+.vercel
