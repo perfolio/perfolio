@@ -1,11 +1,8 @@
 {
   "name": "perfolio",
-  "version": "0.0.0",
-  "license": "MIT",
+  "version": "0.0.0"
   "scripts": {
-    "nx": "nx",
-    "start": "nx serve",
-    "build": "nx build",
+    "build": "nx run-many --target=build",
     "test": "nx test",
     "fmt": "yarn lint && yarn format",
     "lint": "nx workspace-lint && nx lint",
