@@ -1,5 +1,5 @@
 import React from "react"
-import {Navbar, Section } from "../components"
+import { Navbar, Section } from "../components"
 import { NextPage } from "next"
 
 export const Imprint: NextPage = () => {
