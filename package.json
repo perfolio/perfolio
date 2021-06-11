@@ -2,9 +2,9 @@
   "name": "perfolio",
   "version": "0.0.0",
   "scripts": {
-    "build": "nx run-many --target=build",
+    "build": "nx run-many --target=build --all",
     "test": "nx test",
-    "fmt": "yarn lint && yarn format",
+    "fmt": "pnpm run lint && pnpm run format",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
@@ -33,6 +33,7 @@
     "@nrwl/next": "12.3.6",
     "@radix-ui/react-tooltip": "^0.0.18",
     "classnames": "^2.3.1",
+    "cookie": "^0.4.1",
     "core-js": "^3.6.5",
     "document-register-element": "1.13.1",
     "faunadb": "^4.3.0",
@@ -48,6 +49,7 @@
     "tslib": "^2.0.0",
     "tslog": "^3.2.0",
     "use-local-storage-state": "^10.0.0",
+    "uuid": "^8.3.2",
     "zod": "^3.1.0"
   },
   "devDependencies": {
@@ -55,6 +57,7 @@
     "@babel/preset-env": "7.12.13",
     "@babel/preset-react": "7.12.13",
     "@babel/preset-typescript": "7.12.13",
+    "@fauna-labs/fauna-schema-migrate": "^2.1.2",
     "@lhci/cli": "^0.8.0",
     "@nrwl/cli": "^12.3.6",
     "@nrwl/cypress": "12.3.6",
@@ -88,7 +91,6 @@
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.23.1",
     "eslint-plugin-react-hooks": "4.2.0",
-    "fauna-schema-migrate": "^2.1.2",
     "husky": "^6.0.0",
     "jest": "26.2.2",
     "postcss": "^8.3.1",
