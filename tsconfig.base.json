@@ -16,7 +16,6 @@
     "skipDefaultLibCheck": true,
     "jsx": "preserve",
     "types": ["jest", "node", "cypress"],
-
     "strictNullChecks": true,
     "noEmit": true,
     "baseUrl": ".",
@@ -26,7 +25,8 @@
       "@perfolio/components": ["libs/components/src/index.ts"],
       "@perfolio/api": ["libs/api/src/index.ts"],
       "@perfolio/time": ["libs/time/src/index.ts"],
-      "@perfolio/iexcloud": ["libs/iexcloud/src/index.ts"]
+      "@perfolio/iexcloud": ["libs/iexcloud/src/index.ts"],
+      "@perfolio/email": ["libs/email/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

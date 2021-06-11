@@ -49,14 +49,14 @@
         },
         "lhci": {
           "executor": "@nrwl/workspace:run-commands",
-              "options": {
-              "commands": [
-                  {
-                      "command": "pnpm nx build app && pnpm lhci autorun --config=./apps/app/lighthouserc.js"
-                  }
-              ]
+          "options": {
+            "commands": [
+              {
+                "command": "pnpm nx build app && pnpm lhci autorun --config=./apps/app/lighthouserc.js"
+              }
+            ]
           }
-      },
+        },
         "export": {
           "executor": "@nrwl/next:export",
           "options": {
@@ -226,6 +226,114 @@
           "outputs": ["coverage/libs/iexcloud"],
           "options": {
             "jestConfig": "libs/iexcloud/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "landing": {
+      "root": "apps/landing",
+      "sourceRoot": "apps/landing",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/landing",
+            "outputPath": "dist/apps/landing"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "landing:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "landing:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "landing:build:production"
+          }
+        },
+        "lhci": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "pnpm nx build landing && pnpm lhci autorun --config=./apps/landing/lighthouserc.js"
+              }
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/landing"],
+          "options": {
+            "jestConfig": "apps/landing/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "landing-e2e": {
+      "root": "apps/landing-e2e",
+      "sourceRoot": "apps/landing-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/landing-e2e/cypress.json",
+            "tsConfig": "apps/landing-e2e/tsconfig.e2e.json",
+            "devServerTarget": "landing:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "landing:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/landing-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "email": {
+      "root": "libs/email",
+      "sourceRoot": "libs/email/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/email/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/email"],
+          "options": {
+            "jestConfig": "libs/email/jest.config.js",
             "passWithNoTests": true
           }
         }
