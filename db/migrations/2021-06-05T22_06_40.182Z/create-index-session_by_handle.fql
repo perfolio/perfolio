@@ -1,9 +1,0 @@
-CreateIndex({
-  "name": "session_by_handle",
-  "source": Collection("sessions"),
-  "terms": [{
-    "field": ["data", "handle"]
-  }],
-  "unique": true,
-  "serialized": true
-})
