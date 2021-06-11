@@ -68,11 +68,11 @@ jobs:
         with:
           version: latest
           run_install: true
-          
+
       - name: Build
         run: pnpm run build
 
       - name: run Lighthouse CI
-        run: pnpm run lhci autorun --config=./apps/app/lighthouserc.js
+        run: pnpm lhci autorun --config=./apps/app/lighthouserc.js
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
