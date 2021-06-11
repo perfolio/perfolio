@@ -1,0 +1,11 @@
+CreateIndex({
+  "name": "price_by_asset_and_time",
+  "source": Collection("prices"),
+  "terms": [{
+    "field": ["data", "asset"]
+  }, {
+    "field": ["data", "time"]
+  }],
+  "unique": true,
+  "serialized": true
+})

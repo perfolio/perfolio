@@ -1,0 +1,9 @@
+CreateIndex({
+  "name": "company_by_asset",
+  "source": Collection("companies"),
+  "terms": [{
+    "field": ["data", "asset"]
+  }],
+  "unique": true,
+  "serialized": true
+})
