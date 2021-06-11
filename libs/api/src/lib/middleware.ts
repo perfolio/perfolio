@@ -4,6 +4,7 @@ import { z } from "zod"
 export function withMiddleware<REQ, RES>(
   handler: (req: REQ, claims?: Claims) => RES,
   reqValidator: z.ZodAny,
+  requireAuth = true,
 ): NextApiHandler {
   return async (nextReq: NextApiRequest, nextRes: NextApiResponse<RES>): Promise<void> => {
     /**
@@ -24,29 +25,30 @@ export function withMiddleware<REQ, RES>(
       nextRes.end("Content type must be application/json")
       return
     }
+    let claims = {} as Claims
 
-    /**
-     * Check token is in header
-     */
-    const jwt = nextReq.headers.authorization
-    if (!jwt) {
-      nextRes.status(401)
-      nextRes.end("Not authorized: Authorization header missing")
-      return
+    if (requireAuth) {
+      /**
+       * Check token is in header
+       */
+      const jwt = nextReq.headers.authorization
+      if (!jwt) {
+        nextRes.status(401)
+        nextRes.end("Not authorized: Authorization header missing")
+        return
+      }
+
+      /**
+       * Validate token
+       */
+      try {
+        claims = JWT.verify(jwt)
+      } catch (err) {
+        nextRes.status(401)
+        nextRes.end(`Unauthorized: ${err}`)
+        return
+      }
     }
-
-    /**
-     * Validate token
-     */
-    let claims: Claims
-    try {
-      claims = JWT.verify(jwt)
-    } catch (err) {
-      nextRes.status(401)
-      nextRes.end(`Unauthorized: ${err}`)
-      return
-    }
-
     /**
      * Validate request body
      */
@@ -60,7 +62,7 @@ export function withMiddleware<REQ, RES>(
     }
 
     try {
-      const res = await handler(req, claims)
+      const res = await handler(req, requireAuth ? claims : undefined)
       nextRes.json(res ?? ({} as RES))
       nextRes.end()
     } catch (err) {
