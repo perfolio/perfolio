@@ -1,7 +1,4 @@
-.gitkeep
-.env*
-*.ico
-*.lock
-db/migrations
-.next
-.blitz
+# Add files here to ignore them from prettier formatting
+
+/dist
+/coverage

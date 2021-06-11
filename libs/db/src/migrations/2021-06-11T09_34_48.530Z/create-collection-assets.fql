@@ -1,0 +1,4 @@
+CreateCollection({
+  "name": "assets",
+  "ttl_days": 30
+})
