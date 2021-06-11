@@ -47,6 +47,16 @@
             }
           }
         },
+        "lhci": {
+          "executor": "@nrwl/workspace:run-commands",
+              "options": {
+              "commands": [
+                  {
+                      "command": "pnpm nx build app && pnpm lhci autorun --config=./apps/app/lighthouserc.js"
+                  }
+              ]
+          }
+      },
         "export": {
           "executor": "@nrwl/next:export",
           "options": {
