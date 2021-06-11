@@ -1,7 +1,6 @@
 import React from "react"
-import { Header } from "../../header/header"
-// import { Profile } from "../profile/profile"
-
+import { Header } from "../header/header"
+import { InlineTotalAssetChart } from "../charts/inlineTotalAssets"
 export interface WithSidebarProps {
   title: string
   sidebar?: React.ReactNode | React.ReactNodeArray
@@ -34,7 +33,9 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
               </div>
             </div>
             <div className="ml-6 xl:w-1/4 2xl:w-1/5">
-              <div className="w-full mb-8 -mt-8 xl:-mt-28 xl:mb-28">{/* <Profile /> */}</div>
+              <div className="w-full mb-8 -mt-8 xl:-mt-28 xl:mb-28">
+                {<InlineTotalAssetChart />}
+              </div>
               {sidebar}
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React from "react"
-import { AsyncButton, Button, Spinner, WithSidebar } from "@perfolio/components"
+import { AsyncButton, Button, Spinner } from "@perfolio/components"
 import { ActivityFeed } from "../../components"
 import { NextPage } from "next"
 import { useTransactions } from "../../queries"
@@ -9,7 +9,7 @@ import { useAsset } from "../../queries"
 import { DocumentAddIcon, DocumentRemoveIcon } from "@heroicons/react/solid"
 import classNames from "classnames"
 import { withAuthentication } from "@perfolio/auth"
-
+import { WithSidebar } from "../../components"
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean

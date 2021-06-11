@@ -4,7 +4,7 @@
   "scripts": {
     "build": "nx run-many --target=build --all",
     "test": "nx test",
-    "fmt": "pnpm run lint && pnpm run format",
+    "fmt": "pnpm run lint && pnpm prettier --write .",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",
