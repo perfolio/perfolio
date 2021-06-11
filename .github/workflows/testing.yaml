@@ -31,8 +31,6 @@ jobs:
         with:
           version: latest
           run_install: true
-      
-
 
       # Lint Code
       - name: Lint
@@ -40,8 +38,6 @@ jobs:
 
       - name: Check types
         run: pnpm run tsc
-
-
 
   lhci:
     name: Lighthouse

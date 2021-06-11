@@ -1,8 +1,13 @@
 import { NextPage } from "next"
-import { WithSidebar } from "@perfolio/components"
 import { withAuthentication } from "@perfolio/auth"
 import { usePortfolio } from "../queries"
-import { DiversityChart, AssetTable, ActivityFeed, AssetsOverTimeChart } from "../components"
+import {
+  WithSidebar,
+  DiversityChart,
+  AssetTable,
+  ActivityFeed,
+  AssetsOverTimeChart,
+} from "../components"
 
 const App: NextPage = () => {
   const { portfolio } = usePortfolio()
