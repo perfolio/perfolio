@@ -2,7 +2,7 @@
 /tmp
 /out-tsc
 
-/node_modules
+node_modules
 
 .vscode/*
 
