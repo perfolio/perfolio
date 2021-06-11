@@ -41,9 +41,31 @@ jobs:
       - name: Check types
         run: pnpm run tsc
 
+
+  echo-apps:
+    runs-on: ubuntu-latest
+    
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+      - name: Echo apps
+        id: set-matrix
+        run: echo "::set-output name=matrix::$(npx nx affected:apps --files=package.json --plain)"
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
+    needs: echo-apps
+    strategy:
+      matrix:
+        app: ${{ fromJson(needs.echo-apps.outputs.matrix) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -70,9 +92,9 @@ jobs:
           run_install: true
 
       - name: Build
-        run: pnpm run build
+        run: pnpm nx build ${{ matrix.app }}
 
       - name: run Lighthouse CI
-        run: pnpm lhci autorun --config=./apps/app/lighthouserc.js
+        run: pnpm lhci autorun --config=./apps/${{ matrix.app }}/lighthouserc.js
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
