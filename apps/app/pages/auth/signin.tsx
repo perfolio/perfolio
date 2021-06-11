@@ -7,7 +7,7 @@ const SigninPage: NextPage = () => {
     <AuthPageTemplate h1="Signin" h2="Kevin ist ein frischer Hecht!">
       <SigninForm
         onSuccess={() => {
-          router.push("/app")
+          router.push("/")
         }}
       />
     </AuthPageTemplate>
