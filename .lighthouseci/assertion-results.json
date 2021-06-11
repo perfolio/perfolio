@@ -1,0 +1,226 @@
+[
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.9,
+    "values": [
+      0.9,
+      0.9,
+      0.9
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/404.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.9,
+    "values": [
+      0.9,
+      0.9,
+      0.9
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/500.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.77,
+    "values": [
+      0.77,
+      0.77,
+      0.77
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/app.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.82,
+    "values": [
+      0.82,
+      0.82,
+      0.82
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/app.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.75,
+    "values": [
+      0.75,
+      0.75,
+      0.75
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/index.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.8,
+    "values": [
+      0.8,
+      0.8,
+      0.8
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/index.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.67,
+    "values": [
+      0.67,
+      0.67,
+      0.67
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/transactions.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.79,
+    "values": [
+      0.79,
+      0.79,
+      0.79
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/transactions.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.91,
+    "values": [
+      0.91,
+      0.91,
+      0.91
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/auth/signin.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.77,
+    "values": [
+      0.77,
+      0.77,
+      0.77
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/auth/signin.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.91,
+    "values": [
+      0.91,
+      0.91,
+      0.91
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/auth/signup.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.76,
+    "values": [
+      0.76,
+      0.76,
+      0.76
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/auth/signup.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 1,
+    "actual": 0.75,
+    "values": [
+      0.75,
+      0.75,
+      0.75
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "accessibility",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/transactions/new.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.78,
+    "values": [
+      0.78,
+      0.78,
+      0.78
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "error",
+    "url": "http://localhost:45347/transactions/new.html"
+  }
+]

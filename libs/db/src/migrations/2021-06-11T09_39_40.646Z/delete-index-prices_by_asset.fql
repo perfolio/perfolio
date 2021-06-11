@@ -1,0 +1,1 @@
+Delete(Index("prices_by_asset"))

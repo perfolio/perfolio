@@ -1,6 +1,6 @@
 module.exports = {
   directories: {
-    root: "packages/fauna/src",
+    root: "libs/db/src",
     resources: "resources",
     migrations: "migrations",
     children: "dbs",

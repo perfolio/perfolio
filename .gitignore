@@ -1,0 +1,12 @@
+/dist
+/tmp
+/out-tsc
+
+/node_modules
+
+.vscode/*
+
+/ccoverage
+yarn-error.log
+
+.env*
