@@ -46,7 +46,6 @@ jobs:
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
-    needs: echo-apps
     strategy:
       matrix:
         app: ["app"]
