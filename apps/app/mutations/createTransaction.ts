@@ -15,7 +15,6 @@ export function useCreateTransaction() {
 
   return useMutation<Transaction, Error, CreateTransactionRequest>({
     mutationFn: (variables: CreateTransactionRequest) => {
-      console.log({ variables })
       return request<Transaction>({
         token,
         path: "/api/transactions/create",

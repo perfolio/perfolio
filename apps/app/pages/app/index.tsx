@@ -4,7 +4,6 @@ import React from "react"
 
 export const App: NextPage = () => {
   const { user, getToken, isAuthenticated } = useAuth()
-  console.log(getToken(), isAuthenticated)
   return <div>{JSON.stringify(user)}</div>
 }
 

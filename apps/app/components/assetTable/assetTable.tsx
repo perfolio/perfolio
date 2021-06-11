@@ -1,6 +1,5 @@
 import React from "react"
 import { Table, Simple, Icon, Tag } from "@perfolio/components"
-import Image from "next/image"
 
 interface Asset {
   id: string
@@ -20,7 +19,7 @@ const Row = ({ asset }: { asset: Asset }) => {
           content="hello"
           align="justify-start"
           icon={
-            <Image
+            <img
               className="rounded-full"
               src={`https://storage.googleapis.com/iex/api/logos/${asset.id.toUpperCase()}.png`}
               alt={`Logo for company with isin: ${asset.id}`}

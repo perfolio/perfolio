@@ -32,11 +32,9 @@ export class RefreshToken extends Document<z.infer<typeof RefreshToken.schema>> 
    */
   public static async fromHash(client: Client, token: string): Promise<RefreshToken | null> {
     try {
-      console.log({ token })
       const res = await client.query<QueryResponse<z.infer<typeof RefreshToken.schema>>>(
         q.Get(q.Match(q.Index(this.index.byHash), token)),
       )
-      console.log({ res })
       if (res === null) {
         return null
       }

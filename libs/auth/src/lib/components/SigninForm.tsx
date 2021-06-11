@@ -21,7 +21,6 @@ export const SigninForm = (props: SigninFormProps) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={async ({ email, password }) => {
           try {
-            console.log("Hello")
             await signin(email, password)
             props.onSuccess?.()
           } catch (error) {

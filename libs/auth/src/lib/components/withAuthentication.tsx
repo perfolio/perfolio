@@ -113,7 +113,7 @@ export function withAuthentication(
           JWT.verify(token)
           return
         } catch (err) {
-          console.log(`Token is invalid: ${token}: ${err}`)
+          console.error(`Token is invalid: ${token}: ${err}`)
         }
       }
       /**
@@ -125,7 +125,6 @@ export function withAuthentication(
         path: "/api/auth/refresh",
       })
         .then(({ accessToken }) => {
-          console.log({ accessToken })
           setToken(accessToken)
         })
         .catch((err) => setError(err))

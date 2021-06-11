@@ -17,7 +17,6 @@ export async function getAsset({ isin }: GetAssetRequest) {
   }
 
   const possibleAssets = await getIsinMapping(isin)
-  console.log({ possibleAssets })
   /**
    * If there is a asset with neither a country prefix (`US_`) or exchange suffix (`-ch`)
    * we could assume that's the main one.

@@ -13,7 +13,6 @@ import {
   Spinner,
 } from "@perfolio/components"
 import { useForm } from "react-hook-form"
-import Image from "next/image"
 import { Time } from "@perfolio/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/db"
@@ -28,13 +27,12 @@ const Suggestion: React.FC<{
 }> = ({ tx, setValue, trigger }): JSX.Element => {
   const { asset } = useAsset({ isin: tx.data.assetId })
   const { company } = useCompany(asset?.data?.symbol)
-  console.log({ asset, company })
   return (
     <li className="flex items-center justify-between py-3">
       <div className="flex items-center space-x-3">
         <div className="w-10 h-10 rounded">
           {company ? (
-            <Image
+            <img
               alt={`Logo of ${company?.data.name}`}
               src={company?.data.logo ?? ""}
               height={64}
@@ -92,7 +90,6 @@ const NewTransactionPage: NextPage = () => {
 
   const { mutateAsync: createTransaction } = useCreateTransaction()
   const { transactions } = useTransactions()
-  console.log({ transactions })
   const uniqueAssets: Record<string, Transaction> = {}
   transactions
     ?.sort((a, b) => b.ts - a.ts)
@@ -125,9 +122,7 @@ const NewTransactionPage: NextPage = () => {
             })}
             // initialValues={{assetId: "", executedAt: Time.today().unix()}}
             onSubmit={async (tx) => {
-              console.log({ tx })
               try {
-                console.log("Hello")
                 await createTransaction(tx)
               } catch (error) {
                 return {
@@ -143,7 +138,7 @@ const NewTransactionPage: NextPage = () => {
               label="Isin"
               iconLeft={
                 company ? (
-                  <Image
+                  <img
                     src={company.data.logo}
                     alt={`Logo of ${company.data.name}`}
                     width={64}

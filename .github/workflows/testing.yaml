@@ -40,7 +40,6 @@ jobs:
       - name: Check types
         run: yarn tsc
 
-
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
@@ -66,7 +65,7 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn build
-       
+
       - name: run Lighthouse CI
         run: yarn lhci autorun --config=./apps/app/lighthouserc.js
         env:

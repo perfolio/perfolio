@@ -50,7 +50,6 @@ export async function request<ResponseType>({
       `Unable to POST to endpoint ${path}, failed with status: ${res.status}`,
     )
   }
-  console.log({ res })
   return res.json().catch((err) => {
     throw new JsonUnmarshalError(err)
   })

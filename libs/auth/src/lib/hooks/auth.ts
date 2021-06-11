@@ -45,7 +45,6 @@ async function signup(
   password: string,
   ctx: IAuthContext,
 ): Promise<void> {
-  console.log({ username })
   await request({
     token: ctx.getToken(),
     path: "/api/auth/signup",

@@ -15,7 +15,6 @@ export const GetPricesRequestValidation = z.object({
 export type GetPricesRequest = z.infer<typeof GetPricesRequestValidation>
 
 export async function getPrices({ symbol, begin, end }: GetPricesRequest) {
-  console.error({ symbol })
   if (symbol.includes("_")) {
     symbol = symbol.split("_")[1]
   }
