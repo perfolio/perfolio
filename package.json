@@ -23,7 +23,6 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "tsc": "tsc -p tsconfig.base.json --pretty",
-    "migrate": "fauna-schema-migrate apply",
     "prepare": "husky install"
   },
   "private": true,
