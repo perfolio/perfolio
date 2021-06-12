@@ -53,6 +53,7 @@ specifiers:
   jest: 26.2.2
   jsonwebtoken: ^8.5.1
   next: 10.2.0
+  next-plausible: ^1.6.1
   next-themes: ^0.0.14
   nx: ^12.3.6
   postcss: ^8.3.2
@@ -88,6 +89,7 @@ dependencies:
   faunadb: 4.3.0
   jsonwebtoken: 8.5.1
   next: 10.2.0_19437c2f9b137c4ee9c416360487a7aa
+  next-plausible: 1.6.1_3a7f9b0847035abd95643f9e1809652e
   next-themes: 0.0.14_3a7f9b0847035abd95643f9e1809652e
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -12766,6 +12768,21 @@ packages:
       {
         integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==,
       }
+
+  /next-plausible/1.6.1_3a7f9b0847035abd95643f9e1809652e:
+    resolution:
+      {
+        integrity: sha512-eMVqZbzU6bJsBIHlC63lNKl0KLvx8NA+/YlUUqj2gvCviQ7C2X4PY59gEB+mO46JvKSy/IhAD8l85/YGFhCkDg==,
+      }
+    peerDependencies:
+      next: ^9.4.0 || ^10.0.0
+      react: ^16.8.0 || ^17.0.0
+      react-dom: ^16.8.0 || ^17.0.0
+    dependencies:
+      next: 10.2.0_19437c2f9b137c4ee9c416360487a7aa
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: false
 
   /next-themes/0.0.14_3a7f9b0847035abd95643f9e1809652e:
     resolution:

@@ -1,11 +1,12 @@
 import React from "react"
 import { AppProps } from "next/app"
 import Head from "next/head"
+import PlausibleProvider from "next-plausible"
 import "tailwindcss/tailwind.css"
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <PlausibleProvider domain="perfol.io">
       <Head>
         <title>Perfolio</title>
         <meta name="description" content="Insights. For Everyone." />
@@ -18,10 +19,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <meta name="msapplication-TileColor" content="#1A202C"></meta>
         <meta name="theme-color" content="#1A202C"></meta>
         <script defer data-domain="perfol.io" src="https://plausible.io/js/plausible.js"></script>
-
       </Head>
       <Component {...pageProps} />
-    </>
+    </PlausibleProvider>
   )
 }
 
