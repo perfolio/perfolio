@@ -248,7 +248,7 @@ const IndexPage: NextPage = () => {
                   onSubmit={async (values) => {
                     try {
                       await request({
-                        path: "/api/email/subscribe",
+                        path: "https://app.perfol.io//api/email/subscribe",
                         body: values,
                       })
                       setSubscribed(true)
