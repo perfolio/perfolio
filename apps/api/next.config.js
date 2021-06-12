@@ -7,4 +7,13 @@ module.exports = withNx({
     // See: https://github.com/gregberge/svgr
     svgr: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/api/*',
+        destination: '/*',
+        permanent: true,
+      },
+    ]
+  },
 })
