@@ -3,3 +3,4 @@
 dist
 coverage
 .next
+pnpm-lock.yaml

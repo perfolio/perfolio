@@ -5,7 +5,7 @@ import { z } from "zod"
 import { Transaction } from "@perfolio/db"
 import { Time } from "@perfolio/time"
 
-import { withMiddleware } from "@perfolio/api"
+import { withMiddleware } from "@perfolio/api-client"
 
 import { Claims } from "@perfolio/auth"
 

@@ -1,4 +1,4 @@
-import { withMiddleware } from "@perfolio/api"
+import { withMiddleware } from "@perfolio/api-client"
 
 import { db } from "@perfolio/db"
 import { z } from "zod"

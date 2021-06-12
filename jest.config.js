@@ -4,7 +4,7 @@ module.exports = {
     "<rootDir>/libs/db",
     "<rootDir>/libs/auth",
     "<rootDir>/libs/components",
-    "<rootDir>/libs/api",
+    "<rootDir>/libs/api-client",
     "<rootDir>/libs/time",
     "<rootDir>/libs/iexcloud",
     "<rootDir>/apps/landing",
