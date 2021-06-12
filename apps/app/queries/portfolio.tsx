@@ -1,7 +1,21 @@
+import { useQueries } from "react-query"
+import { request } from "@perfolio/api"
+import { GetAssetRequestValidation } from "../pages/api/assets/getAsset"
+import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
+import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
+import { Asset, Company } from "@perfolio/db"
 import { useHistory } from "./history"
+import { useAuth } from "@perfolio/auth"
+import { GetCompanyRequestValidation } from "../pages/api/companies/getCompany"
+
+export interface Holding {
+  quantity: number
+  value: number
+  company: Company
+}
 
 export interface Portfolio {
-  [assetID: string]: { quantity: number; value: number }
+  [assetID: string]: Holding
 }
 /**
  * Start from the last entry and go back.
@@ -24,6 +38,8 @@ const getLastWithValue = (
 }
 
 export const usePortfolio = () => {
+  const { getToken } = useAuth()
+  const token = getToken()
   const { history, ...meta } = useHistory()
 
   const portfolio: Portfolio = {}
@@ -33,10 +49,39 @@ export const usePortfolio = () => {
       portfolio[assetId] = {
         quantity: latest.quantity,
         value: latest.value,
-      }
+      } as Holding
     })
   }
-  console.log({portfolio})
+  const assets = useQueries(
+    Object.keys(token && history ? history : {}).map((isin) => {
+      return {
+        queryKey: QUERY_KEY_ASSET_BY_ISIN(isin),
+        queryFn: () =>
+          request<Asset>({
+            token,
+            path: "/api/assets/getAsset",
+            body: GetAssetRequestValidation.parse({ isin }),
+          }),
+      }
+    }),
+  ).map((asset) => (asset.data as Asset).data)
+  const companies = useQueries(
+    (token && assets ? assets : []).map(({ symbol }) => {
+      return {
+        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
+        queryFn: () =>
+          request<Company>({
+            token,
+            path: "/api/companies/getCompany",
+            body: GetCompanyRequestValidation.parse({ symbol }),
+          }),
+      }
+    }),
+  ).map((company) => company.data) as Company[]
+
+  Object.keys(portfolio).forEach((isin, i) => {
+    portfolio[isin].company = companies[i]
+  })
 
   return { portfolio, ...meta }
 }
