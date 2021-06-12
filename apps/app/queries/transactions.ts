@@ -1,4 +1,4 @@
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { Transaction } from "@perfolio/db"
 import { useAuth } from "@perfolio/auth"

@@ -43,9 +43,6 @@
     "components": {
       "tags": []
     },
-    "api": {
-      "tags": []
-    },
     "time": {
       "tags": []
     },
@@ -61,6 +58,16 @@
     },
     "email": {
       "tags": []
+    },
+    "api-client": {
+      "tags": []
+    },
+    "api": {
+      "tags": []
+    },
+    "api-e2e": {
+      "tags": [],
+      "implicitDependencies": ["api"]
     }
   }
 }

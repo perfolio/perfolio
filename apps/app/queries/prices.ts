@@ -1,4 +1,4 @@
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { GetPriceRequest, GetPriceRequestValidation } from "../pages/api/prices/getPrice"
 import { Price } from "@perfolio/db"

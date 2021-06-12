@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import { JWT, payload } from "../jwt"
 import { useQueryClient } from "react-query"
 import { z } from "zod"
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 
 export interface UseAuthContext {
   getToken: () => string
