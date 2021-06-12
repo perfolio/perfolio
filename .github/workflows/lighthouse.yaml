@@ -1,5 +1,5 @@
 name: Lighthouse CI
-on: 
+on:
   pull_request:
 jobs:
   lhci:
@@ -30,7 +30,7 @@ jobs:
           version: latest
           run_install: true
 
-      - name: Build 
+      - name: Build
         run: pnpm nx build app --prod
 
       - name: Git branch name
@@ -45,8 +45,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
           deployment-url: ${{ env.VERCEL_DEPLOYMENT_URL}}
-          timeout: 600 
-
+          timeout: 600
 
       - name: run Lighthouse CI
         run: |
