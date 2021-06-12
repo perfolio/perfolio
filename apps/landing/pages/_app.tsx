@@ -18,7 +18,6 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <meta name="msapplication-TileColor" content="#1A202C"></meta>
         <meta name="theme-color" content="#1A202C"></meta>
         <script defer data-domain="perfol.io" src="https://plausible.io/js/plausible.js"></script>
-
       </Head>
       <Component {...pageProps} />
     </>
