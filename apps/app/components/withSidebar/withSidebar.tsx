@@ -32,11 +32,9 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
                 {children}
               </div>
             </div>
-            <div className="ml-6 xl:w-1/4 2xl:w-1/5">
-              <div className="w-full mb-8 -mt-8 xl:-mt-28 xl:mb-28">
-                {<InlineTotalAssetChart />}
-              </div>
-              {sidebar}
+            <div className="relative ml-6 xl:w-1/4 2xl:w-1/5 ">
+              <div className="absolute w-full -mt-8 xl:-mt-28 ">{<InlineTotalAssetChart />}</div>
+              <div className="mt-6">{sidebar}</div>
             </div>
           </div>
         </div>
