@@ -1,5 +1,5 @@
 import { useQueries } from "react-query"
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { GetAssetRequestValidation } from "../pages/api/assets/getAsset"
 import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"

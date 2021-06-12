@@ -11,7 +11,7 @@ import {
   Footer,
   Price,
 } from "../components"
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { Box, LabeledField, Form, FORM_ERROR } from "@perfolio/components"
 import * as z from "zod"
 import {

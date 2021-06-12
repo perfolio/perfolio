@@ -1,4 +1,4 @@
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { GetAssetRequest, GetAssetRequestValidation } from "../pages/api/assets/getAsset"
 import { Asset } from "@perfolio/db"

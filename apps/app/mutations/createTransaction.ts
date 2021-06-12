@@ -1,6 +1,6 @@
 import { Transaction } from "@perfolio/db"
 import { useMutation, useQueryClient } from "react-query"
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { useAuth } from "@perfolio/auth"
 import {
   CreateTransactionRequestValidation,

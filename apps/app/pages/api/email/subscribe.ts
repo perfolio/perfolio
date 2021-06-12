@@ -1,4 +1,4 @@
-import { withMiddleware } from "@perfolio/api"
+import { withMiddleware } from "@perfolio/api-client"
 import { z } from "zod"
 
 export const SubscribeRequestValidation = z.object({

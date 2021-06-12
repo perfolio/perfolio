@@ -1,6 +1,6 @@
 import { Transaction } from "@perfolio/db"
 import { useMutation } from "react-query"
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { SubscribeRequestValidation, SubscribeRequest } from "../pages/api/email/subscribe"
 
 export function useSubscribe() {

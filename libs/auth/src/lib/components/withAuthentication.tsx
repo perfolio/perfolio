@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { NextPage } from "next"
 import { useAuth } from "../hooks/auth"
-import { request } from "@perfolio/api"
+import { request } from "@perfolio/api-client"
 import { JWT } from "../jwt"
 
 /**
