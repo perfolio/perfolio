@@ -36,6 +36,7 @@ export const usePortfolio = () => {
       }
     })
   }
+  console.log({portfolio})
 
   return { portfolio, ...meta }
 }
