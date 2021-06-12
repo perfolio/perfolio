@@ -1,5 +1,6 @@
 name: Lighthouse CI
-on: pull_request
+on: 
+  pull_request:
 jobs:
   lhci:
     # if: github.event.deployment_status.state == 'success'
