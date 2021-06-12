@@ -11,7 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Node
       - name: Setup Node
         uses: actions/setup-node@v2.1.5
         with:
@@ -32,7 +31,6 @@ jobs:
           version: latest
           run_install: true
 
-      # Lint Code
       - name: Lint
         run: pnpm run lint
 
@@ -49,7 +47,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Node
       - name: Setup Node
         uses: actions/setup-node@v2.1.5
         with:
