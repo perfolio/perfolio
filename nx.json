@@ -21,6 +21,7 @@
       }
     },
     "no-cloud": {
+      "comment": "See https://github.com/nrwl/nx/issues/5660",
       "runner": "@nrwl/workspace/src/tasks-runner/default-tasks-runner",
       "options": {}
     }
