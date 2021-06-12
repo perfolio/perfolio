@@ -74,3 +74,5 @@ jobs:
         run: pnpm nx run ${{ matrix.app }}:lhci
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          SENTRY_ORG: chronark
+          SENTRY_PROJECT: ${{ matrix.app }}perfolio
