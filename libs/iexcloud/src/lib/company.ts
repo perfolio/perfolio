@@ -5,7 +5,7 @@ export const GetCompanyResponseValidator = z.object({
   /**
    * Ticker of the company.
    */
-  asset: z.string(),
+  symbol: z.string(),
   /**
    * Name of the company.
    */
@@ -104,11 +104,11 @@ export const GetCompanyResponseValidator = z.object({
  */
 export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator>
 
-export async function getCompany(asset: string): Promise<GetCompanyResponse> {
+export async function getCompany(symbol: string): Promise<GetCompanyResponse> {
   const client = new Client()
 
   const res = await client.get({
-    path: `/stock/${asset}/company`,
+    path: `/stock/${symbol}/company`,
   })
   return GetCompanyResponseValidator.parse(res)
 }

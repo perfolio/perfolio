@@ -4,11 +4,12 @@ import { GetAssetRequest, GetAssetRequestValidation } from "../pages/api/assets/
 import { Asset } from "@perfolio/db"
 import { useAuth } from "@perfolio/auth"
 
+export const QUERY_KEY_ASSET_BY_ISIN = (isin: string): string => `asset_by_${isin}`
 export function useAsset(req: GetAssetRequest) {
   const { getToken } = useAuth()
   const token = getToken()
   const { data, ...meta } = useQuery<Asset, Error>(
-    `asset_by_${req.isin}`,
+    QUERY_KEY_ASSET_BY_ISIN(req.isin),
     async () => {
       return await request<Asset>({
         token,
