@@ -245,11 +245,11 @@ const IndexPage: NextPage = () => {
                     email: z.string().email(),
                   })}
                   initialValues={{ email: "" }}
-                  onSubmit={async (values) => {
+                  onSubmit={async ({ email }) => {
                     try {
                       await request({
-                        path: "https://app.perfol.io//api/email/subscribe",
-                        body: values,
+                        path: "https://app.perfol.io/api/email/subscribe",
+                        body: { email },
                       })
                       setSubscribed(true)
                     } catch (error) {
