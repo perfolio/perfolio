@@ -17,6 +17,8 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <link rel="mask-icon" href="/fav/safari-pinned-tab.svg" color="#1A202C"></link>
         <meta name="msapplication-TileColor" content="#1A202C"></meta>
         <meta name="theme-color" content="#1A202C"></meta>
+        <script defer data-domain="perfol.io" src="https://plausible.io/js/plausible.js"></script>
+
       </Head>
       <Component {...pageProps} />
     </>
