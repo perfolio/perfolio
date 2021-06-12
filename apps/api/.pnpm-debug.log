@@ -1,0 +1,19 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "errno": 2,
+    "code": "ELIFECYCLE",
+    "pkgid": "perfolio@0.0.0",
+    "stage": "tsc",
+    "script": "tsc -p tsconfig.base.json --pretty",
+    "pkgname": "perfolio",
+    "err": {
+      "name": "Error",
+      "message": "perfolio@0.0.0 tsc: `tsc -p tsconfig.base.json --pretty`\nExit status 2",
+      "code": "ELIFECYCLE",
+      "stack": "Error: perfolio@0.0.0 tsc: `tsc -p tsconfig.base.json --pretty`\nExit status 2\n    at EventEmitter.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:104107:20)\n    at EventEmitter.emit (events.js:315:20)\n    at ChildProcess.<anonymous> (/usr/local/lib/node_modules/pnpm/dist/pnpm.cjs:92413:18)\n    at ChildProcess.emit (events.js:315:20)\n    at maybeClose (internal/child_process.js:1048:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:288:5)"
+    }
+  }
+}
