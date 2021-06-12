@@ -8,7 +8,7 @@ export const SubscribeRequestValidation = z.object({
 export type SubscribeRequest = z.infer<typeof SubscribeRequestValidation>
 
 async function getPriceApiHandler({ email }: SubscribeRequest) {
-  const apiKey = process.env["SENDGRID_TOKEN"]
+  const apiKey = process.env["NX_SENDGRID_TOKEN"]
 
   const newsletterListId = "380e1c91-68ec-4152-aab7-775152c2301b"
   const res = await fetch("https://api.sendgrid.com/v3/marketing/contacts", {
