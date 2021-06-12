@@ -52,7 +52,7 @@
           "options": {
             "commands": [
               {
-                "command": "pnpm nx build app && pnpm lhci autorun --config=./apps/app/lighthouserc.js"
+                "command": "pnpm nx build app --prod && pnpm lhci autorun --config=./apps/app/lighthouserc.js"
               }
             ]
           }
@@ -271,7 +271,7 @@
           "options": {
             "commands": [
               {
-                "command": "pnpm nx build landing && pnpm lhci autorun --config=./apps/landing/lighthouserc.js"
+                "command": "pnpm nx build landing --prod && pnpm lhci autorun --config=./apps/landing/lighthouserc.js"
               }
             ]
           }

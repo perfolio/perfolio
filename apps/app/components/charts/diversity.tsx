@@ -1,8 +1,9 @@
 import { usePortfolio } from "../../queries"
 import React, { useState, useMemo } from "react"
 import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
-
-import { Spinner, Switch } from "@perfolio/components"
+import * as ToggleGroup from "@radix-ui/react-toggle-group"
+import { Spinner } from "@perfolio/components"
+import { DefaultButtonStyle } from "@perfolio/components"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
   () => Math.random() - 0.5,
@@ -68,8 +69,8 @@ export const DiversityChart: React.FC = (): JSX.Element => {
     [sectors, countries, selected],
   )
   return (
-    <div className="w-full h-full">
-      <Switch onChange={(checked) => setSelected(checked ? "countries" : "sectors")} />
+    <div className="w-full h-full ">
+      {/* <Switch onChange={(checked) => setSelected(checked ? "countries" : "sectors")} /> */}
 
       <ResponsiveContainer width="100%" height="100%">
         {!data || data.length === 0 ? (
@@ -178,6 +179,28 @@ export const DiversityChart: React.FC = (): JSX.Element => {
           </PieChart>
         )}
       </ResponsiveContainer>
+      <div className="flex justify-center">
+        <ToggleGroup.Root
+          type="single"
+          onValueChange={(value: "sectors" | "countries") => setSelected(value)}
+          className="space-x-2"
+        >
+          <ToggleGroup.Item value="sectors" className="focus:outline-none">
+            <DefaultButtonStyle
+              size="small"
+              label="Sectors"
+              kind={selected === "sectors" ? "primary" : "secondary"}
+            />
+          </ToggleGroup.Item>
+          <ToggleGroup.Item value="countries" className="focus:outline-none">
+            <DefaultButtonStyle
+              size="small"
+              label="Countries"
+              kind={selected === "countries" ? "primary" : "secondary"}
+            />
+          </ToggleGroup.Item>
+        </ToggleGroup.Root>
+      </div>
     </div>
   )
 }

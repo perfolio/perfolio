@@ -24,7 +24,7 @@ const App: NextPage = () => {
         <div className="flex flex-col divide-y">
           <div className="w-full pb-4 md:w-full sm:w-1/2">
             <p className="text-base font-semibold text-gray-800">Diversity</p>
-            <div className="w-full h-60">{<DiversityChart />}</div>
+            <div className="w-full mb-8 h-60">{<DiversityChart />}</div>
           </div>
           <div className="w-full py-4 md:w-full sm:w-1/2">
             <ActivityFeed />
