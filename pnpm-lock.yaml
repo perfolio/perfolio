@@ -22,6 +22,7 @@ specifiers:
   "@nrwl/tao": ^12.3.6
   "@nrwl/web": 12.3.6
   "@nrwl/workspace": 12.3.6
+  "@radix-ui/react-toggle-group": ^0.0.8
   "@radix-ui/react-tooltip": ^0.0.18
   "@tailwindcss/jit": ^0.1.18
   "@tailwindcss/typography": ^0.4.1
@@ -81,6 +82,7 @@ dependencies:
   "@heroicons/react": 1.0.1_react@17.0.2
   "@hookform/resolvers": 2.5.2_react-hook-form@7.8.4
   "@nrwl/next": 12.3.6_567697745b59d834330aa72fb39bee92
+  "@radix-ui/react-toggle-group": 0.0.8_react@17.0.2
   "@radix-ui/react-tooltip": 0.0.18_react-dom@17.0.2+react@17.0.2
   classnames: 2.3.1
   cookie: 0.4.1
@@ -2826,6 +2828,20 @@ packages:
       react: 17.0.2
     dev: false
 
+  /@radix-ui/react-collection/0.0.12_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-jUP99/wCHpXm7ytbmpcjhhxFHBsr2lptEzKO8DUkD2CrJBS4Q3XHMKBDOvNQQzIqJhsz0A5JP6Fo0Vgd8Ld3FQ==,
+      }
+    peerDependencies:
+      react: ^16.8 || ^17.0
+    dependencies:
+      "@babel/runtime": 7.14.5
+      "@radix-ui/react-compose-refs": 0.0.5_react@17.0.2
+      "@radix-ui/react-slot": 0.0.10_react@17.0.2
+      react: 17.0.2
+    dev: false
+
   /@radix-ui/react-compose-refs/0.0.5_react@17.0.2:
     resolution:
       {
@@ -2938,6 +2954,27 @@ packages:
       react: 17.0.2
     dev: false
 
+  /@radix-ui/react-roving-focus/0.0.13_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-jTx3TBMYEdj9SFzRDryO62M9ZK28pYvKKxj/mxWMpMbIjF4q6L+yJmDxtv6glHgCRkwBEyulFVGCjjDg+qxYRA==,
+      }
+    peerDependencies:
+      react: ^16.8 || ^17.0
+    dependencies:
+      "@babel/runtime": 7.14.5
+      "@radix-ui/primitive": 0.0.5
+      "@radix-ui/react-collection": 0.0.12_react@17.0.2
+      "@radix-ui/react-compose-refs": 0.0.5_react@17.0.2
+      "@radix-ui/react-context": 0.0.5_react@17.0.2
+      "@radix-ui/react-id": 0.0.6_react@17.0.2
+      "@radix-ui/react-polymorphic": 0.0.11_react@17.0.2
+      "@radix-ui/react-primitive": 0.0.13_react@17.0.2
+      "@radix-ui/react-use-callback-ref": 0.0.5_react@17.0.2
+      "@radix-ui/react-use-controllable-state": 0.0.6_react@17.0.2
+      react: 17.0.2
+    dev: false
+
   /@radix-ui/react-slot/0.0.10_react@17.0.2:
     resolution:
       {
@@ -2949,6 +2986,42 @@ packages:
       "@babel/runtime": 7.14.5
       "@radix-ui/primitive": 0.0.5
       "@radix-ui/react-compose-refs": 0.0.5_react@17.0.2
+      react: 17.0.2
+    dev: false
+
+  /@radix-ui/react-toggle-group/0.0.8_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-hRg7dkJTWnirUXPDbnz/7y2aOM7E6lStEPHd1EkAdeWqDT8O7UMjgEKXfkjgDEvifLx1ybG0hyPcQzWwZrYYSg==,
+      }
+    peerDependencies:
+      react: ^16.8 || ^17.0
+    dependencies:
+      "@babel/runtime": 7.14.5
+      "@radix-ui/primitive": 0.0.5
+      "@radix-ui/react-context": 0.0.5_react@17.0.2
+      "@radix-ui/react-polymorphic": 0.0.11_react@17.0.2
+      "@radix-ui/react-primitive": 0.0.13_react@17.0.2
+      "@radix-ui/react-roving-focus": 0.0.13_react@17.0.2
+      "@radix-ui/react-slot": 0.0.10_react@17.0.2
+      "@radix-ui/react-toggle": 0.0.8_react@17.0.2
+      "@radix-ui/react-use-controllable-state": 0.0.6_react@17.0.2
+      react: 17.0.2
+    dev: false
+
+  /@radix-ui/react-toggle/0.0.8_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-b4Ew8y9xYTNjs5h81YPCcKZak54n1q0/hqd6vNnIdbCnWzJ0XHaFMkAp39yoEf15MG7ScqnG7DJbyNeDl9AbDg==,
+      }
+    peerDependencies:
+      react: ^16.8 || ^17.0
+    dependencies:
+      "@babel/runtime": 7.14.5
+      "@radix-ui/primitive": 0.0.5
+      "@radix-ui/react-polymorphic": 0.0.11_react@17.0.2
+      "@radix-ui/react-primitive": 0.0.13_react@17.0.2
+      "@radix-ui/react-use-controllable-state": 0.0.6_react@17.0.2
       react: 17.0.2
     dev: false
 
