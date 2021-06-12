@@ -27,7 +27,6 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
       value,
     }
   })
-  console.log({ data })
 
   return (
     <div className="flex-col justify-center hidden w-full h-20 space-y-8 bg-gray-100 rounded xl:flex">
@@ -56,8 +55,10 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
             </AreaChart>
           )}
         </ResponsiveContainer>
-        <div className="absolute bottom-0 right-0 p-4">
-          <span className="text-lg font-semibold text-primary-600">${currentValue.toFixed(2)}</span>
+        <div className="absolute top-0 left-0 p-4">
+          <span className="p-1 text-lg font-semibold bg-gray-100 rounded-full text-primary-600">
+            ${currentValue.toFixed(2)}
+          </span>
         </div>
       </div>
     </div>
