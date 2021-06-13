@@ -1,4 +1,4 @@
-import { withContentTypeJson, use, withAuthentication, withOptions } from "@perfolio/middleware"
+import { withContentTypeJson, use, withAuthentication, allowCors } from "@perfolio/middleware"
 import { getHistory } from "@perfolio/lambda"
 
-export default use(getHistory, [withOptions, withContentTypeJson, withAuthentication])
+export default use(getHistory, [allowCors, withContentTypeJson, withAuthentication])
