@@ -12,7 +12,7 @@ export function allowCors(handler: ApiHandler): ApiHandler {
     ctx.res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT")
     ctx.res.setHeader(
       "Access-Control-Allow-Headers",
-      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+      "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
     )
     if (ctx.req.method === "OPTIONS") {
       return ctx.res.status(200).end()
