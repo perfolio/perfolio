@@ -16,10 +16,10 @@ export type GetPricesRequest = z.infer<typeof GetPricesRequestValidation>
 
 export async function getPrices({ symbol, begin, end }: GetPricesRequest) {
   if (symbol.includes("_")) {
-    symbol = symbol.split("_")[1]
+    symbol = symbol.split("_")[1] ?? symbol
   }
   if (symbol.includes("-")) {
-    symbol = symbol.split("-")[0]
+    symbol = symbol.split("-")[0] ?? symbol
   }
   let cachedPrices = await db().price.fromSymbol(
     symbol,
@@ -91,7 +91,7 @@ export async function getPrices({ symbol, begin, end }: GetPricesRequest) {
   const filteredPriceMap: Record<number, number> = {}
   Object.entries(priceMap).forEach(([ts, value]) => {
     if (value > 0 && Number(ts) >= begin && Number(ts) <= end) {
-      filteredPriceMap[ts] = value
+      filteredPriceMap[Number(ts)] = value
     }
   })
   return { prices: filteredPriceMap }

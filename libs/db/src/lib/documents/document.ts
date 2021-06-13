@@ -5,7 +5,7 @@ export abstract class Document<T> {
   public readonly ts: number
   public readonly data: T
 
-  private readonly ref: Expr
+  public readonly ref: Expr
 
   constructor(data: { ref: Expr; ts: number; data: T }) {
     this.ref = data.ref

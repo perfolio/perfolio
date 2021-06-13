@@ -7,7 +7,6 @@ import { Price } from "./documents/price"
 import { Time } from "@perfolio/time"
 import { z } from "zod"
 import { Transaction } from "./documents/transaction"
-import { Ref } from "react"
 
 /**
  * User facing wrapper for all document types.

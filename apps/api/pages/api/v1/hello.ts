@@ -1,6 +1,6 @@
 import { NextApiHandler } from "next"
 
-const handler: NextApiHandler = (req, res) => {
+const handler: NextApiHandler = (_, res) => {
   res.json({ hello: "world" })
 }
 

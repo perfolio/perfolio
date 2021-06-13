@@ -30,8 +30,10 @@ export const AsyncButton: React.FC<ButtonProps> = ({
 
   return (
     <ButtonController
+      type={type}
       onClick={(e) => {
-        e!.preventDefault()
+        e?.preventDefault()
+
         if (disabled) {
           return
         }

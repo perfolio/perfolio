@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { Time } from "@perfolio/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/db"
-import { useTransactions, usePrice, useCompany, useAsset } from "../../queries"
+import { useTransactions, useCompany, useAsset } from "../../queries"
 import { useCreateTransaction } from "../../mutations"
 import { withAuthentication } from "@perfolio/auth"
 
@@ -70,12 +70,10 @@ interface FormData {
  */
 const NewTransactionPage: NextPage = () => {
   const {
-    register,
     setValue,
     trigger,
-    handleSubmit,
     watch,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<FormData>({ mode: "all", defaultValues: { date: new Date() } })
 
   const { mutateAsync: createTransaction } = useCreateTransaction()
