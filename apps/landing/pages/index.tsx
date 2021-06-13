@@ -11,7 +11,7 @@ import {
   Footer,
   Price,
 } from "../components"
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 import { Box, LabeledField, Form, FORM_ERROR } from "@perfolio/components"
 import * as z from "zod"
 import {
@@ -247,12 +247,9 @@ const IndexPage: NextPage = () => {
                   initialValues={{ email: "" }}
                   onSubmit={async ({ email }) => {
                     try {
-                      await request({
-                        path: "/api/email/subscribe",
-                        body: { email },
-                      })
-                      return
+                      await new Api().emails.subscribe({ email })
                       setSubscribed(true)
+                      return
                     } catch (error) {
                       return {
                         [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",

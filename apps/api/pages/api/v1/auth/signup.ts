@@ -1,18 +1,4 @@
-import { withPreflightChecks, withRequestValidation, use } from "../../../../lib"
+import { withPreflightChecks, withRequestValidation, use } from "@perfolio/middleware"
 
-import { db } from "@perfolio/db"
-import { z } from "zod"
-
-export const SignupRequestValidation = z.object({
-  email: z.string().email(),
-  username: z.string(),
-  password: z.string(),
-})
-
-export type SignupRequest = z.infer<typeof SignupRequestValidation>
-
-export async function signup({ email, username, password }: SignupRequest) {
-  await db().user.create({ username, email, password, role: "USER" })
-  return {}
-}
+import { signup, SignupRequestValidation } from "@perfolio/lambda"
 export default use(signup, [withPreflightChecks, withRequestValidation(SignupRequestValidation)])

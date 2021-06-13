@@ -1,15 +1,3 @@
-import { withPreflightChecks, withAuthentication, use, MiddlewareContext } from "../../../../lib"
-import { removeAuthCookie } from "@perfolio/auth"
-import { db } from "@perfolio/db"
-
-export async function signout(_: void, { res, claims }: MiddlewareContext) {
-  if (!claims) {
-    throw new Error(`Unable to sign out, claims is undefined`)
-  }
-
-  db().refreshToken.deleteFromUser(claims.userId)
-
-  removeAuthCookie(res)
-  return {}
-}
+import { withPreflightChecks, withAuthentication, use } from "@perfolio/middleware"
+import { signout } from "@perfolio/lambda"
 export default use(signout, [withPreflightChecks, withAuthentication])

@@ -1,4 +1,4 @@
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { Transaction } from "@perfolio/db"
 import { useAuth } from "@perfolio/auth"
@@ -10,12 +10,7 @@ export function useTransactions() {
   const token = getToken()
   const { data, ...meta } = useQuery<Transaction[], Error>(
     USE_TRANSACTIONS_QUERY_KEY,
-    async () => {
-      return request<Transaction[]>({
-        token,
-        path: "/api/transactions/getTransactions",
-      })
-    },
+    async () => new Api({ token }).transactions.getTransactions(),
     {
       enabled: !!token,
     },
