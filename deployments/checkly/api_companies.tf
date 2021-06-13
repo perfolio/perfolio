@@ -37,6 +37,6 @@ resource "checkly_check" "get_company" {
       comparison = "EQUALS"
       target     = "400"
     }
-    
+
   }
 }
