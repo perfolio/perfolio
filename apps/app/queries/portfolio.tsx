@@ -1,12 +1,10 @@
 import { useQueries } from "react-query"
-import { request } from "@perfolio/api-client"
-import { GetAssetRequestValidation } from "../pages/api/assets/getAsset"
+import { Api } from "@perfolio/api-client"
 import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { Asset, Company } from "@perfolio/db"
 import { useHistory } from "./history"
 import { useAuth } from "@perfolio/auth"
-import { GetCompanyRequestValidation } from "../pages/api/companies/getCompany"
 
 export interface Holding {
   quantity: number
@@ -57,12 +55,7 @@ export const usePortfolio = () => {
     Object.keys(token && history ? history : {}).map((isin) => {
       return {
         queryKey: QUERY_KEY_ASSET_BY_ISIN(isin),
-        queryFn: () =>
-          request<Asset>({
-            token,
-            path: "/api/assets/getAsset",
-            body: GetAssetRequestValidation.parse({ isin }),
-          }),
+        queryFn: () => new Api({ token }).assets.getAsset({ isin }),
       }
     }),
   ).map((asset) => (asset.data as Asset).data)
@@ -70,12 +63,7 @@ export const usePortfolio = () => {
     (token && assets ? assets : []).map(({ symbol }) => {
       return {
         queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
-        queryFn: () =>
-          request<Company>({
-            token,
-            path: "/api/companies/getCompany",
-            body: GetCompanyRequestValidation.parse({ symbol }),
-          }),
+        queryFn: () => new Api({ token }).companies.getCompany({ symbol }),
       }
     }),
   ).map((company) => company.data) as Company[]

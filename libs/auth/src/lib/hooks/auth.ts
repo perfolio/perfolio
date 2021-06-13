@@ -1,8 +1,8 @@
 import { AuthContext, IAuthContext } from "../context"
 import { useContext, useEffect, useState } from "react"
-import { JWT, payload } from "../jwt"
+import { JWT, payload } from "@perfolio/tokens"
 import { z } from "zod"
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 
 export interface UseAuthContext {
   getToken: () => string
@@ -44,26 +44,18 @@ async function signup(
   password: string,
   ctx: IAuthContext,
 ): Promise<void> {
-  await request({
-    token: ctx.getToken(),
-    path: "/api/auth/signup",
-    body: {
-      email,
-      username,
-      password,
-    },
+  await new Api({ token: ctx.getToken() }).auth.signup({
+    email,
+    username,
+    password,
   })
   return signin(email, password, ctx)
 }
 
 async function signin(email: string, password: string, ctx: IAuthContext): Promise<void> {
-  const res = await request({
-    token: ctx.getToken(),
-    path: "/api/auth/signin",
-    body: {
-      email,
-      password,
-    },
+  const res = await new Api({ token: ctx.getToken() }).auth.signin({
+    email,
+    password,
   })
 
   const { accessToken } = z.object({ accessToken: z.string() }).parse(res)
@@ -75,7 +67,7 @@ async function signin(email: string, password: string, ctx: IAuthContext): Promi
  * Remove the token from context and clear all required queries
  */
 async function signout(ctx: IAuthContext) {
-  await request({ token: ctx.getToken(), path: "/api/auth/signout" })
+  await new Api({ token: ctx.getToken() }).auth.signout()
   ctx.setToken(undefined)
 }
 

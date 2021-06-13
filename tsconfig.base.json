@@ -38,7 +38,10 @@
       "@perfolio/time": ["libs/time/src/index.ts"],
       "@perfolio/iexcloud": ["libs/iexcloud/src/index.ts"],
       "@perfolio/email": ["libs/email/src/index.ts"],
-      "@perfolio/api-client": ["libs/api-client/src/index.ts"]
+      "@perfolio/api-client": ["libs/api-client/src/index.ts"],
+      "@perfolio/tokens": ["libs/tokens/src/index.ts"],
+      "@perfolio/lambda": ["libs/lambda/src/index.ts"],
+      "@perfolio/middleware": ["libs/middleware/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
