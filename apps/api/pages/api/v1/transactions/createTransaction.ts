@@ -1,5 +1,5 @@
 import {
-  withPreflightChecks,
+  withContentTypeJson,
   withRequestValidation,
   use,
   withAuthentication,
@@ -7,7 +7,7 @@ import {
 
 import { createTransaction, CreateTransactionRequestValidation } from "@perfolio/lambda"
 export default use(createTransaction, [
-  withPreflightChecks,
+  withContentTypeJson,
   withRequestValidation(CreateTransactionRequestValidation),
   withAuthentication,
 ])

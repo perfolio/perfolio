@@ -1,4 +1,4 @@
-import { withPreflightChecks, use, withAuthentication } from "@perfolio/middleware"
+import { withContentTypeJson, use, withAuthentication } from "@perfolio/middleware"
 import { getHistory } from "@perfolio/lambda"
 
-export default use(getHistory, [withPreflightChecks, withAuthentication])
+export default use(getHistory, [withContentTypeJson, withAuthentication])
