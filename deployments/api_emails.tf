@@ -17,7 +17,7 @@ resource "checkly_check" "subscribe" {
   type                   = "API"
   activated              = true
   frequency              = 5
-  group_id               = checkly_check_group.companies.id
+  group_id               = checkly_check_group.emails.id
   degraded_response_time = 3000
   max_response_time      = 9000
   locations = [
