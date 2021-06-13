@@ -39,7 +39,7 @@ jobs:
       - name: TODO Retrieve deployment URL (example on how to set an ENV var)
         run: "echo VERCEL_DEPLOYMENT_URL=perfolio-${{ env.GIT_BRANCH_NAME }}-chronark.vercel-app >> $GITHUB_ENV"
 
-      - uses: UnlyEd/github-action-await-vercel@v1.1.0
+      - uses: UnlyEd/github-action-await-vercel@v1.2.12
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
