@@ -1,5 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+pnpm fmt
 pnpm tsc
 pnpm lint-staged
