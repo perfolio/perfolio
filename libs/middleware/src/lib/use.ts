@@ -21,7 +21,10 @@ export function castToApiHandler<REQ, RES>(
 }
 
 /**
- * Wrap all middlewares around the handler
+ * Apply all middlewares.
+ *
+ * The first middleware in the array will be the outer most, meaning it will be called
+ * first.
  *
  * A ctx object is used to pass metadat between middlewares.
  * Currently this is only used to pass the user's claims from their jwt to the final
