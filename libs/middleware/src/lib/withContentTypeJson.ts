@@ -11,14 +11,7 @@ export function withContentTypeJson(handler: ApiHandler): ApiHandler {
     res: NextApiResponse,
     ctx: MiddlewareContext,
   ): Promise<void> => {
-    if (
-      /**
-       * OPTIONS requests will be fired during preflight and will not have
-       * content-type set
-       */
-      req.method?.toLowerCase() === "post" &&
-      req.headers["content-type"] !== "application/json"
-    ) {
+    if (req.headers["content-type"] !== "application/json") {
       res.status(400)
       res.end("Content type must be application/json")
       return
