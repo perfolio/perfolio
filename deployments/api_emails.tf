@@ -1,6 +1,6 @@
 
-resource "checkly_check_group" "companies" {
-  name         = "companies"
+resource "checkly_check_group" "emails" {
+  name         = "emails"
   activated    = true
   double_check = true
   concurrency  = 8
