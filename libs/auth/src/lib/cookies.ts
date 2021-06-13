@@ -1,8 +1,8 @@
 import { serialize } from "cookie"
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next"
 
-const TOKEN_NAME = "perfolio_refresh_token"
-const MAX_AGE = 60 * 60 * 8 // 8 hours
+export const TOKEN_NAME = "perfolio_refresh_token"
+const MAX_AGE = 60 * 60 * 24 * 30 // 30 days. This must match the ttl in fauna
 
 /**
  * Save a cookie to the user's browser.
@@ -13,6 +13,7 @@ export function setRefreshCookie(res: NextApiResponse, token: string): void {
      * HTTP-ONLY cookies can only be read server side.
      */
     httpOnly: true,
+    domain: process.env.NODE_ENV === "production" ? "perfol.io" : undefined,
     maxAge: MAX_AGE,
     path: "/",
     sameSite: "lax",
