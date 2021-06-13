@@ -5,6 +5,7 @@ specifiers:
   '@babel/preset-env': 7.12.13
   '@babel/preset-react': 7.12.13
   '@babel/preset-typescript': 7.12.13
+  '@commitlint/config-conventional': ^12.1.4
   '@fauna-labs/fauna-schema-migrate': ^2.1.2
   '@headlessui/react': ^1.2.0
   '@heroicons/react': ^1.0.1
@@ -114,6 +115,7 @@ devDependencies:
   '@babel/preset-env': 7.12.13_@babel+core@7.12.13
   '@babel/preset-react': 7.12.13_@babel+core@7.12.13
   '@babel/preset-typescript': 7.12.13_@babel+core@7.12.13
+  '@commitlint/config-conventional': 12.1.4
   '@fauna-labs/fauna-schema-migrate': 2.1.2_faunadb@4.3.0
   '@lhci/cli': 0.8.0
   '@nrwl/cli': 12.3.6
@@ -1320,6 +1322,13 @@ packages:
       resolve-from: 5.0.0
       resolve-global: 1.0.0
       yargs: 16.2.0
+    dev: true
+
+  /@commitlint/config-conventional/12.1.4:
+    resolution: {integrity: sha512-ZIdzmdy4o4WyqywMEpprRCrehjCSQrHkaRTVZV411GyLigFQHlEBSJITAihLAWe88Qy/8SyoIe5uKvAsV5vRqQ==}
+    engines: {node: '>=v10'}
+    dependencies:
+      conventional-changelog-conventionalcommits: 4.6.0
     dev: true
 
   /@commitlint/ensure/12.1.4:
@@ -5196,6 +5205,15 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       compare-func: 2.0.0
+      q: 1.5.1
+    dev: true
+
+  /conventional-changelog-conventionalcommits/4.6.0:
+    resolution: {integrity: sha512-sj9tj3z5cnHaSJCYObA9nISf7eq/YjscLPoq6nmew4SiOjxqL2KRpK20fjnjVbpNDjJ2HR3MoVcWKXwbVvzS0A==}
+    engines: {node: '>=10'}
+    dependencies:
+      compare-func: 2.0.0
+      lodash: 4.17.21
       q: 1.5.1
     dev: true
 
