@@ -1,6 +1,6 @@
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
-import { GetAssetRequest, GetAssetRequestValidation } from "../pages/api/assets/getAsset"
+import { GetAssetRequest } from "@perfolio/lambda"
 import { Asset } from "@perfolio/db"
 import { useAuth } from "@perfolio/auth"
 
@@ -10,13 +10,7 @@ export function useAsset(req: GetAssetRequest) {
   const token = getToken()
   const { data, ...meta } = useQuery<Asset, Error>(
     QUERY_KEY_ASSET_BY_ISIN(req.isin),
-    async () => {
-      return await request<Asset>({
-        token,
-        path: "/api/assets/getAsset",
-        body: GetAssetRequestValidation.parse(req),
-      })
-    },
+    async () => new Api({ token }).assets.getAsset(req),
     {
       enabled: !!token && !!req.isin,
     },

@@ -1,6 +1,5 @@
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
-import { GetCompanyRequestValidation } from "../pages/api/companies/getCompany"
 import { Company } from "@perfolio/db"
 import { useAuth } from "@perfolio/auth"
 
@@ -10,13 +9,7 @@ export function useCompany(symbol: string | undefined) {
   const token = getToken()
   const { data, ...meta } = useQuery<Company, Error>(
     QUERY_KEY_COMPANY_BY_SYMBOL(symbol ?? ""),
-    async () => {
-      return request<Company>({
-        token,
-        path: "/api/companies/getCompany",
-        body: GetCompanyRequestValidation.parse({ symbol }),
-      })
-    },
+    async () => new Api({ token }).companies.getCompany({ symbol: symbol! }),
     {
       enabled: !!token && !!symbol,
     },

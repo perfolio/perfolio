@@ -1,7 +1,7 @@
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { useAuth } from "@perfolio/auth"
-import { History } from "../pages/api/holdings/getHistory"
+import { History } from "@perfolio/lambda"
 
 export const QUERY_KEY_GET_HISTORY = "history"
 
@@ -10,12 +10,7 @@ export function useHistory() {
   const token = getToken()
   const { data, ...meta } = useQuery<History, Error>(
     QUERY_KEY_GET_HISTORY,
-    async () => {
-      return request<History>({
-        token,
-        path: "/api/holdings/getHistory",
-      })
-    },
+    async () => new Api({ token }).holdings.getHistory(),
     {
       enabled: !!token,
     },
