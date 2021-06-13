@@ -2,6 +2,7 @@
   "name": "perfolio",
   "version": "0.0.0",
   "scripts": {
+    "dev": "concurrently \"nx serve api --port=8080\" \"nx serve app --port=3000\"",
     "build": "nx run-many --target=build --all",
     "test": "nx test",
     "fmt": "pnpm run lint && pnpm prettier --write .",
@@ -88,6 +89,7 @@
     "autoprefixer": "^10.2.6",
     "babel-jest": "26.2.2",
     "commitlint": "^12.1.4",
+    "concurrently": "^6.2.0",
     "cypress": "^7.5.0",
     "dotenv": "8.2.0",
     "eslint": "7.22.0",

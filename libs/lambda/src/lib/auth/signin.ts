@@ -17,6 +17,7 @@ export async function signin(
   { email, password }: SigninRequest,
   { res }: MiddlewareContext,
 ): Promise<SigninResponse> {
+  console.log("ACTUAL SIGNUP HANDLER")
   const user = await db().user.signin({ email, password })
   const newRefreshToken = uuid()
   await db().refreshToken.create({

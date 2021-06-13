@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next"
 import { MiddlewareContext, ApiHandler } from "./types"
 
 /**
@@ -6,17 +5,12 @@ import { MiddlewareContext, ApiHandler } from "./types"
  * This way we do not have to unmarshal it ourselves because next has already done it.
  */
 export function withContentTypeJson(handler: ApiHandler): ApiHandler {
-  return async (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    ctx: MiddlewareContext,
-  ): Promise<void> => {
-    if (req.headers["content-type"] !== "application/json") {
-      res.status(400)
-      res.end("Content type must be application/json")
-      return
+  return async (ctx: MiddlewareContext): Promise<void> => {
+    if (ctx.req.headers["content-type"] !== "application/json") {
+      ctx.res.status(400)
+      return ctx.res.end("Content type must be application/json")
     }
 
-    return handler(req, res, ctx)
+    return handler(ctx)
   }
 }

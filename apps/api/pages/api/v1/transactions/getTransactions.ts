@@ -1,4 +1,4 @@
-import { withContentTypeJson, use, withAuthentication, withOptions } from "@perfolio/middleware"
+import { withContentTypeJson, use, withAuthentication, allowCors } from "@perfolio/middleware"
 import { getTransactions } from "@perfolio/lambda"
 
-export default use(getTransactions, [withOptions, withContentTypeJson, withAuthentication])
+export default use(getTransactions, [allowCors, withContentTypeJson, withAuthentication])

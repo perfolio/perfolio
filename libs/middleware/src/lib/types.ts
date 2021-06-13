@@ -6,10 +6,6 @@ export type MiddlewareContext = {
   res: NextApiResponse
 }
 
-export type ApiHandler = (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  ctx: MiddlewareContext,
-) => Promise<void>
+export type ApiHandler = (ctx: MiddlewareContext) => Promise<void>
 
 export type Middleware = (apiHandler: ApiHandler) => ApiHandler

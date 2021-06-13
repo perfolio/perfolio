@@ -1,16 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next"
 import { MiddlewareContext, ApiHandler } from "./types"
 import { JWT } from "@perfolio/tokens"
 export function withAuthentication(handler: ApiHandler): ApiHandler {
-  return async (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    ctx: MiddlewareContext,
-  ): Promise<void> => {
-    const jwt = req.headers.authorization
+  return async (ctx: MiddlewareContext): Promise<void> => {
+    const jwt = ctx.req.headers.authorization
     if (!jwt) {
-      res.status(401)
-      res.end("Not authorized: Authorization header missing")
+      ctx.res.status(401)
+      ctx.res.end("Not authorized: Authorization header missing")
       return
     }
 
@@ -19,11 +14,10 @@ export function withAuthentication(handler: ApiHandler): ApiHandler {
      */
     try {
       ctx.claims = JWT.verify(jwt)
-      return handler(req, res, ctx)
+      return handler(ctx)
     } catch (err) {
-      res.status(401)
-      res.end(`Unauthorized: ${err}`)
-      return
+      ctx.res.status(401)
+      return ctx.res.end(`Unauthorized: ${err}`)
     }
   }
 }

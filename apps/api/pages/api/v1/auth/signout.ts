@@ -1,3 +1,3 @@
-import { withContentTypeJson, withAuthentication, use, withOptions } from "@perfolio/middleware"
+import { withContentTypeJson, withAuthentication, use, allowCors } from "@perfolio/middleware"
 import { signout } from "@perfolio/lambda"
-export default use(signout, [withOptions, withContentTypeJson, withAuthentication])
+export default use(signout, [allowCors, withContentTypeJson, withAuthentication])

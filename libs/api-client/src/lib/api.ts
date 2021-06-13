@@ -44,8 +44,9 @@ export class Api {
   private readonly token?: string
 
   constructor(opts?: { token?: string }) {
-    this.baseUrl = process.env.PERFOLIO_API_URL ?? "https://api.perfol.io"
+    this.baseUrl = process.env.NX_PERFOLIO_API_URL ?? "http://localhost:8080"
     this.token = opts?.token
+    console.log({ url: this.baseUrl })
   }
 
   /**
@@ -67,7 +68,7 @@ export class Api {
       method: "POST",
       headers,
       body: body ? JSON.stringify(body) : undefined,
-      mode: "cors",
+      // mode: "cors",
     })
 
     if (res.status !== 200) {
@@ -90,7 +91,7 @@ export class Api {
     return {
       signup: async (body: SignupRequest) => this.request<void>({ body, path: "/v1/auth/signup" }),
       signin: async (body: SigninRequest) =>
-        this.request<SigninResponse>({ body, path: "/v1/auth/signin" }),
+        this.request<SigninResponse>({ body, path: "/api/v1/auth/signin" }),
       signout: async () => this.request<void>({ path: "/v1/auth/signout" }),
       refresh: async () => this.request<RefreshResponse>({ path: "/v1/auth/refresh" }),
     }
