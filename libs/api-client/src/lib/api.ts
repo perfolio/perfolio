@@ -46,7 +46,6 @@ export class Api {
   constructor(opts?: { token?: string }) {
     this.baseUrl = process.env.NX_PERFOLIO_API_URL ?? "http://localhost:8080"
     this.token = opts?.token
-    console.log({ url: this.baseUrl })
   }
 
   /**
@@ -68,7 +67,6 @@ export class Api {
       method: "POST",
       headers,
       body: body ? JSON.stringify(body) : undefined,
-      // mode: "cors",
     })
 
     if (res.status !== 200) {
