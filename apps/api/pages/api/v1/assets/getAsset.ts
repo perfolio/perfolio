@@ -1,5 +1,5 @@
 import {
-  withPreflightChecks,
+  withContentTypeJson,
   withRequestValidation,
   use,
   withAuthentication,
@@ -7,7 +7,7 @@ import {
 import { getAsset, GetAssetRequestValidation } from "@perfolio/lambda"
 
 export default use(getAsset, [
-  withPreflightChecks,
+  withContentTypeJson,
   withRequestValidation(GetAssetRequestValidation),
   withAuthentication,
 ])
