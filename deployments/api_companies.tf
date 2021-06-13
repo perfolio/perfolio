@@ -13,7 +13,7 @@ resource "checkly_check_group" "companies" {
 }
 
 resource "checkly_check" "getCompany" {
-  name                   = "Fails due to missing autorization header"
+  name                   = "/companies/getCompany: fails due to missing autorization header"
   type                   = "API"
   activated              = true
   frequency              = 5
@@ -26,7 +26,7 @@ resource "checkly_check" "getCompany" {
   ]
   request {
     follow_redirects = true
-    url              = "https://api.perfol.io/api/companies/getCompany"
+    url              = "https://api.perfol.io/v1/companies/getCompany"
     method           = "POST"
     headers = {
       "Content-Type" = "application/json"

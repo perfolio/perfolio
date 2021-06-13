@@ -13,7 +13,7 @@ resource "checkly_check_group" "emails" {
 }
 
 resource "checkly_check" "subscribe" {
-  name                   = "Successfully enters an email"
+  name                   = "emails/subscribe: successfully enters an email"
   type                   = "API"
   activated              = true
   frequency              = 5
@@ -25,7 +25,7 @@ resource "checkly_check" "subscribe" {
   ]
   request {
     follow_redirects = true
-    url              = "https://api.perfol.io/api/emails/subscribe"
+    url              = "https://api.perfol.io/v1/emails/subscribe"
     method           = "POST"
     headers = {
       "Content-Type" = "application/json"
