@@ -17,7 +17,7 @@ export const DiversityChart: React.FC = (): JSX.Element => {
   const sectors: { [sector: string]: number } = useMemo(() => {
     const tmp: { [sector: string]: number } = {}
 
-    Object.entries(portfolio).forEach(([isin, holding]) => {
+    Object.values(portfolio).forEach((holding) => {
       if (holding.company) {
         const sector = holding.company.data.sector
         if (sector) {
@@ -39,7 +39,7 @@ export const DiversityChart: React.FC = (): JSX.Element => {
   const countries: { [country: string]: number } = useMemo(() => {
     const tmp: { [country: string]: number } = {}
 
-    Object.entries(portfolio).forEach(([isin, holding]) => {
+    Object.values(portfolio).forEach((holding) => {
       if (holding.company) {
         const country = holding.company.data.country
         if (country) {

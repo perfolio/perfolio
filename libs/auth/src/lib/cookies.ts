@@ -52,7 +52,9 @@ export function getTokenFromCookies(req: NextApiRequest): string
  *
  * @throws ERR_TOKEN_NOT_FOUND.
  */
-export function getTokenFromCookies(arg0: GetServerSidePropsContext | NextApiRequest): string {
+export function getTokenFromCookies(
+  arg0: GetServerSidePropsContext | NextApiRequest,
+): string | undefined {
   const cookies: Record<string, string> =
     "cookies" in arg0
       ? (arg0 as NextApiRequest).cookies

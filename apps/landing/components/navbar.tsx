@@ -2,11 +2,8 @@ import React, { useState } from "react"
 import { Logo, Button } from "@perfolio/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
-export interface NavbarProps {
-  links?: { label: string; href: string }[]
-}
 
-export const Navbar: React.FC<NavbarProps> = ({ links = [] }) => {
+export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false)
 
   const handleScroll = () => {

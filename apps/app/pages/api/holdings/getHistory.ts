@@ -108,7 +108,7 @@ function groupTransactionsByAsset(
     if (!(tx.data.assetId in transactionsByAsset)) {
       transactionsByAsset[tx.data.assetId] = []
     }
-    const tmpTxs = transactionsByAsset[tx.data.assetId]
+    const tmpTxs = transactionsByAsset[tx.data.assetId] ?? []
     tmpTxs.push(tx)
     transactionsByAsset[tx.data.assetId] = tmpTxs
   })

@@ -29,8 +29,9 @@ const getLastWithValue = (
 ): { quantity: number; value: number } => {
   if (arr.length >= 1) {
     for (let i = arr.length - 1; i >= 0; i--) {
-      if (!!arr[i] && arr[i].value > 0) {
-        return arr[i]
+      const element = arr[i]
+      if (!!element && element.value > 0) {
+        return element
       }
     }
   }
@@ -80,7 +81,10 @@ export const usePortfolio = () => {
   ).map((company) => company.data) as Company[]
 
   Object.keys(portfolio).forEach((isin, i) => {
-    portfolio[isin].company = companies[i]
+    const company = companies[i]
+    if (company) {
+      portfolio[isin].company = company
+    }
   })
 
   return { portfolio, ...meta }
