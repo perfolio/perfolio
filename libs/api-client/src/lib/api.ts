@@ -67,6 +67,7 @@ export class Api {
       method: "POST",
       headers,
       body: body ? JSON.stringify(body) : undefined,
+      mode: "cors",
     })
 
     if (res.status !== 200) {
