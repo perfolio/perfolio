@@ -1,6 +1,6 @@
 
-resource "checkly_check_group" "companies" {
-  name         = "companies"
+resource "checkly_check_group" "emails" {
+  name         = "emails"
   activated    = true
   double_check = true
   concurrency  = 8
@@ -12,13 +12,12 @@ resource "checkly_check_group" "companies" {
 
 }
 
-resource "checkly_check" "getCompany" {
-  name                   = "/v1/companies/getCompany: fails due to missing autorization header"
+resource "checkly_check" "subscribe" {
+  name                   = "/v1/emails/subscribe: successfully enters an email"
   type                   = "API"
   activated              = true
   frequency              = 5
   group_id               = checkly_check_group.companies.id
-  should_fail = true
   degraded_response_time = 3000
   max_response_time      = 9000
   locations = [
@@ -26,16 +25,17 @@ resource "checkly_check" "getCompany" {
   ]
   request {
     follow_redirects = true
-    url              = "https://api.perfol.io/v1/companies/getCompany"
+    url              = "https://api.perfol.io/v1/emails/subscribe"
     method           = "POST"
     headers = {
       "Content-Type" = "application/json"
     }
+    body = jsonencode({"email" = "emailsubscribetest@perfol.io"})
 
     assertion {
       source     = "STATUS_CODE"
       comparison = "EQUALS"
-      target     = "400"
+      target     = "200"
     }
 
   }
