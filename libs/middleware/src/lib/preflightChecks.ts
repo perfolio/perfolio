@@ -10,7 +10,7 @@ export function withPreflightChecks(handler: ApiHandler): ApiHandler {
     /**
      * For simplicity all request will be POST.
      */
-    if (req.method?.toLowerCase() !== "post") {
+    if (!["post", "options"].includes(req.method!.toLowerCase())) {
       res.status(405)
       res.end("This endpoint only accepts post requests")
       return
