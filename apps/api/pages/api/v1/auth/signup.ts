@@ -1,4 +1,8 @@
-import { withContentTypeJson, withRequestValidation, use } from "@perfolio/middleware"
+import { withContentTypeJson, withRequestValidation, use, withOptions } from "@perfolio/middleware"
 
 import { signup, SignupRequestValidation } from "@perfolio/lambda"
-export default use(signup, [withContentTypeJson, withRequestValidation(SignupRequestValidation)])
+export default use(signup, [
+  withOptions,
+  withContentTypeJson,
+  withRequestValidation(SignupRequestValidation),
+])

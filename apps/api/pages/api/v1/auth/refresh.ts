@@ -1,4 +1,4 @@
-import { withContentTypeJson, use, withAuthentication } from "@perfolio/middleware"
+import { withContentTypeJson, use, withAuthentication, withOptions } from "@perfolio/middleware"
 import { refresh } from "@perfolio/lambda"
 
-export default use(refresh, [withContentTypeJson, withAuthentication])
+export default use(refresh, [withOptions, withContentTypeJson, withAuthentication])
