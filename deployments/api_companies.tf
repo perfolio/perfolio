@@ -13,7 +13,7 @@ resource "checkly_check_group" "companies" {
 }
 
 resource "checkly_check" "getCompany" {
-  name                   = "/companies/getCompany: fails due to missing autorization header"
+  name                   = "/v1/companies/getCompany: fails due to missing autorization header"
   type                   = "API"
   activated              = true
   frequency              = 5

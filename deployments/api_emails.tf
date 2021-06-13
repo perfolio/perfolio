@@ -13,7 +13,7 @@ resource "checkly_check_group" "emails" {
 }
 
 resource "checkly_check" "subscribe" {
-  name                   = "emails/subscribe: successfully enters an email"
+  name                   = "/v1/emails/subscribe: successfully enters an email"
   type                   = "API"
   activated              = true
   frequency              = 5
