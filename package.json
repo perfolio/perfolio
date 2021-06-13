@@ -99,7 +99,7 @@
     "jest": "26.2.2",
     "nx": "^12.3.6",
     "postcss": "^8.3.2",
-    "prettier": "2.2.1",
+    "prettier": "2.3.1",
     "tailwindcss": "^2.1.4",
     "tailwindcss-debug-screens": "^2.0.0",
     "tailwindcss-textshadow": "^2.1.3",
