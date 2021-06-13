@@ -1,4 +1,4 @@
-import { withMiddleware } from "../../../../lib/middleware"
+import { withPreflightChecks, withRequestValidation, use } from "../../../../lib"
 import { z } from "zod"
 
 export const SubscribeRequestValidation = z.object({
@@ -7,8 +7,11 @@ export const SubscribeRequestValidation = z.object({
 
 export type SubscribeRequest = z.infer<typeof SubscribeRequestValidation>
 
-async function getPriceApiHandler({ email }: SubscribeRequest) {
+async function subscribe({ email }: SubscribeRequest) {
   const apiKey = process.env["NX_SENDGRID_TOKEN"]
+  if (!apiKey) {
+    throw new Error("`NX_SENDGRID_TOKEN` must be defined")
+  }
 
   const newsletterListId = "380e1c91-68ec-4152-aab7-775152c2301b"
   const res = await fetch("https://api.sendgrid.com/v3/marketing/contacts", {
@@ -29,4 +32,7 @@ async function getPriceApiHandler({ email }: SubscribeRequest) {
   return
 }
 
-export default withMiddleware(getPriceApiHandler, SubscribeRequestValidation, false)
+export default use(subscribe, [
+  withPreflightChecks,
+  withRequestValidation(SubscribeRequestValidation),
+])
