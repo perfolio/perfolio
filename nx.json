@@ -64,10 +64,6 @@
     },
     "api": {
       "tags": []
-    },
-    "api-e2e": {
-      "tags": [],
-      "implicitDependencies": ["api"]
     }
   }
 }

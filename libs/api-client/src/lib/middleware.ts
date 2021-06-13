@@ -2,7 +2,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import { Claims, JWT } from "@perfolio/auth"
 import { z } from "zod"
 export function withMiddleware<REQ, RES>(
-  handler: (req: REQ, claims?: Claims) => RES,
+  handler: (req: REQ, claims: Claims) => RES,
   reqValidator: z.ZodAny,
   requireAuth = true,
 ): NextApiHandler {
@@ -62,7 +62,7 @@ export function withMiddleware<REQ, RES>(
     }
 
     try {
-      const res = await handler(req, requireAuth ? claims : undefined)
+      const res = await handler(req, requireAuth ? claims : ({} as Claims))
       nextRes.json(res ?? ({} as RES))
       nextRes.end()
     } catch (err) {

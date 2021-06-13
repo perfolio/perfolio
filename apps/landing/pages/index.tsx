@@ -251,6 +251,7 @@ const IndexPage: NextPage = () => {
                         path: "/api/email/subscribe",
                         body: { email },
                       })
+                      return
                       setSubscribed(true)
                     } catch (error) {
                       return {

@@ -4,23 +4,6 @@ import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
 import { Time } from "@perfolio/time"
 import { Box, Spinner } from "@perfolio/components"
 
-const CustomTooltip = ({ active, payload }) => {
-  if (active) {
-    const { time, value } = payload[0]?.payload as {
-      time: string
-      value: number
-    }
-    return (
-      <Box className="flex flex-col p-4 text-center bg-gray-50">
-        <span className="text-xl font-medium">${value.toFixed(2)}</span>
-        <span className="text-sm text-gray-700">{time}</span>
-      </Box>
-    )
-  }
-
-  return null
-}
-
 export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
   const { history, isLoading } = useHistory()
   const valueMap: Record<number, number> = {}
@@ -69,7 +52,19 @@ export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
             </linearGradient>
           </defs>
           <Tooltip
-            content={({ active, payload }) => <CustomTooltip active={active} payload={payload} />}
+            content={({ active, payload }) => {
+              if (!active || !payload) {
+                return null
+              }
+
+              const { time, value } = payload[0].payload
+              return (
+                <Box className="flex flex-col p-4 text-center bg-gray-50">
+                  <span className="text-xl font-medium">${value.toFixed(2)}</span>
+                  <span className="text-sm text-gray-700">{time}</span>
+                </Box>
+              )
+            }}
           />
           <Area
             type="monotone"

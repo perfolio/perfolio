@@ -32,7 +32,7 @@ export async function request<ResponseType>({
   path,
   body,
 }: ApiRequest): Promise<ResponseType> {
-  const headers = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
   }
   if (token) {

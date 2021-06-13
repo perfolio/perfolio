@@ -25,6 +25,7 @@ export const SignupForm = (props: SignupFormProps) => {
           try {
             await signup(email, username, password)
             props.onSuccess?.()
+            return
           } catch (error) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               // This error comes from Prisma
