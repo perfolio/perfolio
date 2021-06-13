@@ -30,7 +30,7 @@ function castToApiHandler<REQ, RES>(
  * @example
  * ```typescript
  * export default use(subscribe, [
- *   withPreflightChecks,
+ *   withContentTypeJson,
  *   withRequestValidation(SubscribeRequestValidation),
  * ])
  * ```

@@ -1,5 +1,5 @@
 export * from "./lib/types"
 export * from "./lib/authentication"
-export * from "./lib/preflightChecks"
+export * from "./lib/withContentTypeJson"
 export * from "./lib/requestValidation"
 export * from "./lib/use"
