@@ -12,7 +12,7 @@ export async function subscribe({ email }: SubscribeRequest) {
     throw new Error("`NX_SENDGRID_TOKEN` must be defined")
   }
 
-  const newsletterListId = "380e1c91-68ec-4152-aab7-775152c2301b"
+  const newsletterListId = "9a32d029-4d38-47d0-bd77-4315086834b6"
   const res = await fetch("https://api.sendgrid.com/v3/marketing/contacts", {
     method: "PUT",
     body: JSON.stringify({

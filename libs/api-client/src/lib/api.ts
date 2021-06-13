@@ -44,7 +44,7 @@ export class Api {
   private readonly token?: string
 
   constructor(opts?: { token?: string }) {
-    this.baseUrl = process.env.NX_PERFOLIO_API_URL ?? "http://localhost:8080"
+    this.baseUrl = process.env.NEXT_PUBLIC_PERFOLIO_API_URL ?? "http://localhost:8080"
     this.token = opts?.token
   }
 
