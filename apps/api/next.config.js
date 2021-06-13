@@ -7,7 +7,6 @@ module.exports = withNx({
       {
         source: "/:version(v\\d+)/:slug*",
         destination: "/api/:version/:slug*",
-        permanent: true,
       },
     ]
   },
