@@ -2,7 +2,7 @@
 const withNx = require("@nrwl/next/plugins/with-nx")
 
 module.exports = withNx({
-  async redirects() {
+  async rewrites() {
     return [
       {
         source: "/:version(v\\d+)/:slug*",
