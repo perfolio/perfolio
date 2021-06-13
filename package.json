@@ -107,5 +107,20 @@
     "ts-jest": "26.5.5",
     "ts-node": "~9.1.1",
     "typescript": "4.2.3"
-  }
+  },
+
+"lint-staged": {
+  "*.{ts,tsx,js,html}": [
+    "eslint --fix --ext .js,.ts,.tsx",
+    "prettier --write"
+  ],
+  "*.{yml,yaml,css,json}": [
+    "prettier --write"
+  ]
+},
+"commitlint": {
+  "extends": [
+    "@commitlint/config-conventional"
+  ]
+}
 }
