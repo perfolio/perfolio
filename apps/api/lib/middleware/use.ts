@@ -1,6 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import { MiddlewareContext, ApiHandler, Middleware } from "./types"
-
+import { Claims } from "@perfolio/auth"
 /**
  * Expose the context to a handler function and transform it to implement `ApiHandler`
  */
@@ -47,6 +47,6 @@ export function use<REQ, RES>(
     for (const mw of mws.reverse()) {
       handler = mw(handler)
     }
-    return handler(req, res, {})
+    return handler(req, res, { req, res, claims: {} as Claims })
   }
 }

@@ -1,7 +1,9 @@
 import { Claims } from "@perfolio/auth"
 import { NextApiRequest, NextApiResponse } from "next"
 export type MiddlewareContext = {
-  claims?: Claims
+  claims: Claims
+  req: NextApiRequest
+  res: NextApiResponse
 }
 
 export type ApiHandler = (
