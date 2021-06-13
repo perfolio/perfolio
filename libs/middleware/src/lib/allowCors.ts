@@ -5,7 +5,6 @@ import { MiddlewareContext, ApiHandler } from "./types"
  */
 export function allowCors(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
-    console.log("enabling cors")
     ctx.res.setHeader("Access-Control-Allow-Credentials", "true")
     ctx.res.setHeader("Access-Control-Allow-Origin", "*")
     // another common pattern
@@ -15,9 +14,7 @@ export function allowCors(handler: ApiHandler): ApiHandler {
       "Access-Control-Allow-Headers",
       "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
     )
-    console.log("done")
     if (ctx.req.method === "OPTIONS") {
-      console.log("PREFLIGHT CHECK DETECTED")
       return ctx.res.status(200).end()
     }
 

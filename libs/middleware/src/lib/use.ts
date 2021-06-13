@@ -43,8 +43,6 @@ export function use<REQ, RES>(
   mws: Middleware[],
 ): NextApiHandler {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    console.log("begin")
-
     let handler = castToApiHandler(fn)
 
     mws.reverse().forEach((mw) => {
