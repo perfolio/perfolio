@@ -64,6 +64,15 @@
     },
     "api": {
       "tags": []
+    },
+    "tokens": {
+      "tags": []
+    },
+    "lambda": {
+      "tags": []
+    },
+    "middleware": {
+      "tags": []
     }
   }
 }

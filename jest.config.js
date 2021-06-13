@@ -10,5 +10,8 @@ module.exports = {
     "<rootDir>/apps/landing",
     "<rootDir>/libs/email",
     "<rootDir>/apps/api",
+    "<rootDir>/libs/tokens",
+    "<rootDir>/libs/lambda",
+    "<rootDir>/libs/middleware",
   ],
 }
