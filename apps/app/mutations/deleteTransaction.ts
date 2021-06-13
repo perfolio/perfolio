@@ -1,11 +1,7 @@
-import { Transaction } from "@perfolio/db"
 import { useMutation, useQueryClient } from "react-query"
-import { request } from "@perfolio/api-client"
+import { Api } from "@perfolio/api-client"
 import { useAuth } from "@perfolio/auth"
-import {
-  DeleteTransactionRequestValidation,
-  DeleteTransactionRequest,
-} from "../pages/api/transactions/delete"
+import { DeleteTransactionRequest } from "@perfolio/lambda"
 import { USE_TRANSACTIONS_QUERY_KEY } from "../queries"
 
 export function useDeleteTransaction() {
@@ -13,14 +9,9 @@ export function useDeleteTransaction() {
   const token = getToken()
   const queryClient = useQueryClient()
 
-  return useMutation<Transaction, Error, DeleteTransactionRequest>({
-    mutationFn: (variables: DeleteTransactionRequest) => {
-      return request<Transaction>({
-        token,
-        path: "/api/transactions/delete",
-        body: DeleteTransactionRequestValidation.parse(variables),
-      })
-    },
+  return useMutation<void, Error, DeleteTransactionRequest>({
+    mutationFn: (variables: DeleteTransactionRequest) =>
+      new Api({ token }).transactions.deleteTransaction(variables),
     onSuccess: () => {
       queryClient.invalidateQueries(USE_TRANSACTIONS_QUERY_KEY)
     },

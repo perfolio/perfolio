@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { NextPage } from "next"
 import { useAuth } from "../hooks/auth"
-import { request } from "@perfolio/api-client"
-import { JWT } from "../jwt"
+import { Api } from "@perfolio/api-client"
+import { JWT } from "@perfolio/tokens"
 
 /**
  * A spinner animation blocking the entire screen.
@@ -121,9 +121,8 @@ export function withAuthentication(
        */
 
       setLoading(true)
-      request<{ accessToken: string }>({
-        path: "/api/auth/refresh",
-      })
+      new Api().auth
+        .refresh()
         .then(({ accessToken }) => {
           setToken(accessToken)
         })

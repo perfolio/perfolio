@@ -389,6 +389,69 @@
           }
         }
       }
+    },
+    "tokens": {
+      "root": "libs/tokens",
+      "sourceRoot": "libs/tokens/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/tokens/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/tokens"],
+          "options": {
+            "jestConfig": "libs/tokens/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lambda": {
+      "root": "libs/lambda",
+      "sourceRoot": "libs/lambda/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lambda/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lambda"],
+          "options": {
+            "jestConfig": "libs/lambda/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "middleware": {
+      "root": "libs/middleware",
+      "sourceRoot": "libs/middleware/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/middleware/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/middleware"],
+          "options": {
+            "jestConfig": "libs/middleware/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
