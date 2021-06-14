@@ -452,6 +452,27 @@
           }
         }
       }
+    },
+    "localstorage": {
+      "root": "libs/localstorage",
+      "sourceRoot": "libs/localstorage/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/localstorage/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/localstorage"],
+          "options": {
+            "jestConfig": "libs/localstorage/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
