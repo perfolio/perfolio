@@ -3,12 +3,12 @@ import {
   withRequestValidation,
   use,
   withAuthentication,
-  allowCors,
+  withCors,
 } from "@perfolio/middleware"
 
 import { deleteTransaction, DeleteTransactionRequestValidation } from "@perfolio/lambda"
 export default use(deleteTransaction, [
-  allowCors,
+  withCors(),
   withContentTypeJson,
   withRequestValidation(DeleteTransactionRequestValidation),
   withAuthentication,
