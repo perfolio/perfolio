@@ -7,9 +7,7 @@ export function allowCors(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
     ctx.res.setHeader("Access-Control-Allow-Credentials", "true")
     ctx.res.setHeader("Access-Control-Allow-Origin", ctx.req.headers.origin ?? "*")
-    // another common pattern
-    // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-    ctx.res.setHeader("Access-Control-Allow-Methods", "OPTIONS,POST")
+    ctx.res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,DELETE,OPTIONS,POST")
     ctx.res.setHeader(
       "Access-Control-Allow-Headers",
       "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
