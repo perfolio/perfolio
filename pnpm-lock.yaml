@@ -29,6 +29,7 @@ specifiers:
   '@tailwindcss/typography': ^0.4.1
   '@testing-library/react': 11.2.6
   '@types/cookie': ^0.4.0
+  '@types/cors': ^2.8.10
   '@types/jest': 26.0.8
   '@types/jsonwebtoken': ^8.5.1
   '@types/node': 14.14.33
@@ -44,6 +45,7 @@ specifiers:
   concurrently: ^6.2.0
   cookie: ^0.4.1
   core-js: ^3.14.0
+  cors: ^2.8.5
   cypress: ^7.5.0
   document-register-element: 1.13.1
   dotenv: 8.2.0
@@ -93,6 +95,7 @@ dependencies:
   classnames: 2.3.1
   cookie: 0.4.1
   core-js: 3.14.0
+  cors: 2.8.5
   document-register-element: 1.13.1
   faunadb: 4.3.0
   jsonwebtoken: 8.5.1
@@ -134,6 +137,7 @@ devDependencies:
   '@tailwindcss/typography': 0.4.1_tailwindcss@2.1.4
   '@testing-library/react': 11.2.6_react-dom@17.0.2+react@17.0.2
   '@types/cookie': 0.4.0
+  '@types/cors': 2.8.10
   '@types/jest': 26.0.8
   '@types/jsonwebtoken': 8.5.1
   '@types/node': 14.14.33
@@ -1568,7 +1572,7 @@ packages:
       ink-divider: 3.0.0_ink@3.0.8+react@17.0.2
       ink-gradient: 2.0.0_ink@3.0.8+react@17.0.2
       ink-link: 2.0.0_ink@3.0.8+react@17.0.2
-      ink-select-input: github.com/fauna-labs/ink-select-input/1b980edb61cf99cca989dda7d0d77abbcaebd592_ink@3.0.8+react@17.0.2
+      ink-select-input: github.com/fauna-labs/ink-select-input/ccafccf2c1f4d08704c466e48e26844f03012e15_ink@3.0.8+react@17.0.2
       ink-spinner: 4.0.2_ink@3.0.8+react@17.0.2
       ink-syntax-highlight: 1.0.1_ink@3.0.8+react@17.0.2
       js-beautify: 1.13.13
@@ -3000,6 +3004,10 @@ packages:
 
   /@types/cookie/0.4.0:
     resolution: {integrity: sha512-y7mImlc/rNkvCRmg8gC3/lj87S7pTUIJ6QGjwHR9WQJcFs+ZMTOaoPrkdFA/YdbuqVEmEbb5RdhVxMkAcgOnpg==}
+    dev: true
+
+  /@types/cors/2.8.10:
+    resolution: {integrity: sha512-C7srjHiVG3Ey1nR6d511dtDkCEjxuN9W1HWAEjGq8kpcwmNM6JJkpC0xvabM7BXTG2wDq8Eu33iH9aQKa7IvLQ==}
     dev: true
 
   /@types/d3-path/1.0.9:
@@ -5344,6 +5352,14 @@ packages:
 
   /core-util-is/1.0.2:
     resolution: {integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=}
+
+  /cors/2.8.5:
+    resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      object-assign: 4.1.1
+      vary: 1.1.2
+    dev: false
 
   /corser/2.0.1:
     resolution: {integrity: sha1-jtolLsqrWEDc2XXOuQ2TcMgZ/4c=}
@@ -14966,9 +14982,9 @@ packages:
     resolution: {integrity: sha512-yvcO3FZ8URR+LliMGqaW7tlVOOTzmup3vzKEe9Ds7twyJtdhvYa7dIYr0FbD1wVfWC1OuS83vZfHtCKslPuRhA==}
     dev: false
 
-  github.com/fauna-labs/ink-select-input/1b980edb61cf99cca989dda7d0d77abbcaebd592_ink@3.0.8+react@17.0.2:
-    resolution: {tarball: https://codeload.github.com/fauna-labs/ink-select-input/tar.gz/1b980edb61cf99cca989dda7d0d77abbcaebd592}
-    id: github.com/fauna-labs/ink-select-input/1b980edb61cf99cca989dda7d0d77abbcaebd592
+  github.com/fauna-labs/ink-select-input/ccafccf2c1f4d08704c466e48e26844f03012e15_ink@3.0.8+react@17.0.2:
+    resolution: {tarball: https://codeload.github.com/fauna-labs/ink-select-input/tar.gz/ccafccf2c1f4d08704c466e48e26844f03012e15}
+    id: github.com/fauna-labs/ink-select-input/ccafccf2c1f4d08704c466e48e26844f03012e15
     name: ink-select-input
     version: 4.2.1
     engines: {node: '>=10'}

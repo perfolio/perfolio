@@ -1,42 +1,205 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useHistory } from "../../queries"
 import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
 import { Time } from "@perfolio/time"
 import { Box, Spinner } from "@perfolio/components"
 
-export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
-  const { history, isLoading } = useHistory()
-  const valueMap: Record<number, number> = {}
+type Data = {
+  time: string
+  value: number
+}[]
 
-  if (!!history && Object.keys(history).length >= 1) {
-    Object.values(history).forEach((asset) => {
-      asset.forEach((day) => {
-        if (day.value > 0) {
-          if (!valueMap[day.time]) {
-            valueMap[day.time] = 0
-          }
-          valueMap[day.time] += day.value * day.quantity
-        }
-      })
+type AssetHistory = {
+  time: number
+  quantity: number
+  value: number
+}[]
+
+type Weights = {
+  [time: number]: {
+    [isin: string]: number
+  }
+}
+
+type ReturnsPerAsset = {
+  [time: number]: {
+    [isin: string]: number
+  }
+}
+
+type ValueAtTime = {
+  [time: number]: number
+}
+
+export const plotAbsolute = (history: Timeline): Data => {
+  return Object.entries(history).map(([time, assets]) => {
+    return {
+      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
+      value: Object.values(assets)
+        .map((asset) => asset.quantity * asset.value)
+        .reduce((acc, val) => acc + val),
+    }
+  })
+}
+
+/**
+ * Compute weights for each asset for each day.
+ *
+ * If a user has $100 worth of assetA and $100 worth of assetB the weights will be 0.5 and 0.5
+ */
+const calculateWeight = (history: Timeline): Weights => {
+  const weights: Weights = {}
+  Object.entries(history).forEach((day) => {
+    const time = Number(day[0])
+    const assets = day[1]
+    /**
+     * Compute the total value of all assets on this day.
+     */
+    const totalValue = Object.values(assets)
+      .map((asset) => asset.quantity * asset.value)
+      .reduce((acc, val) => acc + val)
+
+    if (!weights[time]) {
+      weights[time] = {}
+    }
+
+    Object.entries(assets).forEach(([assetId, { value, quantity }]) => {
+      weights[time][assetId] = (value * quantity) / totalValue
+    })
+  })
+  return weights
+}
+
+const calculateReturns = (today: number, yesterday: number): number => {
+  return yesterday === 0 ? 0 : today / yesterday - 1
+}
+
+const calculateReturnsPerAsset = (history: Timeline): ReturnsPerAsset => {
+  const returns = {} as ReturnsPerAsset
+
+  for (let i = 0; i < Object.keys(history).length; i++) {
+    const day = Object.entries(history)[i]
+
+    const time = Number(day[0])
+
+    const assets = day[1]
+
+    // valueToday / valueYesterday - 1 ?? 0
+
+    if (!returns[time]) {
+      returns[time] = {}
+    }
+
+    Object.entries(assets).forEach(([assetId, today]) => {
+      let yesterday: { value: number } | undefined
+      try {
+        yesterday = Object.values(history)[i - 1][assetId]
+      } catch {
+        yesterday = undefined
+      }
+      returns[time][assetId] =
+        !yesterday || yesterday.value === 0 ? 0 : today.value / yesterday.value - 1
+      returns[time][assetId] = calculateReturns(today.value, yesterday?.value ?? 0)
     })
   }
+  return returns
+}
 
-  const data = Object.entries(valueMap).map(([time, value]) => {
+const calculateTotalReturns = (weights: Weights, returns: ReturnsPerAsset): ValueAtTime => {
+  const times: number[] = Object.keys(weights).map((time) => Number(time))
+  const totalReturns: ValueAtTime = {}
+  times.forEach((time) => {
+    let total = 0
+    if (!(time in weights)) {
+      throw new Error(`${time} is not in weights`)
+    }
+    Object.keys(weights[time]).forEach((assetId) => {
+      if (!(assetId in weights[time])) {
+        throw new Error(`${assetId} is not in weights.${time}`)
+      }
+
+      if (!(time in returns)) {
+        throw new Error(`${time} is not in returns`)
+      }
+      if (!(assetId in returns[time])) {
+        throw new Error(`${assetId} is not in returns.${time}`)
+      }
+      total += weights[time][assetId] * returns[time][assetId]
+    })
+    totalReturns[time] = total
+  })
+  return totalReturns
+}
+
+const buildIndex = (totalReturns: ValueAtTime): ValueAtTime => {
+  const index: ValueAtTime = {}
+
+  /**
+   * drag timestamp, to retrieve the index value from yesterday
+   */
+  let yesterday = 0
+  for (let i = 0; i < Object.keys(totalReturns).length; i++) {
+    const time = Object.keys(totalReturns)[i]
+    if (i === 0) {
+      index[Number(time)] = 1
+    } else {
+      const returnsToday = Object.values(totalReturns)[i]
+      if (i < 10) {
+        console.log({ yesterday, indexYesterday: index[yesterday], returnsToday })
+      }
+      index[Number(time)] = index[yesterday] * (1 + returnsToday)
+    }
+    yesterday = Number(time)
+  }
+  return index
+}
+
+const plotRelative = (history: { [isin: string]: AssetHistory }): Data => {
+  const timeline = toTimeseries(history)
+  const weights = calculateWeight(timeline)
+  const returns = calculateReturnsPerAsset(timeline)
+  const totalReturns = calculateTotalReturns(weights, returns)
+  const index = buildIndex(totalReturns)
+  console.table(index)
+  const data = Object.entries(index).map(([time, value]) => {
     return {
       time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
       value,
     }
   })
+  return data
+}
 
-  // while (currentUnix < Date.now()) {
-  //   currentValue += (currentValue * (Math.random() - 0.46)) / 3
-  //   currentUnix += 24 * 60 * 60 * 1000
-  //   data.push({
-  //     value: currentValue,
-  //     date: new Date(currentUnix).toLocaleDateString(),
-  //   })
-  // }
+type Timeline = {
+  [time: number]: {
+    [asset: string]: {
+      value: number
+      quantity: number
+    }
+  }
+}
+const toTimeseries = (historyMap: { [isin: string]: AssetHistory }): Timeline => {
+  const timeline: Timeline = {}
+  Object.entries(historyMap).forEach(([isin, history]) => {
+    history
+      .sort((a, b) => a.time - b.time)
+      .forEach((day) => {
+        if (day.value > 0) {
+          if (!timeline[day.time]) {
+            timeline[day.time] = {}
+          }
 
+          timeline[day.time][isin] = { value: day.value, quantity: day.quantity }
+        }
+      })
+  })
+  return timeline
+}
+
+export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
+  const { history, isLoading } = useHistory()
+
+  const data = useMemo(() => plotRelative(history ?? {}), [history])
   return (
     <ResponsiveContainer width="100%" height="100%">
       {isLoading ? (
