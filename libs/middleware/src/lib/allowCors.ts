@@ -15,6 +15,7 @@ export function allowCors(handler: ApiHandler): ApiHandler {
       "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
     )
     if (ctx.req.method === "OPTIONS") {
+      console.log("detected OPTIONS, returning 200")
       return ctx.res.status(200).end()
     }
 
