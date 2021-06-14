@@ -1,8 +1,8 @@
-import { withContentTypeJson, withRequestValidation, use, allowCors } from "@perfolio/middleware"
+import { withContentTypeJson, withRequestValidation, use, withCors } from "@perfolio/middleware"
 import { subscribe, SubscribeRequestValidation } from "@perfolio/lambda"
 
 export default use(subscribe, [
-  allowCors,
+  withCors(),
   withContentTypeJson,
   withRequestValidation(SubscribeRequestValidation),
 ])

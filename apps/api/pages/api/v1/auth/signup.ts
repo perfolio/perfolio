@@ -1,8 +1,8 @@
-import { withContentTypeJson, withRequestValidation, use, allowCors } from "@perfolio/middleware"
+import { withContentTypeJson, withRequestValidation, use, withCors } from "@perfolio/middleware"
 
 import { signup, SignupRequestValidation } from "@perfolio/lambda"
 export default use(signup, [
-  allowCors,
+  withCors("https://app.perfol.io"),
   withContentTypeJson,
   withRequestValidation(SignupRequestValidation),
 ])

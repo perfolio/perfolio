@@ -3,12 +3,12 @@ import {
   withRequestValidation,
   use,
   withAuthentication,
-  allowCors,
+  withCors,
 } from "@perfolio/middleware"
 import { getAsset, GetAssetRequestValidation } from "@perfolio/lambda"
 
 export default use(getAsset, [
-  allowCors,
+  withCors(),
   withContentTypeJson,
   withRequestValidation(GetAssetRequestValidation),
   withAuthentication,
