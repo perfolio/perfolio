@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app"
 import { AuthProvider } from "@perfolio/auth"
-import { QueryClient, QueryClientProvider } from "react-query"
+import { QueryClientProvider } from "react-query"
+import { PersistentQueryClient } from "@perfolio/localstorage"
 import Head from "next/head"
 import "tailwindcss/tailwind.css"
 function MyApp({ Component, pageProps }: AppProps) {
@@ -18,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="msapplication-TileColor" content="#1A202C"></meta>
         <meta name="theme-color" content="#1A202C"></meta>
       </Head>
-      <QueryClientProvider client={new QueryClient()}>
+      <QueryClientProvider client={PersistentQueryClient()}>
         <AuthProvider>
           <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
             <Component {...pageProps} />;
