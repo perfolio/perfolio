@@ -3,12 +3,12 @@ import {
   withRequestValidation,
   use,
   withAuthentication,
-  allowCors,
+  withCors,
 } from "@perfolio/middleware"
 
 import { createTransaction, CreateTransactionRequestValidation } from "@perfolio/lambda"
 export default use(createTransaction, [
-  allowCors,
+  withCors(),
   withContentTypeJson,
   withRequestValidation(CreateTransactionRequestValidation),
   withAuthentication,

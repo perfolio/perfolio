@@ -1,5 +1,5 @@
 import { signin } from "@perfolio/lambda"
 
-import { use, allowCors } from "@perfolio/middleware"
+import { use, withCors } from "@perfolio/middleware"
 
-export default use(signin, [allowCors])
+export default use(signin, [withCors("https://app.perfol.io")])
