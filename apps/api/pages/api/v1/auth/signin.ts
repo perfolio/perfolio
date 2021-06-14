@@ -1,8 +1,4 @@
-import { withContentTypeJson, withRequestValidation, use, allowCors } from "@perfolio/middleware"
-import { signin, SigninRequestValidation } from "@perfolio/lambda"
+import { use } from "@perfolio/middleware"
+import { signin } from "@perfolio/lambda"
 
-export default use(signin, [
-  allowCors,
-  withContentTypeJson,
-  withRequestValidation(SigninRequestValidation),
-])
+export default use(signin, [])
