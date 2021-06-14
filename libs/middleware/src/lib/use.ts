@@ -48,7 +48,7 @@ export function use<REQ, RES>(
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     let handler = castToApiHandler(fn)
 
-    mws.forEach((mw) => {
+    mws.reverse().forEach((mw) => {
       handler = mw(handler)
     })
 
