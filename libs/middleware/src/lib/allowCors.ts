@@ -5,9 +5,14 @@ import { MiddlewareContext, ApiHandler } from "./types"
  */
 export function allowCors(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
+    console.log("Applying cors middleware")
+
     ctx.res.setHeader("Access-Control-Allow-Credentials", "true")
     if (ctx.req.headers.origin) {
       ctx.res.setHeader("Access-Control-Allow-Origin", ctx.req.headers.origin)
+      console.log(
+        `Setting Access-Control-Allow-Origin=${ctx.res.getHeader("Access-Control-Allow-Origin")}`,
+      )
     }
     ctx.res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,DELETE,OPTIONS,POST")
     ctx.res.setHeader(
