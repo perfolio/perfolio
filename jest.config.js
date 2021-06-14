@@ -13,5 +13,6 @@ module.exports = {
     "<rootDir>/libs/tokens",
     "<rootDir>/libs/lambda",
     "<rootDir>/libs/middleware",
+    "<rootDir>/libs/localstorage",
   ],
 }
