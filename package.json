@@ -34,6 +34,7 @@
     "@nrwl/next": "12.3.6",
     "@radix-ui/react-toggle-group": "^0.0.8",
     "@radix-ui/react-tooltip": "^0.0.18",
+    "@sentry/nextjs": "^6.7.1",
     "classnames": "^2.3.1",
     "cookie": "^0.4.1",
     "core-js": "^3.14.0",
