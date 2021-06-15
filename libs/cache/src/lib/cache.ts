@@ -10,10 +10,20 @@ export class Cache {
     return new Redis(connection)
   }
 
-  public static async set(key: Redis.KeyType, value: Record<string, unknown>): Promise<void> {
+  /**
+   *
+   * @param key
+   * @param value
+   * @param ttl in seconds
+   */
+  public static async set(
+    key: Redis.KeyType,
+    value: Record<string, unknown>,
+    ttl: number,
+  ): Promise<void> {
     const redis = Cache.connect()
 
-    await redis.set(key, JSON.stringify(value))
+    await redis.set(key, JSON.stringify(value), "EX", ttl)
 
     redis.quit()
   }

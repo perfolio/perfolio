@@ -51,6 +51,6 @@ export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetComp
     phone: newCompany.phone,
   }
 
-  await Cache.set(symbol, company)
+  await Cache.set(symbol, company, 30 * 24 * 60 * 60) // 30 days
   return company
 }
