@@ -1,5 +1,21 @@
 import Redis from "ioredis"
 
+export class Key {
+  public readonly query: string
+  public readonly parameters: Record<string, unknown>
+  constructor(query: string, parameters: Record<string, unknown>) {
+    this.query = query
+    this.parameters = parameters
+  }
+
+  public toString(): string {
+    return JSON.stringify({
+      parameters: this.parameters,
+      query: this.query,
+    })
+  }
+}
+
 export class Cache {
   private static connect(): Redis.Redis {
     const connection = process.env.REDIS_CONNECTION
@@ -17,22 +33,22 @@ export class Cache {
    * @param ttl in seconds
    */
   public static async set(
-    key: Redis.KeyType,
-    value: Record<string, unknown>,
+    key: Key,
+    value: Record<string, unknown> | unknown[],
     ttl: number,
   ): Promise<void> {
     const redis = Cache.connect()
 
-    await redis.set(key, JSON.stringify(value), "EX", ttl)
+    await redis.setex(key.toString(), ttl, JSON.stringify(value))
 
     redis.quit()
   }
 
-  public static async get<T>(key: Redis.KeyType): Promise<T | null> {
+  public static async get<T>(key: Key): Promise<T | null> {
     const redis = Cache.connect()
 
     try {
-      const res = await redis.get(key)
+      const res = await redis.get(key.toString())
       if (!res) {
         return null
       }

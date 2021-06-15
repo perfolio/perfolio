@@ -2,8 +2,6 @@ import { Client } from "faunadb"
 import { Asset } from "./documents/asset"
 import { RefreshToken } from "./documents/refresh_token"
 import { User } from "./documents/user"
-import { Price } from "./documents/price"
-import { Time } from "@perfolio/time"
 import { z } from "zod"
 import { Transaction } from "./documents/transaction"
 
@@ -52,16 +50,6 @@ export class Fauna {
     }
   }
 
-  public get price() {
-    return {
-      create: (input: z.infer<typeof Price.schema>) => Price.create(this.client, input),
-      fromSymbolAndTime: (asset: string, time: Time) =>
-        Price.fromSymbolAndTime(this.client, asset, time),
-      fromSymbol: (symbol: string, begin: Time, end: Time) =>
-        Price.fromSymbol(this.client, symbol, begin, end),
-      delete: (price: Price) => price.delete(this.client),
-    }
-  }
   public get refreshToken() {
     return {
       create: (input: z.infer<typeof RefreshToken.schema>) =>

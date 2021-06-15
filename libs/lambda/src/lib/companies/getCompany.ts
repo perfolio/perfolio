@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { getCompany as getCompanyFromCloud, getLogo as getLogoFromCloud } from "@perfolio/iexcloud"
-import { Cache } from "@perfolio/cache"
+import { Cache, Key } from "@perfolio/cache"
 import { Company } from "@perfolio/types"
 export const GetCompanyRequestValidation = z.object({
   symbol: z.string(),
@@ -10,7 +10,9 @@ export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>
 export type GetCompanyResponse = Company
 
 export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetCompanyResponse> {
-  let company = await Cache.get<Company>(symbol)
+  const key = new Key("getCompany", { symbol })
+
+  let company = await Cache.get<Company>(key)
   if (company) {
     return company
   }
@@ -51,6 +53,6 @@ export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetComp
     phone: newCompany.phone,
   }
 
-  await Cache.set(symbol, company, 30 * 24 * 60 * 60) // 30 days
+  await Cache.set(key, company, 30 * 24 * 60 * 60) // 30 days
   return company
 }
