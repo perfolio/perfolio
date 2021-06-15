@@ -18,12 +18,12 @@ export const GetPriceResponseValidator = z.array(
  */
 export type GetPriceResponse = { close: number }
 
-export async function getPrice(asset: string, time: Time): Promise<GetPriceResponse> {
+export async function getPrice(symbol: string, time: Time): Promise<GetPriceResponse> {
   const { year, month, day } = time.pad()
 
   const res = await new Client()
     .get({
-      path: `/stock/${asset}/chart/date/${year}${month}${day}`,
+      path: `/stock/${symbol}/chart/date/${year}${month}${day}`,
       parameters: {
         chartByDay: "true",
         chartCloseOnly: "true",
@@ -61,9 +61,9 @@ export const GetHistoryResponseValidator = z.array(
 
 export type GetHistoryResponse = z.infer<typeof GetHistoryResponseValidator>
 
-export async function getHistory(asset: string): Promise<GetHistoryResponse> {
+export async function getHistory(symbol: string): Promise<GetHistoryResponse> {
   const res = await new Client().get({
-    path: `/stock/${asset}/chart/max`,
+    path: `/stock/${symbol}/chart/max`,
     parameters: {
       chartCloseOnly: "true",
     },
