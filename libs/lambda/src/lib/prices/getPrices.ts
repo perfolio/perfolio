@@ -1,10 +1,11 @@
 import { z } from "zod"
-import { db } from "@perfolio/db"
 import {
   getPrice as getPriceFromCloud,
   getHistory as getHistoryFromCloud,
 } from "@perfolio/iexcloud"
 import { Time } from "@perfolio/time"
+import { Price } from "@perfolio/types"
+import { Cache, Key } from "@perfolio/cache"
 
 export const GetPricesRequestValidation = z.object({
   symbol: z.string(),
@@ -19,53 +20,38 @@ export async function getPrices({
   begin,
   end,
 }: GetPricesRequest): Promise<GetPricesResponse> {
-  if (symbol.includes("_")) {
-    symbol = symbol.split("_")[1] ?? symbol
-  }
-  if (symbol.includes("-")) {
-    symbol = symbol.split("-")[0] ?? symbol
-  }
-  let cachedPrices = await db().price.fromSymbol(
-    symbol,
-    Time.fromTimestamp(begin),
-    Time.fromTimestamp(end),
-  )
+  // if (symbol.includes("_")) {
+  //   symbol = symbol.split("_")[1] ?? symbol
+  // }
+  // if (symbol.includes("-")) {
+  //   symbol = symbol.split("-")[0] ?? symbol
+  // }
+
+  const key = new Key("getPrices", { symbol })
+
+  let cachedPrices = await Cache.get<Price[]>(key)
   /**
-   * In case this is a new company we load everything in bulk and return immediately
-   * because we are certain there are no dates missing.
-   *
-   * TODO: I have to play with the length a bit.
-   *
-   * The idea is to get the right number to fetch the least amount of data from iex.
-   * Considerations:
-   * - Due to the entry of a transaction there probably are already a few entries, so
-   *   I set it to 50 as a start.
-   * - The only real issue I see is when a company does not have 50 days worth of prices
-   *   yet. In this case we are overfetching every time this data is needed
+   * In case this is a new company we load everything in bulk
    */
-  if (cachedPrices.length === 50) {
+  if (!cachedPrices) {
     const allPrices = await getHistoryFromCloud(symbol)
-    cachedPrices = await Promise.all(
-      allPrices.map((price) =>
-        db().price.create({
-          symbol,
-          time: Time.fromDate(new Date(price.date)).unix(),
-          value: price.close,
-        }),
-      ),
-    )
+    cachedPrices = allPrices.map((price) => {
+      return {
+        symbol,
+        time: Time.fromDate(new Date(price.date)).unix(),
+        value: price.close,
+      }
+    })
   }
   /**
-   * If we have a subset of dates but potentially missing a few we fetch the missing
-   * ones in parallel.
+   * Figure out what dates are missing
    */
   /**
-   * Has the format:
    * [unixTimestamp]: value.
    */
   const priceMap: Record<number, number> = {}
   cachedPrices.forEach((price) => {
-    priceMap[price.data.time] = price.data.value
+    priceMap[price.time] = price.value
   })
   const priceRequests: Time[] = []
   for (let day = Time.fromTimestamp(begin); day.unix() <= end; day = day.nextDay()) {
@@ -73,22 +59,33 @@ export async function getPrices({
       priceRequests.push(day)
     }
   }
-  const newPrices = await Promise.all(
+
+  /**
+   * Load remaining prices
+   */
+  await Promise.all(
     priceRequests.map(async (time) => {
       const price = await getPriceFromCloud(symbol, time)
 
-      const saved = await db().price.create({
-        symbol,
-        time: time.unix(),
-        value: price.close,
-      })
-      return saved
+      priceMap[time.unix()] = price.close
     }),
   )
 
-  newPrices.forEach((price) => {
-    priceMap[price.data.time] = price.data.value
-  })
+  /**
+   * Save ALL prices back to redis
+   */
+  Cache.set(
+    key,
+    Object.entries(priceMap).map(([time, value]) => {
+      return {
+        symbol,
+        time,
+        value,
+      }
+    }),
+    30 * 24 * 60 * 60, // 30 days
+  )
+
   /**
    * Only return the prices the user originally requestes
    */

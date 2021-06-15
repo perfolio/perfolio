@@ -1,7 +1,7 @@
 import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { GetPriceRequest } from "@perfolio/lambda"
-import { Price } from "@perfolio/db"
+import { Price } from "@perfolio/types"
 import { useAuth } from "@perfolio/auth"
 
 export function usePrice(req: GetPriceRequest) {

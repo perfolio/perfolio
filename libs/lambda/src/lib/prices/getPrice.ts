@@ -1,8 +1,8 @@
 import { Time } from "@perfolio/time"
 import { z } from "zod"
-import { db, Price } from "@perfolio/db"
 import { getPrice as getPriceFromCloud } from "@perfolio/iexcloud"
-
+import { Key, Cache } from "@perfolio/cache"
+import { Price } from "@perfolio/types"
 export const GetPriceRequestValidation = z.object({
   symbol: z.string(),
   time: z.number().int(),
@@ -11,16 +11,17 @@ export const GetPriceRequestValidation = z.object({
 export type GetPriceRequest = z.infer<typeof GetPriceRequestValidation>
 export type GetPriceResponse = Price
 export async function getPrice({ symbol, time }: GetPriceRequest): Promise<GetPriceResponse> {
-  const t = Time.fromTimestamp(time)
-  const price = await db().price.fromSymbolAndTime(symbol, t)
+  const key = new Key("getPrice", { symbol, time })
+
+  let price = await Cache.get<Price>(key)
   if (price) {
     return price
   }
+  const newPrice = await getPriceFromCloud(symbol, Time.fromTimestamp(time))
 
-  const newPrice = await getPriceFromCloud(symbol, t)
-  return db().price.create({
-    symbol,
-    time,
-    value: newPrice.close,
-  })
+  price = { symbol, time, value: newPrice.close }
+
+  await Cache.set(key, price, 7 * 24 * 60 * 60)
+
+  return price
 }
