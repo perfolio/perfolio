@@ -11,6 +11,10 @@ module.exports = withNx(
         svgr: true,
       },
     },
-    {},
+    {
+      org: "chronark",
+      project: "appperfolio",
+      authToken: "cf6c23ce1a7f418fa9d77e7801d01f8944a4a3f30196492ab071df228ac19824",
+    },
   ),
 )
