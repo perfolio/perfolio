@@ -1,6 +1,6 @@
 import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
-import { Company } from "@perfolio/db"
+import { Company } from "@perfolio/types"
 import { useAuth } from "@perfolio/auth"
 
 export const QUERY_KEY_COMPANY_BY_SYMBOL = (symbol: string): string => `company_by_${symbol}`

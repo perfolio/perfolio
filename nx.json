@@ -76,6 +76,12 @@
     },
     "localstorage": {
       "tags": []
+    },
+    "cache": {
+      "tags": []
+    },
+    "types": {
+      "tags": []
     }
   }
 }

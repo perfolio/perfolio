@@ -2,9 +2,10 @@ import { useQueries } from "react-query"
 import { Api } from "@perfolio/api-client"
 import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
-import { Asset, Company } from "@perfolio/db"
+import { Asset } from "@perfolio/db"
 import { useHistory } from "./history"
 import { useAuth } from "@perfolio/auth"
+import { Company } from "@perfolio/types"
 
 export interface Holding {
   quantity: number
@@ -66,10 +67,10 @@ export const usePortfolio = () => {
         queryFn: () => new Api({ token }).companies.getCompany({ symbol }),
       }
     }),
-  ).map((company) => company.data) as Company[]
+  )
 
   Object.keys(portfolio).forEach((isin, i) => {
-    const company = companies[i]
+    const company = companies[i].data as Company
     if (company) {
       portfolio[isin].company = company
     }
