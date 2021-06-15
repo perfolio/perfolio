@@ -8,7 +8,28 @@ import { MiddlewareContext, ApiHandler, Middleware } from "./types"
 export function withCors(allowedOrigin?: string): Middleware {
   return (handler: ApiHandler): ApiHandler => {
     return async (ctx: MiddlewareContext): Promise<void> => {
-      console.log("Method:", ctx.req.method)
+      ctx.res.setHeader("Access-Control-Allow-Credentials", "true")
+      ctx.res.setHeader(
+        "Access-Control-Allow-Origin",
+        allowedOrigin ?? ctx.req.headers.origin ?? "*",
+      )
+      ctx.res.setHeader("Access-Control-Allow-Methods", "POST")
+      ctx.res.setHeader("Access-Control-Max-Age", 24 * 60 * 60) // 24h
+      ctx.res.setHeader(
+        "Access-Control-Allow-Headers",
+        [
+          "Authorization",
+          "X-CSRF-Token",
+          "X-Requested-With",
+          "Accept",
+          "Accept-Version",
+          "Content-Length",
+          "Content-MD5",
+          "Content-Type",
+          "Date",
+          "X-Api-Version",
+        ].join(", "),
+      )
       /**
        * A CORS preflight request is a CORS request that checks to see if the
        * CORS protocol is understood and a server is aware using specific
@@ -21,28 +42,6 @@ export function withCors(allowedOrigin?: string): Middleware {
        * @see https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
        */
       if (ctx.req.method === "OPTIONS") {
-        ctx.res.setHeader("Access-Control-Allow-Credentials", "true")
-        ctx.res.setHeader(
-          "Access-Control-Allow-Origin",
-          allowedOrigin ?? ctx.req.headers.origin ?? "*",
-        )
-        ctx.res.setHeader("Access-Control-Allow-Methods", "POST")
-        ctx.res.setHeader("Access-Control-Max-Age", 24 * 60 * 60) // 24h
-        ctx.res.setHeader(
-          "Access-Control-Allow-Headers",
-          [
-            "Authorization",
-            "X-CSRF-Token",
-            "X-Requested-With",
-            "Accept",
-            "Accept-Version",
-            "Content-Length",
-            "Content-MD5",
-            "Content-Type",
-            "Date",
-            "X-Api-Version",
-          ].join(", "),
-        )
         return ctx.res.status(204).end()
       } else {
         return handler(ctx)
