@@ -1,5 +1,9 @@
-import { signin } from "@perfolio/lambda"
+import { signin, SigninRequestValidation } from "@perfolio/lambda"
 
-import { use, withCors } from "@perfolio/middleware"
+import { use, withCors, withContentTypeJson, withRequestValidation } from "@perfolio/middleware"
 
-export default use(signin, [withCors("https://app.perfol.io")])
+export default use(signin, [
+  withCors(process.env.NODE_ENV === "production" ? "https://app.perfol.io" : undefined),
+  withContentTypeJson,
+  withRequestValidation(SigninRequestValidation),
+])

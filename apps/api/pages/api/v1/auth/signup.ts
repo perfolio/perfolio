@@ -2,7 +2,8 @@ import { withContentTypeJson, withRequestValidation, use, withCors } from "@perf
 
 import { signup, SignupRequestValidation } from "@perfolio/lambda"
 export default use(signup, [
-  withCors("https://app.perfol.io"),
+  withCors(process.env.NODE_ENV === "production" ? "https://app.perfol.io" : undefined),
+
   withContentTypeJson,
   withRequestValidation(SignupRequestValidation),
 ])
