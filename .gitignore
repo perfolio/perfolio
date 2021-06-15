@@ -13,3 +13,5 @@ yarn-error.log
 .next/
 .vercel
 .lighthouseci
+
+.pnpm-*.log

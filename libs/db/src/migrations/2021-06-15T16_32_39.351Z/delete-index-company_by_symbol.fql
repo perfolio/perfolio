@@ -1,0 +1,1 @@
+Delete(Index("company_by_symbol"))
