@@ -19,7 +19,7 @@ export const DiversityChart: React.FC = (): JSX.Element => {
 
     Object.values(portfolio).forEach((holding) => {
       if (holding.company) {
-        const sector = holding.company.data.sector
+        const sector = holding.company.sector
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
@@ -41,7 +41,7 @@ export const DiversityChart: React.FC = (): JSX.Element => {
 
     Object.values(portfolio).forEach((holding) => {
       if (holding.company) {
-        const country = holding.company.data.country
+        const country = holding.company.country
         if (country) {
           if (!tmp[country]) {
             tmp[country] = 0

@@ -9,12 +9,9 @@ export function withCors(allowedOrigin?: string): Middleware {
   return (handler: ApiHandler): ApiHandler => {
     return async (ctx: MiddlewareContext): Promise<void> => {
       ctx.res.setHeader("Access-Control-Allow-Credentials", "true")
-      ctx.res.setHeader(
-        "Access-Control-Allow-Origin",
-        allowedOrigin ?? ctx.req.headers.origin ?? "*",
-      )
+      ctx.res.setHeader("Access-Control-Allow-Origin", allowedOrigin ?? "*")
       ctx.res.setHeader("Access-Control-Allow-Methods", "POST")
-      ctx.res.setHeader("Access-Control-Max-Age", 24 * 60 * 60) // 24h
+      // ctx.res.setHeader("Access-Control-Max-Age", 24 * 60 * 60) // 24h
       ctx.res.setHeader(
         "Access-Control-Allow-Headers",
         [
