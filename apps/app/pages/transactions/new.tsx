@@ -23,8 +23,8 @@ const Suggestion: React.FC<{
         <div className="w-10 h-10 rounded">
           {company ? (
             <img
-              alt={`Logo of ${company?.data.name}`}
-              src={company?.data.logo ?? ""}
+              alt={`Logo of ${company?.name}`}
+              src={company?.logo ?? ""}
               height={64}
               width={64}
             />
@@ -33,7 +33,7 @@ const Suggestion: React.FC<{
           )}
         </div>
         <div className="flex flex-col items-start truncate ">
-          <span className="font-medium text-gray-800 ">{company?.data.name}</span>
+          <span className="font-medium text-gray-800 ">{company?.name}</span>
           <span className="text-xs text-gray-600 md:text-sm">{tx.data.assetId}</span>
         </div>
       </div>
@@ -126,12 +126,7 @@ const NewTransactionPage: NextPage = () => {
               label="Isin"
               iconLeft={
                 company ? (
-                  <img
-                    src={company.data.logo}
-                    alt={`Logo of ${company.data.name}`}
-                    width={64}
-                    height={64}
-                  />
+                  <img src={company.logo} alt={`Logo of ${company.name}`} width={64} height={64} />
                 ) : companyLoading ? (
                   <Spinner />
                 ) : null

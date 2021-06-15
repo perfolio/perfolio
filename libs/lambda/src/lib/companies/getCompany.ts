@@ -1,7 +1,7 @@
 import { z } from "zod"
-import { db, Company } from "@perfolio/db"
 import { getCompany as getCompanyFromCloud, getLogo as getLogoFromCloud } from "@perfolio/iexcloud"
-
+import { Cache } from "@perfolio/cache"
+import { Company } from "@perfolio/types"
 export const GetCompanyRequestValidation = z.object({
   symbol: z.string(),
 })
@@ -10,7 +10,7 @@ export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>
 export type GetCompanyResponse = Company
 
 export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetCompanyResponse> {
-  const company = await db().company.fromSymbol(symbol)
+  let company = await Cache.get<Company>(symbol)
   if (company) {
     return company
   }
@@ -19,30 +19,38 @@ export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetComp
     getCompanyFromCloud(symbol),
     getLogoFromCloud(symbol),
   ])
-  return db().company.create({
-    symbol: symbol,
+
+  /**
+   * Transform company from iex schema to one we want to use.
+   */
+  company = {
     logo: logo.url,
+    name: newCompany.companyName,
+
     /**
-     * IEX Cloud returns null on some fields but it's easier to work with undefined
-     * in fauna. so we convert to undefined
+     * Copy the rest
      */
-    name: newCompany.companyName ?? undefined,
-    exchange: newCompany.exchange ?? undefined,
-    industry: newCompany.industry ?? undefined,
-    website: newCompany.website ?? undefined,
-    description: newCompany.description ?? undefined,
-    ceo: newCompany.CEO ?? undefined,
-    issueType: newCompany.issueType ?? undefined,
-    sector: newCompany.sector ?? undefined,
-    employees: newCompany.employees ?? undefined,
-    securityName: newCompany.securityName ?? undefined,
-    primarySicCode: newCompany.primarySicCode ?? undefined,
-    address: newCompany.address ?? undefined,
-    address2: newCompany.address2 ?? undefined,
-    state: newCompany.state ?? undefined,
-    city: newCompany.city ?? undefined,
-    zip: newCompany.zip ?? undefined,
-    country: newCompany.country ?? undefined,
-    phone: newCompany.phone ?? undefined,
-  })
+    symbol: symbol,
+    exchange: newCompany.exchange,
+    industry: newCompany.industry,
+    website: newCompany.website,
+    description: newCompany.description,
+    ceo: newCompany.CEO,
+    issueType: newCompany.issueType,
+    sector: newCompany.sector,
+    employees: newCompany.employees,
+    securityName: newCompany.securityName,
+    primarySicCode: newCompany.primarySicCode,
+    address: newCompany.address,
+    address2: newCompany.address2,
+    tags: newCompany.tags,
+    state: newCompany.state,
+    city: newCompany.city,
+    zip: newCompany.zip,
+    country: newCompany.country,
+    phone: newCompany.phone,
+  }
+
+  await Cache.set(symbol, company)
+  return company
 }

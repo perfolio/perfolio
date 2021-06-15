@@ -2,7 +2,8 @@ import { withContentTypeJson, use, withAuthentication, withCors } from "@perfoli
 import { refresh } from "@perfolio/lambda"
 
 export default use(refresh, [
-  withCors("https://app.perfol.io"),
+  withCors(process.env.NODE_ENV === "production" ? "https://app.perfol.io" : undefined),
+
   withContentTypeJson,
   withAuthentication,
 ])

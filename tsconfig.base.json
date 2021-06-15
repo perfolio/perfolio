@@ -42,7 +42,9 @@
       "@perfolio/tokens": ["libs/tokens/src/index.ts"],
       "@perfolio/lambda": ["libs/lambda/src/index.ts"],
       "@perfolio/middleware": ["libs/middleware/src/index.ts"],
-      "@perfolio/localstorage": ["libs/localstorage/src/index.ts"]
+      "@perfolio/localstorage": ["libs/localstorage/src/index.ts"],
+      "@perfolio/cache": ["libs/cache/src/index.ts"],
+      "@perfolio/types": ["libs/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

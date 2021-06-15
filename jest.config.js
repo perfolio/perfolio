@@ -14,5 +14,7 @@ module.exports = {
     "<rootDir>/libs/lambda",
     "<rootDir>/libs/middleware",
     "<rootDir>/libs/localstorage",
+    "<rootDir>/libs/cache",
+    "<rootDir>/libs/types",
   ],
 }

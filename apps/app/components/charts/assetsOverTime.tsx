@@ -144,9 +144,6 @@ const buildIndex = (totalReturns: ValueAtTime): ValueAtTime => {
       index[Number(time)] = 1
     } else {
       const returnsToday = Object.values(totalReturns)[i]
-      if (i < 10) {
-        console.log({ yesterday, indexYesterday: index[yesterday], returnsToday })
-      }
       index[Number(time)] = index[yesterday] * (1 + returnsToday)
     }
     yesterday = Number(time)
@@ -160,7 +157,6 @@ const plotRelative = (history: { [isin: string]: AssetHistory }): Data => {
   const returns = calculateReturnsPerAsset(timeline)
   const totalReturns = calculateTotalReturns(weights, returns)
   const index = buildIndex(totalReturns)
-  console.table(index)
   const data = Object.entries(index).map(([time, value]) => {
     return {
       time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
