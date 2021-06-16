@@ -74,7 +74,6 @@ const Setting: React.FC<SettingProps> = ({
 const SettingsPage: NextPage = () => {
   const { user } = useAuth()
   const router = useRouter()
-
   const emailValidation = z.object({ email: z.string().email() })
   const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
     console.log(values)

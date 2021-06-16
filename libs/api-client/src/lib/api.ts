@@ -16,9 +16,9 @@ import {
   SigninRequest,
   SigninResponse,
   SignupRequest,
-  SendEmailConfirmationRequest,
   SubscribeRequest,
   GetAssetResponse,
+  SendEmailConfirmationRequest,
 } from "@perfolio/lambda"
 /**
  * Generic api request to be extended by other request types.

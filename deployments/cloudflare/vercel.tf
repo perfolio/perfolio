@@ -28,3 +28,5 @@ resource "cloudflare_record" "www" {
 }
 
 
+
+
