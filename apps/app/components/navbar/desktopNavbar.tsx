@@ -2,7 +2,7 @@ import React from "react"
 import { NavbarProps } from "./types"
 import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
-import { ThemeSwitch, Logo } from "@perfolio/components"
+import { Logo } from "@perfolio/components"
 import { useAuth } from "@perfolio/auth"
 import { BellIcon, AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
@@ -35,9 +35,9 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
         </li>
         <li className="flex justify-end w-1/5">
           <ul className="flex items-center space-x-6 xl:space-x-9">
-            <li>
+            {/* <li>
               <ThemeSwitch />
-            </li>
+            </li> */}
             <li className="text-gray-200 hover:text-gray-50">
               <div className="relative pb-1 cursor-pointer ">
                 <BellIcon className="w-6 h-6" />
@@ -47,7 +47,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
               </div>
             </li>
             <li className="text-gray-200 hover:text-gray-50">
-              <a href="#">
+              <a href="/settings/account">
                 <AdjustmentsIcon className="w-6 h-6" />
               </a>
             </li>

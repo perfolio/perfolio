@@ -1,42 +1,66 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import classNames from "classnames"
 import { ExclamationCircleIcon } from "@heroicons/react/outline"
+import cn from "classnames"
 export interface LabeledFieldProps {
   /**
    * Field name. Make sure this matches your schema.
    */
   name: string
+
   /**
    * Field label.
    */
   label: string
+
+  hideLabel?: boolean
   /**
    *  Field type. Doesn't include radio buttons and checkboxes
    */
   type?: "text" | "password" | "email" | "number" | "date"
 
   iconLeft?: React.ReactNode
+
+  defaultValue?: string | number
 }
 
-export const LabeledField: React.FC<LabeledFieldProps> = ({ label, name, iconLeft, type }) => {
+export const LabeledField: React.FC<LabeledFieldProps> = ({
+  label,
+  hideLabel,
+  name,
+  iconLeft,
+  type,
+  defaultValue,
+}) => {
   const {
     register,
     formState: { isSubmitting, errors },
+    setValue,
   } = useFormContext()
   const error = Array.isArray(errors[name])
     ? errors[name].join(", ")
     : errors[name]?.message || errors[name]
 
+  useEffect(() => {
+    if (defaultValue) {
+      setValue(name, defaultValue)
+    }
+  }, [defaultValue, name, setValue])
   return (
-    <div className="w-full space-y-1 text-gray-800">
-      <label htmlFor={name} className="block text-xs font-medium text-gray-700 uppercase">
+    <div className="w-full text-gray-800">
+      <label
+        htmlFor={name}
+        className={cn("mb-1 block text-xs font-medium text-gray-700 uppercase", {
+          "sr-only": hideLabel,
+        })}
+      >
         {label}
       </label>
       <div className="relative ">
         {iconLeft ? (
           <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
-            <span className="flex items-center justify-center w-12 h-12 p-3 overflow-hidden border-r rounded-l">
+            <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
               {iconLeft}
             </span>
           </div>
@@ -47,7 +71,7 @@ export const LabeledField: React.FC<LabeledFieldProps> = ({ label, name, iconLef
           {...register(name)}
           type={type}
           className={classNames(
-            "text-center h-12 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+            "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
             {
               "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
               "border-error-400 focus:border-error-700 focus:bg-error-50": error,
