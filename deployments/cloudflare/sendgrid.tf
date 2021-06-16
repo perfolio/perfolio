@@ -34,6 +34,3 @@ resource "cloudflare_record" "s2-_domainkey-perfol-io" {
   zone_id = var.config.zone_id
 }
 
-
-
-

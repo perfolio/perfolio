@@ -1,6 +1,6 @@
 import { AuthContext, IAuthContext } from "../context"
 import { useContext, useEffect, useState } from "react"
-import { AccessToken, UserClaimsValidator } from "@perfolio/tokens"
+import { JWT, payload } from "@perfolio/tokens"
 import { z } from "zod"
 import { Api } from "@perfolio/api-client"
 
@@ -22,7 +22,7 @@ export interface AuthHook {
    * User object. This will be set after the user has been authenticated but loaded
    * asynchronously to improve ux.
    */
-  user: z.infer<typeof UserClaimsValidator> | undefined
+  user: z.infer<typeof payload> | undefined
   isAuthenticated: boolean
   /**
    * Logs the user in and automatically store the token and load user data in state.
@@ -81,12 +81,12 @@ export function useAuth(): AuthHook {
   const token = ctx.getToken()
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<z.infer<typeof UserClaimsValidator> | undefined>(undefined)
+  const [user, setUser] = useState<z.infer<typeof payload> | undefined>(undefined)
 
   useEffect(() => {
     if (token) {
       try {
-        const user = AccessToken.verify(token)
+        const user = JWT.verify(token)
         setUser(user)
         setIsAuthenticated(true)
       } catch {

@@ -4,7 +4,7 @@ import { createHmac } from "crypto"
 import { setRefreshCookie } from "@perfolio/tokens"
 import { db } from "@perfolio/db"
 import { z } from "zod"
-import { AccessToken } from "@perfolio/tokens"
+import { JWT } from "@perfolio/tokens"
 export const SigninRequestValidation = z.object({
   email: z.string().email(),
   password: z.string(),
@@ -27,7 +27,7 @@ export async function signin(
 
   setRefreshCookie(res, newRefreshToken)
   return {
-    accessToken: AccessToken.sign({
+    accessToken: JWT.sign({
       userId: user.id,
       username: user.data.username,
       email: user.data.email,

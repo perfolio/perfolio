@@ -1,6 +1,6 @@
 import { MiddlewareContext } from "@perfolio/middleware"
 import { db, RefreshToken } from "@perfolio/db"
-import { getTokenFromCookies, AccessToken } from "@perfolio/tokens"
+import { getTokenFromCookies, JWT } from "@perfolio/tokens"
 import { createHmac } from "crypto"
 export type RefreshResponse = { accessToken: string }
 export const refresh = async (_: void, { req }: MiddlewareContext): Promise<RefreshResponse> => {
@@ -21,7 +21,7 @@ export const refresh = async (_: void, { req }: MiddlewareContext): Promise<Refr
     throw new Error(`No user found, please create an account`)
   }
 
-  const accessToken = AccessToken.sign({
+  const accessToken = JWT.sign({
     userId: user.id,
     username: user.data.username,
     email: user.data.email,
