@@ -2,6 +2,8 @@ import { MiddlewareContext, ApiHandler } from "./types"
 import { JWT } from "@perfolio/tokens"
 export function withAuthentication(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
+    console.log("authenticationMiddleware", { method: ctx.req.method })
+
     const jwt = ctx.req.headers.authorization
     if (!jwt) {
       ctx.res.status(401)
