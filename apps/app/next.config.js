@@ -2,17 +2,14 @@
 const withNx = require("@nrwl/next/plugins/with-nx")
 const { withSentryConfig } = require("@sentry/nextjs")
 
-if (process.env.NODE_ENV === "production") {
-  module.exports = withNx(
-    withSentryConfig(
-      {},
-      {
+const nextConfig = {}
+
+module.exports = withNx(
+  process.env.NODE_ENV === "process"
+    ? withSentryConfig(nextConfig, {
         org: "chronark",
         project: "app-perfolio",
         authToken: process.env.NX_SENTRY_AUTH_TOKEN,
-      },
-    ),
-  )
-} else {
-  module.exports = withNx({})
-}
+      })
+    : nextConfig,
+)
