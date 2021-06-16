@@ -6,7 +6,7 @@ import { MiddlewareContext, ApiHandler } from "./types"
  */
 export function withContentTypeJson(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
-    console.log("contentTypeMiddleware", { method: ctx.req.method })
+    console.log(Date.now(), "contentTypeMiddleware", { method: ctx.req.method })
 
     if (ctx.req.headers["content-type"] !== "application/json") {
       ctx.res.status(400)

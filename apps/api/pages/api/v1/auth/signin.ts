@@ -4,7 +4,6 @@ import { use, withCors, withContentTypeJson, withRequestValidation } from "@perf
 
 export default use(signin, [
   withCors(process.env.NODE_ENV === "production" ? "https://app.perfol.io" : undefined),
-
   withContentTypeJson,
   withRequestValidation(SigninRequestValidation),
 ])
