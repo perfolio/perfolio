@@ -8,6 +8,7 @@ export * from "./lib/auth/signout"
 export * from "./lib/companies/getCompany"
 
 export * from "./lib/emails/subscribe"
+export * from "./lib/emails/sendEmailConfirmation"
 
 export * from "./lib/holdings/getHistory"
 
