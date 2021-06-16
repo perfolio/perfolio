@@ -27,6 +27,10 @@ export async function signin(
 
   setRefreshCookie(res, newRefreshToken)
   return {
-    accessToken: JWT.sign({ userId: user.id, username: user.data.username }),
+    accessToken: JWT.sign({
+      userId: user.id,
+      username: user.data.username,
+      email: user.data.email,
+    }),
   }
 }

@@ -1,4 +1,3 @@
-import React from "react"
 import { LinkProps, ButtonProps } from "./types"
 import { ButtonController } from "./buttonController"
 import { LinkController } from "./linkController"

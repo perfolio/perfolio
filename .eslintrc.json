@@ -18,7 +18,8 @@
               }
             ]
           }
-        ]
+        ],
+        "eslintjsx-a11y/anchor-is-valid": "off"
       }
     },
     {
