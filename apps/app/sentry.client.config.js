@@ -5,7 +5,6 @@
 import * as Sentry from "@sentry/nextjs"
 
 const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
-
 Sentry.init({
   dsn: SENTRY_DSN || "https://abe0674d426c4de28126ab53d500b136@o322681.ingest.sentry.io/5813266",
   // Note: if you want to override the automatic release value, do not set a

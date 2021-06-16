@@ -47,7 +47,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <Link size="large" prefix={<BellIcon />} href="/" />
             </li>
             <li>
-              <Link size="large" prefix={<AdjustmentsIcon />} href="/" />
+              <Link size="large" prefix={<AdjustmentsIcon />} href="/settings/account" />
             </li>
             <li>
               <Link size="large" prefix={<DotsVerticalIcon />} href="/" />

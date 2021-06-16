@@ -12,6 +12,7 @@ export const payload = z.object({
 
   userId: z.string(),
   username: z.string(),
+  email: z.string().email(),
 })
 
 export type Claims = z.infer<typeof payload>
@@ -21,7 +22,7 @@ export class JWT {
   private static readonly secret = "secret"
   private static readonly algorithm = "HS256"
 
-  public static sign(user: { userId: string; username: string }): string {
+  public static sign(user: { userId: string; username: string; email: string }): string {
     return jwt.sign(user, JWT.secret, {
       algorithm: JWT.algorithm,
       expiresIn: "15m",

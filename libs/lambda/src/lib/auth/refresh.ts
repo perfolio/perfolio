@@ -24,6 +24,7 @@ export const refresh = async (_: void, { req }: MiddlewareContext): Promise<Refr
   const accessToken = JWT.sign({
     userId: user.id,
     username: user.data.username,
+    email: user.data.email,
   })
 
   return { accessToken }

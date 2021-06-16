@@ -1,4 +1,5 @@
 export * from "./Form"
+export * from "./Form2"
 export * from "./LabeledField"
 export * from "./input"
 export * from "./radio"

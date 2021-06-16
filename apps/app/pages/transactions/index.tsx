@@ -1,6 +1,6 @@
 import React from "react"
 import { AsyncButton, Button, Spinner } from "@perfolio/components"
-import { ActivityFeed } from "../../components"
+import { ActivityFeed, MainCard } from "../../components"
 import { NextPage } from "next"
 import { useTransactions } from "../../queries"
 import { Transaction } from "@perfolio/db"
@@ -73,27 +73,29 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
 const TransactionsPage: NextPage = () => {
   const { transactions, isLoading } = useTransactions()
   return (
-    <WithSidebar title="My Transactions" sidebar={<ActivityFeed />}>
-      {isLoading ? (
-        <Spinner />
-      ) : !transactions || transactions.length === 0 ? (
-        <div className="flex flex-col items-center justify-center space-y-2">
-          <p className="text-gray-700">Looks like you don't have any transactions yet</p>
-          <Button size="large" label="Add transaction" kind="primary" href="/transactions/new" />
-        </div>
-      ) : (
-        <div>
-          {transactions
-            .sort((a, b) => b.data.executedAt - a.data.executedAt)
-            ?.map((tx, i) => (
-              <TransactionItem
-                key={tx.id}
-                transaction={tx}
-                isLast={i === transactions.length - 1}
-              />
-            ))}
-        </div>
-      )}
+    <WithSidebar sidebar={<ActivityFeed />}>
+      <MainCard title="MyTransactions">
+        {isLoading ? (
+          <Spinner />
+        ) : !transactions || transactions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center space-y-2">
+            <p className="text-gray-700">Looks like you don't have any transactions yet</p>
+            <Button size="large" label="Add transaction" kind="primary" href="/transactions/new" />
+          </div>
+        ) : (
+          <div>
+            {transactions
+              .sort((a, b) => b.data.executedAt - a.data.executedAt)
+              ?.map((tx, i) => (
+                <TransactionItem
+                  key={tx.id}
+                  transaction={tx}
+                  isLast={i === transactions.length - 1}
+                />
+              ))}
+          </div>
+        )}
+      </MainCard>
     </WithSidebar>
   )
 }

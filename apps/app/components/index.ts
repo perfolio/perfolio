@@ -6,3 +6,6 @@ export * from "./charts/inlineTotalAssets"
 
 export * from "./withSidebar/withSidebar"
 export * from "./header/header"
+
+export * from "./card/mainCard"
+export * from "./card/card"

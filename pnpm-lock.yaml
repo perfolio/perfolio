@@ -23,6 +23,7 @@ specifiers:
   '@nrwl/tao': ^12.3.6
   '@nrwl/web': 12.3.6
   '@nrwl/workspace': 12.3.6
+  '@radix-ui/react-tabs': ^0.0.13
   '@radix-ui/react-toggle-group': ^0.0.8
   '@radix-ui/react-tooltip': ^0.0.18
   '@sentry/nextjs': ^6.7.1
@@ -70,7 +71,7 @@ specifiers:
   prettier: 2.2.1
   react: 17.0.2
   react-dom: 17.0.2
-  react-hook-form: ^7.8.6
+  react-hook-form: ^7.8.7
   react-query: ^3.17.0
   recharts: ^2.0.9
   regenerator-runtime: 0.13.7
@@ -90,8 +91,9 @@ specifiers:
 dependencies:
   '@headlessui/react': 1.2.0_react@17.0.2
   '@heroicons/react': 1.0.1_react@17.0.2
-  '@hookform/resolvers': 2.5.2_react-hook-form@7.8.6
+  '@hookform/resolvers': 2.5.2_react-hook-form@7.8.7
   '@nrwl/next': 12.3.6_567697745b59d834330aa72fb39bee92
+  '@radix-ui/react-tabs': 0.0.13_react@17.0.2
   '@radix-ui/react-toggle-group': 0.0.8_react@17.0.2
   '@radix-ui/react-tooltip': 0.0.18_react-dom@17.0.2+react@17.0.2
   '@sentry/nextjs': 6.7.1_next@10.2.0+react@17.0.2
@@ -107,7 +109,7 @@ dependencies:
   next-themes: 0.0.14_3a7f9b0847035abd95643f9e1809652e
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
-  react-hook-form: 7.8.6_react@17.0.2
+  react-hook-form: 7.8.7_react@17.0.2
   react-query: 3.17.0_react-dom@17.0.2+react@17.0.2
   recharts: 2.0.9_react-dom@17.0.2+react@17.0.2
   regenerator-runtime: 0.13.7
@@ -131,7 +133,7 @@ devDependencies:
   '@nrwl/jest': 12.3.6
   '@nrwl/linter': 12.3.6
   '@nrwl/node': 12.3.6_prettier@2.2.1+typescript@4.2.3
-  '@nrwl/nx-cloud': 12.2.1
+  '@nrwl/nx-cloud': 12.2.2
   '@nrwl/react': 12.3.6_7921ec85d4c3e61c71e8301b85702221
   '@nrwl/tao': 12.3.6
   '@nrwl/web': 12.3.6_df450955111a7df6bbf5123fc607ebe2
@@ -1637,12 +1639,12 @@ packages:
       react: 17.0.2
     dev: false
 
-  /@hookform/resolvers/2.5.2_react-hook-form@7.8.6:
+  /@hookform/resolvers/2.5.2_react-hook-form@7.8.7:
     resolution: {integrity: sha512-IS9Ycbezdzim5vRxytPcYVUUo8Jhtc9GR35SDXsCELwDCM63RUpjWnAaZLQnBO1XY1PMTBwEnBBBOBgGr9CzVA==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.8.6_react@17.0.2
+      react-hook-form: 7.8.7_react@17.0.2
     dev: false
 
   /@istanbuljs/load-nyc-config/1.1.0:
@@ -2168,8 +2170,8 @@ packages:
       - typescript
     dev: true
 
-  /@nrwl/nx-cloud/12.2.1:
-    resolution: {integrity: sha512-XHD/SaxgonXz0EBLL3gp/0ot9WPe0Vnm/cNXFFod5aaC3YDJK38JWrnTTjVhtgL5pCYKZkUVDJx0r4Tn6nL1Vg==}
+  /@nrwl/nx-cloud/12.2.2:
+    resolution: {integrity: sha512-6OThH97bvXaymSa0367VBjXbqG8pgaeQEjs9JmkEISLEu0A6/+zrgYwYO+Vtj1sLyGL7APFGLLC+b0OyobOcYQ==}
     hasBin: true
     dependencies:
       axios: 0.21.1
@@ -2574,6 +2576,23 @@ packages:
       '@babel/runtime': 7.14.6
       '@radix-ui/primitive': 0.0.5
       '@radix-ui/react-compose-refs': 0.0.5_react@17.0.2
+      react: 17.0.2
+    dev: false
+
+  /@radix-ui/react-tabs/0.0.13_react@17.0.2:
+    resolution: {integrity: sha512-zSa+qRRvSIyw5brgRMujG1/bjJFDvWyWfdlNTyB44JlGEJSjDm35ZsL0NlHubDSeOrAazDWrkzIhp+p9ZHPhhw==}
+    peerDependencies:
+      react: ^16.8 || ^17.0
+    dependencies:
+      '@babel/runtime': 7.14.6
+      '@radix-ui/primitive': 0.0.5
+      '@radix-ui/react-context': 0.0.5_react@17.0.2
+      '@radix-ui/react-id': 0.0.6_react@17.0.2
+      '@radix-ui/react-polymorphic': 0.0.11_react@17.0.2
+      '@radix-ui/react-primitive': 0.0.13_react@17.0.2
+      '@radix-ui/react-roving-focus': 0.0.13_react@17.0.2
+      '@radix-ui/react-use-callback-ref': 0.0.5_react@17.0.2
+      '@radix-ui/react-use-controllable-state': 0.0.6_react@17.0.2
       react: 17.0.2
     dev: false
 
@@ -12217,8 +12236,8 @@ packages:
       scheduler: 0.20.2
     dev: false
 
-  /react-hook-form/7.8.6_react@17.0.2:
-    resolution: {integrity: sha512-kKdaySvv21tyH8WM5jYpKRxTFdknmHi7ssdBrU7cW0qRwXcr9lxVyO14MjUFlfEGe9S5VzBmTz7NKNSarV3AFw==}
+  /react-hook-form/7.8.7_react@17.0.2:
+    resolution: {integrity: sha512-wfpiHwgIvGCKN2scqrFzFiGZh0L2Cz7SWyI16v/0NBPYvSGN7T4HybdiOtNIuAbODxLaPyEalab2y8nCV/w7dg==}
     peerDependencies:
       react: ^16.8.0 || ^17
     dependencies:
