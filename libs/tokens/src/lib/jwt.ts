@@ -40,4 +40,12 @@ export class JWT {
 
     return payload.parse(decoded)
   }
+  public static isValid(token: string): boolean {
+    try {
+      JWT.verify(token)
+      return true
+    } catch {
+      return false
+    }
+  }
 }
