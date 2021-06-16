@@ -18,6 +18,7 @@ import {
   SignupRequest,
   SubscribeRequest,
   GetAssetResponse,
+  SendEmailConfirmationRequest,
 } from "@perfolio/lambda"
 /**
  * Generic api request to be extended by other request types.
@@ -106,6 +107,8 @@ export class Api {
     return {
       subscribe: async (body: SubscribeRequest) =>
         this.request<void>({ body, path: "/v1/emails/subscribe" }),
+      sendEmailConfirmation: async (body: SendEmailConfirmationRequest) =>
+        this.request<void>({ body, path: "/v1/emails/sendEmailConfirmation" }),
     }
   }
   public get holdings() {
