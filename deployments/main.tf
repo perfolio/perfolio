@@ -13,7 +13,7 @@ module "checkly" {
 
 
 provider "cloudflare" {
-  api_token = var.config.api_token
+  api_token = var.cloudflare.api_token
 }
 
 
