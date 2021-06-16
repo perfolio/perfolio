@@ -1,7 +1,6 @@
 
 
 
-
 resource "cloudflare_record" "ionos0" {
   name     = "perfol.io"
   value    = "mx00.ionos.de"

@@ -1,7 +1,7 @@
-import { UserClaims } from "@perfolio/tokens"
+import { Claims } from "@perfolio/tokens"
 import { NextApiRequest, NextApiResponse } from "next"
 export type MiddlewareContext = {
-  claims: UserClaims
+  claims: Claims
   req: NextApiRequest
   res: NextApiResponse
 }

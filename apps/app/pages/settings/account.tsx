@@ -3,6 +3,7 @@ import { NextPage } from "next"
 import { useAuth, withAuthentication } from "@perfolio/auth"
 import { useForm } from "react-hook-form"
 import { WithSidebar, Card } from "../../components"
+import { Api } from "@perfolio/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
 import { Button, LabeledField, Form2, handleSubmit } from "@perfolio/components"
@@ -10,7 +11,6 @@ import { MailIcon, UserIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
-import { Api } from "@perfolio/api-client"
 interface SettingProps {
   validation: z.ZodAny
   title: string

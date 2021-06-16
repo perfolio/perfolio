@@ -1,6 +1,5 @@
 
 
-
 provider "checkly" {
   api_key = var.checkly_api_key
 }
@@ -23,3 +22,4 @@ module "cloudflare" {
   source = "./cloudflare"
   config = var.cloudflare
 }
+
