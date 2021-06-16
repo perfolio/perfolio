@@ -16,6 +16,7 @@ import {
   SigninRequest,
   SigninResponse,
   SignupRequest,
+  SendEmailConfirmationRequest,
   SubscribeRequest,
   GetAssetResponse,
 } from "@perfolio/lambda"
@@ -106,6 +107,8 @@ export class Api {
     return {
       subscribe: async (body: SubscribeRequest) =>
         this.request<void>({ body, path: "/v1/emails/subscribe" }),
+      sendEmailConfirmation: async (body: SendEmailConfirmationRequest) =>
+        this.request<void>({ body, path: "/v1/emails/sendEmailConfirmation" }),
     }
   }
   public get holdings() {

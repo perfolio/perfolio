@@ -1,1 +1,2 @@
-export * from "./lib/email"
+export * from "./lib/subscribe"
+export * from "./lib/send"

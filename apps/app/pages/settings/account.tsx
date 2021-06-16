@@ -3,6 +3,7 @@ import { NextPage } from "next"
 import { useAuth, withAuthentication } from "@perfolio/auth"
 import { useForm } from "react-hook-form"
 import { WithSidebar, Card } from "../../components"
+import { Api } from "@perfolio/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
 import { Button, LabeledField, Form2, handleSubmit } from "@perfolio/components"
@@ -77,7 +78,7 @@ const SettingsPage: NextPage = () => {
   const emailValidation = z.object({ email: z.string().email() })
   const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
     console.log(values)
-    return new Promise((resolve) => setTimeout(resolve, 1000))
+    return new Api().emails.sendEmailConfirmation(values)
   }
   const usernameValidation = z.object({ username: z.string().min(3).max(32) })
   const onUsernameSubmit = async (values: z.infer<typeof usernameValidation>): Promise<void> => {
