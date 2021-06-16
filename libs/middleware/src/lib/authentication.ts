@@ -1,5 +1,5 @@
 import { MiddlewareContext, ApiHandler } from "./types"
-import { JWT } from "@perfolio/tokens"
+import { AccessToken } from "@perfolio/tokens"
 export function withAuthentication(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
     const jwt = ctx.req.headers.authorization
@@ -13,7 +13,7 @@ export function withAuthentication(handler: ApiHandler): ApiHandler {
      * Validate token
      */
     try {
-      ctx.claims = JWT.verify(jwt)
+      ctx.claims = AccessToken.verify(jwt)
       return handler(ctx)
     } catch (err) {
       ctx.res.status(401)

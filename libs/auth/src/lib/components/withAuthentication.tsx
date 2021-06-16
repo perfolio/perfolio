@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { NextPage } from "next"
 import { useAuth } from "../hooks/auth"
 import { Api } from "@perfolio/api-client"
-import { JWT } from "@perfolio/tokens"
+import { AccessToken } from "@perfolio/tokens"
 
 /**
  * A spinner animation blocking the entire screen.
@@ -110,7 +110,7 @@ export function withAuthentication(
        */
       if (token) {
         try {
-          JWT.verify(token)
+          AccessToken.verify(token)
           return
         } catch (err) {
           console.error(`Token is invalid: ${token}: ${err}`)

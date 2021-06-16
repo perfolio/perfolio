@@ -10,6 +10,7 @@ import { MailIcon, UserIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
+import { Api } from "@perfolio/api-client"
 interface SettingProps {
   validation: z.ZodAny
   title: string
@@ -73,11 +74,10 @@ const Setting: React.FC<SettingProps> = ({
 const SettingsPage: NextPage = () => {
   const { user } = useAuth()
   const router = useRouter()
-
   const emailValidation = z.object({ email: z.string().email() })
   const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
     console.log(values)
-    return new Promise((resolve) => setTimeout(resolve, 1000))
+    return new Api().emails.sendEmailConfirmation(values)
   }
   const usernameValidation = z.object({ username: z.string().min(3).max(32) })
   const onUsernameSubmit = async (values: z.infer<typeof usernameValidation>): Promise<void> => {

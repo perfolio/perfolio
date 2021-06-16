@@ -26,6 +26,7 @@ specifiers:
   '@radix-ui/react-tabs': ^0.0.13
   '@radix-ui/react-toggle-group': ^0.0.8
   '@radix-ui/react-tooltip': ^0.0.18
+  '@sendgrid/mail': ^7.4.4
   '@sentry/nextjs': ^6.7.1
   '@tailwindcss/jit': ^0.1.18
   '@tailwindcss/typography': ^0.4.1
@@ -96,6 +97,7 @@ dependencies:
   '@radix-ui/react-tabs': 0.0.13_react@17.0.2
   '@radix-ui/react-toggle-group': 0.0.8_react@17.0.2
   '@radix-ui/react-tooltip': 0.0.18_react-dom@17.0.2+react@17.0.2
+  '@sendgrid/mail': 7.4.4
   '@sentry/nextjs': 6.7.1_next@10.2.0+react@17.0.2
   classnames: 2.3.1
   cookie: 0.4.1
@@ -2813,6 +2815,33 @@ packages:
       picomatch: 2.3.0
       rollup: 1.31.1
 
+  /@sendgrid/client/7.4.3:
+    resolution: {integrity: sha512-tTaHx893w5iqG0sVtUnMyRchuwYF95k4UOkmov1MouMIeMUbNvbalITo7cG7YSXUTY9rT2t4eBY6HcEBCVeqfg==}
+    engines: {node: 6.* || 8.* || >=10.*}
+    dependencies:
+      '@sendgrid/helpers': 7.4.3
+      axios: 0.21.1
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@sendgrid/helpers/7.4.3:
+    resolution: {integrity: sha512-Wt+68g1sVEM5UspJh34O/cxtv6BBbtAIk7U9B3PB2ySOtPs9e6hI1QkgYVwpNmkt7k2p86muUNyma/Aig25agg==}
+    engines: {node: '>= 6.0.0'}
+    dependencies:
+      deepmerge: 4.2.2
+    dev: false
+
+  /@sendgrid/mail/7.4.4:
+    resolution: {integrity: sha512-9+dyArajxbPY7eJJAd2eps7MVsXW9E4Y294gWeMYku0/Id/qAivexidjstvkkVlZdlrHbEsGDlnMEcw2eXOiFg==}
+    engines: {node: 6.* || 8.* || >=10.*}
+    dependencies:
+      '@sendgrid/client': 7.4.3
+      '@sendgrid/helpers': 7.4.3
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /@sentry/browser/6.7.1:
     resolution: {integrity: sha512-R5PYx4TTvifcU790XkK6JVGwavKaXwycDU0MaAwfc4Vf7BLm5KCNJCsDySu1RPAap/017MVYf54p6dWvKiRviA==}
     engines: {node: '>=6'}
@@ -4223,7 +4252,6 @@ packages:
       follow-redirects: 1.14.1
     transitivePeerDependencies:
       - debug
-    dev: true
 
   /axobject-query/2.2.0:
     resolution: {integrity: sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==}
