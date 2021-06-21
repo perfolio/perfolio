@@ -9,3 +9,4 @@ export * from "./header/header"
 
 export * from "./card/mainCard"
 export * from "./card/card"
+export * from "./withAuthentication/withAuthentication"

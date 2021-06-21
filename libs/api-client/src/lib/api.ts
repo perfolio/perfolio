@@ -13,14 +13,10 @@ import {
   GetPricesResponse,
   GetTransactionsResponse,
   RefreshResponse,
-  SigninRequest,
-  SigninResponse,
-  SignupRequest,
   SubscribeRequest,
   GetAssetResponse,
   SendEmailConfirmationRequest,
 } from "@perfolio/lambda"
-import { JWT } from "@perfolio/tokens"
 /**
  * Generic api request to be extended by other request types.
  */
@@ -56,9 +52,10 @@ export class Api {
   }
 
   private async silentRefresh(): Promise<void> {
-    if (this.token && !JWT.isValid(this.token)) {
-      console.log("AccessToken is invalid, refreshing now.")
-      const { accessToken } = await this.auth.refresh()
+    if (!this.token) {
+      const { accessToken } = await fetch(`${process.env.NEXTAUTH_URL}/getAccessToken`, {
+        method: "POST",
+      }).then((res) => res.json())
       this.token = accessToken
       console.log("AccessToken refreshed.")
     }
@@ -114,10 +111,6 @@ export class Api {
 
   public get auth() {
     return {
-      signup: async (body: SignupRequest) => this.request<void>({ body, path: "/v1/auth/signup" }),
-      signin: async (body: SigninRequest) =>
-        this.request<SigninResponse>({ body, path: "/api/v1/auth/signin" }),
-      signout: async () => this.request<void>({ path: "/v1/auth/signout", silentRefresh: true }),
       refresh: async () => this.request<RefreshResponse>({ path: "/v1/auth/refresh" }),
     }
   }

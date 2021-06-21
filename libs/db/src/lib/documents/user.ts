@@ -1,6 +1,6 @@
 import { QueryResponse } from "./util"
 import { Document } from "./document"
-import { Client, Collection, Expr, query as q, Ref } from "faunadb"
+import { Client, Collection, query as q, Ref } from "faunadb"
 import { z } from "zod"
 
 export class User extends Document<z.infer<typeof User.schema>> {
@@ -14,23 +14,50 @@ export class User extends Document<z.infer<typeof User.schema>> {
    */
   public static schema = z
     .object({
-      username: z.string(),
+      name: z.string().optional(),
       email: z.string().email(),
-      role: z.string(),
+      image: z.string().url().optional(),
+      emailVerified: z.date().nullable().optional(),
+      username: z.string().optional(),
+      createdAt: z.date(),
+      updatedAt: z.date(),
     })
     .strict()
-
-  public static createValidation = User.schema.extend({ password: z.string() }).strict()
 
   /**
-   * Required fields to sign in
+   * Overwrite date values.
+   * In javascript you can accesst he raw date via `.value`
    */
-  public static signinValidation = z
-    .object({
-      email: z.string().email(),
-      password: z.string(),
-    })
-    .strict()
+  private static internalSchema = User.schema.merge(
+    z.object({
+      emailVerified: z.object({ value: z.date() }).nullable(),
+      createdAt: z.object({ value: z.date() }),
+      updatedAt: z.object({ value: z.date() }),
+    }),
+  )
+
+  public static createValidation = User.schema.omit({ updatedAt: true, createdAt: true }).strict()
+  public static updateValidation = z.object({
+    name: z.string().optional(),
+    email: z.string().email().optional(),
+    image: z.string().url().optional(),
+    emailVerified: z.date().optional(),
+    username: z.string().optional(),
+  })
+
+  public static fromInternal(
+    res: QueryResponse<z.infer<typeof User.internalSchema>>,
+  ): QueryResponse<z.infer<typeof User.schema>> {
+    return {
+      ...res,
+      data: {
+        ...res.data,
+        emailVerified: res.data.emailVerified ? res.data.emailVerified.value : null,
+        createdAt: res.data.createdAt.value,
+        updatedAt: res.data.updatedAt.value,
+      },
+    }
+  }
 
   /**
    * Load a user by its unique email
@@ -38,28 +65,28 @@ export class User extends Document<z.infer<typeof User.schema>> {
   public static async fromEmail(client: Client, email: string): Promise<User | null> {
     try {
       const res = await client
-        .query<QueryResponse<z.infer<typeof User.schema>>>(
+        .query<QueryResponse<z.infer<typeof User.internalSchema>>>(
           q.Get(q.Match(q.Index(User.index.byEmail), email)),
         )
         .catch(() => null)
 
-      if (res === null) {
+      if (!res) {
         return null
       }
 
-      return new User(res)
+      return new User(this.fromInternal(res))
     } catch (err) {
       throw new Error(`Unable load user from email: ${err}`)
     }
   }
 
   /**
-   * Load a user by its unique email
+   * Load a user by its unique id
    */
   public static async fromId(client: Client, id: string): Promise<User | null> {
     try {
       const res = await client
-        .query<QueryResponse<z.infer<typeof User.schema>>>(
+        .query<QueryResponse<z.infer<typeof User.internalSchema>>>(
           q.Get(q.Ref(q.Collection(this.collection), id)),
         )
         .catch(() => null)
@@ -68,7 +95,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
         return null
       }
 
-      return new User(res)
+      return new User(this.fromInternal(res))
     } catch (err) {
       throw new Error(`Unable load user from id: ${err}`)
     }
@@ -81,93 +108,56 @@ export class User extends Document<z.infer<typeof User.schema>> {
     input: z.infer<typeof User.createValidation>,
   ): Promise<User> {
     try {
-      const { password, ...data } = this.createValidation.parse(input)
-      /**
-       * Creating an user is a special case because we have to handle the
-       * password specifically.
-       *
-       * First a new user is created and then logged in as a single atomic
-       * transaction.
-       *
-       * This returns a new user token which should be used from now on.
-       */
-
-      const res = await client.query(
-        q.Create(Collection(User.collection), {
-          data,
-          credentials: {
-            password,
+      const data = this.createValidation.parse(input)
+      const res = await client.query<QueryResponse<z.infer<typeof User.internalSchema>>>(
+        q.Create(q.Collection(User.collection), {
+          data: {
+            name: data.name,
+            email: data.email,
+            image: data.image,
+            emailVerified: data.emailVerified ? q.Time(data.emailVerified.toISOString()) : null,
+            username: data.username,
+            createdAt: q.Now(),
+            updatedAt: q.Now(),
           },
         }),
       )
 
-      const user = z
-        .object({
-          ref: z.instanceof(Expr),
-          ts: z.number().int(),
-          data: User.schema,
-        })
-        .parse(res)
-      return new User(user)
+      return new User(this.fromInternal(res))
     } catch (err) {
       throw new Error(`Unable to create user: ${err}`)
     }
   }
-
-  /**
-   * Sign in an existing user.
-   */
-  public static async signin(
+  public static async update(
     client: Client,
-    input: z.infer<typeof User.signinValidation>,
+    id: string,
+    input: z.infer<typeof User.updateValidation>,
   ): Promise<User> {
     try {
-      const { email, password } = this.signinValidation.parse(input)
-
-      const res = await client.query(
-        q.Let(
-          {
-            /**
-             * Login will return something like this:
-             * {
-             *    ref: Ref(Tokens(), "298752981921169927"),
-             *    ts: 1621171895875000,
-             *    instance: Ref(Collection("users"), "298480483928375813"),
-             *    secret: 'xxx'
-             * }.
-             */
-            login: q.Login(q.Match(q.Index(this.index.byEmail), q.Casefold(email)), {
-              password,
-            }),
+      const data = this.updateValidation.parse(input)
+      const res = await client.query<QueryResponse<z.infer<typeof User.internalSchema>>>(
+        q.Update(q.Ref(q.Collection(User.collection), id), {
+          data: {
+            name: data.name,
+            email: data.email,
+            image: data.image,
+            emailVerified: data.emailVerified ? q.Time(data.emailVerified.toISOString()) : null,
+            username: data.username,
+            updatedAt: q.Now(),
           },
-          {
-            secret: q.Select("secret", q.Var("login")),
-            user: q.Get(q.Select("instance", q.Var("login"))),
-          },
-        ),
+        }),
       )
 
-      const { user } = z
-        .object({
-          secret: z.string(),
-          user: z.object({
-            ref: z.instanceof(Expr),
-            ts: z.number().int(),
-            data: User.schema,
-          }),
-        })
-        .parse(res)
-      return new User(user)
+      return new User(this.fromInternal(res))
     } catch (err) {
-      throw new Error(`Unable to sign in user: ${err}`)
+      throw new Error(`Unable to update user: ${err}`)
     }
   }
-
   /**
    * Delete this user
    */
-  public async delete(client: Client): Promise<void> {
-    await client.query(q.Delete(Ref(Collection(User.collection), this.id))).catch((err) => {
+  public static async delete(client: Client, userId: string): Promise<void> {
+    await client.query(q.Delete(Ref(Collection(User.collection), userId))).catch((err) => {
       throw new Error(`Unable to delete user: ${err}`)
     })
   }

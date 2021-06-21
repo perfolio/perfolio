@@ -1,0 +1,4 @@
+CreateCollection({
+  "name": "verification_requests",
+  "ttl_days": 30
+})

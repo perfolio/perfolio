@@ -1,5 +1,4 @@
 import { NextPage } from "next"
-import { withAuthentication } from "@perfolio/auth"
 import { usePortfolio } from "../queries"
 import {
   WithSidebar,
@@ -9,6 +8,7 @@ import {
   AssetsOverTimeChart,
   MainCard,
   InlineTotalAssetChart,
+  withAuthentication,
 } from "../components"
 
 const App: NextPage = () => {
@@ -19,6 +19,7 @@ const App: NextPage = () => {
       totalAssets += e.quantity * e.value
     })
   }
+
   return (
     <WithSidebar
       sidebar={

@@ -1,31 +1,41 @@
 import { MiddlewareContext } from "@perfolio/middleware"
-import { db, RefreshToken } from "@perfolio/db"
-import { getTokenFromCookies, JWT } from "@perfolio/tokens"
-import { createHmac } from "crypto"
+import jwt from "next-auth/jwt"
+
 export type RefreshResponse = { accessToken: string }
+
+// export default async (req, res)=>{
+//     try {
+
+//         const claims = await jwt.getToken({req, secret: process.env.NX_JWT_SIGNING_KEY})
+//         console.log({claims})
+
+//         const token = await jwt.encode({token: claims, secret: process.env.NX_JWT_SIGNING_KEY})
+//         console.log({token})
+
+//         res.json({token}).end()
+//     } catch(err){
+//         console.log(err)
+//         res.status(500).end(err)
+//     }
+// }
+
 export const refresh = async (_: void, { req }: MiddlewareContext): Promise<RefreshResponse> => {
-  const existingRefreshToken = getTokenFromCookies(req)
-  if (!existingRefreshToken) {
-    throw new Error(`Missing refresh token in cookies`)
+  console.log({ cookies: req.cookies })
+  const signingKey = process.env.NX_JWT_SIGNING_KEY
+  if (!signingKey) {
+    throw new Error("NX_JWT_SINGING_KEY must be defined")
+  }
+  const claims = await jwt.getToken({ req, secret: process.env.NX_JWT_SIGNING_KEY })
+
+  if (!claims) {
+    throw new Error("Unable to validate refresh token")
   }
 
-  const refreshToken: RefreshToken | null = await db().refreshToken.fromHash(
-    createHmac("sha256", existingRefreshToken).digest("hex").toString(),
-  )
-  if (!refreshToken) {
-    throw new Error(`No refresh token found, please log in again`)
-  }
-
-  const user = await db().user.fromId(refreshToken.data.userId)
-  if (!user) {
-    throw new Error(`No user found, please create an account`)
-  }
-
-  const accessToken = JWT.sign({
-    userId: user.id,
-    username: user.data.username,
-    email: user.data.email,
+  const accessToken = await jwt.encode({
+    token: claims,
+    secret: signingKey,
   })
+  console.log({ accessToken })
 
   return { accessToken }
 }

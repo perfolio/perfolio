@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app"
-import { AuthProvider } from "@perfolio/auth"
+import { Provider as AuthProvider } from "next-auth/client"
 import { QueryClientProvider } from "react-query"
 import { PersistentQueryClient } from "@perfolio/localstorage"
 import Head from "next/head"
@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#1A202C"></meta>
       </Head>
       <QueryClientProvider client={PersistentQueryClient()}>
-        <AuthProvider>
+        <AuthProvider session={pageProps.session}>
           <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
             <Component {...pageProps} />;
           </div>

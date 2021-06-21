@@ -1,18 +1,17 @@
 import { Api } from "@perfolio/api-client"
 import { useQuery } from "react-query"
 import { Transaction } from "@perfolio/db"
-import { useAuth } from "@perfolio/auth"
+import { useSession } from "next-auth/client"
 
 export const USE_TRANSACTIONS_QUERY_KEY = "transactions"
 
 export function useTransactions() {
-  const { getToken } = useAuth()
-  const token = getToken()
+  const [session] = useSession()
   const { data, ...meta } = useQuery<Transaction[], Error>(
     USE_TRANSACTIONS_QUERY_KEY,
-    async () => new Api({ token }).transactions.getTransactions(),
+    async () => new Api().transactions.getTransactions(),
     {
-      enabled: !!token,
+      enabled: !!session,
     },
   )
   return { transactions: data, ...meta }

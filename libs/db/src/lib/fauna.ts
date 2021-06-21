@@ -3,6 +3,7 @@ import { Asset } from "./documents/asset"
 import { RefreshToken } from "./documents/refresh_token"
 import { User } from "./documents/user"
 import { z } from "zod"
+import { Session } from "./documents/session"
 import { Transaction } from "./documents/transaction"
 
 /**
@@ -26,9 +27,11 @@ export class Fauna {
   public get user() {
     return {
       create: (input: z.infer<typeof User.createValidation>) => User.create(this.client, input),
-      signin: (input: z.infer<typeof User.signinValidation>) => User.signin(this.client, input),
+      update: (id: string, input: z.infer<typeof User.updateValidation>) =>
+        User.update(this.client, id, input),
       fromId: (id: string) => User.fromId(this.client, id),
-      delete: (user: User) => user.delete(this.client),
+      fromEmail: (email: string) => User.fromEmail(this.client, email),
+      delete: (userId: string) => User.delete(this.client, userId),
     }
   }
 
@@ -57,6 +60,16 @@ export class Fauna {
       fromHash: (token: string) => RefreshToken.fromHash(this.client, token),
       deleteFromUser: (userId: string) => RefreshToken.deleteFromUser(this.client, userId),
       delete: (token: RefreshToken) => token.delete(this.client),
+    }
+  }
+
+  public get session() {
+    return {
+      create: (input: z.infer<typeof Session.createSchema>) => Session.create(this.client, input),
+      fromSessionToken: (sessionToken: string) =>
+        Session.fromSessionToken(this.client, sessionToken),
+      delete: (sessionToken: string) => Session.delete(this.client, sessionToken),
+      update: (input: z.infer<typeof Session.updateSchema>) => Session.update(this.client, input),
     }
   }
 }

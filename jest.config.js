@@ -2,7 +2,6 @@ module.exports = {
   projects: [
     "<rootDir>/apps/app",
     "<rootDir>/libs/db",
-    "<rootDir>/libs/auth",
     "<rootDir>/libs/components",
     "<rootDir>/libs/api-client",
     "<rootDir>/libs/time",
@@ -16,5 +15,6 @@ module.exports = {
     "<rootDir>/libs/localstorage",
     "<rootDir>/libs/cache",
     "<rootDir>/libs/types",
+    "<rootDir>/libs/fauna-adapter",
   ],
 }

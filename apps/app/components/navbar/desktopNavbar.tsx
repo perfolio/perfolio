@@ -3,13 +3,11 @@ import { NavbarProps } from "./types"
 import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
 import { Logo } from "@perfolio/components"
-import { useAuth } from "@perfolio/auth"
+import { signOut } from "next-auth/client"
 import { BellIcon, AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
-  const { signout } = useAuth()
-
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -53,7 +51,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button onClick={() => signout()}>
+              <button onClick={() => signOut()}>
                 <LogoutIcon className="w-6 h-6" />
               </button>
             </li>
