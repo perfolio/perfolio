@@ -53,7 +53,7 @@ export class Api {
 
   private async silentRefresh(): Promise<void> {
     if (!this.token) {
-      const { accessToken } = await fetch(`${process.env.NEXTAUTH_URL}/getAccessToken`, {
+      const { accessToken } = await fetch("/api/auth/getAccessToken", {
         method: "POST",
       }).then((res) => res.json())
       this.token = accessToken
