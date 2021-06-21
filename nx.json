@@ -37,9 +37,6 @@
     "db": {
       "tags": []
     },
-    "auth": {
-      "tags": []
-    },
     "components": {
       "tags": []
     },
@@ -81,6 +78,9 @@
       "tags": []
     },
     "types": {
+      "tags": []
+    },
+    "fauna-adapter": {
       "tags": []
     }
   }

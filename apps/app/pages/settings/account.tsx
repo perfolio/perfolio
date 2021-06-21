@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { NextPage } from "next"
-import { useAuth, withAuthentication } from "@perfolio/auth"
 import { useForm } from "react-hook-form"
-import { WithSidebar, Card } from "../../components"
+import { withAuthentication, WithSidebar, Card } from "../../components"
 import { Api } from "@perfolio/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
@@ -10,7 +9,9 @@ import { Button, LabeledField, Form2, handleSubmit } from "@perfolio/components"
 import { MailIcon, UserIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
+import { useSession } from "next-auth/client"
 import cn from "classnames"
+
 interface SettingProps {
   validation: z.ZodAny
   title: string
@@ -72,23 +73,19 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const { user } = useAuth()
+  const [session] = useSession()
   const router = useRouter()
   const emailValidation = z.object({ email: z.string().email() })
   const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
     console.log(values)
     return new Api().emails.sendEmailConfirmation(values)
   }
-  const usernameValidation = z.object({ username: z.string().min(3).max(32) })
-  const onUsernameSubmit = async (values: z.infer<typeof usernameValidation>): Promise<void> => {
+  const nameValidation = z.object({ name: z.string().min(3).max(32) })
+  const onUsernameSubmit = async (values: z.infer<typeof nameValidation>): Promise<void> => {
     console.log(values)
     return new Promise((resolve) => setTimeout(resolve, 1000))
   }
-  const passwordValidation = z.object({ password: z.string().min(8) })
-  const onPasswordSubmit = async (values: z.infer<typeof passwordValidation>): Promise<void> => {
-    console.log(values)
-    return new Promise((resolve) => setTimeout(resolve, 1000))
-  }
+
   const deleteValidation = z.object({
     confirmation: z
       .string()
@@ -157,36 +154,27 @@ const SettingsPage: NextPage = () => {
               name="email"
               iconLeft={<MailIcon />}
               type="email"
-              defaultValue={user?.email}
+              defaultValue={session?.user?.email ?? ""}
             />,
           ]}
         />
         <Setting
-          title="Username"
+          title="name"
           footer="Please use between 3 and 32 characters"
-          validation={usernameValidation}
+          validation={nameValidation}
           onSubmit={onUsernameSubmit as (values: Record<string, string | number>) => Promise<void>}
           fields={[
             <LabeledField
               label="Name"
               hideLabel
-              name="username"
+              name="name"
               iconLeft={<UserIcon />}
               type="text"
-              defaultValue={user?.username}
+              defaultValue={session?.user?.name ?? ""}
             />,
           ]}
         />
-        <Setting
-          title="Change password"
-          footer="We will email with further instructions"
-          validation={z.any()}
-          onSubmit={onPasswordSubmit as (values: Record<string, string | number>) => Promise<void>}
-          fields={[]}
-          button={{
-            label: "Request email",
-          }}
-        />
+
         <Setting
           title="Delete Account"
           footer={`Enter "delete my account forever". This can not be undone. You will have to sign up for a new account again.`}

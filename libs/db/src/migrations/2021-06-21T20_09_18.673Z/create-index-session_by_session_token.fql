@@ -1,0 +1,9 @@
+CreateIndex({
+  "name": "session_by_session_token",
+  "source": Collection("sessions"),
+  "terms": [{
+    "field": ["data", "sessionToken"]
+  }],
+  "unique": true,
+  "serialized": true
+})

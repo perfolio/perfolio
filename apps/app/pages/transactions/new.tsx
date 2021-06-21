@@ -8,7 +8,7 @@ import { NextPage } from "next"
 import { Transaction } from "@perfolio/db"
 import { useTransactions, useCompany, useAsset } from "../../queries"
 import { useCreateTransaction } from "../../mutations"
-import { withAuthentication } from "@perfolio/auth"
+import { withAuthentication } from "../../components"
 
 const Suggestion: React.FC<{
   tx: Transaction
