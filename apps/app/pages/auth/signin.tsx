@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { NextPage, GetServerSideProps } from "next"
-import { signIn } from "next-auth/client"
+import { signIn, getSession } from "next-auth/client"
 import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/components"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
@@ -79,9 +79,9 @@ const SigninPage: NextPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  // const session = await getSession({ req })
-  // console.log({ session })
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const session = await getSession({ req })
+  console.log({ session })
   // if (session) {
   //   res.writeHead(302, { Location: "/" })
   //   res.end()
