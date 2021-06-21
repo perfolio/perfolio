@@ -4,7 +4,8 @@ import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { Asset } from "@perfolio/db"
 import { useHistory } from "./history"
-import { useAuth } from "@perfolio/auth"
+import { useSession } from "next-auth/client"
+
 import { Company } from "@perfolio/types"
 
 export interface Holding {
@@ -38,8 +39,7 @@ const getLastWithValue = (
 }
 
 export const usePortfolio = () => {
-  const { getToken } = useAuth()
-  const token = getToken()
+  const [session] = useSession()
   const { history, ...meta } = useHistory()
 
   const portfolio: Portfolio = {}
@@ -53,18 +53,18 @@ export const usePortfolio = () => {
     })
   }
   const assets = useQueries(
-    Object.keys(token && history ? history : {}).map((isin) => {
+    Object.keys(session && history ? history : {}).map((isin) => {
       return {
         queryKey: QUERY_KEY_ASSET_BY_ISIN(isin),
-        queryFn: () => new Api({ token }).assets.getAsset({ isin }),
+        queryFn: () => new Api().assets.getAsset({ isin }),
       }
     }),
   ).map((asset) => (asset.data as Asset).data)
   const companies = useQueries(
-    (token && assets ? assets : []).map(({ symbol }) => {
+    (session && assets ? assets : []).map(({ symbol }) => {
       return {
         queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
-        queryFn: () => new Api({ token }).companies.getCompany({ symbol }),
+        queryFn: () => new Api().companies.getCompany({ symbol }),
       }
     }),
   )

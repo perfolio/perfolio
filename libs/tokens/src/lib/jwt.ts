@@ -7,32 +7,37 @@ export const payload = z.object({
   iat: z.number(),
   exp: z.number().int(),
   aud: z.string(),
-
   sub: z.string(),
 
   userId: z.string(),
-  username: z.string(),
-  email: z.string().email(),
 })
 
 export type Claims = z.infer<typeof payload>
 export class JWT {
   private static readonly issuer = "perfolio"
   private static readonly audience = "perfolio"
-  private static readonly secret = "secret"
+  private static readonly secret = process.env.NX_JWT_SIGNING_KEY
   private static readonly algorithm = "HS256"
 
-  public static sign(user: { userId: string; username: string; email: string }): string {
-    return jwt.sign(user, JWT.secret, {
+  public static sign(claims: { userId: string }): string {
+    if (!JWT.secret) {
+      throw new Error("NX_JWT_SIGNING_KEY must be defined")
+    }
+
+    return jwt.sign(claims, JWT.secret, {
       algorithm: JWT.algorithm,
       expiresIn: "15m",
       audience: JWT.audience,
       issuer: JWT.issuer,
-      subject: user.userId,
+      subject: claims.userId,
     })
   }
 
   public static verify(encoded: string): Claims {
+    if (!JWT.secret) {
+      throw new Error("NX_JWT_SIGNING_KEY must be defined")
+    }
+
     const decoded = jwt.verify(encoded, JWT.secret, {
       audience: JWT.audience,
       issuer: JWT.issuer,

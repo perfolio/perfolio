@@ -8,6 +8,7 @@ export function withAuthentication(handler: ApiHandler): ApiHandler {
     console.log(Date.now(), "authenticationMiddleware", { method: ctx.req.method })
 
     const jwt = ctx.req.headers.authorization
+
     if (!jwt) {
       ctx.res.status(401)
       ctx.res.end("Not authorized: Authorization header missing")

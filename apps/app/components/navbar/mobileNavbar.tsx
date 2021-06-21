@@ -5,12 +5,11 @@ import { NavbarProps } from "./types"
 import { BellIcon, DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
 import { Link, Logo, ThemeSwitch } from "@perfolio/components"
 import { Transition } from "@headlessui/react"
-import { useAuth } from "@perfolio/auth"
+import { signOut } from "next-auth/client"
 
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const { signout } = useAuth()
 
   return (
     <nav className="flex items-center justify-between w-full">
@@ -56,7 +55,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <ThemeSwitch />
             </li>
             <li>
-              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={signout}>
+              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => signOut()}>
                 <LogoutIcon className="w-6 h-6 text-white" />
               </button>
             </li>
