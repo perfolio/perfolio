@@ -1,5 +1,5 @@
 import React from "react"
-import { Logo } from "@perfolio/components"
+import { Logo } from "@perfolio/ui/components"
 
 import Link from "next/link"
 /* eslint-disable-next-line */

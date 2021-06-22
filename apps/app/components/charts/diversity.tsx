@@ -2,8 +2,8 @@ import { usePortfolio } from "../../queries"
 import React, { useState, useMemo } from "react"
 import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import * as ToggleGroup from "@radix-ui/react-toggle-group"
-import { Spinner } from "@perfolio/components"
-import { DefaultButtonStyle } from "@perfolio/components"
+import { Spinner } from "@perfolio/ui/components"
+import { DefaultButtonStyle } from "@perfolio/ui/components"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
   () => Math.random() - 0.5,

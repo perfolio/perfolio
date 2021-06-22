@@ -1,5 +1,5 @@
 import React from "react"
-import { Table, Simple, Icon, Tag } from "@perfolio/components"
+import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
 
 interface Asset {
   id: string
