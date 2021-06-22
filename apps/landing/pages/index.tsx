@@ -11,8 +11,8 @@ import {
   Footer,
   Price,
 } from "../components"
-import { Api } from "@perfolio/api-client"
-import { Box, LabeledField, Form, FORM_ERROR } from "@perfolio/components"
+import { useApi } from "@perfolio/data-access/api-client"
+import { Box, LabeledField, Form, FORM_ERROR } from "@perfolio/ui/components"
 import * as z from "zod"
 import {
   ChartSquareBarIcon,
@@ -103,6 +103,7 @@ const features = () => {
   ]
 }
 const IndexPage: NextPage = () => {
+  const api = useApi()
   const [subscribed, setSubscribed] = useState(false)
   return (
     <div>
@@ -247,7 +248,7 @@ const IndexPage: NextPage = () => {
                   initialValues={{ email: "" }}
                   onSubmit={async ({ email }) => {
                     try {
-                      await new Api().emails.subscribe({ email })
+                      await api.emails.subscribe({ email })
                       setSubscribed(true)
                       return
                     } catch (error) {

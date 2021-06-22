@@ -4,7 +4,7 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import * as Fauna from "faunadb"
-import { FaunaAdapter } from "@perfolio/fauna-adapter"
+import { FaunaAdapter } from "@perfolio/data-access/fauna-adapter"
 const faunaClient = new Fauna.Client({
   secret: process.env.NX_FAUNA_SERVER_KEY,
 })

@@ -1,16 +1,18 @@
-import { Api } from "@perfolio/api-client"
+import { useApi } from "@perfolio/data-access/api-client"
 import { useQuery } from "react-query"
 import { useSession } from "next-auth/client"
 
-import { History } from "@perfolio/lambda"
+import { History } from "@perfolio/api/feature/lambda"
 
 export const QUERY_KEY_GET_HISTORY = "history"
 
 export function useHistory() {
+  const api = useApi()
+
   const [session] = useSession()
   const { data, ...meta } = useQuery<History, Error>(
     QUERY_KEY_GET_HISTORY,
-    async () => new Api().holdings.getHistory(),
+    async () => api.holdings.getHistory(),
     {
       enabled: !!session,
     },

@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
 import { withAuthentication, WithSidebar, Card } from "../../components"
-import { Api } from "@perfolio/api-client"
+import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
-import { Button, LabeledField, Form2, handleSubmit } from "@perfolio/components"
+import { Button, LabeledField, Form2, handleSubmit } from "@perfolio/ui/components"
 import { MailIcon, UserIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
@@ -75,10 +75,11 @@ const Setting: React.FC<SettingProps> = ({
 const SettingsPage: NextPage = () => {
   const [session] = useSession()
   const router = useRouter()
+  const api = useApi()
   const emailValidation = z.object({ email: z.string().email() })
   const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
     console.log(values)
-    return new Api().emails.sendEmailConfirmation(values)
+    return api.emails.sendEmailConfirmation(values)
   }
   const nameValidation = z.object({ name: z.string().min(3).max(32) })
   const onUsernameSubmit = async (values: z.infer<typeof nameValidation>): Promise<void> => {

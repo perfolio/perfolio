@@ -30,7 +30,10 @@
     "api": {
       "tags": []
     },
-    "api-client": {
+    "api-feature-lambda": {
+      "tags": []
+    },
+    "api-feature-middleware": {
       "tags": []
     },
     "app": {
@@ -40,25 +43,31 @@
       "tags": [],
       "implicitDependencies": ["app"]
     },
-    "cache": {
+    "data-access-api-client": {
       "tags": []
     },
-    "components": {
+    "data-access-cache": {
       "tags": []
     },
-    "db": {
+    "data-access-db": {
       "tags": []
     },
-    "email": {
+    "data-access-fauna-adapter": {
       "tags": []
     },
-    "fauna-adapter": {
+    "data-access-iexcloud": {
       "tags": []
     },
-    "iexcloud": {
+    "data-access-localstorage": {
       "tags": []
     },
-    "lambda": {
+    "feature-email": {
+      "tags": []
+    },
+    "feature-time": {
+      "tags": []
+    },
+    "feature-tokens": {
       "tags": []
     },
     "landing": {
@@ -68,19 +77,10 @@
       "tags": [],
       "implicitDependencies": ["landing"]
     },
-    "localstorage": {
-      "tags": []
-    },
-    "middleware": {
-      "tags": []
-    },
-    "time": {
-      "tags": []
-    },
-    "tokens": {
-      "tags": []
-    },
     "types": {
+      "tags": []
+    },
+    "ui-components": {
       "tags": []
     }
   }

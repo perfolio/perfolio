@@ -1,5 +1,5 @@
 import React from "react"
-import { Button } from "@perfolio/components"
+import { Button } from "@perfolio/ui/components"
 
 export const HeroSection: React.FC = (): JSX.Element => {
   return (

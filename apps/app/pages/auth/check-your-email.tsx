@@ -1,7 +1,7 @@
 import React from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
-import { Logo } from "@perfolio/components"
+import { Logo } from "@perfolio/ui/components"
 
 const CheckYourEmailPage: NextPage = () => {
   return (
