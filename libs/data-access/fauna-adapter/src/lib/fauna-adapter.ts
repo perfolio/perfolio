@@ -47,12 +47,17 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
               },
             }),
           )
+          if (!newUser) {
+            return null
+          }
           newUser.data.id = newUser.ref.id
-
           return newUser.data
         },
         async getUser(id) {
           const user = await faunaClient.query(q.Get(q.Ref(q.Collection(collections.User), id)))
+          if (!user) {
+            return null
+          }
           user.data.id = user.ref.id
           return user.data
         },
@@ -69,7 +74,6 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
               q.If(q.Exists(q.Var("ref")), q.Get(q.Var("ref")), null),
             ),
           )
-
           if (user == null) {
             return null
           }
@@ -120,6 +124,9 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
               },
             }),
           )
+          if (newUser) {
+            return null
+          }
           newUser.data.id = newUser.ref.id
 
           return newUser.data
@@ -176,7 +183,7 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
             q.Create(q.Collection(collections.Session), {
               data: {
                 userId: user.id,
-                expires: q.Time(expires),
+                expires: expires ? q.Time(expires) : undefined,
                 sessionToken: randomBytes(32).toString("hex"),
                 accessToken: randomBytes(32).toString("hex"),
                 createdAt: q.Now(),
@@ -184,17 +191,23 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
               },
             }),
           )
-
+          if (!session) {
+            console.error(`Unable to create session with user: ${user}`)
+            return null
+          }
           session.data.id = session.ref.id
           session.data.expires = new Date(session.data.expires.value)
           return session.data
         },
         async getSession(sessionToken) {
-          const { data, ref } = await faunaClient.query(
+          const res = await faunaClient.query(
             q.Get(q.Match(q.Index(indexes.Session), sessionToken)),
           )
-          const session = data
-          session.id = ref.id
+          if (!res) {
+            return null
+          }
+          const session = res.data
+          session.id = res.ref.id
           session.expires = new Date(session.expires.value)
           // Check session has not expired (do not return it if it has)
           if (session?.expires && new Date() > session.expires) {
@@ -240,6 +253,9 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
               },
             }),
           )
+          if (!updatedSession) {
+            return null
+          }
 
           updatedSession.data.id = updatedSession.ref.id
 
@@ -273,6 +289,9 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
               },
             }),
           )
+          if (!verificationRequest) {
+            return null
+          }
 
           // With the verificationCallback on a provider, you can send an email, or queue
           // an email to be sent, or perform some other action (e.g. send a text message)
@@ -287,7 +306,7 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
           return verificationRequest.data
         },
         async getVerificationRequest(identifier, token) {
-          const { ref, request: verificationRequest } = await faunaClient.query(
+          const res = await faunaClient.query(
             q.Let(
               {
                 ref: q.Match(q.Index(indexes.VerificationRequest), [hashToken(token), identifier]),
@@ -296,13 +315,16 @@ export function FaunaAdapter(faunaClient: Client): Adapter {
                 q.Exists(q.Var("ref")),
                 {
                   ref: q.Var("ref"),
-                  request: q.Select("data", q.Get(q.Var("ref"))),
+                  verificationRequest: q.Select("data", q.Get(q.Var("ref"))),
                 },
                 null,
               ),
             ),
           )
-
+          if (!res) {
+            return null
+          }
+          const { verificationRequest, ref } = res
           if (
             verificationRequest?.expires &&
             new Date(verificationRequest.expires.value) < new Date()

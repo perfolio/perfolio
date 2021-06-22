@@ -10,7 +10,7 @@ const faunaClient = new Fauna.Client({
 })
 
 export default NextAuth({
-  debug: false,
+  debug: process.env.NODE_ENV !== "production",
   pages: {
     signIn: "/auth/signin",
     verifyRequest: "/auth/check-your-email",
