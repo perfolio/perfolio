@@ -16,3 +16,6 @@ export * from "./lib/prices/getPrices"
 export * from "./lib/transactions/createTransaction"
 export * from "./lib/transactions/deleteTransaction"
 export * from "./lib/transactions/getTransactions"
+
+export * from "./lib/settings/changeName"
+export * from "./lib/settings/deleteAccount"

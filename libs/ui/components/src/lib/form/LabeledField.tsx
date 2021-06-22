@@ -4,6 +4,7 @@ import classNames from "classnames"
 import { ExclamationCircleIcon } from "@heroicons/react/outline"
 import cn from "classnames"
 export interface LabeledFieldProps {
+  disabled?: boolean
   /**
    * Field name. Make sure this matches your schema.
    */
@@ -26,6 +27,7 @@ export interface LabeledFieldProps {
 }
 
 export const LabeledField: React.FC<LabeledFieldProps> = ({
+  disabled,
   label,
   hideLabel,
   name,
@@ -67,7 +69,7 @@ export const LabeledField: React.FC<LabeledFieldProps> = ({
         ) : null}
         <input
           id={name}
-          disabled={isSubmitting}
+          disabled={disabled || isSubmitting}
           {...register(name)}
           type={type}
           className={classNames(
