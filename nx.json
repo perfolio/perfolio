@@ -27,6 +27,12 @@
     }
   },
   "projects": {
+    "api": {
+      "tags": []
+    },
+    "api-client": {
+      "tags": []
+    },
     "app": {
       "tags": []
     },
@@ -34,16 +40,25 @@
       "tags": [],
       "implicitDependencies": ["app"]
     },
-    "db": {
+    "cache": {
       "tags": []
     },
     "components": {
       "tags": []
     },
-    "time": {
+    "db": {
+      "tags": []
+    },
+    "email": {
+      "tags": []
+    },
+    "fauna-adapter": {
       "tags": []
     },
     "iexcloud": {
+      "tags": []
+    },
+    "lambda": {
       "tags": []
     },
     "landing": {
@@ -53,34 +68,19 @@
       "tags": [],
       "implicitDependencies": ["landing"]
     },
-    "email": {
-      "tags": []
-    },
-    "api-client": {
-      "tags": []
-    },
-    "api": {
-      "tags": []
-    },
-    "tokens": {
-      "tags": []
-    },
-    "lambda": {
+    "localstorage": {
       "tags": []
     },
     "middleware": {
       "tags": []
     },
-    "localstorage": {
+    "time": {
       "tags": []
     },
-    "cache": {
+    "tokens": {
       "tags": []
     },
     "types": {
-      "tags": []
-    },
-    "fauna-adapter": {
       "tags": []
     }
   }
