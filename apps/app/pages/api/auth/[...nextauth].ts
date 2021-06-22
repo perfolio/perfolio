@@ -29,4 +29,10 @@ export default NextAuth({
     }),
   ],
   adapter: FaunaAdapter(faunaClient),
+  callbacks: {
+    async session(session, user) {
+      session.user = user
+      return session
+    },
+  },
 })

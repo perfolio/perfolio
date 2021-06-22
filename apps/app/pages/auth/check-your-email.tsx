@@ -48,7 +48,6 @@ const CheckYourEmailPage: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req })
   if (session) {
-    console.log({ session })
     return {
       redirect: {
         destination: "/",
