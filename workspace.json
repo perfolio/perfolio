@@ -18,6 +18,78 @@
     }
   },
   "projects": {
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/api",
+            "outputPath": "dist/apps/api"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "api:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "api:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "api:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api"],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "api-client": {
+      "root": "libs/api-client",
+      "sourceRoot": "libs/api-client/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-client/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api-client"],
+          "options": {
+            "jestConfig": "libs/api-client/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "app": {
       "root": "apps/app",
       "sourceRoot": "apps/app",
@@ -105,22 +177,22 @@
         }
       }
     },
-    "db": {
-      "root": "libs/db",
-      "sourceRoot": "libs/db/src",
+    "cache": {
+      "root": "libs/cache",
+      "sourceRoot": "libs/cache/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/db/**/*.ts"]
+            "lintFilePatterns": ["libs/cache/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/db"],
+          "outputs": ["coverage/libs/cache"],
           "options": {
-            "jestConfig": "libs/db/jest.config.js",
+            "jestConfig": "libs/cache/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -147,22 +219,64 @@
         }
       }
     },
-    "time": {
-      "root": "libs/time",
-      "sourceRoot": "libs/time/src",
+    "db": {
+      "root": "libs/db",
+      "sourceRoot": "libs/db/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/time/**/*.ts"]
+            "lintFilePatterns": ["libs/db/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/time"],
+          "outputs": ["coverage/libs/db"],
           "options": {
-            "jestConfig": "libs/time/jest.config.js",
+            "jestConfig": "libs/db/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "email": {
+      "root": "libs/email",
+      "sourceRoot": "libs/email/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/email/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/email"],
+          "options": {
+            "jestConfig": "libs/email/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "fauna-adapter": {
+      "root": "libs/fauna-adapter",
+      "sourceRoot": "libs/fauna-adapter/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/fauna-adapter/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/fauna-adapter"],
+          "options": {
+            "jestConfig": "libs/fauna-adapter/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -184,6 +298,27 @@
           "outputs": ["coverage/libs/iexcloud"],
           "options": {
             "jestConfig": "libs/iexcloud/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "lambda": {
+      "root": "libs/lambda",
+      "sourceRoot": "libs/lambda/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lambda/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lambda"],
+          "options": {
+            "jestConfig": "libs/lambda/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -276,136 +411,22 @@
         }
       }
     },
-    "email": {
-      "root": "libs/email",
-      "sourceRoot": "libs/email/src",
+    "localstorage": {
+      "root": "libs/localstorage",
+      "sourceRoot": "libs/localstorage/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/email/**/*.ts"]
+            "lintFilePatterns": ["libs/localstorage/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/email"],
+          "outputs": ["coverage/libs/localstorage"],
           "options": {
-            "jestConfig": "libs/email/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-client": {
-      "root": "libs/api-client",
-      "sourceRoot": "libs/api-client/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api-client/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api-client"],
-          "options": {
-            "jestConfig": "libs/api-client/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/next:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "root": "apps/api",
-            "outputPath": "dist/apps/api"
-          },
-          "configurations": {
-            "production": {}
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "api:build",
-            "dev": true
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "api:build:production",
-              "dev": false
-            }
-          }
-        },
-        "export": {
-          "executor": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "api:build:production"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
-    "tokens": {
-      "root": "libs/tokens",
-      "sourceRoot": "libs/tokens/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/tokens/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/tokens"],
-          "options": {
-            "jestConfig": "libs/tokens/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "lambda": {
-      "root": "libs/lambda",
-      "sourceRoot": "libs/lambda/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/lambda/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/lambda"],
-          "options": {
-            "jestConfig": "libs/lambda/jest.config.js",
+            "jestConfig": "libs/localstorage/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -432,43 +453,43 @@
         }
       }
     },
-    "localstorage": {
-      "root": "libs/localstorage",
-      "sourceRoot": "libs/localstorage/src",
+    "time": {
+      "root": "libs/time",
+      "sourceRoot": "libs/time/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/localstorage/**/*.ts"]
+            "lintFilePatterns": ["libs/time/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/localstorage"],
+          "outputs": ["coverage/libs/time"],
           "options": {
-            "jestConfig": "libs/localstorage/jest.config.js",
+            "jestConfig": "libs/time/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "cache": {
-      "root": "libs/cache",
-      "sourceRoot": "libs/cache/src",
+    "tokens": {
+      "root": "libs/tokens",
+      "sourceRoot": "libs/tokens/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/cache/**/*.ts"]
+            "lintFilePatterns": ["libs/tokens/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/cache"],
+          "outputs": ["coverage/libs/tokens"],
           "options": {
-            "jestConfig": "libs/cache/jest.config.js",
+            "jestConfig": "libs/tokens/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -490,27 +511,6 @@
           "outputs": ["coverage/libs/types"],
           "options": {
             "jestConfig": "libs/types/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "fauna-adapter": {
-      "root": "libs/fauna-adapter",
-      "sourceRoot": "libs/fauna-adapter/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/fauna-adapter/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/fauna-adapter"],
-          "options": {
-            "jestConfig": "libs/fauna-adapter/jest.config.js",
             "passWithNoTests": true
           }
         }
