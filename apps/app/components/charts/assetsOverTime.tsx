@@ -219,7 +219,7 @@ export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
               const { time, value } = payload[0].payload
               return (
                 <Box className="flex flex-col p-4 text-center bg-gray-50">
-                  <span className="text-xl font-medium">${value.toFixed(2)}</span>
+                  <span className="text-xl font-medium">{value.toFixed(2)}</span>
                   <span className="text-sm text-gray-700">{time}</span>
                 </Box>
               )
@@ -232,7 +232,7 @@ export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
             strokeWidth={2}
             fill="url(#gradient)"
           />
-          <XAxis dataKey="time" minTickGap={100} padding={{ right: 50 }} />
+          <XAxis dataKey="time" minTickGap={100} />
         </AreaChart>
       )}
     </ResponsiveContainer>
