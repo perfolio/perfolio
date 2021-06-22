@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ApiProvider>
           <AuthProvider session={pageProps.session}>
             <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-              <Component {...pageProps} />;
+              <Component {...pageProps} />
             </div>
           </AuthProvider>
         </ApiProvider>
