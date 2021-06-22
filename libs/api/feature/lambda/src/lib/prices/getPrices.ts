@@ -3,7 +3,7 @@ import {
   getPrice as getPriceFromCloud,
   getHistory as getHistoryFromCloud,
 } from "@perfolio/data-access/iexcloud"
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 import { Price } from "@perfolio/types"
 import { Cache, Key } from "@perfolio/data-access/cache"
 

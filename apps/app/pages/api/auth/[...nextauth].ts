@@ -10,7 +10,7 @@ const faunaClient = new Fauna.Client({
 })
 
 export default NextAuth({
-  debug: process.env.NODE_ENV !== "production",
+  debug: false,
   pages: {
     signIn: "/auth/signin",
     verifyRequest: "/auth/check-your-email",
@@ -29,4 +29,10 @@ export default NextAuth({
     }),
   ],
   adapter: FaunaAdapter(faunaClient),
+  callbacks: {
+    async session(session, user) {
+      session.user = user
+      return session
+    },
+  },
 })

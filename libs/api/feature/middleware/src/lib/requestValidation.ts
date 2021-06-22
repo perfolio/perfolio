@@ -7,7 +7,6 @@ export function withRequestValidation(validator: z.ZodAny): Middleware {
       if (ctx.req.method === "OPTIONS") {
         return ctx.res.status(204).end()
       }
-      console.log(Date.now(), "requestValidationMiddleware", { method: ctx.req.method })
 
       try {
         validator.parse(ctx.req.body)

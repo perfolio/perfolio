@@ -41,10 +41,10 @@
       "@perfolio/data-access/iexcloud": ["libs/data-access/iexcloud/src/index.ts"],
       "@perfolio/data-access/localstorage": ["libs/data-access/localstorage/src/index.ts"],
       "@perfolio/feature/email": ["libs/feature/email/src/index.ts"],
-      "@perfolio/feature/time": ["libs/feature/time/src/index.ts"],
       "@perfolio/feature/tokens": ["libs/feature/tokens/src/index.ts"],
       "@perfolio/types": ["libs/types/src/index.ts"],
-      "@perfolio/ui/components": ["libs/ui/components/src/index.ts"]
+      "@perfolio/ui/components": ["libs/ui/components/src/index.ts"],
+      "@perfolio/util/time": ["libs/util/time/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

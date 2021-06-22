@@ -78,7 +78,6 @@ const SettingsPage: NextPage = () => {
   const api = useApi()
   const emailValidation = z.object({ email: z.string().email() })
   const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
-    console.log(values)
     return api.emails.sendEmailConfirmation(values)
   }
   const nameValidation = z.object({ name: z.string().min(3).max(64) })
