@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Image from "next/image"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import {
   Navbar,
   Member,
@@ -24,85 +24,11 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
 
-const members: { name: string; title: string; image: string }[] = [
-  {
-    name: "Nicolas Webersinke",
-    title: "Product",
-    image: "/img/nico.jpeg",
-  },
-  {
-    name: "Andreas Thomas",
-    title: "Tech",
-    image: "/img/andreas.jpeg",
-  },
-  {
-    name: "Mads Jordt",
-    title: "Sales",
-    image: "/img/mads.jpeg",
-  },
-  {
-    name: "Kevin Kohler",
-    title: "Marketing",
-    image: "/img/kevin.jpeg",
-  },
-  {
-    name: "Lauren Mackintosh",
-    title: "Business Development",
-    image: "/img/lauren.jpeg",
-  },
-  {
-    name: "Luis Meister",
-    title: "Product",
-    image: "/img/luis.png",
-  },
-  {
-    name: "Lukas Meister",
-    title: "Business Development",
-    image: "/img/lukas.png",
-  },
-]
-
-const features = () => {
-  return [
-    {
-      icon: <FlagIcon />,
-      title: "Independent",
-      description:
-        "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
-    },
-    {
-      icon: <ChartSquareBarIcon />,
-      title: "Complex made easy",
-      description:
-        "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
-    },
-    {
-      icon: <HomeIcon />,
-      title: "All in one place",
-      description:
-        "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
-    },
-    {
-      icon: <DatabaseIcon />,
-      title: "Highest data quality",
-      description:
-        "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
-    },
-    {
-      icon: <ShieldCheckIcon />,
-      title: "Privacy and Security",
-      description:
-        "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
-    },
-    {
-      icon: <CreditCardIcon />,
-      title: "Fair pricing",
-      description:
-        "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
-    },
-  ]
+export interface IndexPageProps {
+  members: { name: string; title: string; image: string }[]
 }
-const IndexPage: NextPage = () => {
+
+const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
   const api = useApi()
   const [subscribed, setSubscribed] = useState(false)
   return (
@@ -129,7 +55,44 @@ const IndexPage: NextPage = () => {
           <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
-            {features().map((f, index) => {
+            {[
+              {
+                icon: <FlagIcon />,
+                title: "Independent",
+                description:
+                  "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
+              },
+              {
+                icon: <ChartSquareBarIcon />,
+                title: "Complex made easy",
+                description:
+                  "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
+              },
+              {
+                icon: <HomeIcon />,
+                title: "All in one place",
+                description:
+                  "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
+              },
+              {
+                icon: <DatabaseIcon />,
+                title: "Highest data quality",
+                description:
+                  "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
+              },
+              {
+                icon: <ShieldCheckIcon />,
+                title: "Privacy and Security",
+                description:
+                  "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
+              },
+              {
+                icon: <CreditCardIcon />,
+                title: "Fair pricing",
+                description:
+                  "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
+              },
+            ].map((f, index) => {
               return (
                 <li key={index} className="p-3 md:w-1/2 xl:w-1/3">
                   <Feature icon={f.icon} title={f.title} description={f.description}></Feature>
@@ -141,7 +104,7 @@ const IndexPage: NextPage = () => {
         <Section bg="bg-gray-50" id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
-          <div className="flex flex-col items-center justify-center md:flex-row">
+          <div className="flex flex-col items-center justify-center md:flex-row md:space-x-8">
             <Box>
               <Price
                 title="Try it for free"
@@ -268,6 +231,50 @@ const IndexPage: NextPage = () => {
       <Footer />
     </div>
   )
+}
+
+export const getStaticProps: GetStaticProps<IndexPageProps> = async () => {
+  return {
+    props: {
+      members: [
+        {
+          name: "Nicolas Webersinke",
+          title: "Product",
+          image: "/img/nico.jpeg",
+        },
+        {
+          name: "Andreas Thomas",
+          title: "Tech",
+          image: "/img/andreas.jpeg",
+        },
+        {
+          name: "Mads Jordt",
+          title: "Sales",
+          image: "/img/mads.jpeg",
+        },
+        {
+          name: "Kevin Kohler",
+          title: "Marketing",
+          image: "/img/kevin.jpeg",
+        },
+        {
+          name: "Lauren Mackintosh",
+          title: "Business Development",
+          image: "/img/lauren.jpeg",
+        },
+        {
+          name: "Luis Meister",
+          title: "Product",
+          image: "/img/luis.png",
+        },
+        {
+          name: "Lukas Meister",
+          title: "Business Development",
+          image: "/img/lukas.png",
+        },
+      ],
+    },
+  }
 }
 
 export default IndexPage
