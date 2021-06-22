@@ -22,7 +22,7 @@ export const WithSidebar: React.FC<WithSidebarProps> = ({
         <div className="container mx-auto ">
           <div className={`xl:flex space-x-8 ${side === "left" ? "flex-row-reverse" : "flex-row"}`}>
             <main className="-mt-8 xl:w-3/4 2xl:w-4/5 xl:-mt-28">{children}</main>
-            <div className="xl:w-1/4 2xl:w-1/5 ">{sidebar}</div>
+            <div className="mt-4 xl:w-1/4 2xl:w-1/5 ">{sidebar}</div>
           </div>
         </div>
       </div>
