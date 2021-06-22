@@ -16,6 +16,7 @@ import {
   SubscribeRequest,
   GetAssetResponse,
   SendEmailConfirmationRequest,
+  ChangeNameRequest,
 } from "@perfolio/api/feature/lambda"
 /**
  * Generic api request to be extended by other request types.
@@ -169,6 +170,22 @@ export class Api {
       getTransactions: async () =>
         this.request<GetTransactionsResponse>({
           path: "/v1/transactions/getTransactions",
+          silentRefresh: true,
+        }),
+    }
+  }
+
+  public get settings() {
+    return {
+      changeName: async (body: ChangeNameRequest) =>
+        this.request<void>({
+          body,
+          path: "/v1/settings/changeName",
+          silentRefresh: true,
+        }),
+      deleteAccount: async () =>
+        this.request<void>({
+          path: "/v1/settings/deleteAccount",
           silentRefresh: true,
         }),
     }
