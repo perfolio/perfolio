@@ -1,4 +1,4 @@
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 import * as z from "zod"
 export interface IEXService {
   getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse>

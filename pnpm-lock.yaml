@@ -11,7 +11,7 @@ specifiers:
   '@heroicons/react': ^1.0.1
   '@hookform/resolvers': ^2.6.0
   '@lhci/cli': ^0.8.0
-  '@next-auth/fauna-adapter': ^0.0.1-pr.5.32
+  '@next-auth/fauna-adapter': ^0.0.1-canary.155
   '@nrwl/cli': 12.4.0
   '@nrwl/cypress': 12.4.0
   '@nrwl/eslint-plugin-nx': 12.4.0
@@ -94,7 +94,7 @@ dependencies:
   '@headlessui/react': 1.3.0_react-dom@17.0.2+react@17.0.2
   '@heroicons/react': 1.0.1_react@17.0.2
   '@hookform/resolvers': 2.6.0_react-hook-form@7.9.0
-  '@next-auth/fauna-adapter': 0.0.1-pr.5.32_faunadb@4.3.0+next-auth@3.27.0
+  '@next-auth/fauna-adapter': 0.0.1-canary.155_faunadb@4.3.0+next-auth@3.27.0
   '@nrwl/next': 12.4.0_9975135d91698fd2458ae57433e4ec85
   '@radix-ui/react-tabs': 0.0.13_react@17.0.2
   '@radix-ui/react-toggle-group': 0.0.8_react@17.0.2
@@ -2960,11 +2960,11 @@ packages:
       - supports-color
     dev: true
 
-  /@next-auth/fauna-adapter/0.0.1-pr.5.32_faunadb@4.3.0+next-auth@3.27.0:
-    resolution: {integrity: sha512-Vxho9p+EppqLX7L65bs2/rSt9Tg0Go8NdejX5ilfZAriktxE81baQ/v8ehXWLvzY4L/0mmqJfkWQx9AI7BsLMQ==}
+  /@next-auth/fauna-adapter/0.0.1-canary.155_faunadb@4.3.0+next-auth@3.27.0:
+    resolution: {integrity: sha512-bG/3MEZ33i9spo4o5FyCadGjfDC6xjZFqASzZzNk6XSjtZfpCnkMilBIc9R1zPNCXQ32fk0LIzrBYkLIdNII8g==}
     peerDependencies:
-      faunadb: ^4.0.2
-      next-auth: ^3.1.0
+      faunadb: ^4.1.1
+      next-auth: ^3.11.2
     dependencies:
       faunadb: 4.3.0
       next-auth: 3.27.0_react-dom@17.0.2+react@17.0.2

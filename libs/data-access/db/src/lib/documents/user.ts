@@ -45,7 +45,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
     username: z.string().optional(),
   })
 
-  public static fromInternal(
+  public static reshape(
     res: QueryResponse<z.infer<typeof User.internalSchema>>,
   ): QueryResponse<z.infer<typeof User.schema>> {
     return {
@@ -74,7 +74,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
         return null
       }
 
-      return new User(this.fromInternal(res))
+      return new User(this.reshape(res))
     } catch (err) {
       throw new Error(`Unable load user from email: ${err}`)
     }
@@ -95,7 +95,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
         return null
       }
 
-      return new User(this.fromInternal(res))
+      return new User(this.reshape(res))
     } catch (err) {
       throw new Error(`Unable load user from id: ${err}`)
     }
@@ -123,7 +123,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
         }),
       )
 
-      return new User(this.fromInternal(res))
+      return new User(this.reshape(res))
     } catch (err) {
       throw new Error(`Unable to create user: ${err}`)
     }
@@ -148,7 +148,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
         }),
       )
 
-      return new User(this.fromInternal(res))
+      return new User(this.reshape(res))
     } catch (err) {
       throw new Error(`Unable to update user: ${err}`)
     }

@@ -1,6 +1,6 @@
 import { useAsset, useTransactions } from "../../queries"
 import { Transaction } from "@perfolio/data-access/db"
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 import React from "react"
 import { Spinner } from "@perfolio/ui/components"
 

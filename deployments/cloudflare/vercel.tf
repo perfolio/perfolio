@@ -5,14 +5,6 @@ resource "cloudflare_record" "perfolio" {
   type    = "A"
   zone_id = var.config.zone_id
 }
-
-resource "cloudflare_record" "api" {
-  name    = "api"
-  value   = "cname.vercel-dns.com"
-  type    = "CNAME"
-  zone_id = var.config.zone_id
-}
-
 resource "cloudflare_record" "app" {
   name    = "app"
   value   = "cname.vercel-dns.com"
