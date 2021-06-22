@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import { signIn } from "next-auth/client"
 import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/components"
 import { z } from "zod"
@@ -79,4 +79,8 @@ const SigninPage: NextPage = () => {
   )
 }
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  console.log("Hello from serverside")
+  return { props: {} }
+}
 export default SigninPage
