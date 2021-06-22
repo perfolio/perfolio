@@ -81,10 +81,9 @@ const SettingsPage: NextPage = () => {
     console.log(values)
     return api.emails.sendEmailConfirmation(values)
   }
-  const nameValidation = z.object({ name: z.string().min(3).max(32) })
+  const nameValidation = z.object({ name: z.string().min(3).max(64) })
   const onUsernameSubmit = async (values: z.infer<typeof nameValidation>): Promise<void> => {
-    console.log(values)
-    return new Promise((resolve) => setTimeout(resolve, 1000))
+    await api.settings.changeName(values)
   }
 
   const deleteValidation = z.object({
@@ -95,9 +94,8 @@ const SettingsPage: NextPage = () => {
         `Please enter "delete my account forever"`,
       ),
   })
-  const onDeleteSubmit = async (values: z.infer<typeof deleteValidation>): Promise<void> => {
-    console.log(values)
-    return new Promise((resolve) => setTimeout(resolve, 1000))
+  const onDeleteSubmit = async (): Promise<void> => {
+    await api.settings.deleteAccount()
   }
 
   return (
@@ -150,6 +148,7 @@ const SettingsPage: NextPage = () => {
           onSubmit={onEmailSubmit as (values: Record<string, string | number>) => Promise<void>}
           fields={[
             <LabeledField
+              disabled
               label="Email"
               hideLabel
               name="email"
@@ -160,8 +159,8 @@ const SettingsPage: NextPage = () => {
           ]}
         />
         <Setting
-          title="name"
-          footer="Please use between 3 and 32 characters"
+          title="Name"
+          footer="Please use between 3 and 64 characters"
           validation={nameValidation}
           onSubmit={onUsernameSubmit as (values: Record<string, string | number>) => Promise<void>}
           fields={[

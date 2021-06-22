@@ -13,9 +13,9 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
 
   return (
     <nav className="flex items-center justify-between w-full">
-      <div>
-        <Logo imageColor="text-primary-50" />
-      </div>
+      <a className="text-gray-200 hover:text-gray-50">
+        <Logo />
+      </a>
       <div>
         <button className="w-6 h-6 cursor-pointer text-gray-50" onClick={() => setOpen(!open)}>
           {open ? <XIcon /> : <DotsVerticalIcon />}
