@@ -1,4 +1,4 @@
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 import { z } from "zod"
 import { getPrice as getPriceFromCloud } from "@perfolio/data-access/iexcloud"
 import { Key, Cache } from "@perfolio/data-access/cache"

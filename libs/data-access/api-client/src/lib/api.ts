@@ -12,12 +12,12 @@ import {
   GetPricesRequest,
   GetPricesResponse,
   GetTransactionsResponse,
-  RefreshResponse,
   SubscribeRequest,
   GetAssetResponse,
   SendEmailConfirmationRequest,
   ChangeNameRequest,
 } from "@perfolio/api/feature/lambda"
+import { JWT } from "@perfolio/feature/tokens"
 /**
  * Generic api request to be extended by other request types.
  */
@@ -36,31 +36,35 @@ export interface ApiRequest {
    * Send a body with the request. Must be json serializable.
    */
   body?: unknown
-
-  /**
-   * Automatically refreshes the access token when it has expired.
-   */
-  silentRefresh?: boolean
 }
 
 export class Api {
-  public readonly baseUrl: string
   private token?: string
 
   constructor(opts?: { token?: string }) {
-    this.baseUrl = process.env.NEXT_PUBLIC_PERFOLIO_API_URL ?? "http://localhost:8080"
     this.token = opts?.token
   }
 
-  private async silentRefresh(): Promise<void> {
-    if (!this.token) {
-      const { accessToken } = await fetch("/api/auth/getAccessToken", {
-        method: "POST",
-      }).then((res) => res.json())
-      this.token = accessToken
-      console.log("AccessToken refreshed.")
-    }
+  private async refreshAccessToken(): Promise<void> {
+    const { accessToken } = await this.request<{ accessToken: string }>({
+      path: "/api/auth/getAccessToken",
+    })
+    this.token = accessToken
   }
+
+  private async requestWithAuth<ResponseType>(req: ApiRequest): Promise<ResponseType> {
+    /**
+     * If there is no token or it expires within the next 10 seconds.
+     *
+     * The idea is to get a new one before it expires in case it is still valid on the client
+     * but expires "in transit"
+     */
+    if (!this.token || JWT.expiresIn(this.token) < 10) {
+      await this.refreshAccessToken()
+    }
+    return this.request<ResponseType>(req)
+  }
+
   /**
    * Make a post request to a serverless function
    *
@@ -68,14 +72,7 @@ export class Api {
    * @param body
    * @param token - Overwrite default token getter.
    */
-  private async request<ResponseType>({
-    path,
-    body,
-    silentRefresh,
-  }: ApiRequest): Promise<ResponseType> {
-    if (silentRefresh) {
-      await this.silentRefresh()
-    }
+  private async request<ResponseType>({ path, body }: ApiRequest): Promise<ResponseType> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     }
@@ -83,16 +80,11 @@ export class Api {
       headers["Authorization"] = this.token
     }
 
-    const res = await fetch(`${this.baseUrl}${path}`, {
+    const res = await fetch(path, {
       method: "POST",
       headers,
       body: body ? JSON.stringify(body) : undefined,
-      mode: "cors",
     })
-
-    if (res.status === 401) {
-      await this.silentRefresh()
-    }
 
     if (res.status !== 200) {
       throw new HTTPRequestError(
@@ -106,49 +98,44 @@ export class Api {
   public get assets() {
     return {
       getAsset: async (body: GetAssetRequest) =>
-        this.request<GetAssetResponse>({ body, path: "/v1/assets/getAsset", silentRefresh: true }),
-    }
-  }
-
-  public get auth() {
-    return {
-      refresh: async () => this.request<RefreshResponse>({ path: "/v1/auth/refresh" }),
+        this.requestWithAuth<GetAssetResponse>({ body, path: "/api/assets/getAsset" }),
     }
   }
 
   public get companies() {
     return {
       getCompany: async (body: GetCompanyRequest) =>
-        this.request<GetCompanyResponse>({
+        this.requestWithAuth<GetCompanyResponse>({
           body,
-          path: "/v1/companies/getCompany",
-          silentRefresh: true,
+          path: "/api/companies/getCompany",
         }),
     }
   }
   public get emails() {
     return {
       subscribe: async (body: SubscribeRequest) =>
-        this.request<void>({ body, path: "/v1/emails/subscribe", silentRefresh: true }),
+        this.request<void>({ body, path: "/api/emails/subscribe" }),
       sendEmailConfirmation: async (body: SendEmailConfirmationRequest) =>
-        this.request<void>({ body, path: "/v1/emails/sendEmailConfirmation", silentRefresh: true }),
+        this.request<void>({
+          body,
+          path: "/api/emails/sendEmailConfirmation",
+        }),
     }
   }
   public get holdings() {
     return {
       getHistory: async () =>
-        this.request<GetHistoryResponse>({ path: "/v1/holdings/getHistory", silentRefresh: true }),
+        this.requestWithAuth<GetHistoryResponse>({ path: "/api/holdings/getHistory" }),
     }
   }
   public get prices() {
     return {
       getPrice: async (body: GetPriceRequest) =>
-        this.request<GetPriceResponse>({ body, path: "/v1/prices/getPrice", silentRefresh: true }),
+        this.requestWithAuth<GetPriceResponse>({ body, path: "/api/prices/getPrice" }),
       getPrices: async (body: GetPricesRequest) =>
-        this.request<GetPricesResponse>({
+        this.requestWithAuth<GetPricesResponse>({
           body,
-          path: "/v1/prices/getPrices",
-          silentRefresh: true,
+          path: "/api/prices/getPrices",
         }),
     }
   }
@@ -156,21 +143,18 @@ export class Api {
   public get transactions() {
     return {
       createTransaction: async (body: CreateTransactionRequest) =>
-        this.request<CreateTransactionResponse>({
+        this.requestWithAuth<CreateTransactionResponse>({
           body,
-          path: "/v1/transactions/createTransaction",
-          silentRefresh: true,
+          path: "/api/transactions/createTransaction",
         }),
       deleteTransaction: async (body: DeleteTransactionRequest) =>
-        this.request<void>({
+        this.requestWithAuth<void>({
           body,
-          path: "/v1/transactions/deleteTransaction",
-          silentRefresh: true,
+          path: "/api/transactions/deleteTransaction",
         }),
       getTransactions: async () =>
-        this.request<GetTransactionsResponse>({
-          path: "/v1/transactions/getTransactions",
-          silentRefresh: true,
+        this.requestWithAuth<GetTransactionsResponse>({
+          path: "/api/transactions/getTransactions",
         }),
     }
   }
@@ -178,15 +162,13 @@ export class Api {
   public get settings() {
     return {
       changeName: async (body: ChangeNameRequest) =>
-        this.request<void>({
+        this.requestWithAuth<void>({
           body,
-          path: "/v1/settings/changeName",
-          silentRefresh: true,
+          path: "/api/settings/changeName",
         }),
       deleteAccount: async () =>
-        this.request<void>({
-          path: "/v1/settings/deleteAccount",
-          silentRefresh: true,
+        this.requestWithAuth<void>({
+          path: "/api/settings/deleteAccount",
         }),
     }
   }

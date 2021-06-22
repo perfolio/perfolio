@@ -8,7 +8,6 @@ module.exports = {
     "<rootDir>/libs/data-access/iexcloud",
     "<rootDir>/apps/landing",
     "<rootDir>/libs/feature/email",
-    "<rootDir>/apps/api",
     "<rootDir>/libs/feature/tokens",
     "<rootDir>/libs/api/feature/lambda",
     "<rootDir>/libs/api/feature/middleware",

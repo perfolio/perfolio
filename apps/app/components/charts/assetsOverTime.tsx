@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { useHistory } from "../../queries"
 import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 import { Box, Spinner } from "@perfolio/ui/components"
 
 type Data = {

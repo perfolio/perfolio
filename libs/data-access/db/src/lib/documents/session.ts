@@ -63,14 +63,12 @@ export class Session extends Document<z.infer<typeof Session.schema>> {
     sessionToken: string,
   ): Promise<Session | null> {
     try {
-      console.log({ sessionToken })
       const res = await client
         .query<QueryResponse<z.infer<typeof Session.internalSchema>>>(
           q.Get(q.Match(q.Index(Session.index.bySessionToken), sessionToken)),
         )
         .catch(() => null)
 
-      console.log({ res })
       if (res === null) {
         return null
       }

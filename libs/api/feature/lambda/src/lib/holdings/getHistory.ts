@@ -4,7 +4,7 @@ import { getTransactions } from "../transactions/getTransactions"
 import { getAsset } from "../assets/getAsset"
 import { getPrices } from "../prices/getPrices"
 import { Transaction } from "@perfolio/data-access/db"
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 
 export type History = {
   [assetId: string]: {

@@ -27,9 +27,6 @@
     }
   },
   "projects": {
-    "api": {
-      "tags": []
-    },
     "api-feature-lambda": {
       "tags": []
     },
@@ -64,9 +61,6 @@
     "feature-email": {
       "tags": []
     },
-    "feature-time": {
-      "tags": []
-    },
     "feature-tokens": {
       "tags": []
     },
@@ -81,6 +75,9 @@
       "tags": []
     },
     "ui-components": {
+      "tags": []
+    },
+    "util-time": {
       "tags": []
     }
   }
