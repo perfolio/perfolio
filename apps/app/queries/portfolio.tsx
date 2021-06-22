@@ -1,8 +1,8 @@
 import { useQueries } from "react-query"
-import { Api } from "@perfolio/api-client"
+import { useApi } from "@perfolio/data-access/api-client"
 import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
-import { Asset } from "@perfolio/db"
+import { Asset } from "@perfolio/data-access/db"
 import { useHistory } from "./history"
 import { useSession } from "next-auth/client"
 
@@ -41,6 +41,7 @@ const getLastWithValue = (
 export const usePortfolio = () => {
   const [session] = useSession()
   const { history, ...meta } = useHistory()
+  const api = useApi()
 
   const portfolio: Portfolio = {}
   if (history) {
@@ -56,7 +57,7 @@ export const usePortfolio = () => {
     Object.keys(session && history ? history : {}).map((isin) => {
       return {
         queryKey: QUERY_KEY_ASSET_BY_ISIN(isin),
-        queryFn: () => new Api().assets.getAsset({ isin }),
+        queryFn: () => api.assets.getAsset({ isin }),
       }
     }),
   ).map((asset) => (asset.data as Asset).data)
@@ -64,7 +65,7 @@ export const usePortfolio = () => {
     (session && assets ? assets : []).map(({ symbol }) => {
       return {
         queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
-        queryFn: () => new Api().companies.getCompany({ symbol }),
+        queryFn: () => api.companies.getCompany({ symbol }),
       }
     }),
   )

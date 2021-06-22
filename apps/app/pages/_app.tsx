@@ -1,7 +1,8 @@
 import type { AppProps } from "next/app"
 import { Provider as AuthProvider } from "next-auth/client"
 import { QueryClientProvider } from "react-query"
-import { PersistentQueryClient } from "@perfolio/localstorage"
+import { ApiProvider } from "@perfolio/data-access/api-client"
+import { PersistentQueryClient } from "@perfolio/data-access/localstorage"
 import Head from "next/head"
 import "tailwindcss/tailwind.css"
 function MyApp({ Component, pageProps }: AppProps) {
@@ -20,11 +21,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#1A202C"></meta>
       </Head>
       <QueryClientProvider client={PersistentQueryClient()}>
-        <AuthProvider session={pageProps.session}>
-          <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-            <Component {...pageProps} />;
-          </div>
-        </AuthProvider>
+        <ApiProvider>
+          <AuthProvider session={pageProps.session}>
+            <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+              <Component {...pageProps} />;
+            </div>
+          </AuthProvider>
+        </ApiProvider>
       </QueryClientProvider>
     </>
   )

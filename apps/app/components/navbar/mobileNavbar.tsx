@@ -3,7 +3,7 @@ import { MobileNavLink } from "./mobileNavLink"
 import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
 import { BellIcon, DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
-import { Link, Logo, ThemeSwitch } from "@perfolio/components"
+import { Link, Logo, ThemeSwitch } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import { signOut } from "next-auth/client"
 

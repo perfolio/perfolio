@@ -2,6 +2,7 @@ import React from "react"
 import { AppProps } from "next/app"
 import Head from "next/head"
 import PlausibleProvider from "next-plausible"
+import { ApiProvider } from "@perfolio/data-access/api-client"
 import "tailwindcss/tailwind.css"
 
 function CustomApp({ Component, pageProps }: AppProps) {
@@ -19,7 +20,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <meta name="msapplication-TileColor" content="#1A202C"></meta>
         <meta name="theme-color" content="#1A202C"></meta>
       </Head>
-      <Component {...pageProps} />
+      <ApiProvider>
+        <Component {...pageProps} />
+      </ApiProvider>
     </PlausibleProvider>
   )
 }
