@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { signIn, getSession } from "next-auth/client"
-import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/components"
+import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/ui/components"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"

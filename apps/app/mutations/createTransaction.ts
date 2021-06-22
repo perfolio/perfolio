@@ -1,16 +1,17 @@
-import { Transaction } from "@perfolio/db"
+import { Transaction } from "@perfolio/data-access/db"
 import { useMutation, useQueryClient } from "react-query"
-import { Api } from "@perfolio/api-client"
+import { useApi } from "@perfolio/data-access/api-client"
 
-import { CreateTransactionRequest } from "@perfolio/lambda"
+import { CreateTransactionRequest } from "@perfolio/api/feature/lambda"
 import { USE_TRANSACTIONS_QUERY_KEY } from "../queries"
 
 export function useCreateTransaction() {
   const queryClient = useQueryClient()
+  const api = useApi()
 
   return useMutation<Transaction, Error, CreateTransactionRequest>({
     mutationFn: (variables: CreateTransactionRequest) =>
-      new Api().transactions.createTransaction(variables),
+      api.transactions.createTransaction(variables),
     onSuccess: () => {
       queryClient.invalidateQueries(USE_TRANSACTIONS_QUERY_KEY)
     },

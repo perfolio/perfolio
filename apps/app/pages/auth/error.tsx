@@ -1,5 +1,5 @@
 import { NextPage } from "next"
-import { Logo } from "@perfolio/components"
+import { Logo } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
 
 const SigninPage: NextPage = () => {

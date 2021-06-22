@@ -4,9 +4,9 @@ import {
   use,
   withAuthentication,
   withCors,
-} from "@perfolio/middleware"
+} from "@perfolio/api/feature/middleware"
 
-import { deleteTransaction, DeleteTransactionRequestValidation } from "@perfolio/lambda"
+import { deleteTransaction, DeleteTransactionRequestValidation } from "@perfolio/api/feature/lambda"
 export default use(deleteTransaction, [
   withCors(),
 

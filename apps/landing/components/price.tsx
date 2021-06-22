@@ -1,6 +1,6 @@
 import React from "react"
 import { CheckIcon } from "@heroicons/react/outline"
-import { Button } from "@perfolio/components"
+import { Button } from "@perfolio/ui/components"
 
 export interface PriceProps {
   title: string

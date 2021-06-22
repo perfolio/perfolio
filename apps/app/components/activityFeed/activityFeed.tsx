@@ -1,8 +1,8 @@
 import { useAsset, useTransactions } from "../../queries"
-import { Transaction } from "@perfolio/db"
-import { Time } from "@perfolio/time"
+import { Transaction } from "@perfolio/data-access/db"
+import { Time } from "@perfolio/feature/time"
 import React from "react"
-import { Spinner } from "@perfolio/components"
+import { Spinner } from "@perfolio/ui/components"
 
 interface TransactionActivityItemProps {
   transaction: Transaction
