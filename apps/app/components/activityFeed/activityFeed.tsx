@@ -16,7 +16,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   })
 
   return (
-    <li className="py-4 h-28">
+    <li className="h-20 py-4">
       {isLoading ? (
         <div className="flex items-center justify-center h-full">
           <Spinner />
