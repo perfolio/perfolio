@@ -46,11 +46,15 @@ const SigninPage: NextPage = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await getSession({ req })
-  console.log({ session })
-  if (session) {
-    res.writeHead(302, { Location: "/" })
-    res.end()
+  try {
+    const session = await getSession({ req })
+    console.log({ session })
+    if (session) {
+      res.writeHead(302, { Location: "/" })
+      res.end()
+    }
+  } catch (err) {
+    console.error(err)
   }
   return { props: {} }
 }
