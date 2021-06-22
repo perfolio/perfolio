@@ -3,7 +3,7 @@ import { NextPage, GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
 import { Logo } from "@perfolio/components"
 
-const SigninPage: NextPage = () => {
+const CheckYourEmailPage: NextPage = () => {
   return (
     <section className="relative w-screen h-screen bg-white ">
       <div className="container w-full h-full mx-auto">
@@ -45,17 +45,18 @@ const SigninPage: NextPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  try {
-    const session = await getSession({ req })
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const session = await getSession({ req })
+  if (session) {
     console.log({ session })
-    if (session) {
-      res.writeHead(302, { Location: "/" })
-      res.end()
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     }
-  } catch (err) {
-    console.error(err)
   }
+
   return { props: {} }
 }
-export default SigninPage
+export default CheckYourEmailPage
