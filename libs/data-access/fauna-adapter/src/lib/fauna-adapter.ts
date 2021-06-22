@@ -1,10 +1,12 @@
-//eslint-disable-next-line
+// eslint-disable-next-line
 // @ts-nocheck
 
-import { query as q, Client } from "faunadb"
+//TODO: Use offical adapter
+import { query as q } from "faunadb"
 import { createHash, randomBytes } from "crypto"
-import { Adapter } from "next-auth/adapters"
-export function FaunaAdapter(faunaClient: Client): Adapter {
+
+/** @type {import("next-auth/adapters").Adapter} */
+export function FaunaAdapter(faunaClient) {
   const collections = {
     User: "users",
     Account: "accounts",

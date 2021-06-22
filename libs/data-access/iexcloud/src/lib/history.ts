@@ -1,4 +1,4 @@
-import { Time } from "@perfolio/feature/time"
+import { Time } from "@perfolio/util/time"
 import * as z from "zod"
 import { Client, ErrorHTTP400 } from "./client"
 

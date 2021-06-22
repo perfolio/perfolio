@@ -18,57 +18,6 @@
     }
   },
   "projects": {
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/next:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "root": "apps/api",
-            "outputPath": "dist/apps/api"
-          },
-          "configurations": {
-            "production": {}
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "api:build",
-            "dev": true
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "api:build:production",
-              "dev": false
-            }
-          }
-        },
-        "export": {
-          "executor": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "api:build:production"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
     "api-feature-lambda": {
       "root": "libs/api/feature/lambda",
       "sourceRoot": "libs/api/feature/lambda/src",
@@ -345,27 +294,6 @@
         }
       }
     },
-    "feature-time": {
-      "root": "libs/feature/time",
-      "sourceRoot": "libs/feature/time/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/feature/time/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/feature/time"],
-          "options": {
-            "jestConfig": "libs/feature/time/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "feature-tokens": {
       "root": "libs/feature/tokens",
       "sourceRoot": "libs/feature/tokens/src",
@@ -511,6 +439,27 @@
           "outputs": ["coverage/libs/ui/components"],
           "options": {
             "jestConfig": "libs/ui/components/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "util-time": {
+      "root": "libs/util/time",
+      "sourceRoot": "libs/util/time/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util/time/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util/time"],
+          "options": {
+            "jestConfig": "libs/util/time/jest.config.js",
             "passWithNoTests": true
           }
         }
