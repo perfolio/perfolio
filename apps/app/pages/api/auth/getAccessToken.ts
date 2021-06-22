@@ -1,7 +1,7 @@
-import { MiddlewareContext, use, withCors } from "@perfolio/middleware"
-import { JWT } from "@perfolio/tokens"
+import { MiddlewareContext, use } from "@perfolio/api/feature/middleware"
+import { JWT } from "@perfolio/feature/tokens"
 import { getSession } from "next-auth/client"
-import { db } from "@perfolio/db"
+import { db } from "@perfolio/data-access/db"
 async function refresh(_: void, { req }: MiddlewareContext): Promise<{ accessToken: string }> {
   const secret = process.env.NX_JWT_SIGNING_KEY
   if (!secret) {
@@ -25,4 +25,4 @@ async function refresh(_: void, { req }: MiddlewareContext): Promise<{ accessTok
   return { accessToken }
 }
 
-export default use(refresh, [withCors()])
+export default use(refresh, [])

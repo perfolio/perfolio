@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
 import { useHistory } from "../../queries"
 import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
-import { Time } from "@perfolio/time"
-import { Box, Spinner } from "@perfolio/components"
+import { Time } from "@perfolio/feature/time"
+import { Box, Spinner } from "@perfolio/ui/components"
 
 type Data = {
   time: string

@@ -1,8 +1,8 @@
 import React from "react"
 import { AreaChart, Area, ResponsiveContainer } from "recharts"
 import { useHistory, useCurrentValue } from "../../queries"
-import { Time } from "@perfolio/time"
-import { Spinner } from "@perfolio/components"
+import { Time } from "@perfolio/feature/time"
+import { Spinner } from "@perfolio/ui/components"
 
 export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
   const { history, isLoading } = useHistory()

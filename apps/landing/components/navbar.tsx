@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Logo, Button } from "@perfolio/components"
+import { Logo, Button } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
 

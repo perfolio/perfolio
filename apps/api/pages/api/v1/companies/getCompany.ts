@@ -4,8 +4,8 @@ import {
   use,
   withAuthentication,
   withCors,
-} from "@perfolio/middleware"
-import { getCompany, GetCompanyRequestValidation } from "@perfolio/lambda"
+} from "@perfolio/api/feature/middleware"
+import { getCompany, GetCompanyRequestValidation } from "@perfolio/api/feature/lambda"
 
 export default use(getCompany, [
   withCors(),

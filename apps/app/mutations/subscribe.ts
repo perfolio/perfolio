@@ -1,9 +1,11 @@
 import { useMutation } from "react-query"
-import { Api } from "@perfolio/api-client"
-import { SubscribeRequest } from "@perfolio/lambda"
+import { useApi } from "@perfolio/data-access/api-client"
+import { SubscribeRequest } from "@perfolio/api/feature/lambda"
 
 export function useSubscribe() {
+  const api = useApi()
+
   return useMutation<void, Error, SubscribeRequest>({
-    mutationFn: (variables: SubscribeRequest) => new Api().emails.subscribe(variables),
+    mutationFn: (variables: SubscribeRequest) => api.emails.subscribe(variables),
   })
 }
