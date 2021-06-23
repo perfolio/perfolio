@@ -51,6 +51,7 @@ module.exports = {
   plugins: [
     require("tailwindcss-textshadow"),
     require("@tailwindcss/typography"),
+    require("@tailwindcss/custom-forms"),
     require("tailwindcss-debug-screens"),
   ],
 }
