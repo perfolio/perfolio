@@ -31,7 +31,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   return (
     <div
       className={cn({
-        "w-6 h-6": size === "small",
+        "w-8 h-8": size === "small",
         "w-10 h-10": size === "medium",
         "w-16 h-16": size === "large",
       })}
