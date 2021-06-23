@@ -1,3 +1,4 @@
+import React from "react"
 import { NextPage } from "next"
 import { usePortfolio } from "../queries"
 import {
@@ -77,8 +78,9 @@ const App: NextPage = () => {
             </div>
           </div>
         </div>
-
-        <div className="w-full h-56 pt-8">{<AssetsOverTimeChart />}</div>
+        <div className="pt-4">
+          <AssetsOverTimeChart />
+        </div>
         <div className="mt-5 rounded md:mt-10">
           <div className="py-4 pl-4 md:py-6 md:pl-6">
             <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">
