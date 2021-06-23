@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
-import { withAuthentication, WithSidebar, Card } from "../../components"
+import { withAuthentication, WithSidebar } from "../../components"
 import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useSession } from "next-auth/client"
 import cn from "classnames"
+import { Card } from "@perfolio/ui/design-system"
 
 interface SettingProps {
   validation: z.ZodAny
@@ -39,32 +40,32 @@ const Setting: React.FC<SettingProps> = ({
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   return (
-    <Card
-      title={title}
-      footer={
-        <>
-          <p className="text-sm text-gray-700">{footer}</p>
-          <div>
-            <Button
-              loading={submitting}
-              // eslint-disable-next-line
-              // @ts-ignore
-              onClick={() =>
-                handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
-              }
-              kind={button?.kind ?? "primary"}
-              size="medium"
-              label={button?.label ?? "Save"}
-              type="submit"
-              disabled={ctx.formState.isSubmitting}
-            />
-          </div>
-        </>
-      }
-    >
-      <Form2 ctx={ctx} formError={formError}>
-        {fields}
-      </Form2>
+    <Card>
+      <Card.Title title={title} />
+
+      <Card.Content>
+        <Form2 ctx={ctx} formError={formError}>
+          {fields}
+        </Form2>
+      </Card.Content>
+      <Card.Footer>
+        <Card.Footer.Status>{footer}</Card.Footer.Status>
+        <Card.Footer.Actions>
+          <Button
+            loading={submitting}
+            // eslint-disable-next-line
+            // @ts-ignore
+            onClick={() =>
+              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
+            }
+            kind={button?.kind ?? "primary"}
+            size="small"
+            label={button?.label ?? "Save"}
+            type="submit"
+            disabled={ctx.formState.isSubmitting}
+          />
+        </Card.Footer.Actions>
+      </Card.Footer>
     </Card>
   )
 }

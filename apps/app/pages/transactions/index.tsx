@@ -6,9 +6,9 @@ import { useCompany, useTransactions } from "../../queries"
 import { Transaction } from "@perfolio/data-access/db"
 import { useDeleteTransaction } from "../../mutations"
 import { useAsset } from "../../queries"
-import { DocumentAddIcon, DocumentRemoveIcon } from "@heroicons/react/solid"
 import classNames from "classnames"
 import { WithSidebar, withAuthentication } from "../../components"
+import { Avatar, Description } from "@perfolio/ui/design-system"
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean
@@ -28,46 +28,35 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
               {new Date(transaction.data.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-900 dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {transaction.data.volume > 0 ? <DocumentAddIcon /> : <DocumentRemoveIcon />}
+              {company?.logo ? (
+                <Avatar
+                  size="small"
+                  src={company.logo}
+                  alt={`Logo of ${transaction.data.assetId}`}
+                />
+              ) : (
+                <Spinner />
+              )}
             </div>
           </div>
         </div>
       </div>
       <div
         className={classNames(
-          "flex items-start justify-between w-full md:ml-8 md:w-3/4 lg:w-4/5 xl:w-5/6",
+          "flex items-center justify-between w-full md:ml-8 md:w-3/4 lg:w-4/5 xl:w-5/6",
           {
             "border-b pb-4 mb-4 border-gray-200": !isLast,
           },
         )}
       >
         <div className="flex flex-grow gap-4">
-          <div className="items-center justify-center hidden w-16 h-16 md:flex">
-            {company?.logo ? (
-              <img src={company.logo} alt={`Logo of ${transaction.data.assetId}`} />
-            ) : (
-              <Spinner />
-            )}
-          </div>
-          <div className="md:h-16">
-            <div className="flex items-center h-8 gap-2">
-              <div className="flex items-center justify-center w-8 h-8 md:hidden">
-                {company?.logo ? (
-                  <img src={company.logo} alt={`Logo of ${transaction.data.assetId}`} />
-                ) : (
-                  <Spinner />
-                )}
-              </div>
-              <h2 className="text-3xl font-semibold text-gray-900">{asset?.data.symbol}</h2>
-            </div>
-            <p className="text-gray-600">
-              {`You ${transaction.data.volume > 0 ? "bought" : "sold"} ${Math.abs(
-                transaction.data.volume,
-              ).toFixed(2)} shares of ${
-                transaction.data.assetId
-              } at $${transaction.data.value.toFixed(2)} per share`}
-            </p>
-          </div>
+          <Description title={company?.symbol}>
+            {`You ${transaction.data.volume > 0 ? "bought" : "sold"} ${Math.abs(
+              transaction.data.volume,
+            ).toFixed(2)} shares of ${
+              transaction.data.assetId
+            } at $${transaction.data.value.toFixed(2)} per share`}
+          </Description>
         </div>
         <div className="flex-shrink-0">
           <AsyncButton
@@ -91,7 +80,7 @@ const TransactionsPage: NextPage = () => {
   const { transactions, isLoading } = useTransactions()
   return (
     <WithSidebar sidebar={<ActivityFeed />}>
-      <MainCard title="MyTransactions">
+      <MainCard title="My Transactions">
         {isLoading ? (
           <Spinner />
         ) : !transactions || transactions.length === 0 ? (

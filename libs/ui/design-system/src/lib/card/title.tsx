@@ -1,5 +1,4 @@
 import React from "react"
-import { Heading } from "../heading/heading"
 import { Text } from "../text/text"
 
 export interface CardTitleProps {
@@ -9,8 +8,8 @@ export interface CardTitleProps {
 
 export const CardTitle: React.FC<CardTitleProps> = ({ title, subtitle }): JSX.Element => {
   return (
-    <div className="p-4">
-      <Heading h2>{title}</Heading>
+    <div className="px-4 pt-4">
+      <span className="text-lg font-semibold text-gray-900">{title}</span>
       <Text>{subtitle}</Text>
     </div>
   )
