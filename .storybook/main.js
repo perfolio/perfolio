@@ -1,12 +1,12 @@
 module.exports = {
   stories: [],
   addons: [
-    "@storybook/addon-knobs/register",
-    "@storybook/addon-links/register",
-    "@storybook/addon-essentials/register",
-    "@storybook/addon-a11y/register",
-    "@storybook/addon-docs/register",
-    "@storybook/addon-controls/register",
+    "@storybook/addon-knobs",
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-a11y",
+    "@storybook/addon-docs",
+    "@storybook/addon-controls",
     {
       name: "@storybook/addon-postcss",
       options: {
