@@ -1,1 +1,5 @@
-export * from "./lib/general/text/text"
+export * from "./lib/avatar/avatar"
+export * from "./lib/card"
+export * from "./lib/heading/heading"
+export * from "./lib/text/text"
+export * from "./lib/description/description"
