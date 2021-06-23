@@ -1,8 +1,10 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { useHistory } from "../../queries"
 import { AreaChart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
 import { Time } from "@perfolio/util/time"
 import { Box, Spinner } from "@perfolio/ui/components"
+import { ToggleGroup } from "@perfolio/ui/design-system"
+import { History } from "@perfolio/api/feature/lambda"
 
 type Data = {
   time: string
@@ -192,49 +194,84 @@ const toTimeseries = (historyMap: { [isin: string]: AssetHistory }): Timeline =>
   return timeline
 }
 
+const ranges: Record<string, number> = {
+  "1W": new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).getTime(),
+  "1M": new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).getTime(),
+  "3M": new Date(Date.now() - 1000 * 60 * 60 * 24 * 30 * 3).getTime(),
+  "6M": new Date(Date.now() - 1000 * 60 * 60 * 24 * 30 * 6).getTime(),
+  "1Y": new Date(Date.now() - 1000 * 60 * 60 * 24 * 365).getTime(),
+  YTD: new Date(new Date().getFullYear(), 0).getTime(),
+  ALL: Number.NEGATIVE_INFINITY,
+}
+
 export const AssetsOverTimeChart: React.FC = (): JSX.Element => {
   const { history, isLoading } = useHistory()
+  const [range, setRange] = useState("ALL")
 
-  const data = useMemo(() => plotRelative(history ?? {}), [history])
+  const selectedHistory = useMemo(() => {
+    if (!history) {
+      return {}
+    }
+
+    const selected: History = {}
+    Object.entries(history).forEach(([assetId, timeline]) => {
+      selected[assetId] = timeline.filter((day) => day.time * 1000 >= ranges[range])
+    })
+    return selected
+  }, [history, range])
+
+  const data = useMemo(() => plotRelative(selectedHistory), [selectedHistory])
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      {isLoading ? (
-        <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
-          <Spinner />
-        </div>
-      ) : (
-        <AreaChart data={data}>
-          <defs>
-            <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="10%" stopColor="#262059" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#262059" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <Tooltip
-            content={({ active, payload }) => {
-              if (!active || !payload) {
-                return null
-              }
+    <>
+      <div className="w-full h-56">
+        <ResponsiveContainer width="100%" height="100%">
+          {isLoading ? (
+            <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
+              <Spinner />
+            </div>
+          ) : (
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="10%" stopColor="#262059" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#262059" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (!active || !payload) {
+                    return null
+                  }
 
-              const { time, value } = payload[0].payload
-              return (
-                <Box className="flex flex-col p-4 text-center bg-gray-50">
-                  <span className="text-xl font-medium">{value.toFixed(2)}</span>
-                  <span className="text-sm text-gray-700">{time}</span>
-                </Box>
-              )
-            }}
-          />
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke="#262059"
-            strokeWidth={2}
-            fill="url(#gradient)"
-          />
-          <XAxis dataKey="time" minTickGap={100} />
-        </AreaChart>
-      )}
-    </ResponsiveContainer>
+                  const { time, value } = payload[0].payload
+                  return (
+                    <Box className="flex flex-col p-4 text-center bg-gray-50">
+                      <span className="text-xl font-medium">{value.toFixed(2)}</span>
+                      <span className="text-sm text-gray-700">{time}</span>
+                    </Box>
+                  )
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#262059"
+                strokeWidth={2}
+                fill="url(#gradient)"
+              />
+              <XAxis dataKey="time" minTickGap={100} />
+            </AreaChart>
+          )}
+        </ResponsiveContainer>
+      </div>
+      <div className="flex justify-end mt-8">
+        <ToggleGroup
+          size="md"
+          options={Object.keys(ranges)}
+          selected={range}
+          setSelected={setRange}
+        />
+      </div>
+    </>
   )
 }
