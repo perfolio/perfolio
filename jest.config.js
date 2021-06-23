@@ -15,5 +15,6 @@ module.exports = {
     "<rootDir>/libs/data-access/cache",
     "<rootDir>/libs/types",
     "<rootDir>/libs/data-access/fauna-adapter",
+    "<rootDir>/libs/ui/design-system",
   ],
 }
