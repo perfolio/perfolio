@@ -4,7 +4,8 @@ on:
   push:
 
 jobs:
-  chromatic-deployment:
+  deploy:
+    name: "Deploy"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
