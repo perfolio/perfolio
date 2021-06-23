@@ -6,22 +6,22 @@ import { CardFooterStatus } from "./footer/status"
 import { CardFooterActions } from "./footer/actions"
 import React from "react"
 
-type FooterComponent<P = CardFooterProps> = React.FC<P> & {
+type NestedFooter<P = CardFooterProps> = React.FC<P> & {
   Status: typeof CardFooterStatus
   Actions: typeof CardFooterActions
 }
 
-type CardComponent<P = RootProps> = React.FC<P> & {
+type NestedCard<P = RootProps> = React.FC<P> & {
   Title: typeof CardTitle
   Content: typeof CardContent
-  Footer: FooterComponent
+  Footer: NestedFooter
 }
 
-const Footer = CardFooter as FooterComponent
+const Footer = CardFooter as NestedFooter
 Footer.Status = CardFooterStatus
 Footer.Actions = CardFooterActions
 
-export const TMP = Root as CardComponent
+export const TMP = Root as NestedCard
 TMP.Title = CardTitle
 TMP.Content = CardContent
 TMP.Footer = Footer
