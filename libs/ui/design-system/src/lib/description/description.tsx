@@ -7,8 +7,8 @@ export interface DescriptionProps {
 
 export const Description: React.FC<DescriptionProps> = ({ title, children }): JSX.Element => {
   return (
-    <div className="space-y-2">
-      <span className="text-sm font-medium text-gray-500 uppercase whitespace-nowrap">{title}</span>
+    <div className="space-y-1">
+      <span className="text-sm font-medium text-gray-900 uppercase whitespace-nowrap">{title}</span>
       <Text size="sm">{children}</Text>
     </div>
   )
