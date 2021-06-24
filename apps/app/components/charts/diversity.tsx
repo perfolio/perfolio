@@ -55,6 +55,9 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
   }, [portfolio])
 
   const [activeIndex, setActiveIndex] = useState(-1)
+  /**
+   * Selection can either be "sectors" or "counrties"
+   */
   const [selected, setSelected] = useState("sectors")
 
   const data = useMemo(
