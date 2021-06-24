@@ -3,7 +3,7 @@ import { NextPage } from "next"
 import { usePortfolio } from "../queries"
 import {
   WithSidebar,
-  DiversityChart,
+  DiversificationChart,
   AssetTable,
   ActivityFeed,
   AssetsOverTimeChart,
@@ -29,8 +29,7 @@ const App: NextPage = () => {
           <div className="mt-4">
             <div className="flex flex-col divide-y">
               <div className="w-full pb-4 md:w-full sm:w-1/2">
-                <p className="text-base font-semibold text-gray-800">Diversity</p>
-                <div className="w-full mb-8 h-60">{<DiversityChart />}</div>
+                <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
               </div>
               <div className="w-full py-4 md:w-full sm:w-1/2">
                 <ActivityFeed />
