@@ -13,9 +13,17 @@ export interface TextProps {
    * If enabled this will render the text semibold
    */
   bold?: boolean
+
+  lineBreak?: boolean
 }
 
-export const Text: React.FC<TextProps> = ({ bold, color, children, size = "md" }): JSX.Element => {
+export const Text: React.FC<TextProps> = ({
+  bold,
+  color,
+  children,
+  size = "md",
+  lineBreak,
+}): JSX.Element => {
   return (
     <p
       className={cn(
@@ -23,6 +31,7 @@ export const Text: React.FC<TextProps> = ({ bold, color, children, size = "md" }
         "text-gray-700",
         {
           "text-semibold": bold,
+          "break-words": lineBreak,
         },
         color,
       )}
