@@ -1,14 +1,13 @@
 import { usePortfolio } from "../../queries"
 import React, { useState, useMemo } from "react"
 import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
-import * as ToggleGroup from "@radix-ui/react-toggle-group"
+import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/design-system"
 import { Spinner } from "@perfolio/ui/components"
-import { DefaultButtonStyle } from "@perfolio/ui/components"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
   () => Math.random() - 0.5,
 )
-export const DiversityChart: React.FC = (): JSX.Element => {
+export const DiversificationChart: React.FC = (): JSX.Element => {
   const { portfolio } = usePortfolio()
 
   /**
@@ -56,11 +55,11 @@ export const DiversityChart: React.FC = (): JSX.Element => {
   }, [portfolio])
 
   const [activeIndex, setActiveIndex] = useState(-1)
-  const [selected, setSelected] = useState<"countries" | "sectors">("sectors")
+  const [selected, setSelected] = useState("sectors")
 
   const data = useMemo(
     () =>
-      Object.entries(selected === "countries" ? countries : sectors).map(([name, value]) => {
+      Object.entries(selected === "Countries" ? countries : sectors).map(([name, value]) => {
         return {
           name,
           value,
@@ -69,9 +68,26 @@ export const DiversityChart: React.FC = (): JSX.Element => {
     [sectors, countries, selected],
   )
   return (
-    <div className="w-full h-full ">
-      {/* <Switch onChange={(checked) => setSelected(checked ? "countries" : "sectors")} /> */}
-
+    <div className="w-full h-full space-y-2">
+      <div className="flex justify-between">
+        <div className="flex items-center space-x-2">
+          <Heading h4>Diversification</Heading>
+          <Tooltip>
+            <Description title="Diversification">
+              Stock market diversity is a measure of the distribution of capital in an equity
+              market. Diversification is higher when capital is more evenly distributed among the
+              stocks in the market, and is lower when capital is more concentrated into a few of the
+              largest companies.
+            </Description>
+          </Tooltip>
+        </div>
+        <ToggleGroup
+          size="sm"
+          options={["Sectors", "Countries"]}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      </div>
       <ResponsiveContainer width="100%" height="100%">
         {!data || data.length === 0 ? (
           <div className="flex items-center justify-center w-full h-full">
@@ -179,28 +195,6 @@ export const DiversityChart: React.FC = (): JSX.Element => {
           </PieChart>
         )}
       </ResponsiveContainer>
-      <div className="flex justify-center">
-        <ToggleGroup.Root
-          type="single"
-          onValueChange={(value: "sectors" | "countries") => setSelected(value)}
-          className="space-x-2"
-        >
-          <ToggleGroup.Item value="sectors" className="focus:outline-none">
-            <DefaultButtonStyle
-              size="small"
-              label="Sectors"
-              kind={selected === "sectors" ? "primary" : "secondary"}
-            />
-          </ToggleGroup.Item>
-          <ToggleGroup.Item value="countries" className="focus:outline-none">
-            <DefaultButtonStyle
-              size="small"
-              label="Countries"
-              kind={selected === "countries" ? "primary" : "secondary"}
-            />
-          </ToggleGroup.Item>
-        </ToggleGroup.Root>
-      </div>
     </div>
   )
 }
