@@ -164,19 +164,17 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
             </div>
             <div className="pt-4 mt-4 border-t border-gray-300 md:w-2/3 md:pl-8 md:py-8 md:border-l md:border-t-0 md:mt-0">
               <div className="flex flex-col items-center justify-center sm:flex-row sm:flex-wrap">
-                {members
-                  .sort(() => 0.5 - Math.random())
-                  .map((m) => {
-                    return (
-                      <Member
-                        key={m.name}
-                        className="w-2/3 p-4 sm:w-1/2 lg:w-1/4"
-                        name={m.name}
-                        title={m.title}
-                        image={m.image}
-                      />
-                    )
-                  })}
+                {members.map((m) => {
+                  return (
+                    <Member
+                      key={m.name}
+                      className="w-2/3 p-4 sm:w-1/2 lg:w-1/4"
+                      name={m.name}
+                      title={m.title}
+                      image={m.image}
+                    />
+                  )
+                })}
               </div>
               <p className="mt-8 text-center text-gray-600">
                 We are a motivated team of enthusiastic techies who are passionate about capital
