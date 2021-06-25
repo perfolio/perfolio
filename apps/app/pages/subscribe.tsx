@@ -1,12 +1,14 @@
 import React, { useState } from "react"
 import { NextPage, GetServerSideProps } from "next"
-import { signIn, getSession } from "next-auth/client"
+import { getSession } from "next-auth/client"
+import { useApi } from "@perfolio/data-access/api-client"
 import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/ui/components"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Description } from "@perfolio/ui/design-system"
 
-const SigninPage: NextPage = () => {
+const Subscribe: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
 
   const ctx = useForm<z.infer<typeof validation>>({
@@ -16,6 +18,8 @@ const SigninPage: NextPage = () => {
   })
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [subscribed, setSubscribed] = useState(false)
+  const api = useApi()
   return (
     <section className="relative w-screen h-screen bg-white ">
       <div className="container w-full h-full mx-auto">
@@ -35,34 +39,41 @@ const SigninPage: NextPage = () => {
               </svg>
             </div>
             <div className="z-50 flex flex-col items-center justify-center px-8 space-y-4 tracking-tight text-center md:text-left md:items-start md:justify-start md:max-w-3xl">
-              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">Sign in</h1>
-              <h2 className="text-lg font-normal text-gray-500 ">Kevin ist ein frischer Hecht!</h2>
+              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">Stay in touch</h1>
+              <h2 className="text-lg font-normal text-gray-500 ">description</h2>
             </div>
           </div>
           <div className="w-full max-w-sm px-6 space-y-4">
-            <Form2 ctx={ctx} formError={formError}>
-              <LabeledField label="Email" name="email" type="email" />
-            </Form2>
-            <Button
-              loading={submitting}
-              // eslint-disable-next-line
-              // @ts-ignore
-              onClick={() =>
-                handleSubmit<z.infer<typeof validation>>(
-                  ctx,
-                  async ({ email }) => {
-                    await signIn("email", { email })
-                  },
-                  setSubmitting,
-                  setFormError,
-                )
-              }
-              kind="primary"
-              size="auto"
-              label="Sign in"
-              type="submit"
-              disabled={ctx.formState.isSubmitting}
-            />
+            {subscribed ? (
+              <Description title="Thank you!">We will be in touch</Description>
+            ) : (
+              <>
+                <Form2 ctx={ctx} formError={formError}>
+                  <LabeledField label="Email" name="email" type="email" />
+                </Form2>
+                <Button
+                  loading={submitting}
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  onClick={() =>
+                    handleSubmit<z.infer<typeof validation>>(
+                      ctx,
+                      async ({ email }) => {
+                        await api.emails.subscribe({ email })
+                        setSubscribed(true)
+                      },
+                      setSubmitting,
+                      setFormError,
+                    )
+                  }
+                  kind="primary"
+                  size="auto"
+                  label="Sign in"
+                  type="submit"
+                  disabled={ctx.formState.isSubmitting}
+                />
+              </>
+            )}
           </div>
           <div className="absolute flex items-center justify-between w-full md:hidden top-12">
             <span className="w-4/5 border-b border-primary-600"></span>
@@ -92,4 +103,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   return { props: {} }
 }
-export default SigninPage
+export default Subscribe
