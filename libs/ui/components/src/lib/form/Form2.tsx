@@ -15,7 +15,7 @@ export function Form2<FieldValues>({
 }: Form2Props<FieldValues>): JSX.Element {
   return (
     <FormProvider {...ctx}>
-      <form className="w-full">{children}</form>
+      <form>{children}</form>
       {formError ? (
         <div role="alert" className="flex items-center gap-1 pt-2 pb-4 text-sm text-error-500">
           <ExclamationCircleIcon className="w-4 h-4" />
