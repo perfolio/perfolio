@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "nx serve app --port=3000",
     "build": "nx run-many --target=build --all --parallel --maxParallel=16",
-    "test": "nx test",
+    "test": "nx run-many --target=test --all",
     "fmt": "pnpm run lint && pnpm prettier --write .",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
