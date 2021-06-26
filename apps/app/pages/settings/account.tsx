@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
-import { withAuthentication, WithSidebar } from "../../components"
+import { withAuthentication, AppLayout } from "@perfolio/app/components"
 import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
@@ -99,7 +99,7 @@ const SettingsPage: NextPage = () => {
   }
 
   return (
-    <WithSidebar
+    <AppLayout
       side="left"
       sidebar={
         <div className="mt-4">
@@ -184,7 +184,7 @@ const SettingsPage: NextPage = () => {
           button={{ label: "Delete", kind: "alert" }}
         />
       </div>
-    </WithSidebar>
+    </AppLayout>
   )
 }
 
