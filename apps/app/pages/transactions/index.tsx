@@ -1,13 +1,17 @@
 import React from "react"
 import { AsyncButton, Button, Spinner } from "@perfolio/ui/components"
-import { ActivityFeed, MainCard } from "../../components"
 import { NextPage } from "next"
-import { useCompany, useTransactions } from "../../queries"
+import { useCompany, useTransactions, useAsset } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/data-access/db"
-import { useDeleteTransaction } from "../../mutations"
-import { useAsset } from "../../queries"
+import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
-import { WithSidebar, withAuthentication } from "../../components"
+import {
+  AppLayout,
+  withAuthentication,
+  ActivityFeed,
+  Main,
+  Sidebar,
+} from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/design-system"
 export interface TransactionItemProps {
   transaction: Transaction
@@ -79,30 +83,46 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
 const TransactionsPage: NextPage = () => {
   const { transactions, isLoading } = useTransactions()
   return (
-    <WithSidebar sidebar={<ActivityFeed />}>
-      <MainCard title="My Transactions">
-        {isLoading ? (
-          <Spinner />
-        ) : !transactions || transactions.length === 0 ? (
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <p className="text-gray-700">Looks like you don't have any transactions yet</p>
-            <Button size="large" label="Add transaction" kind="primary" href="/transactions/new" />
-          </div>
-        ) : (
-          <div>
-            {transactions
-              .sort((a, b) => b.data.executedAt - a.data.executedAt)
-              ?.map((tx, i) => (
-                <TransactionItem
-                  key={tx.id}
-                  transaction={tx}
-                  isLast={i === transactions.length - 1}
-                />
-              ))}
-          </div>
-        )}
-      </MainCard>
-    </WithSidebar>
+    <AppLayout
+      sidebar={
+        <Sidebar>
+          <ActivityFeed />
+        </Sidebar>
+      }
+    >
+      <Main>
+        <Main.Header>
+          <Main.Header.Title title="My Transactions" />
+        </Main.Header>
+        <Main.Content>
+          {isLoading ? (
+            <Spinner />
+          ) : !transactions || transactions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <p className="text-gray-700">Looks like you don't have any transactions yet</p>
+              <Button
+                size="large"
+                label="Add transaction"
+                kind="primary"
+                href="/transactions/new"
+              />
+            </div>
+          ) : (
+            <div>
+              {transactions
+                .sort((a, b) => b.data.executedAt - a.data.executedAt)
+                ?.map((tx, i) => (
+                  <TransactionItem
+                    key={tx.id}
+                    transaction={tx}
+                    isLast={i === transactions.length - 1}
+                  />
+                ))}
+            </div>
+          )}
+        </Main.Content>
+      </Main>
+    </AppLayout>
   )
 }
 

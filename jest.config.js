@@ -16,5 +16,10 @@ module.exports = {
     "<rootDir>/libs/types",
     "<rootDir>/libs/data-access/fauna-adapter",
     "<rootDir>/libs/ui/design-system",
+    "<rootDir>/libs/app/components",
+    "<rootDir>/libs/data-access/mutations",
+    "<rootDir>/libs/data-access/queries",
+    "<rootDir>/libs/feature/finance/returns",
+    "<rootDir>/libs/ui/charts",
   ],
 }

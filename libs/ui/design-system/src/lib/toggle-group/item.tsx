@@ -15,7 +15,6 @@ export interface ToggleItemProps {
 
 export const ToggleItem: React.FC<ToggleItemProps> = ({ label, value, disabled }): JSX.Element => {
   const ref = useRef(null)
-  console.log(ref.current)
 
   return (
     <div ref={ref}>
