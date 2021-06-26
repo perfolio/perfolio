@@ -15,11 +15,11 @@ type NestedMain<P = RootProps> = React.FC<P> & {
   Divider: typeof MainDivider
 }
 
-const H = MainHeader as NestedHeader
-H.Title = MainTitle
+const Header = MainHeader as NestedHeader
+Header.Title = MainTitle
 
 export const TMP = Root as NestedMain
-TMP.Header = H
+TMP.Header = Header
 TMP.Content = MainContent
 TMP.Divider = MainDivider
 
