@@ -83,7 +83,7 @@ export async function getPrices({
         value,
       }
     }),
-    30 * 24 * 60 * 60, // 30 days
+    30 * 24 * 60 * 60, // 30 dayst
   )
 
   /**

@@ -36,6 +36,9 @@
     "app": {
       "tags": []
     },
+    "app-components": {
+      "tags": []
+    },
     "app-e2e": {
       "tags": [],
       "implicitDependencies": ["app"]
@@ -58,7 +61,16 @@
     "data-access-localstorage": {
       "tags": []
     },
+    "data-access-mutations": {
+      "tags": []
+    },
+    "data-access-queries": {
+      "tags": []
+    },
     "feature-email": {
+      "tags": []
+    },
+    "feature-finance-returns": {
       "tags": []
     },
     "feature-tokens": {
@@ -72,6 +84,9 @@
       "implicitDependencies": ["landing"]
     },
     "types": {
+      "tags": []
+    },
+    "ui-charts": {
       "tags": []
     },
     "ui-components": {

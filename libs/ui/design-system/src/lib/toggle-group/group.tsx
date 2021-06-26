@@ -1,18 +1,18 @@
 import React from "react"
 import cn from "classnames"
-export type ToggleGroupProps = {
+export type ToggleGroupProps<T extends string> = {
   size?: "sm" | "md" | "lg"
-  options: string[]
-  selected: string
-  setSelected: (value: string) => void
+  options: T[]
+  selected: T
+  setSelected: (value: T) => void
 }
 
-export const ToggleGroup: React.FC<ToggleGroupProps> = ({
+export function ToggleGroup<T extends string>({
   size = "md",
   options,
   selected,
   setSelected,
-}): JSX.Element => {
+}: ToggleGroupProps<T>): JSX.Element {
   return (
     <ul className="inline-flex overflow-hidden border border-gray-200 divide-x divide-gray-300 rounded">
       {options.map((label) => (
