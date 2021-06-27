@@ -68,7 +68,11 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
 
   return (
     <div className="w-full h-56">
-      <AreaChart isLoading={isLoading} data={data} />
+      <AreaChart
+        isLoading={isLoading}
+        data={data}
+        formatTooltip={aggregate === "Absolute" ? (n) => `${n}€` : undefined}
+      />
     </div>
   )
 }

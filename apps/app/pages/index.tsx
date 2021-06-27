@@ -15,7 +15,7 @@ import {
 } from "@perfolio/app/components"
 import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finance/returns"
 
-import { ToggleGroup } from "@perfolio/ui/design-system"
+import { Heading, ToggleGroup } from "@perfolio/ui/design-system"
 import cn from "classnames"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
@@ -111,7 +111,10 @@ const App: NextPage = () => {
                   <span
                     className={cn(
                       "text-lg font-bold text-success-400 leading-3 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl",
-                      absoluteChange >= 0 ? "text-success-400" : "text-error-500",
+                      (aggregation === "Absolute" && absoluteChange >= 0) ||
+                        (aggregation === "Relative" && relativeChange >= 0)
+                        ? "text-success-400"
+                        : "text-error-500",
                     )}
                   >
                     {aggregation === "Absolute"
@@ -123,7 +126,7 @@ const App: NextPage = () => {
             </div>
           </div>
           <Main.Divider />
-          <div className="pt-4 space-y-2">
+          <div className="pt-2 space-y-8">
             <div className="flex justify-end">
               <ToggleGroup<Range>
                 options={Object.keys(ranges) as Range[]}
@@ -133,11 +136,9 @@ const App: NextPage = () => {
             </div>
             <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
           </div>
-          <div className="mt-5 rounded md:mt-10">
-            <div className="py-4 pl-4 md:py-6 md:pl-6">
-              <p className="text-base font-bold leading-tight text-gray-900 md:text-lg lg:text-xl">
-                Current Assets (fake)
-              </p>
+          <div>
+            <div className="py-4 md:py-6">
+              <Heading h3>Current Assets</Heading>
             </div>
 
             <AssetTable />
