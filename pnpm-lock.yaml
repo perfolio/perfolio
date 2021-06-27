@@ -49,6 +49,7 @@ specifiers:
   '@types/node': 14.14.33
   '@types/react': 17.0.3
   '@types/react-dom': 17.0.3
+  '@types/react-table': ^7.7.1
   '@types/uuid': ^8.3.0
   '@typescript-eslint/eslint-plugin': 4.19.0
   '@typescript-eslint/parser': 4.19.0
@@ -88,6 +89,7 @@ specifiers:
   react-dom: 17.0.2
   react-hook-form: ^7.9.0
   react-query: ^3.17.2
+  react-table: ^7.7.0
   recharts: ^2.0.9
   regenerator-runtime: 0.13.7
   tailwindcss: ~2.1.4
@@ -129,6 +131,7 @@ dependencies:
   react-dom: 17.0.2_react@17.0.2
   react-hook-form: 7.9.0_react@17.0.2
   react-query: 3.17.2_react-dom@17.0.2+react@17.0.2
+  react-table: 7.7.0_react@17.0.2
   recharts: 2.0.9_react-dom@17.0.2+react@17.0.2
   regenerator-runtime: 0.13.7
   tslib: 2.3.0
@@ -177,6 +180,7 @@ devDependencies:
   '@types/node': 14.14.33
   '@types/react': 17.0.3
   '@types/react-dom': 17.0.3
+  '@types/react-table': 7.7.1
   '@types/uuid': 8.3.0
   '@typescript-eslint/eslint-plugin': 4.19.0_f26dcf5ec38a04241b14c26bc931244e
   '@typescript-eslint/parser': 4.19.0_eslint@7.22.0+typescript@4.2.3
@@ -6907,6 +6911,12 @@ packages:
 
   /@types/react-syntax-highlighter/11.0.5:
     resolution: {integrity: sha512-VIOi9i2Oj5XsmWWoB72p3KlZoEbdRAcechJa8Ztebw7bDl2YmR+odxIqhtJGp1q2EozHs02US+gzxJ9nuf56qg==}
+    dependencies:
+      '@types/react': 17.0.3
+    dev: true
+
+  /@types/react-table/7.7.1:
+    resolution: {integrity: sha512-oed13swLIS4Ffyo4jAjl9lGbYMaY0uavKoI9GNMvf2R6vh8JfpRUpizQ90X1VI4WrhfaMb/HMsN7TTBvkGOQXQ==}
     dependencies:
       '@types/react': 17.0.3
     dev: true
@@ -18240,6 +18250,14 @@ packages:
       react: 17.0.2
       refractor: 3.3.1
     dev: true
+
+  /react-table/7.7.0_react@17.0.2:
+    resolution: {integrity: sha512-jBlj70iBwOTvvImsU9t01LjFjy4sXEtclBovl3mTiqjz23Reu0DKnRza4zlLtOPACx6j2/7MrQIthIK1Wi+LIA==}
+    peerDependencies:
+      react: ^16.8.3 || ^17.0.0-0
+    dependencies:
+      react: 17.0.2
+    dev: false
 
   /react-textarea-autosize/8.3.3_@types+react@17.0.3+react@17.0.2:
     resolution: {integrity: sha512-2XlHXK2TDxS6vbQaoPbMOfQ8GK7+irc2fVK6QFIcC8GOnH3zI/v481n+j1L0WaPVvKxwesnY93fEfH++sus2rQ==}

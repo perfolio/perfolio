@@ -21,7 +21,7 @@ const Footer = CardFooter as NestedFooter
 Footer.Status = CardFooterStatus
 Footer.Actions = CardFooterActions
 
-export const TMP = Root as NestedCard
+const TMP = Root as NestedCard
 TMP.Title = CardTitle
 TMP.Content = CardContent
 TMP.Footer = Footer

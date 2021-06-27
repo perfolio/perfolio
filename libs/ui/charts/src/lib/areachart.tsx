@@ -10,9 +10,14 @@ type Data = {
 export interface AreaChartProps {
   data: Data
   isLoading?: boolean
+  formatTooltip?: (n: number) => string
 }
 
-export const AreaChart: React.FC<AreaChartProps> = ({ data, isLoading }): JSX.Element => {
+export const AreaChart: React.FC<AreaChartProps> = ({
+  data,
+  isLoading,
+  formatTooltip = (n: number) => n.toString(),
+}): JSX.Element => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       {isLoading ? (
@@ -36,7 +41,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({ data, isLoading }): JSX.El
               const { time, value } = payload[0].payload
               return (
                 <Box className="flex flex-col p-4 text-center bg-gray-50">
-                  <span className="text-xl font-medium">{value.toFixed(2)}</span>
+                  <span className="text-xl font-medium">{formatTooltip(value.toFixed(2))}</span>
                   <span className="text-sm text-gray-700">{time}</span>
                 </Box>
               )
