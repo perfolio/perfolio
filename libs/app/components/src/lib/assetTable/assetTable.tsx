@@ -67,6 +67,15 @@ export const AssetTable = (): JSX.Element => {
         },
       ]}
       data={Object.entries(portfolio).map(([assetId, asset]) => {
+        if (!asset?.company) {
+          return {
+            asset: <Cell.Loading />,
+            quantity: <Cell.Loading />,
+            costPerShare: <Cell.Loading />,
+            pricePerShare: <Cell.Loading />,
+            change: <Cell.Loading />,
+          }
+        }
         return {
           asset: (
             <Cell.Profile
