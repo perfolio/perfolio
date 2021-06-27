@@ -60,12 +60,22 @@ export const usePortfolio = () => {
         queryFn: () => api.assets.getAsset({ isin }),
       }
     }),
-  ).map((asset) => (asset.data as Asset).data)
+  ).map((asset) => {
+    console.log(JSON.stringify(asset, null, 2))
+    return asset.data as Asset
+  })
+
+  /**
+   * Inject company data
+   */
   const companies = useQueries(
-    (session && assets ? assets : []).map(({ symbol }) => {
+    (session && assets && assets.every((asset) => typeof asset?.data !== "undefined")
+      ? assets
+      : []
+    ).map((asset) => {
       return {
-        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
-        queryFn: () => api.companies.getCompany({ symbol }),
+        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(asset.data.symbol),
+        queryFn: () => api.companies.getCompany({ symbol: asset.data.symbol }),
       }
     }),
   )
