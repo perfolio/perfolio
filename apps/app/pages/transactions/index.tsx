@@ -33,11 +33,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-900 dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
               {company?.logo ? (
-                <Avatar
-                  size="small"
-                  src={company.logo}
-                  alt={`Logo of ${transaction.data.assetId}`}
-                />
+                <Avatar size="sm" src={company.logo} alt={`Logo of ${transaction.data.assetId}`} />
               ) : (
                 <Spinner />
               )}
