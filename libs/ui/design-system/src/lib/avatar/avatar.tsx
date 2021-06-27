@@ -1,7 +1,7 @@
 import React from "react"
 import cn from "classnames"
 
-type Size = "small" | "medium" | "large"
+type Size = "sm" | "md" | "lg"
 
 export interface AvatarProps {
   /**
@@ -10,7 +10,7 @@ export interface AvatarProps {
   src: string
 
   /**
-   * Defaults to medium
+   * Defaults to md
    */
   size?: Size
 
@@ -22,18 +22,13 @@ export interface AvatarProps {
   alt: string
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
-  src,
-  alt,
-  size = "medium",
-  square,
-}): JSX.Element => {
+export const Avatar: React.FC<AvatarProps> = ({ src, alt, size = "md", square }): JSX.Element => {
   return (
     <div
       className={cn({
-        "w-8 h-8": size === "small",
-        "w-10 h-10": size === "medium",
-        "w-16 h-16": size === "large",
+        "w-8 h-8": size === "sm",
+        "w-10 h-10": size === "md",
+        "w-16 h-16": size === "lg",
       })}
     >
       <img src={src} alt={alt} className={square ? "rounded" : "rounded-full"} />

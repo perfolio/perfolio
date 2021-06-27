@@ -7,14 +7,14 @@ export default {
 
 export const Avatars = (args: AvatarProps) => (
   <div className="flex items-center gap-4">
-    <Avatar {...args} size="small">
+    <Avatar {...args} size="sm">
       Avatar
     </Avatar>
-    <Avatar {...args} size="medium">
+    <Avatar {...args} size="md">
       Avatar
     </Avatar>
-    <Avatar {...args} size="large">
-      Avatar
+    <Avatar {...args} size="lg">
+      lg
     </Avatar>
   </div>
 )
@@ -26,13 +26,13 @@ Avatars.args = {
 
 export const Square = (args: AvatarProps) => (
   <div className="flex items-center gap-4">
-    <Avatar {...args} size="small">
+    <Avatar {...args} size="sm">
       Avatar
     </Avatar>
-    <Avatar {...args} size="medium">
+    <Avatar {...args} size="md">
       Avatar
     </Avatar>
-    <Avatar {...args} size="large">
+    <Avatar {...args} size="lg">
       Avatar
     </Avatar>
   </div>
