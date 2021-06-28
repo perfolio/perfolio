@@ -193,7 +193,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
               paddingAngle={1}
               cx="50%"
               cy="50%"
-              innerRadius="75%"
+              innerRadius="80%"
               outerRadius="100%"
               dataKey="value"
               onMouseEnter={(_: void, index: number) => setActiveIndex(index)}
