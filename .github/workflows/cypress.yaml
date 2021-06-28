@@ -1,6 +1,6 @@
 name: Testing
 
-on: ["push", "deployment", "deployment_status"]
+on: ["deployment_status"]
 
 jobs:
   e2e:
