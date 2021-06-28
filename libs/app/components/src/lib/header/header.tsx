@@ -35,7 +35,7 @@ const menu = {
 export const Header: React.FC<HeaderProps> = (): JSX.Element => {
   return (
     <div className="h-full pt-6 bg-gray-900 md:pt-8 xl:pt-12">
-      <div className="container px-4 mx-auto xl:px-0">
+      <div className="container px-4 mx-auto">
         <div className="hidden xl:flex">
           <DesktopNavbar items={menu.items} />
         </div>

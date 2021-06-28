@@ -3,4 +3,5 @@
 
 pnpm fmt
 pnpm tsc
+pnpm test
 pnpm lint-staged
