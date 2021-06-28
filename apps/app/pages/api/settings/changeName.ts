@@ -8,8 +8,8 @@ import {
 import { changeName, ChangeNameRequestValidation } from "@perfolio/api/feature/lambda"
 
 export default use(changeName, [
+  withMetrics,
   withContentTypeJson,
   withRequestValidation(ChangeNameRequestValidation),
   withAuthentication,
-  withMetrics,
 ])

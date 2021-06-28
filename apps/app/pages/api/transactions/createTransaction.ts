@@ -8,8 +8,8 @@ import {
 
 import { createTransaction, CreateTransactionRequestValidation } from "@perfolio/api/feature/lambda"
 export default use(createTransaction, [
+  withMetrics,
   withContentTypeJson,
   withRequestValidation(CreateTransactionRequestValidation),
   withAuthentication,
-  withMetrics,
 ])

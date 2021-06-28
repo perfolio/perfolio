@@ -7,7 +7,7 @@ import {
 import { subscribe, SubscribeRequestValidation } from "@perfolio/api/feature/lambda"
 
 export default use(subscribe, [
+  withMetrics,
   withContentTypeJson,
   withRequestValidation(SubscribeRequestValidation),
-  withMetrics,
 ])

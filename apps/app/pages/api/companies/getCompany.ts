@@ -8,8 +8,8 @@ import {
 import { getCompany, GetCompanyRequestValidation } from "@perfolio/api/feature/lambda"
 
 export default use(getCompany, [
+  withMetrics,
   withContentTypeJson,
   withRequestValidation(GetCompanyRequestValidation),
   withAuthentication,
-  withMetrics,
 ])

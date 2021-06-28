@@ -10,7 +10,7 @@ import {
 } from "@perfolio/api/feature/lambda"
 
 export default use(sendEmailConfirmation, [
+  withMetrics,
   withContentTypeJson,
   withRequestValidation(SendEmailConfirmationRequestValidation),
-  withMetrics,
 ])

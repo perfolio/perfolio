@@ -2,19 +2,18 @@ import { MiddlewareContext, ApiHandler } from "./types"
 // eslint-disable-next-line
 // @ts-ignore
 import moesif from "moesif-nodejs"
+import { NextApiRequest } from "next"
+import { JWT } from "@perfolio/feature/tokens"
 
-// const runMiddleware = (req: NextApiRequest, res: NextApiResponse, next: any) => {
-//   return new Promise((resolve, reject) => {
-//     next(req, res, (result: unknown) => {
-//       if (result instanceof Error) {
-//         return reject(result)
-//       }
-//       console.log({ result })
-//       return resolve(result)
-//     })
-//   })
-// }
+const getUserId = (req: NextApiRequest): string | undefined => {
+  const jwt = req.headers.authorization
 
+  if (!jwt) {
+    return undefined
+  }
+
+  return JWT.decode(jwt).sub
+}
 /**
  *Send metrics to moesif
  */
@@ -23,7 +22,7 @@ export function withMetrics(handler: ApiHandler): ApiHandler {
     try {
       const config = {
         applicationId: process.env.NX_MOESIF_ID,
-        identifyUser: () => ctx.claims?.userId,
+        identifyUser: () => getUserId(ctx.req),
         getMetadata: () => {
           return {
             NODE_ENV: process.env.NODE_ENV,

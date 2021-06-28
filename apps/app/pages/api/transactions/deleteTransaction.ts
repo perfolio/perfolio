@@ -8,8 +8,8 @@ import {
 
 import { deleteTransaction, DeleteTransactionRequestValidation } from "@perfolio/api/feature/lambda"
 export default use(deleteTransaction, [
+  withMetrics,
   withContentTypeJson,
   withRequestValidation(DeleteTransactionRequestValidation),
   withAuthentication,
-  withMetrics,
 ])
