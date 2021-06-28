@@ -128,7 +128,7 @@ const App: NextPage = () => {
           </div>
           <Main.Divider />
           <div className="pt-2 space-y-8">
-            <div className="flex justify-end">
+            <div className="flex justify-center md:justify-end">
               <ToggleGroup<Range>
                 options={Object.keys(ranges) as Range[]}
                 selected={range}

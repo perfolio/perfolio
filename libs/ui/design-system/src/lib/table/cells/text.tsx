@@ -1,14 +1,17 @@
 import React from "react"
 import Wrapper from "./wrapper"
-import cn from "classnames"
+import { Text as TextComponent } from "../../text/text"
 export interface TextProps {
   align?: "text-left" | "text-center" | "text-right"
+  mono?: boolean
 }
 
-export const Text: React.FC<TextProps> = ({ children, align = "text-left" }): JSX.Element => {
+export const Text: React.FC<TextProps> = ({ children, align = "text-left", mono }): JSX.Element => {
   return (
     <Wrapper>
-      <div className={cn("text-sm leading-5 text-gray-700", align)}>{children}</div>
+      <TextComponent align={align} mono={mono}>
+        {children}
+      </TextComponent>
     </Wrapper>
   )
 }

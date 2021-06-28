@@ -15,6 +15,9 @@ export interface TextProps {
   bold?: boolean
 
   lineBreak?: boolean
+
+  align?: "text-left" | "text-center" | "text-right"
+  mono?: boolean
 }
 
 export const Text: React.FC<TextProps> = ({
@@ -23,6 +26,8 @@ export const Text: React.FC<TextProps> = ({
   children,
   size = "md",
   lineBreak,
+  align,
+  mono,
 }): JSX.Element => {
   return (
     <p
@@ -32,7 +37,9 @@ export const Text: React.FC<TextProps> = ({
         {
           "text-semibold": bold,
           "break-words": lineBreak,
+          "font-mono": mono,
         },
+        align,
         color,
       )}
     >

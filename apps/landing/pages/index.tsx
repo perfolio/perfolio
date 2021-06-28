@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Image from "next/image"
 import { NextPage, GetStaticProps } from "next"
 import {
@@ -11,16 +11,13 @@ import {
   Footer,
   Price,
 } from "../components"
-import { useApi } from "@perfolio/data-access/api-client"
-import { Box, LabeledField, Form, FORM_ERROR } from "@perfolio/ui/components"
-import * as z from "zod"
+import { Box, Button } from "@perfolio/ui/components"
 import {
   ChartSquareBarIcon,
   CreditCardIcon,
   DatabaseIcon,
   FlagIcon,
   HomeIcon,
-  MailIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
 
@@ -29,8 +26,6 @@ export interface IndexPageProps {
 }
 
 const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
-  const api = useApi()
-  const [subscribed, setSubscribed] = useState(false)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -195,34 +190,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
                 Curious for more?
               </p>
             </div>
-            <div>
-              {subscribed ? (
-                <div className="flex items-center justify-center">
-                  Thank you, we'll be in touch.
-                </div>
-              ) : (
-                <Form
-                  submitText="Subscribe"
-                  schema={z.object({
-                    email: z.string().email(),
-                  })}
-                  initialValues={{ email: "" }}
-                  onSubmit={async ({ email }) => {
-                    try {
-                      await api.emails.subscribe({ email })
-                      setSubscribed(true)
-                      return
-                    } catch (error) {
-                      return {
-                        [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-                      }
-                    }
-                  }}
-                >
-                  <LabeledField name="email" label="Email" type="email" iconLeft={<MailIcon />} />
-                </Form>
-              )}
-            </div>
+            <Button label="Subscribe" href="https://app.perfol.io/subscribe" />
           </div>
         </Section>
       </div>
