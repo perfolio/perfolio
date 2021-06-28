@@ -61,7 +61,6 @@ export const usePortfolio = () => {
       }
     }),
   ).map((asset) => {
-    console.log(JSON.stringify(asset, null, 2))
     return asset.data as Asset
   })
 
@@ -79,11 +78,24 @@ export const usePortfolio = () => {
       }
     }),
   )
+  if (companies && companies.length === Object.keys(portfolio).length) {
+    Object.keys(portfolio).forEach((isin, i) => {
+      const company = companies[i].data as Company
+      if (company) {
+        portfolio[isin].company = company
+      }
+    })
+  }
 
-  Object.keys(portfolio).forEach((isin, i) => {
-    const company = companies[i].data as Company
-    if (company) {
-      portfolio[isin].company = company
+  /**
+   * Remove all assets that he user has sold completely
+   *
+   * If this step is omitted we would display assets with quantity = 0 and all
+   * derived values are nonsense.
+   */
+  Object.entries(portfolio).forEach(([assetId, { quantity }]) => {
+    if (quantity <= 0) {
+      delete portfolio[assetId]
     }
   })
 

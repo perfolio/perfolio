@@ -23,15 +23,12 @@ const SigninPage: NextPage = () => {
           <div className="relative items-center justify-center hidden w-2/3 h-full md:flex md:flex-col bg-gradient-to-r from-white to-gray-100">
             <div className="absolute inset-y-0 items-center justify-center hidden md:flex">
               <svg
-                className="z-0 w-full h-full p-8 text-gray-100 stroke-current"
-                viewBox="0 0 194 148"
-                fill="none"
+                className="z-0 w-full h-full p-8 text-gray-100 fill-current"
+                viewBox="0 0 354 283"
+                fill="fill-current"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  d="M9 106.208L97.3883 17.8199L134.158 54.5894M185.07 41.8615L96.6814 130.25L59.9118 93.4803"
-                  strokeWidth="25"
-                />
+                <path d="M247.35 70.671L176.678 0 0 176.678l35.336 35.336L176.678 70.671l35.336 35.336 35.336-35.336zM106.007 212.014l70.671 70.671 176.679-176.678-35.336-35.336-141.343 141.343-35.335-35.336-35.336 35.336z" />
               </svg>
             </div>
             <div className="z-50 flex flex-col items-center justify-center px-8 space-y-4 tracking-tight text-center md:text-left md:items-start md:justify-start md:max-w-3xl">
