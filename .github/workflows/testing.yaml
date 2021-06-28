@@ -37,6 +37,8 @@ jobs:
       - name: Check types
         run: pnpm run tsc
 
+      - name: Unit tests
+        run: pnpm test
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest

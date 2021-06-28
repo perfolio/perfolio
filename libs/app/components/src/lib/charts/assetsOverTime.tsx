@@ -3,6 +3,7 @@ import { AreaChart } from "@perfolio/ui/charts"
 import { Time } from "@perfolio/util/time"
 import { AssetsOverTime, toTimeseries, rebalance } from "@perfolio/feature/finance/returns"
 import { useHistory } from "@perfolio/data-access/queries"
+import { format } from "@perfolio/util/numbers"
 
 type Data = {
   time: string
@@ -71,7 +72,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
       <AreaChart
         isLoading={isLoading}
         data={data}
-        formatTooltip={aggregate === "Absolute" ? (n) => `${n}€` : undefined}
+        formatTooltip={(n) => format(n, { suffix: aggregate === "Absolute" ? "€" : undefined })}
       />
     </div>
   )

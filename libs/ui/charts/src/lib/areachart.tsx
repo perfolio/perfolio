@@ -1,6 +1,7 @@
 import React from "react"
 import { AreaChart as Chart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
 import { Box, Spinner } from "@perfolio/ui/components"
+import { format } from "util"
 
 type Data = {
   time: string
@@ -16,7 +17,7 @@ export interface AreaChartProps {
 export const AreaChart: React.FC<AreaChartProps> = ({
   data,
   isLoading,
-  formatTooltip = (n: number) => n.toString(),
+  formatTooltip = (n) => format(n),
 }): JSX.Element => {
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -41,7 +42,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
               const { time, value } = payload[0].payload
               return (
                 <Box className="flex flex-col p-4 text-center bg-gray-50">
-                  <span className="text-xl font-medium">{formatTooltip(value.toFixed(2))}</span>
+                  <span className="text-xl font-medium">{formatTooltip(value)}</span>
                   <span className="text-sm text-gray-700">{time}</span>
                 </Box>
               )

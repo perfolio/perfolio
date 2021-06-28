@@ -1,0 +1,30 @@
+name: Cypress
+
+on: ["deployment_status"]
+
+jobs:
+  e2e:
+    name: Integration tests
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
+          run_install: true
+
+      - run: echo ${{toJson(github.event.deployment.environment)}}
+      - name: Integration app.perfol.io
+        if: github.event.deployment.environment == 'Preview – app-perfolio'
+        run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}} --baseUrl=${{ github.event.deployment_status.target_url }}
+      - name: Integration perfol.io
+        if: github.event.deployment.environment == 'Preview – perfolio'
+        run: pnpm nx e2e landing-e2e --record --key ${{secrets.CYPRESS_LANDING_RECORD_KEY}} --baseUrl=${{ github.event.deployment_status.target_url }}

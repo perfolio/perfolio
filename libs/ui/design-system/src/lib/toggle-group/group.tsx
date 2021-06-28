@@ -23,9 +23,9 @@ export function ToggleGroup<T extends string>({
               "bg-white text-primary-900 transition duration-150 ease-in-out  hover:text-gray-800 hover:bg-gray-100 focus:outline-none",
               {
                 "bg-gray-100 text-gray-900 font-semibold": label === selected,
-                "px-2 text-xs h-6": size === "sm",
-                "px-4 text-sm h-8": size === "md",
-                "px-4 h-10": size === "lg",
+                "px-1 sm:px-2 text-xs h-3 sm:h-6": size === "sm",
+                "px-2 h-4 sm:px-4 text-sm sm:h-8": size === "md",
+                "px-3 sm:px-4 h-6 sm:h-10": size === "lg",
               },
             )}
           >
