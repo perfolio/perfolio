@@ -21,9 +21,9 @@ jobs:
           version: latest
           run_install: true
 
-      - run: echo ${{toJson(github.event)}}
+      - run: echo ${{toJson(github.event.deployment.environment)}}
       - name: Integration test
-        if: startsWith(github.event.deploymemt_status.target_url, 'app-perfolio')
+        if: github.event.deployment.environment == 'Preview – app-perfolio'
         run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}}
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
