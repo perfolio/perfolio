@@ -7,5 +7,6 @@
   "video": false,
   "screenshots": false,
   "screenshotsFolder": "../../dist/cypress/apps/app-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "projectId": "b96iaa"
 }

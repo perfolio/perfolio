@@ -37,6 +37,12 @@ jobs:
       - name: Check types
         run: pnpm run tsc
 
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Integration test
+        run: pnpm nx e2e app --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}}
+
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
