@@ -4,8 +4,21 @@ import { QueryClientProvider } from "react-query"
 import { ApiProvider } from "@perfolio/data-access/api-client"
 import { PersistentQueryClient } from "@perfolio/data-access/localstorage"
 import Head from "next/head"
+import { useSession } from "next-auth/client"
+import LogRocket from "logrocket"
 import "tailwindcss/tailwind.css"
+
+LogRocket.init("perfolio/app")
+
 function MyApp({ Component, pageProps }: AppProps) {
+  const [session] = useSession()
+  if (session?.user) {
+    LogRocket.identify(session.user.email!, {
+      name: session.user.name!,
+      email: session.user.email!,
+    })
+  }
+
   return (
     <>
       <Head>
