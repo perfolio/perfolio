@@ -54,12 +54,7 @@ export class JWT {
     }
   }
 
-  /**
-   * Return in how many seconds the jwt will expire.
-   *
-   * Will be negative if it has expired already
-   */
-  public static expiresIn(token: string): number {
+  public static decode(token: string): jwt.JwtPayload {
     const claims = jwt.decode(token)
     if (!claims) {
       throw new Error(`Unable to decode token: ${token}`)
@@ -67,6 +62,15 @@ export class JWT {
     if (typeof claims === "string") {
       throw new Error(`Unable to parse claims: ${claims}`)
     }
+    return claims
+  }
+  /**
+   * Return in how many seconds the jwt will expire.
+   *
+   * Will be negative if it has expired already
+   */
+  public static expiresIn(token: string): number {
+    const claims = JWT.decode(token)
 
     return claims.exp ?? 0 - Math.floor(Date.now() / 1000)
   }
