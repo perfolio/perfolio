@@ -3,7 +3,11 @@ import { AppProps } from "next/app"
 import Head from "next/head"
 import PlausibleProvider from "next-plausible"
 import { ApiProvider } from "@perfolio/data-access/api-client"
+import LogRocket from "logrocket"
+
 import "tailwindcss/tailwind.css"
+
+LogRocket.init("perfolio/landing-ett7w")
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
