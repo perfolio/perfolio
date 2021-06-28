@@ -8,5 +8,6 @@
   "video": true,
   "videosFolder": "../../dist/cypress/apps/landing-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/landing-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "projectId": "mda7ox"
 }

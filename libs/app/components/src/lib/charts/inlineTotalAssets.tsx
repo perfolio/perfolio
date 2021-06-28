@@ -3,7 +3,7 @@ import { AreaChart, Area, ResponsiveContainer } from "recharts"
 import { useHistory, useCurrentValue } from "@perfolio/data-access/queries"
 import { Time } from "@perfolio/util/time"
 import { Spinner } from "@perfolio/ui/components"
-
+import { format } from "@perfolio/util/numbers"
 export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
   const { history, isLoading } = useHistory()
   const { currentValue } = useCurrentValue()
@@ -39,7 +39,7 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
           ) : (
             <AreaChart data={data} margin={{ top: 0, left: 0, bottom: 0, right: 0 }}>
               <defs>
-                <linearGradient id="profileCard" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="inlineAssetChartGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#262059" stopOpacity={0.1} />
                   <stop offset="100%" stopColor="#262059" stopOpacity={0} />
                 </linearGradient>
@@ -50,14 +50,14 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
                 dataKey="value"
                 stroke="#262059"
                 strokeWidth={2}
-                fill="url(#profileCard)"
+                fill="url(#inlineAssetChartGradient)"
               />
             </AreaChart>
           )}
         </ResponsiveContainer>
         <div className="absolute top-0 left-0 p-4">
-          <span className="p-1 text-lg font-semibold bg-gray-100 rounded-full text-primary-600">
-            ${currentValue.toFixed(2)}
+          <span className="p-1 text-lg font-semibold bg-gray-100 bg-opacity-75 rounded text-primary-600">
+            {format(currentValue, { suffix: "€" })}
           </span>
         </div>
       </div>

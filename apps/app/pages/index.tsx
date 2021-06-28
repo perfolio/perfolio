@@ -17,6 +17,7 @@ import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finan
 
 import { Heading, ToggleGroup } from "@perfolio/ui/design-system"
 import cn from "classnames"
+import { format } from "@perfolio/util/numbers"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -97,7 +98,7 @@ const App: NextPage = () => {
                     Total Assets
                   </h4>
                   <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    ${currentValue.toFixed(2)}
+                    {format(currentValue, { suffix: "€" })}
                   </span>
                 </div>
               </div>
@@ -118,8 +119,8 @@ const App: NextPage = () => {
                     )}
                   >
                     {aggregation === "Absolute"
-                      ? `$${absoluteChange.toFixed(2)}`
-                      : `${(relativeChange * 100).toFixed(2)}%`}
+                      ? format(absoluteChange, { suffix: "€", sign: true })
+                      : format(relativeChange, { suffix: "%", percent: true, sign: true })}
                   </span>
                 </div>
               </div>
@@ -127,7 +128,7 @@ const App: NextPage = () => {
           </div>
           <Main.Divider />
           <div className="pt-2 space-y-8">
-            <div className="flex justify-end">
+            <div className="flex justify-center md:justify-end">
               <ToggleGroup<Range>
                 options={Object.keys(ranges) as Range[]}
                 selected={range}
@@ -141,7 +142,7 @@ const App: NextPage = () => {
               <Heading h3>Current Assets</Heading>
             </div>
 
-            <AssetTable />
+            <AssetTable aggregation={aggregation} />
           </div>
         </Main.Content>
       </Main>

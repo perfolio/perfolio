@@ -2,10 +2,15 @@ import React, { useMemo } from "react"
 // import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
 import { Table, Cell, Tooltip, Description } from "@perfolio/ui/design-system"
 import { usePortfolio, useTransactions } from "@perfolio/data-access/queries"
+import { format } from "@perfolio/util/numbers"
+export interface AssetTableProps {
+  aggregation: "Absolute" | "Relative"
+}
 
-export const AssetTable = (): JSX.Element => {
+export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
   const { portfolio } = usePortfolio()
   const { transactions } = useTransactions()
+  console.log(JSON.stringify(portfolio, null, 2))
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
@@ -84,12 +89,29 @@ export const AssetTable = (): JSX.Element => {
               subtitle={asset.company.name ?? undefined}
             />
           ),
-          quantity: <Cell.Text align="text-right">{asset.quantity.toFixed(2)}</Cell.Text>,
+          quantity: <Cell.Text align="text-right">{format(asset.quantity)}</Cell.Text>,
           costPerShare: (
-            <Cell.Text align="text-right">{costPerShare[assetId]?.toFixed(2)}€</Cell.Text>
+            <Cell.Text align="text-right">
+              {format(costPerShare[assetId], { suffix: "€" })}
+            </Cell.Text>
           ),
-          pricePerShare: <Cell.Text align="text-right">{asset.value.toFixed(2)}€</Cell.Text>,
-          change: <Cell.Text align="text-right">TODO:</Cell.Text>,
+          pricePerShare: (
+            <Cell.Text align="text-right">{format(asset.value, { suffix: "€" })}</Cell.Text>
+          ),
+          change: (
+            <Cell.Text align="text-right">
+              {aggregation === "Absolute"
+                ? format((asset.value - costPerShare[assetId]) * asset.quantity, {
+                    suffix: "€",
+                    sign: true,
+                  })
+                : format(asset.value / costPerShare[assetId] - 1, {
+                    percent: true,
+                    suffix: "%",
+                    sign: true,
+                  })}
+            </Cell.Text>
+          ),
         }
       })}
     />
