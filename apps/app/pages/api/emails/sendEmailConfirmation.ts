@@ -1,4 +1,9 @@
-import { withContentTypeJson, withRequestValidation, use } from "@perfolio/api/feature/middleware"
+import {
+  withContentTypeJson,
+  withRequestValidation,
+  use,
+  withMetrics,
+} from "@perfolio/api/feature/middleware"
 import {
   sendEmailConfirmation,
   SendEmailConfirmationRequestValidation,
@@ -7,4 +12,5 @@ import {
 export default use(sendEmailConfirmation, [
   withContentTypeJson,
   withRequestValidation(SendEmailConfirmationRequestValidation),
+  withMetrics,
 ])

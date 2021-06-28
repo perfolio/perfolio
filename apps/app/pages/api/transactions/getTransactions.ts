@@ -1,4 +1,9 @@
-import { withContentTypeJson, use, withAuthentication } from "@perfolio/api/feature/middleware"
+import {
+  withContentTypeJson,
+  use,
+  withAuthentication,
+  withMetrics,
+} from "@perfolio/api/feature/middleware"
 import { getTransactions } from "@perfolio/api/feature/lambda"
 
-export default use(getTransactions, [withContentTypeJson, withAuthentication])
+export default use(getTransactions, [withContentTypeJson, withAuthentication, withMetrics])

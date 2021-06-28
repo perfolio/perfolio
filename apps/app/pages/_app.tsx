@@ -15,6 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   if (session?.user) {
     LogRocket.identify(session.user.email!, {
       name: session.user.name!,
+      email: session.user.email!,
     })
   }
 
