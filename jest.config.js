@@ -22,5 +22,6 @@ module.exports = {
     "<rootDir>/libs/feature/finance/returns",
     "<rootDir>/libs/ui/charts",
     "<rootDir>/libs/util/numbers",
+    "<rootDir>/libs/util/currency",
   ],
 }

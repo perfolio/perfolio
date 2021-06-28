@@ -601,6 +601,27 @@
         }
       }
     },
+    "util-currency": {
+      "root": "libs/util/currency",
+      "sourceRoot": "libs/util/currency/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util/currency/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util/currency"],
+          "options": {
+            "jestConfig": "libs/util/currency/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-numbers": {
       "root": "libs/util/numbers",
       "sourceRoot": "libs/util/numbers/src",
