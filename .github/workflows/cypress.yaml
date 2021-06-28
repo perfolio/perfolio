@@ -1,0 +1,37 @@
+name: Testing
+
+on: ["push", "deployment", "deployment_status"]
+
+jobs:
+  e2e:
+    name: Integration tests
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
+          run_install: true
+
+      - name: Integration test
+        run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}}
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}

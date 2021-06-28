@@ -39,12 +39,6 @@ jobs:
 
       - name: Unit tests
         run: pnpm test
-
-      - name: Integration test
-        run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}}
-        env:
-          NX_SENDGRID_TOKEN: ${{ secrets.SENDGRID_TOKEN }}
-
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
