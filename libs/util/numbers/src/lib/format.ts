@@ -14,6 +14,7 @@ export type FormatOptions = {
 }
 
 export function format(n: number, opts?: FormatOptions): string {
+  n ??= 0
   if (opts?.percent) {
     n *= 100
   }
