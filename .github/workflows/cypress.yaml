@@ -16,12 +16,12 @@ jobs:
         with:
           node-version: 14
 
-      # - uses: pnpm/action-setup@v2.0.1
-      #   with:
-      #     version: latest
-      #     run_install: true
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
+          run_install: true
 
       - name: Integration test
-        run: npx nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}}
+        run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}}
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
