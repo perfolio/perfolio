@@ -21,5 +21,6 @@ jobs:
           version: latest
           run_install: true
 
+      - run: echo ${{github.event}}
       - name: Integration test
         run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}} --baseUrl=${{ github.event.deployment_status.target_url }}
