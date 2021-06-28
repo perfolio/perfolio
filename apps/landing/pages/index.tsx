@@ -110,7 +110,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
                   "Performance dashboard and key figures",
                   "Chart diagram of sectors",
                 ]}
-                href="https://app.perfol.io/auth/signup"
+                href="https://app.perfol.io/auth/signin"
               />
             </Box>
             <Box>
@@ -124,7 +124,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
                   "Performance dashboard and key figures",
                   "Chart diagram of sectors",
                 ]}
-                href="https://app.perfol.io/auth/signup"
+                href="https://app.perfol.io/auth/signin"
                 highlighted
               />
             </Box>
