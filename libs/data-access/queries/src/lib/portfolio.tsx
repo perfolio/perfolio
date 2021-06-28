@@ -79,13 +79,14 @@ export const usePortfolio = () => {
       }
     }),
   )
-
-  Object.keys(portfolio).forEach((isin, i) => {
-    const company = companies[i].data as Company
-    if (company) {
-      portfolio[isin].company = company
-    }
-  })
+  if (companies && companies.length === Object.keys(portfolio).length) {
+    Object.keys(portfolio).forEach((isin, i) => {
+      const company = companies[i].data as Company
+      if (company) {
+        portfolio[isin].company = company
+      }
+    })
+  }
 
   return { portfolio, ...meta }
 }

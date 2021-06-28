@@ -601,6 +601,27 @@
         }
       }
     },
+    "util-numbers": {
+      "root": "libs/util/numbers",
+      "sourceRoot": "libs/util/numbers/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util/numbers/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util/numbers"],
+          "options": {
+            "jestConfig": "libs/util/numbers/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-time": {
       "root": "libs/util/time",
       "sourceRoot": "libs/util/time/src",

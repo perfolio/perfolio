@@ -54,11 +54,10 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     return tmp
   }, [portfolio])
 
-  const [activeIndex, setActiveIndex] = useState(-1)
   /**
    * Selection can either be "sectors" or "counrties"
    */
-  const [selected, setSelected] = useState("sectors")
+  const [selected, setSelected] = useState("Sectors")
 
   const data = useMemo(
     () =>
@@ -70,6 +69,24 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       }),
     [sectors, countries, selected],
   )
+
+  /**
+   * Display the tooltip for the biggest position by default
+   */
+  const defaultSection = useMemo(() => {
+    let biggestIndex = -1
+    let max = 0
+    data.forEach((d, i) => {
+      if (d.value > max) {
+        max = d.value
+        biggestIndex = i
+      }
+    })
+    return biggestIndex
+  }, [data])
+
+  const [activeIndex, setActiveIndex] = useState(defaultSection)
+
   return (
     <div className="w-full h-full space-y-2">
       <div className="flex justify-between">
@@ -176,7 +193,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
               paddingAngle={1}
               cx="50%"
               cy="50%"
-              innerRadius="80%"
+              innerRadius="75%"
               outerRadius="100%"
               dataKey="value"
               onMouseEnter={(_: void, index: number) => setActiveIndex(index)}
@@ -186,9 +203,9 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                    * Do not remove the tooltip if the user has hovered a different part
                    */
                   if (name === data[activeIndex].name) {
-                    setActiveIndex(-1)
+                    setActiveIndex(defaultSection)
                   }
-                }, 300)
+                }, 0)
               }
             >
               {data.map((_, index) => (
