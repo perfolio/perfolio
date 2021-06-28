@@ -65,7 +65,7 @@ const Subscribe: NextPage = () => {
                   }
                   kind="primary"
                   size="auto"
-                  label="Sign in"
+                  label="Subscribe"
                   type="submit"
                   disabled={ctx.formState.isSubmitting}
                 />
