@@ -117,7 +117,7 @@ export class Session extends Document<z.infer<typeof Session.schema>> {
     try {
       const data = Session.updateSchema.parse(input)
       const res = await client.query<QueryResponse<z.infer<typeof Session.internalSchema>>>(
-        q.Update(q.Ref(q.Collection(Session.collection), data.id), {
+        q.Update(q.Select("ref", q.Get(q.Match(q.Index(Session.collection), data.id))), {
           data: {
             expires: q.Time(data.expires.toISOString()),
             updatedAt: q.Now(),

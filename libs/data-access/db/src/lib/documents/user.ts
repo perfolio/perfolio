@@ -136,7 +136,7 @@ export class User extends Document<z.infer<typeof User.schema>> {
     try {
       const data = this.updateValidation.parse(input)
       const res = await client.query<QueryResponse<z.infer<typeof User.internalSchema>>>(
-        q.Update(q.Ref(q.Collection(User.collection), id), {
+        q.Update(q.Select("ref", q.Get(q.Match(q.Index(User.collection), id))), {
           data: {
             name: data.name,
             email: data.email,
