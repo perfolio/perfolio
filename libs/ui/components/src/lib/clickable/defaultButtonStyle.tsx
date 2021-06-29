@@ -65,8 +65,7 @@ const colors = (kind: Kind, disabled?: boolean): string => {
     secondary:
       "bg-transparent border border-gray-200 text-primary-900 hover:border-gray-400 hover:text-black",
     alert: "bg-gradient-to-tr from-error-700 to-error-600 text-white hover:to-error-400",
-    cta:
-      "from-error-600 to-secondary-500 text-white justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:from-error-600 hover:to-secondary-300 duration-200 hover:text-black",
+    cta: "from-error-600 to-secondary-500 text-white justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:from-error-600 hover:to-secondary-300 duration-200 hover:text-black",
     plain:
       "bg-transparent shadow-none hover:shadow-none hover:text-primary-600 text-gray-800 hover:font-semibold",
   }

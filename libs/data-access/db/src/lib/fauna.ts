@@ -1,10 +1,10 @@
 import { Client } from "faunadb"
 import { Asset } from "./documents/asset"
-import { RefreshToken } from "./documents/refresh_token"
 import { User } from "./documents/user"
 import { z } from "zod"
 import { Session } from "./documents/session"
 import { Transaction } from "./documents/transaction"
+import { Settings } from "./documents/settings"
 
 /**
  * User facing wrapper for all document types.
@@ -34,6 +34,15 @@ export class Fauna {
       delete: (userId: string) => User.delete(this.client, userId),
     }
   }
+  public get settings() {
+    return {
+      create: (input: z.infer<typeof Settings.schema>) => Settings.create(this.client, input),
+      update: (userId: string, input: z.infer<typeof Settings.updateValidation>) =>
+        Settings.update(this.client, userId, input),
+      fromUserId: (userId: string) => Settings.fromUserId(this.client, userId),
+      delete: (userId: string) => Settings.delete(this.client, userId),
+    }
+  }
 
   public get asset() {
     return {
@@ -50,16 +59,6 @@ export class Fauna {
       fromId: (id: string) => Transaction.fromId(this.client, id),
       fromUser: (userId: string) => Transaction.fromUserId(this.client, userId),
       delete: (transaction: Transaction) => transaction.delete(this.client),
-    }
-  }
-
-  public get refreshToken() {
-    return {
-      create: (input: z.infer<typeof RefreshToken.schema>) =>
-        RefreshToken.create(this.client, input),
-      fromHash: (token: string) => RefreshToken.fromHash(this.client, token),
-      deleteFromUser: (userId: string) => RefreshToken.deleteFromUser(this.client, userId),
-      delete: (token: RefreshToken) => token.delete(this.client),
     }
   }
 

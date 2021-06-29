@@ -94,9 +94,7 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
 /**
  * Aggregate all transactions by their assetId
  */
-function groupTransactionsByAsset(
-  transactions: Transaction[],
-): {
+function groupTransactionsByAsset(transactions: Transaction[]): {
   [assetId: string]: Transaction[]
 } {
   const transactionsByAsset: Record<string, Transaction[]> = {}
