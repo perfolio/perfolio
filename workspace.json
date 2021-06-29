@@ -601,6 +601,27 @@
         }
       }
     },
+    "ui-form": {
+      "root": "libs/ui/form",
+      "sourceRoot": "libs/ui/form/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/ui/form/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ui/form"],
+          "options": {
+            "jestConfig": "libs/ui/form/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-currency": {
       "root": "libs/util/currency",
       "sourceRoot": "libs/util/currency/src",

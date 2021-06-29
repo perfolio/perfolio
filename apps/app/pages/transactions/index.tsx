@@ -32,11 +32,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
               {new Date(transaction.data.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-900 dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {company?.logo ? (
-                <Avatar size="sm" src={company.logo} alt={`Logo of ${transaction.data.assetId}`} />
-              ) : (
-                <Spinner />
-              )}
+              {company?.logo ? <Avatar size="sm" src={company.logo} /> : <Spinner />}
             </div>
           </div>
         </div>

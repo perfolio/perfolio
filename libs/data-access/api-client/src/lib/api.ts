@@ -16,6 +16,9 @@ import {
   GetAssetResponse,
   SendEmailConfirmationRequest,
   ChangeNameRequest,
+  UpdateSettingsRequest,
+  GetSettingsResponse,
+  GetExchangesResponse,
 } from "@perfolio/api/feature/lambda"
 import { JWT } from "@perfolio/feature/tokens"
 /**
@@ -170,6 +173,16 @@ export class Api {
         this.requestWithAuth<void>({
           path: "/api/settings/deleteAccount",
         }),
+      getSettings: async () =>
+        this.requestWithAuth<GetSettingsResponse>({ path: "/api/settings/getSettings" }),
+      updateSettings: async (body: UpdateSettingsRequest) =>
+        this.requestWithAuth<GetSettingsResponse>({ body, path: "/api/settings/updateSettings" }),
+    }
+  }
+  public get exchanges() {
+    return {
+      getExchanges: async () =>
+        this.requestWithAuth<GetExchangesResponse>({ path: "/api/exchanges/getExchanges" }),
     }
   }
 }
