@@ -2,8 +2,8 @@ import Redis from "ioredis"
 
 export class Key {
   public readonly query: string
-  public readonly parameters: Record<string, unknown>
-  constructor(query: string, parameters: Record<string, unknown>) {
+  public readonly parameters?: Record<string, unknown>
+  constructor(query: string, parameters?: Record<string, unknown>) {
     this.query = query
     this.parameters = parameters
   }

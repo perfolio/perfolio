@@ -50,6 +50,8 @@
       "@perfolio/ui/charts": ["libs/ui/charts/src/index.ts"],
       "@perfolio/ui/components": ["libs/ui/components/src/index.ts"],
       "@perfolio/ui/design-system": ["libs/ui/design-system/src/index.ts"],
+      "@perfolio/ui/form": ["libs/ui/form/src/index.ts"],
+      "@perfolio/util/currency": ["libs/util/currency/src/index.ts"],
       "@perfolio/util/numbers": ["libs/util/numbers/src/index.ts"],
       "@perfolio/util/time": ["libs/util/time/src/index.ts"]
     }

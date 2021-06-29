@@ -20,8 +20,7 @@ export async function getLogo(asset: string): Promise<GetLogoResponse> {
     .catch((err) => {
       console.warn(err)
       return {
-        url:
-          "https://avatars.githubusercontent.com/u/67603535?s=400&u=cb14061ee696c1d3ca79760fcc80dd00ad93d8d3&v=4",
+        url: "https://avatars.githubusercontent.com/u/67603535?s=400&u=cb14061ee696c1d3ca79760fcc80dd00ad93d8d3&v=4",
       }
     })
 

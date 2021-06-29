@@ -95,11 +95,25 @@
     "ui-design-system": {
       "tags": []
     },
+    "ui-form": {
+      "tags": []
+    },
+    "util-currency": {
+      "tags": []
+    },
     "util-numbers": {
       "tags": []
     },
     "util-time": {
       "tags": []
     }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }
