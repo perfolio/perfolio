@@ -98,6 +98,9 @@
     "ui-form": {
       "tags": []
     },
+    "util-currency": {
+      "tags": []
+    },
     "util-numbers": {
       "tags": []
     },

@@ -23,5 +23,6 @@ module.exports = {
     "<rootDir>/libs/ui/charts",
     "<rootDir>/libs/util/numbers",
     "<rootDir>/libs/ui/form",
+    "<rootDir>/libs/util/currency",
   ],
 }
