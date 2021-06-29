@@ -111,7 +111,7 @@ export function FaunaAdapter(faunaClient) {
         },
         async updateUser(user) {
           const newUser = await faunaClient.query(
-            q.Update(q.Ref(q.Collection(collections.User), user.id), {
+            q.Update(q.Select("ref", q.Get(q.Match(q.Index(collections.User), user.id))), {
               data: {
                 name: user.name,
                 email: user.email,
@@ -235,7 +235,7 @@ export function FaunaAdapter(faunaClient) {
           newExpiryDate.setTime(newExpiryDate.getTime() + sessionMaxAge)
 
           const updatedSession = await faunaClient.query(
-            q.Update(q.Ref(q.Collection(collections.Session), session.id), {
+            q.Update(q.Select("ref", q.Get(q.Match(q.Index(collections.Session), session.id))), {
               data: {
                 expires: q.Time(newExpiryDate.toISOString()),
                 updatedAt: q.Time(new Date().toISOString()),

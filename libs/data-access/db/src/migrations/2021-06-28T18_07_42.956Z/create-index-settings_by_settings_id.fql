@@ -1,0 +1,9 @@
+CreateIndex({
+  "name": "settings_by_settings_id",
+  "source": Collection("settings"),
+  "terms": [{
+    "field": ["data", "userId"]
+  }],
+  "unique": true,
+  "serialized": true
+})

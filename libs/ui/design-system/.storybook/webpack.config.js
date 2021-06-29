@@ -23,9 +23,8 @@ module.exports = async ({ config, mode }) => {
     const { test } = rule
     return test?.toString().startsWith("/\\.(svg|ico") ?? false
   })
-  config.module.rules[
-    svgRuleIndex
-  ].test = /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
+  config.module.rules[svgRuleIndex].test =
+    /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
 
   config.module.rules.push(
     {
