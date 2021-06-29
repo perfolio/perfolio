@@ -40,7 +40,9 @@ const Setting: React.FC<SettingProps> = ({
   const [submitting, setSubmitting] = useState(false)
   return (
     <Card>
-      <Card.Title title={title} />
+      <Card.Header>
+        <Card.Header.Title title={title} />
+      </Card.Header>
 
       <Card.Content>
         <Form ctx={ctx} formError={formError}>

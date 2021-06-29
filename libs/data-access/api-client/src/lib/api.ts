@@ -19,6 +19,8 @@ import {
   UpdateSettingsRequest,
   GetSettingsResponse,
   GetExchangesResponse,
+  CreateSettingsRequest,
+  CreateSettingsResponse,
 } from "@perfolio/api/feature/lambda"
 import { JWT } from "@perfolio/feature/tokens"
 /**
@@ -177,6 +179,11 @@ export class Api {
         this.requestWithAuth<GetSettingsResponse>({ path: "/api/settings/getSettings" }),
       updateSettings: async (body: UpdateSettingsRequest) =>
         this.requestWithAuth<GetSettingsResponse>({ body, path: "/api/settings/updateSettings" }),
+      createSettings: async (body: CreateSettingsRequest) =>
+        this.requestWithAuth<CreateSettingsResponse>({
+          body,
+          path: "/api/settings/createSettings",
+        }),
     }
   }
   public get exchanges() {

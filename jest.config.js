@@ -24,5 +24,6 @@ module.exports = {
     "<rootDir>/libs/util/numbers",
     "<rootDir>/libs/ui/form",
     "<rootDir>/libs/util/currency",
+    "<rootDir>/libs/app/middleware",
   ],
 }
