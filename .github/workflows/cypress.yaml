@@ -21,7 +21,10 @@ jobs:
           version: latest
           run_install: true
 
-      - run: echo ${{toJson(github.event.deployment.environment)}}
+      # We have more than ~ 8k files
+      - name: Increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
       - name: Integration app.perfol.io
         if: github.event.deployment.environment == 'Preview – app-perfolio'
         run: pnpm nx e2e app-e2e --record --key ${{secrets.CYPRESS_APP_RECORD_KEY}} --baseUrl=${{ github.event.deployment_status.target_url }}

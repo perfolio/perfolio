@@ -62,13 +62,10 @@ export class Settings extends Document<z.infer<typeof Settings.schema>> {
     input: z.infer<typeof Settings.createValidation>,
   ): Promise<Settings> {
     try {
-      const data = this.schema.parse(input)
+      const data = this.schema.parse({ ...input, userId })
       const res = await client.query<QueryResponse<z.infer<typeof Settings.schema>>>(
         q.Create(q.Collection(Settings.collection), {
-          data: {
-            ...data,
-            userId,
-          },
+          data,
         }),
       )
 

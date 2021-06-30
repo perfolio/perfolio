@@ -6,16 +6,18 @@ export interface FormProps<FieldValues> {
   ctx: UseFormReturn<FieldValues>
   formError: string | null
   children: React.ReactNode
+  className?: string
 }
 
 export function Form<FieldValues>({
   ctx,
   formError,
   children,
+  className,
 }: FormProps<FieldValues>): JSX.Element {
   return (
     <FormProvider {...ctx}>
-      <form>{children}</form>
+      <form className={className}>{children}</form>
       {formError ? (
         <div role="alert" className="flex items-center gap-1 pt-2 pb-4 text-sm text-error-500">
           <ExclamationCircleIcon className="w-4 h-4" />

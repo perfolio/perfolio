@@ -1,6 +1,6 @@
-import { getCurrency } from "./currency"
+import { getCurrency, getCurrencySymbol } from "./currency"
 
 it("works with germany", () => {
-  const currency = getCurrency("DE")
-  expect(currency).toBe("€")
+  expect(getCurrency("DE")).toBe("EUR")
+  expect(getCurrencySymbol("DE")).toBe("€")
 })
