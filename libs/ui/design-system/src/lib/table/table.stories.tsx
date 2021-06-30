@@ -1,7 +1,7 @@
 import { Table } from "./table"
 import { Text } from "../text/text"
 export default {
-  title: "Surfaces/Table",
+  title: "Table",
   component: Table,
 }
 
