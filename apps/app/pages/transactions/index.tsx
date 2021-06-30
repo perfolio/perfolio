@@ -5,14 +5,9 @@ import { useCompany, useTransactions, useAsset } from "@perfolio/data-access/que
 import { Transaction } from "@perfolio/data-access/db"
 import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
-import {
-  AppLayout,
-  withAuthentication,
-  ActivityFeed,
-  Main,
-  Sidebar,
-} from "@perfolio/app/components"
+import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/design-system"
+import { withAuthentication } from "@perfolio/app/middleware"
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean

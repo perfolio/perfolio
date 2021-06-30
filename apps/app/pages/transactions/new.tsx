@@ -1,13 +1,8 @@
 import React from "react"
 import { z } from "zod"
 import { LabeledField, Form, FORM_ERROR, Button, Spinner } from "@perfolio/ui/components"
-import {
-  Main,
-  AppLayout,
-  withAuthentication,
-  Sidebar,
-  ActivityFeed,
-} from "@perfolio/app/components"
+import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
+import { withAuthentication } from "@perfolio/app/middleware"
 import { useForm } from "react-hook-form"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
