@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
-import { withAuthentication, AppLayout } from "@perfolio/app/components"
+import { AppLayout } from "@perfolio/app/components"
 import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
@@ -12,6 +12,7 @@ import Link from "next/link"
 import { useSession } from "next-auth/client"
 import cn from "classnames"
 import { Card } from "@perfolio/ui/design-system"
+import { withAuthentication } from "@perfolio/app/middleware"
 
 interface SettingProps {
   validation: z.ZodAny
