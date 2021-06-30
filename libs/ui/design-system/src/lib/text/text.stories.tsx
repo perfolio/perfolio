@@ -1,7 +1,7 @@
 import { Text, TextProps } from "./text"
 
 export default {
-  title: "General/Text",
+  title: "Text",
   component: Text,
 }
 

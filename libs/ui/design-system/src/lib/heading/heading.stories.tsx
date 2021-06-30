@@ -1,7 +1,7 @@
 import { Heading, HeadingProps } from "./heading"
 
 export default {
-  title: "General/Heading",
+  title: "Heading",
   component: Heading,
 }
 

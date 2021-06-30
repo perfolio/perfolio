@@ -18,5 +18,6 @@ export * from "./lib/settings/changeName"
 export * from "./lib/settings/deleteAccount"
 export * from "./lib/settings/getSettings"
 export * from "./lib/settings/updateSettings"
+export * from "./lib/settings/createSettings"
 
 export * from "./lib/exchanges/getExchanges"

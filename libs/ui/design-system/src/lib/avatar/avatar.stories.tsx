@@ -1,7 +1,7 @@
 import { Avatar, AvatarProps } from "./avatar"
 
 export default {
-  title: "Data Display/Avatar",
+  title: "Avatar",
   component: Avatar,
 }
 

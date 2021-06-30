@@ -36,7 +36,8 @@ export class Fauna {
   }
   public get settings() {
     return {
-      create: (input: z.infer<typeof Settings.schema>) => Settings.create(this.client, input),
+      create: (userId: string, input: z.infer<typeof Settings.createValidation>) =>
+        Settings.create(this.client, userId, input),
       update: (userId: string, input: z.infer<typeof Settings.updateValidation>) =>
         Settings.update(this.client, userId, input),
       fromUserId: (userId: string) => Settings.fromUserId(this.client, userId),
