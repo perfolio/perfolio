@@ -168,6 +168,27 @@
         }
       }
     },
+    "app-middleware": {
+      "root": "libs/app/middleware",
+      "sourceRoot": "libs/app/middleware/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/app/middleware/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/app/middleware"],
+          "options": {
+            "jestConfig": "libs/app/middleware/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "data-access-api-client": {
       "root": "libs/data-access/api-client",
       "sourceRoot": "libs/data-access/api-client/src",

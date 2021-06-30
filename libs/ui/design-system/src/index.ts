@@ -6,3 +6,6 @@ export * from "./lib/description/description"
 export * from "./lib/toggle-group/group"
 export * from "./lib/tooltip/tooltip"
 export * from "./lib/table"
+
+export * from "./lib/modal"
+export * from "./lib/progress/dots"

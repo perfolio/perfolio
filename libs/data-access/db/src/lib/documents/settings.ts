@@ -19,7 +19,12 @@ export class Settings extends Document<z.infer<typeof Settings.schema>> {
       defaultExchange: z.string(),
     })
     .strict()
-
+  public static createValidation = z
+    .object({
+      defaultCurrency: z.string(),
+      defaultExchange: z.string(),
+    })
+    .strict()
   public static updateValidation = z
     .object({
       defaultCurrency: z.string().optional(),
@@ -53,13 +58,17 @@ export class Settings extends Document<z.infer<typeof Settings.schema>> {
    */
   public static async create(
     client: Client,
-    input: z.infer<typeof Settings.schema>,
+    userId: string,
+    input: z.infer<typeof Settings.createValidation>,
   ): Promise<Settings> {
     try {
       const data = this.schema.parse(input)
       const res = await client.query<QueryResponse<z.infer<typeof Settings.schema>>>(
         q.Create(q.Collection(Settings.collection), {
-          data,
+          data: {
+            ...data,
+            userId,
+          },
         }),
       )
 

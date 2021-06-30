@@ -43,6 +43,9 @@
       "tags": [],
       "implicitDependencies": ["app"]
     },
+    "app-middleware": {
+      "tags": []
+    },
     "data-access-api-client": {
       "tags": []
     },

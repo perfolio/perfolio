@@ -1,14 +1,17 @@
 import React from "react"
-import { Text } from "../text/text"
+import { Text } from "../../text/text"
 
-export interface CardTitleProps {
+export interface CardHeaderTitleProps {
   title: string
   subtitle?: string
 }
 
-export const CardTitle: React.FC<CardTitleProps> = ({ title, subtitle }): JSX.Element => {
+export const CardHeaderTitle: React.FC<CardHeaderTitleProps> = ({
+  title,
+  subtitle,
+}): JSX.Element => {
   return (
-    <div className="px-4 pt-4">
+    <div>
       <span className="text-lg font-semibold text-gray-900">{title}</span>
       <Text>{subtitle}</Text>
     </div>
