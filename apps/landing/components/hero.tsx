@@ -17,7 +17,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
           kind="primary"
           size="auto"
           label="Sign up"
-          href="https://app.perfol.io/auth/signup"
+          href="https://app.perfol.io/auth/signin"
         />
         <Button size="auto" kind="secondary" label="Contact" href="mailto:info@perfol.io" />
       </div>
