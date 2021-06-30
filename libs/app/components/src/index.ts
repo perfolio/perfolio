@@ -8,5 +8,4 @@ export * from "./lib/applayout/applayout"
 export * from "./lib/header/header"
 
 export * from "./lib/main"
-export * from "./lib/withAuthentication/withAuthentication"
 export * from "./lib/sidebar/sidebar"
