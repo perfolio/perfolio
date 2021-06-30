@@ -111,7 +111,7 @@ export function FaunaAdapter(faunaClient) {
         },
         async updateUser(user) {
           const newUser = await faunaClient.query(
-            q.Update(q.Select("ref", q.Get(q.Match(q.Index(collections.User), user.id))), {
+            q.Update(q.Ref(q.Collection(collections.User), user.id), {
               data: {
                 name: user.name,
                 email: user.email,
@@ -192,18 +192,22 @@ export function FaunaAdapter(faunaClient) {
           return session.data
         },
         async getSession(sessionToken) {
-          const { data, ref } = await faunaClient.query(
-            q.Get(q.Match(q.Index(indexes.Session), sessionToken)),
-          )
-          const session = data
-          session.id = ref.id
-          session.expires = new Date(session.expires.value)
-          // Check session has not expired (do not return it if it has)
-          if (session?.expires && new Date() > session.expires) {
-            await faunaClient.query(q.Delete(q.Ref(q.Collection(collections.Session), ref.id)))
+          try {
+            const { data, ref } = await faunaClient.query(
+              q.Get(q.Match(q.Index(indexes.Session), sessionToken)),
+            )
+            const session = data
+            session.id = ref.id
+            session.expires = new Date(session.expires.value)
+            // Check session has not expired (do not return it if it has)
+            if (session?.expires && new Date() > session.expires) {
+              await faunaClient.query(q.Delete(q.Ref(q.Collection(collections.Session), ref.id)))
+              return null
+            }
+            return session
+          } catch (err) {
             return null
           }
-          return session
         },
         async updateSession(session, force) {
           const shouldUpdate =
