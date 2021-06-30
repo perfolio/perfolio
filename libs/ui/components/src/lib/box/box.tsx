@@ -1,6 +1,6 @@
 import React from "react"
 
-type Size = "small" | "medium" | "large"
+type Size = "sm" | "md" | "lg"
 export interface BoxProps {
   className?: string
   size?: Size
@@ -9,7 +9,7 @@ export interface BoxProps {
  * A simple wrapper for any element to add a shadow effect around it.
  */
 export const Box: React.FC<BoxProps> = ({ children, className, size }) => (
-  <div className={`rounded-sm ${shadow(size ?? "medium")} overflow-hidden`}>
+  <div className={`rounded-sm ${shadow(size ?? "md")} overflow-hidden`}>
     <div className={className}>{children}</div>
   </div>
 )
@@ -20,8 +20,8 @@ export const Box: React.FC<BoxProps> = ({ children, className, size }) => (
  */
 function shadow(size: Size): string {
   return {
-    small: "shadow",
-    medium: "shadow-lg",
-    large: "shadow-xl",
+    sm: "shadow",
+    md: "shadow-lg",
+    lg: "shadow-xl",
   }[size]
 }

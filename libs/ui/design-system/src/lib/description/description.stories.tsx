@@ -1,6 +1,6 @@
 import { Description } from "./description"
 export default {
-  title: "Data Display/Description",
+  title: "Description",
   component: Description,
 }
 

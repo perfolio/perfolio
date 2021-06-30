@@ -7,6 +7,7 @@ import Head from "next/head"
 import { useSession } from "next-auth/client"
 import LogRocket from "logrocket"
 import "tailwindcss/tailwind.css"
+import { OnboardingModal } from "@perfolio/app/middleware"
 
 LogRocket.init("perfolio/app")
 
@@ -31,6 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={PersistentQueryClient()}>
         <ApiProvider>
           <AuthProvider session={pageProps.session}>
+            <OnboardingModal />
             <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
               <Component {...pageProps} />
             </div>
