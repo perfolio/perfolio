@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Card, Modal, Dots, Description } from "@perfolio/ui/design-system"
 import { z } from "zod"
 import { Button } from "@perfolio/ui/components"
@@ -9,6 +9,7 @@ import { Exchange } from "@perfolio/types"
 import { useSettings, useExchanges } from "@perfolio/data-access/queries"
 import { useSession } from "next-auth/client"
 import { useCreateSettings } from "@perfolio/data-access/mutations"
+import { getCurrency } from "@perfolio/util/currency"
 /**
  * Check whether a user has settings in the database. If not they are presented
  * a modal to insert settings for the first time
@@ -49,36 +50,39 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [region, setRegion] = useState<string>("")
-  if (!requiresOnboarding) {
-    return null
-  }
 
+  useEffect(() => {
+    if (region?.length > 0) {
+      ctx.setValue("defaultCurrency", getCurrency(region))
+    }
+  }, [region, ctx])
   /**
    * Input fields for each step of the form
    */
   const steps: { title: string; description: string; fields: React.ReactNode | null }[] = [
     {
       title: "Welcome",
-      description: "Please help us configure perfolio to your preferences.",
+      description: "Please help us configure perfolio to your preferences. TODO:",
       fields: null,
     },
     {
-      title: "Step 1: Select your default currency",
-      description: "We will display this currency everywhere",
-      fields: <Field.Input label="Currency" name="defaultCurrency" type="text" />,
+      title: "Step 1: Select your default region",
+      description: "TODO:",
+      fields: (
+        <Field.Select
+          onChange={setRegion}
+          options={[...new Set(exchanges?.map((e) => e.region))] ?? []}
+          label="Region"
+          name="defaultRegion"
+        />
+      ),
     },
     {
       title: "Step 2: Select your default exchange",
       description:
-        "Where do you usually sell your stock? Stock prices are displayed for this exchange.",
+        "Where do you usually sell your stock? Stock prices are displayed for this exchange. TODO:",
       fields: (
         <div className="space-y-4">
-          <Field.Select
-            onChange={setRegion}
-            options={[...new Set(exchanges?.map((e) => e.region))] ?? []}
-            label="Region"
-            name="defaultRegion"
-          />
           <Field.Select
             options={exchanges?.filter((e) => e.region === region).map((e) => e.description) ?? []}
             label="Exchange"
@@ -88,9 +92,12 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
       ),
     },
   ]
+  if (!requiresOnboarding) {
+    return null
+  }
   return (
     <Modal trigger={null}>
-      <Form ctx={ctx} formError={formError}>
+      <Form ctx={ctx} formError={formError} className="lg:w-1/3">
         <Card>
           <Card.Header>
             <Card.Header.Title title="Welcome to Perfolio" />
