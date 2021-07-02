@@ -399,6 +399,27 @@
         }
       }
     },
+    "feature-i18n": {
+      "root": "libs/feature/i18n",
+      "sourceRoot": "libs/feature/i18n/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/feature/i18n/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/feature/i18n"],
+          "options": {
+            "jestConfig": "libs/feature/i18n/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "feature-tokens": {
       "root": "libs/feature/tokens",
       "sourceRoot": "libs/feature/tokens/src",
