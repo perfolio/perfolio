@@ -1,38 +1,38 @@
-import { Locale, Namespace, Translation } from "./types"
-import { common as deCommon } from "./locales/de/common"
-import { common as enCommon } from "./locales/en/common"
+import { resolve } from "path"
+import fs from "fs"
 
-import { footer as deFooter } from "./locales/de/footer"
-import { footer as enFooter } from "./locales/en/footer"
-import { landing as deLanding } from "./locales/de/landing"
-import { landing as enLanding } from "./locales/en/landing"
+type Namespace = "common" | "footer" | "landing"
+type Locale = "en" | "de"
 
-export const i18n: Translation = {
-  common: {
-    de: deCommon,
-    en: enCommon,
-  },
-  footer: {
-    de: deFooter,
-    en: enFooter,
-  },
-  landing: {
-    de: deLanding,
-    en: enLanding,
-  },
+/**
+ * Load a translations file from local fs
+ */
+const loadTranslation = (namespace: Namespace, locale: Locale): Promise<Record<string, string>> => {
+  const path = resolve(
+    "libs",
+    "feature",
+    "i18n",
+    "src",
+    "lib",
+    "locales",
+    locale,
+    `${namespace}.json`,
+  )
+  try {
+    return JSON.parse(fs.readFileSync(path).toString())
+  } catch (err) {
+    throw new Error(`Unable to load locale from ${path}: ${err}`)
+  }
 }
 
 /**
- * Return all translations for a given locale and namespaces 
- * 
- * @example
- * const i18n = translate("en", ["common", "footer"])
-
+ * Return all translations for a given locale and namespaces
  */
 export function getTranslations(
   locale: string | undefined,
   namespaces: Namespace[],
 ): Record<string, string> {
   locale ??= "en"
-  return Object.assign({}, ...namespaces.map((ns) => i18n[ns][locale as Locale]))
+
+  return Object.assign({}, ...namespaces.map((ns) => loadTranslation(ns, locale as Locale)))
 }
