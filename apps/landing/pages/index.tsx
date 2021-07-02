@@ -209,7 +209,7 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
       members: [
         {
           name: "Nicolas Webersinke",
-          title: "Product",
+          title: "Product & Tech",
           image: "/img/nico.jpeg",
         },
         {
@@ -219,22 +219,22 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
         },
         {
           name: "Mads Jordt",
-          title: "Sales",
+          title: "Product",
           image: "/img/mads.jpeg",
         },
         {
           name: "Kevin Kohler",
-          title: "Marketing",
+          title: "Customer Relations",
           image: "/img/kevin.jpeg",
         },
         {
           name: "Lauren Mackintosh",
-          title: "Business Development",
+          title: "Marketing & Sales",
           image: "/img/lauren.jpeg",
         },
         {
           name: "Luis Meister",
-          title: "Product",
+          title: "Business Development",
           image: "/img/luis.png",
         },
         {

@@ -33,7 +33,9 @@ const SigninPage: NextPage = () => {
             </div>
             <div className="z-50 flex flex-col items-center justify-center px-8 space-y-4 tracking-tight text-center md:text-left md:items-start md:justify-start md:max-w-3xl">
               <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">Sign in</h1>
-              <h2 className="text-lg font-normal text-gray-500 ">Kevin ist ein frischer Hecht!</h2>
+              <h2 className="text-lg font-normal text-gray-500 ">
+                One account - All of your portfolio!
+              </h2>
             </div>
           </div>
           <div className="w-full max-w-sm px-6 space-y-4">
