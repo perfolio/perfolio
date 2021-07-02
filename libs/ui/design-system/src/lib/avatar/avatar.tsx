@@ -34,6 +34,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   return (
     <Root
+      as="div"
       className={cn({
         "w-8 h-8": size === "sm",
         "w-10 h-10": size === "md",

@@ -2,6 +2,7 @@ import React from "react"
 import { z } from "zod"
 import { LabeledField, Form, FORM_ERROR, Button, Spinner } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
+import { Avatar, Text } from "@perfolio/ui/design-system"
 import { withAuthentication } from "@perfolio/app/middleware"
 import { useForm } from "react-hook-form"
 import { Time } from "@perfolio/util/time"
@@ -18,26 +19,17 @@ const Suggestion: React.FC<{
   const { asset } = useAsset({ isin: tx.data.assetId })
   const { company } = useCompany(asset?.data?.symbol)
   return (
-    <li className="flex items-center justify-between py-3">
-      <div className="flex items-center space-x-3">
-        <div className="w-10 h-10 rounded">
-          {company ? (
-            <img
-              alt={`Logo of ${company?.name}`}
-              src={company?.logo ?? ""}
-              height={64}
-              width={64}
-            />
-          ) : (
-            <Spinner />
-          )}
-        </div>
-        <div className="flex flex-col items-start truncate ">
-          <span className="font-medium text-gray-800 ">{company?.name}</span>
-          <span className="text-xs text-gray-600 md:text-sm">{tx.data.assetId}</span>
+    <li className="flex items-center justify-between w-full gap-4 py-3">
+      <div className="flex items-center w-3/5">
+        <div>{company?.logo ? <Avatar size="lg" src={company.logo} /> : <Spinner />}</div>
+        <div className="overflow-hidden">
+          <Text truncate bold>
+            {company?.name}
+          </Text>
+          <Text size="sm">{tx.data.assetId}</Text>
         </div>
       </div>
-      <div className="flex flex-col items-end space-y-1">
+      <div className="flex flex-col items-end w-2/5 space-y-1">
         <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
           tx.ts / 1_000_000,
         )}`}</span>
