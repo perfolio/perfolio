@@ -26,5 +26,6 @@ module.exports = {
     "<rootDir>/libs/util/currency",
     "<rootDir>/libs/app/middleware",
     "<rootDir>/libs/util/i18n",
+    "<rootDir>/libs/feature/finance/kpis",
   ],
 }
