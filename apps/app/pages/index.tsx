@@ -90,7 +90,7 @@ const App: NextPage = () => {
         </Main.Header>
         <Main.Content>
           <div className="py-4 sm:py-6 md:py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
+            <div className="grid grid-cols-2 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
               <div className="flex justify-center">
                 <div className="flex flex-col space-y-3">
                   <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
