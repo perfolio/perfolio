@@ -204,7 +204,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
 
 export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["common", "landing"])
-  console.log({ translations })
   return {
     props: {
       members: [

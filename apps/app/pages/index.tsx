@@ -52,16 +52,14 @@ const App: NextPage = () => {
   const index = useMemo(() => rebalance(selectedHistory), [selectedHistory])
   const firstValue = useMemo(() => {
     let firstValue = 0
-    console.log({ history })
     Object.values(Object.values(selectedHistory)[0] ?? {}).forEach((asset) => {
       if (asset.value > 0) {
         firstValue += asset.quantity * asset.value
       }
     })
     return firstValue
-  }, [selectedHistory, history])
+  }, [selectedHistory])
 
-  console.log({ currentValue, firstValue })
   const absoluteChange = currentValue - firstValue
   const relativeChange = index ? Object.values(index)[Object.values(index).length - 1] - 1 : 0
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
