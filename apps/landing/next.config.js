@@ -1,4 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withNx = require("@nrwl/next/plugins/with-nx")
 
-module.exports = withNx({})
+module.exports = withNx({
+  i18n: {
+    locales: ["de", "en"],
+    defaultLocale: "en",
+  },
+})

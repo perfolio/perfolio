@@ -10,7 +10,6 @@ export interface AssetTableProps {
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
   const { portfolio } = usePortfolio()
   const { transactions } = useTransactions()
-  console.log(JSON.stringify(portfolio, null, 2))
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}

@@ -76,6 +76,9 @@
     "feature-finance-returns": {
       "tags": []
     },
+    "feature-i18n": {
+      "tags": []
+    },
     "feature-tokens": {
       "tags": []
     },
