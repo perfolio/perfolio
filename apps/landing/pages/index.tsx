@@ -20,12 +20,15 @@ import {
   HomeIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
+  translations: Record<string, string>
 }
 
-const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
+const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
+  const { t } = useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -53,7 +56,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
             {[
               {
                 icon: <FlagIcon />,
-                title: "Independent",
+                title: t("independent"),
                 description:
                   "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
               },
@@ -199,13 +202,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps<IndexPageProps> = async () => {
+export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["common", "landing"])
   return {
     props: {
       members: [
         {
           name: "Nicolas Webersinke",
-          title: "Product",
+          title: "Product & Tech",
           image: "/img/nico.jpeg",
         },
         {
@@ -215,22 +219,22 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async () => {
         },
         {
           name: "Mads Jordt",
-          title: "Sales",
+          title: "Product",
           image: "/img/mads.jpeg",
         },
         {
           name: "Kevin Kohler",
-          title: "Marketing",
+          title: "Customer Relations",
           image: "/img/kevin.jpeg",
         },
         {
           name: "Lauren Mackintosh",
-          title: "Business Development",
+          title: "Marketing & Sales",
           image: "/img/lauren.jpeg",
         },
         {
           name: "Luis Meister",
-          title: "Product",
+          title: "Business Development",
           image: "/img/luis.png",
         },
         {
@@ -239,6 +243,7 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async () => {
           image: "/img/lukas.png",
         },
       ],
+      translations,
     },
   }
 }

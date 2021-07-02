@@ -46,6 +46,7 @@
       "@perfolio/data-access/queries": ["libs/data-access/queries/src/index.ts"],
       "@perfolio/feature/email": ["libs/feature/email/src/index.ts"],
       "@perfolio/feature/finance/returns": ["libs/feature/finance/returns/src/index.ts"],
+      "@perfolio/feature/i18n": ["libs/feature/i18n/src/index.ts"],
       "@perfolio/feature/tokens": ["libs/feature/tokens/src/index.ts"],
       "@perfolio/types": ["libs/types/src/index.ts"],
       "@perfolio/ui/charts": ["libs/ui/charts/src/index.ts"],

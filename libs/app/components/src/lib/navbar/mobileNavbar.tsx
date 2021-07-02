@@ -6,16 +6,18 @@ import { BellIcon, DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/
 import { Link, Logo, ThemeSwitch } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import { signOut } from "next-auth/client"
-
+import NextLink from "next/link"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
 
   return (
     <nav className="flex items-center justify-between w-full">
-      <a className="text-gray-200 hover:text-gray-50">
-        <Logo />
-      </a>
+      <NextLink href="/">
+        <a className="text-gray-200 hover:text-gray-50">
+          <Logo />
+        </a>
+      </NextLink>
       <div>
         <button className="w-6 h-6 cursor-pointer text-gray-50" onClick={() => setOpen(!open)}>
           {open ? <XIcon /> : <DotsVerticalIcon />}
