@@ -12,12 +12,12 @@ import {
   AggregateOptions,
   Sidebar,
 } from "@perfolio/app/components"
-import { Time } from "@perfolio/util/time"
 import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finance/returns"
 import { withAuthentication } from "@perfolio/app/middleware"
 import { Heading, ToggleGroup } from "@perfolio/ui/design-system"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
+import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -65,39 +65,14 @@ const App: NextPage = () => {
   const relativeChange = index ? Object.values(index)[Object.values(index).length - 1] - 1 : 0
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
-  /**
-   * MEAN
-   */
-  const absoluteTimeseries = Object.entries(selectedHistory).map(([time, assets]) => {
-    return {
-      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
-      value: Object.values(assets)
-        .map((asset) => asset.quantity * asset.value)
-        .reduce((acc, val) => acc + val),
-    }
+  const absoluteTimeseries = Object.values(selectedHistory).map((assets) => {
+    return Object.values(assets)
+      .map((asset) => asset.quantity * asset.value)
+      .reduce((acc, val) => acc + val)
   })
-
-  const absoluteDiffPerDay: number[] = []
-  for (let i = 0; i < absoluteTimeseries.length - 1; i++) {
-    absoluteDiffPerDay.push(absoluteTimeseries[i + 1].value - absoluteTimeseries[i].value)
-  }
-
-  const absoluteMean =
-    absoluteDiffPerDay.reduce((acc, val) => acc + val, 0) / absoluteDiffPerDay.length
-
-  const relativeDiffPerDay: number[] = []
-  const relativeValues = Object.values(index)
-  console.log(relativeValues.length)
-  for (let i = 0; i < relativeValues.length - 1; i++) {
-    relativeDiffPerDay.push(relativeValues[i + 1] / relativeValues[i] - 1)
-  }
-
-  const relativeMean =
-    relativeDiffPerDay.reduce((acc, val) => acc + val, 0) / relativeDiffPerDay.length
-
-  const relativeSTD = Math.sqrt(
-    relativeDiffPerDay.map((diff) => (diff - relativeMean) ** 2).reduce((acc, val) => acc + val, 0),
-  )
+  const absoluteMean = useMemo(() => Mean.getAbsolute(absoluteTimeseries), [absoluteTimeseries])
+  const relativeMean = useMemo(() => Mean.getRelative(Object.values(index)), [index])
+  const relativeSTD = useMemo(() => standardDeviation(Object.values(index)), [index])
 
   return (
     <AppLayout
