@@ -72,7 +72,10 @@ const App: NextPage = () => {
   })
   const absoluteMean = useMemo(() => Mean.getAbsolute(absoluteTimeseries), [absoluteTimeseries])
   const relativeMean = useMemo(() => Mean.getRelative(Object.values(index)), [index])
-  const relativeSTD = useMemo(() => standardDeviation(Object.values(index)), [index])
+  const relativeSTD = useMemo(
+    () => (index && Object.keys(index).length >= 2 ? standardDeviation(Object.values(index)) : 0),
+    [index],
+  )
 
   return (
     <AppLayout
