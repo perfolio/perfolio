@@ -10,6 +10,6 @@ describe("average", () => {
 })
 describe("standardDeviation", () => {
   it("calculates the correct std", () => {
-    expect(standardDeviation([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])).toBe(5.927999271337386)
+    expect(standardDeviation([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])).toBe(0.26885326206904914)
   })
 })
