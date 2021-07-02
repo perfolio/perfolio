@@ -1,6 +1,6 @@
 import React from "react"
 import Image from "next/image"
-import { NextPage, GetStaticProps, GetStaticPaths } from "next"
+import { NextPage, GetStaticProps } from "next"
 import {
   Navbar,
   Member,
@@ -200,17 +200,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
       <Footer />
     </div>
   )
-}
-
-export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
-  return {
-    paths: (locales ?? []).map((locale) => {
-      return {
-        params: { locale },
-      }
-    }),
-    fallback: true,
-  }
 }
 
 export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
