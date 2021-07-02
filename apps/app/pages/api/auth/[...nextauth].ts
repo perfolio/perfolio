@@ -13,7 +13,7 @@ export default NextAuth({
   debug: false,
   pages: {
     signIn: "/auth/signin",
-    verifyRequest: "/auth/check-your-email",
+    verifyRequest: "/auth/verify",
   },
   providers: [
     Providers.Email({
