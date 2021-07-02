@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { MobileNavLink } from "./mobileNavLink"
 import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
-import { BellIcon, DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
+import { DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
 import { Link, Logo, ThemeSwitch } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import { signOut } from "next-auth/client"
@@ -44,9 +44,9 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
             ))}
           </ul>
           <ul className="flex items-center justify-center h-20 space-x-8 text-gray-700 border-t border-gray-300">
-            <li>
+            {/* <li>
               <Link size="large" prefix={<BellIcon />} href="/" />
-            </li>
+            </li> */}
             <li>
               <Link size="large" prefix={<AdjustmentsIcon />} href="/settings/account" />
             </li>
