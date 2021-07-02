@@ -26,7 +26,7 @@ const CheckYourEmailPage: NextPage = () => {
 
             <Text>Just click on the link in the email to complete your signin.</Text>
             <Text>
-              If you don't see it, you may need to
+              If you don't see it, you may need to{" "}
               <span className="font-medium">check your spam folder</span>.
             </Text>
 
