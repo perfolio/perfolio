@@ -6,4 +6,13 @@ module.exports = withNx({
     locales: ["de", "en"],
     defaultLocale: "en",
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      /**
+       * Allows us to use `fs` in getServerSideProps
+       */
+      config.node = { fs: "empty" }
+    }
+    return config
+  },
 })
