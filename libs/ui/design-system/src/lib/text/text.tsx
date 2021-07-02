@@ -13,11 +13,22 @@ export interface TextProps {
    * If enabled this will render the text semibold
    */
   bold?: boolean
-
+  /**
+   * Enable line break on words
+   */
   lineBreak?: boolean
 
   align?: "text-left" | "text-center" | "text-right"
+
+  /**
+   * Use a monospace font
+   */
   mono?: boolean
+
+  /**
+   * Truncate the text to prevent overflows
+   */
+  truncate?: boolean
 }
 
 export const Text: React.FC<TextProps> = ({
@@ -28,6 +39,7 @@ export const Text: React.FC<TextProps> = ({
   lineBreak,
   align,
   mono,
+  truncate,
 }): JSX.Element => {
   return (
     <p
@@ -35,9 +47,10 @@ export const Text: React.FC<TextProps> = ({
         `text-${size}`,
         "text-gray-700",
         {
-          "text-semibold": bold,
+          "font-semibold": bold,
           "break-words": lineBreak,
           "font-mono": mono,
+          "truncate overflow-ellipsis": truncate,
         },
         align,
         color,

@@ -1,15 +1,20 @@
 import React from "react"
-
+import cn from "classnames"
 export interface SpinnerProps {
   className?: string
+  size?: "sm" | "md" | "lg"
 }
 
-export const Spinner: React.FC<SpinnerProps> = ({ className }): JSX.Element => {
+export const Spinner: React.FC<SpinnerProps> = ({ className, size = "md" }): JSX.Element => {
   return (
     <div className={className}>
       <span className="flex items-center justify-center w-full h-full animate-pulse">
         <svg
-          className={`w-4 h-4 animate-spin`}
+          className={cn("animate-spin", {
+            "w-8 h-8": size === "sm",
+            "w-10 h-10": size === "md",
+            "w-16 h-16": size === "lg",
+          })}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
