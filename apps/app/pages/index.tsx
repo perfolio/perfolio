@@ -17,6 +17,7 @@ import { withAuthentication } from "@perfolio/app/middleware"
 import { Heading, ToggleGroup } from "@perfolio/ui/design-system"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
+import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -64,6 +65,18 @@ const App: NextPage = () => {
   const relativeChange = index ? Object.values(index)[Object.values(index).length - 1] - 1 : 0
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
+  const absoluteTimeseries = Object.values(selectedHistory).map((assets) => {
+    return Object.values(assets)
+      .map((asset) => asset.quantity * asset.value)
+      .reduce((acc, val) => acc + val)
+  })
+  const absoluteMean = useMemo(() => Mean.getAbsolute(absoluteTimeseries), [absoluteTimeseries])
+  const relativeMean = useMemo(() => Mean.getRelative(Object.values(index)), [index])
+  const relativeSTD = useMemo(
+    () => (index && Object.keys(index).length >= 2 ? standardDeviation(Object.values(index)) : 0),
+    [index],
+  )
+
   return (
     <AppLayout
       sidebar={
@@ -88,7 +101,7 @@ const App: NextPage = () => {
         </Main.Header>
         <Main.Content>
           <div className="py-4 sm:py-6 md:py-8">
-            <div className="grid grid-cols-2 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
+            <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
               <div className="flex justify-center">
                 <div className="flex flex-col space-y-3">
                   <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
@@ -100,6 +113,28 @@ const App: NextPage = () => {
                 </div>
               </div>
 
+              <div className="flex justify-center">
+                <div className="flex flex-col space-y-3">
+                  <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
+                    {aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
+                  </h4>
+                  <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
+                    {aggregation === "Absolute"
+                      ? format(absoluteMean, { suffix: "€", sign: true })
+                      : format(relativeMean, { suffix: "%", percent: true, sign: true })}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="flex flex-col space-y-3">
+                  <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
+                    Standard Deviation
+                  </h4>
+                  <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
+                    {format(relativeSTD)}
+                  </span>
+                </div>
+              </div>
               <div className="flex justify-center ">
                 <div className="flex flex-col space-y-3">
                   <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
