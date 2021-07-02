@@ -74,7 +74,6 @@ export const Select: React.FC<SelectProps> = ({
         <Listbox
           value={watch(name)}
           onChange={(value) => {
-            console.log(value)
             setValue(name, value)
           }}
         >
