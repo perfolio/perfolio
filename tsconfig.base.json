@@ -45,6 +45,7 @@
       "@perfolio/data-access/mutations": ["libs/data-access/mutations/src/index.ts"],
       "@perfolio/data-access/queries": ["libs/data-access/queries/src/index.ts"],
       "@perfolio/feature/email": ["libs/feature/email/src/index.ts"],
+      "@perfolio/feature/finance/kpis": ["libs/feature/finance/kpis/src/index.ts"],
       "@perfolio/feature/finance/returns": ["libs/feature/finance/returns/src/index.ts"],
       "@perfolio/feature/i18n": ["libs/feature/i18n/src/index.ts"],
       "@perfolio/feature/tokens": ["libs/feature/tokens/src/index.ts"],

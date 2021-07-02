@@ -378,6 +378,27 @@
         }
       }
     },
+    "feature-finance-kpis": {
+      "root": "libs/feature/finance/kpis",
+      "sourceRoot": "libs/feature/finance/kpis/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/feature/finance/kpis/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/feature/finance/kpis"],
+          "options": {
+            "jestConfig": "libs/feature/finance/kpis/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "feature-finance-returns": {
       "root": "libs/feature/finance/returns",
       "sourceRoot": "libs/feature/finance/returns/src",
