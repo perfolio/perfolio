@@ -1,6 +1,6 @@
 import React from "react"
 import Image from "next/image"
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetStaticProps, GetStaticPaths } from "next"
 import {
   Navbar,
   Member,
@@ -20,12 +20,15 @@ import {
   HomeIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
+  translations: Record<string, string>
 }
 
-const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
+const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
+  const { t } = useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -53,7 +56,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
             {[
               {
                 icon: <FlagIcon />,
-                title: "Independent",
+                title: t("independent"),
                 description:
                   "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
               },
@@ -199,7 +202,20 @@ const IndexPage: NextPage<IndexPageProps> = ({ members }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps<IndexPageProps> = async () => {
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+  return {
+    paths: (locales ?? []).map((locale) => {
+      return {
+        params: { locale },
+      }
+    }),
+    fallback: true,
+  }
+}
+
+export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["common", "landing"])
+  console.log({ translations })
   return {
     props: {
       members: [
@@ -239,6 +255,7 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async () => {
           image: "/img/lukas.png",
         },
       ],
+      translations,
     },
   }
 }
