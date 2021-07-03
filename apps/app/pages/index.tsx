@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react"
 import { NextPage } from "next"
-import { useCurrentValue, useHistory } from "@perfolio/data-access/queries"
+import { useCurrentValue, useHistory, useSettings } from "@perfolio/data-access/queries"
 import {
   AppLayout,
   DiversificationChart,
@@ -14,11 +14,11 @@ import {
 } from "@perfolio/app/components"
 import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finance/returns"
 import { withAuthentication } from "@perfolio/app/middleware"
-import { Heading, ToggleGroup } from "@perfolio/ui/components"
+import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
-
+import { getCurrencySymbol } from "@perfolio/util/currency"
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
 const ranges: Record<Range, number> = {
@@ -31,10 +31,39 @@ const ranges: Record<Range, number> = {
   ALL: Number.NEGATIVE_INFINITY,
 }
 
+const KPI = ({
+  label,
+  value,
+  color,
+}: {
+  label: string
+  value: string
+  color?: string
+}): JSX.Element => {
+  return (
+    <div className="flex justify-center">
+      <div className="flex flex-col space-y-3">
+        <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
+          {label}
+        </h4>
+        <span
+          className={cn(
+            "text-lg font-bold leading-3 sm:text-xl md:text-2xl lg:text-3xl",
+            color ?? "text-gray-800",
+          )}
+        >
+          {value}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 const App: NextPage = () => {
   const { currentValue } = useCurrentValue()
   const [range, setRange] = useState<Range>("ALL")
   const { history } = useHistory()
+  const { settings } = useSettings()
 
   const selectedHistory = useMemo<AssetsOverTime>(() => {
     if (!history) {
@@ -108,54 +137,59 @@ const App: NextPage = () => {
                     Total Assets
                   </h4>
                   <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    {format(currentValue, { suffix: "€" })}
+                    {format(currentValue, { suffix: getCurrencySymbol(settings?.defaultCurrency) })}
                   </span>
                 </div>
               </div>
 
-              <div className="flex justify-center">
-                <div className="flex flex-col space-y-3">
-                  <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
-                    {aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
-                  </h4>
-                  <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    {aggregation === "Absolute"
-                      ? format(absoluteMean, { suffix: "€", sign: true })
-                      : format(relativeMean, { suffix: "%", percent: true, sign: true })}
-                  </span>
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <div className="flex flex-col space-y-3">
-                  <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
-                    Standard Deviation
-                  </h4>
-                  <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    {format(relativeSTD)}
-                  </span>
-                </div>
-              </div>
-              <div className="flex justify-center ">
-                <div className="flex flex-col space-y-3">
-                  <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
-                    Change
-                  </h4>
-
-                  <span
-                    className={cn(
-                      "text-lg font-bold text-success-400 leading-3 whitespace-nowrap sm:text-xl md:text-2xl lg:text-3xl",
-                      (aggregation === "Absolute" && absoluteChange >= 0) ||
-                        (aggregation === "Relative" && relativeChange >= 0)
+              <Tooltip
+                trigger={
+                  <KPI
+                    label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
+                    color={
+                      (aggregation === "Relative" && relativeMean >= 0) ||
+                      (aggregation === "Absolute" && absoluteMean > 0)
                         ? "text-success-400"
-                        : "text-error-500",
-                    )}
-                  >
-                    {aggregation === "Absolute"
-                      ? format(absoluteChange, { suffix: "€", sign: true })
-                      : format(relativeChange, { suffix: "%", percent: true, sign: true })}
-                  </span>
-                </div>
-              </div>
+                        : "text-error-500"
+                    }
+                    value={
+                      aggregation === "Absolute"
+                        ? format(absoluteMean, {
+                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(relativeMean, { suffix: "%", percent: true, sign: true })
+                    }
+                  />
+                }
+              >
+                @webersni
+              </Tooltip>
+              <Tooltip trigger={<KPI label="Standard Deviation" value={format(relativeSTD)} />}>
+                @webersni
+              </Tooltip>
+              <Tooltip
+                trigger={
+                  <KPI
+                    label="Change"
+                    color={
+                      aggregation === "Relative" && relativeChange >= 0
+                        ? "text-success-400"
+                        : "text-error-500"
+                    }
+                    value={
+                      aggregation === "Absolute"
+                        ? format(absoluteChange, {
+                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(relativeChange, { suffix: "%", percent: true, sign: true })
+                    }
+                  />
+                }
+              >
+                @webersni
+              </Tooltip>
             </div>
           </div>
           <Main.Divider />

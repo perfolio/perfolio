@@ -28,6 +28,7 @@ specifiers:
   '@radix-ui/react-accessible-icon': ^0.0.15
   '@radix-ui/react-avatar': ^0.0.14
   '@radix-ui/react-dialog': ^0.0.19
+  '@radix-ui/react-id': ^0.0.6
   '@radix-ui/react-tabs': ^0.0.13
   '@radix-ui/react-toggle-group': ^0.0.8
   '@radix-ui/react-tooltip': ^0.0.18
@@ -120,6 +121,7 @@ dependencies:
   '@radix-ui/react-accessible-icon': 0.0.15_react@17.0.2
   '@radix-ui/react-avatar': 0.0.14_react@17.0.2
   '@radix-ui/react-dialog': 0.0.19_ba191c0052acfa37659f3ba04a2d9405
+  '@radix-ui/react-id': 0.0.6_react@17.0.2
   '@radix-ui/react-tabs': 0.0.13_react@17.0.2
   '@radix-ui/react-toggle-group': 0.0.8_react@17.0.2
   '@radix-ui/react-tooltip': 0.0.18_react-dom@17.0.2+react@17.0.2
