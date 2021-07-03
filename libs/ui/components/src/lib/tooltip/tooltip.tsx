@@ -1,34 +1,36 @@
 import React from "react"
 import { Root, Trigger, Content, Arrow } from "@radix-ui/react-tooltip"
-import classNames from "classnames"
+import { Text } from "../text/text"
+import { InformationCircleIcon } from "@heroicons/react/outline"
+import cn from "classnames"
 export interface TooltipProps {
-  leftIcon?: React.ReactNode
-  text: string
-  dark?: boolean
+  side?: "top" | "right" | "bottom" | "left"
+  size?: "sm" | "md" | "lg"
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
-  dark,
   children,
-  leftIcon,
-  text,
+  side = "top",
+  size = "md",
 }): JSX.Element => {
   return (
-    <Root>
-      <Trigger>{children} </Trigger>
-      <Content side="top">
+    <Root delayDuration={200}>
+      <Trigger>
+        <InformationCircleIcon
+          className={cn("text-gray-600", {
+            "w-3 h-3": size === "sm",
+            "w-4 h-4": size === "md",
+            "w-6 h-6": size === "lg",
+          })}
+        />
+      </Trigger>
+      <Content
+        side={side}
+        className="p-2 bg-white border border-gray-200 rounded shadow-lg lg:p-4 xl:p-6"
+      >
         <Arrow />
-
-        <div
-          className={classNames(
-            "flex space-x-2 items-center px-4 py-2 text-sm bg-white border text-gray-800 border-gray-600 rounded shadow-xl",
-            {
-              "bg-gray-800 text-gray-100": dark,
-            },
-          )}
-        >
-          <span className="w-4 h-4 text-gray-900">{leftIcon}</span>
-          <span>{text}</span>
+        <div className="max-w-md lg:max-w-lg xl:max-w-xl ">
+          <Text>{children}</Text>
         </div>
       </Content>
     </Root>

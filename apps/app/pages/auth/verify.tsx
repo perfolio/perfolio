@@ -1,13 +1,13 @@
 import React from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
-import { Heading, Text } from "@perfolio/ui/design-system"
+import { Heading, Text } from "@perfolio/ui/components"
 import Link from "next/link"
 const CheckYourEmailPage: NextPage = () => {
   return (
     <section className="relative w-screen h-screen bg-white ">
       <div className="relative items-center justify-center hidden h-full md:flex md:flex-col bg-gradient-to-r from-white to-gray-100">
-        <div className="absolute inset-y-0 items-center justify-center hidden md:flex">
+        <div className="absolute inset-y-0 items-center justify-center hidden w-full h-full md:flex">
           <svg
             className="z-0 w-full h-full p-8 text-gray-100 fill-current"
             viewBox="0 0 354 283"

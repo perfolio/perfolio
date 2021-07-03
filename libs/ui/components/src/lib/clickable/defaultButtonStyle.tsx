@@ -1,11 +1,10 @@
 import React from "react"
-import { Spinner } from "../spinner/spinner"
+import { Loading } from "../loading/loading"
 type Kind = "primary" | "secondary" | "alert" | "cta" | "plain"
 type Justify = "start" | "center" | "end" | "between" | "around"
 type Size = "small" | "medium" | "large" | "auto"
 
 export interface DefaultButtonStyleProps {
-  label: React.ReactNode
   kind: Kind
   justify?: Justify
   loading?: boolean
@@ -21,7 +20,7 @@ export interface DefaultButtonStyleProps {
  * Controller logic should be done in a parent component by wrapping DefaultButtonStyle.
  */
 export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
-  label,
+  children,
   kind = "primary",
   justify = "center",
   loading,
@@ -46,7 +45,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
       `}
     >
       {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
-      {label ? <span className={text(size)}>{loading ? <Spinner /> : label}</span> : null}
+      {loading ? <Loading /> : <span className={text(size)}>{children}</span>}
       {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
     </div>
   )

@@ -21,7 +21,7 @@ export const Price: React.FC<PriceProps> = ({
   highlighted,
 }) => {
   return (
-    <div className="flex flex-col items-center w-full max-w-md p-4 mx-auto my-0 space-y-6 sm:p-6 md:px-8 md:py-12">
+    <div className="flex shadow-lg flex-col items-center w-full max-w-md p-4 mx-auto my-0 space-y-6 sm:p-6 md:px-8 md:py-12">
       <h3 className="m-0 text-2xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">{title}</h3>
       <div className="flex items-end mt-6 leading-7 text-gray-900 border-0 border-gray-200">
         <div className="flex items-end mt-6 leading-7 text-gray-900 border-0 border-gray-200">

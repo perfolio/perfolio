@@ -14,7 +14,7 @@ import {
 } from "@perfolio/app/components"
 import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finance/returns"
 import { withAuthentication } from "@perfolio/app/middleware"
-import { Heading, ToggleGroup } from "@perfolio/ui/design-system"
+import { Heading, ToggleGroup } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"

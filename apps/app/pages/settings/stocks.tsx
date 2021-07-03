@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
 import { useSettings, useExchanges } from "@perfolio/data-access/queries"
-import { Card } from "@perfolio/ui/design-system"
+import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { withAuthentication } from "@perfolio/app/middleware"
 
@@ -62,10 +62,11 @@ const Setting: React.FC<SettingProps> = ({
             }
             kind={button?.kind ?? "primary"}
             size="small"
-            label={button?.label ?? "Save"}
             type="submit"
             disabled={ctx.formState.isSubmitting}
-          />
+          >
+            {button?.label ?? "Save"}
+          </Button>
         </Card.Footer.Actions>
       </Card.Footer>
     </Card>

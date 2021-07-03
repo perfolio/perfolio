@@ -16,10 +16,11 @@ export const Button: React.FC<LinkProps | ButtonProps> = (props): JSX.Element =>
     props,
     <DefaultButtonStyle
       loading={props.loading}
-      label={props.label}
       kind={props.kind}
       size={props.size}
       prefix={props.prefix}
-    />,
+    >
+      {props.children}
+    </DefaultButtonStyle>,
   )
 }

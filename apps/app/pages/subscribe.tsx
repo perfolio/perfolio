@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { getSession } from "next-auth/client"
 import { useApi } from "@perfolio/data-access/api-client"
-import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/ui/components"
+import { Logo, Button } from "@perfolio/ui/components"
 import { z } from "zod"
+import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Description } from "@perfolio/ui/design-system"
+import { Description } from "@perfolio/ui/components"
 
 const Subscribe: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
@@ -45,9 +46,9 @@ const Subscribe: NextPage = () => {
               <Description title="Thank you!">We will be in touch</Description>
             ) : (
               <>
-                <Form2 ctx={ctx} formError={formError}>
-                  <LabeledField label="Email" name="email" type="email" />
-                </Form2>
+                <Form ctx={ctx} formError={formError}>
+                  <Field.Input label="Email" name="email" type="email" />
+                </Form>
                 <Button
                   loading={submitting}
                   // eslint-disable-next-line
@@ -65,10 +66,11 @@ const Subscribe: NextPage = () => {
                   }
                   kind="primary"
                   size="auto"
-                  label="Subscribe"
                   type="submit"
                   disabled={ctx.formState.isSubmitting}
-                />
+                >
+                  Subscribe
+                </Button>
               </>
             )}
           </div>

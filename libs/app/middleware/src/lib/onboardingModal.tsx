@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Card, Modal, Dots, Description } from "@perfolio/ui/design-system"
+import { Card, Modal, Dots, Description } from "@perfolio/ui/components"
 import { z } from "zod"
 import { Button } from "@perfolio/ui/components"
 import { useForm } from "react-hook-form"
@@ -113,8 +113,9 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
                   onClick={() => setStep(step > 0 ? step - 1 : 0)}
                   kind="secondary"
                   size="small"
-                  label="Back"
-                />
+                >
+                  Back
+                </Button>
               </Card.Footer.Actions>
             ) : null}
             <Card.Footer.Status>
@@ -139,10 +140,12 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
                 }}
                 kind={"primary"}
                 size="small"
-                label={step < steps.length - 1 ? "Next" : "Save"}
                 type="submit"
                 disabled={ctx.formState.isSubmitting}
-              />
+              >
+                {" "}
+                {step < steps.length - 1 ? "Next" : "Save"}
+              </Button>
             </Card.Footer.Actions>
           </Card.Footer>
         </Card>
