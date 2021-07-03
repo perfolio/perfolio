@@ -11,10 +11,12 @@ export function getCurrency(country: string): string {
   return currency
 }
 /**
- * Get the currency symbol from a country
+ * Get the currency symbol from a currency
  */
-export function getCurrencySymbol(country: string): string {
-  const currency = getCurrency(country)
+export function getCurrencySymbol(currency: string | undefined): string {
+  if (!currency) {
+    return ""
+  }
   const symbol = currencySymbols[currency.toUpperCase()]
   if (!symbol) {
     throw new Error(`No symbol found for currency: ${currency}`)

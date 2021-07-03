@@ -33,7 +33,7 @@ export function withMetrics(handler: ApiHandler): ApiHandler {
 
       await mw(ctx.req, ctx.res)
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
 
     return handler(ctx)

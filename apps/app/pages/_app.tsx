@@ -6,8 +6,9 @@ import { PersistentQueryClient } from "@perfolio/data-access/localstorage"
 import Head from "next/head"
 import { useSession } from "next-auth/client"
 import LogRocket from "logrocket"
-import "tailwindcss/tailwind.css"
 import { OnboardingModal } from "@perfolio/app/middleware"
+import { IdProvider } from "@radix-ui/react-id"
+import "tailwindcss/tailwind.css"
 
 LogRocket.init("perfolio/app")
 
@@ -29,16 +30,18 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"></link>
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"></link>
       </Head>
-      <QueryClientProvider client={PersistentQueryClient()}>
-        <ApiProvider>
-          <AuthProvider session={pageProps.session}>
-            <OnboardingModal />
-            <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-              <Component {...pageProps} />
-            </div>
-          </AuthProvider>
-        </ApiProvider>
-      </QueryClientProvider>
+      <IdProvider>
+        <QueryClientProvider client={PersistentQueryClient()}>
+          <ApiProvider>
+            <AuthProvider session={pageProps.session}>
+              <OnboardingModal />
+              <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+                <Component {...pageProps} />
+              </div>
+            </AuthProvider>
+          </ApiProvider>
+        </QueryClientProvider>
+      </IdProvider>
     </>
   )
 }
