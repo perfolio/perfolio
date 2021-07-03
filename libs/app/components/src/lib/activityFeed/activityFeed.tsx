@@ -2,7 +2,7 @@ import { useAsset, useTransactions } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/data-access/db"
 import { Time } from "@perfolio/util/time"
 import React from "react"
-import { Spinner } from "@perfolio/ui/components"
+import { Loading } from "@perfolio/ui/components"
 
 interface TransactionActivityItemProps {
   transaction: Transaction
@@ -19,7 +19,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
     <li className="h-20 py-4">
       {isLoading ? (
         <div className="flex items-center justify-center h-full">
-          <Spinner />
+          <Loading />
         </div>
       ) : (
         <>

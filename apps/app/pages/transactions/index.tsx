@@ -1,12 +1,13 @@
 import React from "react"
-import { AsyncButton, Button, Spinner } from "@perfolio/ui/components"
+import { AsyncButton, Button } from "@perfolio/ui/components"
+import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
 import { useCompany, useTransactions, useAsset } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/data-access/db"
 import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
-import { Avatar, Description } from "@perfolio/ui/design-system"
+import { Avatar, Description } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
 export interface TransactionItemProps {
   transaction: Transaction
@@ -27,7 +28,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
               {new Date(transaction.data.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-900 dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {company?.logo ? <Avatar size="sm" src={company.logo} /> : <Spinner />}
+              {company?.logo ? <Avatar size="sm" src={company.logo} /> : <Loading />}
             </div>
           </div>
         </div>
@@ -53,11 +54,12 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
           <AsyncButton
             kind="secondary"
             size="small"
-            label="Delete"
             onClick={async () => {
               await deleteTransaction({ transactionId: transaction.id })
             }}
-          />
+          >
+            Delete
+          </AsyncButton>
         </div>
       </div>
     </div>
@@ -83,7 +85,7 @@ const TransactionsPage: NextPage = () => {
         </Main.Header>
         <Main.Content>
           {isLoading ? (
-            <Spinner />
+            <Loading />
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-gray-700">Looks like you don't have any transactions yet</p>

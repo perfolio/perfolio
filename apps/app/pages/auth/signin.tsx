@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { NextPage, GetServerSideProps } from "next"
 import { signIn, getSession } from "next-auth/client"
-import { Logo, Button, Form2, LabeledField, handleSubmit } from "@perfolio/ui/components"
+import { Logo, Button } from "@perfolio/ui/components"
+import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,7 +22,7 @@ const SigninPage: NextPage = () => {
       <div className="container w-full h-full mx-auto">
         <div className="flex flex-col items-center justify-center w-full h-full md:flex-row">
           <div className="relative items-center justify-center hidden w-2/3 h-full md:flex md:flex-col bg-gradient-to-r from-white to-gray-100">
-            <div className="absolute inset-y-0 items-center justify-center hidden md:flex">
+            <div className="absolute inset-y-0 items-center justify-center hidden w-full h-full md:flex">
               <svg
                 className="z-0 w-full h-full p-8 text-gray-100 fill-current"
                 viewBox="0 0 354 283"
@@ -39,9 +40,9 @@ const SigninPage: NextPage = () => {
             </div>
           </div>
           <div className="w-full max-w-sm px-6 space-y-4">
-            <Form2 ctx={ctx} formError={formError}>
-              <LabeledField label="Email" name="email" type="email" />
-            </Form2>
+            <Form ctx={ctx} formError={formError}>
+              <Field.Input label="Email" name="email" type="email" />
+            </Form>
             <Button
               loading={submitting}
               // eslint-disable-next-line
@@ -58,10 +59,11 @@ const SigninPage: NextPage = () => {
               }
               kind="primary"
               size="auto"
-              label="Sign in"
               type="submit"
               disabled={ctx.formState.isSubmitting}
-            />
+            >
+              Sign in
+            </Button>
           </div>
           <div className="absolute flex items-center justify-between w-full md:hidden top-12">
             <span className="w-4/5 border-b border-primary-600"></span>

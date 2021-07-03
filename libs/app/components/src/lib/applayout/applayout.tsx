@@ -16,13 +16,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 }): JSX.Element => {
   return (
     <>
-      <div className="h-20 md:h-42 lg:h-60">
+      <div className="h-20 md:h-42 lg:h-56">
         <Header />
       </div>
       <div className="container px-4 mx-auto">
         <div className={`xl:flex gap-6 ${side === "left" ? "flex-row-reverse" : "flex-row"}`}>
           <main
-            className={cn("w-full  lg:-mt-32 ", {
+            className={cn("w-full  lg:-mt-28 ", {
               "xl:w-3/4 2xl:w-4/5": sidebar,
             })}
           >

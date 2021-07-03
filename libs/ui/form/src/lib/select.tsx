@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from "react"
 import { useFormContext } from "react-hook-form"
-import { Text } from "@perfolio/ui/design-system"
+import { Text } from "@perfolio/ui/components"
 import { SelectorIcon } from "@heroicons/react/outline"
 import cn from "classnames"
 import { Listbox, Transition } from "@headlessui/react"

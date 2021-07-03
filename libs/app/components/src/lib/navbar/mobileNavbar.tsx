@@ -3,7 +3,7 @@ import { MobileNavLink } from "./mobileNavLink"
 import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
 import { DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
-import { Link, Logo, ThemeSwitch } from "@perfolio/ui/components"
+import { Link, Logo } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import { signOut } from "next-auth/client"
 import NextLink from "next/link"
@@ -52,9 +52,6 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
             </li>
             <li>
               <Link size="large" prefix={<DotsVerticalIcon />} href="/" />
-            </li>
-            <li>
-              <ThemeSwitch />
             </li>
             <li>
               <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => signOut()}>
