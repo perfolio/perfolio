@@ -3,7 +3,7 @@ import cn from "classnames"
 import { Root, Fallback, Image } from "@radix-ui/react-avatar"
 
 import { Text } from "../text/text"
-type Size = "sm" | "md" | "lg"
+type Size = "xs" | "sm" | "md" | "lg"
 
 export interface AvatarProps {
   /**
@@ -36,6 +36,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     <Root
       as="div"
       className={cn({
+        "w-6 h-6": size === "xs",
         "w-8 h-8": size === "sm",
         "w-10 h-10": size === "md",
         "w-16 h-16": size === "lg",
@@ -55,5 +56,3 @@ export const Avatar: React.FC<AvatarProps> = ({
     </Root>
   )
 }
-
-export default Avatar

@@ -1,8 +1,9 @@
 import { usePortfolio } from "@perfolio/data-access/queries"
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
+import { format } from "@perfolio/util/numbers"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
   () => Math.random() - 0.5,
@@ -85,7 +86,14 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     return biggestIndex
   }, [data])
 
-  const [activeIndex, setActiveIndex] = useState(defaultSection)
+  const [activeIndex, setActiveIndex] = useState(-1)
+
+  /**
+   * Set the default index at the start
+   */
+  useEffect(() => {
+    setActiveIndex(defaultSection)
+  }, [defaultSection])
 
   return (
     <div className="w-full h-full space-y-2">
@@ -116,6 +124,8 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         ) : (
           <PieChart>
             <Pie
+              startAngle={90}
+              endAngle={450}
               activeIndex={activeIndex}
               activeShape={({
                 cx,
@@ -171,7 +181,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                       filter="url(#solid)"
                       x={cx}
                       y={cy}
-                      dy={16}
+                      dy={25}
                       className="text-sm"
                       textAnchor="middle"
                     >
@@ -180,11 +190,11 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                     <text
                       x={cx}
                       y={cy}
-                      dy={-2}
+                      dy={5}
                       textAnchor="middle"
                       className="text-4xl font-semibold"
                     >
-                      {(percent * 100).toFixed(0)}%
+                      {format(percent, { percent: true, suffix: "%", fractionDigits: 0 })}
                     </text>
                   </g>
                 )

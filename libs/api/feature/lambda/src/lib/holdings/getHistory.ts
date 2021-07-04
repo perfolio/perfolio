@@ -1,7 +1,7 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
 
 import { getTransactions } from "../transactions/getTransactions"
-import { getAsset } from "../assets/getAsset"
+import { getSymbolFromFigi } from "../assets/getSymbolFromFigi"
 import { getPrices } from "../prices/getPrices"
 import { Transaction } from "@perfolio/data-access/db"
 import { Time } from "@perfolio/util/time"
@@ -33,15 +33,15 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
    * Preload all assets
    * {isin: asset}
    */
-  const isinToSymbol: { [isin: string]: string } = {}
+  const figiToSymbol: { [isin: string]: string } = {}
   await Promise.all(
-    Object.keys(transactionsByAsset).map(async (isin) => {
-      const asset = await getAsset({ isin })
-      isinToSymbol[isin] = asset.data.symbol
+    Object.keys(transactionsByAsset).map(async (figi) => {
+      const { symbol } = await getSymbolFromFigi({ figi })
+      figiToSymbol[figi] = symbol
     }),
   )
   const priceResponse = await Promise.all(
-    Object.entries(isinToSymbol).map(async ([isin, symbol]) => {
+    Object.entries(figiToSymbol).map(async ([isin, symbol]) => {
       const txs = transactionsByAsset[isin]
       const begin = Time.fromTimestamp(txs[0].data.executedAt).unix()
       const end = Time.today().unix()
@@ -53,7 +53,7 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
     [isin: string]: Record<number, number>
   } = {}
 
-  Object.keys(isinToSymbol).forEach((isin, i) => {
+  Object.keys(figiToSymbol).forEach((isin, i) => {
     prices[isin] = priceResponse[i]?.prices
   })
 

@@ -20,7 +20,7 @@ export const DesktopNavMenu: React.FC<MenuProps> = ({ label, icon, menu }): JSX.
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-md">
+          <Popover.Panel className="absolute z-20 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-md">
             <div className="overflow-hidden rounded shadow-xl dark:shadow-none dark:border dark:border-gray-700">
               <div className="relative p-4 space-y-8 bg-gray-100 dark:bg-gray-900 ">
                 {menu.map((item) => (

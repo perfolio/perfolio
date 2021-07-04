@@ -1,15 +1,14 @@
 import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { Icon } from "@perfolio/ui/components"
-import { XIcon } from "@heroicons/react/outline"
 import cn from "classnames"
-import { Listbox, Transition } from "@headlessui/react"
+import { Transition } from "@headlessui/react"
 import { useSearch } from "@perfolio/data-access/queries"
-export interface AutoCompleteSelectProps<T> {
+import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
+export interface AutoCompleteSelectProps<Option> {
   /**
    * Available options the user can choose from
    */
-  options: (fragment: string) => Promise<T[]>
+  options: (fragment: string) => Promise<Option[]>
 
   disabled?: boolean
   /**
@@ -24,18 +23,26 @@ export interface AutoCompleteSelectProps<T> {
 
   hideLabel?: boolean
 
-  iconLeft?: React.ReactNode
+  onChange?: (option: Option) => void
 
-  onChange?: (value: T) => void
+  help?: React.ReactNode
+  renderOption?: (option: Option) => JSX.Element
 }
 
-export function AutoCompleteSelect<T>({
+enum State {
+  Start,
+  Selecting,
+  Done,
+}
+
+export function AutoCompleteSelect<Option>({
   onChange,
   label,
   hideLabel,
+  help,
   name,
-  iconLeft,
-}: AutoCompleteSelectProps<T>): JSX.Element {
+}: AutoCompleteSelectProps<Option>): JSX.Element {
+  const [state, setState] = useState<State>(State.Start)
   const { setValue, watch } = useFormContext()
 
   const value = watch(name)
@@ -50,124 +57,117 @@ export function AutoCompleteSelect<T>({
   }, [value, onChange])
 
   /**
-   * Dropdown open state
-   */
-  const [openOverride, setOpenOverride] = useState(false)
-
-  /**
    * User search value
    */
   const [search, setSearch] = useState("")
-
   /**
    * Available options from iex
    */
-  const { search: options } = useSearch({ fragment: search })
-
-  useEffect(() => {
-    console.log("Triggered by options")
-    setOpenOverride(!!options)
-  }, [options])
-
-  useEffect(() => {
-    setOpenOverride(!value)
-  }, [value])
+  const { search: options, isLoading } = useSearch({ fragment: search })
 
   return (
     <div className="w-full text-gray-800">
       <label
         htmlFor={name}
-        className={cn("mb-1 block text-xs font-medium text-gray-700 uppercase", {
+        className={cn("flex items-center mb-1 gap-2 text-xs font-medium text-gray-700 uppercase", {
           "sr-only": hideLabel,
         })}
       >
         {label}
+        {help ? <Tooltip side="bottom">{help}</Tooltip> : null}
       </label>
       <div className="relative ">
-        {iconLeft ? (
-          <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
-            <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
-              {iconLeft}
-            </span>
+        {state === State.Done ? (
+          <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
+            <Avatar src={value.logo} size="xs" />
           </div>
         ) : null}
-        {value ? (
-          <div className="absolute inset-y-0 right-0 z-50 overflow-hidden rounded-r">
-            <button
-              type="reset"
-              onClick={(e) => {
-                e.stopPropagation()
-                console.log("ASDF")
-                setValue(name, undefined)
-              }}
-              className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l"
+
+        {state === State.Done ? (
+          <button
+            className="absolute inset-0 z-10 w-full h-full cursor-text"
+            type="reset"
+            onClick={() => {
+              /**
+               * Go back to the state where the user can enter a search and select an option.
+               * This also unmounts the button because value is now falsy
+               */
+              setValue(name, undefined)
+              setState(State.Selecting)
+            }}
+          />
+        ) : null}
+        <div>
+          <div className="relative mt-1">
+            <div
+              className={cn(
+                "text-center h-10 w-full focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+                // { "animate-pulse bg-gray-50 text-opacity-0": options?.length === 0 },
+              )}
             >
-              <Icon label="Clear search">
-                <XIcon />
-              </Icon>
-            </button>
-          </div>
-        ) : null}
-        <Listbox
-          value={watch(name)}
-          onChange={(value) => {
-            setValue(name, value)
-          }}
-        >
-          {({ open }) => (
-            <div className="relative mt-1">
-              <Listbox.Button
-                as="div"
-                className={cn(
-                  "text-center h-10 w-full focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
-                  // { "animate-pulse bg-gray-50 text-opacity-0": options?.length === 0 },
-                )}
-              >
-                {value ? (
-                  <div>{JSON.stringify(value)}</div>
-                ) : (
-                  <input
-                    type="text"
-                    className="w-full h-full text-center bg-error-200"
-                    value={value || search}
-                    onChange={(e) => {
-                      setSearch(e.currentTarget.value)
-                      setValue(name, undefined)
-                    }}
-                  />
-                )}
-              </Listbox.Button>
-              <Transition
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-                show={open || openOverride}
-              >
-                <Listbox.Options
-                  static
-                  className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                >
-                  {options?.sort().map((option, i) => (
-                    <Listbox.Option
-                      key={i}
-                      className={({ active, selected }) =>
-                        cn("cursor-default select-none relative p-2 text-gray-800", {
-                          "bg-gray-100": active,
-                          "bg-gradient-to-tr from-gray-900 to-primary-900 text-gray-50 font-semibold":
-                            selected,
-                        })
-                      }
-                      value={option.symbol}
-                    >
-                      <span>{option.symbol}</span>
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </Transition>
+              {state === State.Done ? (
+                <div className="flex items-center justify-center w-full h-full">{value?.name}</div>
+              ) : (
+                <input
+                  type="text"
+                  className="w-full h-full text-center focus:bg-gray-50 focus:outline-none"
+                  /**
+                   * If propagation is not stopped the click will also trigger the div.Button
+                   * and the input loses focus.
+                   */
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.currentTarget.value)
+                    setState(State.Selecting)
+                  }}
+                />
+              )}
             </div>
-          )}
-        </Listbox>
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              show={state === State.Selecting}
+            >
+              <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                {isLoading ? (
+                  <li className="w-full h-32">
+                    Hello
+                    <Loading bg="bg-gray-50" />
+                  </li>
+                ) : options.length === 0 ? (
+                  <li className="relative w-full p-2 cursor-pointer">
+                    <Text>No results found</Text>
+                  </li>
+                ) : (
+                  options.sort().map((option, i) => (
+                    <li key={i}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setValue(name, option)
+                          setState(State.Done)
+                        }}
+                        className={cn("relative p-2 cursor-pointer w-full", {
+                          "bg-gray-100": option === value,
+                          "bg-gradient-to-tr from-gray-50 to-gray-100": value,
+                        })}
+                      >
+                        <Profile
+                          image={option.logo}
+                          title={option.name}
+                          subtitle={option.exchange}
+                          tag={option.symbol}
+                        />
+                      </button>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </Transition>
+          </div>
+        </div>
       </div>
     </div>
   )

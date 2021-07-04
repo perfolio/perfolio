@@ -1,8 +1,7 @@
 import { useQueries } from "react-query"
 import { useApi } from "@perfolio/data-access/api-client"
-import { QUERY_KEY_ASSET_BY_ISIN } from "./asset"
+import { QUERY_KEY_SYMBOL_FROM_FIGI } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
-import { Asset } from "@perfolio/data-access/db"
 import { useHistory } from "./history"
 import { useSession } from "next-auth/client"
 
@@ -53,28 +52,28 @@ export const usePortfolio = () => {
       } as Holding
     })
   }
-  const assets = useQueries(
-    Object.keys(session && history ? history : {}).map((isin) => {
+  const symbols = useQueries(
+    Object.keys(session && history ? history : {}).map((figi) => {
       return {
-        queryKey: QUERY_KEY_ASSET_BY_ISIN(isin),
-        queryFn: () => api.assets.getAsset({ isin }),
+        queryKey: QUERY_KEY_SYMBOL_FROM_FIGI(figi),
+        queryFn: () => api.assets.getSymbolFromFigi({ figi }),
       }
     }),
-  ).map((asset) => {
-    return asset.data as Asset
+  ).map((symbol) => {
+    return (symbol.data as { symbol: string }).symbol
   })
 
   /**
    * Inject company data
    */
   const companies = useQueries(
-    (session && assets && assets.every((asset) => typeof asset?.data !== "undefined")
-      ? assets
+    (session && symbols && symbols.every((symbol) => typeof symbol !== "undefined")
+      ? symbols
       : []
-    ).map((asset) => {
+    ).map((symbol) => {
       return {
-        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(asset.data.symbol),
-        queryFn: () => api.companies.getCompany({ symbol: asset.data.symbol }),
+        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
+        queryFn: () => api.companies.getCompany({ symbol }),
       }
     }),
   )
@@ -88,9 +87,9 @@ export const usePortfolio = () => {
   }
 
   /**
-   * Remove all assets that he user has sold completely
+   * Remove all assets that the user has sold completely
    *
-   * If this step is omitted we would display assets with quantity = 0 and all
+   * If this step is omitted we would display symbols with quantity = 0 and all
    * derived values are nonsense.
    */
   Object.entries(portfolio).forEach(([assetId, { quantity }]) => {

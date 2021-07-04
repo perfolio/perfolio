@@ -1,29 +1,36 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { z } from "zod"
-import { Loading, Button } from "@perfolio/ui/components"
+import { Loading, Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
 import { Avatar, Text } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/data-access/db"
-import { useTransactions, useCompany, useAsset } from "@perfolio/data-access/queries"
+import {
+  useTransactions,
+  useCompany,
+  useSymbolFromFigi,
+  useSettings,
+} from "@perfolio/data-access/queries"
 import { useCreateTransaction } from "@perfolio/data-access/mutations"
-import { Field, Form, useForm } from "@perfolio/ui/form"
+import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useApi } from "@perfolio/data-access/api-client"
+import { getCurrencySymbol } from "@perfolio/util/currency"
+import Link from "next/link"
 
 const Suggestion: React.FC<{
   tx: Transaction
-  setValue: (key: "isin", val: string) => void
-  trigger: () => void
-}> = ({ tx, setValue, trigger }): JSX.Element => {
-  const { asset } = useAsset({ isin: tx.data.assetId })
-  const { company } = useCompany(asset?.data?.symbol)
+  setValue?: (key: "isin", val: string) => void
+  trigger?: () => void
+}> = ({ tx }): JSX.Element => {
+  const { symbol } = useSymbolFromFigi({ figi: tx.data.assetId })
+  const { company } = useCompany(symbol)
   return (
     <li className="flex items-center justify-between w-full gap-4 py-3">
-      <div className="flex items-center w-3/5">
-        <div>{company?.logo ? <Avatar size="lg" src={company.logo} /> : <Loading />}</div>
+      <div className="flex items-center w-3/5 gap-2">
+        <div>{company?.logo ? <Avatar src={company.logo} /> : <Loading />}</div>
         <div className="overflow-hidden">
           <Text truncate bold>
             {company?.name}
@@ -40,8 +47,8 @@ const Suggestion: React.FC<{
             kind="secondary"
             size="small"
             onClick={() => {
-              setValue("isin", tx.data.assetId)
-              trigger()
+              // setValue("isin", tx.data.assetId)
+              // trigger()
             }}
           >
             Add
@@ -53,7 +60,15 @@ const Suggestion: React.FC<{
 }
 
 const validation = z.object({
-  isin: z.string(),
+  asset: z.object({
+    name: z.string(),
+    currency: z.string(),
+    figi: z.string(),
+    exchange: z.string(),
+  }),
+  volume: z.string().transform((x: string) => parseInt(x)),
+  value: z.string().transform((x: string) => parseInt(x)),
+  executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
 })
 
 /**
@@ -65,7 +80,7 @@ const NewTransactionPage: NextPage = () => {
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
-  const data = ctx.watch()
+  const formData = ctx.watch()
   const { mutateAsync: createTransaction } = useCreateTransaction()
   const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
@@ -76,10 +91,27 @@ const NewTransactionPage: NextPage = () => {
         uniqueAssets[tx.data.assetId] = tx
       }
     })
-  const { asset } = useAsset({ isin: data.isin })
-  const { company, isLoading: companyLoading } = useCompany(asset?.data.symbol)
-  const [formError, setFormError] = useState<string | null>(null)
+  const { settings } = useSettings()
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
 
+  useEffect(() => {
+    if (!settings || !formData.asset) {
+      return
+    }
+
+    if (settings.defaultCurrency !== formData.asset.currency) {
+      setFormError(
+        <span>
+          The currency at {formData.asset.exchange} does not match your preferred currency. Please
+          choose a different exchange or{" "}
+          <Link href="/settings/">
+            <a className="underline">change your settings</a>
+          </Link>
+        </span>,
+      )
+    }
+  }, [formData.asset, settings])
+  const [submitting, setSubmitting] = useState(false)
   return (
     <AppLayout
       sidebar={
@@ -98,6 +130,7 @@ const NewTransactionPage: NextPage = () => {
               <Form
                 ctx={ctx}
                 formError={formError}
+                className="grid grid-cols-1 gap-8"
                 // submitText="Add Transaction"
                 // schema={z.object({
                 //   assetId: z.string().regex(/[A-Z]{2}[a-zA-Z0-9]{10}/, "This is not a valid isin."),
@@ -123,8 +156,13 @@ const NewTransactionPage: NextPage = () => {
               >
                 <Field.AutoCompleteSelect
                   options={(fragment: string) => api.search.search({ fragment })}
-                  name="search"
-                  label="Search"
+                  name="asset"
+                  label="Asset"
+                  help={
+                    <Description title="TODO: @webersni">
+                      Search for your asset. Try <pre>microsoft</pre>
+                    </Description>
+                  }
                 />
 
                 <Field.Input
@@ -147,11 +185,47 @@ const NewTransactionPage: NextPage = () => {
                     type="number"
                     iconLeft={
                       <div className="flex items-center justify-center w-full h-full">
-                        <span className="font-medium text-gray-700">$</span>
+                        <span className="font-medium text-gray-700">
+                          {getCurrencySymbol(ctx.watch("asset")?.currency)}
+                        </span>
                       </div>
                     }
                   />
                 </div>
+
+                <Button
+                  loading={submitting}
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  onClick={() =>
+                    handleSubmit<z.infer<typeof validation>>(
+                      ctx,
+                      async ({ asset: { figi }, volume, value, executedAt }) => {
+                        console.log({ figi, volume, value, executedAt })
+                        try {
+                          await createTransaction({
+                            volume: Number(volume),
+                            value: Number(value),
+                            executedAt: Time.fromString(executedAt as unknown as string).unix(),
+                            assetId: figi,
+                          })
+                        } catch (err) {
+                          setFormError(
+                            `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
+                          )
+                        }
+                      },
+                      setSubmitting,
+                      setFormError,
+                    )
+                  }
+                  kind="primary"
+                  size="auto"
+                  type="submit"
+                  disabled={submitting}
+                >
+                  Add transaction
+                </Button>
               </Form>
             </div>
             <div className="w-full">
@@ -168,8 +242,8 @@ const NewTransactionPage: NextPage = () => {
                         <Suggestion
                           key={tx.id}
                           tx={tx}
-                          trigger={() => ctx.trigger("isin")}
-                          setValue={ctx.setValue}
+                          // trigger={() => ctx.trigger("isin")}
+                          // setValue={ctx.setValue}
                         />
                       )
                     })}
