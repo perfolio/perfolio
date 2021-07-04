@@ -1,4 +1,4 @@
-import { useAsset, useTransactions } from "@perfolio/data-access/queries"
+import { useSymbolFromFigi, useTransactions } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/data-access/db"
 import { Time } from "@perfolio/util/time"
 import React from "react"
@@ -11,8 +11,8 @@ interface TransactionActivityItemProps {
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
 }): JSX.Element => {
-  const { asset, isLoading } = useAsset({
-    isin: transaction.data.assetId,
+  const { symbol, isLoading } = useSymbolFromFigi({
+    figi: transaction.data.assetId,
   })
 
   return (
@@ -29,8 +29,8 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
           </div>
           <p>
             You {transaction.data.volume > 0 ? "bought" : "sold"} {transaction.data.volume}{" "}
-            <span className="font-semibold">{asset?.data.symbol}</span> shares at $
-            {transaction.data.value} per share.
+            <span className="font-semibold">{symbol}</span> shares at ${transaction.data.value} per
+            share.
           </p>
         </>
       )}

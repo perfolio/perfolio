@@ -84,8 +84,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           asset: (
             <Cell.Profile
               src={asset.company.logo}
-              title={asset.company.symbol}
-              subtitle={asset.company.name ?? undefined}
+              title={asset.company.name}
+              subtitle={asset.company.exchange ?? undefined}
             />
           ),
           quantity: <Cell.Text align="text-right">{format(asset.quantity)}</Cell.Text>,

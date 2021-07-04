@@ -5,11 +5,11 @@ import {
   withAuthentication,
   withMetrics,
 } from "@perfolio/api/feature/middleware"
-import { getAsset, GetAssetRequestValidation } from "@perfolio/api/feature/lambda"
+import { getSymbolFromFigi, GetSymbolFromFigiRequestValidation } from "@perfolio/api/feature/lambda"
 
-export default use(getAsset, [
+export default use(getSymbolFromFigi, [
   withMetrics,
   withContentTypeJson,
-  withRequestValidation(GetAssetRequestValidation),
+  withRequestValidation(GetSymbolFromFigiRequestValidation),
   withAuthentication,
 ])
