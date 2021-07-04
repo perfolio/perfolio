@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: "components",
+  displayName: "ui-components",
   preset: "../../../jest.preset.js",
   transform: {
     "^.+\\.[tj]sx?$": "babel-jest",

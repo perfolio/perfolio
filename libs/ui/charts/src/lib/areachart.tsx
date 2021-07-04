@@ -1,8 +1,7 @@
 import React from "react"
 import { AreaChart as Chart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
-import { Box, Spinner } from "@perfolio/ui/components"
 import { format } from "util"
-
+import { Loading } from "@perfolio/ui/components"
 type Data = {
   time: string
   value: number
@@ -22,9 +21,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
   return (
     <ResponsiveContainer width="100%" height="100%">
       {isLoading ? (
-        <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
-          <Spinner />
-        </div>
+        <Loading bg="bg-gray-100" />
       ) : (
         <Chart data={data}>
           <defs>
@@ -41,10 +38,10 @@ export const AreaChart: React.FC<AreaChartProps> = ({
 
               const { time, value } = payload[0].payload
               return (
-                <Box className="flex flex-col p-4 text-center bg-gray-50">
+                <div className="flex flex-col p-4 text-center shadow-lg bg-gray-50">
                   <span className="text-xl font-medium">{formatTooltip(value)}</span>
                   <span className="text-sm text-gray-700">{time}</span>
-                </Box>
+                </div>
               )
             }}
           />

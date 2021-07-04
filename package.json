@@ -24,7 +24,7 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "tsc": "tsc -p tsconfig.base.json --pretty",
-    "build:storybook": "nx build-storybook ui-design-system",
+    "build:storybook": "nx build-storybook ui-components",
     "prepare": "husky install"
   },
   "private": true,
@@ -37,6 +37,7 @@
     "@radix-ui/react-accessible-icon": "^0.0.15",
     "@radix-ui/react-avatar": "^0.0.14",
     "@radix-ui/react-dialog": "^0.0.19",
+    "@radix-ui/react-id": "^0.0.6",
     "@radix-ui/react-tabs": "^0.0.13",
     "@radix-ui/react-toggle-group": "^0.0.8",
     "@radix-ui/react-tooltip": "^0.0.18",

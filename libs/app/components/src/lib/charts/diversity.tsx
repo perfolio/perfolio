@@ -1,8 +1,8 @@
 import { usePortfolio } from "@perfolio/data-access/queries"
 import React, { useState, useMemo } from "react"
 import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
-import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/design-system"
-import { Spinner } from "@perfolio/ui/components"
+import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
+import { Loading } from "@perfolio/ui/components"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
   () => Math.random() - 0.5,
@@ -111,7 +111,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       <ResponsiveContainer width="100%" height="100%">
         {!data || data.length === 0 ? (
           <div className="flex items-center justify-center w-full h-full">
-            <Spinner />
+            <Loading />
           </div>
         ) : (
           <PieChart>

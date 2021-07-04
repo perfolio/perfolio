@@ -1,8 +1,9 @@
-export * from "./icon/icon"
-export * from "./multiline/multiline"
-export * from "./preview/preview"
-export * from "./profile/profile"
-export * from "./progress/progress"
-export * from "./simple/simple"
-export * from "./tag/tag"
-export * from "./wrapper/wrapper"
+import { Text } from "./text"
+import { Loading } from "./loading"
+import { Profile } from "./profile"
+
+export const Cell = {
+  Text,
+  Loading,
+  Profile,
+}

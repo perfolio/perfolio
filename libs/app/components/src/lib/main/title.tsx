@@ -1,5 +1,5 @@
 import React from "react"
-import { Text } from "@perfolio/ui/design-system"
+import { Text } from "@perfolio/ui/components"
 
 export interface MainTitleProps {
   title: string

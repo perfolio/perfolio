@@ -5,13 +5,13 @@ import { AppLayout } from "@perfolio/app/components"
 import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
-import { Button, LabeledField, Form2, handleSubmit } from "@perfolio/ui/components"
+import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { MailIcon, UserIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useSession } from "next-auth/client"
 import cn from "classnames"
-import { Card } from "@perfolio/ui/design-system"
+import { Card, Button } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
 
 interface SettingProps {
@@ -47,9 +47,9 @@ const Setting: React.FC<SettingProps> = ({
       </Card.Header>
 
       <Card.Content>
-        <Form2 ctx={ctx} formError={formError}>
+        <Form ctx={ctx} formError={formError}>
           {fields}
-        </Form2>
+        </Form>
       </Card.Content>
       <Card.Footer>
         <Card.Footer.Status>{footer}</Card.Footer.Status>
@@ -63,10 +63,11 @@ const Setting: React.FC<SettingProps> = ({
             }
             kind={button?.kind ?? "primary"}
             size="small"
-            label={button?.label ?? "Save"}
             type="submit"
             disabled={ctx.formState.isSubmitting}
-          />
+          >
+            {button?.label ?? "Save"}
+          </Button>
         </Card.Footer.Actions>
       </Card.Footer>
     </Card>
@@ -150,7 +151,7 @@ const SettingsPage: NextPage = () => {
           validation={emailValidation}
           onSubmit={onEmailSubmit as (values: Record<string, string | number>) => Promise<void>}
           fields={[
-            <LabeledField
+            <Field.Input
               disabled
               label="Email"
               hideLabel
@@ -167,7 +168,7 @@ const SettingsPage: NextPage = () => {
           validation={nameValidation}
           onSubmit={onUsernameSubmit as (values: Record<string, string | number>) => Promise<void>}
           fields={[
-            <LabeledField
+            <Field.Input
               label="Name"
               hideLabel
               name="name"
@@ -183,7 +184,7 @@ const SettingsPage: NextPage = () => {
           footer={`Enter "delete my account forever". This can not be undone. You will have to sign up for a new account again.`}
           validation={deleteValidation}
           onSubmit={onDeleteSubmit as (values: Record<string, string | number>) => Promise<void>}
-          fields={[<LabeledField label="Confirm" hideLabel name="confirmation" type="text" />]}
+          fields={[<Field.Input label="Confirm" hideLabel name="confirmation" type="text" />]}
           button={{ label: "Delete", kind: "alert" }}
         />
       </div>

@@ -11,7 +11,7 @@ import {
   Footer,
   Price,
 } from "../components"
-import { Box, Button } from "@perfolio/ui/components"
+import { Button } from "@perfolio/ui/components"
 import {
   ChartSquareBarIcon,
   CreditCardIcon,
@@ -103,34 +103,30 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
           <div className="flex flex-col items-center justify-center md:flex-row md:space-x-8">
-            <Box>
-              <Price
-                title="Try it for free"
-                description="Just do it"
-                price={0}
-                bullets={[
-                  "Manual data import",
-                  "Performance dashboard and key figures",
-                  "Chart diagram of sectors",
-                ]}
-                href="https://app.perfol.io/auth/signin"
-              />
-            </Box>
-            <Box>
-              <Price
-                title="Premium"
-                description="Cool pricing"
-                price={7.98}
-                interval="month"
-                bullets={[
-                  "Manual data import",
-                  "Performance dashboard and key figures",
-                  "Chart diagram of sectors",
-                ]}
-                href="https://app.perfol.io/auth/signin"
-                highlighted
-              />
-            </Box>
+            <Price
+              title="Try it for free"
+              description="Just do it"
+              price={0}
+              bullets={[
+                "Manual data import",
+                "Performance dashboard and key figures",
+                "Chart diagram of sectors",
+              ]}
+              href="https://app.perfol.io/auth/signin"
+            />
+            <Price
+              title="Premium"
+              description="Cool pricing"
+              price={7.98}
+              interval="month"
+              bullets={[
+                "Manual data import",
+                "Performance dashboard and key figures",
+                "Chart diagram of sectors",
+              ]}
+              href="https://app.perfol.io/auth/signin"
+              highlighted
+            />
           </div>
         </Section>
         <Section bg="bg-white" className="flex flex-col justify-center" id="team">
