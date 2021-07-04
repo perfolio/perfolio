@@ -65,10 +65,10 @@ export const Input: React.FC<InputProps> = ({
       </label>
       <div className="relative ">
         {iconLeft ? (
-          <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
-            <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
-              {iconLeft}
-            </span>
+          <div className="absolute inset-y-0 left-0 flex overflow-hidden rounded-l pointer-events-none itmes-center">
+            <div className="flex items-center justify-center w-10 h-10 overflow-hidden rounded-l">
+              <div className="w-8 h-8 p-1 border-r">{iconLeft}</div>
+            </div>
           </div>
         ) : null}
         <input
