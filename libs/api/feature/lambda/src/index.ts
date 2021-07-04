@@ -21,3 +21,4 @@ export * from "./lib/settings/updateSettings"
 export * from "./lib/settings/createSettings"
 
 export * from "./lib/exchanges/getExchanges"
+export * from "./lib/search/search"
