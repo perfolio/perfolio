@@ -1,15 +1,9 @@
 import { useContext } from "react"
-import { ApiContext } from "./context"
+import { JWTContext } from "./context"
 import { Api } from "./api"
 
 export const useApi = (): Api => {
-  const { getApi, setApi } = useContext(ApiContext)
+  const ctx = useContext(JWTContext)
 
-  let api = getApi()
-  if (!api) {
-    api = new Api()
-    setApi(api)
-  }
-
-  return api
+  return new Api(ctx)
 }

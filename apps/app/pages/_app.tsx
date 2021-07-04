@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app"
 import { Provider as AuthProvider } from "next-auth/client"
 import { QueryClientProvider } from "react-query"
-import { ApiProvider } from "@perfolio/data-access/api-client"
+import { JWTProvider } from "@perfolio/data-access/api-client"
 import { PersistentQueryClient } from "@perfolio/data-access/localstorage"
 import Head from "next/head"
 import { useSession } from "next-auth/client"
@@ -32,14 +32,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <IdProvider>
         <QueryClientProvider client={PersistentQueryClient()}>
-          <ApiProvider>
+          <JWTProvider>
             <AuthProvider session={pageProps.session}>
               <OnboardingModal />
               <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
                 <Component {...pageProps} />
               </div>
             </AuthProvider>
-          </ApiProvider>
+          </JWTProvider>
         </QueryClientProvider>
       </IdProvider>
     </>
