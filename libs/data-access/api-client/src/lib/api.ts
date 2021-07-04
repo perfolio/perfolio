@@ -3,7 +3,7 @@ import {
   CreateTransactionRequest,
   CreateTransactionResponse,
   DeleteTransactionRequest,
-  GetAssetRequest,
+  GetSymbolFromFigiRequest,
   GetCompanyRequest,
   GetCompanyResponse,
   GetHistoryResponse,
@@ -13,7 +13,7 @@ import {
   GetPricesResponse,
   GetTransactionsResponse,
   SubscribeRequest,
-  GetAssetResponse,
+  GetSymbolFromFigiResponse,
   SendEmailConfirmationRequest,
   ChangeNameRequest,
   UpdateSettingsRequest,
@@ -21,6 +21,8 @@ import {
   GetExchangesResponse,
   CreateSettingsRequest,
   CreateSettingsResponse,
+  SearchResponse,
+  SearchRequest,
 } from "@perfolio/api/feature/lambda"
 import { JWT } from "@perfolio/feature/tokens"
 /**
@@ -102,8 +104,11 @@ export class Api {
   }
   public get assets() {
     return {
-      getAsset: async (body: GetAssetRequest) =>
-        this.requestWithAuth<GetAssetResponse>({ body, path: "/api/assets/getAsset" }),
+      getSymbolFromFigi: async (body: GetSymbolFromFigiRequest) =>
+        this.requestWithAuth<GetSymbolFromFigiResponse>({
+          body,
+          path: "/api/assets/getSymbolFromFigi",
+        }),
     }
   }
 
@@ -190,6 +195,12 @@ export class Api {
     return {
       getExchanges: async () =>
         this.requestWithAuth<GetExchangesResponse>({ path: "/api/exchanges/getExchanges" }),
+    }
+  }
+  public get search() {
+    return {
+      search: async (body: SearchRequest) =>
+        this.requestWithAuth<SearchResponse>({ body, path: "/api/search/search" }),
     }
   }
 }

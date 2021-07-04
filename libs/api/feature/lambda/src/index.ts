@@ -1,4 +1,4 @@
-export * from "./lib/assets/getAsset"
+export * from "./lib/assets/getSymbolFromFigi"
 
 export * from "./lib/companies/getCompany"
 
@@ -21,3 +21,4 @@ export * from "./lib/settings/updateSettings"
 export * from "./lib/settings/createSettings"
 
 export * from "./lib/exchanges/getExchanges"
+export * from "./lib/search/search"

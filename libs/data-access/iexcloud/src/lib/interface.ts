@@ -5,7 +5,7 @@ export interface IEXService {
   getLogo(req: GetLogoRequest): Promise<GetLogoResponse>
   getHistory(req: GetHistoryRequest): Promise<GetHistoryResponse>
   getPossibleAssets(req: GetPossibleAssetsRequest): Promise<GetPossibleAssetsResponse>
-  getAsset(req: GetAssetRequest): Promise<GetAssetResponse>
+  getSymbolFromFigi(req: GetSymbolFromFigiRequest): Promise<GetSymbolFromFigiRespnse>
   getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse>
 }
 
@@ -162,12 +162,14 @@ export type GetHistoryResponse = {
   value: number
 }[]
 
-export type GetAssetRequest = {
-  isin: string
+export type GetSymbolFromFigiRequest = {
+  figi: string
 }
 
-export type GetAssetResponse = {
-  asset: string
+export type GetSymbolFromFigiRespnse = {
+  symbol: string
+  exchange: string
+  region: string
 }
 
 export type GetCurrentPriceRequest = {

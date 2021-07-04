@@ -1,5 +1,4 @@
 import { Client } from "faunadb"
-import { Asset } from "./documents/asset"
 import { User } from "./documents/user"
 import { z } from "zod"
 import { Session } from "./documents/session"
@@ -42,15 +41,6 @@ export class Fauna {
         Settings.update(this.client, userId, input),
       fromUserId: (userId: string) => Settings.fromUserId(this.client, userId),
       delete: (userId: string) => Settings.delete(this.client, userId),
-    }
-  }
-
-  public get asset() {
-    return {
-      create: (input: z.infer<typeof Asset.schema>) => Asset.create(this.client, input),
-      fromSymbol: (symbol: string) => Asset.fromSymbol(this.client, symbol),
-      fromIsin: (isin: string) => Asset.fromIsin(this.client, isin),
-      delete: (asset: Asset) => asset.delete(this.client),
     }
   }
 

@@ -28,6 +28,14 @@ export class Time {
     return Time.fromDate(new Date(n * 1000))
   }
 
+  /**
+   * Semantic sugar to create a Time instance from a string.
+   * The string must be parsable by `new Date(...)`
+   */
+  public static fromString(s: string): Time {
+    return Time.fromDate(new Date(s))
+  }
+
   /**.
    * Pads times with leading zeros
    *

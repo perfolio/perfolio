@@ -1,20 +1,19 @@
 import { useApi } from "@perfolio/data-access/api-client"
 import { useQuery } from "react-query"
-import { GetAssetRequest } from "@perfolio/api/feature/lambda"
-import { Asset } from "@perfolio/data-access/db"
+import { GetSymbolFromFigiRequest } from "@perfolio/api/feature/lambda"
 import { useSession } from "next-auth/client"
 
-export const QUERY_KEY_ASSET_BY_ISIN = (isin: string): string => `asset_by_${isin}`
-export function useAsset(req: GetAssetRequest) {
+export const QUERY_KEY_SYMBOL_FROM_FIGI = (figi: string): string => `symbol_from_figi_${figi}`
+export function useSymbolFromFigi(req: GetSymbolFromFigiRequest) {
   const [session] = useSession()
   const api = useApi()
 
-  const { data, ...meta } = useQuery<Asset, Error>(
-    QUERY_KEY_ASSET_BY_ISIN(req.isin),
-    async () => api.assets.getAsset(req),
+  const { data, ...meta } = useQuery<{ symbol: string }, Error>(
+    QUERY_KEY_SYMBOL_FROM_FIGI(req.figi),
+    async () => api.assets.getSymbolFromFigi(req),
     {
-      enabled: !!session && !!req.isin,
+      enabled: !!session && !!req.figi,
     },
   )
-  return { asset: data, ...meta }
+  return { symbol: data?.symbol, ...meta }
 }
