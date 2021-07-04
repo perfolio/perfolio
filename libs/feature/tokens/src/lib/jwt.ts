@@ -26,7 +26,7 @@ export class JWT {
 
     return jwt.sign(claims, JWT.secret, {
       algorithm: JWT.algorithm,
-      expiresIn: "15m",
+      expiresIn: "5m",
       audience: JWT.audience,
       issuer: JWT.issuer,
       subject: claims.userId,

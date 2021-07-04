@@ -3,7 +3,7 @@ import { JWTContext } from "./context"
 import { Api } from "./api"
 
 export const useApi = (): Api => {
-  const { getToken } = useContext(JWTContext)
+  const ctx = useContext(JWTContext)
 
-  return new Api({ token: getToken() })
+  return new Api(ctx)
 }
