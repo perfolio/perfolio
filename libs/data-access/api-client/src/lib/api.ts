@@ -46,7 +46,7 @@ export interface ApiRequest {
 }
 
 export class Api {
-  private token?: string
+  private token: string | undefined
 
   constructor(opts?: { token?: string }) {
     this.token = opts?.token
