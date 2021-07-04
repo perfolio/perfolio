@@ -45,18 +45,18 @@ export interface ApiRequest {
   body?: unknown
 }
 
+type ApiConfig = {
+  getToken: () => string | undefined
+  setToken: (token: string) => void
+}
+
 export class Api {
-  private token: string | undefined
+  getToken: () => string | undefined
+  setToken: (token: string) => void
 
-  constructor(opts?: { token?: string }) {
-    this.token = opts?.token
-  }
-
-  private async refreshAccessToken(): Promise<void> {
-    const { accessToken } = await this.request<{ accessToken: string }>({
-      path: "/api/auth/getAccessToken",
-    })
-    this.token = accessToken
+  constructor(config: ApiConfig) {
+    this.getToken = config.getToken
+    this.setToken = config.setToken
   }
 
   private async requestWithAuth<ResponseType>(req: ApiRequest): Promise<ResponseType> {
@@ -64,12 +64,17 @@ export class Api {
      * If there is no token or it expires within the next 10 seconds.
      *
      * The idea is to get a new one before it expires in case it is still valid on the client
-     * but expires "in transit"
+     * but expires before being validated on the server
      */
-    if (!this.token || JWT.expiresIn(this.token) < 10) {
-      await this.refreshAccessToken()
+    let token = this.getToken()
+    if (!token || JWT.expiresIn(token) < 10) {
+      const { accessToken } = await this.request<{ accessToken: string }>({
+        path: "/api/auth/getAccessToken",
+      })
+      this.setToken(accessToken)
+      token = accessToken
     }
-    return this.request<ResponseType>(req)
+    return this.request<ResponseType>({ ...req, token })
   }
 
   /**
@@ -79,12 +84,12 @@ export class Api {
    * @param body
    * @param token - Overwrite default token getter.
    */
-  private async request<ResponseType>({ path, body }: ApiRequest): Promise<ResponseType> {
+  private async request<ResponseType>({ path, body, token }: ApiRequest): Promise<ResponseType> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     }
-    if (this.token) {
-      headers["Authorization"] = this.token
+    if (token) {
+      headers["Authorization"] = token
     }
 
     const res = await fetch(path, {
@@ -102,6 +107,7 @@ export class Api {
       throw new JsonUnmarshalError(err)
     })
   }
+
   public get assets() {
     return {
       getSymbolFromFigi: async (body: GetSymbolFromFigiRequest) =>

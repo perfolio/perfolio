@@ -14,7 +14,15 @@ export const JWTProvider: React.FC = ({ children }) => {
   const [token, setToken] = useState<string | undefined>(undefined)
 
   return (
-    <JWTContext.Provider value={{ setToken, getToken: () => token }}>
+    <JWTContext.Provider
+      value={{
+        setToken: (token: string) => {
+          console.log("Setting token", token)
+          setToken(token)
+        },
+        getToken: () => token,
+      }}
+    >
       {children}
     </JWTContext.Provider>
   )
