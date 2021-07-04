@@ -21,6 +21,8 @@ import {
   GetExchangesResponse,
   CreateSettingsRequest,
   CreateSettingsResponse,
+  SearchResponse,
+  SearchRequest,
 } from "@perfolio/api/feature/lambda"
 import { JWT } from "@perfolio/feature/tokens"
 /**
@@ -190,6 +192,12 @@ export class Api {
     return {
       getExchanges: async () =>
         this.requestWithAuth<GetExchangesResponse>({ path: "/api/exchanges/getExchanges" }),
+    }
+  }
+  public get search() {
+    return {
+      search: async (body: SearchRequest) =>
+        this.requestWithAuth<SearchResponse>({ body, path: "/api/search/search" }),
     }
   }
 }
