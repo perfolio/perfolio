@@ -1,5 +1,5 @@
 import React from "react"
-import Wrapper from "./wrapper"
+import { Wrapper } from "./wrapper"
 import { Text as TextComponent } from "../../text/text"
 export interface TextProps {
   align?: "text-left" | "text-center" | "text-right"

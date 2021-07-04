@@ -45,8 +45,8 @@ export const Text: React.FC<TextProps> = ({
     <p
       className={cn(
         `text-${size}`,
-        "text-gray-700",
         {
+          "text-gray-700": !color,
           "font-semibold": bold,
           "break-words": lineBreak,
           "font-mono": mono,

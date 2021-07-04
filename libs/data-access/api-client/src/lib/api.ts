@@ -3,7 +3,7 @@ import {
   CreateTransactionRequest,
   CreateTransactionResponse,
   DeleteTransactionRequest,
-  GetAssetRequest,
+  GetSymbolFromFigiRequest,
   GetCompanyRequest,
   GetCompanyResponse,
   GetHistoryResponse,
@@ -13,7 +13,7 @@ import {
   GetPricesResponse,
   GetTransactionsResponse,
   SubscribeRequest,
-  GetAssetResponse,
+  GetSymbolFromFigiResponse,
   SendEmailConfirmationRequest,
   ChangeNameRequest,
   UpdateSettingsRequest,
@@ -104,8 +104,11 @@ export class Api {
   }
   public get assets() {
     return {
-      getAsset: async (body: GetAssetRequest) =>
-        this.requestWithAuth<GetAssetResponse>({ body, path: "/api/assets/getAsset" }),
+      getSymbolFromFigi: async (body: GetSymbolFromFigiRequest) =>
+        this.requestWithAuth<GetSymbolFromFigiResponse>({
+          body,
+          path: "/api/assets/getSymbolFromFigi",
+        }),
     }
   }
 

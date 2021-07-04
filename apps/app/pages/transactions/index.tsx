@@ -2,7 +2,7 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { useCompany, useTransactions, useAsset } from "@perfolio/data-access/queries"
+import { useCompany, useTransactions, useSymbolFromFigi } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/data-access/db"
 import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
@@ -15,8 +15,8 @@ export interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
-  const { asset } = useAsset({ isin: transaction.data.assetId })
-  const { company } = useCompany(asset?.data.symbol)
+  const { symbol } = useSymbolFromFigi({ figi: transaction.data.assetId })
+  const { company } = useCompany(symbol)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction()
 
   return (
@@ -42,10 +42,10 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
         )}
       >
         <div className="flex flex-grow gap-4">
-          <Description title={company?.symbol}>
+          <Description title={company?.name}>
             {`You ${transaction.data.volume > 0 ? "bought" : "sold"} ${Math.abs(
               transaction.data.volume,
-            ).toFixed(2)} shares of ${
+            ).toFixed(2)} share${transaction.data.volume === 1 ? "" : "s"} of ${
               transaction.data.assetId
             } at $${transaction.data.value.toFixed(2)} per share`}
           </Description>

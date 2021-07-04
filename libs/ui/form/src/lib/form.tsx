@@ -1,10 +1,10 @@
 import React from "react"
 import { FormProvider, UseFormReturn } from "react-hook-form"
-import { ExclamationCircleIcon } from "@heroicons/react/outline"
+import { Text } from "@perfolio/ui/components"
 
 export interface FormProps<FieldValues> {
   ctx: UseFormReturn<FieldValues>
-  formError: string | null
+  formError: React.ReactNode | null
   children: React.ReactNode
   className?: string
 }
@@ -19,11 +19,10 @@ export function Form<FieldValues>({
     <FormProvider {...ctx}>
       <form className={className}>{children}</form>
       {formError ? (
-        <div role="alert" className="flex items-center gap-1 pt-2 pb-4 text-sm text-error-500">
-          <ExclamationCircleIcon className="w-4 h-4" />
-          <p>
+        <div role="alert" className="pt-2 pb-4">
+          <Text color="text-error-500" size="sm">
             <span className="font-semibold">Error:</span> {formError}
-          </p>
+          </Text>
         </div>
       ) : null}
     </FormProvider>

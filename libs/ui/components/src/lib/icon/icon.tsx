@@ -2,7 +2,7 @@ import React from "react"
 import cn from "classnames"
 import { Root } from "@radix-ui/react-accessible-icon"
 
-type Size = "sm" | "md" | "lg"
+type Size = "xs" | "sm" | "md" | "lg"
 
 export interface IconProps {
   /**
@@ -19,6 +19,7 @@ export const Icon: React.FC<IconProps> = ({ size = "md", label, children, color 
     <Root label={label}>
       <div
         className={cn("focus:outline-none", color, {
+          "w-6 h-6": size === "xs",
           "w-8 h-8": size === "sm",
           "w-10 h-10": size === "md",
           "w-16 h-16": size === "lg",

@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form"
 import classNames from "classnames"
 import { ExclamationCircleIcon } from "@heroicons/react/outline"
 import cn from "classnames"
+import { Tooltip } from "@perfolio/ui/components"
 export interface InputProps {
   disabled?: boolean
   /**
@@ -24,6 +25,7 @@ export interface InputProps {
   iconLeft?: React.ReactNode
 
   defaultValue?: string | number
+  help?: React.ReactNode
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -34,6 +36,7 @@ export const Input: React.FC<InputProps> = ({
   iconLeft,
   type,
   defaultValue,
+  help,
 }) => {
   const {
     register,
@@ -53,11 +56,12 @@ export const Input: React.FC<InputProps> = ({
     <div className="w-full text-gray-800">
       <label
         htmlFor={name}
-        className={cn("mb-1 block text-xs font-medium text-gray-700 uppercase", {
+        className={cn("flex items-center mb-1 gap-2 text-xs font-medium text-gray-700 uppercase", {
           "sr-only": hideLabel,
         })}
       >
         {label}
+        {help ? <Tooltip side="bottom">{help}</Tooltip> : null}
       </label>
       <div className="relative ">
         {iconLeft ? (

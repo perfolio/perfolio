@@ -11,7 +11,7 @@ export interface LoadingProps {
 export const Loading: React.FC<LoadingProps> = ({ size = "md", bg }): JSX.Element => {
   return (
     <div
-      className={cn("flex items-center justify-center w-full h-full", bg, {
+      className={cn("flex items-center justify-center w-full h-full text-black animate-pulse", bg, {
         rounded: bg,
       })}
     >
@@ -19,7 +19,7 @@ export const Loading: React.FC<LoadingProps> = ({ size = "md", bg }): JSX.Elemen
         className={cn("animate-spin", {
           "w-4 h-4": size === "sm",
           "w-6 h-6": size === "md",
-          "w-10 h-10": size === "lg",
+          "w-8 h-8": size === "lg",
         })}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

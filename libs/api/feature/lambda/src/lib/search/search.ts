@@ -14,5 +14,5 @@ export type SearchResponse = {
   currency: string
 }[]
 export async function search({ fragment }: SearchRequest): Promise<SearchResponse> {
-  return await iexSearch(fragment)
+  return await iexSearch(encodeURIComponent(fragment))
 }
