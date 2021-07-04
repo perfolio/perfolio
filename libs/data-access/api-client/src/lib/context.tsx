@@ -1,18 +1,29 @@
 import React, { useState } from "react"
-import { Api } from "./api"
 
-export const ApiContext = React.createContext<{
-  getApi: () => Api | null
-  setApi: (api: Api) => void
+export const JWTContext = React.createContext<{
+  getToken: () => string | undefined
+  setToken: (token: string) => void
 }>({
-  getApi: () => null,
-  setApi: () => {
+  getToken: () => undefined,
+  setToken: () => {
     throw new Error("Implement me")
   },
 })
 
-export const ApiProvider: React.FC = ({ children }) => {
-  const [api, setApi] = useState<Api | null>(null)
+export const JWTProvider: React.FC = ({ children }) => {
+  const [token, setToken] = useState<string | undefined>(undefined)
 
-  return <ApiContext.Provider value={{ setApi, getApi: () => api }}>{children}</ApiContext.Provider>
+  return (
+    <JWTContext.Provider
+      value={{
+        setToken: (token: string) => {
+          console.log("Setting token", token)
+          setToken(token)
+        },
+        getToken: () => token,
+      }}
+    >
+      {children}
+    </JWTContext.Provider>
+  )
 }

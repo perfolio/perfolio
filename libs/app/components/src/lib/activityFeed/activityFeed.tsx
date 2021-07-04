@@ -2,21 +2,27 @@ import { useSymbolFromFigi, useTransactions } from "@perfolio/data-access/querie
 import { Transaction } from "@perfolio/data-access/db"
 import { Time } from "@perfolio/util/time"
 import React from "react"
-import { Loading } from "@perfolio/ui/components"
-
+import { Loading, Text } from "@perfolio/ui/components"
+import cn from "classnames"
 interface TransactionActivityItemProps {
   transaction: Transaction
+  isFirst?: boolean
 }
 
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
+  isFirst,
 }): JSX.Element => {
   const { symbol, isLoading } = useSymbolFromFigi({
     figi: transaction.data.assetId,
   })
 
   return (
-    <li className="h-20 py-4">
+    <li
+      className={cn(" py-4", {
+        "border-t border-gray-100": !isFirst,
+      })}
+    >
       {isLoading ? (
         <div className="flex items-center justify-center h-full">
           <Loading />
@@ -24,14 +30,16 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-black">New Transaction</span>
-            <span className="text-xs">{Time.ago(transaction.data.executedAt)}</span>
+            <Text size="sm" bold>
+              New Transaction
+            </Text>
+            <Text size="xs">{Time.ago(transaction.data.executedAt)}</Text>
           </div>
-          <p>
+          <Text size="sm">
             You {transaction.data.volume > 0 ? "bought" : "sold"} {transaction.data.volume}{" "}
             <span className="font-semibold">{symbol}</span> shares at ${transaction.data.value} per
             share.
-          </p>
+          </Text>
         </>
       )}
     </li>
@@ -48,9 +56,9 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
   return (
     <>
       <p className="text-base font-semibold text-gray-800">Recent Activity</p>
-      <ul className="mt-4 text-sm text-gray-700 divide-y divide-gray-300">
-        {last5Transactions?.map((tx) => (
-          <TransactionActivityItem key={tx.id} transaction={tx} />
+      <ul>
+        {last5Transactions?.map((tx, i) => (
+          <TransactionActivityItem key={tx.id} transaction={tx} isFirst={i === 0} />
         ))}
       </ul>
     </>

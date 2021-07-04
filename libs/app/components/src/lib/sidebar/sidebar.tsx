@@ -8,7 +8,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ aboveFold, children }): JSX.El
     <aside className="relative">
       <div className="absolute w-full -mt-10 xl:-mt-32 ">{aboveFold}</div>
       <div className="mt-4">
-        <div className="flex flex-col divide-y">{children}</div>
+        <div className="flex flex-col">{children}</div>
       </div>
     </aside>
   )
