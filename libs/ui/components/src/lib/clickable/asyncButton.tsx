@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react"
 import { DefaultButtonStyle } from "./defaultButtonStyle"
 import { ButtonProps } from "./types"
 import { ButtonController } from "./buttonController"
-import { Spinner } from "../spinner/spinner"
+import { Loading } from "../loading/loading"
 /**
  * A button to perform async actions.
  *
@@ -12,11 +12,11 @@ import { Spinner } from "../spinner/spinner"
 export const AsyncButton: React.FC<ButtonProps> = ({
   type,
   onClick,
-  label,
   kind,
   size,
   prefix,
   disabled,
+  children,
 }): JSX.Element => {
   const [isLoading, setLoading] = useState(false)
 
@@ -40,13 +40,9 @@ export const AsyncButton: React.FC<ButtonProps> = ({
         handleClick()
       }}
     >
-      <DefaultButtonStyle
-        disabled={disabled}
-        label={isLoading ? <Spinner /> : label}
-        kind={kind}
-        size={size}
-        prefix={prefix}
-      />
+      <DefaultButtonStyle disabled={disabled} kind={kind} size={size} prefix={prefix}>
+        {isLoading ? <Loading /> : children}
+      </DefaultButtonStyle>
     </ButtonController>
   )
 }

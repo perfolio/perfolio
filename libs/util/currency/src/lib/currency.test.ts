@@ -2,5 +2,5 @@ import { getCurrency, getCurrencySymbol } from "./currency"
 
 it("works with germany", () => {
   expect(getCurrency("DE")).toBe("EUR")
-  expect(getCurrencySymbol("DE")).toBe("€")
+  expect(getCurrencySymbol("EUR")).toBe("€")
 })

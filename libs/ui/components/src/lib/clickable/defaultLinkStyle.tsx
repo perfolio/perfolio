@@ -1,5 +1,5 @@
 import React from "react"
-import { Spinner } from "../spinner/spinner"
+import { Loading } from "../loading/loading"
 type Justify = "start" | "center" | "end" | "between" | "around"
 type Size = "small" | "medium" | "large" | "auto"
 export interface DefaultLinkStyleProps {
@@ -22,7 +22,7 @@ export interface DefaultLinkStyleProps {
  * Controller logic should be done in a parent component by wrapping DefaultLinkStyle.
  */
 export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
-  label,
+  children,
   justify = "center",
   loading,
   prefix,
@@ -44,12 +44,12 @@ export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
     >
       {loading ? (
         <span className="w-4 h-4 text-yellow-400">
-          <Spinner />
+          <Loading />
         </span>
       ) : (
         <>
           {prefix ? <div className={iconSize(size)}>{prefix}</div> : null}
-          {label ? <div className={text(size)}>{label}</div> : null}
+          {children ? <div className={text(size)}>{children}</div> : null}
           {suffix ? <div className={iconSize(size)}>{suffix}</div> : null}
         </>
       )}

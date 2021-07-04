@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 // import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
-import { Table, Cell, Tooltip, Description } from "@perfolio/ui/design-system"
+import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { usePortfolio, useTransactions } from "@perfolio/data-access/queries"
 import { format } from "@perfolio/util/numbers"
 export interface AssetTableProps {

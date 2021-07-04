@@ -17,10 +17,11 @@ export const Link: React.FC<LinkProps | ButtonProps> = (props): JSX.Element => {
     <DefaultLinkStyle
       kind={props.kind}
       size={props.size}
-      label={props.label}
       prefix={props.prefix}
       suffix={props.suffix}
       justify={props.justify}
-    />,
+    >
+      {props.children}
+    </DefaultLinkStyle>,
   )
 }

@@ -1,15 +1,16 @@
 import React from "react"
-import { z } from "zod"
-import { LabeledField, Form, FORM_ERROR, Button, Spinner } from "@perfolio/ui/components"
+// import { z } from "zod"
+// import { Form } from "@perfolio/ui/form"
+import { Loading, Button } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
-import { Avatar, Text } from "@perfolio/ui/design-system"
+import { Avatar, Text } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
 import { useForm } from "react-hook-form"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/data-access/db"
 import { useTransactions, useCompany, useAsset } from "@perfolio/data-access/queries"
-import { useCreateTransaction } from "@perfolio/data-access/mutations"
+// import { useCreateTransaction } from "@perfolio/data-access/mutations"
 
 const Suggestion: React.FC<{
   tx: Transaction
@@ -21,7 +22,7 @@ const Suggestion: React.FC<{
   return (
     <li className="flex items-center justify-between w-full gap-4 py-3">
       <div className="flex items-center w-3/5">
-        <div>{company?.logo ? <Avatar size="lg" src={company.logo} /> : <Spinner />}</div>
+        <div>{company?.logo ? <Avatar size="lg" src={company.logo} /> : <Loading />}</div>
         <div className="overflow-hidden">
           <Text truncate bold>
             {company?.name}
@@ -35,14 +36,15 @@ const Suggestion: React.FC<{
         )}`}</span>
         <div>
           <Button
-            label="Add"
             kind="secondary"
             size="small"
             onClick={() => {
               setValue("isin", tx.data.assetId)
               trigger()
             }}
-          />
+          >
+            Add
+          </Button>
         </div>
       </div>
     </li>
@@ -64,11 +66,11 @@ const NewTransactionPage: NextPage = () => {
   const {
     setValue,
     trigger,
-    watch,
+    // watch,
     // formState: { errors },
   } = useForm<FormData>({ mode: "all", defaultValues: { date: new Date() } })
 
-  const { mutateAsync: createTransaction } = useCreateTransaction()
+  // const { mutateAsync: createTransaction } = useCreateTransaction()
   const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
   transactions
@@ -78,10 +80,10 @@ const NewTransactionPage: NextPage = () => {
         uniqueAssets[tx.data.assetId] = tx
       }
     })
-  const data = watch()
-  const { asset } = useAsset({ isin: data.isin })
+  // const data = watch()
+  // const { asset } = useAsset({ isin: data.isin })
 
-  const { company, isLoading: companyLoading } = useCompany(asset?.data.symbol)
+  // const { company, isLoading: companyLoading } = useCompany(asset?.data.symbol)
 
   return (
     <AppLayout
@@ -98,13 +100,8 @@ const NewTransactionPage: NextPage = () => {
         <Main.Content>
           <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
             <div className="w-full">
-              <Form
+              {/* <Form
                 submitText="Add Transaction"
-                /**
-                 * HTML input elements return a string, if not using `valueAsNumber`
-                 * Since that is non trivial to do with the current setup, we let zod transform
-                 * the data.
-                 */
                 schema={z.object({
                   assetId: z.string().regex(/[A-Z]{2}[a-zA-Z0-9]{10}/, "This is not a valid isin."),
                   volume: z.string().transform((x: string) => parseInt(x)),
@@ -139,7 +136,7 @@ const NewTransactionPage: NextPage = () => {
                         height={64}
                       />
                     ) : companyLoading ? (
-                      <Spinner />
+                      <Loading />
                     ) : null
                   }
                 />
@@ -168,7 +165,7 @@ const NewTransactionPage: NextPage = () => {
                     }
                   />
                 </div>
-              </Form>
+              </Form> */}
             </div>
             <div className="w-full">
               <div className="flex items-center justify-between px-6 py-6">

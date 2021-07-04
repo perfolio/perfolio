@@ -2,7 +2,7 @@ import React from "react"
 import { AreaChart, Area, ResponsiveContainer } from "recharts"
 import { useHistory, useCurrentValue } from "@perfolio/data-access/queries"
 import { Time } from "@perfolio/util/time"
-import { Spinner } from "@perfolio/ui/components"
+import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
   const { history, isLoading } = useHistory()
@@ -30,11 +30,11 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
 
   return (
     <div className="flex-col justify-center hidden w-full h-20 space-y-8 bg-gray-100 rounded xl:flex">
-      <div className="relative w-full h-20">
+      <div className="relative w-full h-full">
         <ResponsiveContainer width="100%" height="100%">
           {isLoading ? (
             <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
-              <Spinner />
+              <Loading />
             </div>
           ) : (
             <AreaChart data={data} margin={{ top: 0, left: 0, bottom: 0, right: 0 }}>

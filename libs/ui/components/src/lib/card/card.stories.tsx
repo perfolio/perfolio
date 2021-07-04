@@ -1,6 +1,6 @@
 import { Card } from "./index"
 import { Text } from "../text/text"
-import { Button } from "@perfolio/ui/components"
+import { Button } from "../clickable"
 export default {
   title: "Card",
   component: Card,
