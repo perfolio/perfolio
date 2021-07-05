@@ -9,10 +9,10 @@ export function usePrice(req: GetPriceRequest) {
   const api = useApi()
 
   return useQuery<Price, Error>(
-    `price_by_${req.symbol}_and_${req.time}`,
+    `price_by_${req.ticker}_and_${req.time}`,
     async () => api.prices.getPrice(req),
     {
-      enabled: !!session && !!req.symbol,
+      enabled: !!session && !!req.ticker,
     },
   )
 }

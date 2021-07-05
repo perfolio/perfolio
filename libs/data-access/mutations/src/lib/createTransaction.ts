@@ -1,4 +1,4 @@
-import { Transaction } from "@perfolio/data-access/db"
+import { Transaction } from "@perfolio/integrations/fauna"
 import { useMutation, useQueryClient } from "react-query"
 import { useApi } from "@perfolio/data-access/api-client"
 

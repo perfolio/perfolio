@@ -26,5 +26,8 @@ module.exports = {
     "<rootDir>/libs/util/currency",
     "<rootDir>/libs/util/i18n",
     "<rootDir>/libs/util/numbers",
+    "<rootDir>/libs/data-access/openfigi",
+    "<rootDir>/libs/util/errors",
+    "<rootDir>/libs/util/env",
   ],
 }

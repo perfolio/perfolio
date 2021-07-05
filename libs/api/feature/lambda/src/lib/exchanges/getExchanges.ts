@@ -1,5 +1,5 @@
-import { getExchanges as getExchangesFromCloud } from "@perfolio/data-access/iexcloud"
-import { Cache, Key } from "@perfolio/data-access/cache"
+import { getExchanges as getExchangesFromCloud } from "@perfolio/integrations/iexcloud"
+import { Cache, Key } from "@perfolio/integrations/redis"
 import { Exchange } from "@perfolio/types"
 
 export type GetExchangesResponse = Exchange[]

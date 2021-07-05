@@ -2,7 +2,7 @@ export type Company = {
   /**
    * Ticker of the company
    */
-  symbol: string
+  ticker: string
 
   /**
    * Url of the logo
@@ -85,7 +85,7 @@ export type Company = {
   securityName: string | null
 
   /**
-   * Primary SIC Code for the symbol (if available)
+   * Primary SIC Code for the ticker (if available)
    * @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
    */
   primarySicCode: number | null

@@ -6,7 +6,7 @@ export type Asset = {
   /**
    * Ticker of the company
    */
-  symbol: string
+  ticker: string
 
   assetId: string
 

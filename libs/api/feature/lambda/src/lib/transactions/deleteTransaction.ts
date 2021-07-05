@@ -1,6 +1,6 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
 import { z } from "zod"
-import { db } from "@perfolio/data-access/db"
+import { db } from "@perfolio/integrations/fauna"
 
 export const DeleteTransactionRequestValidation = z.object({
   transactionId: z.string(),

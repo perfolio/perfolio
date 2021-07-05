@@ -1,5 +1,5 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
-import { db, Settings } from "@perfolio/data-access/db"
+import { db, Settings } from "@perfolio/integrations/fauna"
 import { z } from "zod"
 
 export type GetSettingsResponse = z.infer<typeof Settings.schema> | null

@@ -6,7 +6,7 @@ import { Avatar, Text } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
-import { Transaction } from "@perfolio/data-access/db"
+import { Transaction } from "@perfolio/integrations/fauna"
 import {
   useTransactions,
   useCompany,
@@ -25,8 +25,8 @@ const Suggestion: React.FC<{
   setValue?: (key: "isin", val: string) => void
   trigger?: () => void
 }> = ({ tx }): JSX.Element => {
-  const { symbol } = useSymbolFromFigi({ figi: tx.data.assetId })
-  const { company } = useCompany(symbol)
+  const { ticker } = useSymbolFromFigi({ figi: tx.data.assetId })
+  const { company } = useCompany(ticker)
   return (
     <li className="flex items-center justify-between w-full gap-4 py-3">
       <div className="flex items-center w-3/5 gap-2">

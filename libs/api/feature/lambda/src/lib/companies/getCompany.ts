@@ -2,18 +2,18 @@ import { z } from "zod"
 import {
   getCompany as getCompanyFromCloud,
   getLogo as getLogoFromCloud,
-} from "@perfolio/data-access/iexcloud"
-import { Cache, Key } from "@perfolio/data-access/cache"
+} from "@perfolio/integrations/iexcloud"
+import { Cache, Key } from "@perfolio/integrations/redis"
 import { Company } from "@perfolio/types"
 export const GetCompanyRequestValidation = z.object({
-  symbol: z.string(),
+  ticker: z.string(),
 })
 
 export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>
 export type GetCompanyResponse = Company
 
-export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetCompanyResponse> {
-  const key = new Key("getCompany", { symbol })
+export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetCompanyResponse> {
+  const key = new Key("getCompany", { ticker })
 
   let company = await Cache.get<Company>(key)
   if (company) {
@@ -21,8 +21,8 @@ export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetComp
   }
 
   const [newCompany, logo] = await Promise.all([
-    getCompanyFromCloud(symbol),
-    getLogoFromCloud(symbol),
+    getCompanyFromCloud(ticker),
+    getLogoFromCloud(ticker),
   ])
 
   /**
@@ -35,7 +35,7 @@ export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetComp
     /**
      * Copy the rest
      */
-    symbol: symbol,
+    ticker: ticker,
     exchange: newCompany.exchange,
     industry: newCompany.industry,
     website: newCompany.website,

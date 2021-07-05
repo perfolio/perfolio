@@ -1,18 +1,18 @@
 import { z } from "zod"
-import { getFigiMapping, getVolumeByVenue } from "@perfolio/data-access/iexcloud"
-import { Cache, Key } from "@perfolio/data-access/cache"
+import { getFigiMapping, getVolumeByVenue } from "@perfolio/integrations/iexcloud"
+import { Cache, Key } from "@perfolio/integrations/redis"
 export const GetSymbolFromFigiRequestValidation = z.object({
   figi: z.string(),
 })
 
 export type GetSymbolFromFigiRequest = z.infer<typeof GetSymbolFromFigiRequestValidation>
-export type GetSymbolFromFigiResponse = { symbol: string }
+export type GetSymbolFromFigiResponse = { ticker: string }
 export async function getSymbolFromFigi({
   figi,
 }: GetSymbolFromFigiRequest): Promise<GetSymbolFromFigiResponse> {
   const key = new Key("getSymbolFromFigi", { figi })
 
-  let asset = await Cache.get<{ symbol: string }>(key)
+  let asset = await Cache.get<{ ticker: string }>(key)
   if (asset) {
     return asset
   }
@@ -28,7 +28,7 @@ export async function getSymbolFromFigi({
   )
   if (quickFind) {
     asset = {
-      symbol: quickFind.symbol,
+      ticker: quickFind.symbol,
     }
     Cache.set(key, asset, 30)
     return asset
@@ -43,14 +43,14 @@ export async function getSymbolFromFigi({
         const venues = await getVolumeByVenue(asset.symbol)
         return {
           volume: venues.sort((a, b) => b.volume - a.volume)[0].volume,
-          symbol: asset.symbol,
+          ticker: asset.symbol,
         }
       }),
     )
   ).sort((a, b) => b.volume - a.volume)[0]
 
   asset = {
-    symbol: bestAsset.symbol,
+    ticker: bestAsset.ticker,
   }
   Cache.set(key, asset, 30)
   return asset
