@@ -102,7 +102,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section bg="bg-gray-50" id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
-          <div className="flex flex-col items-center justify-center md:flex-row md:space-x-8">
+          <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
             <Price
               title="Try it for free"
               description="Just do it"
@@ -189,7 +189,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 Curious for more?
               </p>
             </div>
-            <Button label="Subscribe" href="https://app.perfol.io/subscribe" />
+            <Button href="https://app.perfol.io/subscribe">Subscribe</Button>
           </div>
         </Section>
       </div>
