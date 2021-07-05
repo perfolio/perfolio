@@ -1,6 +1,6 @@
 import React from "react"
 import { CheckIcon } from "@heroicons/react/outline"
-import { Button } from "@perfolio/ui/components"
+import { Button, Text } from "@perfolio/ui/components"
 
 export interface PriceProps {
   title: string
@@ -21,7 +21,7 @@ export const Price: React.FC<PriceProps> = ({
   highlighted,
 }) => {
   return (
-    <div className="flex shadow-lg flex-col items-center w-full max-w-md p-4 mx-auto my-0 space-y-6 sm:p-6 md:px-8 md:py-12">
+    <div className="flex flex-col items-center max-w-md p-4 my-0 space-y-6 shadow-lg sm:p-6 md:px-8 md:py-12">
       <h3 className="m-0 text-2xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">{title}</h3>
       <div className="flex items-end mt-6 leading-7 text-gray-900 border-0 border-gray-200">
         <div className="flex items-end mt-6 leading-7 text-gray-900 border-0 border-gray-200">
@@ -44,18 +44,15 @@ export const Price: React.FC<PriceProps> = ({
               <span className="w-6 h-6 text-success-500">
                 <CheckIcon />
               </span>
-              <span className="ml-2">{bullet}</span>
+              <Text>{bullet}</Text>
             </li>
           )
         })}
       </ul>
       <div className="w-full">
-        <Button
-          kind={highlighted ? "primary" : "secondary"}
-          href={href}
-          label="Choose plan"
-          size="auto"
-        />
+        <Button kind={highlighted ? "primary" : "secondary"} href={href} size="auto">
+          Choose plan
+        </Button>
       </div>
     </div>
   )
