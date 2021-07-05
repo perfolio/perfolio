@@ -16,10 +16,7 @@ export const JWTProvider: React.FC = ({ children }) => {
   return (
     <JWTContext.Provider
       value={{
-        setToken: (token: string) => {
-          console.log("Setting token", token)
-          setToken(token)
-        },
+        setToken,
         getToken: () => token,
       }}
     >
