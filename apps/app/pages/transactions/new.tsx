@@ -195,13 +195,10 @@ const NewTransactionPage: NextPage = () => {
 
                 <Button
                   loading={submitting}
-                  // eslint-disable-next-line
-                  // @ts-ignore
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
                       async ({ asset: { figi }, volume, value, executedAt }) => {
-                        console.log({ figi, volume, value, executedAt })
                         try {
                           await createTransaction({
                             volume: Number(volume),
