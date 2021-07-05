@@ -8,12 +8,12 @@ export function useSymbolFromFigi(req: GetSymbolFromFigiRequest) {
   const [session] = useSession()
   const api = useApi()
 
-  const { data, ...meta } = useQuery<{ symbol: string }, Error>(
+  const { data, ...meta } = useQuery<{ ticker: string }, Error>(
     QUERY_KEY_SYMBOL_FROM_FIGI(req.figi),
     async () => api.assets.getSymbolFromFigi(req),
     {
       enabled: !!session && !!req.figi,
     },
   )
-  return { symbol: data?.symbol, ...meta }
+  return { ticker: data?.ticker, ...meta }
 }

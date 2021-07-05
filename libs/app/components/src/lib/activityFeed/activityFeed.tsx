@@ -1,5 +1,5 @@
 import { useSymbolFromFigi, useTransactions } from "@perfolio/data-access/queries"
-import { Transaction } from "@perfolio/data-access/db"
+import { Transaction } from "@perfolio/integrations/fauna"
 import { Time } from "@perfolio/util/time"
 import React from "react"
 import { Loading, Text } from "@perfolio/ui/components"
@@ -13,7 +13,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
-  const { symbol, isLoading } = useSymbolFromFigi({
+  const { ticker, isLoading } = useSymbolFromFigi({
     figi: transaction.data.assetId,
   })
 
@@ -37,7 +37,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
           </div>
           <Text size="sm">
             You {transaction.data.volume > 0 ? "bought" : "sold"} {transaction.data.volume}{" "}
-            <span className="font-semibold">{symbol}</span> shares at ${transaction.data.value} per
+            <span className="font-semibold">{ticker}</span> shares at ${transaction.data.value} per
             share.
           </Text>
         </>

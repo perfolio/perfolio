@@ -3,15 +3,15 @@ import { useQuery } from "react-query"
 import { Company } from "@perfolio/types"
 import { useSession } from "next-auth/client"
 
-export const QUERY_KEY_COMPANY_BY_SYMBOL = (symbol: string): string => `company_by_${symbol}`
-export function useCompany(symbol: string | undefined) {
+export const QUERY_KEY_COMPANY_BY_SYMBOL = (ticker: string): string => `company_by_${ticker}`
+export function useCompany(ticker: string | undefined) {
   const [session] = useSession()
   const api = useApi()
   const { data, ...meta } = useQuery<Company, Error>(
-    QUERY_KEY_COMPANY_BY_SYMBOL(symbol ?? ""),
-    async () => api.companies.getCompany({ symbol: symbol! }),
+    QUERY_KEY_COMPANY_BY_SYMBOL(ticker ?? ""),
+    async () => api.companies.getCompany({ ticker: ticker! }),
     {
-      enabled: !!session && !!symbol,
+      enabled: !!session && !!ticker,
     },
   )
   return { company: data, ...meta }

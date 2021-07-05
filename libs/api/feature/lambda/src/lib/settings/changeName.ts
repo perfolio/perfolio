@@ -1,5 +1,5 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
-import { db } from "@perfolio/data-access/db"
+import { db } from "@perfolio/integrations/fauna"
 import { z } from "zod"
 export const ChangeNameRequestValidation = z.object({
   name: z.string().min(3).max(64),

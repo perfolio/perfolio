@@ -1,6 +1,6 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
 import { z } from "zod"
-import { db, Transaction } from "@perfolio/data-access/db"
+import { db, Transaction } from "@perfolio/integrations/fauna"
 
 export const CreateTransactionRequestValidation = Transaction.schema.omit({
   userId: true,

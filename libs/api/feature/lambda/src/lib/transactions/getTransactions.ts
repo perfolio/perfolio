@@ -1,5 +1,5 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
-import { db, Transaction } from "@perfolio/data-access/db"
+import { db, Transaction } from "@perfolio/integrations/fauna"
 
 export type GetTransactionsResponse = Transaction[]
 export async function getTransactions(

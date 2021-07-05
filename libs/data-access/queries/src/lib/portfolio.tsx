@@ -59,21 +59,21 @@ export const usePortfolio = () => {
         queryFn: () => api.assets.getSymbolFromFigi({ figi }),
       }
     }),
-  ).map((symbol) => {
-    return (symbol.data as { symbol: string }).symbol
+  ).map((ticker) => {
+    return (ticker.data as { ticker: string }).ticker
   })
 
   /**
    * Inject company data
    */
   const companies = useQueries(
-    (session && symbols && symbols.every((symbol) => typeof symbol !== "undefined")
+    (session && symbols && symbols.every((ticker) => typeof ticker !== "undefined")
       ? symbols
       : []
-    ).map((symbol) => {
+    ).map((ticker) => {
       return {
-        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(symbol),
-        queryFn: () => api.companies.getCompany({ symbol }),
+        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(ticker),
+        queryFn: () => api.companies.getCompany({ ticker }),
       }
     }),
   )

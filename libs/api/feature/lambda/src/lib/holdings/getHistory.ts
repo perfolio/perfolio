@@ -3,7 +3,7 @@ import { MiddlewareContext } from "@perfolio/api/feature/middleware"
 import { getTransactions } from "../transactions/getTransactions"
 import { getSymbolFromFigi } from "../assets/getSymbolFromFigi"
 import { getPrices } from "../prices/getPrices"
-import { Transaction } from "@perfolio/data-access/db"
+import { Transaction } from "@perfolio/integrations/fauna"
 import { Time } from "@perfolio/util/time"
 
 export type History = {
@@ -36,16 +36,16 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
   const figiToSymbol: { [isin: string]: string } = {}
   await Promise.all(
     Object.keys(transactionsByAsset).map(async (figi) => {
-      const { symbol } = await getSymbolFromFigi({ figi })
-      figiToSymbol[figi] = symbol
+      const { ticker } = await getSymbolFromFigi({ figi })
+      figiToSymbol[figi] = ticker
     }),
   )
   const priceResponse = await Promise.all(
-    Object.entries(figiToSymbol).map(async ([isin, symbol]) => {
+    Object.entries(figiToSymbol).map(async ([isin, ticker]) => {
       const txs = transactionsByAsset[isin]
       const begin = Time.fromTimestamp(txs[0].data.executedAt).unix()
       const end = Time.today().unix()
-      return getPrices({ symbol, begin, end })
+      return getPrices({ ticker, begin, end })
     }),
   )
 

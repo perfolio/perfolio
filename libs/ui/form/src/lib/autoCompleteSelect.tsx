@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearch } from "@perfolio/data-access/queries"
+import { useSearch, useSettings } from "@perfolio/data-access/queries"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   /**
@@ -56,6 +56,7 @@ export function AutoCompleteSelect<Option>({
     }
   }, [value, onChange])
 
+  const { settings } = useSettings()
   /**
    * User search value
    */
@@ -63,7 +64,10 @@ export function AutoCompleteSelect<Option>({
   /**
    * Available options from iex
    */
-  const { search: options, isLoading } = useSearch({ fragment: search })
+  const { search: options, isLoading } = useSearch({
+    fragment: search,
+    currency: settings?.defaultCurrency,
+  })
 
   return (
     <div className="w-full text-gray-800">
@@ -158,7 +162,7 @@ export function AutoCompleteSelect<Option>({
                           image={option.logo}
                           title={option.name}
                           subtitle={option.exchange}
-                          tag={option.symbol}
+                          tag={option.ticker}
                         />
                       </button>
                     </li>

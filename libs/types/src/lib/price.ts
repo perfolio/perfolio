@@ -2,7 +2,7 @@ export type Price = {
   /**
    * Ticker of the company
    */
-  symbol: string
+  ticker: string
 
   /**
    * Unix timestamp with second precision
