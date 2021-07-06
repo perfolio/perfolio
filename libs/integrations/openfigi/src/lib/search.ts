@@ -31,17 +31,13 @@ export type SearchResponse = z.infer<typeof SearchResponseValidator>
 
 export async function search(req: SearchRequest): Promise<SearchResponse> {
   const client = new Client()
-  console.log({
-    query: req.fragment,
-    currency: req.currency,
-  })
   const res = await client.post<SearchResponse>({
-    path: "/v3/search",
+    path: "/v3/filter",
     body: {
       query: req.fragment,
       currency: req.currency,
+      exchCode: "XETRA",
     },
   })
-  console.log({ res })
   return SearchResponseValidator.parse(res.data)
 }

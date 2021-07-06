@@ -18,7 +18,6 @@ export async function getSymbolFromFigi({
   }
 
   const possibleAssets = await getFigiMapping(figi)
-  console.warn({ key, possibleAssets, figi })
   /**
    * If there is a asset with neither a country prefix (`US_`) or exchange suffix (`-ch`)
    * we could assume that's the main one.

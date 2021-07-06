@@ -22,19 +22,19 @@ export function useSearch(req: SearchRequest) {
    */
   const searchResults = data?.filter((d) => d.ticker)
 
-  const companies = useQueries(
-    (searchResults ?? []).map((option) => {
-      return {
-        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(option.ticker!),
-        queryFn: () => api.companies.getCompany({ ticker: option.ticker! }),
-      }
-    }),
-  ).map((company) => {
-    return company.data as Company
-  })
+  // const companies = useQueries(
+  //   (searchResults ?? []).map((option) => {
+  //     return {
+  //       queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(option.ticker!),
+  //       queryFn: () => api.companies.getCompany({ ticker: option.ticker! }),
+  //     }
+  //   }),
+  // ).map((company) => {
+  //   return company.data as Company
+  // })
 
-  const search = (searchResults ?? []).map((option, i) => {
-    return Object.assign(option, companies[i])
-  })
-  return { search, ...meta }
+  // const search = (searchResults ?? []).map((option, i) => {
+  //   return Object.assign(option, companies[i])
+  // })
+  return { search: searchResults, ...meta }
 }

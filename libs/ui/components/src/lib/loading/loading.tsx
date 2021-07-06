@@ -6,14 +6,24 @@ export interface LoadingProps {
    * Display a skeleton in this color during loading
    */
   bg?: string
+
+  /**
+   * Override black color
+   */
+  color?: string
 }
 
-export const Loading: React.FC<LoadingProps> = ({ size = "md", bg }): JSX.Element => {
+export const Loading: React.FC<LoadingProps> = ({ size = "md", bg, color }): JSX.Element => {
   return (
     <div
-      className={cn("flex items-center justify-center w-full h-full text-black animate-pulse", bg, {
-        rounded: bg,
-      })}
+      className={cn(
+        "flex items-center justify-center w-full h-full animate-pulse",
+        bg,
+        {
+          rounded: bg,
+        },
+        color ?? "text-black",
+      )}
     >
       <svg
         className={cn("animate-spin", {
