@@ -1,7 +1,7 @@
 import { GenericError } from "./error"
 
 export class HTTPError extends GenericError {
-  constructor(message = "Unable to request resource") {
-    super("HTTPError", message, {})
+  constructor(status: number, resource: string) {
+    super("HTTPError", `Unable to reach resource "${resource}": status = ${status}`, {})
   }
 }

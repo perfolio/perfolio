@@ -140,12 +140,12 @@ export function AutoCompleteSelect<Option>({
                     Hello
                     <Loading bg="bg-gray-50" />
                   </li>
-                ) : options.length === 0 ? (
+                ) : options?.length === 0 ? (
                   <li className="relative w-full p-2 cursor-pointer">
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options.sort().map((option, i) => (
+                  options?.sort().map((option, i) => (
                     <li key={i}>
                       <button
                         type="button"

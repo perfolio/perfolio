@@ -29,5 +29,7 @@ module.exports = {
     "<rootDir>/libs/data-access/openfigi",
     "<rootDir>/libs/util/errors",
     "<rootDir>/libs/util/env",
+    "<rootDir>/libs/integrations/bankofengland",
+    "<rootDir>/libs/integrations/ecb",
   ],
 }
