@@ -12,16 +12,6 @@
   "npmScope": "perfolio",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "YjAyY2Q1YTMtYTAzNy00Yzk4LWEwMDMtNzg4M2NlMzJhZmQ2fHJlYWQtd3JpdGU=",
-        "canTrackAnalytics": false,
-        "showUsageWarnings": true
-      }
-    },
-    "no-cloud": {
-      "comment": "See https://github.com/nrwl/nx/issues/5660",
       "runner": "@nrwl/workspace/src/tasks-runner/default-tasks-runner",
       "options": {}
     }
@@ -96,10 +86,6 @@
     },
     "landing": {
       "tags": []
-    },
-    "landing-e2e": {
-      "tags": [],
-      "implicitDependencies": ["landing"]
     },
     "types": {
       "tags": []

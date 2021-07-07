@@ -6,12 +6,11 @@ export const getTickerFromFigiRequestValidation = z.object({
 })
 
 export type GetTickerFromFigiRequest = z.infer<typeof getTickerFromFigiRequestValidation>
-export type GetTickerFromFigiResponse = { symbol: string; region: string; exchange: string }[]
+export type GetTickerFromFigiResponse = { symbol: string; region: string; exchange: string } | null
 export async function getTickerFromFigi({
   figi,
 }: GetTickerFromFigiRequest): Promise<GetTickerFromFigiResponse> {
   const key = new Key("getTickerFromFigi", { figi })
-
   const cachedData = await Cache.get<GetTickerFromFigiResponse>(key)
   if (cachedData) {
     return cachedData
@@ -19,6 +18,7 @@ export async function getTickerFromFigi({
 
   const freshData = await getFigiMapping(figi)
 
-  Cache.set(key, freshData, 60 * 60) // 1h
-  return freshData
+  const value = freshData.length > 0 ? freshData[0] : null
+  Cache.set("30d", { key, value })
+  return value
 }

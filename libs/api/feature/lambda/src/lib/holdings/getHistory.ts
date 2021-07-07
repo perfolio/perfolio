@@ -36,8 +36,10 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
   const figiToSymbol: { [figi: string]: string } = {}
   await Promise.all(
     Object.keys(transactionsByAsset).map(async (figi) => {
-      const { symbol } = (await getTickerFromFigi({ figi }))[0]
-      figiToSymbol[figi] = symbol
+      const res = await getTickerFromFigi({ figi })
+      if (res) {
+        figiToSymbol[figi] = res.symbol
+      }
     }),
   )
   const priceResponse = await Promise.all(

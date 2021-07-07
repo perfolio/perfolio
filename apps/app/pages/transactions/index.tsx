@@ -89,12 +89,9 @@ const TransactionsPage: NextPage = () => {
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-gray-700">Looks like you don't have any transactions yet</p>
-              <Button
-                size="large"
-                label="Add transaction"
-                kind="primary"
-                href="/transactions/new"
-              />
+              <Button size="large" kind="primary" href="/transactions/new">
+                Add transaction
+              </Button>
             </div>
           ) : (
             <div>

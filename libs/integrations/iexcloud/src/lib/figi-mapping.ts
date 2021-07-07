@@ -16,6 +16,9 @@ export type GetFigiMappingResponse = z.infer<typeof GetFigiMappingResponseValida
  * The result is always an array, even if you only specify one figi
  */
 export async function getFigiMapping(...figi: string[]): Promise<GetFigiMappingResponse> {
+  if (figi.length === 0) {
+    return []
+  }
   const res = await new Client().get({
     path: `/ref-data/figi`,
     parameters: { figi },

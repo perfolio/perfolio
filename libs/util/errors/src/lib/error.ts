@@ -1,3 +1,4 @@
+import { Logger } from "tslog"
 export interface ErrorOptions {
   /**
    * Log the error.
@@ -26,24 +27,22 @@ export abstract class GenericError extends Error {
     super(message)
     this.name = name
 
-    /* eslint-disable no-console */
+    const logger = new Logger()
+
     switch (logLevel) {
       case "debug":
-        console.debug(message)
+        logger.debug(message)
         break
       case "info":
-        console.log(message)
+        logger.info(message)
         break
       case "warn":
-        console.warn(message)
+        logger.warn(message)
         break
       case "error":
-        console.error(message)
-        break
-      default:
+        logger.error(message)
         break
     }
-    /* eslint-enable no-console */
 
     this.getPublicMessage = getPublicMessage
   }

@@ -69,8 +69,6 @@ export function AutoCompleteSelect<Option>({
     currency: settings?.defaultCurrency,
     exchange: settings?.defaultExchange,
   })
-  console.log({ options })
-
   return (
     <div className="w-full text-gray-800">
       <label
@@ -139,7 +137,6 @@ export function AutoCompleteSelect<Option>({
               <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {isLoading ? (
                   <li className="w-full h-32">
-                    Hello
                     <Loading bg="bg-gray-50" />
                   </li>
                 ) : options?.length === 0 ? (
@@ -148,7 +145,6 @@ export function AutoCompleteSelect<Option>({
                   </li>
                 ) : (
                   options?.sort().map((option, i) => {
-                    console.log({ option })
                     return (
                       <li key={i}>
                         <button

@@ -21,7 +21,7 @@ export async function getPrice({ ticker, time }: GetPriceRequest): Promise<GetPr
 
   price = { ticker, time, value: newPrice.close }
 
-  await Cache.set(key, price, 7 * 24 * 60 * 60)
+  await Cache.set("1d", { key, value: price })
 
   return price
 }

@@ -22,22 +22,8 @@ export const Default = () => (
     <Card.Footer>
       <Card.Footer.Status>200 OK</Card.Footer.Status>
       <Card.Footer.Actions>
-        <Button
-          kind="secondary"
-          size="small"
-          label="Undo"
-          onClick={() => {
-            console.log("I am not empty")
-          }}
-        ></Button>
-        <Button
-          kind="primary"
-          size="small"
-          label="Save"
-          onClick={() => {
-            console.log("I am not empty")
-          }}
-        ></Button>
+        <Button kind="secondary" size="small" label="Undo"></Button>
+        <Button kind="primary" size="small" label="Save"></Button>
       </Card.Footer.Actions>
     </Card.Footer>
   </Card>
