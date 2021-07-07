@@ -1,5 +1,5 @@
-import { getExchanges as getExchangesFromCloud } from "@perfolio/data-access/iexcloud"
-import { Cache, Key } from "@perfolio/data-access/cache"
+import { getExchanges as getExchangesFromCloud } from "@perfolio/integrations/iexcloud"
+import { Cache, Key } from "@perfolio/integrations/redis"
 import { Exchange } from "@perfolio/types"
 
 export type GetExchangesResponse = Exchange[]
@@ -14,6 +14,6 @@ export async function getExchanges(): Promise<GetExchangesResponse> {
 
   exchanges = await getExchangesFromCloud()
 
-  await Cache.set(key, exchanges, 30 * 24 * 60 * 60) // 30 days
+  await Cache.set("1d", { key, value: exchanges })
   return exchanges
 }

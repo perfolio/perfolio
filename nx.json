@@ -12,16 +12,6 @@
   "npmScope": "perfolio",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "YjAyY2Q1YTMtYTAzNy00Yzk4LWEwMDMtNzg4M2NlMzJhZmQ2fHJlYWQtd3JpdGU=",
-        "canTrackAnalytics": false,
-        "showUsageWarnings": true
-      }
-    },
-    "no-cloud": {
-      "comment": "See https://github.com/nrwl/nx/issues/5660",
       "runner": "@nrwl/workspace/src/tasks-runner/default-tasks-runner",
       "options": {}
     }
@@ -49,19 +39,7 @@
     "data-access-api-client": {
       "tags": []
     },
-    "data-access-cache": {
-      "tags": []
-    },
-    "data-access-db": {
-      "tags": []
-    },
     "data-access-fauna-adapter": {
-      "tags": []
-    },
-    "data-access-iexcloud": {
-      "tags": []
-    },
-    "data-access-localstorage": {
       "tags": []
     },
     "data-access-mutations": {
@@ -85,12 +63,29 @@
     "feature-tokens": {
       "tags": []
     },
-    "landing": {
+    "integrations-bankofengland": {
       "tags": []
     },
-    "landing-e2e": {
-      "tags": [],
-      "implicitDependencies": ["landing"]
+    "integrations-ecb": {
+      "tags": []
+    },
+    "integrations-fauna": {
+      "tags": []
+    },
+    "integrations-iexcloud": {
+      "tags": []
+    },
+    "integrations-localstorage": {
+      "tags": []
+    },
+    "integrations-openfigi": {
+      "tags": []
+    },
+    "integrations-redis": {
+      "tags": []
+    },
+    "landing": {
+      "tags": []
     },
     "types": {
       "tags": []
@@ -105,6 +100,12 @@
       "tags": []
     },
     "util-currency": {
+      "tags": []
+    },
+    "util-env": {
+      "tags": []
+    },
+    "util-errors": {
       "tags": []
     },
     "util-numbers": {

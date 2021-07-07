@@ -210,48 +210,6 @@
         }
       }
     },
-    "data-access-cache": {
-      "root": "libs/data-access/cache",
-      "sourceRoot": "libs/data-access/cache/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/cache/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/cache"],
-          "options": {
-            "jestConfig": "libs/data-access/cache/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-db": {
-      "root": "libs/data-access/db",
-      "sourceRoot": "libs/data-access/db/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/db/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/db"],
-          "options": {
-            "jestConfig": "libs/data-access/db/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "data-access-fauna-adapter": {
       "root": "libs/data-access/fauna-adapter",
       "sourceRoot": "libs/data-access/fauna-adapter/src",
@@ -268,48 +226,6 @@
           "outputs": ["coverage/libs/data-access/fauna-adapter"],
           "options": {
             "jestConfig": "libs/data-access/fauna-adapter/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-iexcloud": {
-      "root": "libs/data-access/iexcloud",
-      "sourceRoot": "libs/data-access/iexcloud/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/iexcloud/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/iexcloud"],
-          "options": {
-            "jestConfig": "libs/data-access/iexcloud/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-localstorage": {
-      "root": "libs/data-access/localstorage",
-      "sourceRoot": "libs/data-access/localstorage/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/localstorage/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/localstorage"],
-          "options": {
-            "jestConfig": "libs/data-access/localstorage/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -462,6 +378,153 @@
         }
       }
     },
+    "integrations-bankofengland": {
+      "root": "libs/integrations/bankofengland",
+      "sourceRoot": "libs/integrations/bankofengland/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/bankofengland/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/bankofengland"],
+          "options": {
+            "jestConfig": "libs/integrations/bankofengland/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-ecb": {
+      "root": "libs/integrations/ecb",
+      "sourceRoot": "libs/integrations/ecb/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/ecb/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/ecb"],
+          "options": {
+            "jestConfig": "libs/integrations/ecb/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-fauna": {
+      "root": "libs/integrations/fauna",
+      "sourceRoot": "libs/integrations/fauna/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/fauna/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/fauna"],
+          "options": {
+            "jestConfig": "libs/integrations/fauna/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-iexcloud": {
+      "root": "libs/integrations/iexcloud",
+      "sourceRoot": "libs/integrations/iexcloud/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/iexcloud/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/iexcloud"],
+          "options": {
+            "jestConfig": "libs/integrations/iexcloud/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-localstorage": {
+      "root": "libs/integrations/localstorage",
+      "sourceRoot": "libs/integrations/localstorage/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/localstorage/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/localstorage"],
+          "options": {
+            "jestConfig": "libs/integrations/localstorage/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-openfigi": {
+      "root": "libs/integrations/openfigi",
+      "sourceRoot": "libs/integrations/openfigi/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/openfigi/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/openfigi"],
+          "options": {
+            "jestConfig": "libs/integrations/openfigi/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-redis": {
+      "root": "libs/integrations/redis",
+      "sourceRoot": "libs/integrations/redis/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/redis/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/redis"],
+          "options": {
+            "jestConfig": "libs/integrations/redis/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "landing": {
       "root": "apps/landing",
       "sourceRoot": "apps/landing",
@@ -519,32 +582,6 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
-    "landing-e2e": {
-      "root": "apps/landing-e2e",
-      "sourceRoot": "apps/landing-e2e/src",
-      "projectType": "application",
-      "targets": {
-        "e2e": {
-          "executor": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/landing-e2e/cypress.json",
-            "tsConfig": "apps/landing-e2e/tsconfig.e2e.json",
-            "devServerTarget": "landing:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "landing:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/landing-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -680,6 +717,48 @@
           "outputs": ["coverage/libs/util/currency"],
           "options": {
             "jestConfig": "libs/util/currency/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "util-env": {
+      "root": "libs/util/env",
+      "sourceRoot": "libs/util/env/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util/env/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util/env"],
+          "options": {
+            "jestConfig": "libs/util/env/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "util-errors": {
+      "root": "libs/util/errors",
+      "sourceRoot": "libs/util/errors/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util/errors/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util/errors"],
+          "options": {
+            "jestConfig": "libs/util/errors/jest.config.js",
             "passWithNoTests": true
           }
         }

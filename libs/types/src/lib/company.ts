@@ -2,7 +2,7 @@ export type Company = {
   /**
    * Ticker of the company
    */
-  symbol: string
+  ticker: string
 
   /**
    * Url of the logo
@@ -12,33 +12,33 @@ export type Company = {
   /**
    * Name of the company
    */
-  name: string | null
+  name?: string
 
   /**
    * Refers to Exchange using IEX Supported Exchanges list
    * @see https://cloud.iexapis.com/stable/ref-data/exchanges
    */
-  exchange: string | null
+  exchange?: string
 
   /**
    * Refers to the industry the company belongs to
    */
-  industry: string | null
+  industry?: string
 
   /**
    * Website of the company
    */
-  website: string | null
+  website?: string
 
   /**
    *  	Description for the company
    */
-  description: string | null
+  description?: string
 
   /**
    * Name of the CEO of the company
    */
-  ceo: string | null
+  ceo?: string
 
   /**
    * Refers to the common issue type of the stock.
@@ -55,7 +55,7 @@ export type Company = {
    * wt - Warrant
    * empty - Other
    */
-  issueType:
+  issueType?:
     | "ad"
     | "cs"
     | "cef"
@@ -68,65 +68,64 @@ export type Company = {
     | "wi"
     | "wt"
     | "empty"
-    | null
 
   /**
    * Refers to the sector the company belongs to.
    */
-  sector: string | null
+  sector?: string
 
   /**
    *  	Number of employees
    */
-  employees: number | null
+  employees?: number
   /**
    * Name of the CEO of the company
    */
-  securityName: string | null
+  securityName?: string
 
   /**
-   * Primary SIC Code for the symbol (if available)
+   * Primary SIC Code for the ticker (if available)
    * @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
    */
-  primarySicCode: number | null
+  primarySicCode?: number
 
   /**
    * An array of strings used to classify the company.
    */
-  tags: string[] | null
+  tags?: string[]
 
   /**
    * Street address of the company if available
    */
-  address: string | null
+  address?: string
 
   /**
    * Street address of the company if available
    */
-  address2: string | null
+  address2?: string
 
   /**
    * State of the company if available
    */
-  state: string | null
+  state?: string
 
   /**
    * City of the company if available
    */
-  city: string | null
+  city?: string
 
   /**
    * Zip code of the company if available
    */
-  zip: string | null
+  zip?: string
 
   /**
    * Country of the company if available
    */
-  country: string | null
+  country?: string
 
   /**
    * Phone number of the company if available
    */
-  phone: string | null
+  phone?: string
 }

@@ -2,8 +2,8 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { useCompany, useTransactions, useSymbolFromFigi } from "@perfolio/data-access/queries"
-import { Transaction } from "@perfolio/data-access/db"
+import { useCompany, useTransactions, useTickerFromFigi } from "@perfolio/data-access/queries"
+import { Transaction } from "@perfolio/integrations/fauna"
 import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
@@ -15,8 +15,8 @@ export interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
-  const { symbol } = useSymbolFromFigi({ figi: transaction.data.assetId })
-  const { company } = useCompany(symbol)
+  const { ticker } = useTickerFromFigi({ figi: transaction.data.assetId })
+  const { company } = useCompany(ticker)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction()
 
   return (
@@ -89,12 +89,9 @@ const TransactionsPage: NextPage = () => {
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-gray-700">Looks like you don't have any transactions yet</p>
-              <Button
-                size="large"
-                label="Add transaction"
-                kind="primary"
-                href="/transactions/new"
-              />
+              <Button size="large" kind="primary" href="/transactions/new">
+                Add transaction
+              </Button>
             </div>
           ) : (
             <div>
