@@ -34,7 +34,7 @@ export class Cache {
    */
   public static async set(
     key: Key,
-    value: Record<string, unknown> | unknown[],
+    value: Record<string, unknown> | unknown[] | null,
     ttl: number,
   ): Promise<void> {
     const redis = Cache.connect()

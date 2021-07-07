@@ -10,7 +10,7 @@ import { Transaction } from "@perfolio/integrations/fauna"
 import {
   useTransactions,
   useCompany,
-  useSymbolFromFigi,
+  useTickerFromFigi,
   useSettings,
 } from "@perfolio/data-access/queries"
 import { useCreateTransaction } from "@perfolio/data-access/mutations"
@@ -25,7 +25,7 @@ const Suggestion: React.FC<{
   setValue?: (key: "isin", val: string) => void
   trigger?: () => void
 }> = ({ tx }): JSX.Element => {
-  const { ticker } = useSymbolFromFigi({ figi: tx.data.assetId })
+  const { ticker } = useTickerFromFigi({ figi: tx.data.assetId })
   const { company } = useCompany(ticker)
   return (
     <li className="flex items-center justify-between w-full gap-4 py-3">

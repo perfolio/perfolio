@@ -1,4 +1,4 @@
-import { useSymbolFromFigi, useTransactions } from "@perfolio/data-access/queries"
+import { useTickerFromFigi, useTransactions } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/integrations/fauna"
 import { Time } from "@perfolio/util/time"
 import React from "react"
@@ -13,7 +13,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
-  const { ticker, isLoading } = useSymbolFromFigi({
+  const { ticker, isLoading } = useTickerFromFigi({
     figi: transaction.data.assetId,
   })
 

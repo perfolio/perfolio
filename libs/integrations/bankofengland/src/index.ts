@@ -1,1 +1,1 @@
-export * from "./lib/integrations-bankofengland"
+export * from "./lib/bankofengland"

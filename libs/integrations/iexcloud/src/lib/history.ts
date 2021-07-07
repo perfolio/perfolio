@@ -1,7 +1,7 @@
 import { Time } from "@perfolio/util/time"
 import * as z from "zod"
-import { Client, ErrorHTTP400 } from "./client"
-
+import { Client } from "./client"
+import { HTTPError } from "@perfolio/util/errors"
 export const GetPriceResponseValidator = z.array(
   z
     .object({
@@ -33,7 +33,7 @@ export async function getPrice(symbol: string, time: Time): Promise<GetPriceResp
       /**
        * Just return -1 if the request was in the past where no price data was availabe.
        */
-      if (err instanceof ErrorHTTP400 && time.unix() <= Time.today().unix()) {
+      if (err instanceof HTTPError && time.unix() <= Time.today().unix()) {
         return {
           close: -1,
         }

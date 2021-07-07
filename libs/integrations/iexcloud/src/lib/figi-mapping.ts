@@ -10,7 +10,12 @@ export const GetFigiMappingResponseValidator = z.array(
 )
 export type GetFigiMappingResponse = z.infer<typeof GetFigiMappingResponseValidator>
 
-export async function getFigiMapping(figi: string): Promise<GetFigiMappingResponse> {
+/**
+ * Return the figi mapping for all figis where iex knows a matching symbol.
+ *
+ * The result is always an array, even if you only specify one figi
+ */
+export async function getFigiMapping(...figi: string[]): Promise<GetFigiMappingResponse> {
   const res = await new Client().get({
     path: `/ref-data/figi`,
     parameters: { figi },

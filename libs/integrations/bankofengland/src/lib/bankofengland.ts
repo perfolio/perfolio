@@ -51,17 +51,17 @@ export type FXRates = Record<string, number>
  * We chose the latter and have to parse the CSV manually.
  *
  * Each row except the header looks as follows:
-   * ```
-   * 13 Jan 2020, 0.12345
-   * ```
-   * 
-   * For monthly and annual requests the api returns only the last day of the
-   * month or year respectively.
-   * ```
-   * 31 Dec 2020, 0.12345
-   * ```
-*
-*/
+ * ```
+ * 13 Jan 2020, 0.12345
+ * ```
+ *
+ * For monthly and annual requests the api returns only the last day of the
+ * month or year respectively.
+ * ```
+ * 31 Dec 2020, 0.12345
+ * ```
+ *
+ */
 export async function getFXRates(interval: Interval, currency: Currency): Promise<FXRates> {
   const url = "http://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp"
   const params = {
@@ -79,7 +79,6 @@ export async function getFXRates(interval: Interval, currency: Currency): Promis
   if (res.status !== 200) {
     throw new HTTPError(res.status, url)
   }
-
 
   const data = await res.text()
 

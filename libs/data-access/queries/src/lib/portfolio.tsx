@@ -1,6 +1,6 @@
 import { useQueries } from "react-query"
 import { useApi } from "@perfolio/data-access/api-client"
-import { QUERY_KEY_SYMBOL_FROM_FIGI } from "./asset"
+import { QUERY_KEY_TICKER_FROM_FIGI } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { useHistory } from "./history"
 import { useSession } from "next-auth/client"
@@ -55,8 +55,8 @@ export const usePortfolio = () => {
   const symbols = useQueries(
     Object.keys(session && history ? history : {}).map((figi) => {
       return {
-        queryKey: QUERY_KEY_SYMBOL_FROM_FIGI(figi),
-        queryFn: () => api.assets.getSymbolFromFigi({ figi }),
+        queryKey: QUERY_KEY_TICKER_FROM_FIGI(figi),
+        queryFn: () => api.assets.getTickerFromFigi({ figi }),
       }
     }),
   ).map((ticker) => {
