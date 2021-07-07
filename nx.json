@@ -73,6 +73,12 @@
     "feature-tokens": {
       "tags": []
     },
+    "integrations-bankofengland": {
+      "tags": []
+    },
+    "integrations-ecb": {
+      "tags": []
+    },
     "integrations-fauna": {
       "tags": []
     },

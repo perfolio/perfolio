@@ -378,6 +378,48 @@
         }
       }
     },
+    "integrations-bankofengland": {
+      "root": "libs/integrations/bankofengland",
+      "sourceRoot": "libs/integrations/bankofengland/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/bankofengland/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/bankofengland"],
+          "options": {
+            "jestConfig": "libs/integrations/bankofengland/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-ecb": {
+      "root": "libs/integrations/ecb",
+      "sourceRoot": "libs/integrations/ecb/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/ecb/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/ecb"],
+          "options": {
+            "jestConfig": "libs/integrations/ecb/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-fauna": {
       "root": "libs/integrations/fauna",
       "sourceRoot": "libs/integrations/fauna/src",
