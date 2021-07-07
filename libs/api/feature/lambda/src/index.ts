@@ -1,4 +1,4 @@
-export * from "./lib/assets/getSymbolFromFigi"
+export * from "./lib/assets/getTickerFromFigi"
 
 export * from "./lib/companies/getCompany"
 

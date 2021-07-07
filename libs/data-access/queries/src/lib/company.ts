@@ -7,12 +7,12 @@ export const QUERY_KEY_COMPANY_BY_SYMBOL = (ticker: string): string => `company_
 export function useCompany(ticker: string | undefined) {
   const [session] = useSession()
   const api = useApi()
-  const { data, ...meta } = useQuery<Company, Error>(
-    QUERY_KEY_COMPANY_BY_SYMBOL(ticker ?? ""),
+  const { data, ...meta } = useQuery<Company | null, Error>(
+    QUERY_KEY_COMPANY_BY_SYMBOL(ticker!),
     async () => api.companies.getCompany({ ticker: ticker! }),
     {
       enabled: !!session && !!ticker,
     },
   )
-  return { company: data, ...meta }
+  return { company: data ?? undefined, ...meta }
 }

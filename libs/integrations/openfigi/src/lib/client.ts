@@ -51,7 +51,7 @@ export class Client {
        */
 
       if (res.status !== 200) {
-        throw new HTTPError(`[POST] ${path} failed with status: ${res.status}`)
+        throw new HTTPError(res.status, path)
       }
       const unmarshalled = await res.json().catch((err) => {
         throw new Error(`Unable to unmarshal response: ${err}`)

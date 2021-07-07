@@ -1,3 +1,4 @@
+import { HTTPError } from "@perfolio/util/errors"
 /**
  * Generic api request to be extended by other request types.
  */
@@ -32,10 +33,8 @@ export interface GetRequest extends ApiRequest {
   /**
    * Query parameters.
    */
-  parameters?: Record<string, string | number | undefined>
+  parameters?: Record<string, string | string[] | number | number[] | undefined>
 }
-
-export class ErrorHTTP400 extends Error {}
 
 /**
  * SDK for IEXCloud resources.
@@ -73,7 +72,12 @@ export class Client {
      * Flatten query.
      */
     const query = Object.entries(parameters)
-      .map(([k, v]) => `${k}=${v}`)
+      .map(([k, v]) => {
+        if (Array.isArray(v)) {
+          v = v.join(",")
+        }
+        return `${k}=${v}`
+      })
       .join("&")
 
     const url = `${this.baseUrl}${path}?${query}`
@@ -93,7 +97,7 @@ export class Client {
        * We need to handle some 400 errors specifically.
        */
       if (res.status === 400) {
-        throw new ErrorHTTP400(`Unable to GET endpoint ${path}, failed with status: ${res.status}`)
+        throw new HTTPError(res.status, path, await res.text())
       }
 
       if (res.status !== 200) {

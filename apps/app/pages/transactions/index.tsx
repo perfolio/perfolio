@@ -2,7 +2,7 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { useCompany, useTransactions, useSymbolFromFigi } from "@perfolio/data-access/queries"
+import { useCompany, useTransactions, useTickerFromFigi } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/integrations/fauna"
 import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
@@ -15,7 +15,7 @@ export interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
-  const { ticker } = useSymbolFromFigi({ figi: transaction.data.assetId })
+  const { ticker } = useTickerFromFigi({ figi: transaction.data.assetId })
   const { company } = useCompany(ticker)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction()
 

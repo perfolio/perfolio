@@ -67,7 +67,9 @@ export function AutoCompleteSelect<Option>({
   const { search: options, isLoading } = useSearch({
     fragment: search,
     currency: settings?.defaultCurrency,
+    exchange: settings?.defaultExchange,
   })
+  console.log({ options })
 
   return (
     <div className="w-full text-gray-800">
@@ -145,28 +147,31 @@ export function AutoCompleteSelect<Option>({
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options?.sort().map((option, i) => (
-                    <li key={i}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setValue(name, option)
-                          setState(State.Done)
-                        }}
-                        className={cn("relative p-2 cursor-pointer w-full", {
-                          "bg-gray-100": option === value,
-                          "bg-gradient-to-tr from-gray-50 to-gray-100": value,
-                        })}
-                      >
-                        <Profile
-                          image={option.logo}
-                          title={option.name}
-                          subtitle={option.exchange}
-                          tag={option.ticker}
-                        />
-                      </button>
-                    </li>
-                  ))
+                  options?.sort().map((option, i) => {
+                    console.log({ option })
+                    return (
+                      <li key={i}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setValue(name, option)
+                            setState(State.Done)
+                          }}
+                          className={cn("relative p-2 cursor-pointer w-full", {
+                            "bg-gray-100": option === value,
+                            "bg-gradient-to-tr from-gray-50 to-gray-100": value,
+                          })}
+                        >
+                          <Profile
+                            image={option.logo}
+                            title={option.name}
+                            subtitle={option.exchange}
+                            tag={option.ticker}
+                          />
+                        </button>
+                      </li>
+                    )
+                  })
                 )}
               </ul>
             </Transition>
