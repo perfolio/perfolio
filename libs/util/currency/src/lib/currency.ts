@@ -11,15 +11,15 @@ export function getCurrency(country: string): string {
   return currency
 }
 /**
- * Get the currency symbol from a currency
+ * Get the currency ticker from a currency
  */
 export function getCurrencySymbol(currency: string | undefined): string {
-  if (!currency) {
+  if (typeof currency !== "string") {
     return ""
   }
-  const symbol = currencySymbols[currency.toUpperCase()]
-  if (!symbol) {
-    throw new Error(`No symbol found for currency: ${currency}`)
+  const ticker = currencySymbols[currency.toUpperCase()]
+  if (!ticker) {
+    throw new Error(`No ticker found for currency: ${currency}`)
   }
-  return symbol
+  return ticker
 }

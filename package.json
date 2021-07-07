@@ -5,7 +5,7 @@
     "dev": "nx serve app --port=3000",
     "build": "nx run-many --target=build --all --parallel --maxParallel=16",
     "test": "nx run-many --target=test --all",
-    "fmt": "pnpm run lint && pnpm prettier --write .",
+    "fmt": "pnpm run lint && pnpm prettier --loglevel=warn --write .",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx run-many --target=e2e --all",
     "affected:apps": "nx affected:apps",

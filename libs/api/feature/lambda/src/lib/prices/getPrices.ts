@@ -2,13 +2,13 @@ import { z } from "zod"
 import {
   getPrice as getPriceFromCloud,
   getHistory as getHistoryFromCloud,
-} from "@perfolio/data-access/iexcloud"
+} from "@perfolio/integrations/iexcloud"
 import { Time } from "@perfolio/util/time"
 import { Price } from "@perfolio/types"
-import { Cache, Key } from "@perfolio/data-access/cache"
+import { Cache, Key } from "@perfolio/integrations/redis"
 
 export const GetPricesRequestValidation = z.object({
-  symbol: z.string(),
+  ticker: z.string(),
   begin: z.number(),
   end: z.number(),
 })
@@ -16,28 +16,28 @@ export const GetPricesRequestValidation = z.object({
 export type GetPricesRequest = z.infer<typeof GetPricesRequestValidation>
 export type GetPricesResponse = { prices: Record<number, number> }
 export async function getPrices({
-  symbol,
+  ticker,
   begin,
   end,
 }: GetPricesRequest): Promise<GetPricesResponse> {
-  // if (symbol.includes("_")) {
-  //   symbol = symbol.split("_")[1] ?? symbol
+  // if (ticker.includes("_")) {
+  //   ticker = ticker.split("_")[1] ?? ticker
   // }
-  // if (symbol.includes("-")) {
-  //   symbol = symbol.split("-")[0] ?? symbol
+  // if (ticker.includes("-")) {
+  //   ticker = ticker.split("-")[0] ?? ticker
   // }
 
-  const key = new Key("getPrices", { symbol })
+  const key = new Key("getPrices", { ticker })
 
   let cachedPrices = await Cache.get<Price[]>(key)
   /**
    * In case this is a new company we load everything in bulk
    */
   if (!cachedPrices) {
-    const allPrices = await getHistoryFromCloud(symbol)
+    const allPrices = await getHistoryFromCloud(ticker)
     cachedPrices = allPrices.map((price) => {
       return {
-        symbol,
+        ticker,
         time: Time.fromDate(new Date(price.date)).unix(),
         value: price.close,
       }
@@ -65,7 +65,7 @@ export async function getPrices({
    */
   await Promise.all(
     priceRequests.map(async (time) => {
-      const price = await getPriceFromCloud(symbol, time)
+      const price = await getPriceFromCloud(ticker, time)
 
       priceMap[time.unix()] = price.close
     }),
@@ -74,17 +74,16 @@ export async function getPrices({
   /**
    * Save ALL prices back to redis
    */
-  Cache.set(
+  Cache.set("1d", {
     key,
-    Object.entries(priceMap).map(([time, value]) => {
+    value: Object.entries(priceMap).map(([time, value]) => {
       return {
-        symbol,
+        ticker,
         time,
         value,
       }
     }),
-    30 * 24 * 60 * 60, // 30 dayst
-  )
+  })
 
   /**
    * Only return the prices the user originally requestes

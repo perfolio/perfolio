@@ -1,7 +1,7 @@
 import { useApi } from "@perfolio/data-access/api-client"
 import { useQuery } from "react-query"
 import { useSession } from "next-auth/client"
-import { GetExchangesResponse } from "@perfolio/data-access/iexcloud"
+import { GetExchangesResponse } from "@perfolio/integrations/iexcloud"
 export const QUERY_KEY_EXCHANGES = "exchanges"
 export function useExchanges() {
   const [session] = useSession()

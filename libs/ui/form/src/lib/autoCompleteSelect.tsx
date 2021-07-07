@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearch } from "@perfolio/data-access/queries"
+import { useSearch, useSettings } from "@perfolio/data-access/queries"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   /**
@@ -56,6 +56,7 @@ export function AutoCompleteSelect<Option>({
     }
   }, [value, onChange])
 
+  const { settings } = useSettings()
   /**
    * User search value
    */
@@ -63,8 +64,11 @@ export function AutoCompleteSelect<Option>({
   /**
    * Available options from iex
    */
-  const { search: options, isLoading } = useSearch({ fragment: search })
-
+  const { search: options, isLoading } = useSearch({
+    fragment: search,
+    currency: settings?.defaultCurrency,
+    exchange: settings?.defaultExchange,
+  })
   return (
     <div className="w-full text-gray-800">
       <label
@@ -133,36 +137,37 @@ export function AutoCompleteSelect<Option>({
               <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {isLoading ? (
                   <li className="w-full h-32">
-                    Hello
                     <Loading bg="bg-gray-50" />
                   </li>
-                ) : options.length === 0 ? (
+                ) : options?.length === 0 ? (
                   <li className="relative w-full p-2 cursor-pointer">
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options.sort().map((option, i) => (
-                    <li key={i}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setValue(name, option)
-                          setState(State.Done)
-                        }}
-                        className={cn("relative p-2 cursor-pointer w-full", {
-                          "bg-gray-100": option === value,
-                          "bg-gradient-to-tr from-gray-50 to-gray-100": value,
-                        })}
-                      >
-                        <Profile
-                          image={option.logo}
-                          title={option.name}
-                          subtitle={option.exchange}
-                          tag={option.symbol}
-                        />
-                      </button>
-                    </li>
-                  ))
+                  options?.sort().map((option, i) => {
+                    return (
+                      <li key={i}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setValue(name, option)
+                            setState(State.Done)
+                          }}
+                          className={cn("relative p-2 cursor-pointer w-full", {
+                            "bg-gray-100": option === value,
+                            "bg-gradient-to-tr from-gray-50 to-gray-100": value,
+                          })}
+                        >
+                          <Profile
+                            image={option.logo}
+                            title={option.name}
+                            subtitle={option.exchange}
+                            tag={option.ticker}
+                          />
+                        </button>
+                      </li>
+                    )
+                  })
                 )}
               </ul>
             </Transition>

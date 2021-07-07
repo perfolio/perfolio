@@ -2,18 +2,18 @@ import { z } from "zod"
 import {
   getCompany as getCompanyFromCloud,
   getLogo as getLogoFromCloud,
-} from "@perfolio/data-access/iexcloud"
-import { Cache, Key } from "@perfolio/data-access/cache"
+} from "@perfolio/integrations/iexcloud"
+import { Cache, Key } from "@perfolio/integrations/redis"
 import { Company } from "@perfolio/types"
 export const GetCompanyRequestValidation = z.object({
-  symbol: z.string(),
+  ticker: z.string(),
 })
 
 export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>
-export type GetCompanyResponse = Company
+export type GetCompanyResponse = Company | null
 
-export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetCompanyResponse> {
-  const key = new Key("getCompany", { symbol })
+export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetCompanyResponse> {
+  const key = new Key("getCompany_b", { ticker })
 
   let company = await Cache.get<Company>(key)
   if (company) {
@@ -21,41 +21,48 @@ export async function getCompany({ symbol }: GetCompanyRequest): Promise<GetComp
   }
 
   const [newCompany, logo] = await Promise.all([
-    getCompanyFromCloud(symbol),
-    getLogoFromCloud(symbol),
+    getCompanyFromCloud(ticker).catch(() => {
+      // ignore error, this is quite likely to happen
+      return undefined
+    }),
+    getLogoFromCloud(ticker).catch(() => {
+      // ignore error, this is quite likely to happen
+      return undefined
+    }),
   ])
 
   /**
    * Transform company from iex schema to one we want to use.
    */
-  company = {
-    logo: logo.url,
-    name: newCompany.companyName,
+  company = newCompany
+    ? {
+        logo: logo?.url ?? "",
+        name: newCompany.companyName ?? undefined,
+        /**
+         * Copy the rest
+         */
+        ticker: ticker,
+        exchange: newCompany.exchange ?? undefined,
+        industry: newCompany.industry ?? undefined,
+        website: newCompany.website ?? undefined,
+        description: newCompany.description ?? undefined,
+        ceo: newCompany.CEO ?? undefined,
+        issueType: newCompany.issueType ?? undefined,
+        sector: newCompany.sector ?? undefined,
+        employees: newCompany.employees ?? undefined,
+        securityName: newCompany.securityName ?? undefined,
+        primarySicCode: newCompany.primarySicCode ?? undefined,
+        address: newCompany.address ?? undefined,
+        address2: newCompany.address2 ?? undefined,
+        tags: newCompany.tags ?? undefined,
+        state: newCompany.state ?? undefined,
+        city: newCompany.city ?? undefined,
+        zip: newCompany.zip ?? undefined,
+        country: newCompany.country ?? undefined,
+        phone: newCompany.phone ?? undefined,
+      }
+    : null
 
-    /**
-     * Copy the rest
-     */
-    symbol: symbol,
-    exchange: newCompany.exchange,
-    industry: newCompany.industry,
-    website: newCompany.website,
-    description: newCompany.description,
-    ceo: newCompany.CEO,
-    issueType: newCompany.issueType,
-    sector: newCompany.sector,
-    employees: newCompany.employees,
-    securityName: newCompany.securityName,
-    primarySicCode: newCompany.primarySicCode,
-    address: newCompany.address,
-    address2: newCompany.address2,
-    tags: newCompany.tags,
-    state: newCompany.state,
-    city: newCompany.city,
-    zip: newCompany.zip,
-    country: newCompany.country,
-    phone: newCompany.phone,
-  }
-
-  await Cache.set(key, company, 30 * 24 * 60 * 60) // 30 days
+  await Cache.set("1d", { key, value: company })
   return company
 }

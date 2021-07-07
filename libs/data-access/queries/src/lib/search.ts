@@ -5,6 +5,8 @@ import { useSession } from "next-auth/client"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { Company } from "@perfolio/types"
 
+export type SearchResult = Company & { figi: string }
+
 export const QUERY_KEY_SEARCH = (fragment: string): string => `search_${fragment}`
 export function useSearch(req: SearchRequest) {
   const [session] = useSession()
@@ -17,20 +19,24 @@ export function useSearch(req: SearchRequest) {
       enabled: !!session && req.fragment.length > 0,
     },
   )
-
   const companies = useQueries(
     (data ?? []).map((option) => {
       return {
         queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(option.symbol),
-        queryFn: () => api.companies.getCompany({ symbol: option.symbol }),
+        queryFn: async () => {
+          const company = await api.companies.getCompany({ ticker: option.symbol })
+          return {
+            ...company,
+            figi: option.figi,
+          }
+        },
       }
     }),
-  ).map((company) => {
-    return company.data as Company
-  })
+  )
+    .map((company) => {
+      return company.data as SearchResult
+    })
+    .filter((company) => !!company)
 
-  const search = (data ?? []).map((option, i) => {
-    return Object.assign(option, companies[i])
-  })
-  return { search, ...meta }
+  return { search: companies, ...meta }
 }
