@@ -74,17 +74,16 @@ export async function getPrices({
   /**
    * Save ALL prices back to redis
    */
-  Cache.set(
+  Cache.set("1d", {
     key,
-    Object.entries(priceMap).map(([time, value]) => {
+    value: Object.entries(priceMap).map(([time, value]) => {
       return {
         ticker,
         time,
         value,
       }
     }),
-    30 * 24 * 60 * 60, // 30 dayst
-  )
+  })
 
   /**
    * Only return the prices the user originally requestes

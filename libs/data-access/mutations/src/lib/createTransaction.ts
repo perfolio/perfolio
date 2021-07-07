@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "react-query"
 import { useApi } from "@perfolio/data-access/api-client"
 
 import { CreateTransactionRequest } from "@perfolio/api/feature/lambda"
-import { USE_TRANSACTIONS_QUERY_KEY } from "@perfolio/data-access/queries"
+import { USE_TRANSACTIONS_QUERY_KEY, QUERY_KEY_GET_HISTORY } from "@perfolio/data-access/queries"
 
 export function useCreateTransaction() {
   const queryClient = useQueryClient()
@@ -14,6 +14,7 @@ export function useCreateTransaction() {
       api.transactions.createTransaction(variables),
     onSuccess: () => {
       queryClient.invalidateQueries(USE_TRANSACTIONS_QUERY_KEY)
+      queryClient.invalidateQueries(QUERY_KEY_GET_HISTORY)
     },
   })
 }

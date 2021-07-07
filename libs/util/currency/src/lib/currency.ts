@@ -14,7 +14,7 @@ export function getCurrency(country: string): string {
  * Get the currency ticker from a currency
  */
 export function getCurrencySymbol(currency: string | undefined): string {
-  if (!currency) {
+  if (typeof currency !== "string") {
     return ""
   }
   const ticker = currencySymbols[currency.toUpperCase()]

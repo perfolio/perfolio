@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { z } from "zod"
 import { Loading, Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
@@ -26,6 +26,7 @@ const Suggestion: React.FC<{
   trigger?: () => void
 }> = ({ tx }): JSX.Element => {
   const { ticker } = useTickerFromFigi({ figi: tx.data.assetId })
+  console.log({ figi: tx.data.assetId, ticker })
   const { company } = useCompany(ticker)
   return (
     <li className="flex items-center justify-between w-full gap-4 py-3">
@@ -62,7 +63,7 @@ const Suggestion: React.FC<{
 const validation = z.object({
   asset: z.object({
     name: z.string(),
-    currency: z.string(),
+    ticker: z.string(),
     figi: z.string(),
     exchange: z.string(),
   }),
@@ -80,7 +81,6 @@ const NewTransactionPage: NextPage = () => {
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
-  const formData = ctx.watch()
   const { mutateAsync: createTransaction } = useCreateTransaction()
   const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
@@ -91,27 +91,10 @@ const NewTransactionPage: NextPage = () => {
         uniqueAssets[tx.data.assetId] = tx
       }
     })
-  const { settings } = useSettings()
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
-
-  useEffect(() => {
-    if (!settings || !formData.asset) {
-      return
-    }
-
-    if (settings.defaultCurrency !== formData.asset.currency) {
-      setFormError(
-        <span>
-          The currency at {formData.asset.exchange} does not match your preferred currency. Please
-          choose a different exchange or{" "}
-          <Link href="/settings/">
-            <a className="underline">change your settings</a>
-          </Link>
-        </span>,
-      )
-    }
-  }, [formData.asset, settings])
   const [submitting, setSubmitting] = useState(false)
+  const { settings } = useSettings()
+
   return (
     <AppLayout
       sidebar={
@@ -127,33 +110,7 @@ const NewTransactionPage: NextPage = () => {
         <Main.Content>
           <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
             <div className="w-full">
-              <Form
-                ctx={ctx}
-                formError={formError}
-                className="grid grid-cols-1 gap-8"
-                // submitText="Add Transaction"
-                // schema={z.object({
-                //   assetId: z.string().regex(/[A-Z]{2}[a-zA-Z0-9]{10}/, "This is not a valid isin."),
-                //   volume: z.string().transform((x: string) => parseInt(x)),
-                //   value: z.string().transform((x: string) => parseInt(x)),
-                //   executedAt: z
-                //     .string()
-                //     .transform((x: string) => Time.fromDate(new Date(x)).unix()),
-                // })}
-                // // initialValues={{assetId: "", executedAt: Time.today().unix()}}
-                // onSubmit={async (tx) => {
-                //   try {
-                //     await createTransaction(tx)
-                //   } catch (error) {
-                //     return {
-                //       [FORM_ERROR]:
-                //         "Sorry, we had an unexpected error. Please try again. - " +
-                //         error.toString(),
-                //     }
-                //   }
-                //   return
-                // }}
-              >
+              <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
                 <Field.AutoCompleteSelect
                   options={(fragment: string) => api.search.search({ fragment })}
                   name="asset"
@@ -161,6 +118,11 @@ const NewTransactionPage: NextPage = () => {
                   help={
                     <Description title="TODO: @webersni">
                       Search for your asset. Try <pre>microsoft</pre>
+                      Only stocks from your selected exchange will be shown here. If you would like
+                      to change this, please{" "}
+                      <Link href="/settings/stocks">
+                        <a className="underline text-info-400">go to settings</a>
+                      </Link>
                     </Description>
                   }
                 />
@@ -186,7 +148,7 @@ const NewTransactionPage: NextPage = () => {
                     iconLeft={
                       <div className="flex items-center justify-center w-full h-full">
                         <span className="font-medium text-gray-700">
-                          {getCurrencySymbol(ctx.watch("asset")?.currency)}
+                          {getCurrencySymbol(settings?.defaultCurrency)}
                         </span>
                       </div>
                     }
@@ -198,19 +160,17 @@ const NewTransactionPage: NextPage = () => {
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
-                      async ({ asset: { figi }, volume, value, executedAt }) => {
-                        try {
-                          await createTransaction({
-                            volume: Number(volume),
-                            value: Number(value),
-                            executedAt: Time.fromString(executedAt as unknown as string).unix(),
-                            assetId: figi,
-                          })
-                        } catch (err) {
+                      async ({ asset, volume, value, executedAt }) => {
+                        await createTransaction({
+                          volume: Number(volume),
+                          value: Number(value),
+                          executedAt: Time.fromString(executedAt as unknown as string).unix(),
+                          assetId: asset.figi,
+                        }).catch((err) => {
                           setFormError(
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )
-                        }
+                        })
                       },
                       setSubmitting,
                       setFormError,

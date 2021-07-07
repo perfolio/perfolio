@@ -15,7 +15,6 @@ export function useTickerFromFigi(req: GetTickerFromFigiRequest) {
       enabled: !!session && !!req.figi,
     },
   )
-  const res = data ? data[0] : undefined
 
-  return { ticker: res?.symbol, ...meta }
+  return { ticker: data?.symbol, ...meta }
 }

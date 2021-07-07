@@ -13,7 +13,7 @@ export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>
 export type GetCompanyResponse = Company | null
 
 export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetCompanyResponse> {
-  const key = new Key("getCompany", { ticker })
+  const key = new Key("getCompany_b", { ticker })
 
   let company = await Cache.get<Company>(key)
   if (company) {
@@ -38,7 +38,6 @@ export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetComp
     ? {
         logo: logo?.url ?? "",
         name: newCompany.companyName ?? undefined,
-
         /**
          * Copy the rest
          */
@@ -64,6 +63,6 @@ export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetComp
       }
     : null
 
-  await Cache.set(key, company, 24 * 60 * 60) // 1 day
+  await Cache.set("1d", { key, value: company })
   return company
 }

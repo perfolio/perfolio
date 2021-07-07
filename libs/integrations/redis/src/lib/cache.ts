@@ -16,6 +16,7 @@ export class Key {
   }
 }
 
+type Value = Record<string, unknown> | unknown[] | null | string
 export class Cache {
   private static connect(): Redis.Redis {
     const connection = process.env.REDIS_CONNECTION
@@ -26,25 +27,49 @@ export class Cache {
     return new Redis(connection)
   }
 
-  /**
-   *
-   * @param key
-   * @param value
-   * @param ttl in seconds
-   */
-  public static async set(
-    key: Key,
-    value: Record<string, unknown> | unknown[] | null,
-    ttl: number,
-  ): Promise<void> {
+  private static convertTime(ttl: string): number {
+    const parsed = RegExp(/^(\d+)([smhd]{1})$/).exec(ttl)
+    if (!parsed) {
+      throw new Error(`Unable to parse ttl`)
+    }
+
+    const multiplier = parseInt(parsed[1])
+    const time = parsed[2]
+
+    const intervals: Record<string, number> = {
+      s: 1,
+      m: 60,
+      h: 60 * 60,
+      d: 60 * 60 * 24,
+    }
+    return intervals[time] * multiplier
+  }
+
+  public static async set(ttl: string, ...data: { key: Key; value: Value }[]): Promise<void> {
     const redis = Cache.connect()
 
-    await redis.setex(key.toString(), ttl, JSON.stringify(value))
+    /**
+     * Usually we either have 1 value to save or a lot and I would like to avoid using
+     * a pipeline for only 1 transaction.
+     */
+    if (data.length === 1) {
+      await redis.setex(
+        data[0].key.toString(),
+        this.convertTime(ttl),
+        JSON.stringify(data[0].value),
+      )
+    } else {
+      const pipeline = redis.pipeline()
+      data.forEach(({ key, value }) => {
+        pipeline.setex(key.toString(), this.convertTime(ttl), JSON.stringify(value))
+      })
+      await pipeline.exec()
+    }
 
     redis.quit()
   }
 
-  public static async get<T>(key: Key): Promise<T | null> {
+  public static async get<T extends Value>(key: Key): Promise<T | null> {
     const redis = Cache.connect()
 
     try {

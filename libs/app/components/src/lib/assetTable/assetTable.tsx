@@ -10,7 +10,6 @@ export interface AssetTableProps {
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
   const { portfolio } = usePortfolio()
   const { transactions } = useTransactions()
-
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
     transactions?.forEach(({ data }) => {
@@ -70,49 +69,55 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           align: "text-right",
         },
       ]}
-      data={Object.entries(portfolio).map(([assetId, asset]) => {
-        if (!asset?.company) {
-          return {
-            asset: <Cell.Loading />,
-            quantity: <Cell.Loading />,
-            costPerShare: <Cell.Loading />,
-            pricePerShare: <Cell.Loading />,
-            change: <Cell.Loading />,
+      data={Object.entries(portfolio)
+        /**
+         * Sort by total value descending
+         * The largest position is at the top of the table
+         */
+        .sort((a, b) => b[1].quantity * b[1].value - a[1].quantity * a[1].value)
+        .map(([assetId, asset]) => {
+          if (!asset?.company) {
+            return {
+              asset: <Cell.Loading />,
+              quantity: <Cell.Loading />,
+              costPerShare: <Cell.Loading />,
+              pricePerShare: <Cell.Loading />,
+              change: <Cell.Loading />,
+            }
           }
-        }
-        return {
-          asset: (
-            <Cell.Profile
-              src={asset.company.logo}
-              title={asset.company.name}
-              subtitle={asset.company.exchange ?? undefined}
-            />
-          ),
-          quantity: <Cell.Text align="text-right">{format(asset.quantity)}</Cell.Text>,
-          costPerShare: (
-            <Cell.Text align="text-right">
-              {format(costPerShare[assetId], { suffix: "€" })}
-            </Cell.Text>
-          ),
-          pricePerShare: (
-            <Cell.Text align="text-right">{format(asset.value, { suffix: "€" })}</Cell.Text>
-          ),
-          change: (
-            <Cell.Text align="text-right">
-              {aggregation === "Absolute"
-                ? format((asset.value - costPerShare[assetId]) * asset.quantity, {
-                    suffix: "€",
-                    sign: true,
-                  })
-                : format(asset.value / costPerShare[assetId] - 1, {
-                    percent: true,
-                    suffix: "%",
-                    sign: true,
-                  })}
-            </Cell.Text>
-          ),
-        }
-      })}
+          return {
+            asset: (
+              <Cell.Profile
+                src={asset.company.logo}
+                title={asset.company.name}
+                subtitle={asset.company.exchange ?? undefined}
+              />
+            ),
+            quantity: <Cell.Text align="text-right">{format(asset.quantity)}</Cell.Text>,
+            costPerShare: (
+              <Cell.Text align="text-right">
+                {format(costPerShare[assetId], { suffix: "€" })}
+              </Cell.Text>
+            ),
+            pricePerShare: (
+              <Cell.Text align="text-right">{format(asset.value, { suffix: "€" })}</Cell.Text>
+            ),
+            change: (
+              <Cell.Text align="text-right">
+                {aggregation === "Absolute"
+                  ? format((asset.value - costPerShare[assetId]) * asset.quantity, {
+                      suffix: "€",
+                      sign: true,
+                    })
+                  : format(asset.value / costPerShare[assetId] - 1, {
+                      percent: true,
+                      suffix: "%",
+                      sign: true,
+                    })}
+              </Cell.Text>
+            ),
+          }
+        })}
     />
   )
 }

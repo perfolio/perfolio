@@ -14,6 +14,6 @@ export async function getExchanges(): Promise<GetExchangesResponse> {
 
   exchanges = await getExchangesFromCloud()
 
-  await Cache.set(key, exchanges, 30 * 24 * 60 * 60) // 30 days
+  await Cache.set("1d", { key, value: exchanges })
   return exchanges
 }

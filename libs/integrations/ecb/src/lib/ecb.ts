@@ -35,8 +35,6 @@ export async function getRiskFreeRates(interval: Interval): Promise<RiskFreeRate
     }
   }
 
-  console.log(JSON.stringify(data, null, 2))
-
   const series: number[] = Object.values(
     data.dataSets[0].series[identifier === "daily" ? "0:0:0" : "0:0:0:0:0:0:0"].observations.map(
       (o) => o[0],

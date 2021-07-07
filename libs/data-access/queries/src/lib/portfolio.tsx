@@ -59,8 +59,8 @@ export const usePortfolio = () => {
         queryFn: () => api.assets.getTickerFromFigi({ figi }),
       }
     }),
-  ).map((ticker) => {
-    return (ticker.data as { ticker: string }).ticker
+  ).map((symbol) => {
+    return (symbol.data as { symbol: string }).symbol
   })
 
   /**
