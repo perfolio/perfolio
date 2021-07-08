@@ -1,3 +1,6 @@
+# When the api is successfulyl deployed this action pushes the graphql schema
+# to apollo studio
+
 name: Apollo Schema Registry
 
 on: ["deployment_status"]
