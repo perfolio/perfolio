@@ -1,0 +1,28 @@
+name: "Apollo Schema"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  register-schema:
+    name: "Register Graphql Schema"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+
+      - name: Upload schema
+        run: |
+          npx apollo service:push \
+            --graph=apiperfolio \
+            --key=${{ secrets.APOLLO_KEY }} \
+            --variant=current \
+            --localSchemaFile=./libs/api/apollo/src/lib/schema.graphql
