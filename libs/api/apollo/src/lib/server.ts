@@ -19,6 +19,7 @@ export const ApolloHandler = (config?: ApolloHandlerConfig): NextApiHandler => {
     typeDefs: fs.readFileSync(schemaPath, "utf-8"),
     resolvers,
     logger: config?.logger,
+    playground: true,
     persistedQueries: config?.withCache
       ? {
           cache: new BaseRedisCache({

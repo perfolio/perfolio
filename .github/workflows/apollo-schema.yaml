@@ -14,11 +14,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install rover
-        run: curl -sSL https://rover.apollo.dev/nix/latest | sh
       - name: Upload schema
         run: |
-          rover graph publish apiperfolio@current \
-            --schema=./libs/api/apollo/src/lib/schema.graphql
-        env:
-          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
+          npx apollo service:push \
+          --graph=apiperfolio \
+          --key=${{ secrets.APOLLO_KEY }} \
+          --variant=current \
+          --endpoint=${{ github.event.deployment_status.target_url }}
