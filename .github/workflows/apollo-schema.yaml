@@ -1,14 +1,14 @@
 # When the api is successfulyl deployed this action pushes the graphql schema
 # to apollo studio
 
-name: Apollo Schema Registry
+name: Apollo Schema
 
 on: ["deployment_status"]
 
 jobs:
   upload-schema:
     name: Upload graphql schema
-    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production – api-perfolio'
+    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production – api-perfolio' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
