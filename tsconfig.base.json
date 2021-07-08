@@ -35,6 +35,7 @@
       "@perfolio/api/apollo": ["libs/api/apollo/src/index.ts"],
       "@perfolio/api/feature/lambda": ["libs/api/feature/lambda/src/index.ts"],
       "@perfolio/api/feature/middleware": ["libs/api/feature/middleware/src/index.ts"],
+      "@perfolio/api/graphql": ["libs/api/graphql/src/index.ts"],
       "@perfolio/app/components": ["libs/app/components/src/index.ts"],
       "@perfolio/app/middleware": ["libs/app/middleware/src/index.ts"],
       "@perfolio/data-access/api-client": ["libs/data-access/api-client/src/index.ts"],

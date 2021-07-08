@@ -1,0 +1,177 @@
+# We are using apollo-graphql-micro
+# see https://stackoverflow.com/a/52925284
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+directive @cacheControl (
+  maxAge: Int
+  scope: CacheControlScope
+) on FIELD_DEFINITION | OBJECT | INTERFACE
+
+
+
+enum Interval {
+  daily
+  monthly
+  annual
+}
+
+"""
+The risk free rate from the european central bank
+
+This was meant to be a map with a time as key and the rate as value
+but graphql does not handle maps.
+"""
+type RiskFreeRate {
+  """
+  Time
+  """
+  key: String!
+
+  """
+  Rate
+  """
+  value: Float!
+}
+
+enum IssueType {
+  "ADR"
+  ad
+  "Common Stock"
+  cs
+  "Closed End Fund"
+  cef
+  "ETF"
+  et
+  "Open Ended Fund"
+  oef
+  "Preferred Stock"
+  ps
+  "Right"
+  rt
+  "Structured Product"
+  struct
+  "Unit"
+  ut
+  "When Issued"
+  wi
+  "Warrant"
+  wt
+  "Other"
+  empty
+}
+
+type Company @cacheControl(maxAge: 240) {
+  """
+  Ticker of the company
+  """
+  ticker: String!
+
+  """
+  Url of the logo
+  """
+  logo: String
+
+  """
+  Name of the company
+  """
+  name: String
+
+  """
+  Refers to Exchange using IEX Supported Exchanges list
+  @see https://cloud.iexapis.com/stable/ref-data/exchanges
+  """
+  exchange: String
+
+  """
+  Refers to the industry the company belongs to
+  """
+  industry: String
+
+  """
+  Website of the company
+  """
+  website: String
+
+  """
+  Description for the company
+  """
+  description: String
+
+  """
+  Name of the CEO of the company
+  """
+  ceo: String
+
+  """
+  Refers to the common issue type of the stock.
+  """
+  issueType: IssueType
+
+  """
+  Refers to the sector the company belongs to.
+  """
+  sector: String
+
+  """
+  Number of employees
+  """
+  employees: Int
+  """
+  Name of the CEO of the company
+  """
+  securityName: String
+
+  """
+  Primary SIC Code for the ticker (if available)
+  @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
+  """
+  primarySicCode: Int
+
+  """
+  An array of Strings used to classify the company.
+  """
+  tags: [String]
+
+  """
+  Street address of the company if available
+  """
+  address: String
+
+  """
+  Street address of the company if available
+  """
+  address2: String
+
+  """
+  State of the company if available
+  """
+  state: String
+
+  """
+  City of the company if available
+  """
+  city: String
+
+  """
+  Zip code of the company if available
+  """
+  zip: String
+
+  """
+  Country of the company if available
+  """
+  country: String
+
+  """
+  Phone Number of the company if available
+  """
+  phone: String
+}
+
+type Query {
+  getRiskFreeRates(interval: Interval!): [RiskFreeRate!]!
+  getCompany(ticker: String!): Company 
+}

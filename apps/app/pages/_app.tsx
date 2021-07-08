@@ -9,6 +9,8 @@ import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import "tailwindcss/tailwind.css"
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
+import { env } from "@perfolio/util/env"
 
 LogRocket.init("perfolio/app")
 
@@ -31,16 +33,25 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"></link>
       </Head>
       <IdProvider>
-        <QueryClientProvider client={PersistentQueryClient()}>
-          <JWTProvider>
-            <AuthProvider session={pageProps.session}>
-              <OnboardingModal />
-              <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-                <Component {...pageProps} />
-              </div>
-            </AuthProvider>
-          </JWTProvider>
-        </QueryClientProvider>
+        <ApolloProvider
+          client={
+            new ApolloClient({
+              uri: "http://localhost:8080/api/graphql",
+              cache: new InMemoryCache(),
+            })
+          }
+        >
+          <QueryClientProvider client={PersistentQueryClient()}>
+            <JWTProvider>
+              <AuthProvider session={pageProps.session}>
+                <OnboardingModal />
+                <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+                  <Component {...pageProps} />
+                </div>
+              </AuthProvider>
+            </JWTProvider>
+          </QueryClientProvider>
+        </ApolloProvider>
       </IdProvider>
     </>
   )

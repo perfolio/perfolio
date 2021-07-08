@@ -1,3 +1,4 @@
+import {env} from "@perfolio/util/env"
 import { HTTPError } from "@perfolio/util/errors"
 /**
  * Generic api request to be extended by other request types.
@@ -44,11 +45,8 @@ export class Client {
   private readonly token: string
 
   constructor(config?: ApiConfig) {
-    const baseUrl = config?.baseUrl ?? process.env["NX_IEX_BASE_URL"]
+    const baseUrl = config?.baseUrl ?? env.require("NX_IEX_BASE_URL")
 
-    if (!baseUrl) {
-      throw new Error("NX_IEX_BASE_URL must be defined")
-    }
     this.baseUrl = baseUrl
 
     const token = config?.token ?? process.env["NX_IEX_TOKEN"]

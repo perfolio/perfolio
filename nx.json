@@ -29,6 +29,9 @@
     "api-feature-middleware": {
       "tags": []
     },
+    "api-graphql": {
+      "tags": []
+    },
     "app": {
       "tags": []
     },

@@ -132,6 +132,37 @@
         }
       }
     },
+    "api-graphql": {
+      "root": "libs/api/graphql",
+      "sourceRoot": "libs/api/graphql/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "pnpm run --dir=libs/api/graphql build"
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/graphql/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/graphql"],
+          "options": {
+            "jestConfig": "libs/api/graphql/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "app": {
       "root": "apps/app",
       "sourceRoot": "apps/app",

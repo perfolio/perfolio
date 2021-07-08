@@ -1,0 +1,25 @@
+query getCompany($ticker: String!) {
+  getCompany(ticker: $ticker) {
+    ticker
+    logo
+    name
+    exchange
+    industry
+    website
+    description
+    ceo
+    issueType
+    sector
+    employees
+    securityName
+    primarySicCode
+    tags
+    address
+    address2
+    state
+    city
+    zip
+    country
+    phone
+  }
+}

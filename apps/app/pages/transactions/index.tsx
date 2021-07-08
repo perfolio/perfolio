@@ -9,6 +9,8 @@ import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
+import { useGetCompanyQuery } from "@perfolio/api/graphql"
+
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean
@@ -16,7 +18,9 @@ export interface TransactionItemProps {
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
   const { ticker } = useTickerFromFigi({ figi: transaction.data.assetId })
-  const { company } = useCompany(ticker)
+  const { data: company } = useGetCompanyQuery({ variables: { ticker: ticker! }, skip: !ticker })
+
+  // const { company } = useCompany(ticker)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction()
 
   return (
@@ -28,7 +32,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
               {new Date(transaction.data.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-900 dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {company?.logo ? <Avatar size="sm" src={company.logo} /> : <Loading />}
+              {company?.logo ? <Avatar size="sm" src={company?.logo} /> : <Loading />}
             </div>
           </div>
         </div>
