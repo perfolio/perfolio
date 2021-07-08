@@ -1,0 +1,28 @@
+# When the api is successfulyl deployed this action pushes the graphql schema
+# to apollo studio
+
+name: Apollo Schema
+
+on: ["deployment_status"]
+
+jobs:
+  upload-schema:
+    name: Upload graphql schema
+    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production – api-perfolio' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+
+      - name: Upload schema
+        run: |
+          npx apollo service:push \
+            --graph=apiperfolio \
+            --key=${{ secrets.APOLLO_KEY }} \
+            --variant=current \
+            --localSchemaFile=./libs/api/apollo/src/lib/schema.graphql
