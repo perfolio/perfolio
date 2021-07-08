@@ -32,6 +32,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
+      "@perfolio/api/apollo": ["libs/api/apollo/src/index.ts"],
       "@perfolio/api/feature/lambda": ["libs/api/feature/lambda/src/index.ts"],
       "@perfolio/api/feature/middleware": ["libs/api/feature/middleware/src/index.ts"],
       "@perfolio/app/components": ["libs/app/components/src/index.ts"],
