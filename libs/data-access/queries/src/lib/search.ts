@@ -23,20 +23,18 @@ export function useSearch(req: SearchRequest) {
     (data ?? []).map((option) => {
       return {
         queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(option.symbol),
-        queryFn: async () => {
-          const company = await api.companies.getCompany({ ticker: option.symbol })
-          return {
-            ...company,
-            figi: option.figi,
-          }
-        },
+        queryFn: () => api.companies.getCompany({ ticker: option.symbol }),
       }
     }),
-  )
-    .map((company) => {
-      return company.data as SearchResult
-    })
-    .filter((company) => !!company)
+  ).map((company, i) => {
+    const figi = data ? data[i].figi : undefined
+    console.log({ figi })
+    return {
+      ...(company.data as SearchResult),
+      figi: figi ?? "NULL",
+    }
+  })
 
+  console.log({ companies })
   return { search: companies, ...meta }
 }
