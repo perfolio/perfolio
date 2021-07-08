@@ -1,11 +1,17 @@
 import Redis from "ioredis"
-
+import { env } from "@perfolio/util/env"
 export class Key {
   public readonly query: string
   public readonly parameters?: Record<string, unknown>
   constructor(query: string, parameters?: Record<string, unknown>) {
     this.query = query
-    this.parameters = parameters
+    this.parameters = {
+      ...parameters,
+      /**
+       * Sometimes during development I fill the cache with "bad" data
+       */
+      ENVIRONMENT: env.get("VERCEL_ENV") ?? env.get("NODE_ENV"),
+    }
   }
 
   public toString(): string {

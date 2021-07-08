@@ -1,18 +1,12 @@
 import React, { useState } from "react"
 import { z } from "zod"
-import { Loading, Button, Description } from "@perfolio/ui/components"
+import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
-import { Avatar, Text } from "@perfolio/ui/components"
 import { withAuthentication } from "@perfolio/app/middleware"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/integrations/fauna"
-import {
-  useTransactions,
-  useCompany,
-  useTickerFromFigi,
-  useSettings,
-} from "@perfolio/data-access/queries"
+import { useTransactions, useSettings } from "@perfolio/data-access/queries"
 import { useCreateTransaction } from "@perfolio/data-access/mutations"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -20,45 +14,54 @@ import { useApi } from "@perfolio/data-access/api-client"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
 
-const Suggestion: React.FC<{
-  tx: Transaction
-  setValue?: (key: "isin", val: string) => void
-  trigger?: () => void
-}> = ({ tx }): JSX.Element => {
-  const { ticker } = useTickerFromFigi({ figi: tx.data.assetId })
-  console.log({ figi: tx.data.assetId, ticker })
-  const { company } = useCompany(ticker)
-  return (
-    <li className="flex items-center justify-between w-full gap-4 py-3">
-      <div className="flex items-center w-3/5 gap-2">
-        <div>{company?.logo ? <Avatar src={company.logo} /> : <Loading />}</div>
-        <div className="overflow-hidden">
-          <Text truncate bold>
-            {company?.name}
-          </Text>
-          <Text size="sm">{tx.data.assetId}</Text>
-        </div>
-      </div>
-      <div className="flex flex-col items-end w-2/5 space-y-1">
-        <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
-          tx.ts / 1_000_000,
-        )}`}</span>
-        <div>
-          <Button
-            kind="secondary"
-            size="small"
-            onClick={() => {
-              // setValue("isin", tx.data.assetId)
-              // trigger()
-            }}
-          >
-            Add
-          </Button>
-        </div>
-      </div>
-    </li>
-  )
-}
+// const Suggestion: React.FC<{
+//   tx: Transaction
+//   setValue: (val: { name: string; ticker: string; figi: string, exchange:string }) => void
+//   trigger: () => void
+// }> = ({ tx, setValue, trigger }): JSX.Element => {
+//   const { ticker } = useTickerFromFigi({ figi: tx.data.assetId })
+//   const { company } = useCompany(ticker)
+//   return (
+//     <li className="flex items-center justify-between w-full gap-4 py-3">
+//       <div className="flex items-center w-3/5 gap-2">
+//         <div>{company?.logo ? <Avatar src={company.logo} /> : <Loading />}</div>
+//         <div className="overflow-hidden">
+//           <Text truncate bold>
+//             {company?.name}
+//           </Text>
+//           <Text size="sm">{tx.data.assetId}</Text>
+//         </div>
+//       </div>
+//       <div className="flex flex-col items-end w-2/5 space-y-1">
+//         <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
+//           tx.ts / 1_000_000,
+//         )}`}</span>
+//         <div>
+//           <Button
+//             kind="secondary"
+//             size="small"
+//             onClick={() => {
+//               console.log({
+//                 name: company?.name ?? "",
+//                 ticker: company?.ticker ?? "",
+//                 figi: tx.data.assetId,
+//               })
+//               setValue({
+//                 name: company?.name ?? "",
+//                 ticker: company?.ticker ?? "",
+//                 figi: tx.data.assetId,
+//                 exchange: ""
+//               })
+//               trigger()
+//             }}
+//           >
+//             Add
+//           </Button>
+//         </div>
+//       </div>
+//     </li>
+//   )
+// }
 
 const validation = z.object({
   asset: z.object({
@@ -108,7 +111,7 @@ const NewTransactionPage: NextPage = () => {
           <Main.Header.Title title="Add a transaction" />
         </Main.Header>
         <Main.Content>
-          <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-2">
+          <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-1">
             <div className="w-full">
               <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
                 <Field.AutoCompleteSelect
@@ -117,9 +120,8 @@ const NewTransactionPage: NextPage = () => {
                   label="Asset"
                   help={
                     <Description title="TODO: @webersni">
-                      Search for your asset. Try <pre>microsoft</pre>
-                      Only stocks from your selected exchange will be shown here. If you would like
-                      to change this, please{" "}
+                      Search for your asset. Try "microsoft" Only stocks from your selected exchange
+                      will be shown here. If you would like to change this, please{" "}
                       <Link href="/settings/stocks">
                         <a className="underline text-info-400">go to settings</a>
                       </Link>
@@ -185,7 +187,7 @@ const NewTransactionPage: NextPage = () => {
                 </Button>
               </Form>
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <div className="flex items-center justify-between px-6 py-6">
                 <p className="text-sm font-semibold leading-tight text-gray-800 lg:text-xl">
                   Suggestions
@@ -194,20 +196,20 @@ const NewTransactionPage: NextPage = () => {
               <div className="px-6 pt-6 overflow-x-auto">
                 <div className="w-full whitespace-nowrap">
                   <ul className="flex flex-col divide-y divide-gray-100">
-                    {Object.values(uniqueAssets).map((tx) => {
+                    {Object.values(uniqueAssets).slice(0,5).map((tx) => {
                       return (
                         <Suggestion
                           key={tx.id}
                           tx={tx}
-                          // trigger={() => ctx.trigger("isin")}
-                          // setValue={ctx.setValue}
+                          trigger={() => ctx.trigger("asset")}
+                          setValue={(asset) => ctx.setValue("asset", { ...asset, exchange: "" })}
                         />
                       )
                     })}
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </Main.Content>
       </Main>

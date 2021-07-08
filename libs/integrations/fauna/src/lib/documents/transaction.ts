@@ -16,9 +16,9 @@ export class Transaction extends Document<z.infer<typeof Transaction.schema>> {
   public static readonly schema = z
     .object({
       /**
-       * Isin for stock assets
+       * Figi for stock assets
        */
-      assetId: z.string().regex(/[A-Z]{2}[a-zA-Z0-9]{10}/, "Invalid isin"),
+      assetId: z.string(),
       userId: z.string(),
       volume: z.number(),
       value: z.number().positive(),
