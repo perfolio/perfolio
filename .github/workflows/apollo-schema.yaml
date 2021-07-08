@@ -16,10 +16,9 @@ jobs:
 
       - name: Install rover
         run: curl -sSL https://rover.apollo.dev/nix/latest | sh
-
       - name: Upload schema
         run: |
-          npx rover graph publish apiperfolio@current \
+          rover graph publish apiperfolio@current \
             --schema=./libs/api/apollo/src/lib/schema.graphql
         env:
           APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
