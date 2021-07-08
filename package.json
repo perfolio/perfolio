@@ -44,6 +44,7 @@
     "@radix-ui/react-tooltip": "^0.0.18",
     "@sendgrid/mail": "^7.4.5",
     "apollo-server": "^2.25.2",
+    "apollo-server-cache-redis": "^1.5.0",
     "apollo-server-core": "^2.25.2",
     "apollo-server-lambda": "^2.25.2",
     "apollo-server-micro": "^2.25.2",
