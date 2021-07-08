@@ -2,7 +2,7 @@ import React from "react"
 import { NavbarProps } from "./types"
 import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
-import { Logo } from "@perfolio/ui/components"
+import { Icon, Logo } from "@perfolio/ui/components"
 import { signOut } from "next-auth/client"
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
@@ -46,13 +46,17 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li> */}
             <li className="text-gray-200 hover:text-gray-50">
               <a href="/settings/account">
-                <AdjustmentsIcon className="w-6 h-6" />
+                <Icon size="sm" label="Settings">
+                  <AdjustmentsIcon />
+                </Icon>
               </a>
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button onClick={() => signOut()}>
-                <LogoutIcon className="w-6 h-6" />
+              <button onClick={() => signOut()} className="focus:outline-none">
+                <Icon size="sm" label="Sign out">
+                  <LogoutIcon />
+                </Icon>
               </button>
             </li>
           </ul>
