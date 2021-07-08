@@ -11,6 +11,12 @@ resource "cloudflare_record" "app" {
   type    = "CNAME"
   zone_id = var.config.zone_id
 }
+resource "cloudflare_record" "api" {
+  name    = "api"
+  value   = "cname.vercel-dns.com"
+  type    = "CNAME"
+  zone_id = var.config.zone_id
+}
 
 resource "cloudflare_record" "www" {
   name    = "www"
