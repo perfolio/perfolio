@@ -1,18 +1,15 @@
-name: "Apollo Schema"
+name: Apollo Schema Registry
 
-on:
-  push:
-    branches: [main]
+on: ["deployment_status"]
 
 jobs:
-  register-schema:
-    name: "Register Graphql Schema"
+  e2e:
+    name: Upload graphql schema
+    if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v2.1.5
@@ -20,6 +17,7 @@ jobs:
           node-version: 14
 
       - name: Upload schema
+        if: github.event.deployment.environment == 'Production – api-perfolio'
         run: |
           npx apollo service:push \
             --graph=apiperfolio \
