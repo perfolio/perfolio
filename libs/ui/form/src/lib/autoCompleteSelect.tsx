@@ -150,10 +150,11 @@ export function AutoCompleteSelect<Option>({
                         <button
                           type="button"
                           onClick={() => {
+                            console.log({ name, option })
                             setValue(name, option)
                             setState(State.Done)
                           }}
-                          className={cn("relative p-2 cursor-pointer w-full", {
+                          className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
                             "bg-gray-100": option === value,
                             "bg-gradient-to-tr from-gray-50 to-gray-100": value,
                           })}
