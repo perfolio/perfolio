@@ -3,21 +3,21 @@ import { env } from "@perfolio/util/env"
 export class Key {
   public readonly query: string
   public readonly parameters?: Record<string, unknown>
+  public readonly environment: string
   constructor(query: string, parameters?: Record<string, unknown>) {
     this.query = query
-    this.parameters = {
-      ...parameters,
-      /**
-       * Sometimes during development I fill the cache with "bad" data
-       */
-      ENVIRONMENT: env.get("VERCEL_ENV") ?? env.get("NODE_ENV"),
-    }
+    this.parameters = parameters
+    /**
+     * Sometimes during development I fill the cache with "bad" data
+     */
+    this.environment = env.get("VERCEL_ENV") ?? env.get("NODE_ENV") ?? "development"
   }
 
   public toString(): string {
     return JSON.stringify({
       parameters: this.parameters,
       query: this.query,
+      environment: this.environment,
     })
   }
 }
