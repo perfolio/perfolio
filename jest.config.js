@@ -31,5 +31,7 @@ module.exports = {
     "<rootDir>/libs/util/env",
     "<rootDir>/libs/integrations/bankofengland",
     "<rootDir>/libs/integrations/ecb",
+    "<rootDir>/apps/api",
+    "<rootDir>/libs/api/apollo",
   ],
 }

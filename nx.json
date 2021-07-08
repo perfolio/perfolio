@@ -17,6 +17,12 @@
     }
   },
   "projects": {
+    "api": {
+      "tags": []
+    },
+    "api-apollo": {
+      "tags": []
+    },
     "api-feature-lambda": {
       "tags": []
     },
