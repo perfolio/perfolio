@@ -18,6 +18,6 @@ jobs:
         run: |
           npx apollo service:push \
           --graph=apiperfolio \
-          --key=${{ secrets.APOLLO_KEY}} \
+          --key=${{ secrets.APOLLO_KEY }} \
           --variant=current \
           --endpoint=${{ github.event.deployment_status.target_url }}
