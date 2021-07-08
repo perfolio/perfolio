@@ -5,6 +5,7 @@ import { Logger } from "tslog"
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 import { resolvers } from "./resolvers"
 import fs from "fs"
+import path from "path"
 import { env } from "@perfolio/util/env"
 export type ApolloHandlerConfig = {
   logger?: Logger
@@ -12,8 +13,10 @@ export type ApolloHandlerConfig = {
 }
 
 export const ApolloHandler = (config?: ApolloHandlerConfig): NextApiHandler => {
+  const schemaPath = path.join(process.cwd(), "libs/api/apollo/src/lib/schema.graphql")
+  console.log({ schemaPath })
   const server = new ApolloServer({
-    typeDefs: fs.readFileSync("./libs/api/apollo/src/lib/schema.graphql", "utf-8"),
+    typeDefs: fs.readFileSync(schemaPath, "utf-8"),
     resolvers,
     logger: config?.logger,
     persistedQueries: config?.withCache
