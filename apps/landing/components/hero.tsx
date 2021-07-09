@@ -5,7 +5,7 @@ import { useI18n } from "@perfolio/feature/i18n"
 export const HeroSection: React.FC = (): JSX.Element => {
   const { t } = useI18n()
   return (
-    <div className="flex flex-col items-center w-full space-y-4 md:space-y-8 xl:space-y-12 ">
+    <div className="flex flex-col items-center w-full space-y-4 md:space-y-8 xl:space-y-16 ">
       <h1 className="py-3 -my-3 text-3xl font-extrabold text-gray-900 sm:text-5xl lg:text-6xl">
         {t("headline")}
       </h1>
