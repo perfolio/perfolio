@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-
+import { env } from "@perfolio/util/env"
 import { z } from "zod"
 
 export const payload = z.object({
@@ -16,15 +16,12 @@ export type Claims = z.infer<typeof payload>
 export class JWT {
   private static readonly issuer = "perfolio"
   private static readonly audience = "perfolio"
-  private static readonly secret = process.env.NX_JWT_SIGNING_KEY
   private static readonly algorithm = "HS256"
 
   public static sign(claims: { userId: string }): string {
-    if (!JWT.secret) {
-      throw new Error("NX_JWT_SIGNING_KEY must be defined")
-    }
+    const secret = env.require("JWT_SIGNING_KEY")
 
-    return jwt.sign(claims, JWT.secret, {
+    return jwt.sign(claims, secret, {
       algorithm: JWT.algorithm,
       expiresIn: "5m",
       audience: JWT.audience,
@@ -34,11 +31,8 @@ export class JWT {
   }
 
   public static verify(encoded: string): Claims {
-    if (!JWT.secret) {
-      throw new Error("NX_JWT_SIGNING_KEY must be defined")
-    }
-
-    const decoded = jwt.verify(encoded, JWT.secret, {
+    const secret = env.require("JWT_SIGNING_KEY")
+    const decoded = jwt.verify(encoded, secret, {
       audience: JWT.audience,
       issuer: JWT.issuer,
     })

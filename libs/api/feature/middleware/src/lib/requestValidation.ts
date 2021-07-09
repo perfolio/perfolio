@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { MiddlewareContext, ApiHandler, Middleware } from "./types"
 
-export function withRequestValidation(validator: z.ZodAny): Middleware {
+export function withRequestValidation(validator: z.AnyZodObject): Middleware {
   return (handler: ApiHandler): ApiHandler => {
     return async (ctx: MiddlewareContext): Promise<void> => {
       if (ctx.req.method === "OPTIONS") {

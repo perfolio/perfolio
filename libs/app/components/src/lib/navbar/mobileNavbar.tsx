@@ -5,7 +5,6 @@ import { NavbarProps } from "./types"
 import { DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
 import { Link, Logo } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
-import { signOut } from "next-auth/client"
 import NextLink from "next/link"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
@@ -54,7 +53,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <Link size="large" prefix={<DotsVerticalIcon />} href="/" />
             </li>
             <li>
-              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => signOut()}>
+              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => fetch("/api/auth/signout")}>
                 <LogoutIcon className="w-6 h-6 text-white" />
               </button>
             </li>

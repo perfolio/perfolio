@@ -42,6 +42,9 @@
     "app-middleware": {
       "tags": []
     },
+    "auth": {
+      "tags": []
+    },
     "data-access-api-client": {
       "tags": []
     },
@@ -70,6 +73,9 @@
       "tags": []
     },
     "integrations-bankofengland": {
+      "tags": []
+    },
+    "integrations-cookies": {
       "tags": []
     },
     "integrations-ecb": {

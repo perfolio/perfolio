@@ -1,10 +1,9 @@
 import type { AppProps } from "next/app"
-import { Provider as AuthProvider } from "next-auth/client"
-import { QueryClientProvider } from "react-query"
+import { QueryClientProvider, QueryClient } from "react-query"
 import { JWTProvider } from "@perfolio/data-access/api-client"
-import { PersistentQueryClient } from "@perfolio/integrations/localstorage"
+// import { PersistentQueryClient } from "@perfolio/integrations/localstorage"
 import Head from "next/head"
-import { useSession } from "next-auth/client"
+// import { useSession } from "@perfolio/auth"
 import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
@@ -13,14 +12,6 @@ import "tailwindcss/tailwind.css"
 LogRocket.init("perfolio/app")
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [session] = useSession()
-  if (session?.user) {
-    LogRocket.identify(session.user.email!, {
-      name: session.user.name!,
-      email: session.user.email!,
-    })
-  }
-
   return (
     <>
       <Head>
@@ -30,18 +21,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"></link>
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"></link>
       </Head>
-      <IdProvider>
-        <QueryClientProvider client={PersistentQueryClient()}>
+      <QueryClientProvider client={new QueryClient()}>
+        <IdProvider>
           <JWTProvider>
-            <AuthProvider session={pageProps.session}>
-              <OnboardingModal />
-              <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-                <Component {...pageProps} />
-              </div>
-            </AuthProvider>
+            <OnboardingModal />
+            <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+              <Component {...pageProps} />
+            </div>
           </JWTProvider>
-        </QueryClientProvider>
-      </IdProvider>
+        </IdProvider>
+      </QueryClientProvider>
     </>
   )
 }

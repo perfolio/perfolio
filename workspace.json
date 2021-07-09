@@ -261,6 +261,27 @@
         }
       }
     },
+    "auth": {
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/auth/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/auth"],
+          "options": {
+            "jestConfig": "libs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "data-access-api-client": {
       "root": "libs/data-access/api-client",
       "sourceRoot": "libs/data-access/api-client/src",
@@ -466,6 +487,27 @@
           "outputs": ["coverage/libs/integrations/bankofengland"],
           "options": {
             "jestConfig": "libs/integrations/bankofengland/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-cookies": {
+      "root": "libs/integrations/cookies",
+      "sourceRoot": "libs/integrations/cookies/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/cookies/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/cookies"],
+          "options": {
+            "jestConfig": "libs/integrations/cookies/jest.config.js",
             "passWithNoTests": true
           }
         }
