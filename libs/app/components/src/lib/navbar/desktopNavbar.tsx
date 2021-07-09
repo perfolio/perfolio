@@ -3,7 +3,7 @@ import { NavbarProps } from "./types"
 import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
 import { Icon, Logo } from "@perfolio/ui/components"
-import { signOut } from "next-auth/client"
+
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 
@@ -53,7 +53,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button onClick={() => signOut()} className="focus:outline-none">
+              <button onClick={() => fetch("/api/auth/signout")} className="focus:outline-none">
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />
                 </Icon>

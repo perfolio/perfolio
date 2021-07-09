@@ -9,13 +9,11 @@ import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { MailIcon, UserIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useSession } from "next-auth/client"
+import { useSession, withClientSideAuthentication } from "@perfolio/auth"
 import cn from "classnames"
 import { Card, Button } from "@perfolio/ui/components"
-import { withAuthentication } from "@perfolio/app/middleware"
-
 interface SettingProps {
-  validation: z.ZodAny
+  validation: z.AnyZodObject
   title: string
   footer: string
   fields: React.ReactNode
@@ -78,7 +76,7 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const [session] = useSession()
+  const { session } = useSession()
   const router = useRouter()
   const api = useApi()
   const emailValidation = z.object({ email: z.string().email() })
@@ -158,7 +156,7 @@ const SettingsPage: NextPage = () => {
               name="email"
               iconLeft={<MailIcon />}
               type="email"
-              defaultValue={session?.user?.email ?? ""}
+              defaultValue={session?.email ?? ""}
             />,
           ]}
         />
@@ -174,7 +172,7 @@ const SettingsPage: NextPage = () => {
               name="name"
               iconLeft={<UserIcon />}
               type="text"
-              defaultValue={session?.user?.name ?? ""}
+              defaultValue={session?.issuer ?? ""}
             />,
           ]}
         />
@@ -192,4 +190,4 @@ const SettingsPage: NextPage = () => {
   )
 }
 
-export default withAuthentication(SettingsPage)
+export default withClientSideAuthentication(SettingsPage)

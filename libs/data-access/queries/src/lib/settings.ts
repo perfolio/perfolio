@@ -1,11 +1,11 @@
 import { useApi } from "@perfolio/data-access/api-client"
 import { useQuery } from "react-query"
-import { useSession } from "next-auth/client"
+import { useSession } from "@perfolio/auth"
 import { GetSettingsResponse } from "@perfolio/api/feature/lambda"
 
 export const QUERY_KEY_SETTINGS = "settings"
 export function useSettings() {
-  const [session] = useSession()
+  const { session } = useSession()
   const api = useApi()
 
   const { data, ...meta } = useQuery<GetSettingsResponse, Error>(

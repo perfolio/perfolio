@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { z } from "zod"
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
-import { withAuthentication } from "@perfolio/app/middleware"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/integrations/fauna"
@@ -13,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useApi } from "@perfolio/data-access/api-client"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
+import { withClientSideAuthentication } from "@perfolio/auth"
 
 // const Suggestion: React.FC<{
 //   tx: Transaction
@@ -216,5 +216,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-
-export default withAuthentication(NewTransactionPage)
+export default withClientSideAuthentication(NewTransactionPage)

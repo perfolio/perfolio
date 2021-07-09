@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { NextPage, GetServerSideProps } from "next"
-import { getSession } from "next-auth/client"
+import { NextPage } from "next"
 import { useApi } from "@perfolio/data-access/api-client"
 import { Logo, Button } from "@perfolio/ui/components"
 import { z } from "zod"
@@ -8,6 +7,7 @@ import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Description } from "@perfolio/ui/components"
+import { withClientSideAuthentication } from "@perfolio/auth"
 
 const Subscribe: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
@@ -89,17 +89,6 @@ const Subscribe: NextPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const session = await getSession({ req })
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    }
-  }
-
-  return { props: {} }
-}
-export default Subscribe
+export default withClientSideAuthentication(Subscribe, {
+  redirect: { authenticated: "/", anonymous: undefined },
+})

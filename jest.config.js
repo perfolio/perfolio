@@ -33,5 +33,7 @@ module.exports = {
     "<rootDir>/libs/integrations/ecb",
     "<rootDir>/apps/api",
     "<rootDir>/libs/api/apollo",
+    "<rootDir>/libs/integrations/cookies",
+    "<rootDir>/libs/auth",
   ],
 }

@@ -4,6 +4,7 @@ import { MiddlewareContext, ApiHandler } from "./types"
 import moesif from "moesif-nodejs"
 import { NextApiRequest } from "next"
 import { JWT } from "@perfolio/feature/tokens"
+import { env } from "@perfolio/util/env"
 
 const getUserId = (req: NextApiRequest): string | undefined => {
   const jwt = req.headers.authorization
@@ -19,9 +20,10 @@ const getUserId = (req: NextApiRequest): string | undefined => {
  */
 export function withMetrics(handler: ApiHandler): ApiHandler {
   return async (ctx: MiddlewareContext): Promise<void> => {
+    const applicationId = env.require("MOESIF_ID")
     try {
       const config = {
-        applicationId: process.env.NX_MOESIF_ID,
+        applicationId,
         identifyUser: () => getUserId(ctx.req),
         getMetadata: () => {
           return {

@@ -11,7 +11,7 @@ export class Client {
   constructor(config?: ApiConfig) {
     this.baseUrl = config?.baseUrl ?? "https://api.openfigi.com"
 
-    const token = config?.token ?? env.require("NX_OPENFIGI_API_KEY")
+    const token = config?.token ?? env.require("OPENFIGI_API_KEY")
 
     this.token = token
   }

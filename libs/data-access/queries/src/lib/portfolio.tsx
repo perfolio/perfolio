@@ -3,7 +3,7 @@ import { useApi } from "@perfolio/data-access/api-client"
 import { QUERY_KEY_TICKER_FROM_FIGI } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { useHistory } from "./history"
-import { useSession } from "next-auth/client"
+import { useSession } from "@perfolio/auth"
 
 import { Company } from "@perfolio/types"
 
@@ -38,7 +38,7 @@ const getLastWithValue = (
 }
 
 export const usePortfolio = () => {
-  const [session] = useSession()
+  const { session } = useSession()
   const { history, ...meta } = useHistory()
   const api = useApi()
 

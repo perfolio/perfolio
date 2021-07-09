@@ -14,7 +14,6 @@ export type ApolloHandlerConfig = {
 
 export const ApolloHandler = (config?: ApolloHandlerConfig): NextApiHandler => {
   const schemaPath = path.join(process.cwd(), "libs/api/apollo/src/lib/schema.graphql")
-  console.log({ schemaPath })
   const server = new ApolloServer({
     typeDefs: fs.readFileSync(schemaPath, "utf-8"),
     resolvers,
@@ -23,7 +22,7 @@ export const ApolloHandler = (config?: ApolloHandlerConfig): NextApiHandler => {
     persistedQueries: config?.withCache
       ? {
           cache: new BaseRedisCache({
-            client: new Redis(env.require("NX_APOLLO_REDIS")),
+            client: new Redis(env.require("APOLLO_REDIS")),
           }),
         }
       : undefined,
