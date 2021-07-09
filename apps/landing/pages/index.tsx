@@ -35,7 +35,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <div className="fixed inset-x-0 top-0 z-20 bg-gray-50">
           <Navbar />
         </div>
-        <Section bg="bg-gray-50 " className="relative py-20" id="index">
+        <Section className="relative py-20" id="index">
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
             <HeroSection />
 
@@ -49,7 +49,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             </div>
           </div>
         </Section>
-        <Section bg="bg-white" id="features" className="flex flex-col justify-center ">
+        <Section id="features" className="flex flex-col justify-center ">
           <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
@@ -99,7 +99,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             })}
           </ul>
         </Section>
-        <Section bg="bg-gray-50" id="pricing" className="flex flex-col justify-center">
+        <Section id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
           <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
@@ -129,12 +129,12 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             />
           </div>
         </Section>
-        <Section bg="bg-white" className="flex flex-col justify-center" id="team">
+        <Section className="flex flex-col justify-center" id="team">
           <SectionTitle tag="Our Team" title="Who is behind this?" />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-t from-gray-900 to-primary-800 md:h-32 md:w-32">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary md:h-32 md:w-32">
                 <svg
                   className="w-full p-3 text-white stroke-current md:p-4"
                   viewBox="0 0 194 148"
@@ -179,7 +179,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             </div>
           </div>
         </Section>
-        <Section bg="bg-gray-50" id="subscribe">
+        <Section id="subscribe">
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div>
               <h2 className="mb-3 font-semibold tracking-wide text-purple-800 uppercase sm:text-lg sm:leading-snug">

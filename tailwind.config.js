@@ -23,15 +23,9 @@ module.exports = {
         900: "#18181B",
       },
       primary: {
-        100: "#E5E0F8",
-        200: "#CBC2F2",
-        300: "#A498D8",
-        400: "#7A70B1",
-        500: "#49407D",
-        600: "#362E6B",
-        700: "#262059",
-        800: "#191448",
-        900: "#100C3B",
+        light: "#D5DEFC",
+        DEFAULT: "#2F49CF",
+        dark: "#091163",
       },
 
       success: {
@@ -82,7 +76,6 @@ module.exports = {
     },
   },
   plugins: [
-    require("tailwindcss-textshadow"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/custom-forms"),
     require("tailwindcss-debug-screens"),
