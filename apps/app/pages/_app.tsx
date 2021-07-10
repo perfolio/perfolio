@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app"
 import { QueryClientProvider, QueryClient } from "react-query"
-import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/clerk-react"
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react"
 import { JWTProvider } from "@perfolio/data-access/api-client"
 // import { PersistentQueryClient } from "@perfolio/integrations/localstorage"
 import Head from "next/head"
@@ -11,6 +11,8 @@ import "tailwindcss/tailwind.css"
 import { useRouter } from "next/router"
 
 LogRocket.init("perfolio/app")
+
+const publicPages = ["/auth/sign-in/[[...index]]", "/auth/sign-up/[[...index]]"]
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -26,21 +28,27 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <IdProvider>
         <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
-          <SignedIn>
-            <QueryClientProvider client={new QueryClient()}>
-              <JWTProvider>
-                <OnboardingModal />
-                <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-                  <Component {...pageProps} />
-                </div>
-              </JWTProvider>
-            </QueryClientProvider>
-          </SignedIn>
-          <SignedOut>
-            <div className="flex items-center justify-center">
-              <SignIn />
-            </div>
-          </SignedOut>
+          {publicPages.includes(router.pathname) ? (
+            <Component {...pageProps} />
+          ) : (
+            <>
+              <SignedIn>
+                <QueryClientProvider client={new QueryClient()}>
+                  <JWTProvider>
+                    <OnboardingModal />
+                    <div
+                      className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}
+                    >
+                      <Component {...pageProps} />
+                    </div>
+                  </JWTProvider>
+                </QueryClientProvider>
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn />
+              </SignedOut>
+            </>
+          )}
         </ClerkProvider>
       </IdProvider>
     </>
