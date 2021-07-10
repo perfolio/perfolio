@@ -30,7 +30,7 @@ resource "checkly_check" "subscribe" {
     headers = {
       "Content-Type" = "application/json"
     }
-    body = jsonencode({"email" = "emailsubscribetest@perfol.io"})
+    body = jsonencode({ "email" = "emailsubscribetest@perfol.io" })
 
     assertion {
       source     = "STATUS_CODE"
