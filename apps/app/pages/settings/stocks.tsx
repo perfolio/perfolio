@@ -12,10 +12,9 @@ import cn from "classnames"
 import { useSettings, useExchanges } from "@perfolio/data-access/queries"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { withAuthentication } from "@perfolio/app/middleware"
 
 interface SettingProps {
-  validation: z.ZodAny
+  validation: z.AnyZodObject
   title: string
   footer: string
   onSubmit: (values: Record<string, string | number>) => Promise<void>
@@ -191,5 +190,4 @@ const SettingsPage: NextPage = () => {
     </AppLayout>
   )
 }
-
-export default withAuthentication(SettingsPage)
+export default SettingsPage

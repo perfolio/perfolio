@@ -1,7 +1,7 @@
 import sg from "@sendgrid/mail"
 
 export async function send(to: string, subject: string, text: string) {
-  const apiKey = process.env["NX_SENDGRID_TOKEN"]
+  const apiKey = process.env["SENDGRID_TOKEN"]
   if (!apiKey) {
     throw new Error("`NX_SENDGRID_TOKEN` must be defined")
   }

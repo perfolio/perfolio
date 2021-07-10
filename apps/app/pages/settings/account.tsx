@@ -2,20 +2,15 @@ import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout } from "@perfolio/app/components"
-import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
-import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { MailIcon, UserIcon } from "@heroicons/react/outline"
+import { Form, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useSession } from "next-auth/client"
 import cn from "classnames"
 import { Card, Button } from "@perfolio/ui/components"
-import { withAuthentication } from "@perfolio/app/middleware"
-
 interface SettingProps {
-  validation: z.ZodAny
+  validation: z.AnyZodObject
   title: string
   footer: string
   fields: React.ReactNode
@@ -26,7 +21,7 @@ interface SettingProps {
   }
 }
 
-const Setting: React.FC<SettingProps> = ({
+export const Setting: React.FC<SettingProps> = ({
   validation,
   title,
   footer,
@@ -78,29 +73,7 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const [session] = useSession()
   const router = useRouter()
-  const api = useApi()
-  const emailValidation = z.object({ email: z.string().email() })
-  const onEmailSubmit = async (values: z.infer<typeof emailValidation>): Promise<void> => {
-    return api.emails.sendEmailConfirmation(values)
-  }
-  const nameValidation = z.object({ name: z.string().min(3).max(64) })
-  const onUsernameSubmit = async (values: z.infer<typeof nameValidation>): Promise<void> => {
-    await api.settings.changeName(values)
-  }
-
-  const deleteValidation = z.object({
-    confirmation: z
-      .string()
-      .refine(
-        (s) => s.toLowerCase() === "delete my account forever",
-        `Please enter "delete my account forever"`,
-      ),
-  })
-  const onDeleteSubmit = async (): Promise<void> => {
-    await api.settings.deleteAccount()
-  }
 
   return (
     <AppLayout
@@ -144,52 +117,9 @@ const SettingsPage: NextPage = () => {
         </div>
       }
     >
-      <div className="space-y-8">
-        <Setting
-          title="Email"
-          footer="We will email you to verify the change"
-          validation={emailValidation}
-          onSubmit={onEmailSubmit as (values: Record<string, string | number>) => Promise<void>}
-          fields={[
-            <Field.Input
-              disabled
-              label="Email"
-              hideLabel
-              name="email"
-              iconLeft={<MailIcon />}
-              type="email"
-              defaultValue={session?.user?.email ?? ""}
-            />,
-          ]}
-        />
-        <Setting
-          title="Name"
-          footer="Please use between 3 and 64 characters"
-          validation={nameValidation}
-          onSubmit={onUsernameSubmit as (values: Record<string, string | number>) => Promise<void>}
-          fields={[
-            <Field.Input
-              label="Name"
-              hideLabel
-              name="name"
-              iconLeft={<UserIcon />}
-              type="text"
-              defaultValue={session?.user?.name ?? ""}
-            />,
-          ]}
-        />
-
-        <Setting
-          title="Delete Account"
-          footer={`Enter "delete my account forever". This can not be undone. You will have to sign up for a new account again.`}
-          validation={deleteValidation}
-          onSubmit={onDeleteSubmit as (values: Record<string, string | number>) => Promise<void>}
-          fields={[<Field.Input label="Confirm" hideLabel name="confirmation" type="text" />]}
-          button={{ label: "Delete", kind: "alert" }}
-        />
-      </div>
+      <div className="space-y-8"></div>
     </AppLayout>
   )
 }
 
-export default withAuthentication(SettingsPage)
+export default SettingsPage
