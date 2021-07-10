@@ -44,17 +44,17 @@ export class Client {
   private readonly token: string
 
   constructor(config?: ApiConfig) {
-    const baseUrl = config?.baseUrl ?? process.env["NX_IEX_BASE_URL"]
+    const baseUrl = config?.baseUrl ?? process.env["IEX_BASE_URL"]
 
     if (!baseUrl) {
-      throw new Error("NX_IEX_BASE_URL must be defined")
+      throw new Error("IEX_BASE_URL must be defined")
     }
     this.baseUrl = baseUrl
 
-    const token = config?.token ?? process.env["NX_IEX_TOKEN"]
+    const token = config?.token ?? process.env["IEX_TOKEN"]
 
     if (!token) {
-      throw new Error("NX_IEX_TOKEN must be defined")
+      throw new Error("IEX_TOKEN must be defined")
     }
     this.token = token
   }

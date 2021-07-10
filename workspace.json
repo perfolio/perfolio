@@ -471,6 +471,27 @@
         }
       }
     },
+    "integrations-cookies": {
+      "root": "libs/integrations/cookies",
+      "sourceRoot": "libs/integrations/cookies/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/cookies/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/cookies"],
+          "options": {
+            "jestConfig": "libs/integrations/cookies/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-ecb": {
       "root": "libs/integrations/ecb",
       "sourceRoot": "libs/integrations/ecb/src",

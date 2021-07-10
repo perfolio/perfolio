@@ -1,26 +1,20 @@
 import type { AppProps } from "next/app"
-import { Provider as AuthProvider } from "next-auth/client"
-import { QueryClientProvider } from "react-query"
+import { QueryClientProvider, QueryClient } from "react-query"
+import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/clerk-react"
 import { JWTProvider } from "@perfolio/data-access/api-client"
-import { PersistentQueryClient } from "@perfolio/integrations/localstorage"
+// import { PersistentQueryClient } from "@perfolio/integrations/localstorage"
 import Head from "next/head"
-import { useSession } from "next-auth/client"
 import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import "tailwindcss/tailwind.css"
+import { useRouter } from "next/router"
 
 LogRocket.init("perfolio/app")
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [session] = useSession()
-  if (session?.user) {
-    LogRocket.identify(session.user.email!, {
-      name: session.user.name!,
-      email: session.user.email!,
-    })
-  }
-
+  const router = useRouter()
+  const frontendApi = process.env["NEXT_PUBLIC_CLERK_FRONTEND_API"]
   return (
     <>
       <Head>
@@ -31,16 +25,23 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"></link>
       </Head>
       <IdProvider>
-        <QueryClientProvider client={PersistentQueryClient()}>
-          <JWTProvider>
-            <AuthProvider session={pageProps.session}>
-              <OnboardingModal />
-              <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-                <Component {...pageProps} />
-              </div>
-            </AuthProvider>
-          </JWTProvider>
-        </QueryClientProvider>
+        <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
+          <SignedIn>
+            <QueryClientProvider client={new QueryClient()}>
+              <JWTProvider>
+                <OnboardingModal />
+                <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+                  <Component {...pageProps} />
+                </div>
+              </JWTProvider>
+            </QueryClientProvider>
+          </SignedIn>
+          <SignedOut>
+            <div className="flex items-center justify-center">
+              <SignIn />
+            </div>
+          </SignedOut>
+        </ClerkProvider>
       </IdProvider>
     </>
   )

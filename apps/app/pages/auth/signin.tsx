@@ -1,12 +1,11 @@
 import React, { useState } from "react"
-import { NextPage, GetServerSideProps } from "next"
-import { signIn, getSession } from "next-auth/client"
+import { NextPage } from "next"
 import { Logo, Button } from "@perfolio/ui/components"
 import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-
+import { Magic } from "magic-sdk"
 const SigninPage: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
 
@@ -51,7 +50,17 @@ const SigninPage: NextPage = () => {
                 handleSubmit<z.infer<typeof validation>>(
                   ctx,
                   async ({ email }) => {
-                    await signIn("email", { email })
+                    const magic = new Magic("pk_live_47E2276BF2FDD304")
+                    const didToken = await magic.auth.loginWithMagicLink({
+                      email,
+                    })
+                    await fetch("/api/auth/signin", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${didToken}`,
+                      },
+                    })
                   },
                   setSubmitting,
                   setFormError,
@@ -80,17 +89,4 @@ const SigninPage: NextPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const session = await getSession({ req })
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    }
-  }
-
-  return { props: {} }
-}
 export default SigninPage

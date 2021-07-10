@@ -150,7 +150,6 @@ export function AutoCompleteSelect<Option>({
                         <button
                           type="button"
                           onClick={() => {
-                            console.log({ name, option })
                             setValue(name, option)
                             setState(State.Done)
                           }}

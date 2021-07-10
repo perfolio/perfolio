@@ -47,6 +47,7 @@
       "@perfolio/feature/i18n": ["libs/feature/i18n/src/index.ts"],
       "@perfolio/feature/tokens": ["libs/feature/tokens/src/index.ts"],
       "@perfolio/integrations/bankofengland": ["libs/integrations/bankofengland/src/index.ts"],
+      "@perfolio/integrations/cookies": ["libs/integrations/cookies/src/index.ts"],
       "@perfolio/integrations/ecb": ["libs/integrations/ecb/src/index.ts"],
       "@perfolio/integrations/fauna": ["libs/integrations/fauna/src/index.ts"],
       "@perfolio/integrations/iexcloud": ["libs/integrations/iexcloud/src/index.ts"],
