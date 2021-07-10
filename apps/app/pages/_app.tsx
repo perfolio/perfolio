@@ -17,6 +17,10 @@ const publicPages = ["/auth/sign-in/[[...index]]", "/auth/sign-up/[[...index]]"]
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const frontendApi = process.env["NEXT_PUBLIC_CLERK_FRONTEND_API"]
+  console.log({ frontendApi })
+  if (!frontendApi) {
+    throw new Error("NEXT_PUBLIC_CLERK_FRONTEND_API is not defined")
+  }
   return (
     <>
       <Head>
