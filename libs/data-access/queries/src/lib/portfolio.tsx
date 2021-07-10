@@ -58,7 +58,7 @@ export const usePortfolio = () => {
       }
     }),
   ).map((symbol) => {
-    return (symbol.data as { symbol: string }).symbol
+    return (symbol?.data as { symbol: string })?.symbol
   })
 
   /**
