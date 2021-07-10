@@ -37,7 +37,6 @@
       "@perfolio/api/feature/middleware": ["libs/api/feature/middleware/src/index.ts"],
       "@perfolio/app/components": ["libs/app/components/src/index.ts"],
       "@perfolio/app/middleware": ["libs/app/middleware/src/index.ts"],
-      "@perfolio/auth": ["libs/auth/src/index.ts"],
       "@perfolio/data-access/api-client": ["libs/data-access/api-client/src/index.ts"],
       "@perfolio/data-access/fauna-adapter": ["libs/data-access/fauna-adapter/src/index.ts"],
       "@perfolio/data-access/mutations": ["libs/data-access/mutations/src/index.ts"],

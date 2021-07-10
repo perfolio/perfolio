@@ -7,7 +7,6 @@ import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Description } from "@perfolio/ui/components"
-import { withClientSideAuthentication } from "@perfolio/auth"
 
 const Subscribe: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
@@ -89,6 +88,4 @@ const Subscribe: NextPage = () => {
   )
 }
 
-export default withClientSideAuthentication(Subscribe, {
-  redirect: { authenticated: "/", anonymous: undefined },
-})
+export default Subscribe

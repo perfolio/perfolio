@@ -12,7 +12,6 @@ import cn from "classnames"
 import { useSettings, useExchanges } from "@perfolio/data-access/queries"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { withClientSideAuthentication } from "@perfolio/auth"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -191,4 +190,4 @@ const SettingsPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withClientSideAuthentication(SettingsPage)
+export default SettingsPage

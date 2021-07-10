@@ -10,7 +10,7 @@ export async function createSettings(
   req: CreateSettingsRequest,
   ctx: MiddlewareContext,
 ): Promise<CreateSettingsResponse> {
-  const settings = await db().settings.create(ctx.claims.userId, req)
+  const settings = await db().settings.create(ctx.claims.sub, req)
 
   return settings.data
 }

@@ -3,7 +3,6 @@ import { NextPage } from "next"
 import { Logo, Button } from "@perfolio/ui/components"
 import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
-import { withClientSideAuthentication } from "@perfolio/auth"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Magic } from "magic-sdk"
@@ -90,8 +89,4 @@ const SigninPage: NextPage = () => {
   )
 }
 
-export default withClientSideAuthentication(SigninPage, {
-  redirect: {
-    authenticated: "/",
-  },
-})
+export default SigninPage
