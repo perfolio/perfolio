@@ -13,7 +13,7 @@ export async function createTransaction(
   { claims }: MiddlewareContext,
 ): Promise<CreateTransactionResponse> {
   return await db().transaction.create({
-    userId: claims.userId,
+    userId: claims.sub,
     value,
     assetId,
     executedAt,

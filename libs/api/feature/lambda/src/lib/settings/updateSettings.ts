@@ -10,7 +10,7 @@ export async function updateSettings(
   req: UpdateSettingsRequest,
   ctx: MiddlewareContext,
 ): Promise<UpdateSettingsResponse> {
-  const settings = await db().settings.update(ctx.claims.userId, req)
+  const settings = await db().settings.update(ctx.claims.sub, req)
 
   return settings.data
 }

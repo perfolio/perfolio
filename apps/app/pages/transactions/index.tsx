@@ -8,7 +8,6 @@ import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
-import { withClientSideAuthentication } from "@perfolio/auth"
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean
@@ -112,4 +111,4 @@ const TransactionsPage: NextPage = () => {
   )
 }
 
-export default withClientSideAuthentication(TransactionsPage)
+export default TransactionsPage

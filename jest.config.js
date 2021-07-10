@@ -34,6 +34,5 @@ module.exports = {
     "<rootDir>/apps/api",
     "<rootDir>/libs/api/apollo",
     "<rootDir>/libs/integrations/cookies",
-    "<rootDir>/libs/auth",
   ],
 }

@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useApi } from "@perfolio/data-access/api-client"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
-import { withClientSideAuthentication } from "@perfolio/auth"
 
 // const Suggestion: React.FC<{
 //   tx: Transaction
@@ -216,4 +215,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withClientSideAuthentication(NewTransactionPage)
+export default NewTransactionPage

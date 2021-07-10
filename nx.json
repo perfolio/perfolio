@@ -42,9 +42,6 @@
     "app-middleware": {
       "tags": []
     },
-    "auth": {
-      "tags": []
-    },
     "data-access-api-client": {
       "tags": []
     },

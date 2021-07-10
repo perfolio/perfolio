@@ -18,7 +18,6 @@ import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 import { getCurrencySymbol } from "@perfolio/util/currency"
-import { withClientSideAuthentication } from "@perfolio/auth"
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
 const ranges: Record<Range, number> = {
@@ -215,4 +214,4 @@ const App: NextPage = () => {
     </AppLayout>
   )
 }
-export default withClientSideAuthentication(App)
+export default App

@@ -6,8 +6,10 @@ import { Icon, Logo } from "@perfolio/ui/components"
 
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
+import { useClerk } from "@clerk/clerk-react"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
+  const clerk = useClerk()
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -53,7 +55,13 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button onClick={() => fetch("/api/auth/signout")} className="focus:outline-none">
+              <button
+                onClick={async () => {
+                  await clerk.session?.end()
+                  clerk.setSession(null)
+                }}
+                className="focus:outline-none"
+              >
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />
                 </Icon>
