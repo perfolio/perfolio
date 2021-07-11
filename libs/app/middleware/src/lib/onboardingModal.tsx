@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { Exchange } from "@perfolio/types"
 import { useSettings, useExchanges } from "@perfolio/data-access/queries"
-import { useSession } from "next-auth/client"
 import { useCreateSettings } from "@perfolio/data-access/mutations"
 import { getCurrency } from "@perfolio/util/currency"
 /**
@@ -24,9 +23,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
 
   const { settings, isLoading } = useSettings()
   const createSettings = useCreateSettings()
-  const [session, sessionLoading] = useSession()
-  const requiresOnboarding =
-    !!session && !sessionLoading && !isLoading && (!settings || Object.keys(settings).length === 0)
+  const requiresOnboarding = !isLoading && (!settings || Object.keys(settings).length === 0)
 
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({

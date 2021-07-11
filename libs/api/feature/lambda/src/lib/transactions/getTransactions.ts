@@ -6,5 +6,5 @@ export async function getTransactions(
   _: void,
   { claims }: MiddlewareContext,
 ): Promise<GetTransactionsResponse> {
-  return db().transaction.fromUser(claims.userId)
+  return db().transaction.fromUser(claims.sub)
 }

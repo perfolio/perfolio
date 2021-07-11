@@ -7,7 +7,7 @@ export const SubscribeRequestValidation = z.object({
 export type SubscribeRequest = z.infer<typeof SubscribeRequestValidation>
 
 export async function subscribe({ email }: SubscribeRequest) {
-  const apiKey = process.env["NX_SENDGRID_TOKEN"]
+  const apiKey = process.env["SENDGRID_TOKEN"]
   if (!apiKey) {
     throw new Error("`NX_SENDGRID_TOKEN` must be defined")
   }

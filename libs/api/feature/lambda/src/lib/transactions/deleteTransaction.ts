@@ -16,7 +16,7 @@ export async function deleteTransaction(
     throw new Error(`No transaction found with id: ${transactionId}`)
   }
 
-  if (transaction.data.userId !== claims.userId) {
+  if (transaction.data.userId !== claims.sub) {
     throw new Error(`You are not allowed to delete transactions of other users`)
   }
 

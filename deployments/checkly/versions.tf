@@ -4,7 +4,7 @@ terraform {
       source  = "checkly/checkly"
       version = "1.1.0"
     }
-    
+
   }
 
 }

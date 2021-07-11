@@ -5,12 +5,10 @@ enum CacheControlScope {
   PRIVATE
 }
 
-directive @cacheControl (
+directive @cacheControl(
   maxAge: Int
   scope: CacheControlScope
 ) on FIELD_DEFINITION | OBJECT | INTERFACE
-
-
 
 enum Interval {
   daily
@@ -173,5 +171,5 @@ type Company @cacheControl(maxAge: 240) {
 
 type Query {
   getRiskFreeRates(interval: Interval!): [RiskFreeRate!]!
-  getCompany(ticker: String!): Company 
+  getCompany(ticker: String!): Company
 }

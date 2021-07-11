@@ -3,7 +3,6 @@ import { useApi } from "@perfolio/data-access/api-client"
 import { QUERY_KEY_TICKER_FROM_FIGI } from "./asset"
 import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { useHistory } from "./history"
-import { useSession } from "next-auth/client"
 
 import { Company } from "@perfolio/types"
 
@@ -38,7 +37,6 @@ const getLastWithValue = (
 }
 
 export const usePortfolio = () => {
-  const [session] = useSession()
   const { history, ...meta } = useHistory()
   const api = useApi()
 
@@ -53,29 +51,28 @@ export const usePortfolio = () => {
     })
   }
   const symbols = useQueries(
-    Object.keys(session && history ? history : {}).map((figi) => {
+    Object.keys(history ? history : {}).map((figi) => {
       return {
         queryKey: QUERY_KEY_TICKER_FROM_FIGI(figi),
         queryFn: () => api.assets.getTickerFromFigi({ figi }),
       }
     }),
   ).map((symbol) => {
-    return (symbol.data as { symbol: string }).symbol
+    return (symbol?.data as { symbol: string })?.symbol
   })
 
   /**
    * Inject company data
    */
   const companies = useQueries(
-    (session && symbols && symbols.every((ticker) => typeof ticker !== "undefined")
-      ? symbols
-      : []
-    ).map((ticker) => {
-      return {
-        queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(ticker),
-        queryFn: () => api.companies.getCompany({ ticker }),
-      }
-    }),
+    (symbols && symbols.every((ticker) => typeof ticker !== "undefined") ? symbols : []).map(
+      (ticker) => {
+        return {
+          queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(ticker),
+          queryFn: () => api.companies.getCompany({ ticker }),
+        }
+      },
+    ),
   )
   if (companies && companies.length === Object.keys(portfolio).length) {
     Object.keys(portfolio).forEach((isin, i) => {

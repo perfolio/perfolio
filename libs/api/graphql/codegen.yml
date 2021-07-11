@@ -2,9 +2,15 @@ overwrite: true
 schema: "./src/lib/schema.gql"
 documents: "./src/lib/operations/**/*.gql"
 generates:
-  src/generated/graphql.tsx:
+  src/generated/graphql.ts:
     plugins:
       - "typescript"
-      - "typescript-operations"
       - "typescript-resolvers"
+      - "typescript-operations"
       - "typescript-react-apollo"
+    config:
+      # Required for apollo server
+      # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
+
+      avoidOptionals: true
+      showUnusedMappers: true

@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { z } from "zod"
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
-import { withAuthentication } from "@perfolio/app/middleware"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/integrations/fauna"
@@ -216,5 +215,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-
-export default withAuthentication(NewTransactionPage)
+export default NewTransactionPage

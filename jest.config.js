@@ -34,5 +34,6 @@ module.exports = {
     "<rootDir>/apps/api",
     "<rootDir>/libs/api/apollo",
     "<rootDir>/libs/api/graphql",
+    "<rootDir>/libs/integrations/cookies",
   ],
 }

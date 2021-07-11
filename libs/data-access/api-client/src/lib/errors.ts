@@ -11,3 +11,10 @@ export class JsonUnmarshalError extends Error {
     super(`Unable to unmarshal json: ${err}`)
   }
 }
+
+export class AuthenticationError extends Error {
+  name = "AuthenticationError"
+  constructor(reason: string) {
+    super(`Unable to authenticate user: ${reason}`)
+  }
+}

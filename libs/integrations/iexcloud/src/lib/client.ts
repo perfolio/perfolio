@@ -1,5 +1,5 @@
-import {env} from "@perfolio/util/env"
-import { HTTPError } from "@perfolio/util/errors"
+import { env } from "@perfolio/util/env"
+import { HTTPError, JsonUnmarshalError } from "@perfolio/util/errors"
 /**
  * Generic api request to be extended by other request types.
  */
@@ -45,16 +45,8 @@ export class Client {
   private readonly token: string
 
   constructor(config?: ApiConfig) {
-    const baseUrl = config?.baseUrl ?? env.require("NX_IEX_BASE_URL")
-
-    this.baseUrl = baseUrl
-
-    const token = config?.token ?? process.env["NX_IEX_TOKEN"]
-
-    if (!token) {
-      throw new Error("NX_IEX_TOKEN must be defined")
-    }
-    this.token = token
+    this.baseUrl = config?.baseUrl ?? env.require("IEX_BASE_URL")
+    this.token = config?.token ?? env.require("IEX_TOKEN")
   }
 
   /**
@@ -99,10 +91,10 @@ export class Client {
       }
 
       if (res.status !== 200) {
-        throw new Error(`Unable to GET endpoint ${path}, failed with status: ${res.status}`)
+        throw new HTTPError(res.status, path)
       }
       return res.json().catch((err) => {
-        throw new Error(`Unable to unmarshal response: ${err}`)
+        throw new JsonUnmarshalError(err)
       })
     }
     throw new Error(`Unable to fetch from iex, ran out of retries: ${path}`)

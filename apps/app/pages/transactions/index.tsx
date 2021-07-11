@@ -2,15 +2,13 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { useCompany, useTransactions, useTickerFromFigi } from "@perfolio/data-access/queries"
+import { useTransactions, useTickerFromFigi } from "@perfolio/data-access/queries"
 import { Transaction } from "@perfolio/integrations/fauna"
 import { useDeleteTransaction } from "@perfolio/data-access/mutations"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
-import { withAuthentication } from "@perfolio/app/middleware"
 import { useGetCompanyQuery } from "@perfolio/api/graphql"
-
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean
@@ -18,9 +16,9 @@ export interface TransactionItemProps {
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
   const { ticker } = useTickerFromFigi({ figi: transaction.data.assetId })
-  const { data: company } = useGetCompanyQuery({ variables: { ticker: ticker! }, skip: !ticker })
+  const { data } = useGetCompanyQuery({ variables: { ticker: ticker! }, skip: !ticker })
+  const company = data?.getCompany
 
-  // const { company } = useCompany(ticker)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction()
 
   return (
@@ -116,4 +114,4 @@ const TransactionsPage: NextPage = () => {
   )
 }
 
-export default withAuthentication(TransactionsPage)
+export default TransactionsPage

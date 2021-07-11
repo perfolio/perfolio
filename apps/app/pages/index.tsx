@@ -13,7 +13,6 @@ import {
   Sidebar,
 } from "@perfolio/app/components"
 import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finance/returns"
-import { withAuthentication } from "@perfolio/app/middleware"
 import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
@@ -215,4 +214,4 @@ const App: NextPage = () => {
     </AppLayout>
   )
 }
-export default withAuthentication(App)
+export default App

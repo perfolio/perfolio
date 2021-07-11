@@ -18,7 +18,7 @@ resource "checkly_check" "getCompany" {
   activated              = true
   frequency              = 5
   group_id               = checkly_check_group.companies.id
-  should_fail = true
+  should_fail            = true
   degraded_response_time = 3000
   max_response_time      = 9000
   locations = [

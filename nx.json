@@ -75,6 +75,9 @@
     "integrations-bankofengland": {
       "tags": []
     },
+    "integrations-cookies": {
+      "tags": []
+    },
     "integrations-ecb": {
       "tags": []
     },

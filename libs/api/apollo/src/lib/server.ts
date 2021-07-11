@@ -17,26 +17,34 @@ export type ApolloHandlerConfig = {
 
 export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
   const schemaPath = path.join(process.cwd(), "libs/api/graphql/src/lib/schema.gql")
+
   return new ApolloServer({
     typeDefs: fs.readFileSync(schemaPath, "utf-8"),
-    resolvers,
     dataSources,
+    resolvers,
     logger: config?.logger,
+    playground: true,
 
     /**
      * Send metrics to apollo dashboard
      */
-    apollo: {
-      key: env.require("NX_APOLLO_KEY"),
-      graphId: env.require("NX_APOLLO_GRAPH_ID"),
-      graphVariant: env.require("NX_APOLLO_GRAPH_VARIANT"),
-    },
-    // persistedQueries: {
-    //   cache: new BaseRedisCache({
-    //     client: new Redis(env.require("NX_APOLLO_REDIS")),
-    //   }),
-    // },
+    apollo: env.isProduction()
+      ? {
+          key: env.require("APOLLO_KEY"),
+          graphId: env.require("APOLLO_GRAPH_ID"),
+          graphVariant: env.require("APOLLO_GRAPH_VARIANT"),
+        }
+      : undefined,
+    /**
+     * Cache queries in redis
+     * The cache ttl is defined in the graphql schema definition
+     */
+    persistedQueries: env.isProduction()
+      ? {
+          cache: new BaseRedisCache({
+            client: new Redis(env.require("APOLLO_REDIS_CONNECTION")),
+          }),
+        }
+      : undefined,
   })
-
-  
 }

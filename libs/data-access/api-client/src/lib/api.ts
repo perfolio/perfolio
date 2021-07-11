@@ -15,7 +15,6 @@ import {
   SubscribeRequest,
   GetTickerFromFigiResponse,
   SendEmailConfirmationRequest,
-  ChangeNameRequest,
   UpdateSettingsRequest,
   GetSettingsResponse,
   GetExchangesResponse,
@@ -29,6 +28,7 @@ import { JWT } from "@perfolio/feature/tokens"
  * Generic api request to be extended by other request types.
  */
 export interface ApiRequest {
+  withCookies?: boolean
   /**
    * JWT token to authenticate the current user.
    */
@@ -42,19 +42,22 @@ export interface ApiRequest {
   /**
    * Send a body with the request. Must be json serializable.
    */
-  body?: unknown
+  body?: Record<string | number, unknown>
 }
 
 type ApiConfig = {
+  sessionId: string
   getToken: () => string | undefined
   setToken: (token: string) => void
 }
 
 export class Api {
+  sessionId: string
   getToken: () => string | undefined
   setToken: (token: string) => void
 
   constructor(config: ApiConfig) {
+    this.sessionId = config.sessionId
     this.getToken = config.getToken
     this.setToken = config.setToken
   }
@@ -69,7 +72,9 @@ export class Api {
     let token = this.getToken()
     if (!token || JWT.expiresIn(token) < 10) {
       const { accessToken } = await this.request<{ accessToken: string }>({
-        path: "/api/auth/getAccessToken",
+        withCookies: true,
+        path: "/api/auth/access-token",
+        body: { sessionId: this.sessionId },
       })
       this.setToken(accessToken)
       token = accessToken
@@ -84,10 +89,16 @@ export class Api {
    * @param body
    * @param token - Overwrite default token getter.
    */
-  private async request<ResponseType>({ path, body, token }: ApiRequest): Promise<ResponseType> {
+  private async request<ResponseType>({
+    path,
+    body,
+    token,
+    withCookies,
+  }: ApiRequest): Promise<ResponseType> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     }
+
     if (token) {
       headers["Authorization"] = token
     }
@@ -95,6 +106,7 @@ export class Api {
     const res = await fetch(path, {
       method: "POST",
       headers,
+      credentials: withCookies ? "include" : undefined,
       body: body ? JSON.stringify(body) : undefined,
     })
 
@@ -177,15 +189,6 @@ export class Api {
 
   public get settings() {
     return {
-      changeName: async (body: ChangeNameRequest) =>
-        this.requestWithAuth<void>({
-          body,
-          path: "/api/settings/changeName",
-        }),
-      deleteAccount: async () =>
-        this.requestWithAuth<void>({
-          path: "/api/settings/deleteAccount",
-        }),
       getSettings: async () =>
         this.requestWithAuth<GetSettingsResponse>({ path: "/api/settings/getSettings" }),
       updateSettings: async (body: UpdateSettingsRequest) =>

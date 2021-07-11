@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { NextPage, GetServerSideProps } from "next"
-import { getSession } from "next-auth/client"
+import { NextPage } from "next"
 import { useApi } from "@perfolio/data-access/api-client"
 import { Logo, Button } from "@perfolio/ui/components"
 import { z } from "zod"
@@ -89,17 +88,4 @@ const Subscribe: NextPage = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const session = await getSession({ req })
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    }
-  }
-
-  return { props: {} }
-}
 export default Subscribe
