@@ -134,7 +134,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary md:h-32 md:w-32">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full md:h-32 md:w-32">
                 <svg
                   className="w-full p-3 text-white stroke-current md:p-4"
                   viewBox="0 0 194 148"
@@ -189,7 +189,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 Curious for more?
               </p>
             </div>
-            <Button href="https://app.perfol.io/subscribe">Subscribe</Button>
+            <Button kind="cta" href="https://app.perfol.io/subscribe">
+              Subscribe
+            </Button>
           </div>
         </Section>
       </div>

@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
           <Button href="https://app.perfol.io/auth/signin" kind="plain">
             Sign in
           </Button>
-          <Button kind="primary" href="https://app.perfol.io/auth/signin">
+          <Button kind="cta" href="https://app.perfol.io/auth/signin">
             Start for free
           </Button>
         </div>
@@ -43,7 +43,7 @@ export const Navbar: React.FC = () => {
           leaveFrom="translate-x-0 opacity-100"
           leaveTo="translate-x-full opacity-0"
         >
-          <Button kind="primary" href="https://app.perfol.io/auth/signin">
+          <Button kind="cta" href="https://app.perfol.io/auth/signin">
             Start for free
           </Button>
         </Transition>

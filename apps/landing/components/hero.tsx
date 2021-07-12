@@ -15,7 +15,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
       </p>
 
       <div className="grid w-full gap-4 sm:w-1/2 md:w-1/3 lg:w-1/4 sm:grid-cols-2">
-        <Button kind="primary" size="auto" href="https://app.perfol.io/auth/signin">
+        <Button kind="cta" size="auto" href="https://app.perfol.io/auth/signin">
           Sign up
         </Button>
         <Button size="auto" kind="secondary" href="mailto:info@perfol.io">

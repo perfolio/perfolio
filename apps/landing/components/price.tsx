@@ -50,7 +50,7 @@ export const Price: React.FC<PriceProps> = ({
         })}
       </ul>
       <div className="w-full">
-        <Button kind={highlighted ? "primary" : "secondary"} href={href} size="auto">
+        <Button kind={highlighted ? "cta" : "secondary"} href={href} size="auto">
           Choose plan
         </Button>
       </div>
