@@ -9,4 +9,11 @@ export const resolvers: Resolvers<Context> = {
   Company: {
     logo: (company, _args, ctx) => ctx.dataSources.iex.getLogo(company.ticker),
   },
+
+  Mutation: {
+    subscribeToNewsletter: async (_parent, { email }, ctx) => {
+      ctx.dataSources.sendgrid.subscribeToNewsletter(email)
+      return email
+    },
+  },
 }

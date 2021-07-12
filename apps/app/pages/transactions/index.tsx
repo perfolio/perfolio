@@ -16,7 +16,7 @@ export interface TransactionItemProps {
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
   const { ticker } = useTickerFromFigi({ figi: transaction.data.assetId })
-  const { data } = useGetCompanyQuery({ variables: { ticker: ticker! }, skip: !ticker })
+  const { data } = useGetCompanyQuery({}, { variables: { ticker: ticker! }, skip: !ticker })
   const company = data?.getCompany
 
   const { mutateAsync: deleteTransaction } = useDeleteTransaction()

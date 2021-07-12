@@ -1,13 +1,36 @@
 import { GraphQLResolveInfo } from "graphql"
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "react-query"
 export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
   { [P in K]-?: NonNullable<T[P]> }
-const defaultOptions = {}
+
+function fetcher<TData, TVariables>(
+  endpoint: string,
+  requestInit: RequestInit,
+  query: string,
+  variables?: TVariables,
+) {
+  return async (): Promise<TData> => {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      ...requestInit,
+      body: JSON.stringify({ query, variables }),
+    })
+
+    const json = await res.json()
+
+    if (json.errors) {
+      const { message } = json.errors[0]
+
+      throw new Error(message)
+    }
+
+    return json.data
+  }
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -105,6 +128,15 @@ export enum IssueType {
   Wt = "wt",
   /** Other */
   Empty = "empty",
+}
+
+export type Mutation = {
+  __typename?: "Mutation"
+  subscribeToNewsletter: Maybe<Scalars["String"]>
+}
+
+export type MutationSubscribeToNewsletterArgs = {
+  email: Scalars["String"]
 }
 
 export type Query = {
@@ -234,6 +266,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars["Int"]>
   Interval: Interval
   IssueType: IssueType
+  Mutation: ResolverTypeWrapper<{}>
   Query: ResolverTypeWrapper<{}>
   RiskFreeRate: ResolverTypeWrapper<RiskFreeRate>
   Float: ResolverTypeWrapper<Scalars["Float"]>
@@ -245,6 +278,7 @@ export type ResolversParentTypes = {
   Company: Company
   String: Scalars["String"]
   Int: Scalars["Int"]
+  Mutation: {}
   Query: {}
   RiskFreeRate: RiskFreeRate
   Float: Scalars["Float"]
@@ -291,6 +325,18 @@ export type CompanyResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
+> = {
+  subscribeToNewsletter: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSubscribeToNewsletterArgs, "email">
+  >
+}
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
@@ -320,6 +366,7 @@ export type RiskFreeRateResolvers<
 
 export type Resolvers<ContextType = any> = {
   Company: CompanyResolvers<ContextType>
+  Mutation: MutationResolvers<ContextType>
   Query: QueryResolvers<ContextType>
   RiskFreeRate: RiskFreeRateResolvers<ContextType>
 }
@@ -338,6 +385,15 @@ export type DirectiveResolvers<ContextType = any> = {
  * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
  */
 export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>
+export type SubscribeToNewsletterMutationMutationVariables = Exact<{
+  email: Scalars["String"]
+}>
+
+export type SubscribeToNewsletterMutationMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "subscribeToNewsletter"
+>
+
 export type GetCompanyQueryVariables = Exact<{
   ticker: Scalars["String"]
 }>
@@ -371,62 +427,77 @@ export type GetCompanyQuery = { __typename?: "Query" } & {
   >
 }
 
-export const GetCompanyDocument = gql`
-  query getCompany($ticker: String!) {
-    getCompany(ticker: $ticker) {
-      ticker
-      logo
-      name
-      exchange
-      industry
-      website
-      description
-      ceo
-      issueType
-      sector
-      employees
-      securityName
-      primarySicCode
-      tags
-      address
-      address2
-      state
-      city
-      zip
-      country
-      phone
-    }
+export const SubscribeToNewsletterMutationDocument = `
+    mutation SubscribeToNewsletterMutation($email: String!) {
+  subscribeToNewsletter(email: $email)
+}
+    `
+export const useSubscribeToNewsletterMutationMutation = <TError = unknown, TContext = unknown>(
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
+  options?: UseMutationOptions<
+    SubscribeToNewsletterMutationMutation,
+    TError,
+    SubscribeToNewsletterMutationMutationVariables,
+    TContext
+  >,
+) =>
+  useMutation<
+    SubscribeToNewsletterMutationMutation,
+    TError,
+    SubscribeToNewsletterMutationMutationVariables,
+    TContext
+  >(
+    (variables?: SubscribeToNewsletterMutationMutationVariables) =>
+      fetcher<
+        SubscribeToNewsletterMutationMutation,
+        SubscribeToNewsletterMutationMutationVariables
+      >(
+        dataSource.endpoint,
+        dataSource.fetchParams || {},
+        SubscribeToNewsletterMutationDocument,
+        variables,
+      )(),
+    options,
+  )
+export const GetCompanyDocument = `
+    query getCompany($ticker: String!) {
+  getCompany(ticker: $ticker) {
+    ticker
+    logo
+    name
+    exchange
+    industry
+    website
+    description
+    ceo
+    issueType
+    sector
+    employees
+    securityName
+    primarySicCode
+    tags
+    address
+    address2
+    state
+    city
+    zip
+    country
+    phone
   }
-`
-
-/**
- * __useGetCompanyQuery__
- *
- * To run a query within a React component, call `useGetCompanyQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCompanyQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCompanyQuery({
- *   variables: {
- *      ticker: // value for 'ticker'
- *   },
- * });
- */
-export function useGetCompanyQuery(
-  baseOptions: Apollo.QueryHookOptions<GetCompanyQuery, GetCompanyQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCompanyQuery, GetCompanyQueryVariables>(GetCompanyDocument, options)
 }
-export function useGetCompanyLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCompanyQuery, GetCompanyQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCompanyQuery, GetCompanyQueryVariables>(GetCompanyDocument, options)
-}
-export type GetCompanyQueryHookResult = ReturnType<typeof useGetCompanyQuery>
-export type GetCompanyLazyQueryHookResult = ReturnType<typeof useGetCompanyLazyQuery>
-export type GetCompanyQueryResult = Apollo.QueryResult<GetCompanyQuery, GetCompanyQueryVariables>
+    `
+export const useGetCompanyQuery = <TData = GetCompanyQuery, TError = unknown>(
+  dataSource: { endpoint: string; fetchParams?: RequestInit },
+  variables: GetCompanyQueryVariables,
+  options?: UseQueryOptions<GetCompanyQuery, TError, TData>,
+) =>
+  useQuery<GetCompanyQuery, TError, TData>(
+    ["getCompany", variables],
+    fetcher<GetCompanyQuery, GetCompanyQueryVariables>(
+      dataSource.endpoint,
+      dataSource.fetchParams || {},
+      GetCompanyDocument,
+      variables,
+    ),
+    options,
+  )

@@ -173,3 +173,7 @@ type Query {
   getRiskFreeRates(interval: Interval!): [RiskFreeRate!]!
   getCompany(ticker: String!): Company
 }
+
+type Mutation {
+  subscribeToNewsletter(email: String!): String
+}

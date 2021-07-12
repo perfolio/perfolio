@@ -6,7 +6,7 @@ import {
 } from "@perfolio/integrations/iexcloud"
 import { HTTPError } from "@perfolio/util/errors"
 
-export class DataSourceIEX extends DataSource {
+export class IEX extends DataSource {
   constructor() {
     super()
   }

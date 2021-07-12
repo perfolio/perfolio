@@ -1,11 +1,14 @@
-import { DataSourceIEX } from "./iex"
+import { IEX } from "./iex"
+import { Sendgrid } from "./sendgrid"
 
 export type DataSources = {
-  iex: DataSourceIEX
+  iex: IEX
+  sendgrid: Sendgrid
 }
 
 export const dataSources = (): DataSources => {
   return {
-    iex: new DataSourceIEX(),
+    iex: new IEX(),
+    sendgrid: new Sendgrid(),
   }
 }
