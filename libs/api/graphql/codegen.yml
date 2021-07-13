@@ -7,10 +7,11 @@ generates:
       - "typescript"
       - "typescript-resolvers"
       - "typescript-operations"
-      - "typescript-react-query"
+      - "typescript-react-apollo"
     config:
       # Required for apollo server
       # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
+      useIndexSignature: true
 
       avoidOptionals: true
       showUnusedMappers: true

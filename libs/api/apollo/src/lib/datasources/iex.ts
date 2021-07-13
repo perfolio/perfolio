@@ -1,8 +1,9 @@
 import { DataSource } from "apollo-datasource"
-import { IssueType } from "@perfolio/api/graphql"
+import { Exchange, IssueType } from "@perfolio/api/graphql"
 import {
   getCompany as getCompanyFromCloud,
   getLogo as getLogoFromCloud,
+  getExchanges as getExchangesFromCloud,
 } from "@perfolio/integrations/iexcloud"
 import { HTTPError } from "@perfolio/util/errors"
 
@@ -59,5 +60,22 @@ export class IEX extends DataSource {
           phone: (company.phone as string) ?? undefined,
         }
       : null
+  }
+  async getExchanges(): Promise<Exchange[]> {
+    const exchanges = await getExchangesFromCloud()
+    return exchanges.map((e) => {
+      return {
+        abbreviation: e.exchange,
+        name: e.description,
+        suffix: e.exchangeSuffix,
+        region: e.region,
+        mic: e.mic,
+      }
+    })
+  }
+  async getExchange({ mic }: { mic: string }): Promise<Exchange | null> {
+    const exchanges = await this.getExchanges()
+    const exchange = exchanges.find((exchange) => exchange.mic === mic)
+    return exchange ?? null
   }
 }

@@ -64,7 +64,7 @@ export function AutoCompleteSelect<Option>({
   /**
    * Available options from iex
    */
-  const { search: options, isLoading } = useSearch({
+  const { search: options, loading } = useSearch({
     fragment: search,
     currency: settings?.defaultCurrency,
     exchange: settings?.defaultExchange,
@@ -135,7 +135,7 @@ export function AutoCompleteSelect<Option>({
               show={state === State.Selecting}
             >
               <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {isLoading ? (
+                {loading ? (
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>
@@ -159,10 +159,10 @@ export function AutoCompleteSelect<Option>({
                           })}
                         >
                           <Profile
-                            image={option.logo}
-                            title={option.name}
-                            subtitle={option.exchange}
-                            tag={option.ticker}
+                            image={option?.logo}
+                            title={option?.name}
+                            subtitle={option?.exchange?.name}
+                            tag={option?.ticker}
                           />
                         </button>
                       </li>

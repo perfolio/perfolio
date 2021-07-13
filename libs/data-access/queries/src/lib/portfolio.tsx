@@ -1,7 +1,5 @@
 import { useQueries } from "react-query"
 import { useApi } from "@perfolio/data-access/api-client"
-import { QUERY_KEY_TICKER_FROM_FIGI } from "./asset"
-import { QUERY_KEY_COMPANY_BY_SYMBOL } from "./company"
 import { useHistory } from "./history"
 
 import { Company } from "@perfolio/types"
@@ -53,7 +51,7 @@ export const usePortfolio = () => {
   const symbols = useQueries(
     Object.keys(history ? history : {}).map((figi) => {
       return {
-        queryKey: QUERY_KEY_TICKER_FROM_FIGI(figi),
+        queryKey: ["symbol", figi],
         queryFn: () => api.assets.getTickerFromFigi({ figi }),
       }
     }),
@@ -68,7 +66,7 @@ export const usePortfolio = () => {
     (symbols && symbols.every((ticker) => typeof ticker !== "undefined") ? symbols : []).map(
       (ticker) => {
         return {
-          queryKey: QUERY_KEY_COMPANY_BY_SYMBOL(ticker),
+          queryKey: ["getCompany", ticker],
           queryFn: () => api.companies.getCompany({ ticker }),
         }
       },
