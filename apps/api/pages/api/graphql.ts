@@ -13,6 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
      * Handle graphql request
      */
     const server = Server()
+    await server.start()
     const handler = server.createHandler({ path: "/api/graphql" })
     await handler(req, res)
   }

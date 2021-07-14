@@ -23,6 +23,9 @@
     "api-apollo": {
       "tags": []
     },
+    "api-client": {
+      "tags": []
+    },
     "api-feature-lambda": {
       "tags": []
     },

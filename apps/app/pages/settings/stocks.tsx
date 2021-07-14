@@ -2,14 +2,17 @@ import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout } from "@perfolio/app/components"
-import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
 import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
-import { useGetUserSettingsQuery, useGetExchangesQuery } from "@perfolio/api/graphql"
+import {
+  useGetUserSettingsQuery,
+  useGetExchangesQuery,
+  useUpdateUserSettingsMutation,
+} from "@perfolio/api/graphql"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { useUser } from "@clerk/clerk-react"
@@ -85,15 +88,18 @@ const SettingsPage: NextPage = () => {
   const exchanges = exchangesResponse?.getExchanges
 
   const router = useRouter()
-  const api = useApi()
 
   /**
    * The current defaultExchange
    */
 
   const currencyValidation = z.object({ defaultCurrency: z.string().min(3).max(3) })
+
+  const [updateSettings] = useUpdateUserSettingsMutation()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
-    await api.settings.updateSettings(values)
+    await updateSettings({
+      variables: { userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency } },
+    })
   }
 
   const exchangeValidation = z.object({
@@ -101,8 +107,13 @@ const SettingsPage: NextPage = () => {
     defaultExchange: z.string(),
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
-    await api.settings.updateSettings({
-      defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic,
+    await updateSettings({
+      variables: {
+        userSettings: {
+          userId: user.id,
+          defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
+        },
+      },
     })
   }
 

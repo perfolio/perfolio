@@ -15,11 +15,7 @@ import {
   SubscribeRequest,
   GetTickerFromFigiResponse,
   SendEmailConfirmationRequest,
-  UpdateSettingsRequest,
-  GetSettingsResponse,
   GetExchangesResponse,
-  CreateSettingsRequest,
-  CreateSettingsResponse,
   SearchResponse,
   SearchRequest,
 } from "@perfolio/api/feature/lambda"
@@ -187,19 +183,6 @@ export class Api {
     }
   }
 
-  public get settings() {
-    return {
-      getSettings: async () =>
-        this.requestWithAuth<GetSettingsResponse>({ path: "/api/settings/getSettings" }),
-      updateSettings: async (body: UpdateSettingsRequest) =>
-        this.requestWithAuth<GetSettingsResponse>({ body, path: "/api/settings/updateSettings" }),
-      createSettings: async (body: CreateSettingsRequest) =>
-        this.requestWithAuth<CreateSettingsResponse>({
-          body,
-          path: "/api/settings/createSettings",
-        }),
-    }
-  }
   public get exchanges() {
     return {
       getExchanges: async () =>

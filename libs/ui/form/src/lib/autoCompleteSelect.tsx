@@ -2,8 +2,10 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearch, useSettings } from "@perfolio/data-access/queries"
+import { useSearch } from "@perfolio/data-access/queries"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
+import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
+import { useUser } from "@clerk/clerk-react"
 export interface AutoCompleteSelectProps<Option> {
   /**
    * Available options the user can choose from
@@ -42,6 +44,7 @@ export function AutoCompleteSelect<Option>({
   help,
   name,
 }: AutoCompleteSelectProps<Option>): JSX.Element {
+  const user = useUser()
   const [state, setState] = useState<State>(State.Start)
   const { setValue, watch } = useFormContext()
 
@@ -56,7 +59,8 @@ export function AutoCompleteSelect<Option>({
     }
   }, [value, onChange])
 
-  const { settings } = useSettings()
+  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
+  const settings = data?.getUserSettings
   /**
    * User search value
    */
@@ -67,7 +71,7 @@ export function AutoCompleteSelect<Option>({
   const { search: options, loading } = useSearch({
     fragment: search,
     currency: settings?.defaultCurrency,
-    exchange: settings?.defaultExchange,
+    exchange: settings?.defaultExchange.mic,
   })
   return (
     <div className="w-full text-gray-800">

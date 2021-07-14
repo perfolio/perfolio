@@ -2,6 +2,7 @@ import { ApolloServer } from "apollo-server-micro"
 import { BaseRedisCache } from "apollo-server-cache-redis"
 import Redis from "ioredis"
 import { Logger } from "tslog"
+import { context } from "./context"
 
 import { resolvers } from "./resolvers"
 import fs from "fs"
@@ -23,7 +24,7 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
     dataSources,
     resolvers,
     logger: config?.logger,
-    playground: true,
+    context,
 
     /**
      * Send metrics to apollo dashboard

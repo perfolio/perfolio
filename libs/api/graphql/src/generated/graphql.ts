@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql"
 import { gql } from "@apollo/client"
 import * as Apollo from "@apollo/client"
-export type Maybe<T> = T | null
+export type Maybe<T> = T | null | undefined
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
@@ -43,58 +43,58 @@ export enum CacheControlScope {
 export type Company = {
   __typename?: "Company"
   /** Street address of the company if available */
-  address: Maybe<Scalars["String"]>
+  address?: Maybe<Scalars["String"]>
   /** Street address of the company if available */
-  address2: Maybe<Scalars["String"]>
+  address2?: Maybe<Scalars["String"]>
   /** Name of the CEO of the company */
-  ceo: Maybe<Scalars["String"]>
+  ceo?: Maybe<Scalars["String"]>
   /** City of the company if available */
-  city: Maybe<Scalars["String"]>
+  city?: Maybe<Scalars["String"]>
   /** Country of the company if available */
-  country: Maybe<Scalars["String"]>
+  country?: Maybe<Scalars["String"]>
   /**
    * Return the latest price
    * Computed value
    */
   currentValue: Scalars["Float"]
   /** Description for the company */
-  description: Maybe<Scalars["String"]>
+  description?: Maybe<Scalars["String"]>
   /** Number of employees */
-  employees: Maybe<Scalars["Int"]>
+  employees?: Maybe<Scalars["Int"]>
   /**
    * Refers to Exchange using IEX Supported Exchanges list
    * @see https://cloud.iexapis.com/stable/ref-data/exchanges
    */
-  exchange: Maybe<Exchange>
+  exchange?: Maybe<Exchange>
   /** Refers to the industry the company belongs to */
-  industry: Maybe<Scalars["String"]>
+  industry?: Maybe<Scalars["String"]>
   /** Refers to the common issue type of the stock. */
-  issueType: Maybe<IssueType>
+  issueType?: Maybe<IssueType>
   /** Url of the logo */
-  logo: Maybe<Scalars["String"]>
+  logo?: Maybe<Scalars["String"]>
   /** Name of the company */
-  name: Maybe<Scalars["String"]>
+  name?: Maybe<Scalars["String"]>
   /** Phone Number of the company if available */
-  phone: Maybe<Scalars["String"]>
+  phone?: Maybe<Scalars["String"]>
   /**
    * Primary SIC Code for the ticker (if available)
    * @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
    */
-  primarySicCode: Maybe<Scalars["Int"]>
+  primarySicCode?: Maybe<Scalars["Int"]>
   /** Refers to the sector the company belongs to. */
-  sector: Maybe<Scalars["String"]>
+  sector?: Maybe<Scalars["String"]>
   /** Name of the CEO of the company */
-  securityName: Maybe<Scalars["String"]>
+  securityName?: Maybe<Scalars["String"]>
   /** State of the company if available */
-  state: Maybe<Scalars["String"]>
+  state?: Maybe<Scalars["String"]>
   /** An array of Strings used to classify the company. */
-  tags: Maybe<Array<Maybe<Scalars["String"]>>>
+  tags?: Maybe<Array<Maybe<Scalars["String"]>>>
   /** Ticker of the company */
   ticker: Scalars["String"]
   /** Website of the company */
-  website: Maybe<Scalars["String"]>
+  website?: Maybe<Scalars["String"]>
   /** Zip code of the company if available */
-  zip: Maybe<Scalars["String"]>
+  zip?: Maybe<Scalars["String"]>
 }
 
 /** Create a new transaction */
@@ -185,9 +185,9 @@ export type Mutation = {
   /** Create and store settings for the first time. For example when a new user signs up. */
   createUserSettings: UserSettings
   /** Delete a single transaction from the database */
-  deleteTransaction: Maybe<Transaction>
+  deleteTransaction?: Maybe<Transaction>
   /** Enter the user's email into our newsletter list. */
-  subscribeToNewsletter: Maybe<Scalars["String"]>
+  subscribeToNewsletter?: Maybe<Scalars["String"]>
   /** Only update some values in the user settings. */
   updateUserSettings: UserSettings
 }
@@ -230,7 +230,7 @@ export type Query = {
   /** Return a list of all companies that can be traded at a certain exchange */
   getAvailableCompaniesAtExchange: Array<Company>
   /** Return a company by its symbol */
-  getCompany: Maybe<Company>
+  getCompany?: Maybe<Company>
   /** Get a list of all availale exchanges */
   getExchanges: Array<Exchange>
   /** Return all assets over time for a given user */
@@ -238,13 +238,13 @@ export type Query = {
   /** Get the risk free rates for a given interval */
   getRiskFreeRates: Array<RiskFreeRate>
   /** Return data about a symbol */
-  getSymbol: Maybe<Symbol>
+  getSymbol?: Maybe<Symbol>
   /** Return all transactions of a user */
   getTransactions: Array<Transaction>
   /** Return the user's settings */
-  getUserSettings: Maybe<UserSettings>
+  getUserSettings?: Maybe<UserSettings>
   /** Return matching companies for a given search string */
-  searchForCompanies: Array<Maybe<Company>>
+  searchCompanies: Array<Maybe<Company>>
 }
 
 /** Available queries */
@@ -266,7 +266,7 @@ export type QueryGetPortfolioHistoryArgs = {
 export type QueryGetRiskFreeRatesArgs = {
   interval: Interval
   begin: Scalars["Timestamp"]
-  end: Maybe<Scalars["Timestamp"]>
+  end?: Maybe<Scalars["Timestamp"]>
 }
 
 /** Available queries */
@@ -285,7 +285,7 @@ export type QueryGetUserSettingsArgs = {
 }
 
 /** Available queries */
-export type QuerySearchForCompaniesArgs = {
+export type QuerySearchCompaniesArgs = {
   fragment: Scalars["String"]
 }
 
@@ -307,19 +307,19 @@ export type RiskFreeRate = {
 export type Symbol = {
   __typename?: "Symbol"
   /** Refers to the currency the symbol is traded in */
-  currency: Scalars["String"]
+  currency?: Maybe<Scalars["String"]>
   /** Refers to Exchange using IEX Supported Exchanges list */
-  exchange: Exchange
+  exchange?: Maybe<Exchange>
   /** The figi associated with this symbol */
-  figi: Scalars["String"]
+  figi?: Maybe<Scalars["String"]>
   /** Refers to the name of the company or security. */
-  name: Scalars["String"]
+  name?: Maybe<Scalars["String"]>
   /** Refers to the region of the world the symbol is in */
-  region: Scalars["String"]
+  region?: Maybe<Scalars["String"]>
   /** Refers to the symbol */
   symbol: Scalars["String"]
   /** Refers to the common issue type */
-  type: IssueType
+  type?: Maybe<IssueType>
 }
 
 /** A transactions represents a single purchase or sale of any number of shares of a single asset. */
@@ -342,12 +342,12 @@ export type Transaction = {
 /** Update only some values. */
 export type UpdateUserSettings = {
   /** The user's default currency. Everything will be converted to this currency. */
-  defaultCurrency: Maybe<Scalars["String"]>
+  defaultCurrency?: Maybe<Scalars["String"]>
   /**
    * The user's default exchange. At the start only 1 exchange can be used.
    * This must be the MIC!
    */
-  defaultExchange: Maybe<Scalars["String"]>
+  defaultExchange?: Maybe<Scalars["String"]>
   /** The unique user id */
   userId: Scalars["ID"]
 }
@@ -523,8 +523,8 @@ export type ResolversParentTypes = ResolversObject<{
 }>
 
 export type CacheControlDirectiveArgs = {
-  maxAge: Maybe<Scalars["Int"]>
-  scope: Maybe<CacheControlScope>
+  maxAge?: Maybe<Scalars["Int"]>
+  scope?: Maybe<CacheControlScope>
 }
 
 export type CacheControlDirectiveResolver<
@@ -538,8 +538,8 @@ export type AssetHistoryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["AssetHistory"] = ResolversParentTypes["AssetHistory"],
 > = ResolversObject<{
-  assetId: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  history: Resolver<Array<ResolversTypes["ValueAndQuantityAtTime"]>, ParentType, ContextType>
+  assetId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  history?: Resolver<Array<ResolversTypes["ValueAndQuantityAtTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -547,28 +547,28 @@ export type CompanyResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Company"] = ResolversParentTypes["Company"],
 > = ResolversObject<{
-  address: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  address2: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  ceo: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  city: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  country: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  currentValue: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  description: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  employees: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
-  exchange: Resolver<Maybe<ResolversTypes["Exchange"]>, ParentType, ContextType>
-  industry: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  issueType: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
-  logo: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  name: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  phone: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  primarySicCode: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
-  sector: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  securityName: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  state: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  tags: Resolver<Maybe<Array<Maybe<ResolversTypes["String"]>>>, ParentType, ContextType>
-  ticker: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  website: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  zip: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  address?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  address2?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  ceo?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  city?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  country?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  currentValue?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  employees?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
+  exchange?: Resolver<Maybe<ResolversTypes["Exchange"]>, ParentType, ContextType>
+  industry?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  issueType?: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
+  logo?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  primarySicCode?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
+  sector?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  securityName?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  state?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes["String"]>>>, ParentType, ContextType>
+  ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  website?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  zip?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -576,11 +576,11 @@ export type ExchangeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Exchange"] = ResolversParentTypes["Exchange"],
 > = ResolversObject<{
-  abbreviation: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  suffix: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  mic: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  name: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  region: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  abbreviation?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  suffix?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  mic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  region?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -588,31 +588,31 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
-  createTransaction: Resolver<
+  createTransaction?: Resolver<
     ResolversTypes["Transaction"],
     ParentType,
     ContextType,
     RequireFields<MutationCreateTransactionArgs, "transaction">
   >
-  createUserSettings: Resolver<
+  createUserSettings?: Resolver<
     ResolversTypes["UserSettings"],
     ParentType,
     ContextType,
     RequireFields<MutationCreateUserSettingsArgs, "userSettings">
   >
-  deleteTransaction: Resolver<
+  deleteTransaction?: Resolver<
     Maybe<ResolversTypes["Transaction"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteTransactionArgs, "transactionId">
   >
-  subscribeToNewsletter: Resolver<
+  subscribeToNewsletter?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
     ContextType,
     RequireFields<MutationSubscribeToNewsletterArgs, "email">
   >
-  updateUserSettings: Resolver<
+  updateUserSettings?: Resolver<
     ResolversTypes["UserSettings"],
     ParentType,
     ContextType,
@@ -624,7 +624,7 @@ export type PortfolioHistoryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["PortfolioHistory"] = ResolversParentTypes["PortfolioHistory"],
 > = ResolversObject<{
-  assets: Resolver<Array<ResolversTypes["AssetHistory"]>, ParentType, ContextType>
+  assets?: Resolver<Array<ResolversTypes["AssetHistory"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -632,54 +632,54 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
-  getAvailableCompaniesAtExchange: Resolver<
+  getAvailableCompaniesAtExchange?: Resolver<
     Array<ResolversTypes["Company"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetAvailableCompaniesAtExchangeArgs, "mic">
   >
-  getCompany: Resolver<
+  getCompany?: Resolver<
     Maybe<ResolversTypes["Company"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetCompanyArgs, "ticker">
   >
-  getExchanges: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
-  getPortfolioHistory: Resolver<
+  getExchanges?: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
+  getPortfolioHistory?: Resolver<
     ResolversTypes["PortfolioHistory"],
     ParentType,
     ContextType,
     RequireFields<QueryGetPortfolioHistoryArgs, "userId">
   >
-  getRiskFreeRates: Resolver<
+  getRiskFreeRates?: Resolver<
     Array<ResolversTypes["RiskFreeRate"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetRiskFreeRatesArgs, "interval" | "begin">
   >
-  getSymbol: Resolver<
+  getSymbol?: Resolver<
     Maybe<ResolversTypes["Symbol"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetSymbolArgs, "symbol">
   >
-  getTransactions: Resolver<
+  getTransactions?: Resolver<
     Array<ResolversTypes["Transaction"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetTransactionsArgs, "userId">
   >
-  getUserSettings: Resolver<
+  getUserSettings?: Resolver<
     Maybe<ResolversTypes["UserSettings"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetUserSettingsArgs, "userId">
   >
-  searchForCompanies: Resolver<
+  searchCompanies?: Resolver<
     Array<Maybe<ResolversTypes["Company"]>>,
     ParentType,
     ContextType,
-    RequireFields<QuerySearchForCompaniesArgs, "fragment">
+    RequireFields<QuerySearchCompaniesArgs, "fragment">
   >
 }>
 
@@ -687,8 +687,8 @@ export type RiskFreeRateResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["RiskFreeRate"] = ResolversParentTypes["RiskFreeRate"],
 > = ResolversObject<{
-  rate: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  time: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
+  rate?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  time?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -696,13 +696,13 @@ export type SymbolResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Symbol"] = ResolversParentTypes["Symbol"],
 > = ResolversObject<{
-  currency: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  exchange: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
-  figi: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  name: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  region: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  symbol: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  type: Resolver<ResolversTypes["IssueType"], ParentType, ContextType>
+  currency?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  exchange?: Resolver<Maybe<ResolversTypes["Exchange"]>, ParentType, ContextType>
+  figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  region?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  symbol?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  type?: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -715,12 +715,12 @@ export type TransactionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Transaction"] = ResolversParentTypes["Transaction"],
 > = ResolversObject<{
-  assetId: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  executedAt: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
-  id: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  userId: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  value: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  volume: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  assetId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  executedAt?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  userId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  volume?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -728,9 +728,9 @@ export type UserSettingsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["UserSettings"] = ResolversParentTypes["UserSettings"],
 > = ResolversObject<{
-  defaultCurrency: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  defaultExchange: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
-  userId: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  defaultCurrency?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  defaultExchange?: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
+  userId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -738,25 +738,25 @@ export type ValueAndQuantityAtTimeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["ValueAndQuantityAtTime"] = ResolversParentTypes["ValueAndQuantityAtTime"],
 > = ResolversObject<{
-  quantity: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  time: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
-  value: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  quantity?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  time?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
+  value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
 export type Resolvers<ContextType = any> = ResolversObject<{
-  AssetHistory: AssetHistoryResolvers<ContextType>
-  Company: CompanyResolvers<ContextType>
-  Exchange: ExchangeResolvers<ContextType>
-  Mutation: MutationResolvers<ContextType>
-  PortfolioHistory: PortfolioHistoryResolvers<ContextType>
-  Query: QueryResolvers<ContextType>
-  RiskFreeRate: RiskFreeRateResolvers<ContextType>
-  Symbol: SymbolResolvers<ContextType>
-  Timestamp: GraphQLScalarType
-  Transaction: TransactionResolvers<ContextType>
-  UserSettings: UserSettingsResolvers<ContextType>
-  ValueAndQuantityAtTime: ValueAndQuantityAtTimeResolvers<ContextType>
+  AssetHistory?: AssetHistoryResolvers<ContextType>
+  Company?: CompanyResolvers<ContextType>
+  Exchange?: ExchangeResolvers<ContextType>
+  Mutation?: MutationResolvers<ContextType>
+  PortfolioHistory?: PortfolioHistoryResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
+  RiskFreeRate?: RiskFreeRateResolvers<ContextType>
+  Symbol?: SymbolResolvers<ContextType>
+  Timestamp?: GraphQLScalarType
+  Transaction?: TransactionResolvers<ContextType>
+  UserSettings?: UserSettingsResolvers<ContextType>
+  ValueAndQuantityAtTime?: ValueAndQuantityAtTimeResolvers<ContextType>
 }>
 
 /**
@@ -765,7 +765,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>
 export type DirectiveResolvers<ContextType = any> = ResolversObject<{
-  cacheControl: CacheControlDirectiveResolver<any, any, ContextType>
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>
 }>
 
 /**
@@ -773,6 +773,14 @@ export type DirectiveResolvers<ContextType = any> = ResolversObject<{
  * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
  */
 export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>
+export type CreateUserSettingsMutationVariables = Exact<{
+  userSettings: CreateUserSettings
+}>
+
+export type CreateUserSettingsMutation = { __typename?: "Mutation" } & {
+  createUserSettings: { __typename?: "UserSettings" } & Pick<UserSettings, "userId">
+}
+
 export type SubscribeToNewsletterMutationMutationVariables = Exact<{
   email: Scalars["String"]
 }>
@@ -782,16 +790,24 @@ export type SubscribeToNewsletterMutationMutation = { __typename?: "Mutation" } 
   "subscribeToNewsletter"
 >
 
+export type UpdateUserSettingsMutationVariables = Exact<{
+  userSettings: UpdateUserSettings
+}>
+
+export type UpdateUserSettingsMutation = { __typename?: "Mutation" } & {
+  updateUserSettings: { __typename?: "UserSettings" } & Pick<UserSettings, "userId">
+}
+
 export type GetCompanyQueryVariables = Exact<{
   ticker: Scalars["String"]
 }>
 
 export type GetCompanyQuery = { __typename?: "Query" } & {
-  getCompany: Maybe<
+  getCompany?: Maybe<
     { __typename?: "Company" } & Pick<
       Company,
       "ticker" | "logo" | "name" | "description" | "sector"
-    > & { exchange: Maybe<{ __typename?: "Exchange" } & Pick<Exchange, "name" | "mic">> }
+    > & { exchange?: Maybe<{ __typename?: "Exchange" } & Pick<Exchange, "name" | "mic">> }
   >
 }
 
@@ -811,7 +827,7 @@ export type GetUserSettingsQueryVariables = Exact<{
 }>
 
 export type GetUserSettingsQuery = { __typename?: "Query" } & {
-  getUserSettings: Maybe<
+  getUserSettings?: Maybe<
     { __typename?: "UserSettings" } & Pick<UserSettings, "defaultCurrency"> & {
         defaultExchange: { __typename?: "Exchange" } & Pick<
           Exchange,
@@ -821,21 +837,68 @@ export type GetUserSettingsQuery = { __typename?: "Query" } & {
   >
 }
 
-export type SearchForCompaniesQueryVariables = Exact<{
+export type SearchCompaniesQueryVariables = Exact<{
   fragment: Scalars["String"]
 }>
 
-export type SearchForCompaniesQuery = { __typename?: "Query" } & {
-  searchForCompanies: Array<
+export type SearchCompaniesQuery = { __typename?: "Query" } & {
+  searchCompanies: Array<
     Maybe<
       { __typename?: "Company" } & Pick<
         Company,
         "ticker" | "logo" | "name" | "description" | "sector"
-      > & { exchange: Maybe<{ __typename?: "Exchange" } & Pick<Exchange, "name" | "mic">> }
+      > & { exchange?: Maybe<{ __typename?: "Exchange" } & Pick<Exchange, "name" | "mic">> }
     >
   >
 }
 
+export const CreateUserSettingsDocument = gql`
+  mutation CreateUserSettings($userSettings: CreateUserSettings!) {
+    createUserSettings(userSettings: $userSettings) {
+      userId
+    }
+  }
+`
+export type CreateUserSettingsMutationFn = Apollo.MutationFunction<
+  CreateUserSettingsMutation,
+  CreateUserSettingsMutationVariables
+>
+
+/**
+ * __useCreateUserSettingsMutation__
+ *
+ * To run a mutation, you first call `useCreateUserSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserSettingsMutation, { data, loading, error }] = useCreateUserSettingsMutation({
+ *   variables: {
+ *      userSettings: // value for 'userSettings'
+ *   },
+ * });
+ */
+export function useCreateUserSettingsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserSettingsMutation,
+    CreateUserSettingsMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<CreateUserSettingsMutation, CreateUserSettingsMutationVariables>(
+    CreateUserSettingsDocument,
+    options,
+  )
+}
+export type CreateUserSettingsMutationHookResult = ReturnType<typeof useCreateUserSettingsMutation>
+export type CreateUserSettingsMutationResult = Apollo.MutationResult<CreateUserSettingsMutation>
+export type CreateUserSettingsMutationOptions = Apollo.BaseMutationOptions<
+  CreateUserSettingsMutation,
+  CreateUserSettingsMutationVariables
+>
 export const SubscribeToNewsletterMutationDocument = gql`
   mutation SubscribeToNewsletterMutation($email: String!) {
     subscribeToNewsletter(email: $email)
@@ -883,6 +946,53 @@ export type SubscribeToNewsletterMutationMutationResult =
 export type SubscribeToNewsletterMutationMutationOptions = Apollo.BaseMutationOptions<
   SubscribeToNewsletterMutationMutation,
   SubscribeToNewsletterMutationMutationVariables
+>
+export const UpdateUserSettingsDocument = gql`
+  mutation updateUserSettings($userSettings: UpdateUserSettings!) {
+    updateUserSettings(userSettings: $userSettings) {
+      userId
+    }
+  }
+`
+export type UpdateUserSettingsMutationFn = Apollo.MutationFunction<
+  UpdateUserSettingsMutation,
+  UpdateUserSettingsMutationVariables
+>
+
+/**
+ * __useUpdateUserSettingsMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserSettingsMutation, { data, loading, error }] = useUpdateUserSettingsMutation({
+ *   variables: {
+ *      userSettings: // value for 'userSettings'
+ *   },
+ * });
+ */
+export function useUpdateUserSettingsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUserSettingsMutation,
+    UpdateUserSettingsMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>(
+    UpdateUserSettingsDocument,
+    options,
+  )
+}
+export type UpdateUserSettingsMutationHookResult = ReturnType<typeof useUpdateUserSettingsMutation>
+export type UpdateUserSettingsMutationResult = Apollo.MutationResult<UpdateUserSettingsMutation>
+export type UpdateUserSettingsMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserSettingsMutation,
+  UpdateUserSettingsMutationVariables
 >
 export const GetCompanyDocument = gql`
   query getCompany($ticker: String!) {
@@ -1037,9 +1147,9 @@ export type GetUserSettingsQueryResult = Apollo.QueryResult<
   GetUserSettingsQuery,
   GetUserSettingsQueryVariables
 >
-export const SearchForCompaniesDocument = gql`
-  query searchForCompanies($fragment: String!) {
-    searchForCompanies(fragment: $fragment) {
+export const SearchCompaniesDocument = gql`
+  query searchCompanies($fragment: String!) {
+    searchCompanies(fragment: $fragment) {
       ticker
       logo
       name
@@ -1054,47 +1164,42 @@ export const SearchForCompaniesDocument = gql`
 `
 
 /**
- * __useSearchForCompaniesQuery__
+ * __useSearchCompaniesQuery__
  *
- * To run a query within a React component, call `useSearchForCompaniesQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchForCompaniesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchCompaniesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCompaniesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchForCompaniesQuery({
+ * const { data, loading, error } = useSearchCompaniesQuery({
  *   variables: {
  *      fragment: // value for 'fragment'
  *   },
  * });
  */
-export function useSearchForCompaniesQuery(
-  baseOptions: Apollo.QueryHookOptions<SearchForCompaniesQuery, SearchForCompaniesQueryVariables>,
+export function useSearchCompaniesQuery(
+  baseOptions: Apollo.QueryHookOptions<SearchCompaniesQuery, SearchCompaniesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<SearchForCompaniesQuery, SearchForCompaniesQueryVariables>(
-    SearchForCompaniesDocument,
+  return Apollo.useQuery<SearchCompaniesQuery, SearchCompaniesQueryVariables>(
+    SearchCompaniesDocument,
     options,
   )
 }
-export function useSearchForCompaniesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SearchForCompaniesQuery,
-    SearchForCompaniesQueryVariables
-  >,
+export function useSearchCompaniesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SearchCompaniesQuery, SearchCompaniesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<SearchForCompaniesQuery, SearchForCompaniesQueryVariables>(
-    SearchForCompaniesDocument,
+  return Apollo.useLazyQuery<SearchCompaniesQuery, SearchCompaniesQueryVariables>(
+    SearchCompaniesDocument,
     options,
   )
 }
-export type SearchForCompaniesQueryHookResult = ReturnType<typeof useSearchForCompaniesQuery>
-export type SearchForCompaniesLazyQueryHookResult = ReturnType<
-  typeof useSearchForCompaniesLazyQuery
->
-export type SearchForCompaniesQueryResult = Apollo.QueryResult<
-  SearchForCompaniesQuery,
-  SearchForCompaniesQueryVariables
+export type SearchCompaniesQueryHookResult = ReturnType<typeof useSearchCompaniesQuery>
+export type SearchCompaniesLazyQueryHookResult = ReturnType<typeof useSearchCompaniesLazyQuery>
+export type SearchCompaniesQueryResult = Apollo.QueryResult<
+  SearchCompaniesQuery,
+  SearchCompaniesQueryVariables
 >

@@ -1,5 +1,5 @@
-query searchForCompanies($fragment: String!) {
-  searchForCompanies(fragment: $fragment) {
+query searchCompanies($fragment: String!) {
+  searchCompanies(fragment: $fragment) {
     ticker
     logo
     name

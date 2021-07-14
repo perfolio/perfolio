@@ -418,27 +418,27 @@ type Symbol {
   """
   Refers to the currency the symbol is traded in
   """
-  currency: String!
+  currency: String
 
   """
   Refers to Exchange using IEX Supported Exchanges list
   """
-  exchange: Exchange!
+  exchange: Exchange
 
   """
   The figi associated with this symbol
   """
-  figi: String!
+  figi: String
 
   """
   Refers to the name of the company or security.
   """
-  name: String!
+  name: String
 
   """
   Refers to the region of the world the symbol is in
   """
-  region: String!
+  region: String
 
   """
   Refers to the symbol
@@ -448,7 +448,7 @@ type Symbol {
   """
   Refers to the common issue type
   """
-  type: IssueType!
+  type: IssueType
 }
 """
 Generic Value and Quantity over time.
@@ -587,7 +587,7 @@ type Query {
   """
   Return matching companies for a given search string
   """
-  searchForCompanies(
+  searchCompanies(
     """
     A partial search from the user.
     """

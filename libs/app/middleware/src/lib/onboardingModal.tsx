@@ -5,10 +5,14 @@ import { Button } from "@perfolio/ui/components"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { Exchange } from "@perfolio/types"
-import { useSettings, useExchanges } from "@perfolio/data-access/queries"
-import { useCreateSettings } from "@perfolio/data-access/mutations"
+import {
+  useGetUserSettingsQuery,
+  useGetExchangesQuery,
+  useCreateUserSettingsMutation,
+  Exchange,
+} from "@perfolio/api/graphql"
 import { getCurrency } from "@perfolio/util/currency"
+import { useUser } from "@clerk/clerk-react"
 /**
  * Check whether a user has settings in the database. If not they are presented
  * a modal to insert settings for the first time
@@ -19,11 +23,18 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     defaultExchange: z.string(),
   })
 
-  const { exchanges } = useExchanges()
+  const user = useUser()
 
-  const { settings, isLoading } = useSettings()
-  const createSettings = useCreateSettings()
-  const requiresOnboarding = !isLoading && (!settings || Object.keys(settings).length === 0)
+  const { data: dataExchanges } = useGetExchangesQuery()
+  const exchanges = dataExchanges?.getExchanges
+
+  const { data: dataUserSettings, loading: userSettingsLoading } = useGetUserSettingsQuery({
+    variables: { userId: user.id },
+  })
+  const userSettings = dataUserSettings?.getUserSettings
+  const [createSettings] = useCreateUserSettingsMutation()
+  const requiresOnboarding =
+    !userSettingsLoading && (!userSettings || Object.keys(userSettings).length === 0)
 
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({
@@ -32,15 +43,18 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   })
 
   const onSubmit = async (values: z.infer<typeof validation>): Promise<void> => {
-    const defaultExchange = exchanges?.find(
-      (e: Exchange) => e.description === values.defaultExchange,
-    )?.mic
+    const defaultExchange = exchanges?.find((e: Exchange) => e.name === values.defaultExchange)
     if (!defaultExchange) {
       throw new Error(`No exchange found with name: ${values.defaultExchange}`)
     }
-    await createSettings.mutateAsync({
-      defaultCurrency: values.defaultCurrency,
-      defaultExchange,
+    await createSettings({
+      variables: {
+        userSettings: {
+          userId: user.id,
+          defaultCurrency: values.defaultCurrency,
+          defaultExchange: defaultExchange.mic,
+        },
+      },
     })
   }
 
@@ -81,7 +95,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
       fields: (
         <div className="space-y-4">
           <Field.Select
-            options={exchanges?.filter((e) => e.region === region).map((e) => e.description) ?? []}
+            options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
             label="Exchange"
             name="defaultExchange"
           />

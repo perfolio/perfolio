@@ -5,14 +5,15 @@ import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/integrations/fauna"
-import { useTransactions, useSettings } from "@perfolio/data-access/queries"
+import { useTransactions } from "@perfolio/data-access/queries"
 import { useCreateTransaction } from "@perfolio/data-access/mutations"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useApi } from "@perfolio/data-access/api-client"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
-
+import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
+import { useUser } from "@clerk/clerk-react"
 // const Suggestion: React.FC<{
 //   tx: Transaction
 //   setValue: (val: { name: string; ticker: string; figi: string, exchange:string }) => void
@@ -78,6 +79,7 @@ const validation = z.object({
  * / page.
  */
 const NewTransactionPage: NextPage = () => {
+  const user = useUser()
   const api = useApi()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -95,8 +97,8 @@ const NewTransactionPage: NextPage = () => {
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const { settings } = useSettings()
-
+  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
+  const settings = data?.getUserSettings
   return (
     <AppLayout
       sidebar={

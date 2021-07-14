@@ -1,0 +1,5 @@
+mutation CreateUserSettings($userSettings: CreateUserSettings!) {
+  createUserSettings(userSettings: $userSettings) {
+    userId
+  }
+}

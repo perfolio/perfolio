@@ -4,23 +4,24 @@ import { AuthenticationError } from "@perfolio/util/errors"
 import { Claims, JWT } from "@perfolio/feature/tokens"
 export type Context = {
   dataSources: DataSources
-  claims: Claims
+  authenticateUser: () => Claims
 }
 
 export const context = (ctx: { req: IncomingMessage }) => {
-  const jwt = ctx?.req?.headers?.authorization
-  if (!jwt) {
-    throw new AuthenticationError("missing authorization header")
+  const authenticateUser = () => {
+    try {
+      const jwt = ctx.req.headers?.authorization
+      if (!jwt) {
+        throw new AuthenticationError("missing authorization header")
+      }
+      return JWT.verify(jwt)
+    } catch (err) {
+      throw new AuthenticationError("invalid token")
+    }
   }
 
-  let claims: Claims
-  try {
-    claims = JWT.verify(jwt)
-  } catch (err) {
-    throw new AuthenticationError("invalid token")
-  }
   return {
     ...ctx,
-    claims,
+    authenticateUser,
   }
 }

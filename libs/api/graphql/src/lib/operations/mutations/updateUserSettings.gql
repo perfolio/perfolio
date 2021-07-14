@@ -1,0 +1,5 @@
+mutation updateUserSettings($userSettings: UpdateUserSettings!) {
+  updateUserSettings(userSettings: $userSettings) {
+    userId
+  }
+}

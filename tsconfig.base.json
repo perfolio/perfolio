@@ -33,6 +33,7 @@
     "baseUrl": ".",
     "paths": {
       "@perfolio/api/apollo": ["libs/api/apollo/src/index.ts"],
+      "@perfolio/api/client": ["libs/api/client/src/index.ts"],
       "@perfolio/api/feature/lambda": ["libs/api/feature/lambda/src/index.ts"],
       "@perfolio/api/feature/middleware": ["libs/api/feature/middleware/src/index.ts"],
       "@perfolio/api/graphql": ["libs/api/graphql/src/index.ts"],

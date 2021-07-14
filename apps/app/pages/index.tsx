@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react"
 import { NextPage } from "next"
-import { useCurrentValue, useHistory, useSettings } from "@perfolio/data-access/queries"
+import { useUser } from "@clerk/clerk-react"
+import { useCurrentValue, useHistory } from "@perfolio/data-access/queries"
 import {
   AppLayout,
   DiversificationChart,
@@ -18,6 +19,7 @@ import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 import { getCurrencySymbol } from "@perfolio/util/currency"
+import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
 const ranges: Record<Range, number> = {
@@ -59,10 +61,12 @@ const KPI = ({
 }
 
 const App: NextPage = () => {
+  const user = useUser()
   const { currentValue } = useCurrentValue()
   const [range, setRange] = useState<Range>("ALL")
   const { history } = useHistory()
-  const { settings } = useSettings()
+  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
+  const settings = data?.getUserSettings
 
   const selectedHistory = useMemo<AssetsOverTime>(() => {
     if (!history) {

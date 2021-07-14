@@ -12,6 +12,5 @@ generates:
       # Required for apollo server
       # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
       useIndexSignature: true
-
-      avoidOptionals: true
       showUnusedMappers: true
+      maybeValue: T | null | undefined
