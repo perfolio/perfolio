@@ -1,13 +1,11 @@
-query searchCompanies($fragment: String!) {
-  searchCompanies(fragment: $fragment) {
-    ticker
-    logo
-    name
-    exchange {
+query searchCompanies($fragment: String!, $mic: String!) {
+  searchCompanies(fragment: $fragment, mic: $mic) {
+    company {
+      ticker
+      logo
       name
-      mic
+      sector
+      figi
     }
-    description
-    sector
   }
 }

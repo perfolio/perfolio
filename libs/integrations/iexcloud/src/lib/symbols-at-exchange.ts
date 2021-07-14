@@ -1,7 +1,7 @@
 import * as z from "zod"
 import { Client } from "./client"
 
-export const getInternationalSymbolsResponseValidator = z.array(
+export const getSymbolsAtExchangeRequestValidation = z.array(
   z.object({
     symbol: z.string(),
     exchange: z.string().nullable(),
@@ -21,17 +21,18 @@ export const getInternationalSymbolsResponseValidator = z.array(
 )
 
 /**
- * Resonse from the `GET /ref-data/symbols` endpoint.
+ * Resonse from the `GET /ref-data/exchange/<exchange>/symbols` endpoint.
  */
-export type GetInternationalSymbolsResponse = z.infer<
-  typeof getInternationalSymbolsResponseValidator
->
-
-export async function getInternationalSymbols(): Promise<GetInternationalSymbolsResponse> {
+export type GetSymbolsAtExchange = z.infer<typeof getSymbolsAtExchangeRequestValidation>
+/**
+ *
+ * @param exchange - The iex internal identifier. not MIC
+ */
+export async function getSymbolsAtExchange(exchange: string): Promise<GetSymbolsAtExchange> {
   const client = new Client()
 
   const res = await client.get({
-    path: "/ref-data/symbols",
+    path: `/ref-data/exchange/${exchange}/symbols`,
   })
-  return getInternationalSymbolsResponseValidator.parse(res)
+  return getSymbolsAtExchangeRequestValidation.parse(res)
 }

@@ -25,7 +25,7 @@ export const DesktopNavMenu: React.FC<MenuProps> = ({ label, icon, menu }): JSX.
               <div className="relative p-4 space-y-8 bg-gray-100 dark:bg-gray-900 ">
                 {menu.map((item) => (
                   <Link href={item.href} key={item.name}>
-                    <a className="flex items-center p-2 space-x-4 transition duration-150 ease-in-out rounded hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 hover:bg-gray-300est">
+                    <a className="flex items-center p-2 space-x-4 transition duration-150 ease-in-out rounded hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 hover:bg-gray-300est">
                       <div className="flex items-center justify-center flex-shrink-0 w-8 h-8 p-2 text-white rounded roundedsm:h-12 sm:w-12 sm:h-12 bg-gradient-to-tr from-primary-900 to-primary-700 dark:from-error-700 dark:to-secondary-700">
                         {item.icon}
                       </div>

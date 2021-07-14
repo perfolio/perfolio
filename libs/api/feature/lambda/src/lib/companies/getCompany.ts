@@ -3,7 +3,7 @@ import {
   getCompany as getCompanyFromCloud,
   getLogo as getLogoFromCloud,
 } from "@perfolio/integrations/iexcloud"
-import { Cache, Key } from "@perfolio/integrations/redis"
+import { IEXCache, Key } from "@perfolio/integrations/redis"
 import { Company } from "@perfolio/types"
 export const GetCompanyRequestValidation = z.object({
   ticker: z.string(),
@@ -13,9 +13,10 @@ export type GetCompanyRequest = z.infer<typeof GetCompanyRequestValidation>
 export type GetCompanyResponse = Company | null
 
 export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetCompanyResponse> {
-  const key = new Key("getCompany_b", { ticker })
+  const key = new Key({ query: "getCompany", ticker })
+  const cache = new IEXCache()
 
-  let company = await Cache.get<Company>(key)
+  let company = await cache.get<Company>(key)
   if (company) {
     return company
   }
@@ -63,6 +64,6 @@ export async function getCompany({ ticker }: GetCompanyRequest): Promise<GetComp
       }
     : null
 
-  await Cache.set("1d", { key, value: company })
+  await cache.set("1d", { key, value: company })
   return company
 }

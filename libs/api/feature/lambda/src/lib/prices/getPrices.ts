@@ -5,7 +5,7 @@ import {
 } from "@perfolio/integrations/iexcloud"
 import { Time } from "@perfolio/util/time"
 import { Price } from "@perfolio/types"
-import { Cache, Key } from "@perfolio/integrations/redis"
+import { IEXCache, Key } from "@perfolio/integrations/redis"
 
 export const GetPricesRequestValidation = z.object({
   ticker: z.string(),
@@ -27,9 +27,10 @@ export async function getPrices({
   //   ticker = ticker.split("-")[0] ?? ticker
   // }
 
-  const key = new Key("getPrices", { ticker })
+  const key = new Key({ query: "getPrices", ticker })
+  const cache = new IEXCache()
 
-  let cachedPrices = await Cache.get<Price[]>(key)
+  let cachedPrices = await cache.get<Price[]>(key)
   /**
    * In case this is a new company we load everything in bulk
    */
@@ -74,7 +75,7 @@ export async function getPrices({
   /**
    * Save ALL prices back to redis
    */
-  Cache.set("1d", {
+  cache.set("1d", {
     key,
     value: Object.entries(priceMap).map(([time, value]) => {
       return {

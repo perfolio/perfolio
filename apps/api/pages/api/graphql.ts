@@ -1,4 +1,4 @@
-import { Server } from "@perfolio/api/apollo"
+import { Server } from "@perfolio/api/server"
 import { NextApiRequest, NextApiResponse } from "next"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

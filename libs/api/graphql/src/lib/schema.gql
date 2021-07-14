@@ -1,28 +1,17 @@
-"""
-A unix timestamp with second precision
-"""
-scalar Timestamp
-
-"""
-We are using apollo-graphql-micro
-see https://stackoverflow.com/a/52925284
-"""
 enum CacheControlScope {
-  """
-  Cached only for this user
-  """
-  PRIVATE
-
-  """
-  Cached across all users
-  """
   PUBLIC
+  PRIVATE
 }
 
 directive @cacheControl(
   maxAge: Int
   scope: CacheControlScope
-) on FIELD_DEFINITION | OBJECT | INTERFACE
+  inheritMaxAge: Boolean
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+"""
+A unix timestamp with second precision
+"""
+scalar Timestamp
 
 """
 The interval for timeseries
@@ -122,7 +111,7 @@ enum IssueType {
 """
 A publicly traded company
 """
-type Company @cacheControl(maxAge: 240) {
+type Company @cacheControl(maxAge: 300) {
   """
   Street address of the company if available
   """
@@ -235,6 +224,10 @@ type Company @cacheControl(maxAge: 240) {
   Zip code of the company if available
   """
   zip: String
+  """
+  The figi associated with this company
+  """
+  figi: String
 }
 """
 A transactions represents a single purchase or sale of any number of shares of a single asset.
@@ -359,7 +352,7 @@ input UpdateUserSettings {
 """
 An exchange where shares are traded
 """
-type Exchange {
+type Exchange @cacheControl(maxAge: 300) {
   """
   Exchange abbreviation
   """
@@ -414,7 +407,7 @@ type Exchange {
 """
 A symbol as used by IEX
 """
-type Ticker {
+type Ticker @cacheControl(maxAge: 300) {
   """
   Refers to the currency the symbol is traded in
   """
@@ -449,6 +442,11 @@ type Ticker {
   Refers to the common issue type
   """
   type: IssueType
+
+  """
+  Loads the company assiciated with this ticker"
+  """
+  company: Company
 }
 """
 Generic Value and Quantity over time.
@@ -585,14 +583,20 @@ type Query {
   ): UserSettings
 
   """
-  Return matching companies for a given search string
+  Return matching tickers for a given search string
+
+  The companies will be loaded with a separate query to allow better caching
   """
   searchCompanies(
     """
     A partial search from the user.
     """
     fragment: String!
-  ): [Company]!
+    """
+    Only return companies traded at this exchange defined by the market identifier code
+    """
+    mic: String!
+  ): [Ticker]!
 }
 
 """

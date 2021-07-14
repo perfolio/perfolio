@@ -12,10 +12,10 @@ export const exchange: ResolverFn<Exchange | null, Company, Context, unknown> = 
   ctx.authenticateUser()
 
   cacheControl.setCacheHint({ maxAge: convertTime("1d"), scope: CacheScope.Public })
-  const allTicker = await ctx.dataSources.iex.getTickers()
-  const ticker = allTicker.find((s) => s.ticker === company.ticker)
-  if (!ticker?.exchangeMic) {
-    return null
-  }
-  return await ctx.dataSources.iex.getExchange({ mic: ticker.exchangeMic })
+
+  const allExchanges = await ctx.dataSources.iex.getExchanges()
+  const exchange = allExchanges.find((e) =>
+    company.ticker.toLowerCase().endsWith(e.suffix.toLowerCase()),
+  )
+  return exchange!
 }

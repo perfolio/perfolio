@@ -72,6 +72,7 @@ specifiers:
   apollo-server-cache-redis: ^1.5.0
   apollo-server-core: ^3.0.0
   apollo-server-micro: ~3.0.0
+  apollo-server-plugin-response-cache: ^3.0.0
   autoprefixer: ^10.2.6
   babel-jest: 26.2.2
   babel-loader: 8.1.0
@@ -152,6 +153,7 @@ dependencies:
   apollo-server-cache-redis: 1.5.0
   apollo-server-core: 3.0.0_graphql@15.5.1
   apollo-server-micro: 3.0.0_graphql@15.5.1+micro@9.3.4
+  apollo-server-plugin-response-cache: 3.0.0_graphql@15.5.1
   classnames: 2.3.1
   cookie: 0.4.1
   cookies: 0.8.0
@@ -8120,6 +8122,17 @@ packages:
       graphql: ^15.3.0
     dependencies:
       apollo-server-types: 3.0.0_graphql@15.5.1
+      graphql: 15.5.1
+    dev: false
+
+  /apollo-server-plugin-response-cache/3.0.0_graphql@15.5.1:
+    resolution: {integrity: sha512-fsUMsK3PcCnMygvpFxOc8A/9rKnWt0JqKb0tSVAmXv3PxJzZZ3v6fJibulCS3cohoU9N3uwj4c6a7SPU8cBEfg==}
+    engines: {node: '>=12.0'}
+    peerDependencies:
+      graphql: ^15.3.0
+    dependencies:
+      apollo-server-caching: 3.0.0
+      apollo-server-plugin-base: 3.0.0_graphql@15.5.1
       graphql: 15.5.1
     dev: false
 

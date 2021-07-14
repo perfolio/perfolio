@@ -11,6 +11,7 @@ import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
 import { createUserSettings } from "./resolvers/mutation/createUserSettings"
 import { updateUserSettings } from "./resolvers/mutation/updateUserSettings"
+import { company } from "./resolvers/ticker/company"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
@@ -32,5 +33,9 @@ export const resolvers: Resolvers<Context> = {
     createUserSettings,
     updateUserSettings,
     subscribeToNewsletter,
+  },
+  Ticker: {
+    // @ts-expect-error Missing fields will be handled by the Company resolver
+    company,
   },
 }

@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { getFigiMapping } from "@perfolio/integrations/iexcloud"
-import { Cache, Key } from "@perfolio/integrations/redis"
+import { IEXCache, Key } from "@perfolio/integrations/redis"
 export const getTickerFromFigiRequestValidation = z.object({
   figi: z.string(),
 })
@@ -10,8 +10,10 @@ export type GetTickerFromFigiResponse = { symbol: string; region: string; exchan
 export async function getTickerFromFigi({
   figi,
 }: GetTickerFromFigiRequest): Promise<GetTickerFromFigiResponse> {
-  const key = new Key("getTickerFromFigi", { figi })
-  const cachedData = await Cache.get<GetTickerFromFigiResponse>(key)
+  const key = new Key({ query: "getTickerFromFigi", figi })
+  const cache = new IEXCache()
+
+  const cachedData = await cache.get<GetTickerFromFigiResponse>(key)
   if (cachedData) {
     return cachedData
   }
@@ -19,6 +21,6 @@ export async function getTickerFromFigi({
   const freshData = await getFigiMapping(figi)
 
   const value = freshData.length > 0 ? freshData[0] : null
-  Cache.set("30d", { key, value })
+  cache.set("30d", { key, value })
   return value
 }

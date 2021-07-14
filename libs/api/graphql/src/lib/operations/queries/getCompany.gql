@@ -1,13 +1,14 @@
-query getCompany($ticker: String!) {
+query getCompany($ticker: String!, $withExchange: Boolean!) {
   getCompany(ticker: $ticker) {
     ticker
     logo
     name
-    exchange {
+    exchange @include(if: $withExchange) {
       name
       mic
     }
     description
     sector
+    figi
   }
 }

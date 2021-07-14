@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { search as openfigiSearch } from "@perfolio/integrations/openfigi"
-import { Cache, Key } from "@perfolio/integrations/redis"
+import { IEXCache, Key } from "@perfolio/integrations/redis"
 import { getTickerFromFigi } from "../assets/getTickerFromFigi"
 import { Logger } from "tslog"
 
@@ -19,9 +19,10 @@ export async function search({
 }: SearchRequest): Promise<SearchResponse> {
   fragment = fragment.toLowerCase()
   const log = new Logger({ prefix: [`[ ${fragment} ]`] })
-  const key = new Key("search", { fragment })
+  const key = new Key({ query: "search", fragment })
+  const cache = new IEXCache()
 
-  const cachedData = await Cache.get<SearchResponse>(key)
+  const cachedData = await cache.get<SearchResponse>(key)
   if (cachedData) {
     log.info("Returning cached data", cachedData)
     return cachedData
@@ -42,7 +43,7 @@ export async function search({
     )
   ).filter((s) => !!s.symbol)
 
-  await Cache.set("1d", { key, value: symbols })
+  await cache.set("1d", { key, value: symbols })
   log.info("Retruning symbols", symbols)
   return symbols as { figi: string; symbol: string }[]
 }

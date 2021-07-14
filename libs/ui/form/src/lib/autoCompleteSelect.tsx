@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearch } from "@perfolio/data-access/queries"
+import { useSearchCompaniesQuery } from "@perfolio/api/graphql"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
 import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
@@ -68,11 +68,17 @@ export function AutoCompleteSelect<Option>({
   /**
    * Available options from iex
    */
-  const { search: options, loading } = useSearch({
-    fragment: search,
-    currency: settings?.defaultCurrency,
-    exchange: settings?.defaultExchange.mic,
+  const { data: searchResult, loading } = useSearchCompaniesQuery({
+    variables: {
+      fragment: search,
+      // This query only fires if it is defined
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      mic: settings?.defaultExchange.mic!,
+    },
+    skip: !settings?.defaultExchange.mic,
   })
+  const options = searchResult?.searchCompanies
   return (
     <div className="w-full text-gray-800">
       <label
@@ -148,13 +154,14 @@ export function AutoCompleteSelect<Option>({
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options?.sort().map((option, i) => {
+                  options?.map((option, i) => {
+                    const company = option?.company
                     return (
                       <li key={i}>
                         <button
                           type="button"
                           onClick={() => {
-                            setValue(name, option)
+                            setValue(name, option?.company)
                             setState(State.Done)
                           }}
                           className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
@@ -163,10 +170,10 @@ export function AutoCompleteSelect<Option>({
                           })}
                         >
                           <Profile
-                            image={option?.logo}
-                            title={option?.name}
-                            subtitle={option?.exchange?.name}
-                            tag={option?.ticker}
+                            image={company?.logo}
+                            subtitle={company?.sector}
+                            title={company?.name}
+                            tag={company?.ticker}
                           />
                         </button>
                       </li>

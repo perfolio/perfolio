@@ -1,5 +1,6 @@
 import { env } from "@perfolio/util/env"
 import { HTTPError, JsonUnmarshalError } from "@perfolio/util/errors"
+import { Logger } from "tslog"
 /**
  * Generic api request to be extended by other request types.
  */
@@ -43,10 +44,14 @@ export interface GetRequest extends ApiRequest {
 export class Client {
   private readonly baseUrl: string
   private readonly token: string
+  public readonly logger: Logger
 
   constructor(config?: ApiConfig) {
     this.baseUrl = config?.baseUrl ?? env.require("IEX_BASE_URL")
     this.token = config?.token ?? env.require("IEX_TOKEN")
+    this.logger = new Logger({
+      name: "IEX Client",
+    })
   }
 
   /**
@@ -79,7 +84,7 @@ export class Client {
         method: "GET",
       })
       if (res.status === 429) {
-        console.warn(`IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
+        this.logger.warn(`IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
         await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
       }

@@ -28,15 +28,9 @@ export type AssetHistory = {
   history: Array<ValueAndQuantityAtTime>
 }
 
-/**
- * We are using apollo-graphql-micro
- * see https://stackoverflow.com/a/52925284
- */
 export enum CacheControlScope {
-  /** Cached only for this user */
-  Private = "PRIVATE",
-  /** Cached across all users */
   Public = "PUBLIC",
+  Private = "PRIVATE",
 }
 
 /** A publicly traded company */
@@ -243,8 +237,12 @@ export type Query = {
   getTransactions: Array<Transaction>
   /** Return the user's settings */
   getUserSettings?: Maybe<UserSettings>
-  /** Return matching companies for a given search string */
-  searchCompanies: Array<Maybe<Company>>
+  /**
+   * Return matching tickers for a given search string
+   *
+   * The companies will be loaded with a separate query to allow better caching
+   */
+  searchCompanies: Array<Maybe<Ticker>>
 }
 
 /** Available queries */
@@ -287,6 +285,7 @@ export type QueryGetUserSettingsArgs = {
 /** Available queries */
 export type QuerySearchCompaniesArgs = {
   fragment: Scalars["String"]
+  mic: Scalars["String"]
 }
 
 /**
@@ -320,6 +319,8 @@ export type Ticker = {
   ticker: Scalars["String"]
   /** Refers to the common issue type */
   type?: Maybe<IssueType>
+  /** Loads the company assiciated with this ticker" */
+  company?: Maybe<Company>
 }
 
 /** A transactions represents a single purchase or sale of any number of shares of a single asset. */
@@ -525,6 +526,7 @@ export type ResolversParentTypes = ResolversObject<{
 export type CacheControlDirectiveArgs = {
   maxAge?: Maybe<Scalars["Int"]>
   scope?: Maybe<CacheControlScope>
+  inheritMaxAge?: Maybe<Scalars["Boolean"]>
 }
 
 export type CacheControlDirectiveResolver<
@@ -676,10 +678,10 @@ export type QueryResolvers<
     RequireFields<QueryGetUserSettingsArgs, "userId">
   >
   searchCompanies?: Resolver<
-    Array<Maybe<ResolversTypes["Company"]>>,
+    Array<Maybe<ResolversTypes["Ticker"]>>,
     ParentType,
     ContextType,
-    RequireFields<QuerySearchCompaniesArgs, "fragment">
+    RequireFields<QuerySearchCompaniesArgs, "fragment" | "mic">
   >
 }>
 
@@ -703,6 +705,7 @@ export type TickerResolvers<
   region?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   type?: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
+  company?: Resolver<Maybe<ResolversTypes["Company"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -800,6 +803,7 @@ export type UpdateUserSettingsMutation = { __typename?: "Mutation" } & {
 
 export type GetCompanyQueryVariables = Exact<{
   ticker: Scalars["String"]
+  withExchange: Scalars["Boolean"]
 }>
 
 export type GetCompanyQuery = { __typename?: "Query" } & {
@@ -839,15 +843,17 @@ export type GetUserSettingsQuery = { __typename?: "Query" } & {
 
 export type SearchCompaniesQueryVariables = Exact<{
   fragment: Scalars["String"]
+  mic: Scalars["String"]
 }>
 
 export type SearchCompaniesQuery = { __typename?: "Query" } & {
   searchCompanies: Array<
     Maybe<
-      { __typename?: "Company" } & Pick<
-        Company,
-        "ticker" | "logo" | "name" | "description" | "sector"
-      > & { exchange?: Maybe<{ __typename?: "Exchange" } & Pick<Exchange, "name" | "mic">> }
+      { __typename?: "Ticker" } & {
+        company?: Maybe<
+          { __typename?: "Company" } & Pick<Company, "ticker" | "logo" | "name" | "sector">
+        >
+      }
     >
   >
 }
@@ -995,12 +1001,12 @@ export type UpdateUserSettingsMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserSettingsMutationVariables
 >
 export const GetCompanyDocument = gql`
-  query getCompany($ticker: String!) {
+  query getCompany($ticker: String!, $withExchange: Boolean!) {
     getCompany(ticker: $ticker) {
       ticker
       logo
       name
-      exchange {
+      exchange @include(if: $withExchange) {
         name
         mic
       }
@@ -1023,6 +1029,7 @@ export const GetCompanyDocument = gql`
  * const { data, loading, error } = useGetCompanyQuery({
  *   variables: {
  *      ticker: // value for 'ticker'
+ *      withExchange: // value for 'withExchange'
  *   },
  * });
  */
@@ -1148,17 +1155,14 @@ export type GetUserSettingsQueryResult = Apollo.QueryResult<
   GetUserSettingsQueryVariables
 >
 export const SearchCompaniesDocument = gql`
-  query searchCompanies($fragment: String!) {
-    searchCompanies(fragment: $fragment) {
-      ticker
-      logo
-      name
-      exchange {
+  query searchCompanies($fragment: String!, $mic: String!) {
+    searchCompanies(fragment: $fragment, mic: $mic) {
+      company {
+        ticker
+        logo
         name
-        mic
+        sector
       }
-      description
-      sector
     }
   }
 `
@@ -1176,6 +1180,7 @@ export const SearchCompaniesDocument = gql`
  * const { data, loading, error } = useSearchCompaniesQuery({
  *   variables: {
  *      fragment: // value for 'fragment'
+ *      mic: // value for 'mic'
  *   },
  * });
  */

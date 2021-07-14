@@ -20,9 +20,6 @@
     "api": {
       "tags": []
     },
-    "api-apollo": {
-      "tags": []
-    },
     "api-client": {
       "tags": []
     },
@@ -33,6 +30,9 @@
       "tags": []
     },
     "api-graphql": {
+      "tags": []
+    },
+    "api-server": {
       "tags": []
     },
     "app": {

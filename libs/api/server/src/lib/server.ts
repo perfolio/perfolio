@@ -1,8 +1,10 @@
 import { ApolloServer } from "apollo-server-micro"
 import { BaseRedisCache } from "apollo-server-cache-redis"
+
 import Redis from "ioredis"
 import { Logger } from "tslog"
 import { context } from "./context"
+// import responseCachePlugin from "apollo-server-plugin-response-cache"
 
 import { resolvers } from "./resolvers"
 import fs from "fs"
@@ -10,6 +12,7 @@ import path from "path"
 import { env } from "@perfolio/util/env"
 
 import { dataSources } from "./datasources"
+// import { JWT } from "@perfolio/feature/tokens"
 
 export type ApolloHandlerConfig = {
   logger?: Logger
@@ -25,6 +28,21 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
     resolvers,
     logger: config?.logger,
     context,
+    // plugins: [
+    //   /**
+    //    * Allow caching at the user scope.
+    //    * https://www.apollographql.com/docs/apollo-server/performance/caching/#identifying-users-for-private-responses
+    //    */
+    //   responseCachePlugin({
+    //     sessionId: (ctx) => {
+    //       const token = ctx.request.http?.headers.get("Authorization")
+    //       if (!token) {
+    //         return null
+    //       }
+    //       return JWT.decode(token).sub ?? null
+    //     },
+    //   }),
+    // ],
 
     /**
      * Send metrics to apollo dashboard
@@ -40,12 +58,10 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
      * Cache queries in redis
      * The cache ttl is defined in the graphql schema definition
      */
-    persistedQueries: env.isProduction()
-      ? {
-          cache: new BaseRedisCache({
-            client: new Redis(env.require("APOLLO_REDIS_CONNECTION")),
-          }),
-        }
-      : undefined,
+    persistedQueries: {
+      cache: new BaseRedisCache({
+        client: new Redis(env.require("APOLLO_REDIS_CONNECTION")),
+      }),
+    },
   })
 }

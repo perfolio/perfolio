@@ -1,7 +1,7 @@
 import { Time } from "@perfolio/util/time"
 import { z } from "zod"
 import { getPrice as getPriceFromCloud } from "@perfolio/integrations/iexcloud"
-import { Key, Cache } from "@perfolio/integrations/redis"
+import { Key, IEXCache } from "@perfolio/integrations/redis"
 import { Price } from "@perfolio/types"
 export const GetPriceRequestValidation = z.object({
   ticker: z.string(),
@@ -11,9 +11,10 @@ export const GetPriceRequestValidation = z.object({
 export type GetPriceRequest = z.infer<typeof GetPriceRequestValidation>
 export type GetPriceResponse = Price
 export async function getPrice({ ticker, time }: GetPriceRequest): Promise<GetPriceResponse> {
-  const key = new Key("getPrice", { ticker, time })
+  const key = new Key({ query: "getPrice", ticker, time })
+  const cache = new IEXCache()
 
-  let price = await Cache.get<Price>(key)
+  let price = await cache.get<Price>(key)
   if (price) {
     return price
   }
@@ -21,7 +22,7 @@ export async function getPrice({ ticker, time }: GetPriceRequest): Promise<GetPr
 
   price = { ticker, time, value: newPrice.close }
 
-  await Cache.set("1d", { key, value: price })
+  await cache.set("1d", { key, value: price })
 
   return price
 }
