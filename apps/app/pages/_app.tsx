@@ -27,8 +27,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Perfolio</title>
         <meta name="description" content="Insights. For Everyone." />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
-        <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"></link>
-        <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"></link>
+        <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32_dark_mode.png"></link>
+        <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16_dark_mode.png"></link>
       </Head>
       <IdProvider>
         <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
