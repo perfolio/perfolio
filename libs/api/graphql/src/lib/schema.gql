@@ -393,7 +393,7 @@ type Exchange {
 #   """
 #   The traded stock
 #   """
-#   symbol: Symbol
+#   symbol: Ticker
 
 #   """
 #   Refers to the current day, 15 minute delayed volume
@@ -414,7 +414,7 @@ type Exchange {
 """
 A symbol as used by IEX
 """
-type Symbol {
+type Ticker {
   """
   Refers to the currency the symbol is traded in
   """
@@ -443,7 +443,7 @@ type Symbol {
   """
   Refers to the symbol
   """
-  symbol: String!
+  ticker: String!
 
   """
   Refers to the common issue type
@@ -557,12 +557,12 @@ type Query {
   """
   Return data about a symbol
   """
-  getSymbol(
+  getTicker(
     """
     The symbol as used by IEX
     """
-    symbol: String!
-  ): Symbol
+    ticker: String!
+  ): Ticker
 
   """
   Return all transactions of a user

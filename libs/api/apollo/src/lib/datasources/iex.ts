@@ -1,5 +1,5 @@
 import { DataSource } from "apollo-datasource"
-import { Exchange, Symbol, IssueType } from "@perfolio/api/graphql"
+import { Exchange, Ticker, IssueType } from "@perfolio/api/graphql"
 import {
   getCompany as getCompanyFromCloud,
   getLogo as getLogoFromCloud,
@@ -80,7 +80,7 @@ export class IEX extends DataSource {
     return exchange ?? null
   }
 
-  async getSymbols(): Promise<(Omit<symbol, "exchange"> & { exchangeMic: string | null })[]> {
+  async getTickers(): Promise<(Omit<Ticker, "exchange"> & { exchangeMic: string | null })[]> {
     const symbols = await getInternationalSymbols()
     return symbols.map((s) => {
       return {
@@ -89,7 +89,7 @@ export class IEX extends DataSource {
         figi: s.figi,
         name: s.name,
         region: s.region,
-        symbol: s.symbol,
+        ticker: s.symbol,
         type: s.type as IssueType,
       }
     })

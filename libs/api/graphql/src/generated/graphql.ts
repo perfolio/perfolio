@@ -238,7 +238,7 @@ export type Query = {
   /** Get the risk free rates for a given interval */
   getRiskFreeRates: Array<RiskFreeRate>
   /** Return data about a symbol */
-  getSymbol?: Maybe<Symbol>
+  getTicker?: Maybe<Ticker>
   /** Return all transactions of a user */
   getTransactions: Array<Transaction>
   /** Return the user's settings */
@@ -270,8 +270,8 @@ export type QueryGetRiskFreeRatesArgs = {
 }
 
 /** Available queries */
-export type QueryGetSymbolArgs = {
-  symbol: Scalars["String"]
+export type QueryGetTickerArgs = {
+  ticker: Scalars["String"]
 }
 
 /** Available queries */
@@ -304,8 +304,8 @@ export type RiskFreeRate = {
 }
 
 /** A symbol as used by IEX */
-export type Symbol = {
-  __typename?: "Symbol"
+export type Ticker = {
+  __typename?: "Ticker"
   /** Refers to the currency the symbol is traded in */
   currency?: Maybe<Scalars["String"]>
   /** Refers to Exchange using IEX Supported Exchanges list */
@@ -317,7 +317,7 @@ export type Symbol = {
   /** Refers to the region of the world the symbol is in */
   region?: Maybe<Scalars["String"]>
   /** Refers to the symbol */
-  symbol: Scalars["String"]
+  ticker: Scalars["String"]
   /** Refers to the common issue type */
   type?: Maybe<IssueType>
 }
@@ -489,7 +489,7 @@ export type ResolversTypes = ResolversObject<{
   PortfolioHistory: ResolverTypeWrapper<PortfolioHistory>
   Query: ResolverTypeWrapper<{}>
   RiskFreeRate: ResolverTypeWrapper<RiskFreeRate>
-  Symbol: ResolverTypeWrapper<Symbol>
+  Ticker: ResolverTypeWrapper<Ticker>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
   Transaction: ResolverTypeWrapper<Transaction>
   UpdateUserSettings: UpdateUserSettings
@@ -513,7 +513,7 @@ export type ResolversParentTypes = ResolversObject<{
   PortfolioHistory: PortfolioHistory
   Query: {}
   RiskFreeRate: RiskFreeRate
-  Symbol: Symbol
+  Ticker: Ticker
   Timestamp: Scalars["Timestamp"]
   Transaction: Transaction
   UpdateUserSettings: UpdateUserSettings
@@ -657,11 +657,11 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetRiskFreeRatesArgs, "interval" | "begin">
   >
-  getSymbol?: Resolver<
-    Maybe<ResolversTypes["Symbol"]>,
+  getTicker?: Resolver<
+    Maybe<ResolversTypes["Ticker"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryGetSymbolArgs, "symbol">
+    RequireFields<QueryGetTickerArgs, "ticker">
   >
   getTransactions?: Resolver<
     Array<ResolversTypes["Transaction"]>,
@@ -692,16 +692,16 @@ export type RiskFreeRateResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
-export type SymbolResolvers<
+export type TickerResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes["Symbol"] = ResolversParentTypes["Symbol"],
+  ParentType extends ResolversParentTypes["Ticker"] = ResolversParentTypes["Ticker"],
 > = ResolversObject<{
   currency?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   exchange?: Resolver<Maybe<ResolversTypes["Exchange"]>, ParentType, ContextType>
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   region?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  symbol?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   type?: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
@@ -752,7 +752,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   PortfolioHistory?: PortfolioHistoryResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   RiskFreeRate?: RiskFreeRateResolvers<ContextType>
-  Symbol?: SymbolResolvers<ContextType>
+  Ticker?: TickerResolvers<ContextType>
   Timestamp?: GraphQLScalarType
   Transaction?: TransactionResolvers<ContextType>
   UserSettings?: UserSettingsResolvers<ContextType>
