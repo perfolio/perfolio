@@ -6,13 +6,12 @@ import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
 import { Transaction } from "@perfolio/integrations/fauna"
 import { useTransactions } from "@perfolio/data-access/queries"
-import { useCreateTransaction } from "@perfolio/data-access/mutations"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useApi } from "@perfolio/data-access/api-client"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
-import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
+import { useGetUserSettingsQuery, useCreateTransactionMutation } from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
 // const Suggestion: React.FC<{
 //   tx: Transaction
@@ -64,12 +63,7 @@ import { useUser } from "@clerk/clerk-react"
 // }
 
 const validation = z.object({
-  asset: z.object({
-    name: z.string(),
-    ticker: z.string(),
-    figi: z.string(),
-    exchange: z.string(),
-  }),
+  ticker: z.string(),
   volume: z.string().transform((x: string) => parseInt(x)),
   value: z.string().transform((x: string) => parseInt(x)),
   executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
@@ -85,7 +79,7 @@ const NewTransactionPage: NextPage = () => {
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
-  const { mutateAsync: createTransaction } = useCreateTransaction()
+  const [createTransaction] = useCreateTransactionMutation()
   const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Transaction> = {}
   transactions
@@ -117,7 +111,7 @@ const NewTransactionPage: NextPage = () => {
               <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
                 <Field.AutoCompleteSelect
                   options={(fragment: string) => api.search.search({ fragment })}
-                  name="asset"
+                  name="ticker"
                   label="Asset"
                   help={
                     <Description title="TODO: @webersni">
@@ -163,13 +157,15 @@ const NewTransactionPage: NextPage = () => {
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
-                      async ({ asset, volume, value, executedAt }) => {
-                        await createTransaction({
+                      async ({ ticker, volume, value, executedAt }) => {
+                        const transaction = {
+                          userId: user.id,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
-                          assetId: asset.figi,
-                        }).catch((err) => {
+                          assetId: ticker,
+                        }
+                        await createTransaction({ variables: { transaction } }).catch((err) => {
                           setFormError(
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )

@@ -3,12 +3,7 @@ query getCompany($ticker: String!, $withExchange: Boolean!) {
     ticker
     logo
     name
-    exchange @include(if: $withExchange) {
-      name
-      mic
-    }
     description
     sector
-    figi
   }
 }

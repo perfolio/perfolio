@@ -48,16 +48,16 @@ export function AutoCompleteSelect<Option>({
   const [state, setState] = useState<State>(State.Start)
   const { setValue, watch } = useFormContext()
 
-  const value = watch(name)
+  const ticker = watch(name)
 
   /**
    * Carry onChange event to parent
    */
   useEffect(() => {
     if (onChange) {
-      onChange(value)
+      onChange(ticker)
     }
-  }, [value, onChange])
+  }, [ticker, onChange])
 
   const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
   const settings = data?.getUserSettings
@@ -71,14 +71,12 @@ export function AutoCompleteSelect<Option>({
   const { data: searchResult, loading } = useSearchCompaniesQuery({
     variables: {
       fragment: search,
-      // This query only fires if it is defined
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-      mic: settings?.defaultExchange.mic!,
     },
     skip: !settings?.defaultExchange.mic,
   })
   const options = searchResult?.searchCompanies
+
+  const selected = options?.find((company) => company?.ticker === ticker)
   return (
     <div className="w-full text-gray-800">
       <label
@@ -93,7 +91,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={value.logo} size="xs" />
+            <Avatar src={selected?.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -120,7 +118,9 @@ export function AutoCompleteSelect<Option>({
               )}
             >
               {state === State.Done ? (
-                <div className="flex items-center justify-center w-full h-full">{value?.name}</div>
+                <div className="flex items-center justify-center w-full h-full">
+                  {selected?.name}
+                </div>
               ) : (
                 <input
                   type="text"
@@ -154,19 +154,18 @@ export function AutoCompleteSelect<Option>({
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options?.map((option, i) => {
-                    const company = option?.company
+                  options?.map((company, i) => {
                     return (
                       <li key={i}>
                         <button
                           type="button"
                           onClick={() => {
-                            setValue(name, option?.company)
+                            setValue(name, company?.ticker)
                             setState(State.Done)
                           }}
                           className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
-                            "bg-gray-100": option === value,
-                            "bg-gradient-to-tr from-gray-50 to-gray-100": value,
+                            "bg-gray-100": company?.ticker === ticker,
+                            "bg-gradient-to-tr from-gray-50 to-gray-100": ticker,
                           })}
                         >
                           <Profile

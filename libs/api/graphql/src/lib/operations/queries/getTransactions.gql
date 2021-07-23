@@ -1,0 +1,13 @@
+query getTransactions($userId: ID!) {
+  getTransactions(userId: $userId) {
+    id
+    asset {
+      ... on Stock {
+        ticker
+      }
+    }
+    executedAt
+    value
+    volume
+  }
+}

@@ -39,6 +39,9 @@ export class Fauna extends DataSource {
   public async getTransaction(transactionId: string) {
     return await db().transaction.fromId(transactionId)
   }
+  public async getTransactions(userId: string) {
+    return await db().transaction.fromUser(userId)
+  }
   public async deleteTransaction(transaction: TransactionModel) {
     await db().transaction.delete(transaction)
   }

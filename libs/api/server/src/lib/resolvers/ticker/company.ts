@@ -1,11 +1,11 @@
-import { Ticker, Company, ResolverFn } from "@perfolio/api/graphql"
+import { Company, ResolverFn } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { convertTime } from "@perfolio/util/time"
 import { CacheScope } from "apollo-server-types"
 
 export const company: ResolverFn<
   Omit<Company, "logo" | "currentValue" | "exchange"> | null,
-  Ticker,
+  Company,
   Context,
   void
 > = async ({ ticker }, _args, ctx, { cacheControl }) => {

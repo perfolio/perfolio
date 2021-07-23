@@ -1,17 +1,17 @@
-enum CacheControlScope {
-  PUBLIC
-  PRIVATE
-}
-
-directive @cacheControl(
-  maxAge: Int
-  scope: CacheControlScope
-  inheritMaxAge: Boolean
-) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 """
 A unix timestamp with second precision
 """
 scalar Timestamp
+
+"""
+The interval for timeseries
+"""
+enum AssetType {
+  """
+  Ownership of a fraction of a corporation or fund.
+  """
+  STOCK
+}
 
 """
 The interval for timeseries
@@ -111,7 +111,7 @@ enum IssueType {
 """
 A publicly traded company
 """
-type Company @cacheControl(maxAge: 300) {
+type Company {
   """
   Street address of the company if available
   """
@@ -152,12 +152,6 @@ type Company @cacheControl(maxAge: 300) {
   Number of employees
   """
   employees: Int
-
-  """
-  Refers to Exchange using IEX Supported Exchanges list
-  @see https://cloud.iexapis.com/stable/ref-data/exchanges
-  """
-  exchange: Exchange
 
   """
   Refers to the industry the company belongs to
@@ -224,19 +218,41 @@ type Company @cacheControl(maxAge: 300) {
   Zip code of the company if available
   """
   zip: String
-  """
-  The figi associated with this company
-  """
-  figi: String
 }
+
+type Stock {
+  """
+  The ticker of a stock. This does not include pre/suffixes for different exchanges
+  """
+  ticker: String!
+  """
+  The associated company if available
+
+  This probably does not carry much meaningful data for ETFs etc.
+  """
+  company: Company
+
+  """
+  All exchanges where this stock is listed.
+
+  Together with the exchange suffix we can construct the iex symbol dynamically.
+  """
+  exchanges: [Exchange]!
+}
+type Crypto {
+  name: String!
+}
+
+union Asset = Stock | Crypto
+
 """
 A transactions represents a single purchase or sale of any number of shares of a single asset.
 """
 type Transaction {
   """
-  The asset id identifies the asset, this will be prefixed by 'stock_' for stocks
+  The of asset. Stocks, Crypto, Real estate for example.
   """
-  assetId: ID!
+  asset: Asset
 
   """
   A timestamp when the transaction was executed
@@ -249,7 +265,7 @@ type Transaction {
   id: ID!
 
   """
-  The user's unique id
+  The owner of this transaction
   """
   userId: ID!
 
@@ -260,6 +276,8 @@ type Transaction {
 
   """
   How many shares/items the user bought or sold
+
+  negative if sold
   """
   volume: Float!
 }
@@ -279,7 +297,7 @@ input CreateTransaction {
   executedAt: Timestamp!
 
   """
-  The user's unique id
+  The owner of this transaction
   """
   userId: ID!
 
@@ -306,10 +324,12 @@ type UserSettings {
   The user's default exchange. At the start only 1 exchange can be used.
   """
   defaultExchange: Exchange!
-  """
-  The unique user id
-  """
-  userId: ID!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
 }
 
 """
@@ -352,7 +372,7 @@ input UpdateUserSettings {
 """
 An exchange where shares are traded
 """
-type Exchange @cacheControl(maxAge: 300) {
+type Exchange {
   """
   Exchange abbreviation
   """
@@ -379,75 +399,6 @@ type Exchange @cacheControl(maxAge: 300) {
   region: String!
 }
 
-# """
-# The traded volume for a given stock
-# """
-# type VolumeByVendor {
-#   """
-#   The traded stock
-#   """
-#   symbol: Ticker
-
-#   """
-#   Refers to the current day, 15 minute delayed volume
-#   """
-#   volume: Float!
-
-#   """
-#   Refers to the Market Identifier Code (MIC)
-#   """
-#   exchange: Exchange!
-
-#   """
-#   Refers to the 15 minute delayed percent of total stock volume traded by the venue
-#   """
-#   marketPercent: Float!
-# }
-
-"""
-A symbol as used by IEX
-"""
-type Ticker @cacheControl(maxAge: 300) {
-  """
-  Refers to the currency the symbol is traded in
-  """
-  currency: String
-
-  """
-  Refers to Exchange using IEX Supported Exchanges list
-  """
-  exchange: Exchange
-
-  """
-  The figi associated with this symbol
-  """
-  figi: String
-
-  """
-  Refers to the name of the company or security.
-  """
-  name: String
-
-  """
-  Refers to the region of the world the symbol is in
-  """
-  region: String
-
-  """
-  Refers to the symbol
-  """
-  ticker: String!
-
-  """
-  Refers to the common issue type
-  """
-  type: IssueType
-
-  """
-  Loads the company assiciated with this ticker"
-  """
-  company: Company
-}
 """
 Generic Value and Quantity over time.
 This is used for assets for example.
@@ -474,9 +425,9 @@ The value and volume of an asset over time.
 """
 type AssetHistory {
   """
-  The unique asset id
+  The asset
   """
-  assetId: ID!
+  asset: Asset!
 
   """
   Value and Quantity for each day
@@ -495,6 +446,14 @@ type PortfolioHistory {
 }
 
 """
+
+"""
+type Price {
+  value: Float!
+  time: Timestamp!
+}
+
+"""
 Available queries
 """
 type Query {
@@ -507,6 +466,16 @@ type Query {
     """
     mic: String!
   ): [Company!]!
+
+  """
+  Return the daily closing prices for a stock at a specific exchange
+  """
+  getStockPricesAtExchange(
+    ticker: String!
+    mic: String!
+    start: Timestamp!
+    end: Timestamp!
+  ): [Price]!
 
   """
   Return a company by its symbol
@@ -553,16 +522,6 @@ type Query {
   ): [RiskFreeRate!]!
 
   """
-  Return data about a symbol
-  """
-  getTicker(
-    """
-    The symbol as used by IEX
-    """
-    ticker: String!
-  ): Ticker
-
-  """
   Return all transactions of a user
   """
   getTransactions(
@@ -592,11 +551,7 @@ type Query {
     A partial search from the user.
     """
     fragment: String!
-    """
-    Only return companies traded at this exchange defined by the market identifier code
-    """
-    mic: String!
-  ): [Ticker]!
+  ): [Company]!
 }
 
 """
@@ -606,10 +561,7 @@ type Mutation {
   """
   Create a new transaction
   """
-  createTransaction(
-    "A single buy or sell transaction"
-    transaction: CreateTransaction!
-  ): Transaction!
+  createTransaction("A single buy or sell transaction" transaction: CreateTransaction!): Transaction
 
   """
   Create and store settings for the first time. For example when a new user signs up.
@@ -617,7 +569,7 @@ type Mutation {
   createUserSettings(
     "A complete userSettings object that can be written to the databse as is"
     userSettings: CreateUserSettings!
-  ): UserSettings!
+  ): UserSettings
 
   """
   Delete a single transaction from the database
@@ -635,5 +587,5 @@ type Mutation {
   updateUserSettings(
     "A partial userSettings object"
     userSettings: UpdateUserSettings!
-  ): UserSettings!
+  ): UserSettings
 }

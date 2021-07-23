@@ -1,11 +1,11 @@
 import { DataSource } from "apollo-datasource"
-import { Exchange, Ticker, IssueType, Company } from "@perfolio/api/graphql"
+import { Exchange, IssueType, Company } from "@perfolio/api/graphql"
 import {
+  search as getSearchFromCloud,
   getCompany as getCompanyFromCloud,
   getLogo as getLogoFromCloud,
   getExchanges as getExchangesFromCloud,
   getFigiMapping,
-  getSymbolsAtExchange,
 } from "@perfolio/integrations/iexcloud"
 import { HTTPError } from "@perfolio/util/errors"
 
@@ -17,20 +17,6 @@ export class IEX extends DataSource {
   public async getLogo(ticker: string): Promise<string> {
     const res = await getLogoFromCloud(ticker)
     return res.url ?? ""
-  }
-
-  public async getTickersAtExchange(exchange: string): Promise<Omit<Ticker, "exchange">[]> {
-    const symbols = await getSymbolsAtExchange(exchange)
-    return symbols.map((s) => {
-      return {
-        currency: s.currency,
-        figi: s.figi,
-        name: s.name,
-        region: s.region,
-        type: s.type as IssueType,
-        ticker: s.symbol,
-      }
-    })
   }
 
   public async getCompaniesFromFigis(figis: string[]): Promise<Company[]> {
@@ -99,5 +85,15 @@ export class IEX extends DataSource {
     const exchanges = await this.getExchanges()
     const exchange = exchanges.find((exchange) => exchange.mic.toLowerCase() === mic.toLowerCase())
     return exchange ?? null
+  }
+
+  async search({ fragment }: { fragment: string }): Promise<Company[]> {
+    const result = await getSearchFromCloud(fragment)
+
+    const companies = await Promise.all(result.map(({ symbol }) => this.getCompany(symbol)))
+    /**
+     * Filter out symbols with exchange-suffix. We only want the "real" company here.
+     */
+    return companies.filter((c) => c !== null && !c.ticker.includes("-")) as Company[]
   }
 }

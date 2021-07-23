@@ -4,14 +4,13 @@ import { getExchanges } from "./resolvers/query/getExchanges"
 import { searchCompanies } from "./resolvers/query/searchCompanies"
 import { getCompany } from "./resolvers/query/getCompany"
 import { getUserSettings } from "./resolvers/query/getUserSettings"
+import { getTransactions } from "./resolvers/query/getTransactions"
 import { logo } from "./resolvers/company/logo"
-import { exchange } from "./resolvers/company/exchange"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
 import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
 import { createUserSettings } from "./resolvers/mutation/createUserSettings"
 import { updateUserSettings } from "./resolvers/mutation/updateUserSettings"
-import { company } from "./resolvers/ticker/company"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
@@ -20,11 +19,11 @@ export const resolvers: Resolvers<Context> = {
     getExchanges,
     searchCompanies,
     getUserSettings,
+    getTransactions,
   },
 
   Company: {
     logo,
-    exchange,
   },
 
   Mutation: {
@@ -34,8 +33,12 @@ export const resolvers: Resolvers<Context> = {
     updateUserSettings,
     subscribeToNewsletter,
   },
-  Ticker: {
-    // @ts-expect-error Missing fields will be handled by the Company resolver
-    company,
+  Asset: {
+    __resolveType(obj, _ctx, _info) {
+      if ("ticker" in obj) {
+        return "Stock"
+      }
+      return null
+    },
   },
 }

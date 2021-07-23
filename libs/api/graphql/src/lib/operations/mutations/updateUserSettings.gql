@@ -1,5 +1,8 @@
 mutation updateUserSettings($userSettings: UpdateUserSettings!) {
   updateUserSettings(userSettings: $userSettings) {
-    userId
+    defaultCurrency
+    defaultExchange {
+      mic
+    }
   }
 }
