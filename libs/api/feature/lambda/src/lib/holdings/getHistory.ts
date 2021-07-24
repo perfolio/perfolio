@@ -1,7 +1,6 @@
 import { MiddlewareContext } from "@perfolio/api/feature/middleware"
 
 import { getTransactions } from "../transactions/getTransactions"
-import { getTickerFromFigi } from "../assets/getTickerFromFigi"
 import { getPrices } from "../prices/getPrices"
 import { Transaction } from "@perfolio/integrations/fauna"
 import { Time } from "@perfolio/util/time"
@@ -29,22 +28,9 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
     history[assetId] = []
   })
 
-  /**
-   * Preload all assets
-   * {figi: asset}
-   */
-  const figiToSymbol: { [figi: string]: string } = {}
-  await Promise.all(
-    Object.keys(transactionsByAsset).map(async (figi) => {
-      const res = await getTickerFromFigi({ figi })
-      if (res) {
-        figiToSymbol[figi] = res.symbol
-      }
-    }),
-  )
   const priceResponse = await Promise.all(
-    Object.entries(figiToSymbol).map(async ([figi, ticker]) => {
-      const txs = transactionsByAsset[figi]
+    Object.keys(history).map(async (ticker) => {
+      const txs = transactionsByAsset[ticker]
       const begin = Time.fromTimestamp(txs[0].data.executedAt).unix()
       const end = Time.today().unix()
       return getPrices({ ticker, begin, end })
@@ -55,8 +41,8 @@ export async function getHistory(_: void, ctx: MiddlewareContext): Promise<GetHi
     [figi: string]: Record<number, number>
   } = {}
 
-  Object.keys(figiToSymbol).forEach((figi, i) => {
-    prices[figi] = priceResponse[i]?.prices
+  Object.keys(history).forEach((ticker, i) => {
+    prices[ticker] = priceResponse[i]?.prices
   })
 
   /**

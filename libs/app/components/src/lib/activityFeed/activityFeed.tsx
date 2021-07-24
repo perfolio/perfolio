@@ -46,9 +46,9 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
   const { data } = useGetTransactionsQuery({ variables: { userId: user.id } })
   const transactions = data?.getTransactions
   console.log({ transactions })
-  const last5Transactions = (transactions ?? [])
-    .sort((a, b) => b.executedAt - a.executedAt)
-    .slice(0, 5)
+  const last5Transactions = transactions
+    ? [...transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
+    : []
 
   return (
     <>
