@@ -6,7 +6,9 @@ import {
   getLogo as getLogoFromCloud,
   getExchanges as getExchangesFromCloud,
   getFigiMapping,
+  getHistory,
 } from "@perfolio/integrations/iexcloud"
+import { Time } from "@perfolio/util/time"
 import { HTTPError } from "@perfolio/util/errors"
 
 export class IEX extends DataSource {
@@ -95,5 +97,15 @@ export class IEX extends DataSource {
      * Filter out symbols with exchange-suffix. We only want the "real" company here.
      */
     return companies.filter((c) => c !== null && !c.ticker.includes("-")) as Company[]
+  }
+
+  async getPrices({ ticker }: { ticker: string }): Promise<{ [time: number]: number }> {
+    const allPrices = await getHistory(ticker)
+    const formatted: { [time: number]: number } = {}
+    allPrices.forEach(({ date, close }) => {
+      const time = Time.fromString(date).unix()
+      formatted[time] = close
+    })
+    return formatted
   }
 }

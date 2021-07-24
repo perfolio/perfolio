@@ -17,7 +17,6 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
-  console.log({ transaction })
   return (
     <li
       className={cn(" py-4", {
@@ -45,7 +44,6 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
   const user = useUser()
   const { data } = useGetTransactionsQuery({ variables: { userId: user.id } })
   const transactions = data?.getTransactions
-  console.log({ transactions })
   const last5Transactions = transactions
     ? [...transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []

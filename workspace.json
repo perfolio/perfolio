@@ -355,27 +355,6 @@
         }
       }
     },
-    "data-access-mutations": {
-      "root": "libs/data-access/mutations",
-      "sourceRoot": "libs/data-access/mutations/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/mutations/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/mutations"],
-          "options": {
-            "jestConfig": "libs/data-access/mutations/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "data-access-queries": {
       "root": "libs/data-access/queries",
       "sourceRoot": "libs/data-access/queries/src",

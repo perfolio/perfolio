@@ -5,6 +5,7 @@ import { searchCompanies } from "./resolvers/query/searchCompanies"
 import { getCompany } from "./resolvers/query/getCompany"
 import { getUserSettings } from "./resolvers/query/getUserSettings"
 import { getTransactions } from "./resolvers/query/getTransactions"
+import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
 import { logo } from "./resolvers/company/logo"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
 import { createTransaction } from "./resolvers/mutation/createTransaction"
@@ -20,6 +21,7 @@ export const resolvers: Resolvers<Context> = {
     searchCompanies,
     getUserSettings,
     getTransactions,
+    getPortfolioHistory,
   },
 
   Company: {
@@ -35,10 +37,7 @@ export const resolvers: Resolvers<Context> = {
   },
   Asset: {
     __resolveType(obj, _ctx, _info) {
-      if ("ticker" in obj) {
-        return "Stock"
-      }
-      return null
+      return obj.__typename ?? null
     },
   },
 }

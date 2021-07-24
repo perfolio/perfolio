@@ -220,7 +220,8 @@ type Company {
   zip: String
 }
 
-type Stock {
+type Stock implements Asset {
+  id: ID!
   """
   The ticker of a stock. This does not include pre/suffixes for different exchanges
   """
@@ -239,11 +240,14 @@ type Stock {
   """
   exchanges: [Exchange]!
 }
-type Crypto {
+type Crypto implements Asset {
+  id: ID!
   name: String!
 }
 
-union Asset = Stock | Crypto
+interface Asset {
+  id: ID!
+}
 
 """
 A transactions represents a single purchase or sale of any number of shares of a single asset.
@@ -252,7 +256,7 @@ type Transaction {
   """
   The of asset. Stocks, Crypto, Real estate for example.
   """
-  asset: Asset
+  asset: Asset!
 
   """
   A timestamp when the transaction was executed
@@ -420,6 +424,11 @@ type ValueAndQuantityAtTime {
   value: Float!
 }
 
+type Holding {
+  asset: Asset!
+  quantity: Float!
+}
+
 """
 The value and volume of an asset over time.
 """
@@ -436,16 +445,6 @@ type AssetHistory {
 }
 
 """
-The users assets over time derived from their transactions
-"""
-type PortfolioHistory {
-  """
-  All assets from the beginning of the portfolio until now.
-  """
-  assets: [AssetHistory!]!
-}
-
-"""
 
 """
 type Price {
@@ -457,6 +456,7 @@ type Price {
 Available queries
 """
 type Query {
+  getPortfolio(userId: ID!): [Holding!]!
   """
   Return a list of all companies that can be traded at a certain exchange
   """
@@ -475,7 +475,7 @@ type Query {
     mic: String!
     start: Timestamp!
     end: Timestamp!
-  ): [Price]!
+  ): [Price!]!
 
   """
   Return a company by its symbol
@@ -500,7 +500,7 @@ type Query {
     The users unique id
     """
     userId: String!
-  ): PortfolioHistory!
+  ): [AssetHistory!]!
 
   """
   Get the risk free rates for a given interval
@@ -569,17 +569,17 @@ type Mutation {
   createUserSettings(
     "A complete userSettings object that can be written to the databse as is"
     userSettings: CreateUserSettings!
-  ): UserSettings
+  ): UserSettings!
 
   """
   Delete a single transaction from the database
   """
-  deleteTransaction("The unique id of a transaction" transactionId: ID!): Transaction
+  deleteTransaction("The unique id of a transaction" transactionId: ID!): Transaction!
 
   """
   Enter the user's email into our newsletter list.
   """
-  subscribeToNewsletter("The users email" email: String!): String
+  subscribeToNewsletter("The users email" email: String!): String!
 
   """
   Only update some values in the user settings.
@@ -587,5 +587,5 @@ type Mutation {
   updateUserSettings(
     "A partial userSettings object"
     userSettings: UpdateUserSettings!
-  ): UserSettings
+  ): UserSettings!
 }

@@ -3,7 +3,11 @@ query getTransactions($userId: ID!) {
     id
     asset {
       ... on Stock {
+        id
         ticker
+      }
+      ... on Crypto {
+        id
       }
     }
     executedAt

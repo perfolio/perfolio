@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react"
 import { NextPage } from "next"
 import { useUser } from "@clerk/clerk-react"
-import { useCurrentValue, useHistory } from "@perfolio/data-access/queries"
+import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
 import {
   AppLayout,
   DiversificationChart,
@@ -62,11 +62,12 @@ const KPI = ({
 
 const App: NextPage = () => {
   const user = useUser()
-  const { currentValue } = useCurrentValue()
+  const currentValue = 4 //useCurrentValue()
   const [range, setRange] = useState<Range>("ALL")
-  const { history } = useHistory()
-  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const settings = data?.getUserSettings
+  const historyResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
+  const settingsResponse = useGetUserSettingsQuery({ variables: { userId: user.id } })
+  const history = historyResponse.data?.getPortfolioHistory
+  const settings = settingsResponse.data?.getUserSettings
 
   const selectedHistory = useMemo<AssetsOverTime>(() => {
     if (!history) {

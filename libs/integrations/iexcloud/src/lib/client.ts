@@ -84,7 +84,7 @@ export class Client {
         method: "GET",
       })
       if (res.status === 429) {
-        this.logger.warn(`IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
+        this.logger.warn(`IEX Ratelimit reached [ ${path} ], waiting ${backoff.toFixed(0)}s`)
         await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
       }

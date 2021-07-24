@@ -14,7 +14,7 @@ const resolver: ResolverFn<Transaction[], unknown, Context, { userId: string }> 
   }
 
   const transactions = await ctx.dataSources.fauna.getTransactions(userId)
-  return transactions.map((t) => ({ ...t.data, id: t.id }))
+  return transactions.map((t) => ({ ...t.data, id: t.id, asset: { id: t.data.assetId } }))
 }
 
 export const getTransactions = resolver

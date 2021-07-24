@@ -1,17 +1,22 @@
 import React from "react"
 import { AreaChart, Area, ResponsiveContainer } from "recharts"
-import { useHistory, useCurrentValue } from "@perfolio/data-access/queries"
+import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
 import { Time } from "@perfolio/util/time"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
+import { useUser } from "@clerk/clerk-react"
 export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
-  const { history, isLoading } = useHistory()
-  const { currentValue } = useCurrentValue()
+  const user = useUser()
+  const { data: historyData, loading } = useGetPortfolioHistoryQuery({
+    variables: { userId: user.id },
+  })
+  const history = historyData?.getPortfolioHistory
+  const currentValue = 4
   const valueMap: Record<number, number> = {}
 
   if (!!history && Object.keys(history).length >= 1) {
-    Object.values(history).forEach((asset) => {
-      asset.forEach((day) => {
+    history.forEach((asset) => {
+      asset?.history.forEach((day) => {
         if (day.value > 0) {
           if (!valueMap[day.time]) {
             valueMap[day.time] = 0
@@ -32,7 +37,7 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
     <div className="flex-col justify-center hidden w-full h-20 space-y-8 bg-gray-100 rounded xl:flex">
       <div className="relative w-full h-full">
         <ResponsiveContainer width="100%" height="100%">
-          {isLoading ? (
+          {loading ? (
             <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
               <Loading />
             </div>

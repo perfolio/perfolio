@@ -2,8 +2,9 @@ import React, { useMemo } from "react"
 import { AreaChart } from "@perfolio/ui/charts"
 import { Time } from "@perfolio/util/time"
 import { AssetsOverTime, toTimeseries, rebalance } from "@perfolio/feature/finance/returns"
-import { useHistory } from "@perfolio/data-access/queries"
+import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
 import { format } from "@perfolio/util/numbers"
+import { useUser } from "@clerk/clerk-react"
 
 type Data = {
   time: string
@@ -47,8 +48,10 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   aggregate = "Absolute",
   range,
 }): JSX.Element => {
-  const { history, isLoading } = useHistory()
-
+  const user = useUser()
+  const historyResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
+  const history = historyResponse.data?.getPortfolioHistory
+  const isLoading = historyResponse.loading
   /**
    * Filter by range and return either absolute or relative history
    */
@@ -56,6 +59,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
     if (!history) {
       return []
     }
+    console.log({ history })
     const series = toTimeseries(history)
     const selectedHistory: AssetsOverTime = {}
     Object.keys(series).forEach((time) => {

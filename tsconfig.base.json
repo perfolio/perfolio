@@ -41,7 +41,6 @@
       "@perfolio/app/middleware": ["libs/app/middleware/src/index.ts"],
       "@perfolio/data-access/api-client": ["libs/data-access/api-client/src/index.ts"],
       "@perfolio/data-access/fauna-adapter": ["libs/data-access/fauna-adapter/src/index.ts"],
-      "@perfolio/data-access/mutations": ["libs/data-access/mutations/src/index.ts"],
       "@perfolio/data-access/queries": ["libs/data-access/queries/src/index.ts"],
       "@perfolio/feature/email": ["libs/feature/email/src/index.ts"],
       "@perfolio/feature/finance/kpis": ["libs/feature/finance/kpis/src/index.ts"],

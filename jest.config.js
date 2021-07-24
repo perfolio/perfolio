@@ -12,7 +12,6 @@ module.exports = {
     "<rootDir>/libs/data-access/fauna-adapter",
     "<rootDir>/libs/data-access/iexcloud",
     "<rootDir>/libs/data-access/localstorage",
-    "<rootDir>/libs/data-access/mutations",
     "<rootDir>/libs/data-access/queries",
     "<rootDir>/libs/feature/email",
     "<rootDir>/libs/feature/finance/kpis",

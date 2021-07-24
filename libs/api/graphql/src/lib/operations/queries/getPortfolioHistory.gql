@@ -1,0 +1,18 @@
+query getPortfolioHistory($userId: String!) {
+  getPortfolioHistory(userId: $userId) {
+    asset {
+      ... on Stock {
+        id
+        ticker
+      }
+      ... on Crypto {
+        id
+      }
+    }
+    history {
+      value
+      time
+      quantity
+    }
+  }
+}

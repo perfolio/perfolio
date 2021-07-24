@@ -1,6 +1,7 @@
 import { Time } from "@perfolio/util/time"
-import { AssetsOverTime, AssetHistory } from "./types"
+import { AssetsOverTime } from "./types"
 import { rebalance } from "./rebalance"
+import { AssetHistory } from "@perfolio/api/graphql"
 
 /**
  * Transform AssetsOverTime into a format readable by recharts.
@@ -36,10 +37,10 @@ export const plotRelative = (history: AssetHistory): { time: string; value: numb
  *
  * Sorting by time first, then assetId
  */
-export const toTimeseries = (assetHistory: AssetHistory): AssetsOverTime => {
+export const toTimeseries = (assetHistory: AssetHistory[]): AssetsOverTime => {
   const timeline: AssetsOverTime = {}
-  Object.entries(assetHistory).forEach(([isin, history]) => {
-    history
+  assetHistory.forEach(({ asset, history }) => {
+    ;[...history]
       .sort((a, b) => a.time - b.time)
       .forEach((day) => {
         if (day.value > 0) {
@@ -47,7 +48,7 @@ export const toTimeseries = (assetHistory: AssetHistory): AssetsOverTime => {
             timeline[day.time] = {}
           }
 
-          timeline[day.time][isin] = { value: day.value, quantity: day.quantity }
+          timeline[day.time][asset.id] = { value: day.value, quantity: day.quantity }
         }
       })
   })

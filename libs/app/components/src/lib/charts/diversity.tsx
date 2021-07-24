@@ -1,34 +1,36 @@
-import { usePortfolio } from "@perfolio/data-access/queries"
 import React, { useState, useMemo, useEffect } from "react"
 import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
+import { useGetPortfolioQuery } from "@perfolio/api/graphql"
+import { useUser } from "@clerk/clerk-react"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
   () => Math.random() - 0.5,
 )
 export const DiversificationChart: React.FC = (): JSX.Element => {
-  const { portfolio } = usePortfolio()
-
+  const user = useUser()
+  const portfolioResponse = useGetPortfolioQuery({ variables: { userId: user.id } })
+  const portfolio = portfolioResponse.data?.getPortfolio
   /**
    * Aggregate by sector
    */
   const sectors: { [sector: string]: number } = useMemo(() => {
     const tmp: { [sector: string]: number } = {}
-
-    Object.values(portfolio).forEach((holding) => {
-      if (holding.company) {
-        const sector = holding.company.sector
+    console.log({ portfolio })
+    portfolio?.holdings
+      .filter((h) => h && h?.asset.__typename === "Stock")
+      .forEach((holding) => {
+        const sector = holding?.asset.id
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
           }
 
-          tmp[sector] += holding.quantity * holding.value
+          tmp[sector] += 1 // holding.quantity * holding.value
         }
-      }
-    })
+      })
 
     return tmp
   }, [portfolio])
@@ -39,18 +41,20 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
   const countries: { [country: string]: number } = useMemo(() => {
     const tmp: { [country: string]: number } = {}
 
-    Object.values(portfolio).forEach((holding) => {
-      if (holding.company) {
-        const country = holding.company.country
-        if (country) {
-          if (!tmp[country]) {
-            tmp[country] = 0
-          }
+    portfolio?.holdings
+      .filter((h) => h?.asset.__typename === "Stock")
+      .forEach((holding) => {
+        if (holding) {
+          const country = holding.asset.id
+          if (country) {
+            if (!tmp[country]) {
+              tmp[country] = 0
+            }
 
-          tmp[country] += holding.quantity * holding.value
+            tmp[country] += 4 // holding.quantity * holding.value
+          }
         }
-      }
-    })
+      })
 
     return tmp
   }, [portfolio])

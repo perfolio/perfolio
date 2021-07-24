@@ -28,21 +28,6 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
     resolvers,
     logger: config?.logger,
     context,
-    // plugins: [
-    //   /**
-    //    * Allow caching at the user scope.
-    //    * https://www.apollographql.com/docs/apollo-server/performance/caching/#identifying-users-for-private-responses
-    //    */
-    //   responseCachePlugin({
-    //     sessionId: (ctx) => {
-    //       const token = ctx.request.http?.headers.get("Authorization")
-    //       if (!token) {
-    //         return null
-    //       }
-    //       return JWT.decode(token).sub ?? null
-    //     },
-    //   }),
-    // ],
 
     /**
      * Send metrics to apollo dashboard
