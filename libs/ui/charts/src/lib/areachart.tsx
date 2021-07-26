@@ -26,8 +26,8 @@ export const AreaChart: React.FC<AreaChartProps> = ({
         <Chart data={data}>
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="10%" stopColor="#262059" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#262059" stopOpacity={0} />
+              <stop offset="10%" stopColor="#2F49CF" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="#2F49CF" stopOpacity={0} />
             </linearGradient>
           </defs>
           <Tooltip
@@ -48,7 +48,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
           <Area
             type="monotone"
             dataKey="value"
-            stroke="#262059"
+            stroke="#2F49CF"
             strokeWidth={2}
             fill="url(#gradient)"
           />
