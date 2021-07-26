@@ -6,9 +6,17 @@ import { format } from "@perfolio/util/numbers"
 import { useGetPortfolioHistoryQuery, ValueAndQuantityAtTime } from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
 
-const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
-  () => Math.random() - 0.5,
-)
+const COLORS = [
+  "#D7DDFC",
+  "#B0BCF9",
+  "#8595EE",
+  "#6375DE",
+  "#3548C8",
+  "#2636AC",
+  "#1A2690",
+  "#101974",
+  "#0A1060",
+].sort(() => Math.random() - 0.5)
 export const DiversificationChart: React.FC = (): JSX.Element => {
   const user = useUser()
   const portfolioResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })

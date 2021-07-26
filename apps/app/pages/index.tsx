@@ -157,8 +157,8 @@ const App: NextPage = () => {
                     color={
                       (aggregation === "Relative" && relativeMean >= 0) ||
                       (aggregation === "Absolute" && absoluteMean > 0)
-                        ? "text-success-400"
-                        : "text-error-500"
+                        ? "text-success"
+                        : "text-error"
                     }
                     value={
                       aggregation === "Absolute"
@@ -182,8 +182,8 @@ const App: NextPage = () => {
                     label="Change"
                     color={
                       aggregation === "Relative" && relativeChange >= 0
-                        ? "text-success-400"
-                        : "text-error-500"
+                        ? "text-success"
+                        : "text-error"
                     }
                     value={
                       aggregation === "Absolute"

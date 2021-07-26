@@ -80,7 +80,7 @@ export const Input: React.FC<InputProps> = ({
             "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
             {
               "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
-              "border-error-400 focus:border-error-700 focus:bg-error-50": error,
+              "border-error focus:border-error-dark focus:bg-error-light": error,
               "appearance-none bg-transparent": isSubmitting,
             },
           )}
@@ -88,7 +88,7 @@ export const Input: React.FC<InputProps> = ({
       </div>
 
       {error ? (
-        <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error-500">
+        <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error">
           <ExclamationCircleIcon className="w-4 h-4" />
           <p>
             <span className="font-semibold">Error:</span> {error}

@@ -20,7 +20,7 @@ export function Form<FieldValues>({
       <form className={className}>{children}</form>
       {formError ? (
         <div role="alert" className="pt-2 pb-4">
-          <Text color="text-error-500" size="sm">
+          <Text color="text-error" size="sm">
             <span className="font-semibold">Error:</span> {formError}
           </Text>
         </div>
