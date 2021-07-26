@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react"
 import { NextPage } from "next"
-import { useCurrentValue, useHistory, useSettings } from "@perfolio/data-access/queries"
+import { useUser } from "@clerk/clerk-react"
+import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
 import {
   AppLayout,
   DiversificationChart,
@@ -18,6 +19,9 @@ import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 import { getCurrencySymbol } from "@perfolio/util/currency"
+import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
+import { useCurrentValue } from "@perfolio/queries"
+
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
 const ranges: Record<Range, number> = {
@@ -59,10 +63,15 @@ const KPI = ({
 }
 
 const App: NextPage = () => {
+  const user = useUser()
   const { currentValue } = useCurrentValue()
   const [range, setRange] = useState<Range>("ALL")
-  const { history } = useHistory()
-  const { settings } = useSettings()
+  const settingsResponse = useGetUserSettingsQuery({ variables: { userId: user.id } })
+  const settings = settingsResponse.data?.getUserSettings
+  const historyResponse = useGetPortfolioHistoryQuery({
+    variables: { userId: user.id },
+  })
+  const history = historyResponse.data?.getPortfolioHistory
 
   const selectedHistory = useMemo<AssetsOverTime>(() => {
     if (!history) {
@@ -148,8 +157,8 @@ const App: NextPage = () => {
                     color={
                       (aggregation === "Relative" && relativeMean >= 0) ||
                       (aggregation === "Absolute" && absoluteMean > 0)
-                        ? "text-success-400"
-                        : "text-error-500"
+                        ? "text-success"
+                        : "text-error"
                     }
                     value={
                       aggregation === "Absolute"
@@ -173,8 +182,8 @@ const App: NextPage = () => {
                     label="Change"
                     color={
                       aggregation === "Relative" && relativeChange >= 0
-                        ? "text-success-400"
-                        : "text-error-500"
+                        ? "text-success"
+                        : "text-error"
                     }
                     value={
                       aggregation === "Absolute"

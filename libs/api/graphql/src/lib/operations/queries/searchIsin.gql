@@ -1,0 +1,10 @@
+query searchIsin($fragment: String!) {
+  searchIsin(fragment: $fragment) {
+    isin
+    company {
+      logo
+      sector
+      name
+    }
+  }
+}

@@ -2,16 +2,20 @@ import React, { useState } from "react"
 import { NextPage } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout } from "@perfolio/app/components"
-import { useApi } from "@perfolio/data-access/api-client"
 import { z } from "zod"
 import { useRouter } from "next/router"
 import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
-import { useSettings, useExchanges } from "@perfolio/data-access/queries"
+import {
+  useGetUserSettingsQuery,
+  useGetExchangesQuery,
+  useUpdateUserSettingsMutation,
+} from "@perfolio/api/graphql"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
+import { useUser } from "@clerk/clerk-react"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -76,19 +80,26 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const { settings } = useSettings()
+  const user = useUser()
+  const { data: settingsResponse } = useGetUserSettingsQuery({ variables: { userId: user.id } })
+  const settings = settingsResponse?.getUserSettings
+
+  const { data: exchangesResponse } = useGetExchangesQuery()
+  const exchanges = exchangesResponse?.getExchanges
+
   const router = useRouter()
-  const api = useApi()
-  const { exchanges } = useExchanges()
 
   /**
    * The current defaultExchange
    */
-  const defaultExchange = exchanges?.find((e) => e.mic === settings?.defaultExchange)
 
   const currencyValidation = z.object({ defaultCurrency: z.string().min(3).max(3) })
+
+  const [updateSettings] = useUpdateUserSettingsMutation()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
-    await api.settings.updateSettings(values)
+    await updateSettings({
+      variables: { userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency } },
+    })
   }
 
   const exchangeValidation = z.object({
@@ -96,12 +107,17 @@ const SettingsPage: NextPage = () => {
     defaultExchange: z.string(),
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
-    await api.settings.updateSettings({
-      defaultExchange: exchanges?.find((e) => e.description === values.defaultExchange)?.mic,
+    await updateSettings({
+      variables: {
+        userSettings: {
+          userId: user.id,
+          defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
+        },
+      },
     })
   }
 
-  const [region, setRegion] = useState<string>(defaultExchange?.region ?? "")
+  const [region, setRegion] = useState<string>(settings?.defaultExchange?.region ?? "")
 
   return (
     <AppLayout
@@ -172,17 +188,13 @@ const SettingsPage: NextPage = () => {
               options={[...new Set(exchanges?.map((e) => e.region))] ?? []}
               label="Region"
               name="defaultRegion"
-              defaultValue={
-                exchanges?.find((e) => e.mic === settings?.defaultExchange)?.region ?? ""
-              }
+              defaultValue={settings?.defaultExchange.region}
             />
             <Field.Select
-              options={
-                exchanges?.filter((e) => e.region === region).map((e) => e.description) ?? []
-              }
+              options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
               label="Exchange"
               name="defaultExchange"
-              defaultValue={defaultExchange?.description ?? ""}
+              defaultValue={settings?.defaultExchange?.name ?? ""}
             />
           </div>
         </Setting>

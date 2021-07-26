@@ -1,29 +1,39 @@
 import React, { useMemo } from "react"
 // import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
 import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
-import { usePortfolio, useTransactions } from "@perfolio/data-access/queries"
 import { format } from "@perfolio/util/numbers"
+import {
+  useGetPortfolioHistoryQuery,
+  useGetTransactionsQuery,
+  ValueAndQuantityAtTime,
+} from "@perfolio/api/graphql"
+import { useUser } from "@clerk/clerk-react"
+
 export interface AssetTableProps {
   aggregation: "Absolute" | "Relative"
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const { portfolio } = usePortfolio()
-  const { transactions } = useTransactions()
+  const user = useUser()
+  const portfolioHistoryResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
+  const portfolioHistory = portfolioHistoryResponse.data?.getPortfolioHistory
+  const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
+  const transactions = transactionsResponse.data?.getTransactions
+
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
-    transactions?.forEach(({ data }) => {
-      if (!transactionsFIFO[data.assetId]) {
-        transactionsFIFO[data.assetId] = []
+    transactions?.forEach((tx) => {
+      if (!transactionsFIFO[tx.asset.id]) {
+        transactionsFIFO[tx.asset.id] = []
       }
 
-      if (data.volume > 0) {
-        for (let i = 0; i < data.volume; i++) {
-          transactionsFIFO[data.assetId].push(data.value)
+      if (tx.volume > 0) {
+        for (let i = 0; i < tx.volume; i++) {
+          transactionsFIFO[tx.asset.id].push(tx.value)
         }
       } else {
-        for (let i = 0; i < data.volume; i++) {
-          transactionsFIFO[data.assetId].shift()
+        for (let i = 0; i < tx.volume; i++) {
+          transactionsFIFO[tx.asset.id].shift()
         }
       }
     })
@@ -34,6 +44,30 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
     })
     return costPerShare
   }, [transactions])
+
+  const portfolio = React.useMemo(() => {
+    const getLastValid = (
+      history: ValueAndQuantityAtTime[],
+    ): { quantity: number; value: number } => {
+      const sorted = [...history].sort((a, b) => b.time - a.time)
+
+      for (const day of sorted) {
+        if (day.value > 0) {
+          return day
+        }
+      }
+      throw new Error("Nothing found")
+    }
+    return portfolioHistory?.map((h) => {
+      return {
+        asset: {
+          company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
+          id: h.asset.id,
+        },
+        ...getLastValid(h.history),
+      }
+    })
+  }, [portfolioHistory])
 
   return (
     <Table<"asset" | "quantity" | "costPerShare" | "pricePerShare" | "change">
@@ -69,14 +103,14 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           align: "text-right",
         },
       ]}
-      data={Object.entries(portfolio)
+      data={[...(portfolio ?? [])]
         /**
          * Sort by total value descending
          * The largest position is at the top of the table
          */
-        .sort((a, b) => b[1].quantity * b[1].value - a[1].quantity * a[1].value)
-        .map(([assetId, asset]) => {
-          if (!asset?.company) {
+        .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
+        .map((holding) => {
+          if (!holding?.asset?.company) {
             return {
               asset: <Cell.Loading />,
               quantity: <Cell.Loading />,
@@ -85,31 +119,32 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               change: <Cell.Loading />,
             }
           }
+          console.log({ holding })
           return {
             asset: (
               <Cell.Profile
-                src={asset.company.logo}
-                title={asset.company.name}
-                subtitle={asset.company.exchange ?? undefined}
+                src={holding.asset.company?.logo}
+                title={holding.asset.company?.name}
+                subtitle={holding.asset.company?.ticker}
               />
             ),
-            quantity: <Cell.Text align="text-right">{format(asset.quantity)}</Cell.Text>,
+            quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
             costPerShare: (
               <Cell.Text align="text-right">
-                {format(costPerShare[assetId], { suffix: "€" })}
+                {format(costPerShare[holding.asset.id], { suffix: "€" })}
               </Cell.Text>
             ),
             pricePerShare: (
-              <Cell.Text align="text-right">{format(asset.value, { suffix: "€" })}</Cell.Text>
+              <Cell.Text align="text-right">{format(holding.value, { suffix: "€" })}</Cell.Text>
             ),
             change: (
               <Cell.Text align="text-right">
                 {aggregation === "Absolute"
-                  ? format((asset.value - costPerShare[assetId]) * asset.quantity, {
+                  ? format((holding.value - costPerShare[holding.asset.id]) * holding.quantity, {
                       suffix: "€",
                       sign: true,
                     })
-                  : format(asset.value / costPerShare[assetId] - 1, {
+                  : format(holding.value / costPerShare[holding.asset.id] - 1, {
                       percent: true,
                       suffix: "%",
                       sign: true,

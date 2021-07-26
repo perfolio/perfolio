@@ -1,0 +1,8 @@
+mutation updateUserSettings($userSettings: UpdateUserSettings!) {
+  updateUserSettings(userSettings: $userSettings) {
+    defaultCurrency
+    defaultExchange {
+      mic
+    }
+  }
+}

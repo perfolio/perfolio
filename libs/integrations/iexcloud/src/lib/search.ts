@@ -3,7 +3,7 @@ import { Client } from "./client"
 
 export const SearchResponseValidator = z.array(
   z.object({
-    ticker: z.string(),
+    symbol: z.string(),
     exchange: z.string(),
     exchangeSuffix: z.string().nullable(),
     exchangName: z.string().optional(),

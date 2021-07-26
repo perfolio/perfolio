@@ -1,13 +1,18 @@
 import type { AppProps } from "next/app"
 import { QueryClientProvider, QueryClient } from "react-query"
-import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react"
-import { JWTProvider } from "@perfolio/data-access/api-client"
-// import { PersistentQueryClient } from "@perfolio/integrations/localstorage"
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  RedirectToSignIn,
+  ClerkLoaded,
+} from "@clerk/clerk-react"
 import Head from "next/head"
 import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import "tailwindcss/tailwind.css"
+import { Provider as ApolloProvider } from "@perfolio/api/client"
 import { useRouter } from "next/router"
 
 LogRocket.init("perfolio/app")
@@ -17,7 +22,6 @@ const publicPages = ["/auth/sign-in/[[...index]]", "/auth/sign-up/[[...index]]"]
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const frontendApi = process.env["NEXT_PUBLIC_CLERK_FRONTEND_API"]
-  console.log({ frontendApi })
   if (!frontendApi) {
     throw new Error("NEXT_PUBLIC_CLERK_FRONTEND_API is not defined")
   }
@@ -32,27 +36,31 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <IdProvider>
         <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
-          {publicPages.includes(router.pathname) ? (
-            <Component {...pageProps} />
-          ) : (
-            <>
-              <SignedIn>
-                <QueryClientProvider client={new QueryClient()}>
-                  <JWTProvider>
-                    <OnboardingModal />
-                    <div
-                      className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}
-                    >
-                      <Component {...pageProps} />
-                    </div>
-                  </JWTProvider>
-                </QueryClientProvider>
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn />
-              </SignedOut>
-            </>
-          )}
+          <ClerkLoaded>
+            <ApolloProvider>
+              {publicPages.includes(router.pathname) ? (
+                <Component {...pageProps} />
+              ) : (
+                <>
+                  <SignedIn>
+                    <QueryClientProvider client={new QueryClient()}>
+                      <OnboardingModal />
+                      <div
+                        className={`${
+                          process.env.NODE_ENV !== "production" ? "debug-screens" : ""
+                        }`}
+                      >
+                        <Component {...pageProps} />
+                      </div>
+                    </QueryClientProvider>
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn />
+                  </SignedOut>
+                </>
+              )}
+            </ApolloProvider>
+          </ClerkLoaded>
         </ClerkProvider>
       </IdProvider>
     </>

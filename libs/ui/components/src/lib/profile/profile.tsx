@@ -1,13 +1,13 @@
 import React from "react"
 import { Text, Avatar, Loading } from "../.."
 export interface ProfileProps {
-  image?: string
-  title?: string
-  subtitle?: string
+  image?: string | null
+  title?: string | null
+  subtitle?: string | null
   /**
    * Display more info in the top right
    */
-  tag?: string
+  tag?: string | null
 }
 
 export const Profile: React.FC<ProfileProps> = ({ image, title, subtitle, tag }): JSX.Element => {

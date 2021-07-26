@@ -1,0 +1,12 @@
+query getUserSettings($userId: ID!) {
+  getUserSettings(userId: $userId) {
+    defaultCurrency
+    defaultExchange {
+      abbreviation
+      suffix
+      mic
+      name
+      region
+    }
+  }
+}

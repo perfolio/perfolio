@@ -1,0 +1,5 @@
+mutation CreateTransaction($transaction: CreateTransaction!) {
+  createTransaction(transaction: $transaction) {
+    id
+  }
+}
