@@ -4,9 +4,18 @@ query getPortfolioHistory($userId: String!) {
       ... on Stock {
         id
         ticker
+        company {
+          name
+          logo
+          sector
+          country
+          ticker
+          currentValue
+        }
       }
       ... on Crypto {
         id
+        name
       }
     }
     history {

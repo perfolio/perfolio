@@ -49,7 +49,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
     const getLastValid = (
       history: ValueAndQuantityAtTime[],
     ): { quantity: number; value: number } => {
-      const sorted = [...history].sort((a, b) => a.time - b.time)
+      const sorted = [...history].sort((a, b) => b.time - a.time)
 
       for (const day of sorted) {
         if (day.value > 0) {
@@ -58,12 +58,11 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
       }
       throw new Error("Nothing found")
     }
-
     return portfolioHistory?.map((h) => {
+      console.log({ h })
       return {
         asset: {
-          logo: h.asset.company?.logo ?? "",
-          name: h.asset.company?.name ?? "",
+          company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
           id: h.asset.id,
         },
         ...getLastValid(h.history),
@@ -121,12 +120,13 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               change: <Cell.Loading />,
             }
           }
+          console.log({ holding })
           return {
             asset: (
               <Cell.Profile
                 src={holding.asset.company?.logo ?? "Null"}
                 title={holding.asset.company?.name ?? "Null"}
-                subtitle={holding.asset.company?.id ?? "Null"}
+                subtitle={holding.asset.id}
               />
             ),
             quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,

@@ -21,7 +21,7 @@ export const plotAbsolute = (history: AssetsOverTime): { time: string; value: nu
  * Build an index and transform data to be readable by recharts
  */
 export const plotRelative = (history: AssetHistory): { time: string; value: number }[] => {
-  const timeline = toTimeseries(history)
+  const timeline = toTimeseries([history])
   const index = rebalance(timeline)
   const data = Object.entries(index).map(([time, value]) => {
     return {

@@ -19,7 +19,7 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
       transactions.map((t) => ({
         ...t.data,
         id: t.id,
-        asset: { id: t.data.assetId, name: "" },
+        asset: { id: t.data.assetId, ticker: t.data.assetId },
       })),
     )
     const history: { [assetId: string]: { time: number; quantity: number; value: number }[] } = {}
@@ -72,7 +72,7 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
       }
     }
     const portfolioHistory = Object.entries(history).map(([assetId, history]) => ({
-      asset: { id: assetId, name: "" },
+      asset: { id: assetId, ticker: assetId },
       history,
     }))
     return portfolioHistory

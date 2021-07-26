@@ -1,13 +1,6 @@
 import { DataSource } from "apollo-datasource"
 import { Exchange, IssueType, Company } from "@perfolio/api/graphql"
-import {
-  search as getSearchFromCloud,
-  getCompany as getCompanyFromCloud,
-  getLogo as getLogoFromCloud,
-  getExchanges as getExchangesFromCloud,
-  getFigiMapping,
-  getHistory,
-} from "@perfolio/integrations/iexcloud"
+import * as cloud from "@perfolio/integrations/iexcloud"
 import { Time } from "@perfolio/util/time"
 import { HTTPError } from "@perfolio/util/errors"
 
@@ -17,18 +10,18 @@ export class IEX extends DataSource {
   }
 
   public async getLogo(ticker: string): Promise<string> {
-    const res = await getLogoFromCloud(ticker)
+    const res = await cloud.getLogo(ticker)
     return res.url ?? ""
   }
 
   public async getCompaniesFromFigis(figis: string[]): Promise<Company[]> {
-    const symbols = await getFigiMapping(...figis)
+    const symbols = await cloud.getFigiMapping(...figis)
     const companies = await Promise.all(symbols.map(({ symbol }) => this.getCompany(symbol)))
     return companies.filter((c) => c !== null) as Company[]
   }
 
   public async getCompany(ticker: string) {
-    const company = await getCompanyFromCloud(ticker).catch((err) => {
+    const company = await cloud.getCompany(ticker).catch((err) => {
       if (err instanceof HTTPError) {
         /**
          * 404 simply means the given ticker is invalid which can happen a lot when the user
@@ -71,7 +64,7 @@ export class IEX extends DataSource {
       : null
   }
   async getExchanges(): Promise<Exchange[]> {
-    const exchanges = await getExchangesFromCloud()
+    const exchanges = await cloud.getExchanges()
     return exchanges.map((e) => {
       return {
         abbreviation: e.exchange,
@@ -90,7 +83,7 @@ export class IEX extends DataSource {
   }
 
   async search({ fragment }: { fragment: string }): Promise<Company[]> {
-    const result = await getSearchFromCloud(fragment)
+    const result = await cloud.search(fragment)
 
     const companies = await Promise.all(result.map(({ symbol }) => this.getCompany(symbol)))
     /**
@@ -100,12 +93,15 @@ export class IEX extends DataSource {
   }
 
   async getPrices({ ticker }: { ticker: string }): Promise<{ [time: number]: number }> {
-    const allPrices = await getHistory(ticker)
+    const allPrices = await cloud.getHistory(ticker)
     const formatted: { [time: number]: number } = {}
     allPrices.forEach(({ date, close }) => {
       const time = Time.fromString(date).unix()
       formatted[time] = close
     })
     return formatted
+  }
+  async getCurrentPrice({ ticker }: { ticker: string }): Promise<number> {
+    return await cloud.getCurrentPrice(ticker)
   }
 }

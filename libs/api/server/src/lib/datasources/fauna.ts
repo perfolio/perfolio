@@ -15,7 +15,14 @@ export class Fauna extends DataSource {
     const createdTransaction = await db().transaction.create(tx)
 
     return {
-      ...createdTransaction.data,
+      asset: {
+        ticker: createdTransaction.data.assetId,
+        id: createdTransaction.data.assetId,
+      },
+      executedAt: createdTransaction.data.executedAt,
+      userId: createdTransaction.data.userId,
+      volume: createdTransaction.data.volume,
+      value: createdTransaction.data.value,
       id: createdTransaction.id,
     }
   }

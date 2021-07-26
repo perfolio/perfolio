@@ -1,0 +1,3 @@
+mutation DeleteTransaction($transactionId: ID!) {
+  deleteTransaction(transactionId: $transactionId)
+}

@@ -3,7 +3,7 @@ import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import { useGetPortfolioQuery } from "@perfolio/api/graphql"
+import { useGetPortfolioHistoryQuery, ValueAndQuantityAtTime } from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
 
 const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355", "#001946"].sort(
@@ -11,27 +11,54 @@ const COLORS = ["#49407D", "#362E6B", "#262059", "#191448", "#013269", "#002355"
 )
 export const DiversificationChart: React.FC = (): JSX.Element => {
   const user = useUser()
-  const portfolioResponse = useGetPortfolioQuery({ variables: { userId: user.id } })
-  const portfolio = portfolioResponse.data?.getPortfolio
+  const portfolioResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
+  const portfolio = React.useMemo(() => {
+    const getLastValid = (
+      history: ValueAndQuantityAtTime[],
+    ): { quantity: number; value: number } => {
+      const sorted = [...history].sort((a, b) => b.time - a.time)
+
+      for (const day of sorted) {
+        if (day.value > 0) {
+          return day
+        }
+      }
+      throw new Error("Nothing found")
+    }
+
+    return portfolioResponse.data?.getPortfolioHistory?.map((h) => {
+      return {
+        asset: {
+          company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
+          id: h.asset.id,
+        },
+        ...getLastValid(h.history),
+      }
+    })
+  }, [portfolioResponse.data])
+
   /**
    * Aggregate by sector
    */
   const sectors: { [sector: string]: number } = useMemo(() => {
     const tmp: { [sector: string]: number } = {}
-    console.log({ portfolio })
-    portfolio?.holdings
-      .filter((h) => h && h?.asset.__typename === "Stock")
+    if (!portfolio) {
+      return tmp
+    }
+    portfolio
+      .filter((h) => !!h)
       .forEach((holding) => {
-        const sector = holding?.asset.id
+        const sector = holding?.asset.company?.sector
+        console.log({ holding })
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
           }
 
-          tmp[sector] += 1 // holding.quantity * holding.value
+          tmp[sector] += holding.quantity * holding.value
         }
       })
-
+    console.log({ tmp })
     return tmp
   }, [portfolio])
 
@@ -40,18 +67,21 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
    */
   const countries: { [country: string]: number } = useMemo(() => {
     const tmp: { [country: string]: number } = {}
-
-    portfolio?.holdings
-      .filter((h) => h?.asset.__typename === "Stock")
+    if (!portfolio) {
+      return tmp
+    }
+    portfolio
+      .filter((h) => !!h)
       .forEach((holding) => {
         if (holding) {
-          const country = holding.asset.id
+          const country = holding.asset.company?.country
+          console.log({ country })
           if (country) {
             if (!tmp[country]) {
               tmp[country] = 0
             }
 
-            tmp[country] += 4 // holding.quantity * holding.value
+            tmp[country] += holding.quantity * holding.value
           }
         }
       })

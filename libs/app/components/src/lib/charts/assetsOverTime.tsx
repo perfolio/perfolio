@@ -59,7 +59,6 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
     if (!history) {
       return []
     }
-    console.log({ history })
     const series = toTimeseries(history)
     const selectedHistory: AssetsOverTime = {}
     Object.keys(series).forEach((time) => {

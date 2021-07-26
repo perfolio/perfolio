@@ -166,7 +166,7 @@ type Company {
   """
   Url of the logo
   """
-  logo: String
+  logo: String!
 
   """
   Name of the company
@@ -220,7 +220,7 @@ type Company {
   zip: String
 }
 
-type Stock implements Asset {
+type Stock implements IAsset {
   id: ID!
   """
   The ticker of a stock. This does not include pre/suffixes for different exchanges
@@ -232,22 +232,17 @@ type Stock implements Asset {
   This probably does not carry much meaningful data for ETFs etc.
   """
   company: Company
-
-  """
-  All exchanges where this stock is listed.
-
-  Together with the exchange suffix we can construct the iex symbol dynamically.
-  """
-  exchanges: [Exchange]!
 }
-type Crypto implements Asset {
+type Crypto implements IAsset {
   id: ID!
   name: String!
 }
 
-interface Asset {
+interface IAsset {
   id: ID!
 }
+
+union Asset = Crypto | Stock
 
 """
 A transactions represents a single purchase or sale of any number of shares of a single asset.
@@ -456,7 +451,6 @@ type Price {
 Available queries
 """
 type Query {
-  getPortfolio(userId: ID!): [Holding!]!
   """
   Return a list of all companies that can be traded at a certain exchange
   """
@@ -574,7 +568,7 @@ type Mutation {
   """
   Delete a single transaction from the database
   """
-  deleteTransaction("The unique id of a transaction" transactionId: ID!): Transaction!
+  deleteTransaction("The unique id of a transaction" transactionId: ID!): ID!
 
   """
   Enter the user's email into our newsletter list.

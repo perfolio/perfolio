@@ -2,12 +2,12 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { useDeleteTransactionMutation } from "@perfolio/api/graphql"
+import { Stock, useDeleteTransactionMutation } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction, useGetCompanyQuery, useGetTransactionsQuery } from "@perfolio/api/graphql"
-import { useUser } from ".pnpm/@clerk+clerk-react@1.15.0_react@17.0.2/node_modules/@clerk/clerk-react"
+import { useUser } from "@clerk/clerk-react"
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean
@@ -19,7 +19,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
   })
   const company = data?.getCompany
 
-  const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation()
+  const [deleteTransaction] = useDeleteTransactionMutation()
 
   return (
     <div className="w-full md:flex">
@@ -57,7 +57,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             kind="secondary"
             size="small"
             onClick={async () => {
-              await deleteTransaction({ transactionId: transaction.id })
+              await deleteTransaction({ variables: { transactionId: transaction.id } })
             }}
           >
             Delete
@@ -99,12 +99,12 @@ const TransactionsPage: NextPage = () => {
             </div>
           ) : (
             <div>
-              {transactions
+              {[...transactions]
                 .sort((a, b) => b.executedAt - a.executedAt)
                 ?.map((tx, i) => (
                   <TransactionItem
                     key={tx.id}
-                    transaction={tx}
+                    transaction={{ ...tx, asset: tx.asset as Stock }}
                     isLast={i === transactions.length - 1}
                   />
                 ))}

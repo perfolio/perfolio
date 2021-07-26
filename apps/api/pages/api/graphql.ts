@@ -1,5 +1,8 @@
 import { Server } from "@perfolio/api/server"
 import { NextApiRequest, NextApiResponse } from "next"
+/**
+ * Initialize outside to "cache" it for hot lambdas
+ */
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   /**
@@ -9,11 +12,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200)
     res.end()
   } else {
+    const server = Server()
+    await server.start()
     /**
      * Handle graphql request
      */
-    const server = Server()
-    await server.start()
     const handler = server.createHandler({ path: "/api/graphql" })
     await handler(req, res)
   }
