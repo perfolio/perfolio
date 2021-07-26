@@ -7,7 +7,6 @@ import {
   RedirectToSignIn,
   ClerkLoaded,
 } from "@clerk/clerk-react"
-import { JWTProvider } from "@perfolio/data-access/api-client"
 import Head from "next/head"
 import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
@@ -45,16 +44,14 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <>
                   <SignedIn>
                     <QueryClientProvider client={new QueryClient()}>
-                      <JWTProvider>
-                        <OnboardingModal />
-                        <div
-                          className={`${
-                            process.env.NODE_ENV !== "production" ? "debug-screens" : ""
-                          }`}
-                        >
-                          <Component {...pageProps} />
-                        </div>
-                      </JWTProvider>
+                      <OnboardingModal />
+                      <div
+                        className={`${
+                          process.env.NODE_ENV !== "production" ? "debug-screens" : ""
+                        }`}
+                      >
+                        <Component {...pageProps} />
+                      </div>
                     </QueryClientProvider>
                   </SignedIn>
                   <SignedOut>

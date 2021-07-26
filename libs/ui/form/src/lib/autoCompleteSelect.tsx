@@ -7,11 +7,6 @@ import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components
 import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
 export interface AutoCompleteSelectProps<Option> {
-  /**
-   * Available options the user can choose from
-   */
-  options: (fragment: string) => Promise<Option[]>
-
   disabled?: boolean
   /**
    * Field name. Make sure this matches your schema.

@@ -15,10 +15,11 @@ export interface TransactionItemProps {
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
   const { data } = useGetCompanyQuery({
-    variables: { ticker: transaction.asset.id, withExchange: true },
+    variables: { ticker: transaction.asset.id },
   })
+  console.log({ transaction })
   const company = data?.getCompany
-
+  console.log({ company })
   const [deleteTransaction] = useDeleteTransactionMutation()
 
   return (

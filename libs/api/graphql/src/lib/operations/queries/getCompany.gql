@@ -1,4 +1,4 @@
-query getCompany($ticker: String!, $withExchange: Boolean!) {
+query getCompany($ticker: String!) {
   getCompany(ticker: $ticker) {
     ticker
     logo

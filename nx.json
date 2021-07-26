@@ -23,12 +23,6 @@
     "api-client": {
       "tags": []
     },
-    "api-feature-lambda": {
-      "tags": []
-    },
-    "api-feature-middleware": {
-      "tags": []
-    },
     "api-graphql": {
       "tags": []
     },
@@ -46,15 +40,6 @@
       "implicitDependencies": ["app"]
     },
     "app-middleware": {
-      "tags": []
-    },
-    "data-access-api-client": {
-      "tags": []
-    },
-    "data-access-fauna-adapter": {
-      "tags": []
-    },
-    "data-access-queries": {
       "tags": []
     },
     "feature-email": {

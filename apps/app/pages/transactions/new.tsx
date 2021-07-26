@@ -1,17 +1,20 @@
 import React, { useState } from "react"
 import { z } from "zod"
+
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
 import { Time } from "@perfolio/util/time"
 import { NextPage } from "next"
-import { Transaction } from "@perfolio/integrations/fauna"
-import { useTransactions } from "@perfolio/data-access/queries"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useApi } from "@perfolio/data-access/api-client"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
-import { useGetUserSettingsQuery, useCreateTransactionMutation } from "@perfolio/api/graphql"
+import {
+  useGetUserSettingsQuery,
+  useCreateTransactionMutation,
+  useGetTransactionsQuery,
+  Asset,
+} from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
 // const Suggestion: React.FC<{
 //   tx: Transaction
@@ -74,19 +77,18 @@ const validation = z.object({
  */
 const NewTransactionPage: NextPage = () => {
   const user = useUser()
-  const api = useApi()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
   const [createTransaction] = useCreateTransactionMutation()
-  const { transactions } = useTransactions()
-  const uniqueAssets: Record<string, Transaction> = {}
-  transactions
-    ?.sort((a, b) => b.ts - a.ts)
+  const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
+  const uniqueAssets: Record<string, Asset> = {}
+  transactionsResponse.data?.getTransactions
+    ?.sort((a, b) => b.executedAt - a.executedAt)
     .forEach((tx) => {
-      if (!(tx.data.assetId in uniqueAssets)) {
-        uniqueAssets[tx.data.assetId] = tx
+      if (!(tx.asset.id in uniqueAssets)) {
+        uniqueAssets[tx.asset.id] = tx.asset as Asset
       }
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
@@ -110,7 +112,6 @@ const NewTransactionPage: NextPage = () => {
             <div className="w-full">
               <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
                 <Field.AutoCompleteSelect
-                  options={(fragment: string) => api.search.search({ fragment })}
                   name="ticker"
                   label="Asset"
                   help={

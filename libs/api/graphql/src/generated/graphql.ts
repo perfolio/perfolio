@@ -874,7 +874,6 @@ export type UpdateUserSettingsMutation = { __typename?: "Mutation" } & {
 
 export type GetCompanyQueryVariables = Exact<{
   ticker: Scalars["String"]
-  withExchange: Scalars["Boolean"]
 }>
 
 export type GetCompanyQuery = { __typename?: "Query" } & {
@@ -1212,7 +1211,7 @@ export type UpdateUserSettingsMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserSettingsMutationVariables
 >
 export const GetCompanyDocument = gql`
-  query getCompany($ticker: String!, $withExchange: Boolean!) {
+  query getCompany($ticker: String!) {
     getCompany(ticker: $ticker) {
       ticker
       logo
@@ -1236,7 +1235,6 @@ export const GetCompanyDocument = gql`
  * const { data, loading, error } = useGetCompanyQuery({
  *   variables: {
  *      ticker: // value for 'ticker'
- *      withExchange: // value for 'withExchange'
  *   },
  * });
  */
