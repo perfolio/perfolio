@@ -5,13 +5,15 @@ import { Time } from "@perfolio/util/time"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 import { useUser } from "@clerk/clerk-react"
+import { useCurrentValue } from "@perfolio/queries"
+
 export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
   const user = useUser()
   const { data: historyData, loading } = useGetPortfolioHistoryQuery({
     variables: { userId: user.id },
   })
   const history = historyData?.getPortfolioHistory
-  const currentValue = 4
+  const { currentValue } = useCurrentValue()
   const valueMap: Record<number, number> = {}
 
   if (!!history && Object.keys(history).length >= 1) {

@@ -1,0 +1,9 @@
+query getCompanyFromIsin($isin: ID!) {
+  getCompanyFromIsin(isin: $isin) {
+    ticker
+    logo
+    name
+    description
+    sector
+  }
+}

@@ -605,6 +605,27 @@
         }
       }
     },
+    "queries": {
+      "root": "libs/queries",
+      "sourceRoot": "libs/queries/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/queries"],
+          "options": {
+            "jestConfig": "libs/queries/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "types": {
       "root": "libs/types",
       "sourceRoot": "libs/types/src",

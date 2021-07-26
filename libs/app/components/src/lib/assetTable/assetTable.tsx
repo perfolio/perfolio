@@ -59,7 +59,6 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
       throw new Error("Nothing found")
     }
     return portfolioHistory?.map((h) => {
-      console.log({ h })
       return {
         asset: {
           company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
@@ -111,7 +110,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
          */
         .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
         .map((holding) => {
-          if (!holding?.asset) {
+          if (!holding?.asset?.company) {
             return {
               asset: <Cell.Loading />,
               quantity: <Cell.Loading />,
@@ -124,9 +123,9 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           return {
             asset: (
               <Cell.Profile
-                src={holding.asset.company?.logo ?? "Null"}
-                title={holding.asset.company?.name ?? "Null"}
-                subtitle={holding.asset.id}
+                src={holding.asset.company?.logo}
+                title={holding.asset.company?.name}
+                subtitle={holding.asset.company?.ticker}
               />
             ),
             quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,

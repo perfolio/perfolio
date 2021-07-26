@@ -18,10 +18,10 @@ import {
 import { useUser } from "@clerk/clerk-react"
 // const Suggestion: React.FC<{
 //   tx: Transaction
-//   setValue: (val: { name: string; ticker: string; figi: string, exchange:string }) => void
+//   setValue: (val: { name: string; ticker: string; isin: string, exchange:string }) => void
 //   trigger: () => void
 // }> = ({ tx, setValue, trigger }): JSX.Element => {
-//   const { ticker } = useTickerFromFigi({ figi: tx.data.assetId })
+//   const { ticker } = useTickerFromisin({ isin: tx.data.assetId })
 //   const { company } = useCompany(ticker)
 //   return (
 //     <li className="flex items-center justify-between w-full gap-4 py-3">
@@ -46,12 +46,12 @@ import { useUser } from "@clerk/clerk-react"
 //               console.log({
 //                 name: company?.name ?? "",
 //                 ticker: company?.ticker ?? "",
-//                 figi: tx.data.assetId,
+//                 isin: tx.data.assetId,
 //               })
 //               setValue({
 //                 name: company?.name ?? "",
 //                 ticker: company?.ticker ?? "",
-//                 figi: tx.data.assetId,
+//                 isin: tx.data.assetId,
 //                 exchange: ""
 //               })
 //               trigger()
@@ -66,7 +66,7 @@ import { useUser } from "@clerk/clerk-react"
 // }
 
 const validation = z.object({
-  ticker: z.string(),
+  isin: z.string(),
   volume: z.string().transform((x: string) => parseInt(x)),
   value: z.string().transform((x: string) => parseInt(x)),
   executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
@@ -112,7 +112,7 @@ const NewTransactionPage: NextPage = () => {
             <div className="w-full">
               <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
                 <Field.AutoCompleteSelect
-                  name="ticker"
+                  name="isin"
                   label="Asset"
                   help={
                     <Description title="TODO: @webersni">
@@ -158,13 +158,13 @@ const NewTransactionPage: NextPage = () => {
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
-                      async ({ ticker, volume, value, executedAt }) => {
+                      async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
                           userId: user.id,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
-                          assetId: ticker,
+                          assetId: isin,
                         }
                         await createTransaction({ variables: { transaction } }).catch((err) => {
                           setFormError(

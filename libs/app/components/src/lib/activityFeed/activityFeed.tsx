@@ -1,7 +1,11 @@
-import { useGetTransactionsQuery, Transaction, Stock, Asset } from "@perfolio/api/graphql"
+import {
+  useGetTransactionsQuery,
+  Transaction,
+  useGetCompanyFromIsinQuery,
+} from "@perfolio/api/graphql"
 import { Time } from "@perfolio/util/time"
 import React from "react"
-import { Text } from "@perfolio/ui/components"
+import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
 import { useUser } from "@clerk/clerk-react"
 interface TransactionActivityItemProps {
@@ -9,33 +13,37 @@ interface TransactionActivityItemProps {
   isFirst?: boolean
 }
 
-const isStock = (asset: Asset): asset is Stock => {
-  return "ticker" in asset
-}
-
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
+  const { data, loading } = useGetCompanyFromIsinQuery({
+    variables: { isin: transaction.asset.id },
+  })
+  const company = data?.getCompanyFromIsin
   return (
     <li
       className={cn(" py-4", {
         "border-t border-gray-100": !isFirst,
       })}
     >
-      <div className="flex items-center justify-between">
-        <Text size="sm" bold>
-          New Transaction
-        </Text>
-        <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
-      </div>
-      <Text size="sm">
-        You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
-        <span className="font-semibold">
-          {!!transaction.asset && isStock(transaction.asset) ? transaction.asset.ticker : ""}
-        </span>{" "}
-        shares at ${transaction.value} per share.
-      </Text>
+      {loading || !company ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex items-center justify-between">
+            <Text size="sm" bold>
+              New Transaction
+            </Text>
+            <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
+          </div>
+          <Text size="sm">
+            You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
+            <span className="font-semibold">{company.ticker}</span> shares at ${transaction.value}{" "}
+            per share.
+          </Text>
+        </>
+      )}
     </li>
   )
 }

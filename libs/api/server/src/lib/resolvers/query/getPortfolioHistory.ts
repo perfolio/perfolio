@@ -10,6 +10,16 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
       throw new AuthorizationError("getPortfolioHistory", "wrong user id")
     }
 
+    const userSettings = await ctx.dataSources.fauna.getUserSettings(userId)
+    const mic = userSettings?.data.defaultExchange
+    if (!mic) {
+      throw new Error(`Unable to find defaultExchange in user settings`)
+    }
+    const exchange = await ctx.dataSources.iex.getExchange({ mic })
+    if (!exchange) {
+      throw new Error(`No exchange found: ${mic}`)
+    }
+
     const transactions = await ctx.dataSources.fauna.getTransactions(userId)
     if (!transactions || transactions.length === 0) {
       return []
@@ -19,7 +29,7 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
       transactions.map((t) => ({
         ...t.data,
         id: t.id,
-        asset: { id: t.data.assetId, ticker: t.data.assetId },
+        asset: { id: t.data.assetId, ticker: "" },
       })),
     )
     const history: { [assetId: string]: { time: number; quantity: number; value: number }[] } = {}
@@ -29,7 +39,16 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
     })
 
     const priceResponse = await Promise.all(
-      Object.keys(history).map(async (ticker) => ctx.dataSources.iex.getPrices({ ticker })),
+      Object.keys(history).map(async (isin) => {
+        const isinMap = await ctx.dataSources.iex.getIsinMapping({ isin })
+
+        const ticker = isinMap.find((i) => i.exchange === exchange.abbreviation)?.symbol
+        if (!ticker) {
+          throw new Error(`No symbol found for isin ${isin} and exchange: ${exchange} `)
+        }
+
+        return ctx.dataSources.iex.getPrices({ ticker })
+      }),
     )
 
     const prices: {
@@ -71,10 +90,20 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
         })
       }
     }
-    const portfolioHistory = Object.entries(history).map(([assetId, history]) => ({
-      asset: { id: assetId, ticker: assetId },
-      history,
-    }))
+    const portfolioHistory = Promise.all(
+      Object.entries(history).map(async ([assetId, history]) => {
+        const company = await ctx.dataSources.iex.getCompanyFromIsin(assetId)
+        if (!company) {
+          throw new Error(`No company found for ${assetId}`)
+        }
+
+        return {
+          asset: { id: assetId, ticker: company.ticker },
+          history,
+        }
+      }),
+    )
+
     return portfolioHistory
   }
 

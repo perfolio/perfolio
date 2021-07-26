@@ -3,6 +3,11 @@ import { Exchange, IssueType, Company } from "@perfolio/api/graphql"
 import * as cloud from "@perfolio/integrations/iexcloud"
 import { Time } from "@perfolio/util/time"
 import { HTTPError } from "@perfolio/util/errors"
+import {
+  GetIsinMappingResponse,
+  GetSymbolsAtExchangeResponse,
+  SearchResponse,
+} from "@perfolio/integrations/iexcloud"
 
 export class IEX extends DataSource {
   constructor() {
@@ -18,6 +23,16 @@ export class IEX extends DataSource {
     const symbols = await cloud.getFigiMapping(...figis)
     const companies = await Promise.all(symbols.map(({ symbol }) => this.getCompany(symbol)))
     return companies.filter((c) => c !== null) as Company[]
+  }
+
+  public async getCompanyFromIsin(isin: string) {
+    const isinMapping = await cloud.getIsinMapping(isin)
+    const ticker = isinMapping.find((i) => !i.symbol.includes("-"))?.symbol
+
+    if (!ticker) {
+      throw new Error(`No symbol found for ${isin}`)
+    }
+    return await this.getCompany(ticker)
   }
 
   public async getCompany(ticker: string) {
@@ -82,14 +97,8 @@ export class IEX extends DataSource {
     return exchange ?? null
   }
 
-  async search({ fragment }: { fragment: string }): Promise<Company[]> {
-    const result = await cloud.search(fragment)
-
-    const companies = await Promise.all(result.map(({ symbol }) => this.getCompany(symbol)))
-    /**
-     * Filter out symbols with exchange-suffix. We only want the "real" company here.
-     */
-    return companies.filter((c) => c !== null && !c.ticker.includes("-")) as Company[]
+  async search({ fragment }: { fragment: string }): Promise<SearchResponse> {
+    return await cloud.search(fragment)
   }
 
   async getPrices({ ticker }: { ticker: string }): Promise<{ [time: number]: number }> {
@@ -103,5 +112,16 @@ export class IEX extends DataSource {
   }
   async getCurrentPrice({ ticker }: { ticker: string }): Promise<number> {
     return await cloud.getCurrentPrice(ticker)
+  }
+  async getSymbolsAtExchange({
+    exchange,
+  }: {
+    exchange: string
+  }): Promise<GetSymbolsAtExchangeResponse> {
+    return await cloud.getSymbolsAtExchange(exchange)
+  }
+
+  async getIsinMapping({ isin }: { isin: string }): Promise<GetIsinMappingResponse> {
+    return await cloud.getIsinMapping(isin)
   }
 }

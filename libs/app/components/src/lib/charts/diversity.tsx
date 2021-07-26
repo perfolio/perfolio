@@ -49,7 +49,6 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       .filter((h) => !!h)
       .forEach((holding) => {
         const sector = holding?.asset.company?.sector
-        console.log({ holding })
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
@@ -58,7 +57,6 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
           tmp[sector] += holding.quantity * holding.value
         }
       })
-    console.log({ tmp })
     return tmp
   }, [portfolio])
 
@@ -75,7 +73,6 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       .forEach((holding) => {
         if (holding) {
           const country = holding.asset.company?.country
-          console.log({ country })
           if (country) {
             if (!tmp[country]) {
               tmp[country] = 0

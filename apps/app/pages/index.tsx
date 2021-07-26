@@ -20,6 +20,8 @@ import { format } from "@perfolio/util/numbers"
 import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
+import { useCurrentValue } from "@perfolio/queries"
+
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
 const ranges: Record<Range, number> = {
@@ -62,12 +64,14 @@ const KPI = ({
 
 const App: NextPage = () => {
   const user = useUser()
-  const currentValue = 4 //useCurrentValue()
+  const { currentValue } = useCurrentValue()
   const [range, setRange] = useState<Range>("ALL")
-  const historyResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
   const settingsResponse = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const history = historyResponse.data?.getPortfolioHistory
   const settings = settingsResponse.data?.getUserSettings
+  const historyResponse = useGetPortfolioHistoryQuery({
+    variables: { userId: user.id },
+  })
+  const history = historyResponse.data?.getPortfolioHistory
 
   const selectedHistory = useMemo<AssetsOverTime>(() => {
     if (!history) {

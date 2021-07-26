@@ -2,10 +2,8 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearchCompaniesQuery } from "@perfolio/api/graphql"
+import { useSearchIsinQuery } from "@perfolio/api/graphql"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
-import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
 export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
   /**
@@ -39,39 +37,36 @@ export function AutoCompleteSelect<Option>({
   help,
   name,
 }: AutoCompleteSelectProps<Option>): JSX.Element {
-  const user = useUser()
   const [state, setState] = useState<State>(State.Start)
   const { setValue, watch } = useFormContext()
 
-  const ticker = watch(name)
+  const isin = watch(name)
 
   /**
    * Carry onChange event to parent
    */
   useEffect(() => {
     if (onChange) {
-      onChange(ticker)
+      onChange(isin)
     }
-  }, [ticker, onChange])
+  }, [isin, onChange])
 
-  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const settings = data?.getUserSettings
   /**
    * User search value
    */
   const [search, setSearch] = useState("")
   /**
-   * Available options from iex
+   * All matches on our database
    */
-  const { data: searchResult, loading } = useSearchCompaniesQuery({
+  const { data: searchResult, loading } = useSearchIsinQuery({
     variables: {
       fragment: search,
     },
-    skip: !settings?.defaultExchange.mic,
+    skip: search.length < 2,
   })
-  const options = searchResult?.searchCompanies
+  const options = searchResult?.searchIsin ?? []
 
-  const selected = options?.find((company) => company?.ticker === ticker)
+  const selected = options.find((o) => o.isin === isin)
   return (
     <div className="w-full text-gray-800">
       <label
@@ -86,7 +81,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={selected?.logo ?? ""} size="xs" />
+            <Avatar src={selected?.company.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -114,7 +109,7 @@ export function AutoCompleteSelect<Option>({
             >
               {state === State.Done ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  {selected?.name}
+                  {selected?.company.name}
                 </div>
               ) : (
                 <input
@@ -149,25 +144,25 @@ export function AutoCompleteSelect<Option>({
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options?.map((company, i) => {
+                  options.map((option, i) => {
                     return (
                       <li key={i}>
                         <button
                           type="button"
                           onClick={() => {
-                            setValue(name, company?.ticker)
+                            setValue(name, option?.isin)
                             setState(State.Done)
                           }}
                           className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
-                            "bg-gray-100": company?.ticker === ticker,
-                            "bg-gradient-to-tr from-gray-50 to-gray-100": ticker,
+                            "bg-gray-100": option?.isin === isin,
+                            "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
                           })}
                         >
                           <Profile
-                            image={company?.logo}
-                            subtitle={company?.sector}
-                            title={company?.name}
-                            tag={company?.ticker}
+                            image={option.company.logo}
+                            subtitle={option.company.sector}
+                            title={option.company.name}
+                            tag={option.isin}
                           />
                         </button>
                       </li>

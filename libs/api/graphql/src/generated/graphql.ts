@@ -129,7 +129,7 @@ export type Exchange = {
   /** Exchange abbreviation */
   abbreviation: Scalars["String"]
   /** Exchange Suffix to be added for symbols on that exchange */
-  suffix: Scalars["String"]
+  suffix?: Maybe<Scalars["String"]>
   /** Market Identifier Code using ISO 10383 */
   mic: Scalars["String"]
   /** Full name of the exchange. */
@@ -252,11 +252,12 @@ export type Query = {
   /** Return the user's settings */
   getUserSettings?: Maybe<UserSettings>
   /**
-   * Return matching tickers for a given search string
+   * Return matching isins for a given search string
    *
-   * The companies will be loaded with a separate query to allow better caching
+   * The fragment will be compared against the ticker and company name.
    */
-  searchCompanies: Array<Maybe<Company>>
+  searchIsin: Array<SearchResult>
+  getCompanyFromIsin?: Maybe<Company>
 }
 
 /** Available queries */
@@ -300,8 +301,13 @@ export type QueryGetUserSettingsArgs = {
 }
 
 /** Available queries */
-export type QuerySearchCompaniesArgs = {
+export type QuerySearchIsinArgs = {
   fragment: Scalars["String"]
+}
+
+/** Available queries */
+export type QueryGetCompanyFromIsinArgs = {
+  isin: Scalars["ID"]
 }
 
 /**
@@ -318,8 +324,17 @@ export type RiskFreeRate = {
   time: Scalars["Timestamp"]
 }
 
+export type SearchResult = {
+  __typename?: "SearchResult"
+  isin: Scalars["ID"]
+  ticker: Scalars["ID"]
+  company: Company
+}
+
+/** Stocks such as company shares and funds. */
 export type Stock = IAsset & {
   __typename?: "Stock"
+  /** For stocks we are always using the isin as id. */
   id: Scalars["ID"]
   /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
   ticker: Scalars["String"]
@@ -513,6 +528,7 @@ export type ResolversTypes = ResolversObject<{
   Price: ResolverTypeWrapper<Price>
   Query: ResolverTypeWrapper<{}>
   RiskFreeRate: ResolverTypeWrapper<RiskFreeRate>
+  SearchResult: ResolverTypeWrapper<SearchResult>
   Stock: ResolverTypeWrapper<Stock>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
   Transaction: ResolverTypeWrapper<Omit<Transaction, "asset"> & { asset: ResolversTypes["Asset"] }>
@@ -542,6 +558,7 @@ export type ResolversParentTypes = ResolversObject<{
   Price: Price
   Query: {}
   RiskFreeRate: RiskFreeRate
+  SearchResult: SearchResult
   Stock: Stock
   Timestamp: Scalars["Timestamp"]
   Transaction: Omit<Transaction, "asset"> & { asset: ResolversParentTypes["Asset"] }
@@ -610,7 +627,7 @@ export type ExchangeResolvers<
   ParentType extends ResolversParentTypes["Exchange"] = ResolversParentTypes["Exchange"],
 > = ResolversObject<{
   abbreviation?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  suffix?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  suffix?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   mic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   region?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -726,11 +743,17 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetUserSettingsArgs, "userId">
   >
-  searchCompanies?: Resolver<
-    Array<Maybe<ResolversTypes["Company"]>>,
+  searchIsin?: Resolver<
+    Array<ResolversTypes["SearchResult"]>,
     ParentType,
     ContextType,
-    RequireFields<QuerySearchCompaniesArgs, "fragment">
+    RequireFields<QuerySearchIsinArgs, "fragment">
+  >
+  getCompanyFromIsin?: Resolver<
+    Maybe<ResolversTypes["Company"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetCompanyFromIsinArgs, "isin">
   >
 }>
 
@@ -740,6 +763,16 @@ export type RiskFreeRateResolvers<
 > = ResolversObject<{
   rate?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   time?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}>
+
+export type SearchResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["SearchResult"] = ResolversParentTypes["SearchResult"],
+> = ResolversObject<{
+  isin?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  ticker?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  company?: Resolver<ResolversTypes["Company"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -812,6 +845,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Price?: PriceResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   RiskFreeRate?: RiskFreeRateResolvers<ContextType>
+  SearchResult?: SearchResultResolvers<ContextType>
   Stock?: StockResolvers<ContextType>
   Timestamp?: GraphQLScalarType
   Transaction?: TransactionResolvers<ContextType>
@@ -878,6 +912,19 @@ export type GetCompanyQueryVariables = Exact<{
 
 export type GetCompanyQuery = { __typename?: "Query" } & {
   getCompany?: Maybe<
+    { __typename?: "Company" } & Pick<
+      Company,
+      "ticker" | "logo" | "name" | "description" | "sector"
+    >
+  >
+}
+
+export type GetCompanyFromIsinQueryVariables = Exact<{
+  isin: Scalars["ID"]
+}>
+
+export type GetCompanyFromIsinQuery = { __typename?: "Query" } & {
+  getCompanyFromIsin?: Maybe<
     { __typename?: "Company" } & Pick<
       Company,
       "ticker" | "logo" | "name" | "description" | "sector"
@@ -955,18 +1002,15 @@ export type GetUserSettingsQuery = { __typename?: "Query" } & {
   >
 }
 
-export type SearchCompaniesQueryVariables = Exact<{
+export type SearchIsinQueryVariables = Exact<{
   fragment: Scalars["String"]
 }>
 
-export type SearchCompaniesQuery = { __typename?: "Query" } & {
-  searchCompanies: Array<
-    Maybe<
-      { __typename?: "Company" } & Pick<
-        Company,
-        "ticker" | "logo" | "name" | "description" | "sector"
-      >
-    >
+export type SearchIsinQuery = { __typename?: "Query" } & {
+  searchIsin: Array<
+    { __typename?: "SearchResult" } & Pick<SearchResult, "isin"> & {
+        company: { __typename?: "Company" } & Pick<Company, "logo" | "sector" | "name">
+      }
   >
 }
 
@@ -1253,6 +1297,63 @@ export function useGetCompanyLazyQuery(
 export type GetCompanyQueryHookResult = ReturnType<typeof useGetCompanyQuery>
 export type GetCompanyLazyQueryHookResult = ReturnType<typeof useGetCompanyLazyQuery>
 export type GetCompanyQueryResult = Apollo.QueryResult<GetCompanyQuery, GetCompanyQueryVariables>
+export const GetCompanyFromIsinDocument = gql`
+  query getCompanyFromIsin($isin: ID!) {
+    getCompanyFromIsin(isin: $isin) {
+      ticker
+      logo
+      name
+      description
+      sector
+    }
+  }
+`
+
+/**
+ * __useGetCompanyFromIsinQuery__
+ *
+ * To run a query within a React component, call `useGetCompanyFromIsinQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompanyFromIsinQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompanyFromIsinQuery({
+ *   variables: {
+ *      isin: // value for 'isin'
+ *   },
+ * });
+ */
+export function useGetCompanyFromIsinQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>(
+    GetCompanyFromIsinDocument,
+    options,
+  )
+}
+export function useGetCompanyFromIsinLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCompanyFromIsinQuery,
+    GetCompanyFromIsinQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>(
+    GetCompanyFromIsinDocument,
+    options,
+  )
+}
+export type GetCompanyFromIsinQueryHookResult = ReturnType<typeof useGetCompanyFromIsinQuery>
+export type GetCompanyFromIsinLazyQueryHookResult = ReturnType<
+  typeof useGetCompanyFromIsinLazyQuery
+>
+export type GetCompanyFromIsinQueryResult = Apollo.QueryResult<
+  GetCompanyFromIsinQuery,
+  GetCompanyFromIsinQueryVariables
+>
 export const GetExchangesDocument = gql`
   query getExchanges {
     getExchanges {
@@ -1495,55 +1596,47 @@ export type GetUserSettingsQueryResult = Apollo.QueryResult<
   GetUserSettingsQuery,
   GetUserSettingsQueryVariables
 >
-export const SearchCompaniesDocument = gql`
-  query searchCompanies($fragment: String!) {
-    searchCompanies(fragment: $fragment) {
-      ticker
-      logo
-      name
-      description
-      sector
+export const SearchIsinDocument = gql`
+  query searchIsin($fragment: String!) {
+    searchIsin(fragment: $fragment) {
+      isin
+      company {
+        logo
+        sector
+        name
+      }
     }
   }
 `
 
 /**
- * __useSearchCompaniesQuery__
+ * __useSearchIsinQuery__
  *
- * To run a query within a React component, call `useSearchCompaniesQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchCompaniesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchIsinQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchIsinQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchCompaniesQuery({
+ * const { data, loading, error } = useSearchIsinQuery({
  *   variables: {
  *      fragment: // value for 'fragment'
  *   },
  * });
  */
-export function useSearchCompaniesQuery(
-  baseOptions: Apollo.QueryHookOptions<SearchCompaniesQuery, SearchCompaniesQueryVariables>,
+export function useSearchIsinQuery(
+  baseOptions: Apollo.QueryHookOptions<SearchIsinQuery, SearchIsinQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<SearchCompaniesQuery, SearchCompaniesQueryVariables>(
-    SearchCompaniesDocument,
-    options,
-  )
+  return Apollo.useQuery<SearchIsinQuery, SearchIsinQueryVariables>(SearchIsinDocument, options)
 }
-export function useSearchCompaniesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SearchCompaniesQuery, SearchCompaniesQueryVariables>,
+export function useSearchIsinLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SearchIsinQuery, SearchIsinQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<SearchCompaniesQuery, SearchCompaniesQueryVariables>(
-    SearchCompaniesDocument,
-    options,
-  )
+  return Apollo.useLazyQuery<SearchIsinQuery, SearchIsinQueryVariables>(SearchIsinDocument, options)
 }
-export type SearchCompaniesQueryHookResult = ReturnType<typeof useSearchCompaniesQuery>
-export type SearchCompaniesLazyQueryHookResult = ReturnType<typeof useSearchCompaniesLazyQuery>
-export type SearchCompaniesQueryResult = Apollo.QueryResult<
-  SearchCompaniesQuery,
-  SearchCompaniesQueryVariables
->
+export type SearchIsinQueryHookResult = ReturnType<typeof useSearchIsinQuery>
+export type SearchIsinLazyQueryHookResult = ReturnType<typeof useSearchIsinLazyQuery>
+export type SearchIsinQueryResult = Apollo.QueryResult<SearchIsinQuery, SearchIsinQueryVariables>

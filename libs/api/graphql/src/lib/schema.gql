@@ -112,6 +112,11 @@ enum IssueType {
 A publicly traded company
 """
 type Company {
+  # """
+  # Isin is the global unique id
+  # """
+  # isin: ID!
+
   """
   Street address of the company if available
   """
@@ -220,7 +225,13 @@ type Company {
   zip: String
 }
 
+"""
+Stocks such as company shares and funds.
+"""
 type Stock implements IAsset {
+  """
+  For stocks we are always using the isin as id.
+  """
   id: ID!
   """
   The ticker of a stock. This does not include pre/suffixes for different exchanges
@@ -380,7 +391,7 @@ type Exchange {
   """
   Exchange Suffix to be added for symbols on that exchange
   """
-  suffix: String!
+  suffix: String
 
   """
   Market Identifier Code using ISO 10383
@@ -445,6 +456,12 @@ type AssetHistory {
 type Price {
   value: Float!
   time: Timestamp!
+}
+
+type SearchResult {
+  isin: ID!
+  ticker: ID!
+  company: Company!
 }
 
 """
@@ -536,16 +553,18 @@ type Query {
   ): UserSettings
 
   """
-  Return matching tickers for a given search string
+  Return matching isins for a given search string
 
-  The companies will be loaded with a separate query to allow better caching
+  The fragment will be compared against the ticker and company name.
   """
-  searchCompanies(
+  searchIsin(
     """
     A partial search from the user.
     """
     fragment: String!
-  ): [Company]!
+  ): [SearchResult!]!
+
+  getCompanyFromIsin(isin: ID!): Company
 }
 
 """
