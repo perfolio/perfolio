@@ -1,0 +1,9 @@
+query getCompany($ticker: String!) {
+  getCompany(ticker: $ticker) {
+    ticker
+    logo
+    name
+    description
+    sector
+  }
+}

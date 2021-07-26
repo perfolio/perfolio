@@ -18,7 +18,7 @@ export async function getLogo(symbol: string): Promise<GetLogoResponse> {
       path: `/stock/${symbol}/logo`,
     })
     .catch((err) => {
-      console.warn(err)
+      client.logger.warn(err)
     })) as { url: string }
   if (!res?.url) {
     res = {
