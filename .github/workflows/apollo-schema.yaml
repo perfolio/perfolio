@@ -16,8 +16,14 @@ jobs:
 
       - name: Upload schema
         run: |
-          npx apollo service:push \
-          --graph=apiperfolio \
-          --key=${{ secrets.APOLLO_KEY }} \
-          --variant=current \
-          --endpoint=${{ github.event.deployment_status.target_url }}
+          rover graph introspect \
+          ${{ github.event.deployment_status.target_url }} |
+          rover graph publish apiperfolio@current --schema -
+        env:
+          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
+
+          # npx apollo service:push \
+          # --graph=apiperfolio \
+          # --key=${{ secrets.APOLLO_KEY }} \
+          # --variant=current \
+          # --endpoint=${{ github.event.deployment_status.target_url }}
