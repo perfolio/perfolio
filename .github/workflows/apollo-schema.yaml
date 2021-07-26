@@ -24,7 +24,7 @@ jobs:
       - name: Upload schema
         run: |
           rover graph introspect \
-          ${{ github.event.deployment_status.target_url }}/api/graphql |
+          https://api.perfol.io/graphql |
           rover graph publish apiperfolio@current --schema -
         env:
           APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
