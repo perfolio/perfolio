@@ -121,6 +121,7 @@ specifiers:
   tailwindcss-textshadow: ^2.1.3
   ts-jest: 26.5.5
   ts-node: ~9.1.1
+  ts-tiny-invariant: ^0.0.3
   tslib: ^2.3.0
   tslog: ^3.2.0
   typescript: 4.2.3
@@ -256,6 +257,7 @@ devDependencies:
   tailwindcss-textshadow: 2.1.3
   ts-jest: 26.5.5_jest@26.2.2+typescript@4.2.3
   ts-node: 9.1.1_typescript@4.2.3
+  ts-tiny-invariant: 0.0.3
   typescript: 4.2.3
   url-loader: 3.0.0
   vercel: 23.0.1
@@ -21863,7 +21865,6 @@ packages:
 
   /ts-tiny-invariant/0.0.3:
     resolution: {integrity: sha512-EiaBUsUta7PPzVKpvZurcSDgaSkymxwiUc2rhX6Wu30bws2maipT6ihbEY072dU9lz6/FoFWEc6psXdlo0xqtg==}
-    dev: false
 
   /tsconfig-paths-webpack-plugin/3.2.0:
     resolution: {integrity: sha512-S/gOOPOkV8rIL4LurZ1vUdYCVgo15iX9ZMJ6wx6w2OgcpT/G4wMyHB6WM+xheSqGMrWKuxFul+aXpCju3wmj/g==}
