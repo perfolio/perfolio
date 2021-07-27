@@ -1,8 +1,7 @@
 import { Company, ResolverFn } from "@perfolio/api/graphql"
 import { Context } from "../../context"
-import { cachedResolver } from "@perfolio/integrations/redis"
 
-const resolver: ResolverFn<
+export const getCompany: ResolverFn<
   Omit<Company, "logo" | "currentValue" | "exchange"> | null,
   void,
   Context,
@@ -11,5 +10,3 @@ const resolver: ResolverFn<
   ctx.authenticateUser()
   return await ctx.dataSources.iex.getCompany(ticker)
 }
-
-export const getCompany = cachedResolver("5m", resolver)

@@ -256,7 +256,7 @@ export type Query = {
    *
    * The fragment will be compared against the ticker and company name.
    */
-  searchIsin: Array<SearchResult>
+  search: Array<SearchResult>
   getCompanyFromIsin?: Maybe<Company>
 }
 
@@ -301,7 +301,7 @@ export type QueryGetUserSettingsArgs = {
 }
 
 /** Available queries */
-export type QuerySearchIsinArgs = {
+export type QuerySearchArgs = {
   fragment: Scalars["String"]
 }
 
@@ -743,11 +743,11 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetUserSettingsArgs, "userId">
   >
-  searchIsin?: Resolver<
+  search?: Resolver<
     Array<ResolversTypes["SearchResult"]>,
     ParentType,
     ContextType,
-    RequireFields<QuerySearchIsinArgs, "fragment">
+    RequireFields<QuerySearchArgs, "fragment">
   >
   getCompanyFromIsin?: Resolver<
     Maybe<ResolversTypes["Company"]>,
@@ -1002,12 +1002,12 @@ export type GetUserSettingsQuery = { __typename?: "Query" } & {
   >
 }
 
-export type SearchIsinQueryVariables = Exact<{
+export type SearchQueryVariables = Exact<{
   fragment: Scalars["String"]
 }>
 
-export type SearchIsinQuery = { __typename?: "Query" } & {
-  searchIsin: Array<
+export type SearchQuery = { __typename?: "Query" } & {
+  search: Array<
     { __typename?: "SearchResult" } & Pick<SearchResult, "isin"> & {
         company: { __typename?: "Company" } & Pick<Company, "logo" | "ticker" | "name">
       }
@@ -1596,9 +1596,9 @@ export type GetUserSettingsQueryResult = Apollo.QueryResult<
   GetUserSettingsQuery,
   GetUserSettingsQueryVariables
 >
-export const SearchIsinDocument = gql`
-  query searchIsin($fragment: String!) {
-    searchIsin(fragment: $fragment) {
+export const SearchDocument = gql`
+  query search($fragment: String!) {
+    search(fragment: $fragment) {
       isin
       company {
         logo
@@ -1610,33 +1610,33 @@ export const SearchIsinDocument = gql`
 `
 
 /**
- * __useSearchIsinQuery__
+ * __useSearchQuery__
  *
- * To run a query within a React component, call `useSearchIsinQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchIsinQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchIsinQuery({
+ * const { data, loading, error } = useSearchQuery({
  *   variables: {
  *      fragment: // value for 'fragment'
  *   },
  * });
  */
-export function useSearchIsinQuery(
-  baseOptions: Apollo.QueryHookOptions<SearchIsinQuery, SearchIsinQueryVariables>,
+export function useSearchQuery(
+  baseOptions: Apollo.QueryHookOptions<SearchQuery, SearchQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<SearchIsinQuery, SearchIsinQueryVariables>(SearchIsinDocument, options)
+  return Apollo.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options)
 }
-export function useSearchIsinLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SearchIsinQuery, SearchIsinQueryVariables>,
+export function useSearchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<SearchIsinQuery, SearchIsinQueryVariables>(SearchIsinDocument, options)
+  return Apollo.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options)
 }
-export type SearchIsinQueryHookResult = ReturnType<typeof useSearchIsinQuery>
-export type SearchIsinLazyQueryHookResult = ReturnType<typeof useSearchIsinLazyQuery>
-export type SearchIsinQueryResult = Apollo.QueryResult<SearchIsinQuery, SearchIsinQueryVariables>
+export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>
+export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>
+export type SearchQueryResult = Apollo.QueryResult<SearchQuery, SearchQueryVariables>

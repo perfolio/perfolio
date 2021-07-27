@@ -6,7 +6,7 @@ import {
   UpdateUserSettings,
 } from "@perfolio/api/graphql"
 
-import { db, Transaction as TransactionModel } from "@perfolio/integrations/fauna"
+import { db, Transaction as TransactionModel, IsinMap } from "@perfolio/integrations/fauna"
 export class Fauna extends DataSource {
   constructor() {
     super()
@@ -51,5 +51,11 @@ export class Fauna extends DataSource {
   }
   public async deleteTransaction(transaction: TransactionModel) {
     await db().transaction.delete(transaction)
+  }
+  public async getIsinMap() {
+    return await db().isinMap.get()
+  }
+  public async updateIsinMap(isinMap: IsinMap) {
+    return await db().isinMap.update(isinMap.id, isinMap.data)
   }
 }

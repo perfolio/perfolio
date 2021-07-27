@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useGetCompanyFromIsinQuery, useSearchIsinQuery } from "@perfolio/api/graphql"
+import { useSearchQuery } from "@perfolio/api/graphql"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
@@ -28,48 +28,6 @@ enum State {
   Start,
   Selecting,
   Done,
-}
-
-function useSearch(fragment: string): {
-  options: { isin: string; logo: string; name: string; ticker: string }[]
-  loading: boolean
-} {
-  const regex = RegExp(/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/)
-  const { data: searchResult, loading: searchloading } = useSearchIsinQuery({
-    variables: { fragment },
-    skip: regex.test(fragment),
-  })
-
-  console.log("isin detected", regex.test(fragment))
-  const { data: company, loading: isinLoading } = useGetCompanyFromIsinQuery({
-    variables: { isin: fragment },
-    skip: !regex.test(fragment),
-  })
-
-  const loading = searchloading || isinLoading
-  if (regex.test(fragment)) {
-    console.log(company?.getCompanyFromIsin)
-    const options = company?.getCompanyFromIsin
-      ? [
-          {
-            isin: fragment,
-            logo: company.getCompanyFromIsin.logo,
-            name: company.getCompanyFromIsin.name ?? "",
-            ticker: company.getCompanyFromIsin.ticker,
-          },
-        ]
-      : []
-    return { options, loading }
-  } else {
-    const options =
-      searchResult?.searchIsin.map((i) => ({
-        isin: i.isin,
-        logo: i.company.logo,
-        name: i.company.name ?? "",
-        ticker: i.company.ticker ?? "",
-      })) ?? []
-    return { options, loading }
-  }
 }
 
 export function AutoCompleteSelect<Option>({
@@ -101,7 +59,11 @@ export function AutoCompleteSelect<Option>({
   /**
    * All matches on our database
    */
-  const { options, loading } = useSearch(search)
+  const { data: searchResult, loading } = useSearchQuery({
+    variables: { fragment: search },
+    skip: search.length < 3,
+  })
+  const options = searchResult?.search ?? []
   const selected = options.find((o) => o.isin === isin)
 
   return (
@@ -118,7 +80,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={selected?.logo ?? ""} size="xs" />
+            <Avatar src={selected?.company.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -146,7 +108,7 @@ export function AutoCompleteSelect<Option>({
             >
               {state === State.Done ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  {selected?.name}
+                  {selected?.company.name}
                 </div>
               ) : (
                 <input
@@ -196,9 +158,9 @@ export function AutoCompleteSelect<Option>({
                           })}
                         >
                           <Profile
-                            image={option.logo}
-                            subtitle={option.ticker}
-                            title={option.name}
+                            image={option.company.logo}
+                            subtitle={option.company.ticker}
+                            title={option.company.name}
                             tag={option.isin}
                           />
                         </button>

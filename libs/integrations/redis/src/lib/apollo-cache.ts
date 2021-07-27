@@ -2,7 +2,7 @@ import { env } from "@perfolio/util/env"
 import { Cache } from "./cache"
 import { ResolverFn } from "@perfolio/api/graphql"
 import { Key, Value } from "./key"
-class ApolloCache extends Cache {
+export class ApolloCache extends Cache {
   constructor() {
     super(env.require("APOLLO_REDIS_CONNECTION"))
   }

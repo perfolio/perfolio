@@ -1,6 +1,6 @@
 import { QueryResponse } from "./util"
 import { Document } from "./document"
-import { Client, query as q } from "faunadb"
+import { Client, query as q, Expr } from "faunadb"
 import { z } from "zod"
 
 export class IsinMap extends Document<z.infer<typeof IsinMap.schema>> {
@@ -12,18 +12,20 @@ export class IsinMap extends Document<z.infer<typeof IsinMap.schema>> {
   /**
    * Data type for the isin maps
    */
-  public static readonly schema = z.array(
-    z
-      .object({
-        isin: z.string(),
-        ticker: z.string(),
-        /**
-         * The company name
-         */
-        name: z.number(),
-      })
-      .strict(),
-  )
+  public static readonly schema = z.object({
+    matches: z.array(
+      z
+        .object({
+          isin: z.string(),
+          ticker: z.string(),
+          /**
+           * The company name
+           */
+          name: z.string(),
+        })
+        .strict(),
+    ),
+  })
 
   /**
    * Load all isin maps
@@ -31,19 +33,23 @@ export class IsinMap extends Document<z.infer<typeof IsinMap.schema>> {
   public static async get(client: Client): Promise<IsinMap | null> {
     try {
       const res = await client
-        .query<QueryResponse<z.infer<typeof IsinMap.schema>>>(
+        .query<{
+          data: {
+            ref: Expr
+            ts: number
+            data: z.infer<typeof IsinMap.schema>
+          }[]
+        }>(
           q.Map(
             q.Paginate(q.Match(q.Index(this.index.all))),
             q.Lambda((x) => q.Get(x)),
           ),
         )
         .catch(() => null)
-
       if (res === null) {
         return null
       }
-
-      return new IsinMap(res)
+      return new IsinMap(res.data[0])
     } catch (err) {
       throw new Error(`Unable to load isin map: ${err}`)
     }

@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server-micro"
-import { BaseRedisCache } from "apollo-server-cache-redis"
+// import { BaseRedisCache } from "apollo-server-cache-redis"
 
-import Redis from "ioredis"
+// import Redis from "ioredis"
 import { Logger } from "tslog"
 import { context } from "./context"
 // import responseCachePlugin from "apollo-server-plugin-response-cache"
@@ -44,10 +44,10 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
      * Cache queries in redis
      * The cache ttl is defined in the graphql schema definition
      */
-    persistedQueries: {
-      cache: new BaseRedisCache({
-        client: new Redis(env.require("APOLLO_REDIS_CONNECTION")),
-      }),
-    },
+    // persistedQueries: {
+    //   cache: new BaseRedisCache({
+    //     client: new Redis(env.require("APOLLO_REDIS_CONNECTION")),
+    //   }),
+    // },
   })
 }

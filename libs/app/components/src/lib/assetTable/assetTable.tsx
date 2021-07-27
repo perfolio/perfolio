@@ -119,7 +119,6 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               change: <Cell.Loading />,
             }
           }
-          console.log({ holding })
           return {
             asset: (
               <Cell.Profile
