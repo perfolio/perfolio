@@ -11,6 +11,7 @@ const resolver: ResolverFn<
   ctx.authenticateUser()
 
   const isinMap = await ctx.dataSources.iex.getIsinMapping({ isin })
+  ctx.logger.debug({ isinMap })
   const ticker = isinMap.find((i) => !i.symbol.includes("-"))?.symbol
   if (!ticker) {
     throw new Error(`No main ticker found for isin: ${isin}`)

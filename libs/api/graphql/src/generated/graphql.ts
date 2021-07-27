@@ -1009,7 +1009,7 @@ export type SearchIsinQueryVariables = Exact<{
 export type SearchIsinQuery = { __typename?: "Query" } & {
   searchIsin: Array<
     { __typename?: "SearchResult" } & Pick<SearchResult, "isin"> & {
-        company: { __typename?: "Company" } & Pick<Company, "logo" | "sector" | "name">
+        company: { __typename?: "Company" } & Pick<Company, "logo" | "ticker" | "name">
       }
   >
 }
@@ -1602,7 +1602,7 @@ export const SearchIsinDocument = gql`
       isin
       company {
         logo
-        sector
+        ticker
         name
       }
     }
