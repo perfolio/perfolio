@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
 import { useSearchQuery } from "@perfolio/api/graphql"
-import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
+import { Profile, Avatar, Loading, Description, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
   /**
@@ -61,7 +61,7 @@ export function AutoCompleteSelect<Option>({
    */
   const { data: searchResult, loading } = useSearchQuery({
     variables: { fragment: search },
-    skip: search.length < 3,
+    skip: search.length === 0,
   })
   const options = searchResult?.search ?? []
   const selected = options.find((o) => o.isin === isin)
@@ -133,14 +133,17 @@ export function AutoCompleteSelect<Option>({
               leaveTo="opacity-0"
               show={state === State.Selecting}
             >
-              <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-xl max-h-60 focus:outline-none">
                 {loading ? (
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>
                 ) : options.length === 0 ? (
-                  <li className="relative w-full p-2 cursor-pointer">
-                    <Text>No results found</Text>
+                  <li className="relative w-full p-8">
+                    <Description title="No results found">
+                      We are continuously improving our service, please enter the ISIN manually to
+                      add it to our database.
+                    </Description>
                   </li>
                 ) : (
                   options.map((option, i) => {
@@ -152,10 +155,13 @@ export function AutoCompleteSelect<Option>({
                             setValue(name, option?.isin)
                             setState(State.Done)
                           }}
-                          className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
-                            "bg-gray-100": option?.isin === isin,
-                            "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
-                          })}
+                          className={cn(
+                            "relative p-2 cursor-pointer w-full focus:outline-none hover:bg-gray-50 duration-500 transform",
+                            {
+                              "bg-gray-100": option?.isin === isin,
+                              "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
+                            },
+                          )}
                         >
                           <Profile
                             image={option.company.logo}
