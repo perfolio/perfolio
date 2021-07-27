@@ -28,7 +28,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             <span className="text-gray-600 flexfont-medium md:pr-8 dark:text-blueGray-200 md:font-normal ">
               {new Date(transaction.executedAt * 1000).toLocaleDateString()}
             </span>
-            <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-900 dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
+            <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-dark dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
               {company?.logo ? <Avatar size="sm" src={company?.logo} /> : <Loading />}
             </div>
           </div>

@@ -64,13 +64,13 @@ const colors = (kind: Kind, disabled?: boolean): string => {
 
   const options: Record<Kind, string> = {
     primary:
-      " bg-gradient-to-tr from-gray-900 to-primary-800 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
+      " bg-gradient-to-tr from-gray-900 to-primary-dark text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
     secondary:
-      "bg-transparent border border-gray-200 text-primary-900 hover:border-gray-400 hover:text-black",
+      "bg-transparent border border-gray-200 text-primary-dark hover:border-gray-400 hover:text-black",
     alert: "bg-gradient-to-tr from-error-dark to-error text-white hover:to-error",
     cta: "from-error to-secondary-500 text-white justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:from-error hover:to-secondary-300 duration-200 hover:text-black",
     plain:
-      "bg-transparent shadow-none hover:shadow-none hover:text-primary-600 text-gray-800 hover:font-semibold",
+      "bg-transparent shadow-none hover:shadow-none hover:text-primary00 text-gray-800 hover:font-semibold",
   }
 
   return [common, options[kind]].join(" ")

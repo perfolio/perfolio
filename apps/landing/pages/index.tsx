@@ -134,7 +134,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-t from-gray-900 to-primary-800 md:h-32 md:w-32">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-t from-gray-900 to-primary-dark md:h-32 md:w-32">
                 <svg
                   className="w-full p-3 text-white stroke-current md:p-4"
                   viewBox="0 0 194 148"
