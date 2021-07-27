@@ -14,3 +14,6 @@ generates:
       useIndexSignature: true
       showUnusedMappers: true
       maybeValue: T | null | undefined
+hooks:
+  afterOneFileWrite:
+    - prettier --write
