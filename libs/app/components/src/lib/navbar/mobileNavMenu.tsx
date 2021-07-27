@@ -27,7 +27,7 @@ export const MobileNavMenu: React.FC<MenuProps> = ({ label, icon, menu }): JSX.E
                 enter="transition duration-500 ease-out"
                 enterFrom="transform opacity-0"
                 enterTo="transform opacity-100"
-                leave="transition duration-300 ease-out"
+                leave="transition duration-500 ease-out"
                 leaveFrom="transform opacity-100"
                 leaveTo="transform  opacity-0"
               >

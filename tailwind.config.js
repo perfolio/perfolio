@@ -28,6 +28,10 @@ module.exports = {
         dark: "#101974",
       },
 
+      cta: {
+        DEFAULT: "#F55800",
+      },
+
       success: {
         light: "#CAFAD0",
         DEFAULT: "#37C475",
