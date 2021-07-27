@@ -28,6 +28,7 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
     resolvers,
     logger: config?.logger,
     context,
+    introspection: true,
 
     /**
      * Send metrics to apollo dashboard
