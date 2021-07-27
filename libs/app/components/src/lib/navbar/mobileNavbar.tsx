@@ -28,11 +28,11 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
           enter="transition duration-500 ease-out"
           enterFrom="transform opacity-0 translate-y-full"
           enterTo="transform opacity-100 translate-y-0"
-          leave="transition duration-300 ease-out"
+          leave="transition duration-500 ease-out"
           leaveFrom="transform opacity-100 translate-y-0"
           leaveTo="transform  opacity-0 translate-y-full"
         >
-          <ul className="py-1 transition duration-300 ease-out shadow opacity-100 ">
+          <ul className="py-1 transition duration-500 ease-out shadow opacity-100 ">
             {items.map((item) => (
               <li key={item.label}>
                 {item.menu ? (

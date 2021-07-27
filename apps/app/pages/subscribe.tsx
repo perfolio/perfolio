@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { NextPage } from "next"
-import { useApi } from "@perfolio/data-access/api-client"
 import { Logo, Button } from "@perfolio/ui/components"
 import { z } from "zod"
 import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useSubscribeToNewsletterMutationMutation } from "@perfolio/api/graphql"
 import { Description } from "@perfolio/ui/components"
 
 const Subscribe: NextPage = () => {
@@ -19,7 +19,9 @@ const Subscribe: NextPage = () => {
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
-  const api = useApi()
+
+  const [subscribe] = useSubscribeToNewsletterMutationMutation()
+
   return (
     <section className="relative w-screen h-screen bg-white ">
       <div className="container w-full h-full mx-auto">
@@ -56,7 +58,7 @@ const Subscribe: NextPage = () => {
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
                       async ({ email }) => {
-                        await api.emails.subscribe({ email })
+                        await subscribe({ variables: { email } })
                         setSubscribed(true)
                       },
                       setSubmitting,
@@ -74,13 +76,13 @@ const Subscribe: NextPage = () => {
             )}
           </div>
           <div className="absolute flex items-center justify-between w-full md:hidden top-12">
-            <span className="w-4/5 border-b border-primary-600"></span>
+            <span className="w-4/5 border-b border-primary00"></span>
 
             <span className="flex justify-center w-full text-gray-900 md:hidden ">
               <Logo withName />
             </span>
 
-            <span className="w-4/5 border-b border-primary-600"></span>
+            <span className="w-4/5 border-b border-primary00"></span>
           </div>
         </div>
       </div>

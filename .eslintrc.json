@@ -1,6 +1,9 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
+  "rules": {
+    "eslint@typescript-eslint/ban-types": "off"
+  },
   "plugins": ["@nrwl/nx"],
   "overrides": [
     {

@@ -1,9 +1,0 @@
-CreateIndex({
-  "name": "refresh_token_by_user_id",
-  "source": Collection("refresh_tokens"),
-  "terms": [{
-    "field": ["data", "userId"]
-  }],
-  "unique": false,
-  "serialized": true
-})

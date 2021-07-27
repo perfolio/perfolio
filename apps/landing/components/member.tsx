@@ -5,23 +5,22 @@ export interface MemberProps {
   image: string
   name: string
   title: string
-  className?: string
 }
 
-export const Member: React.FC<MemberProps> = ({ image, name, title, className }): JSX.Element => {
+export const Member: React.FC<MemberProps> = ({ image, name, title }): JSX.Element => {
   return (
-    <div className={className}>
-      <div className="flex flex-col items-center justify-center text-sm whitespace-nowrap">
+    <div className="flex flex-col items-center justify-center p-8 text-sm whitespace-nowrap ">
+      <div className="w-20 h-20 overflow-hidden rounded-full sm:w-32 sm:h-32 md:w-40 md:h-40">
         <Image
-          className="object-cover rounded-full"
           src={image}
           alt={name}
-          width="800"
-          height="800"
+          width={500}
+          height={500}
+          className="object-cover rounded-full"
         />
-        <span className="mt-4 font-semibold text-center text-gray-900">{name}</span>
-        <span className="text-gray-700">{title}</span>
       </div>
+      <span className="mt-4 font-semibold text-center text-gray-900">{name}</span>
+      <span className="text-gray-700">{title}</span>
     </div>
   )
 }

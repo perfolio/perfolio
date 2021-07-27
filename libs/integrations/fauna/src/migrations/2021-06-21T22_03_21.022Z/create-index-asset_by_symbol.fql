@@ -1,9 +1,0 @@
-CreateIndex({
-  "name": "asset_by_symbol",
-  "source": Collection("assets"),
-  "terms": [{
-    "field": ["data", "ticker"]
-  }],
-  "unique": true,
-  "serialized": true
-})

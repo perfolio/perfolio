@@ -20,13 +20,13 @@
     "api": {
       "tags": []
     },
-    "api-apollo": {
+    "api-client": {
       "tags": []
     },
-    "api-feature-lambda": {
+    "api-graphql": {
       "tags": []
     },
-    "api-feature-middleware": {
+    "api-server": {
       "tags": []
     },
     "app": {
@@ -40,18 +40,6 @@
       "implicitDependencies": ["app"]
     },
     "app-middleware": {
-      "tags": []
-    },
-    "data-access-api-client": {
-      "tags": []
-    },
-    "data-access-fauna-adapter": {
-      "tags": []
-    },
-    "data-access-mutations": {
-      "tags": []
-    },
-    "data-access-queries": {
       "tags": []
     },
     "feature-email": {
@@ -94,6 +82,9 @@
       "tags": []
     },
     "landing": {
+      "tags": []
+    },
+    "queries": {
       "tags": []
     },
     "types": {

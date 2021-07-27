@@ -1,12 +1,14 @@
 import { env } from "@perfolio/util/env"
 import { HTTPError } from "@perfolio/util/errors"
 import { ApiConfig, PostRequest } from "./types"
+import { Logger } from "tslog"
 /**
  * SDK for OpenFigi resources.
  */
 export class Client {
   private readonly baseUrl: string
   private readonly token: string
+  private readonly logger: Logger
 
   constructor(config?: ApiConfig) {
     this.baseUrl = config?.baseUrl ?? "https://api.openfigi.com"
@@ -14,6 +16,7 @@ export class Client {
     const token = config?.token ?? env.require("OPENFIGI_API_KEY")
 
     this.token = token
+    this.logger = new Logger({ name: "OpenFigi" })
   }
 
   /**
@@ -42,7 +45,7 @@ export class Client {
       })
 
       if (res.status === 429) {
-        console.warn(`OpenFigi Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
+        this.logger.warn(`OpenFigi Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
         await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
       }

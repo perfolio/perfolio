@@ -2,14 +2,9 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearch, useSettings } from "@perfolio/data-access/queries"
+import { useGetCompanyFromIsinQuery, useSearchIsinQuery } from "@perfolio/api/graphql"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
-  /**
-   * Available options the user can choose from
-   */
-  options: (fragment: string) => Promise<Option[]>
-
   disabled?: boolean
   /**
    * Field name. Make sure this matches your schema.
@@ -35,6 +30,48 @@ enum State {
   Done,
 }
 
+function useSearch(fragment: string): {
+  options: { isin: string; logo: string; name: string; ticker: string }[]
+  loading: boolean
+} {
+  const regex = RegExp(/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/)
+  const { data: searchResult, loading: searchloading } = useSearchIsinQuery({
+    variables: { fragment },
+    skip: regex.test(fragment),
+  })
+
+  console.log("isin detected", regex.test(fragment))
+  const { data: company, loading: isinLoading } = useGetCompanyFromIsinQuery({
+    variables: { isin: fragment },
+    skip: !regex.test(fragment),
+  })
+
+  const loading = searchloading || isinLoading
+  if (regex.test(fragment)) {
+    console.log(company?.getCompanyFromIsin)
+    const options = company?.getCompanyFromIsin
+      ? [
+          {
+            isin: fragment,
+            logo: company.getCompanyFromIsin.logo,
+            name: company.getCompanyFromIsin.name ?? "",
+            ticker: company.getCompanyFromIsin.ticker,
+          },
+        ]
+      : []
+    return { options, loading }
+  } else {
+    const options =
+      searchResult?.searchIsin.map((i) => ({
+        isin: i.isin,
+        logo: i.company.logo,
+        name: i.company.name ?? "",
+        ticker: i.company.ticker ?? "",
+      })) ?? []
+    return { options, loading }
+  }
+}
+
 export function AutoCompleteSelect<Option>({
   onChange,
   label,
@@ -45,30 +82,28 @@ export function AutoCompleteSelect<Option>({
   const [state, setState] = useState<State>(State.Start)
   const { setValue, watch } = useFormContext()
 
-  const value = watch(name)
+  const isin = watch(name)
 
   /**
    * Carry onChange event to parent
    */
   useEffect(() => {
     if (onChange) {
-      onChange(value)
+      onChange(isin)
     }
-  }, [value, onChange])
+  }, [isin, onChange])
 
-  const { settings } = useSettings()
   /**
    * User search value
    */
   const [search, setSearch] = useState("")
+
   /**
-   * Available options from iex
+   * All matches on our database
    */
-  const { search: options, isLoading } = useSearch({
-    fragment: search,
-    currency: settings?.defaultCurrency,
-    exchange: settings?.defaultExchange,
-  })
+  const { options, loading } = useSearch(search)
+  const selected = options.find((o) => o.isin === isin)
+
   return (
     <div className="w-full text-gray-800">
       <label
@@ -83,7 +118,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={value.logo} size="xs" />
+            <Avatar src={selected?.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -105,12 +140,14 @@ export function AutoCompleteSelect<Option>({
           <div className="relative mt-1">
             <div
               className={cn(
-                "text-center h-10 w-full focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+                "text-center h-10 w-full focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
                 // { "animate-pulse bg-gray-50 text-opacity-0": options?.length === 0 },
               )}
             >
               {state === State.Done ? (
-                <div className="flex items-center justify-center w-full h-full">{value?.name}</div>
+                <div className="flex items-center justify-center w-full h-full">
+                  {selected?.name}
+                </div>
               ) : (
                 <input
                   type="text"
@@ -135,34 +172,34 @@ export function AutoCompleteSelect<Option>({
               show={state === State.Selecting}
             >
               <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {isLoading ? (
+                {loading ? (
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>
-                ) : options?.length === 0 ? (
+                ) : options.length === 0 ? (
                   <li className="relative w-full p-2 cursor-pointer">
                     <Text>No results found</Text>
                   </li>
                 ) : (
-                  options?.sort().map((option, i) => {
+                  options.map((option, i) => {
                     return (
                       <li key={i}>
                         <button
                           type="button"
                           onClick={() => {
-                            setValue(name, option)
+                            setValue(name, option?.isin)
                             setState(State.Done)
                           }}
                           className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
-                            "bg-gray-100": option === value,
-                            "bg-gradient-to-tr from-gray-50 to-gray-100": value,
+                            "bg-gray-100": option?.isin === isin,
+                            "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
                           })}
                         >
                           <Profile
                             image={option.logo}
+                            subtitle={option.ticker}
                             title={option.name}
-                            subtitle={option.exchange}
-                            tag={option.ticker}
+                            tag={option.isin}
                           />
                         </button>
                       </li>

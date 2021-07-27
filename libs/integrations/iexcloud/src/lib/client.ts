@@ -1,4 +1,6 @@
-import { HTTPError } from "@perfolio/util/errors"
+import { env } from "@perfolio/util/env"
+import { HTTPError, JsonUnmarshalError } from "@perfolio/util/errors"
+import { Logger } from "tslog"
 /**
  * Generic api request to be extended by other request types.
  */
@@ -42,21 +44,14 @@ export interface GetRequest extends ApiRequest {
 export class Client {
   private readonly baseUrl: string
   private readonly token: string
+  public readonly logger: Logger
 
   constructor(config?: ApiConfig) {
-    const baseUrl = config?.baseUrl ?? process.env["IEX_BASE_URL"]
-
-    if (!baseUrl) {
-      throw new Error("IEX_BASE_URL must be defined")
-    }
-    this.baseUrl = baseUrl
-
-    const token = config?.token ?? process.env["IEX_TOKEN"]
-
-    if (!token) {
-      throw new Error("IEX_TOKEN must be defined")
-    }
-    this.token = token
+    this.baseUrl = config?.baseUrl ?? env.require("IEX_BASE_URL")
+    this.token = config?.token ?? env.require("IEX_TOKEN")
+    this.logger = new Logger({
+      name: "IEX Client",
+    })
   }
 
   /**
@@ -89,7 +84,7 @@ export class Client {
         method: "GET",
       })
       if (res.status === 429) {
-        console.warn(`IEX Ratelimit reached, waiting ${backoff.toFixed(0)}s`)
+        this.logger.warn(`IEX Ratelimit reached [ ${path} ], waiting ${backoff.toFixed(0)}s`)
         await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
       }
@@ -101,10 +96,10 @@ export class Client {
       }
 
       if (res.status !== 200) {
-        throw new Error(`Unable to GET endpoint ${path}, failed with status: ${res.status}`)
+        throw new HTTPError(res.status, path)
       }
       return res.json().catch((err) => {
-        throw new Error(`Unable to unmarshal response: ${err}`)
+        throw new JsonUnmarshalError(err)
       })
     }
     throw new Error(`Unable to fetch from iex, ran out of retries: ${path}`)

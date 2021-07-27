@@ -18,3 +18,10 @@ export function requireEnv(key: string): string {
   }
   return value
 }
+
+/**
+ * Return whether this is a production environment or not
+ */
+export function isProduction(): boolean {
+  return process.env["NODE_ENV"] === "production"
+}

@@ -1,0 +1,9 @@
+query getExchanges {
+  getExchanges {
+    name
+    region
+    mic
+    suffix
+    abbreviation
+  }
+}
