@@ -1,6 +1,7 @@
 import { Client } from "faunadb"
 import { z } from "zod"
 import { Transaction } from "./documents/transaction"
+import { IsinMap } from "./documents/isin-map"
 import { Settings } from "./documents/settings"
 
 /**
@@ -29,6 +30,13 @@ export class Fauna {
         Settings.update(this.client, userId, input),
       fromUserId: (userId: string) => Settings.fromUserId(this.client, userId),
       delete: (userId: string) => Settings.delete(this.client, userId),
+    }
+  }
+  public get isinMap() {
+    return {
+      get: () => IsinMap.get(this.client),
+      update: (id: string, input: z.infer<typeof IsinMap.schema>) =>
+        IsinMap.update(this.client, id, input),
     }
   }
 

@@ -1,7 +1,7 @@
 import { Resolvers } from "@perfolio/api/graphql"
 import { Context } from "./context"
 import { getExchanges } from "./resolvers/query/getExchanges"
-import { searchIsin } from "./resolvers/query/searchIsin"
+import { search } from "./resolvers/query/search"
 import { getCompany } from "./resolvers/query/getCompany"
 import { getUserSettings } from "./resolvers/query/getUserSettings"
 import { getTransactions } from "./resolvers/query/getTransactions"
@@ -11,7 +11,6 @@ import { logo } from "./resolvers/company/logo"
 import { currentValue } from "./resolvers/company/currentValue"
 import { asset } from "./resolvers/transaction/asset"
 import { company as stockCompany } from "./resolvers/stock/company"
-import { company as searchResultCompany } from "./resolvers/searchResult/company"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
 import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
@@ -23,8 +22,7 @@ export const resolvers: Resolvers<Context> = {
     // @ts-expect-error Missing fields will be handled by the Company resolver
     getCompany,
     getExchanges,
-    // @ts-expect-error Missing fields will be handled by the SearchResult resolver
-    searchIsin,
+    search,
     getUserSettings,
     getTransactions,
     getPortfolioHistory,
@@ -40,11 +38,6 @@ export const resolvers: Resolvers<Context> = {
   Stock: {
     // @ts-expect-error Missing fields will be handled by the Company resolver
     company: stockCompany,
-  },
-  SearchResult: {
-    // @ts-expect-error Missing fields will be handled by the Company resolver
-
-    company: searchResultCompany,
   },
 
   Mutation: {
