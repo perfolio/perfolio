@@ -115,7 +115,7 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path 
      * The cachetime for invalid matches is much lower because we will likely find matches
      * after the user has manually added the isin.
      */
-    await cache.set(validMatches.length > 0 ? "24h" : "1h", { key, value: validMatches })
+    await cache.set(validMatches.length > 0 ? "30d" : "1h", { key, value: validMatches })
 
     return validMatches
   }
