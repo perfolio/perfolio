@@ -1,5 +1,11 @@
 import { Server } from "@perfolio/api/server"
 import { NextApiRequest, NextApiResponse } from "next"
+
+/**
+ * Vercel purges this automatially so we have to explicitely import it.
+ * I have no idea what it is even for but the lambda will error out if it's not
+ * loaded.
+ */
 import "ts-tiny-invariant"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
