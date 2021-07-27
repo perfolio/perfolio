@@ -1,49 +1,19 @@
 import { ResolverFn, SearchResult, Company } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { Key, ApolloCache } from "@perfolio/integrations/redis"
+import Fuse from "fuse.js"
 
 type R = SearchResult[]
 type P = unknown
 type C = Context
 type A = { fragment: string }
 
-/**
- * Return true if the target includes all characters of the fragment in the correct order.
- * @param fragment - user input
- *
- */
-const fuzzyMatch = (fragment: string, target: string): boolean => {
-  if (fragment.length > target.length) {
-    return false
-  }
-
-  fragment = fragment.toLowerCase().replace(" ", "")
-  target = target.toLowerCase()
-
-  if (fragment.length === target.length) {
-    return fragment === target
-  }
-  f: for (
-    let fragmentIndex = 0, targetIndex = 0;
-    fragmentIndex < fragment.length;
-    fragmentIndex++
-  ) {
-    while (targetIndex < target.length) {
-      if (target.charAt(targetIndex++) === fragment.charAt(fragmentIndex)) {
-        continue f
-      }
-    }
-    return false
-  }
-  return true
-}
-
-export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, _info) => {
+export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path }) => {
   ctx.authenticateUser()
 
   const fragment = args.fragment.toLowerCase()
 
-  const key = new Key({ resolver: "search", fragment })
+  const key = new Key({ path, fragment })
   const cache = new ApolloCache()
 
   const cachedValue = await cache.get<R>(key)
@@ -88,11 +58,30 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, _info) 
     /**
      * Search
      */
-    const matches = isinMap.data.matches
-      .filter(({ name, ticker }) => {
-        return (ticker.length > 0 && fuzzyMatch(fragment, ticker)) || fuzzyMatch(fragment, name)
+
+    const deduplicationRecord: { [isin: string]: boolean } = {}
+    const matches = new Fuse(isinMap.data.matches, {
+      includeScore: true,
+      shouldSort: true,
+      threshold: 0.2,
+      keys: [
+        {
+          name: "name",
+          weight: 1,
+        },
+        { name: "ticker", weight: 5 },
+      ],
+    })
+      .search(fragment)
+      .slice(0, 5)
+      .map((r) => r.item)
+      .filter(({ isin }) => {
+        const isDuplicate = deduplicationRecord[isin] ?? false
+        deduplicationRecord[isin] = true
+        return !isDuplicate
       })
-      .slice(0, 10)
+
+    ctx.logger.debug({ matches })
 
     let updated = false
     const matchesWithTicker = await Promise.all(
@@ -122,7 +111,11 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, _info) 
     )
     const validMatches = matchesWithCompany.filter((m) => !!m.company) as R
 
-    await cache.set("24h", { key, value: validMatches })
+    /**
+     * The cachetime for invalid matches is much lower because we will likely find matches
+     * after the user has manually added the isin.
+     */
+    await cache.set(validMatches.length > 0 ? "24h" : "1h", { key, value: validMatches })
 
     return validMatches
   }

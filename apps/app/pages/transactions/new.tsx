@@ -84,8 +84,10 @@ const NewTransactionPage: NextPage = () => {
   const [createTransaction] = useCreateTransactionMutation()
   const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
   const uniqueAssets: Record<string, Asset> = {}
-  transactionsResponse.data?.getTransactions
-    ?.sort((a, b) => b.executedAt - a.executedAt)
+  const transactions = transactionsResponse.data?.getTransactions ?? []
+
+  ;[...transactions]
+    .sort((a, b) => b.executedAt - a.executedAt)
     .forEach((tx) => {
       if (!(tx.asset.id in uniqueAssets)) {
         uniqueAssets[tx.asset.id] = tx.asset as Asset
