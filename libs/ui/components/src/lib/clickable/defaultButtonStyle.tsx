@@ -64,7 +64,7 @@ const colors = (kind: Kind, disabled?: boolean): string => {
 
   const options: Record<Kind, string> = {
     primary:
-      " bg-gradient-to-tr from-gray-900 to-primary-dark text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
+      " bg-black text-white hover:border-gray-700 border border-transparent hover:bg-white hover:text-black",
     secondary:
       "bg-transparent border border-gray-200 text-gray-800 hover:border-gray-400 hover:text-black",
     alert: "bg-gradient-to-tr from-error-dark to-error text-white hover:to-error",

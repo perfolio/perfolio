@@ -3,10 +3,9 @@ import { AuthorizationError } from "@perfolio/util/errors"
 import { Context } from "../../context"
 
 export const deleteTransaction: ResolverFn<string, unknown, Context, { transactionId: string }> =
-  async (_parent, { transactionId }, ctx, { cacheControl }) => {
+  async (_parent, { transactionId }, ctx, _info) => {
     const { sub } = ctx.authenticateUser()
 
-    cacheControl.setCacheHint({ maxAge: 0 })
     const transaction = await ctx.dataSources.fauna.getTransaction(transactionId)
     if (!transaction) {
       throw new Error("No transaction found")
