@@ -1,8 +1,6 @@
 import { Server } from "@perfolio/api/server"
 import { NextApiRequest, NextApiResponse } from "next"
-/**
- * Initialize outside to "cache" it for hot lambdas
- */
+import "ts-tiny-invariant"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   /**
