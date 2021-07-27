@@ -32,5 +32,5 @@ export interface PostRequest extends ApiRequest {
   /**
    * Request body.
    */
-  body?: Record<string, string | number | undefined>
+  body?: unknown | unknown[]
 }

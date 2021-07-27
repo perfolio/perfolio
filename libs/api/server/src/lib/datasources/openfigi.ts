@@ -1,5 +1,5 @@
 import { DataSource } from "apollo-datasource"
-import { search } from "@perfolio/integrations/openfigi"
+import { search, getTickerFromIsin } from "@perfolio/integrations/openfigi"
 
 export class OpenFigi extends DataSource {
   constructor() {
@@ -12,5 +12,9 @@ export class OpenFigi extends DataSource {
   ): Promise<string[]> {
     const figis = await search({ fragment, currency, exchange: mic })
     return figis
+  }
+
+  async getTickerFromIsin(isin: string): Promise<string | null> {
+    return await getTickerFromIsin({ isin })
   }
 }

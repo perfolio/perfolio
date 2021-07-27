@@ -557,7 +557,7 @@ type Query {
 
   The fragment will be compared against the ticker and company name.
   """
-  searchIsin(
+  search(
     """
     A partial search from the user.
     """
