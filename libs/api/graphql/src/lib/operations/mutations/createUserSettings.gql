@@ -1,0 +1,8 @@
+mutation CreateUserSettings($userSettings: CreateUserSettings!) {
+  createUserSettings(userSettings: $userSettings) {
+    defaultCurrency
+    defaultExchange {
+      mic
+    }
+  }
+}

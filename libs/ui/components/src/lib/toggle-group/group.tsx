@@ -20,7 +20,7 @@ export function ToggleGroup<T extends string>({
           <button
             onClick={() => setSelected(label)}
             className={cn(
-              "bg-white text-primary-900 transition duration-150 ease-in-out  hover:text-gray-800 hover:bg-gray-100 focus:outline-none",
+              "bg-white text-primary-dark transition duration-150 ease-in-out  hover:text-gray-800 hover:bg-gray-100 focus:outline-none",
               {
                 "bg-gray-100 text-gray-900 font-semibold": label === selected,
                 "px-1 sm:px-2 text-xs h-3 sm:h-6": size === "sm",

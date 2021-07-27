@@ -28,5 +28,5 @@ export const CustomColor = (args: HeadingProps) => (
   </Heading>
 )
 CustomColor.args = {
-  color: "text-error-500",
+  color: "text-error",
 }

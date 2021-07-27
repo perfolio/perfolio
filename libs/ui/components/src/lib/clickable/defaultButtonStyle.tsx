@@ -64,13 +64,13 @@ const colors = (kind: Kind, disabled?: boolean): string => {
 
   const options: Record<Kind, string> = {
     primary:
-      " bg-gradient-to-tr from-gray-900 to-primary-800 text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
+      " bg-gradient-to-tr from-gray-900 to-primary-dark text-gray-50 hover:border-gray-700 border border-transparent hover:from-gray-100 hover:to-white hover:text-black",
     secondary:
-      "bg-transparent border border-gray-200 text-primary-900 hover:border-gray-400 hover:text-black",
-    alert: "bg-gradient-to-tr from-error-700 to-error-600 text-white hover:to-error-400",
-    cta: "from-error-600 to-secondary-500 text-white justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:from-error-600 hover:to-secondary-300 duration-200 hover:text-black",
+      "bg-transparent border border-gray-200 text-gray-800 hover:border-gray-400 hover:text-black",
+    alert: "bg-gradient-to-tr from-error-dark to-error text-white hover:to-error",
+    cta: "bg-cta text-gray-50 justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:bg-black duration-500",
     plain:
-      "bg-transparent shadow-none hover:shadow-none hover:text-primary-600 text-gray-800 hover:font-semibold",
+      "bg-transparent shadow-none hover:shadow-none hover:text-primary00 text-gray-800 hover:font-semibold",
   }
 
   return [common, options[kind]].join(" ")
@@ -123,7 +123,7 @@ const dimensions = (size: Size): string => {
     small: "w-20 h-6",
     medium: "w-32 h-8",
     large: "w-40 h-10",
-    auto: "p-2 w-full h-10",
+    auto: "px-4 py-2 w-full h-10",
   }
 
   return options[size]

@@ -6,7 +6,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
   const { t } = useI18n()
   return (
     <div className="flex flex-col items-center w-full space-y-4 md:space-y-8 xl:space-y-12 ">
-      <h1 className="py-3 -my-3 text-3xl font-extrabold text-transparent sm:text-center bg-clip-text bg-gradient-to-tr from-gray-900 to-primary-700 text-shadow-md sm:text-5xl lg:text-6xl">
+      <h1 className="py-3 -my-3 text-3xl font-extrabold text-transparent sm:text-center bg-clip-text bg-gradient-to-tr from-black to-gray-900 sm:text-5xl lg:text-6xl">
         {t("headline")}
       </h1>
       <p className="text-gray-600 sm:text-lg sm:mx-auto md:text-xl lg:mx-0 sm:text-center">
@@ -15,7 +15,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
       </p>
 
       <div className="grid w-full gap-4 sm:w-1/2 md:w-1/3 lg:w-1/4 sm:grid-cols-2">
-        <Button kind="primary" size="auto" href="https://app.perfol.io/auth/signin">
+        <Button kind="cta" size="auto" href="https://accounts.perfol.io/sign-up">
           Sign up
         </Button>
         <Button size="auto" kind="secondary" href="mailto:info@perfol.io">

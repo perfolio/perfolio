@@ -69,64 +69,74 @@
         }
       }
     },
-    "api-apollo": {
-      "root": "libs/api/apollo",
-      "sourceRoot": "libs/api/apollo/src",
+    "api-client": {
+      "root": "libs/api/client",
+      "sourceRoot": "libs/api/client/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api/apollo/**/*.ts"]
+            "lintFilePatterns": ["libs/api/client/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/apollo"],
+          "outputs": ["coverage/libs/api/client"],
           "options": {
-            "jestConfig": "libs/api/apollo/jest.config.js",
+            "jestConfig": "libs/api/client/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "api-feature-lambda": {
-      "root": "libs/api/feature/lambda",
-      "sourceRoot": "libs/api/feature/lambda/src",
+    "api-graphql": {
+      "root": "libs/api/graphql",
+      "sourceRoot": "libs/api/graphql/src",
       "projectType": "library",
       "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "pnpm run --dir=libs/api/graphql build"
+              }
+            ]
+          }
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api/feature/lambda/**/*.ts"]
+            "lintFilePatterns": ["libs/api/graphql/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature/lambda"],
+          "outputs": ["coverage/libs/api/graphql"],
           "options": {
-            "jestConfig": "libs/api/feature/lambda/jest.config.js",
+            "jestConfig": "libs/api/graphql/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "api-feature-middleware": {
-      "root": "libs/api/feature/middleware",
-      "sourceRoot": "libs/api/feature/middleware/src",
+    "api-server": {
+      "root": "libs/api/server",
+      "sourceRoot": "libs/api/server/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api/feature/middleware/**/*.ts"]
+            "lintFilePatterns": ["libs/api/server/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature/middleware"],
+          "outputs": ["coverage/libs/api/server"],
           "options": {
-            "jestConfig": "libs/api/feature/middleware/jest.config.js",
+            "jestConfig": "libs/api/server/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -256,90 +266,6 @@
           "outputs": ["coverage/libs/app/middleware"],
           "options": {
             "jestConfig": "libs/app/middleware/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-api-client": {
-      "root": "libs/data-access/api-client",
-      "sourceRoot": "libs/data-access/api-client/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/api-client/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/api-client"],
-          "options": {
-            "jestConfig": "libs/data-access/api-client/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-fauna-adapter": {
-      "root": "libs/data-access/fauna-adapter",
-      "sourceRoot": "libs/data-access/fauna-adapter/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/fauna-adapter/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/fauna-adapter"],
-          "options": {
-            "jestConfig": "libs/data-access/fauna-adapter/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-mutations": {
-      "root": "libs/data-access/mutations",
-      "sourceRoot": "libs/data-access/mutations/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/mutations/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/mutations"],
-          "options": {
-            "jestConfig": "libs/data-access/mutations/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "data-access-queries": {
-      "root": "libs/data-access/queries",
-      "sourceRoot": "libs/data-access/queries/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data-access/queries/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data-access/queries"],
-          "options": {
-            "jestConfig": "libs/data-access/queries/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -675,6 +601,27 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "queries": {
+      "root": "libs/queries",
+      "sourceRoot": "libs/queries/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/queries"],
+          "options": {
+            "jestConfig": "libs/queries/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

@@ -5,7 +5,6 @@ import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Magic } from "magic-sdk"
 const SigninPage: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
 
@@ -50,17 +49,7 @@ const SigninPage: NextPage = () => {
                 handleSubmit<z.infer<typeof validation>>(
                   ctx,
                   async ({ email }) => {
-                    const magic = new Magic("pk_live_47E2276BF2FDD304")
-                    const didToken = await magic.auth.loginWithMagicLink({
-                      email,
-                    })
-                    await fetch("/api/auth/signin", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${didToken}`,
-                      },
-                    })
+                    console.log({ email })
                   },
                   setSubmitting,
                   setFormError,
@@ -75,13 +64,13 @@ const SigninPage: NextPage = () => {
             </Button>
           </div>
           <div className="absolute flex items-center justify-between w-full md:hidden top-12">
-            <span className="w-4/5 border-b border-primary-600"></span>
+            <span className="w-4/5 border-b border-primary00"></span>
 
             <span className="flex justify-center w-full text-gray-900 md:hidden ">
               <Logo withName />
             </span>
 
-            <span className="w-4/5 border-b border-primary-600"></span>
+            <span className="w-4/5 border-b border-primary00"></span>
           </div>
         </div>
       </div>

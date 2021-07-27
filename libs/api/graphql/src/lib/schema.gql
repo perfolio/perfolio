@@ -1,0 +1,604 @@
+"""
+A unix timestamp with second precision
+"""
+scalar Timestamp
+
+"""
+The interval for timeseries
+"""
+enum AssetType {
+  """
+  Ownership of a fraction of a corporation or fund.
+  """
+  STOCK
+}
+
+"""
+The interval for timeseries
+"""
+enum Interval {
+  """
+  One rate per day
+  """
+  DAILY
+
+  """
+  One rate per month
+  """
+  MONTHLY
+
+  """
+  One rate per year
+  """
+  ANNUAL
+}
+
+"""
+The risk free rate from the european central bank
+
+This was meant to be a map with a time as key and the rate as value
+but graphql does not handle maps.
+"""
+type RiskFreeRate {
+  """
+  Rate
+  """
+  rate: Float!
+
+  """
+  Timestamp of a specific day
+  """
+  time: Timestamp!
+}
+"""
+Issue types for stock assets
+"""
+enum IssueType {
+  """
+  ADR
+  """
+  AD
+
+  """
+  Closed End Fund
+  """
+  CEF
+
+  """
+  Common Stock
+  """
+  CS
+
+  """
+  Other
+  """
+  EMPTY
+
+  """
+  ETF
+  """
+  ET
+  """
+  Open Ended Fund
+  """
+  OEF
+  """
+  Preferred Stock
+  """
+  PS
+  """
+  Right
+  """
+  RT
+  """
+  Structured Product
+  """
+  STRUCT
+  """
+  Unit
+  """
+  UT
+  """
+  When Issued
+  """
+  WI
+  """
+  Warrant
+  """
+  WT
+}
+
+"""
+A publicly traded company
+"""
+type Company {
+  # """
+  # Isin is the global unique id
+  # """
+  # isin: ID!
+
+  """
+  Street address of the company if available
+  """
+  address: String
+
+  """
+  Street address of the company if available
+  """
+  address2: String
+
+  """
+  Name of the CEO of the company
+  """
+  ceo: String
+
+  """
+  City of the company if available
+  """
+  city: String
+
+  """
+  Country of the company if available
+  """
+  country: String
+
+  """
+  Return the latest price
+  Computed value
+  """
+  currentValue: Float!
+
+  """
+  Description for the company
+  """
+  description: String
+
+  """
+  Number of employees
+  """
+  employees: Int
+
+  """
+  Refers to the industry the company belongs to
+  """
+  industry: String
+
+  """
+  Refers to the common issue type of the stock.
+  """
+  issueType: IssueType
+
+  """
+  Url of the logo
+  """
+  logo: String!
+
+  """
+  Name of the company
+  """
+  name: String
+
+  """
+  Phone Number of the company if available
+  """
+  phone: String
+
+  """
+  Primary SIC Code for the ticker (if available)
+  @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
+  """
+  primarySicCode: Int
+
+  """
+  Refers to the sector the company belongs to.
+  """
+  sector: String
+
+  """
+  Name of the CEO of the company
+  """
+  securityName: String
+
+  """
+  State of the company if available
+  """
+  state: String
+
+  """
+  An array of Strings used to classify the company.
+  """
+  tags: [String]
+
+  """
+  Ticker of the company
+  """
+  ticker: String!
+
+  """
+  Website of the company
+  """
+  website: String
+
+  """
+  Zip code of the company if available
+  """
+  zip: String
+}
+
+"""
+Stocks such as company shares and funds.
+"""
+type Stock implements IAsset {
+  """
+  For stocks we are always using the isin as id.
+  """
+  id: ID!
+  """
+  The ticker of a stock. This does not include pre/suffixes for different exchanges
+  """
+  ticker: String!
+  """
+  The associated company if available
+
+  This probably does not carry much meaningful data for ETFs etc.
+  """
+  company: Company
+}
+type Crypto implements IAsset {
+  id: ID!
+  name: String!
+}
+
+interface IAsset {
+  id: ID!
+}
+
+union Asset = Crypto | Stock
+
+"""
+A transactions represents a single purchase or sale of any number of shares of a single asset.
+"""
+type Transaction {
+  """
+  The of asset. Stocks, Crypto, Real estate for example.
+  """
+  asset: Asset!
+
+  """
+  A timestamp when the transaction was executed
+  """
+  executedAt: Timestamp!
+
+  """
+  A globally unique identifier for each transaction
+  """
+  id: ID!
+
+  """
+  The owner of this transaction
+  """
+  userId: ID!
+
+  """
+  How much each share/item was bought/sold for
+  """
+  value: Float!
+
+  """
+  How many shares/items the user bought or sold
+
+  negative if sold
+  """
+  volume: Float!
+}
+
+"""
+Create a new transaction
+"""
+input CreateTransaction {
+  """
+  The asset id identifies the asset, this will be prefixed by 'stock_' for stocks
+  """
+  assetId: ID!
+
+  """
+  A timestamp when the transaction was executed
+  """
+  executedAt: Timestamp!
+
+  """
+  The owner of this transaction
+  """
+  userId: ID!
+
+  """
+  How much each share/item was bought/sold for
+  """
+  value: Float!
+
+  """
+  How many shares/items the user bought or sold
+  """
+  volume: Float!
+}
+
+"""
+Settings that can be customized by the user such as preferences as well as defaults
+"""
+type UserSettings {
+  """
+  The user's default currency. Everything will be converted to this currency.
+  """
+  defaultCurrency: String!
+  """
+  The user's default exchange. At the start only 1 exchange can be used.
+  """
+  defaultExchange: Exchange!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+}
+
+"""
+Create a new user settings object when a new user signs up
+"""
+input CreateUserSettings {
+  """
+  The user's default currency. Everything will be converted to this currency.
+  """
+  defaultCurrency: String!
+  """
+  The user's default exchange. At the start only 1 exchange can be used.
+  This must be the MIC!
+  """
+  defaultExchange: String!
+  """
+  The unique user id
+  """
+  userId: ID!
+}
+"""
+Update only some values.
+"""
+input UpdateUserSettings {
+  """
+  The user's default currency. Everything will be converted to this currency.
+  """
+  defaultCurrency: String
+  """
+  The user's default exchange. At the start only 1 exchange can be used.
+  This must be the MIC!
+  """
+  defaultExchange: String
+  """
+  The unique user id
+  """
+  userId: ID!
+}
+
+"""
+An exchange where shares are traded
+"""
+type Exchange {
+  """
+  Exchange abbreviation
+  """
+  abbreviation: String!
+
+  """
+  Exchange Suffix to be added for symbols on that exchange
+  """
+  suffix: String
+
+  """
+  Market Identifier Code using ISO 10383
+  """
+  mic: String!
+
+  """
+  Full name of the exchange.
+  """
+  name: String!
+
+  """
+  2 letter case insensitive string of country codes using ISO 3166-1 alpha-2
+  """
+  region: String!
+}
+
+"""
+Generic Value and Quantity over time.
+This is used for assets for example.
+"""
+type ValueAndQuantityAtTime {
+  """
+  How many shares/items
+  """
+  quantity: Float!
+
+  """
+  A timestamp when this value and quantity was
+  """
+  time: Timestamp!
+
+  """
+  The value of each share/item
+  """
+  value: Float!
+}
+
+type Holding {
+  asset: Asset!
+  quantity: Float!
+}
+
+"""
+The value and volume of an asset over time.
+"""
+type AssetHistory {
+  """
+  The asset
+  """
+  asset: Asset!
+
+  """
+  Value and Quantity for each day
+  """
+  history: [ValueAndQuantityAtTime!]!
+}
+
+"""
+
+"""
+type Price {
+  value: Float!
+  time: Timestamp!
+}
+
+type SearchResult {
+  isin: ID!
+  ticker: ID!
+  company: Company!
+}
+
+"""
+Available queries
+"""
+type Query {
+  """
+  Return a list of all companies that can be traded at a certain exchange
+  """
+  getAvailableCompaniesAtExchange(
+    """
+    The market identifier code
+    """
+    mic: String!
+  ): [Company!]!
+
+  """
+  Return the daily closing prices for a stock at a specific exchange
+  """
+  getStockPricesAtExchange(
+    ticker: String!
+    mic: String!
+    start: Timestamp!
+    end: Timestamp!
+  ): [Price!]!
+
+  """
+  Return a company by its symbol
+  """
+  getCompany(
+    """
+    The company symbol as used by IEXCloud
+    """
+    ticker: String!
+  ): Company
+
+  """
+  Get a list of all availale exchanges
+  """
+  getExchanges: [Exchange!]!
+
+  """
+  Return all assets over time for a given user
+  """
+  getPortfolioHistory(
+    """
+    The users unique id
+    """
+    userId: String!
+  ): [AssetHistory!]!
+
+  """
+  Get the risk free rates for a given interval
+  """
+  getRiskFreeRates(
+    """
+    The interval for each datapoint
+    """
+    interval: Interval!
+    """
+    Filter the array from this point in time onwards
+    """
+    begin: Timestamp!
+    """
+    Optionally set an end date.
+    Defaults to `today`
+    """
+    end: Timestamp
+  ): [RiskFreeRate!]!
+
+  """
+  Return all transactions of a user
+  """
+  getTransactions(
+    """
+    The user' unique id
+    """
+    userId: ID!
+  ): [Transaction!]!
+
+  """
+  Return the user's settings
+  """
+  getUserSettings(
+    """
+    The user' unique id
+    """
+    userId: ID!
+  ): UserSettings
+
+  """
+  Return matching isins for a given search string
+
+  The fragment will be compared against the ticker and company name.
+  """
+  searchIsin(
+    """
+    A partial search from the user.
+    """
+    fragment: String!
+  ): [SearchResult!]!
+
+  getCompanyFromIsin(isin: ID!): Company
+}
+
+"""
+Available mutations
+"""
+type Mutation {
+  """
+  Create a new transaction
+  """
+  createTransaction("A single buy or sell transaction" transaction: CreateTransaction!): Transaction
+
+  """
+  Create and store settings for the first time. For example when a new user signs up.
+  """
+  createUserSettings(
+    "A complete userSettings object that can be written to the databse as is"
+    userSettings: CreateUserSettings!
+  ): UserSettings!
+
+  """
+  Delete a single transaction from the database
+  """
+  deleteTransaction("The unique id of a transaction" transactionId: ID!): ID!
+
+  """
+  Enter the user's email into our newsletter list.
+  """
+  subscribeToNewsletter("The users email" email: String!): String!
+
+  """
+  Only update some values in the user settings.
+  """
+  updateUserSettings(
+    "A partial userSettings object"
+    userSettings: UpdateUserSettings!
+  ): UserSettings!
+}

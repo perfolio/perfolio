@@ -49,7 +49,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             </div>
           </div>
         </Section>
-        <Section bg="bg-white" id="features" className="flex flex-col justify-center ">
+        <Section id="features" className="flex flex-col justify-center ">
           <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
@@ -99,13 +99,12 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             })}
           </ul>
         </Section>
-        <Section bg="bg-gray-50" id="pricing" className="flex flex-col justify-center">
+        <Section id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
-          <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 ">
             <Price
-              title="Try it for free"
-              description="Just do it"
+              title="Try for free"
               price={0}
               bullets={[
                 "Manual data import",
@@ -113,11 +112,23 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Chart diagram of sectors",
               ]}
               href="https://app.perfol.io/auth/signin"
+              submitText="Try for free"
             />
             <Price
-              title="Premium"
-              description="Cool pricing"
-              price={7.98}
+              title="Basic"
+              price={3.99}
+              interval="month"
+              bullets={[
+                "Manual data import",
+                "Performance dashboard and key figures",
+                "Chart diagram of sectors",
+              ]}
+              href="https://app.perfol.io/auth/signin"
+              submitText="Get started"
+            />
+            <Price
+              title="Pro"
+              price={8.99}
               interval="month"
               bullets={[
                 "Manual data import",
@@ -126,29 +137,30 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               ]}
               href="https://app.perfol.io/auth/signin"
               highlighted
+              submitText="Take off"
             />
           </div>
         </Section>
-        <Section bg="bg-white" className="flex flex-col justify-center" id="team">
+        <Section className="flex flex-col justify-center" id="team">
           <SectionTitle tag="Our Team" title="Who is behind this?" />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-t from-gray-900 to-primary-800 md:h-32 md:w-32">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full md:h-40 md:w-40">
                 <svg
-                  className="w-full p-3 text-white stroke-current md:p-4"
-                  viewBox="0 0 194 148"
+                  className="w-full p-3 text-white fill-current md:p-4"
+                  viewBox="0 0 354 283"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M9 106.208L97.3883 17.8199L134.158 54.5894M185.07 41.8615L96.6814 130.25L59.9118 93.4803"
-                    strokeWidth="25"
+                    d="M247.35 70.671L176.678 0 0 176.678l35.336 35.336L176.678 70.671l35.336 35.336 35.336-35.336zM106.007 212.014l70.671 70.671 176.679-176.678-35.336-35.336-141.343 141.343-35.335-35.336-35.336 35.336z"
+                    fill="fill-current"
                   />
                 </svg>
               </div>
               <div className="flex flex-col items-center justify-center mt-4 space-y-2 text-center">
-                <h2 className="text-lg font-medium leading-6 text-gray-900">Perfolio</h2>
+                <h2 className="text-lg font-medium leading-6 text-black">Perfolio</h2>
                 <p className="text-base leading-6 text-left text-gray-600 md:text md:text-center">
                   At Perfolio, we believe that investment decisions should always be based on as
                   much well-founded information as possible. It is our mission to provide our users
@@ -157,17 +169,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               </div>
             </div>
             <div className="pt-4 mt-4 border-t border-gray-300 md:w-2/3 md:pl-8 md:py-8 md:border-l md:border-t-0 md:mt-0">
-              <div className="flex flex-col items-center justify-center sm:flex-row sm:flex-wrap">
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
                 {members.map((m) => {
-                  return (
-                    <Member
-                      key={m.name}
-                      className="w-2/3 p-4 sm:w-1/2 lg:w-1/4"
-                      name={m.name}
-                      title={m.title}
-                      image={m.image}
-                    />
-                  )
+                  return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
                 })}
               </div>
               <p className="mt-8 text-center text-gray-600">
@@ -179,17 +183,19 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             </div>
           </div>
         </Section>
-        <Section bg="bg-gray-50" id="subscribe">
+        <Section id="subscribe">
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div>
-              <h2 className="mb-3 font-semibold tracking-wide text-purple-800 uppercase sm:text-lg sm:leading-snug">
+              <h2 className="mb-3 font-semibold tracking-wide text-gray-900 uppercase sm:text-lg sm:leading-snug">
                 Get in touch
               </h2>
               <p className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Curious for more?
               </p>
             </div>
-            <Button href="https://app.perfol.io/subscribe">Subscribe</Button>
+            <Button kind="cta" href="https://app.perfol.io/subscribe">
+              Subscribe
+            </Button>
           </div>
         </Section>
       </div>

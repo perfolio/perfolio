@@ -80,7 +80,7 @@ export const Select: React.FC<SelectProps> = ({
           <div className="relative mt-1">
             <Listbox.Button
               className={cn(
-                "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+                "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
                 { "animate-pulse bg-gray-50 text-opacity-0": options.length === 0 },
               )}
             >
@@ -102,7 +102,7 @@ export const Select: React.FC<SelectProps> = ({
                     className={({ active, selected }) =>
                       cn("cursor-default select-none relative p-2 text-gray-800", {
                         "bg-gray-100": active,
-                        "bg-gradient-to-tr from-gray-900 to-primary-900 text-gray-50 font-semibold":
+                        "bg-gradient-to-tr from-gray-900 to-primary-dark text-gray-50 font-semibold":
                           selected,
                       })
                     }
