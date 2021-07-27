@@ -77,7 +77,7 @@ export const Input: React.FC<InputProps> = ({
           {...register(name)}
           type={type}
           className={classNames(
-            "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+            "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
             {
               "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
               "border-error focus:border-error-dark focus:bg-error-light": error,

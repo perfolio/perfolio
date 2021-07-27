@@ -140,7 +140,7 @@ export function AutoCompleteSelect<Option>({
           <div className="relative mt-1">
             <div
               className={cn(
-                "text-center h-10 w-full focus:shadow placeholder-gray-500 transition duration-300 border  rounded  focus:outline-none",
+                "text-center h-10 w-full focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
                 // { "animate-pulse bg-gray-50 text-opacity-0": options?.length === 0 },
               )}
             >

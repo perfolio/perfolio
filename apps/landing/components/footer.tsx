@@ -50,7 +50,7 @@ const socialMedia = () => {
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-indigo-900 bg-gradient-to-t from-white to-gray-100 ">
+    <footer className="border-t border-gray-300 bg-gradient-to-t from-white to-gray-50 ">
       <div className="container flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800">
         <div className="flex items-center justify-between w-full md:flex-col md:space-y-8">
           <Link href="/</div>">
@@ -71,7 +71,7 @@ export const Footer = () => {
             {footerLink("Privacy", "/privacy")}
           </div>
           <div className="flex items-center justify-end md:w-1/3">
-            <span>© Copyright {new Date().getFullYear()}. All Rights Reserved.</span>
+            <span>© Copyright 2020 - {new Date().getFullYear()}. All Rights Reserved.</span>
           </div>
         </div>
       </div>
