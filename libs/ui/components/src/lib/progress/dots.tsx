@@ -18,9 +18,9 @@ export const Dots: React.FC<DotsProps> = ({ current, max }): JSX.Element => {
           key={i}
           className={` rounded-full ${
             i < current
-              ? "bg-primary-400 w-2 h-2"
+              ? "bg-primary00 w-2 h-2"
               : i === current
-              ? "bg-primary-600 border-4 w-4 h-4 border-primary-200"
+              ? "bg-primary border-4 w-4 h-4 border-primary-light"
               : "w-2 h-2 bg-gray-300"
           }`}
         ></span>

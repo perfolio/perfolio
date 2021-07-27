@@ -64,13 +64,13 @@ const SigninPage: NextPage = () => {
             </Button>
           </div>
           <div className="absolute flex items-center justify-between w-full md:hidden top-12">
-            <span className="w-4/5 border-b border-primary-600"></span>
+            <span className="w-4/5 border-b border-primary00"></span>
 
             <span className="flex justify-center w-full text-gray-900 md:hidden ">
               <Logo withName />
             </span>
 
-            <span className="w-4/5 border-b border-primary-600"></span>
+            <span className="w-4/5 border-b border-primary00"></span>
           </div>
         </div>
       </div>

@@ -102,7 +102,7 @@ export const Select: React.FC<SelectProps> = ({
                     className={({ active, selected }) =>
                       cn("cursor-default select-none relative p-2 text-gray-800", {
                         "bg-gray-100": active,
-                        "bg-gradient-to-tr from-gray-900 to-primary-900 text-gray-50 font-semibold":
+                        "bg-gradient-to-tr from-gray-900 to-primary-dark text-gray-50 font-semibold":
                           selected,
                       })
                     }
