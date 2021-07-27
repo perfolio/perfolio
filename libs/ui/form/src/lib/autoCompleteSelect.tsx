@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearchIsinQuery } from "@perfolio/api/graphql"
+import { useGetCompanyFromIsinQuery, useSearchIsinQuery } from "@perfolio/api/graphql"
 import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
@@ -30,6 +30,48 @@ enum State {
   Done,
 }
 
+function useSearch(fragment: string): {
+  options: { isin: string; logo: string; name: string; ticker: string }[]
+  loading: boolean
+} {
+  const regex = RegExp(/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/)
+  const { data: searchResult, loading: searchloading } = useSearchIsinQuery({
+    variables: { fragment },
+    skip: regex.test(fragment),
+  })
+
+  console.log("isin detected", regex.test(fragment))
+  const { data: company, loading: isinLoading } = useGetCompanyFromIsinQuery({
+    variables: { isin: fragment },
+    skip: !regex.test(fragment),
+  })
+
+  const loading = searchloading || isinLoading
+  if (regex.test(fragment)) {
+    console.log(company?.getCompanyFromIsin)
+    const options = company?.getCompanyFromIsin
+      ? [
+          {
+            isin: fragment,
+            logo: company.getCompanyFromIsin.logo,
+            name: company.getCompanyFromIsin.name ?? "",
+            ticker: company.getCompanyFromIsin.ticker,
+          },
+        ]
+      : []
+    return { options, loading }
+  } else {
+    const options =
+      searchResult?.searchIsin.map((i) => ({
+        isin: i.isin,
+        logo: i.company.logo,
+        name: i.company.name ?? "",
+        ticker: i.company.ticker ?? "",
+      })) ?? []
+    return { options, loading }
+  }
+}
+
 export function AutoCompleteSelect<Option>({
   onChange,
   label,
@@ -55,18 +97,13 @@ export function AutoCompleteSelect<Option>({
    * User search value
    */
   const [search, setSearch] = useState("")
+
   /**
    * All matches on our database
    */
-  const { data: searchResult, loading } = useSearchIsinQuery({
-    variables: {
-      fragment: search,
-    },
-    skip: search.length < 2,
-  })
-  const options = searchResult?.searchIsin ?? []
-
+  const { options, loading } = useSearch(search)
   const selected = options.find((o) => o.isin === isin)
+
   return (
     <div className="w-full text-gray-800">
       <label
@@ -81,7 +118,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={selected?.company.logo ?? ""} size="xs" />
+            <Avatar src={selected?.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -109,7 +146,7 @@ export function AutoCompleteSelect<Option>({
             >
               {state === State.Done ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  {selected?.company.name}
+                  {selected?.name}
                 </div>
               ) : (
                 <input
@@ -139,7 +176,7 @@ export function AutoCompleteSelect<Option>({
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>
-                ) : options?.length === 0 ? (
+                ) : options.length === 0 ? (
                   <li className="relative w-full p-2 cursor-pointer">
                     <Text>No results found</Text>
                   </li>
@@ -159,9 +196,9 @@ export function AutoCompleteSelect<Option>({
                           })}
                         >
                           <Profile
-                            image={option.company.logo}
-                            subtitle={option.company.sector}
-                            title={option.company.name}
+                            image={option.logo}
+                            subtitle={option.ticker}
+                            title={option.name}
                             tag={option.isin}
                           />
                         </button>

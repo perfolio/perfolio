@@ -3,7 +3,7 @@ query searchIsin($fragment: String!) {
     isin
     company {
       logo
-      sector
+      ticker
       name
     }
   }
