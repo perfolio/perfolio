@@ -63,7 +63,7 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
           )}
         </ResponsiveContainer>
         <div className="absolute top-0 left-0 p-4">
-          <span className="p-1 text-lg font-semibold bg-gray-100 bg-opacity-75 rounded text-primary-600">
+          <span className="p-1 text-lg font-semibold bg-gray-100 bg-opacity-75 rounded text-primary00">
             {format(currentValue, { suffix: "€" })}
           </span>
         </div>
