@@ -16,7 +16,7 @@ export class Transaction extends Document<z.infer<typeof Transaction.schema>> {
   public static readonly schema = z
     .object({
       /**
-       * Figi for stock assets
+       * isin for stock assets
        */
       assetId: z.string(),
       userId: z.string(),

@@ -1,4 +1,0 @@
-CreateCollection({
-  "name": "sessions",
-  "ttl_days": 30
-})
