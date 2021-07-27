@@ -1,0 +1,6 @@
+CreateIndex({
+  "name": "isin_map",
+  "source": Collection("isinMap"),
+  "unique": true,
+  "serialized": true
+})

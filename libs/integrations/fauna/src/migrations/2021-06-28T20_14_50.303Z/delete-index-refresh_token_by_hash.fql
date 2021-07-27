@@ -1,1 +1,0 @@
-Delete(Index("refresh_token_by_hash"))

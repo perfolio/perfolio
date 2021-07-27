@@ -1,9 +1,0 @@
-CreateIndex({
-  "name": "refresh_token_by_hash",
-  "source": Collection("refresh_tokens"),
-  "terms": [{
-    "field": ["data", "hashedToken"]
-  }],
-  "unique": true,
-  "serialized": true
-})

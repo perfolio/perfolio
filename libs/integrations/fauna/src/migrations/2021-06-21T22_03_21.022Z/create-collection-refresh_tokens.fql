@@ -1,4 +1,0 @@
-CreateCollection({
-  "name": "refresh_tokens",
-  "ttl_days": 7
-})
