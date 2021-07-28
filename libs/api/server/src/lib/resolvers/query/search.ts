@@ -32,9 +32,8 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path 
      * Get from isin
      */
     const isin = fragment.toUpperCase()
-    const ticker = await ctx.dataSources.openFigi.getTickerFromIsin(isin).catch((err) => {
-      ctx.logger.error(err)
-    })
+    const iexIsinMap = await ctx.dataSources.iex.getIsinMapping({ isin })
+    const ticker = iexIsinMap.find((i) => !i.symbol.includes("-"))?.symbol
     if (!ticker) {
       throw new Error(`No matching ticker found for isin: ${isin}`)
     }
@@ -62,23 +61,18 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path 
     const deduplicationRecord: { [isin: string]: boolean } = {}
     const matches = new Fuse(isinMap.data.matches, {
       shouldSort: true,
-      threshold: 0.2,
-      keys: [
-        {
-          name: "name",
-          weight: 1,
-        },
-        { name: "ticker", weight: 5 },
-      ],
+      threshold: 0.01,
+      keys: ["name", "ticker"],
     })
       .search(fragment)
-      .slice(0, 5)
+      .slice(0, 10)
       .map((r) => r.item)
       .filter(({ isin }) => {
         const isDuplicate = deduplicationRecord[isin] ?? false
         deduplicationRecord[isin] = true
         return !isDuplicate
       })
+      .slice(0, 5)
 
     ctx.logger.debug({ matches })
 
