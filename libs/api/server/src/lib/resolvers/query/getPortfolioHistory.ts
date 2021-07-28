@@ -40,7 +40,7 @@ export const getPortfolioHistory: ResolverFn<AssetHistory[], unknown, Context, {
 
     const priceResponse = await Promise.all(
       Object.keys(history).map(async (isin) => {
-        const isinMap = await ctx.dataSources.iex.getIsinMapping({ isin })
+        const isinMap = await ctx.dataSources.iex.getIsinMapping(isin)
 
         const ticker = isinMap.find((i) => i.exchange === exchange.abbreviation)?.symbol
         if (!ticker) {
