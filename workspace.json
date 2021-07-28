@@ -271,6 +271,27 @@
         }
       }
     },
+    "feature-asset-search": {
+      "root": "libs/feature/asset-search",
+      "sourceRoot": "libs/feature/asset-search/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/feature/asset-search/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/feature/asset-search"],
+          "options": {
+            "jestConfig": "libs/feature/asset-search/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "feature-email": {
       "root": "libs/feature/email",
       "sourceRoot": "libs/feature/email/src",

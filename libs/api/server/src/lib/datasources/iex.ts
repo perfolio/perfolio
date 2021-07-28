@@ -35,7 +35,7 @@ export class IEX extends DataSource {
     return await this.getCompany(ticker)
   }
 
-  public async getCompany(ticker: string) {
+  public async getCompany(ticker: string): Promise<Omit<Company, "currentValue" | "logo"> | null> {
     const company = await cloud.getCompany(ticker).catch((err) => {
       if (err instanceof HTTPError) {
         /**
@@ -121,7 +121,7 @@ export class IEX extends DataSource {
     return await cloud.getSymbolsAtExchange(exchange)
   }
 
-  async getIsinMapping({ isin }: { isin: string }): Promise<GetIsinMappingResponse> {
+  async getIsinMapping(isin: string): Promise<GetIsinMappingResponse> {
     return await cloud.getIsinMapping(isin)
   }
 }

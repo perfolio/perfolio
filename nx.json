@@ -42,6 +42,9 @@
     "app-middleware": {
       "tags": []
     },
+    "feature-asset-search": {
+      "tags": []
+    },
     "feature-email": {
       "tags": []
     },

@@ -66,7 +66,7 @@ export type Company = {
   /** Url of the logo */
   logo: Scalars["String"]
   /** Name of the company */
-  name?: Maybe<Scalars["String"]>
+  name: Scalars["String"]
   /** Phone Number of the company if available */
   phone?: Maybe<Scalars["String"]>
   /**
@@ -600,7 +600,7 @@ export type CompanyResolvers<
   industry?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   issueType?: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
   logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   primarySicCode?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
   sector?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
