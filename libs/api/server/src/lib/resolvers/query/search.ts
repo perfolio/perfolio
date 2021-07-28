@@ -61,7 +61,6 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path 
 
     const deduplicationRecord: { [isin: string]: boolean } = {}
     const matches = new Fuse(isinMap.data.matches, {
-      includeScore: true,
       shouldSort: true,
       threshold: 0.2,
       keys: [
