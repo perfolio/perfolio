@@ -13,7 +13,7 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path 
 
   const fragment = args.fragment.toLowerCase()
 
-  const key = new Key({ path, fragment })
+  const key = new Key({ path, fragment, version: 0 })
   const cache = new ApolloCache()
 
   const cachedValue = await cache.get<R>(key)
@@ -61,10 +61,12 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, args, ctx, { path 
     const deduplicationRecord: { [isin: string]: boolean } = {}
     const matches = new Fuse(isinMap.data.matches, {
       shouldSort: true,
-      threshold: 0.01,
+      threshold: 1,
+      ignoreLocation: true,
       keys: ["name", "ticker"],
     })
-      .search(fragment)
+      // see https://fusejs.io/examples.html#extended-search
+      .search(`="${fragment}"`)
       .slice(0, 10)
       .map((r) => r.item)
       .filter(({ isin }) => {
