@@ -31,5 +31,6 @@ module.exports = {
     "<rootDir>/libs/integrations/cookies",
     "<rootDir>/libs/api/client",
     "<rootDir>/libs/queries",
+    "<rootDir>/libs/feature/asset-search",
   ],
 }

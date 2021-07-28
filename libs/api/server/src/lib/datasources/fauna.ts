@@ -55,7 +55,7 @@ export class Fauna extends DataSource {
   public async getIsinMap() {
     return await db().isinMap.get()
   }
-  public async updateIsinMap(isinMap: IsinMap) {
+  public async updateIsinMap(isinMap: IsinMap): Promise<IsinMap> {
     return await db().isinMap.update(isinMap.id, isinMap.data)
   }
 }
