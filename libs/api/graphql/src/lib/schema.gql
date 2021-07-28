@@ -176,7 +176,7 @@ type Company {
   """
   Name of the company
   """
-  name: String
+  name: String!
 
   """
   Phone Number of the company if available

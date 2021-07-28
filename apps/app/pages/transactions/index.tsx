@@ -6,7 +6,11 @@ import { Stock, useDeleteTransactionMutation } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
-import { Transaction, useGetCompanyQuery, useGetTransactionsQuery } from "@perfolio/api/graphql"
+import {
+  Transaction,
+  useGetCompanyFromIsinQuery,
+  useGetTransactionsQuery,
+} from "@perfolio/api/graphql"
 import { useUser } from "@clerk/clerk-react"
 export interface TransactionItemProps {
   transaction: Transaction
@@ -14,10 +18,11 @@ export interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
-  const { data } = useGetCompanyQuery({
-    variables: { ticker: transaction.asset.id },
+  const { data } = useGetCompanyFromIsinQuery({
+    variables: { isin: transaction.asset.id },
   })
-  const company = data?.getCompany
+  const company = data?.getCompanyFromIsin
+  console.log({ company })
   const [deleteTransaction] = useDeleteTransactionMutation()
 
   return (
@@ -43,13 +48,15 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
         )}
       >
         <div className="flex flex-grow gap-4">
-          <Description title={company?.name}>
-            {`You ${transaction.volume > 0 ? "bought" : "sold"} ${Math.abs(
-              transaction.volume,
-            ).toFixed(2)} share${transaction.volume === 1 ? "" : "s"} of ${
-              transaction.asset.id
-            } at $${transaction.value.toFixed(2)} per share`}
-          </Description>
+          {company ? (
+            <Description title={company.name}>
+              {`You ${transaction.volume > 0 ? "bought" : "sold"} ${Math.abs(
+                transaction.volume,
+              ).toFixed(2)} share${transaction.volume === 1 ? "" : "s"} of ${
+                company.ticker
+              } at $${transaction.value.toFixed(2)} per share`}
+            </Description>
+          ) : null}
         </div>
         <div className="flex-shrink-0">
           <AsyncButton
