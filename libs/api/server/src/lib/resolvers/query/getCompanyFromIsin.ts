@@ -17,8 +17,7 @@ export const getCompanyFromIsin: ResolverFn<
     return cachedValue
   }
 
-  const isinMap = await ctx.dataSources.iex.getIsinMapping({ isin })
-  const ticker = isinMap.find((i) => !i.symbol.includes("-"))?.symbol
+  const ticker = await ctx.dataSources.openFigi.getTickerFromIsin(isin)
   if (!ticker) {
     throw new Error(`No main ticker found for isin: ${isin}`)
   }
