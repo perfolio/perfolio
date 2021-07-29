@@ -1,10 +1,7 @@
-import { useGetPortfolioHistoryQuery, ValueAndQuantityAtTime } from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
-
+import { ValueAndQuantityAtTime } from "@perfolio/api/graphql"
+import { usePortfolioHistory } from "./usePortfolioHistory"
 export const usePortfolio = () => {
-  const user = useUser()
-  const { data, ...meta } = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
-  const history = data?.getPortfolioHistory ?? []
+  const { portfolioHistory, ...meta } = usePortfolioHistory()
 
   const getLastValid = (history: ValueAndQuantityAtTime[]): { quantity: number; value: number } => {
     const sorted = [...history].sort((a, b) => b.time - a.time)
@@ -16,7 +13,7 @@ export const usePortfolio = () => {
     }
     throw new Error("Nothing found")
   }
-  const portfolio = history.map((h) => {
+  let portfolio = (portfolioHistory ?? []).map((h) => {
     return {
       asset: {
         company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
@@ -32,7 +29,7 @@ export const usePortfolio = () => {
    * If this step is omitted we would display symbols with quantity = 0 and all
    * derived values are nonsense.
    */
-  Object.values(portfolio).filter(({ value }) => value > 0)
+  portfolio = Object.values(portfolio).filter(({ value }) => value > 0)
 
   return { portfolio, ...meta }
 }

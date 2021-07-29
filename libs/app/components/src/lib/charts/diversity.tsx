@@ -3,8 +3,8 @@ import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import { useGetPortfolioHistoryQuery, ValueAndQuantityAtTime } from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
+import { ValueAndQuantityAtTime } from "@perfolio/api/graphql"
+import { usePortfolioHistory } from "@perfolio/hooks"
 
 const COLORS = [
   "#D7DDFC",
@@ -18,8 +18,7 @@ const COLORS = [
   "#0A1060",
 ].sort(() => Math.random() - 0.5)
 export const DiversificationChart: React.FC = (): JSX.Element => {
-  const user = useUser()
-  const portfolioResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
+  const { portfolioHistory } = usePortfolioHistory()
   const portfolio = React.useMemo(() => {
     const getLastValid = (
       history: ValueAndQuantityAtTime[],
@@ -34,7 +33,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       throw new Error("Nothing found")
     }
 
-    return portfolioResponse.data?.getPortfolioHistory?.map((h) => {
+    return portfolioHistory?.map((h) => {
       return {
         asset: {
           company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
@@ -43,7 +42,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         ...getLastValid(h.history),
       }
     })
-  }, [portfolioResponse.data])
+  }, [portfolioHistory])
 
   /**
    * Aggregate by sector
