@@ -13,23 +13,16 @@ export const usePortfolio = () => {
     }
     throw new Error("Nothing found")
   }
-  let portfolio = (portfolioHistory ?? []).map((h) => {
+
+  const portfolio = portfolioHistory?.map((h) => {
     return {
       asset: {
-        company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
+        company: "company" in h.asset ? h.asset.company : undefined,
         id: h.asset.id,
       },
       ...getLastValid(h.history),
     }
   })
-
-  /**
-   * Remove all assets that the user has sold completely
-   *
-   * If this step is omitted we would display symbols with quantity = 0 and all
-   * derived values are nonsense.
-   */
-  portfolio = Object.values(portfolio).filter(({ value }) => value > 0)
 
   return { portfolio, ...meta }
 }

@@ -15,7 +15,6 @@ export function client(token?: string): Sdk {
       graphqlClient.setHeader("Authorization", token)
     }
     const res = await graphqlClient.request(doc, vars)
-    console.log({ res })
 
     if (res.errors) {
       throw new GraphqlError(res.errors.map((e: { message: string }) => e.message))
