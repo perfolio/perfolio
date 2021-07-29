@@ -9,12 +9,9 @@ import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
-import {
-  useGetUserSettingsQuery,
-  useCreateTransactionMutation,
-  useGetTransactionsQuery,
-  Asset,
-} from "@perfolio/api/graphql"
+import { Asset } from "@perfolio/api/graphql"
+
+import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useUser } from "@clerk/clerk-react"
 // const Suggestion: React.FC<{
 //   tx: Transaction
@@ -81,12 +78,11 @@ const NewTransactionPage: NextPage = () => {
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
-  const [createTransaction] = useCreateTransactionMutation()
-  const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
+  const createTransaction = useCreateTransaction()
+  const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Asset> = {}
-  const transactions = transactionsResponse.data?.getTransactions ?? []
 
-  ;[...transactions]
+  ;(transactions ?? [])
     .sort((a, b) => b.executedAt - a.executedAt)
     .forEach((tx) => {
       if (!(tx.asset.id in uniqueAssets)) {
@@ -95,8 +91,7 @@ const NewTransactionPage: NextPage = () => {
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const settings = data?.getUserSettings
+  const { settings } = useUserSettings()
   return (
     <AppLayout
       sidebar={
@@ -168,7 +163,7 @@ const NewTransactionPage: NextPage = () => {
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
                           assetId: isin,
                         }
-                        await createTransaction({ variables: { transaction } }).catch((err) => {
+                        await createTransaction.mutateAsync({ transaction }).catch((err) => {
                           setFormError(
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )

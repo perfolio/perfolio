@@ -2,9 +2,8 @@ import React, { useMemo } from "react"
 import { AreaChart } from "@perfolio/ui/charts"
 import { Time } from "@perfolio/util/time"
 import { AssetsOverTime, toTimeseries, rebalance } from "@perfolio/feature/finance/returns"
-import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
+import { usePortfolioHistory } from "@perfolio/hooks"
 import { format } from "@perfolio/util/numbers"
-import { useUser } from "@clerk/clerk-react"
 
 type Data = {
   time: string
@@ -48,18 +47,15 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   aggregate = "Absolute",
   range,
 }): JSX.Element => {
-  const user = useUser()
-  const historyResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
-  const history = historyResponse.data?.getPortfolioHistory
-  const isLoading = historyResponse.loading
+  const { portfolioHistory, isLoading } = usePortfolioHistory()
   /**
    * Filter by range and return either absolute or relative history
    */
   const data = useMemo<Data>(() => {
-    if (!history) {
+    if (!portfolioHistory) {
       return []
     }
-    const series = toTimeseries(history)
+    const series = toTimeseries(portfolioHistory)
     const selectedHistory: AssetsOverTime = {}
     Object.keys(series).forEach((time) => {
       if (Number(time) * 1000 >= range) {
@@ -68,7 +64,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
     })
 
     return aggregate === "Absolute" ? plotAbsolute(selectedHistory) : plotRelative(selectedHistory)
-  }, [aggregate, history, range])
+  }, [aggregate, portfolioHistory, range])
 
   return (
     <div className="w-full h-56">

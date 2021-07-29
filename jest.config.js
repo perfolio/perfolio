@@ -30,7 +30,7 @@ module.exports = {
     "<rootDir>/libs/api/graphql",
     "<rootDir>/libs/integrations/cookies",
     "<rootDir>/libs/api/client",
-    "<rootDir>/libs/queries",
+    "<rootDir>/libs/hooks/queries",
     "<rootDir>/libs/feature/asset-search",
   ],
 }

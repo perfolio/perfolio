@@ -1,13 +1,10 @@
-import {
-  useGetTransactionsQuery,
-  Transaction,
-  useGetCompanyFromIsinQuery,
-} from "@perfolio/api/graphql"
+import { Transaction } from "@perfolio/api/graphql"
 import { Time } from "@perfolio/util/time"
 import React from "react"
 import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
-import { useUser } from "@clerk/clerk-react"
+import { useTransactions, useCompanyFromIsin } from "@perfolio/hooks"
+
 interface TransactionActivityItemProps {
   transaction: Omit<Transaction, "userId">
   isFirst?: boolean
@@ -17,17 +14,16 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
-  const { data, loading } = useGetCompanyFromIsinQuery({
-    variables: { isin: transaction.asset.id },
+  const { company, isLoading } = useCompanyFromIsin({
+    isin: transaction.asset.id,
   })
-  const company = data?.getCompanyFromIsin
   return (
     <li
       className={cn(" py-4", {
         "border-t border-gray-100": !isFirst,
       })}
     >
-      {loading || !company ? (
+      {isLoading || !company ? (
         <Loading />
       ) : (
         <>
@@ -49,9 +45,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const user = useUser()
-  const { data } = useGetTransactionsQuery({ variables: { userId: user.id } })
-  const transactions = data?.getTransactions
+  const { transactions } = useTransactions()
   const last5Transactions = transactions
     ? [...transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []

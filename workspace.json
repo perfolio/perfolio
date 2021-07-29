@@ -397,6 +397,27 @@
         }
       }
     },
+    "hooks": {
+      "root": "libs/hooks",
+      "sourceRoot": "libs/hooks/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/hooks/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/hooks"],
+          "options": {
+            "jestConfig": "libs/hooks/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-bankofengland": {
       "root": "libs/integrations/bankofengland",
       "sourceRoot": "libs/integrations/bankofengland/src",
@@ -622,27 +643,6 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
-    "queries": {
-      "root": "libs/queries",
-      "sourceRoot": "libs/queries/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/queries"],
-          "options": {
-            "jestConfig": "libs/queries/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

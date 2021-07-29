@@ -5,12 +5,9 @@ import { Button } from "@perfolio/ui/components"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import {
-  useGetUserSettingsQuery,
-  useGetExchangesQuery,
-  useCreateUserSettingsMutation,
-  Exchange,
-} from "@perfolio/api/graphql"
+import { Exchange } from "@perfolio/api/graphql"
+
+import { useExchanges, useUserSettings, useCreateUserSettings } from "@perfolio/hooks"
 import { getCurrency } from "@perfolio/util/currency"
 import { useUser } from "@clerk/clerk-react"
 /**
@@ -25,16 +22,14 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
 
   const user = useUser()
 
-  const { data: dataExchanges } = useGetExchangesQuery()
-  const exchanges = dataExchanges?.getExchanges
+  const { exchanges } = useExchanges()
+  console.log({ exchanges })
 
-  const { data: dataUserSettings, loading: userSettingsLoading } = useGetUserSettingsQuery({
-    variables: { userId: user.id },
-  })
-  const userSettings = dataUserSettings?.getUserSettings
-  const [createSettings] = useCreateUserSettingsMutation()
+  const { settings, isLoading: userSettingsLoading } = useUserSettings()
+
+  const createUserSettings = useCreateUserSettings()
   const requiresOnboarding =
-    !userSettingsLoading && (!userSettings || Object.keys(userSettings).length === 0)
+    !userSettingsLoading && (!settings || Object.keys(settings).length === 0)
 
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({
@@ -47,13 +42,11 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     if (!defaultExchange) {
       throw new Error(`No exchange found with name: ${values.defaultExchange}`)
     }
-    await createSettings({
-      variables: {
-        userSettings: {
-          userId: user.id,
-          defaultCurrency: values.defaultCurrency,
-          defaultExchange: defaultExchange.mic,
-        },
+    await createUserSettings.mutateAsync({
+      userSettings: {
+        userId: user.id,
+        defaultCurrency: values.defaultCurrency,
+        defaultExchange: defaultExchange.mic,
       },
     })
   }
@@ -154,7 +147,6 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
                 type="submit"
                 disabled={ctx.formState.isSubmitting}
               >
-                {" "}
                 {step < steps.length - 1 ? "Next" : "Save"}
               </Button>
             </Card.Footer.Actions>
