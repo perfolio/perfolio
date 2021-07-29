@@ -148,7 +148,7 @@ const App: NextPage = () => {
                     label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
                     color={
                       (aggregation === "Relative" && relativeMean >= 0) ||
-                      (aggregation === "Absolute" && absoluteMean > 0)
+                      (aggregation === "Absolute" && absoluteMean >= 0)
                         ? "text-success"
                         : "text-error"
                     }
@@ -173,7 +173,8 @@ const App: NextPage = () => {
                   <KPI
                     label="Change"
                     color={
-                      aggregation === "Relative" && relativeChange >= 0
+                      (aggregation === "Relative" && relativeChange >= 0) ||
+                      (aggregation === "Absolute" && absoluteChange >= 0)
                         ? "text-success"
                         : "text-error"
                     }
