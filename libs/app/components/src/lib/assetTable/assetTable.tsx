@@ -2,14 +2,12 @@ import React, { useMemo } from "react"
 // import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
 import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import { ValueAndQuantityAtTime } from "@perfolio/api/graphql"
-import { useTransactions, usePortfolioHistory } from "@perfolio/hooks"
+import { useTransactions, usePortfolio } from "@perfolio/hooks"
 export interface AssetTableProps {
   aggregation: "Absolute" | "Relative"
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const { portfolioHistory } = usePortfolioHistory()
   const { transactions } = useTransactions()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
@@ -37,29 +35,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
     return costPerShare
   }, [transactions])
 
-  const portfolio = React.useMemo(() => {
-    const getLastValid = (
-      history: ValueAndQuantityAtTime[],
-    ): { quantity: number; value: number } => {
-      const sorted = [...history].sort((a, b) => b.time - a.time)
-
-      for (const day of sorted) {
-        if (day.value > 0) {
-          return day
-        }
-      }
-      throw new Error("Nothing found")
-    }
-    return portfolioHistory?.map((h) => {
-      return {
-        asset: {
-          company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
-          id: h.asset.id,
-        },
-        ...getLastValid(h.history),
-      }
-    })
-  }, [portfolioHistory])
+  const { portfolio } = usePortfolio()
 
   return (
     <Table<"asset" | "quantity" | "costPerShare" | "pricePerShare" | "change">
@@ -95,7 +71,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           align: "text-right",
         },
       ]}
-      data={[...(portfolio ?? [])]
+      data={(portfolio ?? [])
         /**
          * Sort by total value descending
          * The largest position is at the top of the table
