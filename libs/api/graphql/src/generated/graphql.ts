@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql"
-import { gql } from "@apollo/client"
-import * as Apollo from "@apollo/client"
+import { DocumentNode } from "graphql"
+import gql from "graphql-tag"
 export type Maybe<T> = T | null | undefined
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
@@ -8,7 +8,6 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
   { [P in K]-?: NonNullable<T[P]> }
-const defaultOptions = {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -1021,46 +1020,6 @@ export const CreateTransactionDocument = gql`
     }
   }
 `
-export type CreateTransactionMutationFn = Apollo.MutationFunction<
-  CreateTransactionMutation,
-  CreateTransactionMutationVariables
->
-
-/**
- * __useCreateTransactionMutation__
- *
- * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
- *   variables: {
- *      transaction: // value for 'transaction'
- *   },
- * });
- */
-export function useCreateTransactionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateTransactionMutation,
-    CreateTransactionMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(
-    CreateTransactionDocument,
-    options,
-  )
-}
-export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>
-export type CreateTransactionMutationResult = Apollo.MutationResult<CreateTransactionMutation>
-export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
-  CreateTransactionMutation,
-  CreateTransactionMutationVariables
->
 export const CreateUserSettingsDocument = gql`
   mutation CreateUserSettings($userSettings: CreateUserSettings!) {
     createUserSettings(userSettings: $userSettings) {
@@ -1071,139 +1030,16 @@ export const CreateUserSettingsDocument = gql`
     }
   }
 `
-export type CreateUserSettingsMutationFn = Apollo.MutationFunction<
-  CreateUserSettingsMutation,
-  CreateUserSettingsMutationVariables
->
-
-/**
- * __useCreateUserSettingsMutation__
- *
- * To run a mutation, you first call `useCreateUserSettingsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUserSettingsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUserSettingsMutation, { data, loading, error }] = useCreateUserSettingsMutation({
- *   variables: {
- *      userSettings: // value for 'userSettings'
- *   },
- * });
- */
-export function useCreateUserSettingsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateUserSettingsMutation,
-    CreateUserSettingsMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<CreateUserSettingsMutation, CreateUserSettingsMutationVariables>(
-    CreateUserSettingsDocument,
-    options,
-  )
-}
-export type CreateUserSettingsMutationHookResult = ReturnType<typeof useCreateUserSettingsMutation>
-export type CreateUserSettingsMutationResult = Apollo.MutationResult<CreateUserSettingsMutation>
-export type CreateUserSettingsMutationOptions = Apollo.BaseMutationOptions<
-  CreateUserSettingsMutation,
-  CreateUserSettingsMutationVariables
->
 export const DeleteTransactionDocument = gql`
   mutation DeleteTransaction($transactionId: ID!) {
     deleteTransaction(transactionId: $transactionId)
   }
 `
-export type DeleteTransactionMutationFn = Apollo.MutationFunction<
-  DeleteTransactionMutation,
-  DeleteTransactionMutationVariables
->
-
-/**
- * __useDeleteTransactionMutation__
- *
- * To run a mutation, you first call `useDeleteTransactionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTransactionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTransactionMutation, { data, loading, error }] = useDeleteTransactionMutation({
- *   variables: {
- *      transactionId: // value for 'transactionId'
- *   },
- * });
- */
-export function useDeleteTransactionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteTransactionMutation,
-    DeleteTransactionMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<DeleteTransactionMutation, DeleteTransactionMutationVariables>(
-    DeleteTransactionDocument,
-    options,
-  )
-}
-export type DeleteTransactionMutationHookResult = ReturnType<typeof useDeleteTransactionMutation>
-export type DeleteTransactionMutationResult = Apollo.MutationResult<DeleteTransactionMutation>
-export type DeleteTransactionMutationOptions = Apollo.BaseMutationOptions<
-  DeleteTransactionMutation,
-  DeleteTransactionMutationVariables
->
 export const SubscribeToNewsletterMutationDocument = gql`
   mutation SubscribeToNewsletterMutation($email: String!) {
     subscribeToNewsletter(email: $email)
   }
 `
-export type SubscribeToNewsletterMutationMutationFn = Apollo.MutationFunction<
-  SubscribeToNewsletterMutationMutation,
-  SubscribeToNewsletterMutationMutationVariables
->
-
-/**
- * __useSubscribeToNewsletterMutationMutation__
- *
- * To run a mutation, you first call `useSubscribeToNewsletterMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToNewsletterMutationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [subscribeToNewsletterMutationMutation, { data, loading, error }] = useSubscribeToNewsletterMutationMutation({
- *   variables: {
- *      email: // value for 'email'
- *   },
- * });
- */
-export function useSubscribeToNewsletterMutationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SubscribeToNewsletterMutationMutation,
-    SubscribeToNewsletterMutationMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    SubscribeToNewsletterMutationMutation,
-    SubscribeToNewsletterMutationMutationVariables
-  >(SubscribeToNewsletterMutationDocument, options)
-}
-export type SubscribeToNewsletterMutationMutationHookResult = ReturnType<
-  typeof useSubscribeToNewsletterMutationMutation
->
-export type SubscribeToNewsletterMutationMutationResult =
-  Apollo.MutationResult<SubscribeToNewsletterMutationMutation>
-export type SubscribeToNewsletterMutationMutationOptions = Apollo.BaseMutationOptions<
-  SubscribeToNewsletterMutationMutation,
-  SubscribeToNewsletterMutationMutationVariables
->
 export const UpdateUserSettingsDocument = gql`
   mutation updateUserSettings($userSettings: UpdateUserSettings!) {
     updateUserSettings(userSettings: $userSettings) {
@@ -1214,46 +1050,6 @@ export const UpdateUserSettingsDocument = gql`
     }
   }
 `
-export type UpdateUserSettingsMutationFn = Apollo.MutationFunction<
-  UpdateUserSettingsMutation,
-  UpdateUserSettingsMutationVariables
->
-
-/**
- * __useUpdateUserSettingsMutation__
- *
- * To run a mutation, you first call `useUpdateUserSettingsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserSettingsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserSettingsMutation, { data, loading, error }] = useUpdateUserSettingsMutation({
- *   variables: {
- *      userSettings: // value for 'userSettings'
- *   },
- * });
- */
-export function useUpdateUserSettingsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateUserSettingsMutation,
-    UpdateUserSettingsMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>(
-    UpdateUserSettingsDocument,
-    options,
-  )
-}
-export type UpdateUserSettingsMutationHookResult = ReturnType<typeof useUpdateUserSettingsMutation>
-export type UpdateUserSettingsMutationResult = Apollo.MutationResult<UpdateUserSettingsMutation>
-export type UpdateUserSettingsMutationOptions = Apollo.BaseMutationOptions<
-  UpdateUserSettingsMutation,
-  UpdateUserSettingsMutationVariables
->
 export const GetCompanyDocument = gql`
   query getCompany($ticker: String!) {
     getCompany(ticker: $ticker) {
@@ -1265,38 +1061,6 @@ export const GetCompanyDocument = gql`
     }
   }
 `
-
-/**
- * __useGetCompanyQuery__
- *
- * To run a query within a React component, call `useGetCompanyQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCompanyQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCompanyQuery({
- *   variables: {
- *      ticker: // value for 'ticker'
- *   },
- * });
- */
-export function useGetCompanyQuery(
-  baseOptions: Apollo.QueryHookOptions<GetCompanyQuery, GetCompanyQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCompanyQuery, GetCompanyQueryVariables>(GetCompanyDocument, options)
-}
-export function useGetCompanyLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCompanyQuery, GetCompanyQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCompanyQuery, GetCompanyQueryVariables>(GetCompanyDocument, options)
-}
-export type GetCompanyQueryHookResult = ReturnType<typeof useGetCompanyQuery>
-export type GetCompanyLazyQueryHookResult = ReturnType<typeof useGetCompanyLazyQuery>
-export type GetCompanyQueryResult = Apollo.QueryResult<GetCompanyQuery, GetCompanyQueryVariables>
 export const GetCompanyFromIsinDocument = gql`
   query getCompanyFromIsin($isin: ID!) {
     getCompanyFromIsin(isin: $isin) {
@@ -1308,52 +1072,6 @@ export const GetCompanyFromIsinDocument = gql`
     }
   }
 `
-
-/**
- * __useGetCompanyFromIsinQuery__
- *
- * To run a query within a React component, call `useGetCompanyFromIsinQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCompanyFromIsinQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCompanyFromIsinQuery({
- *   variables: {
- *      isin: // value for 'isin'
- *   },
- * });
- */
-export function useGetCompanyFromIsinQuery(
-  baseOptions: Apollo.QueryHookOptions<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>(
-    GetCompanyFromIsinDocument,
-    options,
-  )
-}
-export function useGetCompanyFromIsinLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCompanyFromIsinQuery,
-    GetCompanyFromIsinQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>(
-    GetCompanyFromIsinDocument,
-    options,
-  )
-}
-export type GetCompanyFromIsinQueryHookResult = ReturnType<typeof useGetCompanyFromIsinQuery>
-export type GetCompanyFromIsinLazyQueryHookResult = ReturnType<
-  typeof useGetCompanyFromIsinLazyQuery
->
-export type GetCompanyFromIsinQueryResult = Apollo.QueryResult<
-  GetCompanyFromIsinQuery,
-  GetCompanyFromIsinQueryVariables
->
 export const GetExchangesDocument = gql`
   query getExchanges {
     getExchanges {
@@ -1365,46 +1083,6 @@ export const GetExchangesDocument = gql`
     }
   }
 `
-
-/**
- * __useGetExchangesQuery__
- *
- * To run a query within a React component, call `useGetExchangesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetExchangesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetExchangesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetExchangesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetExchangesQuery, GetExchangesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetExchangesQuery, GetExchangesQueryVariables>(
-    GetExchangesDocument,
-    options,
-  )
-}
-export function useGetExchangesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetExchangesQuery, GetExchangesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetExchangesQuery, GetExchangesQueryVariables>(
-    GetExchangesDocument,
-    options,
-  )
-}
-export type GetExchangesQueryHookResult = ReturnType<typeof useGetExchangesQuery>
-export type GetExchangesLazyQueryHookResult = ReturnType<typeof useGetExchangesLazyQuery>
-export type GetExchangesQueryResult = Apollo.QueryResult<
-  GetExchangesQuery,
-  GetExchangesQueryVariables
->
 export const GetPortfolioHistoryDocument = gql`
   query getPortfolioHistory($userId: String!) {
     getPortfolioHistory(userId: $userId) {
@@ -1434,52 +1112,6 @@ export const GetPortfolioHistoryDocument = gql`
     }
   }
 `
-
-/**
- * __useGetPortfolioHistoryQuery__
- *
- * To run a query within a React component, call `useGetPortfolioHistoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPortfolioHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPortfolioHistoryQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useGetPortfolioHistoryQuery(
-  baseOptions: Apollo.QueryHookOptions<GetPortfolioHistoryQuery, GetPortfolioHistoryQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetPortfolioHistoryQuery, GetPortfolioHistoryQueryVariables>(
-    GetPortfolioHistoryDocument,
-    options,
-  )
-}
-export function useGetPortfolioHistoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetPortfolioHistoryQuery,
-    GetPortfolioHistoryQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetPortfolioHistoryQuery, GetPortfolioHistoryQueryVariables>(
-    GetPortfolioHistoryDocument,
-    options,
-  )
-}
-export type GetPortfolioHistoryQueryHookResult = ReturnType<typeof useGetPortfolioHistoryQuery>
-export type GetPortfolioHistoryLazyQueryHookResult = ReturnType<
-  typeof useGetPortfolioHistoryLazyQuery
->
-export type GetPortfolioHistoryQueryResult = Apollo.QueryResult<
-  GetPortfolioHistoryQuery,
-  GetPortfolioHistoryQueryVariables
->
 export const GetTransactionsDocument = gql`
   query getTransactions($userId: ID!) {
     getTransactions(userId: $userId) {
@@ -1500,47 +1132,6 @@ export const GetTransactionsDocument = gql`
     }
   }
 `
-
-/**
- * __useGetTransactionsQuery__
- *
- * To run a query within a React component, call `useGetTransactionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTransactionsQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useGetTransactionsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(
-    GetTransactionsDocument,
-    options,
-  )
-}
-export function useGetTransactionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(
-    GetTransactionsDocument,
-    options,
-  )
-}
-export type GetTransactionsQueryHookResult = ReturnType<typeof useGetTransactionsQuery>
-export type GetTransactionsLazyQueryHookResult = ReturnType<typeof useGetTransactionsLazyQuery>
-export type GetTransactionsQueryResult = Apollo.QueryResult<
-  GetTransactionsQuery,
-  GetTransactionsQueryVariables
->
 export const GetUserSettingsDocument = gql`
   query getUserSettings($userId: ID!) {
     getUserSettings(userId: $userId) {
@@ -1555,47 +1146,6 @@ export const GetUserSettingsDocument = gql`
     }
   }
 `
-
-/**
- * __useGetUserSettingsQuery__
- *
- * To run a query within a React component, call `useGetUserSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserSettingsQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useGetUserSettingsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetUserSettingsQuery, GetUserSettingsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetUserSettingsQuery, GetUserSettingsQueryVariables>(
-    GetUserSettingsDocument,
-    options,
-  )
-}
-export function useGetUserSettingsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetUserSettingsQuery, GetUserSettingsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetUserSettingsQuery, GetUserSettingsQueryVariables>(
-    GetUserSettingsDocument,
-    options,
-  )
-}
-export type GetUserSettingsQueryHookResult = ReturnType<typeof useGetUserSettingsQuery>
-export type GetUserSettingsLazyQueryHookResult = ReturnType<typeof useGetUserSettingsLazyQuery>
-export type GetUserSettingsQueryResult = Apollo.QueryResult<
-  GetUserSettingsQuery,
-  GetUserSettingsQueryVariables
->
 export const SearchDocument = gql`
   query search($fragment: String!) {
     search(fragment: $fragment) {
@@ -1608,35 +1158,115 @@ export const SearchDocument = gql`
     }
   }
 `
-
-/**
- * __useSearchQuery__
- *
- * To run a query within a React component, call `useSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchQuery({
- *   variables: {
- *      fragment: // value for 'fragment'
- *   },
- * });
- */
-export function useSearchQuery(
-  baseOptions: Apollo.QueryHookOptions<SearchQuery, SearchQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options)
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
+export function getSdk<C>(requester: Requester<C>) {
+  return {
+    CreateTransaction(
+      variables: CreateTransactionMutationVariables,
+      options?: C,
+    ): Promise<CreateTransactionMutation> {
+      return requester<CreateTransactionMutation, CreateTransactionMutationVariables>(
+        CreateTransactionDocument,
+        variables,
+        options,
+      )
+    },
+    CreateUserSettings(
+      variables: CreateUserSettingsMutationVariables,
+      options?: C,
+    ): Promise<CreateUserSettingsMutation> {
+      return requester<CreateUserSettingsMutation, CreateUserSettingsMutationVariables>(
+        CreateUserSettingsDocument,
+        variables,
+        options,
+      )
+    },
+    DeleteTransaction(
+      variables: DeleteTransactionMutationVariables,
+      options?: C,
+    ): Promise<DeleteTransactionMutation> {
+      return requester<DeleteTransactionMutation, DeleteTransactionMutationVariables>(
+        DeleteTransactionDocument,
+        variables,
+        options,
+      )
+    },
+    SubscribeToNewsletterMutation(
+      variables: SubscribeToNewsletterMutationMutationVariables,
+      options?: C,
+    ): Promise<SubscribeToNewsletterMutationMutation> {
+      return requester<
+        SubscribeToNewsletterMutationMutation,
+        SubscribeToNewsletterMutationMutationVariables
+      >(SubscribeToNewsletterMutationDocument, variables, options)
+    },
+    updateUserSettings(
+      variables: UpdateUserSettingsMutationVariables,
+      options?: C,
+    ): Promise<UpdateUserSettingsMutation> {
+      return requester<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>(
+        UpdateUserSettingsDocument,
+        variables,
+        options,
+      )
+    },
+    getCompany(variables: GetCompanyQueryVariables, options?: C): Promise<GetCompanyQuery> {
+      return requester<GetCompanyQuery, GetCompanyQueryVariables>(
+        GetCompanyDocument,
+        variables,
+        options,
+      )
+    },
+    getCompanyFromIsin(
+      variables: GetCompanyFromIsinQueryVariables,
+      options?: C,
+    ): Promise<GetCompanyFromIsinQuery> {
+      return requester<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>(
+        GetCompanyFromIsinDocument,
+        variables,
+        options,
+      )
+    },
+    getExchanges(variables?: GetExchangesQueryVariables, options?: C): Promise<GetExchangesQuery> {
+      return requester<GetExchangesQuery, GetExchangesQueryVariables>(
+        GetExchangesDocument,
+        variables,
+        options,
+      )
+    },
+    getPortfolioHistory(
+      variables: GetPortfolioHistoryQueryVariables,
+      options?: C,
+    ): Promise<GetPortfolioHistoryQuery> {
+      return requester<GetPortfolioHistoryQuery, GetPortfolioHistoryQueryVariables>(
+        GetPortfolioHistoryDocument,
+        variables,
+        options,
+      )
+    },
+    getTransactions(
+      variables: GetTransactionsQueryVariables,
+      options?: C,
+    ): Promise<GetTransactionsQuery> {
+      return requester<GetTransactionsQuery, GetTransactionsQueryVariables>(
+        GetTransactionsDocument,
+        variables,
+        options,
+      )
+    },
+    getUserSettings(
+      variables: GetUserSettingsQueryVariables,
+      options?: C,
+    ): Promise<GetUserSettingsQuery> {
+      return requester<GetUserSettingsQuery, GetUserSettingsQueryVariables>(
+        GetUserSettingsDocument,
+        variables,
+        options,
+      )
+    },
+    search(variables: SearchQueryVariables, options?: C): Promise<SearchQuery> {
+      return requester<SearchQuery, SearchQueryVariables>(SearchDocument, variables, options)
+    },
+  }
 }
-export function useSearchLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options)
-}
-export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>
-export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>
-export type SearchQueryResult = Apollo.QueryResult<SearchQuery, SearchQueryVariables>
+export type Sdk = ReturnType<typeof getSdk>

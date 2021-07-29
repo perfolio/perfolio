@@ -12,7 +12,7 @@ import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import "tailwindcss/tailwind.css"
-import { Provider as ApolloProvider } from "@perfolio/api/client"
+import { JWTProvider } from "@perfolio/api/client"
 import { useRouter } from "next/router"
 
 LogRocket.init("perfolio/app")
@@ -53,12 +53,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <IdProvider>
         <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
           <ClerkLoaded>
-            <ApolloProvider>
-              {publicPages.includes(router.pathname) ? (
-                <Component {...pageProps} />
-              ) : (
-                <>
-                  <SignedIn>
+            {publicPages.includes(router.pathname) ? (
+              <Component {...pageProps} />
+            ) : (
+              <>
+                <SignedIn>
+                  <JWTProvider>
                     <QueryClientProvider client={new QueryClient()}>
                       <OnboardingModal />
                       <div
@@ -69,13 +69,13 @@ function MyApp({ Component, pageProps }: AppProps) {
                         <Component {...pageProps} />
                       </div>
                     </QueryClientProvider>
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              )}
-            </ApolloProvider>
+                  </JWTProvider>
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            )}
           </ClerkLoaded>
         </ClerkProvider>
       </IdProvider>
