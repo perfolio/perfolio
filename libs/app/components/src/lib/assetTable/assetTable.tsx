@@ -87,6 +87,12 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               change: <Cell.Loading />,
             }
           }
+
+          const change =
+            aggregation === "Absolute"
+              ? (holding.value - costPerShare[holding.asset.id]) * holding.quantity
+              : holding.value / costPerShare[holding.asset.id] - 1
+
           return {
             asset: (
               <Cell.Profile
@@ -105,18 +111,18 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               <Cell.Text align="text-right">{format(holding.value, { suffix: "€" })}</Cell.Text>
             ),
             change: (
-              <Cell.Text align="text-right">
-                {aggregation === "Absolute"
-                  ? format((holding.value - costPerShare[holding.asset.id]) * holding.quantity, {
-                      suffix: "€",
-                      sign: true,
-                    })
-                  : format(holding.value / costPerShare[holding.asset.id] - 1, {
-                      percent: true,
-                      suffix: "%",
-                      sign: true,
-                    })}
-              </Cell.Text>
+              <Cell.Tag
+                align="text-right"
+                textColor={change > 0 ? "text-success-dark" : "text-error-dark"}
+                bgColor={change > 0 ? "bg-success-light" : "bg-error-light"}
+              >
+                {format(
+                  change,
+                  aggregation === "Absolute"
+                    ? { suffix: "€", sign: true }
+                    : { percent: true, suffix: "%", sign: true },
+                )}
+              </Cell.Tag>
             ),
           }
         })}
