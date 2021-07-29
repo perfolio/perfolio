@@ -23,14 +23,11 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   const user = useUser()
 
   const { exchanges } = useExchanges()
-  console.log({ exchanges })
 
   const { settings, isLoading: userSettingsLoading } = useUserSettings()
 
   const createUserSettings = useCreateUserSettings()
-  const requiresOnboarding =
-    !userSettingsLoading && (!settings || Object.keys(settings).length === 0)
-
+  const requiresOnboarding = !userSettingsLoading && settings === null
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -96,63 +93,63 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
       ),
     },
   ]
-  if (!requiresOnboarding) {
-    return null
-  }
-  return (
-    <Modal trigger={null}>
-      <Form ctx={ctx} formError={formError} className="lg:w-1/3">
-        <Card>
-          <Card.Header>
-            <Card.Header.Title title="Welcome to Perfolio" />
-          </Card.Header>
-          <Card.Content>
-            <Description title={steps[step].title}>{steps[step].description}</Description>
-            <div className="min-w-full mt-8">{steps[step].fields}</div>
-          </Card.Content>
-          <Card.Footer>
-            {step > 0 ? (
+  if (requiresOnboarding) {
+    return (
+      <Modal trigger={null}>
+        <Form ctx={ctx} formError={formError} className="lg:w-1/3">
+          <Card>
+            <Card.Header>
+              <Card.Header.Title title="Welcome to Perfolio" />
+            </Card.Header>
+            <Card.Content>
+              <Description title={steps[step].title}>{steps[step].description}</Description>
+              <div className="min-w-full mt-8">{steps[step].fields}</div>
+            </Card.Content>
+            <Card.Footer>
+              {step > 0 ? (
+                <Card.Footer.Actions>
+                  <Button
+                    onClick={() => setStep(step > 0 ? step - 1 : 0)}
+                    kind="secondary"
+                    size="small"
+                  >
+                    Back
+                  </Button>
+                </Card.Footer.Actions>
+              ) : null}
+              <Card.Footer.Status>
+                <Dots current={step} max={steps.length} />
+              </Card.Footer.Status>
               <Card.Footer.Actions>
                 <Button
-                  onClick={() => setStep(step > 0 ? step - 1 : 0)}
-                  kind="secondary"
+                  loading={submitting}
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  onClick={() => {
+                    if (step === steps.length - 1) {
+                      handleSubmit<z.infer<typeof validation>>(
+                        ctx,
+                        onSubmit,
+                        setSubmitting,
+                        setFormError,
+                      )
+                    } else {
+                      setStep(step + 1)
+                    }
+                  }}
+                  kind={"primary"}
                   size="small"
+                  type="submit"
+                  disabled={ctx.formState.isSubmitting}
                 >
-                  Back
+                  {step < steps.length - 1 ? "Next" : "Save"}
                 </Button>
               </Card.Footer.Actions>
-            ) : null}
-            <Card.Footer.Status>
-              <Dots current={step} max={steps.length} />
-            </Card.Footer.Status>
-            <Card.Footer.Actions>
-              <Button
-                loading={submitting}
-                // eslint-disable-next-line
-                // @ts-ignore
-                onClick={() => {
-                  if (step === steps.length - 1) {
-                    handleSubmit<z.infer<typeof validation>>(
-                      ctx,
-                      onSubmit,
-                      setSubmitting,
-                      setFormError,
-                    )
-                  } else {
-                    setStep(step + 1)
-                  }
-                }}
-                kind={"primary"}
-                size="small"
-                type="submit"
-                disabled={ctx.formState.isSubmitting}
-              >
-                {step < steps.length - 1 ? "Next" : "Save"}
-              </Button>
-            </Card.Footer.Actions>
-          </Card.Footer>
-        </Card>
-      </Form>
-    </Modal>
-  )
+            </Card.Footer>
+          </Card>
+        </Form>
+      </Modal>
+    )
+  }
+  return null
 }

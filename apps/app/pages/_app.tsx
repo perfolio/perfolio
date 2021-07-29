@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
-import { QueryClientProvider, QueryClient } from "react-query"
+import { QueryClientProvider } from "react-query"
+import { PersistendQueryClient } from "@perfolio/app/query-client"
 import {
   ClerkProvider,
   SignedIn,
@@ -59,7 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <>
                 <SignedIn>
                   <JWTProvider>
-                    <QueryClientProvider client={new QueryClient()}>
+                    <QueryClientProvider client={PersistendQueryClient()}>
                       <OnboardingModal />
                       <div
                         className={`${

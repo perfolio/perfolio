@@ -42,6 +42,9 @@
     "app-middleware": {
       "tags": []
     },
+    "app-query-client": {
+      "tags": []
+    },
     "feature-asset-search": {
       "tags": []
     },
