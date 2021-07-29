@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearchQuery } from "@perfolio/api/graphql"
+import { useSearch } from "@perfolio/hooks"
 import { Profile, Avatar, Loading, Description, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
@@ -54,16 +54,13 @@ export function AutoCompleteSelect<Option>({
   /**
    * User search value
    */
-  const [search, setSearch] = useState("")
+  const [fragment, setFragment] = useState("")
 
   /**
    * All matches on our database
    */
-  const { data: searchResult, loading } = useSearchQuery({
-    variables: { fragment: search },
-    skip: search.length === 0,
-  })
-  const options = searchResult?.search ?? []
+  const { search, isLoading } = useSearch({ fragment })
+  const options = search ?? []
   const selected = options.find((o) => o.isin === isin)
 
   return (
@@ -118,9 +115,9 @@ export function AutoCompleteSelect<Option>({
                    * If propagation is not stopped the click will also trigger the div.Button
                    * and the input loses focus.
                    */
-                  value={search}
+                  value={fragment}
                   onChange={(e) => {
-                    setSearch(e.currentTarget.value)
+                    setFragment(e.currentTarget.value)
                     setState(State.Selecting)
                   }}
                 />
@@ -134,7 +131,7 @@ export function AutoCompleteSelect<Option>({
               show={state === State.Selecting}
             >
               <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-xl max-h-60 focus:outline-none">
-                {loading ? (
+                {isLoading ? (
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>

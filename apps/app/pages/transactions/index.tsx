@@ -2,28 +2,23 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { Stock, useDeleteTransactionMutation } from "@perfolio/api/graphql"
+import { Stock } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
-import {
-  Transaction,
-  useGetCompanyFromIsinQuery,
-  useGetTransactionsQuery,
-} from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
+import { Transaction } from "@perfolio/api/graphql"
+import { useDeleteTransaction, useCompanyFromIsin, useTransactions } from "@perfolio/hooks"
 export interface TransactionItemProps {
   transaction: Transaction
   isLast: boolean
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
-  const { data } = useGetCompanyFromIsinQuery({
-    variables: { isin: transaction.asset.id },
+  const { company } = useCompanyFromIsin({
+    isin: transaction.asset.id,
   })
-  const company = data?.getCompanyFromIsin
   console.log({ company })
-  const [deleteTransaction] = useDeleteTransactionMutation()
+  const deleteTransaction = useDeleteTransaction()
 
   return (
     <div className="w-full md:flex">
@@ -63,7 +58,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             kind="secondary"
             size="small"
             onClick={async () => {
-              await deleteTransaction({ variables: { transactionId: transaction.id } })
+              await deleteTransaction.mutateAsync({ transactionId: transaction.id })
             }}
           >
             Delete
@@ -78,9 +73,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
  * / page.
  */
 const TransactionsPage: NextPage = () => {
-  const user = useUser()
-  const { data, loading } = useGetTransactionsQuery({ variables: { userId: user.id } })
-  const transactions = data?.getTransactions
+  const { transactions, isLoading } = useTransactions()
   return (
     <AppLayout
       sidebar={
@@ -94,7 +87,7 @@ const TransactionsPage: NextPage = () => {
           <Main.Header.Title title="My Transactions" />
         </Main.Header>
         <Main.Content>
-          {loading ? (
+          {isLoading ? (
             <Loading />
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">

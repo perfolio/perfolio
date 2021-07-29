@@ -2,23 +2,15 @@ import React, { useMemo } from "react"
 // import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
 import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import {
-  useGetPortfolioHistoryQuery,
-  useGetTransactionsQuery,
-  ValueAndQuantityAtTime,
-} from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
-
+import { ValueAndQuantityAtTime } from "@perfolio/api/graphql"
+import { useTransactions, usePortfolioHistory } from "@perfolio/hooks"
 export interface AssetTableProps {
   aggregation: "Absolute" | "Relative"
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const user = useUser()
-  const portfolioHistoryResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
-  const portfolioHistory = portfolioHistoryResponse.data?.getPortfolioHistory
-  const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
-  const transactions = transactionsResponse.data?.getTransactions
+  const { portfolioHistory } = usePortfolioHistory()
+  const { transactions } = useTransactions()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}

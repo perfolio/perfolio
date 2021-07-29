@@ -7,7 +7,7 @@ generates:
       - typescript
       - typescript-resolvers
       - typescript-operations
-      - typescript-react-apollo
+      - typescript-generic-sdk
     config:
       # Required for apollo server
       # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server

@@ -8,11 +8,7 @@ import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
-import {
-  useGetUserSettingsQuery,
-  useGetExchangesQuery,
-  useUpdateUserSettingsMutation,
-} from "@perfolio/api/graphql"
+import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { useUser } from "@clerk/clerk-react"
@@ -81,11 +77,9 @@ const Setting: React.FC<SettingProps> = ({
  */
 const SettingsPage: NextPage = () => {
   const user = useUser()
-  const { data: settingsResponse } = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const settings = settingsResponse?.getUserSettings
+  const { settings } = useUserSettings()
 
-  const { data: exchangesResponse } = useGetExchangesQuery()
-  const exchanges = exchangesResponse?.getExchanges
+  const { exchanges } = useExchanges()
 
   const router = useRouter()
 
@@ -95,10 +89,10 @@ const SettingsPage: NextPage = () => {
 
   const currencyValidation = z.object({ defaultCurrency: z.string().min(3).max(3) })
 
-  const [updateSettings] = useUpdateUserSettingsMutation()
+  const updateSettings = useUpdateUserSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
-    await updateSettings({
-      variables: { userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency } },
+    await updateSettings.mutateAsync({
+      userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency },
     })
   }
 
@@ -107,12 +101,10 @@ const SettingsPage: NextPage = () => {
     defaultExchange: z.string(),
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
-    await updateSettings({
-      variables: {
-        userSettings: {
-          userId: user.id,
-          defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
-        },
+    await updateSettings.mutateAsync({
+      userSettings: {
+        userId: user.id,
+        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
       },
     })
   }

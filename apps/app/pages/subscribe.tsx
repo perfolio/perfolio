@@ -5,8 +5,8 @@ import { z } from "zod"
 import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useSubscribeToNewsletterMutationMutation } from "@perfolio/api/graphql"
 import { Description } from "@perfolio/ui/components"
+import { useSubscribeToNewsletter } from "@perfolio/hooks"
 
 const Subscribe: NextPage = () => {
   const validation = z.object({ email: z.string().email() })
@@ -20,7 +20,7 @@ const Subscribe: NextPage = () => {
   const [submitting, setSubmitting] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
 
-  const [subscribe] = useSubscribeToNewsletterMutationMutation()
+  const subscribe = useSubscribeToNewsletter()
 
   return (
     <section className="relative w-screen h-screen bg-white ">
@@ -58,7 +58,7 @@ const Subscribe: NextPage = () => {
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
                       async ({ email }) => {
-                        await subscribe({ variables: { email } })
+                        await subscribe.mutateAsync({ email })
                         setSubscribed(true)
                       },
                       setSubmitting,

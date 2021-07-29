@@ -60,6 +60,9 @@
     "feature-tokens": {
       "tags": []
     },
+    "hooks": {
+      "tags": []
+    },
     "integrations-bankofengland": {
       "tags": []
     },
@@ -85,9 +88,6 @@
       "tags": []
     },
     "landing": {
-      "tags": []
-    },
-    "queries": {
       "tags": []
     },
     "types": {
