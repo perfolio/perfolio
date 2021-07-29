@@ -16,7 +16,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 }): JSX.Element => {
   return (
     <Root delayDuration={200}>
-      <Trigger>
+      <Trigger as="div">
         {trigger ?? (
           <InformationCircleIcon
             className={cn("text-gray-600", {

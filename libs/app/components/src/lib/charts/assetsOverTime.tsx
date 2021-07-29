@@ -71,7 +71,8 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
       <AreaChart
         isLoading={isLoading}
         data={data}
-        formatTooltip={(n) => format(n, { suffix: aggregate === "Absolute" ? "€" : undefined })}
+        withXAxis
+        tooltip={(n) => format(n, { suffix: aggregate === "Absolute" ? "€" : undefined })}
       />
     </div>
   )
