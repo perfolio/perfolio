@@ -1,8 +1,7 @@
 import React from "react"
-import { AreaChart, Area, ResponsiveContainer } from "recharts"
+import { AreaChart } from "@perfolio/ui/charts"
 import { usePortfolioHistory } from "@perfolio/hooks"
 import { Time } from "@perfolio/util/time"
-import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 import { useCurrentValue } from "@perfolio/hooks"
 
@@ -33,32 +32,9 @@ export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
   return (
     <div className="flex-col justify-center hidden w-full h-20 space-y-8 bg-gray-100 rounded xl:flex">
       <div className="relative w-full h-full">
-        <ResponsiveContainer width="100%" height="100%">
-          {isLoading ? (
-            <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded animate-pulse">
-              <Loading />
-            </div>
-          ) : (
-            <AreaChart data={data} margin={{ top: 0, left: 0, bottom: 0, right: 0 }}>
-              <defs>
-                <linearGradient id="inlineAssetChartGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3548c8" stopOpacity={0.1} />
-                  <stop offset="100%" stopColor="#3548c8" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-
-              <Area
-                type="monotone"
-                dataKey="value"
-                stroke="#3548c8"
-                strokeWidth={2}
-                fill="url(#inlineAssetChartGradient)"
-              />
-            </AreaChart>
-          )}
-        </ResponsiveContainer>
+        <AreaChart isLoading={isLoading} data={data} />
         <div className="absolute top-0 left-0 p-4">
-          <span className="p-1 text-lg font-semibold bg-gray-100 bg-opacity-75 rounded text-primary00">
+          <span className="p-1 text-lg font-semibold text-black bg-gray-100 bg-opacity-75 rounded">
             {format(currentValue, { suffix: "€" })}
           </span>
         </div>
