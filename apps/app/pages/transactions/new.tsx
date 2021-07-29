@@ -13,54 +13,6 @@ import { Asset } from "@perfolio/api/graphql"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useUser } from "@clerk/clerk-react"
-// const Suggestion: React.FC<{
-//   tx: Transaction
-//   setValue: (val: { name: string; ticker: string; isin: string, exchange:string }) => void
-//   trigger: () => void
-// }> = ({ tx, setValue, trigger }): JSX.Element => {
-//   const { ticker } = useTickerFromisin({ isin: tx.data.assetId })
-//   const { company } = useCompany(ticker)
-//   return (
-//     <li className="flex items-center justify-between w-full gap-4 py-3">
-//       <div className="flex items-center w-3/5 gap-2">
-//         <div>{company?.logo ? <Avatar src={company.logo} /> : <Loading />}</div>
-//         <div className="overflow-hidden">
-//           <Text truncate bold>
-//             {company?.name}
-//           </Text>
-//           <Text size="sm">{tx.data.assetId}</Text>
-//         </div>
-//       </div>
-//       <div className="flex flex-col items-end w-2/5 space-y-1">
-//         <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
-//           tx.ts / 1_000_000,
-//         )}`}</span>
-//         <div>
-//           <Button
-//             kind="secondary"
-//             size="small"
-//             onClick={() => {
-//               console.log({
-//                 name: company?.name ?? "",
-//                 ticker: company?.ticker ?? "",
-//                 isin: tx.data.assetId,
-//               })
-//               setValue({
-//                 name: company?.name ?? "",
-//                 ticker: company?.ticker ?? "",
-//                 isin: tx.data.assetId,
-//                 exchange: ""
-//               })
-//               trigger()
-//             }}
-//           >
-//             Add
-//           </Button>
-//         </div>
-//       </div>
-//     </li>
-//   )
-// }
 
 const validation = z.object({
   isin: z.string(),

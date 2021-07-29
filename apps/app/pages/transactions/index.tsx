@@ -17,7 +17,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
   const { company } = useCompanyFromIsin({
     isin: transaction.asset.id,
   })
-  console.log({ company })
   const deleteTransaction = useDeleteTransaction()
 
   return (
