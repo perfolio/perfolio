@@ -54,13 +54,9 @@ module.exports = {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
         system: defaultTheme.fontFamily.sans,
       },
-      boxShadow: {
-        evil: "1px 1px 3px rgb(0 0 0 / 29%), 2px 4px 7px rgb(73 64 125 / 35%)",
-      },
     },
   },
   plugins: [
-    require("tailwindcss-textshadow"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/custom-forms"),
     require("tailwindcss-debug-screens"),

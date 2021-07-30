@@ -9,14 +9,11 @@ import {
   ClerkLoaded,
 } from "@clerk/clerk-react"
 import Head from "next/head"
-import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import "tailwindcss/tailwind.css"
 import { JWTProvider } from "@perfolio/api/client"
 import { useRouter } from "next/router"
-
-LogRocket.init("perfolio/app")
 
 const publicPages = ["/auth/sign-in/[[...index]]", "/auth/sign-up/[[...index]]"]
 
