@@ -485,7 +485,7 @@ type Query {
     ticker: String!
     mic: String!
     start: Timestamp!
-    end: Timestamp!
+    end: Timestamp
   ): [Price!]!
 
   """
