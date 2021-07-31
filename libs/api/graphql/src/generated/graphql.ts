@@ -269,7 +269,7 @@ export type QueryGetStockPricesAtExchangeArgs = {
   ticker: Scalars["String"]
   mic: Scalars["String"]
   start: Scalars["Timestamp"]
-  end: Scalars["Timestamp"]
+  end?: Maybe<Scalars["Timestamp"]>
 }
 
 /** Available queries */
@@ -709,7 +709,7 @@ export type QueryResolvers<
     Array<ResolversTypes["Price"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryGetStockPricesAtExchangeArgs, "ticker" | "mic" | "start" | "end">
+    RequireFields<QueryGetStockPricesAtExchangeArgs, "ticker" | "mic" | "start">
   >
   getCompany?: Resolver<
     Maybe<ResolversTypes["Company"]>,
