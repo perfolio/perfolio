@@ -7,6 +7,7 @@ import { getUserSettings } from "./resolvers/query/getUserSettings"
 import { getTransactions } from "./resolvers/query/getTransactions"
 import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
 import { getCompanyFromIsin } from "./resolvers/query/getCompanyFromIsin"
+import { getStockPricesAtExchange } from "./resolvers/query/getStockPricesAtExchange"
 import { logo } from "./resolvers/company/logo"
 import { currentValue } from "./resolvers/company/currentValue"
 import { asset } from "./resolvers/transaction/asset"
@@ -26,6 +27,7 @@ export const resolvers: Resolvers<Context> = {
     getUserSettings,
     getTransactions,
     getPortfolioHistory,
+    getStockPricesAtExchange,
     // @ts-expect-error Missing fields will be handled by the SearchResult resolver
 
     getCompanyFromIsin,
