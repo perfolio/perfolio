@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
-// import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
-import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
+import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 import { useTransactions, usePortfolio } from "@perfolio/hooks"
+
 export interface AssetTableProps {
   aggregation: "Absolute" | "Relative"
 }
@@ -36,14 +36,22 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
   }, [transactions])
 
   const { portfolio } = usePortfolio()
+  const totalValue = (portfolio ?? []).reduce(
+    (acc, { value, quantity }) => acc + value * quantity,
+    0,
+  )
 
   return (
-    <Table<"asset" | "quantity" | "costPerShare" | "pricePerShare" | "change">
+    <Table<"asset" | "chart" | "quantity" | "costPerShare" | "pricePerShare" | "change">
       columns={[
         {
           Header: "Asset",
           accessor: "asset",
           align: "text-left",
+        },
+        {
+          Header: "Weight",
+          accessor: "chart",
         },
         {
           Header: "Quantity",
@@ -81,6 +89,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           if (!holding?.asset?.company) {
             return {
               asset: <Cell.Loading />,
+              chart: <Cell.Loading />,
               quantity: <Cell.Loading />,
               costPerShare: <Cell.Loading />,
               pricePerShare: <Cell.Loading />,
@@ -93,6 +102,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               ? (holding.value - costPerShare[holding.asset.id]) * holding.quantity
               : holding.value / costPerShare[holding.asset.id] - 1
 
+          const weight = (holding.quantity * holding.value) / totalValue
           return {
             asset: (
               <Cell.Profile
@@ -100,6 +110,25 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                 title={holding.asset.company?.name}
                 subtitle={holding.asset.company?.ticker}
               />
+            ),
+            chart: (
+              <Cell.Cell>
+                <Tooltip
+                  trigger={
+                    <div className="flex h-2 overflow-hidden rounded bg-primary-light">
+                      <div
+                        style={{ width: `${weight * 100}%` }}
+                        className="flex w-full h-2 mb-4 overflow-hidden rounded bg-primary"
+                      ></div>
+                    </div>
+                  }
+                >
+                  <Text>
+                    {holding.asset.company.name} represents{" "}
+                    {format(weight, { percent: true, suffix: "%" })} of your portfolio.
+                  </Text>
+                </Tooltip>
+              </Cell.Cell>
             ),
             quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
             costPerShare: (
