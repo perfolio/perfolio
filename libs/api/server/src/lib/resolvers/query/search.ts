@@ -1,16 +1,15 @@
 import { ResolverFn, SearchResult } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
-import { AssetSearch } from "@perfolio/feature/asset-search"
-type R = SearchResult[]
-type P = unknown
-type C = Context
-type A = { fragment: string }
+import { search as searchAssets } from "@perfolio/feature/asset-search"
 
-export const search: ResolverFn<R, P, C, A> = async (_parent, { fragment }, ctx, { path }) => {
+export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: string }> = async (
+  _parent,
+  { fragment },
+  ctx,
+  { path },
+) => {
   ctx.authenticateUser()
-
-  const s = new AssetSearch(ctx.dataSources.iex, ctx.dataSources.fauna)
 
   fragment = fragment.toLowerCase()
 
@@ -21,12 +20,21 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, { fragment }, ctx,
   if (cachedValue) {
     return cachedValue
   }
+  const isinMap = await ctx.dataSources.fauna.getIsinMap()
+  if (!isinMap) {
+    throw new Error(`No isin map found in fauna`)
+  }
 
-  const searchResult = await s.search(fragment)
+  const getSymbolsFromIsin = async (isin: string): Promise<string[]> => {
+    const isins = await ctx.dataSources.iex.getIsinMapping(isin)
+    return isins.map(({ symbol }) => symbol)
+  }
+
+  const searchResult = await searchAssets(fragment, isinMap.data.matches, getSymbolsFromIsin)
   const value = await Promise.all(
     searchResult.map(async ({ isin, ticker }) => {
       const company = await ctx.dataSources.iex.getCompany(ticker)
-      if (!ticker) {
+      if (!company) {
         throw new Error(`No company found for ticker: ${ticker}`)
       }
       return {
@@ -36,6 +44,21 @@ export const search: ResolverFn<R, P, C, A> = async (_parent, { fragment }, ctx,
       }
     }),
   )
+
+  /**
+   * Update our internal isin map if necessary
+   */
+  let hasUpdated = false
+  value.forEach(({ isin, ticker, company: { name } }) => {
+    if (!isinMap.data.matches.map((m) => m.isin).includes(isin)) {
+      isinMap.data.matches.push({ isin, ticker, name })
+      hasUpdated = true
+    }
+  })
+  if (hasUpdated) {
+    await ctx.dataSources.fauna.updateIsinMap(isinMap)
+  }
+
   await cache.set(value.length > 0 ? "30d" : "1d", { key, value })
   return value.map((v) => v as SearchResult)
 }

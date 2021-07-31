@@ -204,7 +204,7 @@ const App: NextPage = () => {
             </div>
             <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
           </div>
-          <div>
+          <div className="mt-16">
             <div className="py-4 md:py-6">
               <Heading h3>Current Assets</Heading>
             </div>
