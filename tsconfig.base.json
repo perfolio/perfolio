@@ -30,6 +30,7 @@
     "jsx": "preserve",
     "types": ["jest", "node", "cypress"],
     "noEmit": true,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@perfolio/api/client": ["libs/api/client/src/index.ts"],

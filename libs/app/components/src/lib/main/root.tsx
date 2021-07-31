@@ -4,5 +4,5 @@ import React from "react"
 export interface RootProps {}
 
 export const Root: React.FC<RootProps> = ({ children }): JSX.Element => {
-  return <div className="bg-white rounded lg:shadow-xl">{children}</div>
+  return <div className="mb-16 bg-white rounded lg:shadow-xl">{children}</div>
 }
