@@ -45,6 +45,9 @@
     "app-query-client": {
       "tags": []
     },
+    "downsampling": {
+      "tags": []
+    },
     "feature-asset-search": {
       "tags": []
     },

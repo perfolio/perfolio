@@ -1,6 +1,5 @@
 import React from "react"
 import { AreaChart as Chart, XAxis, Tooltip, Area, ResponsiveContainer, YAxis } from "recharts"
-import { format } from "util"
 import { Loading } from "@perfolio/ui/components"
 type Data = {
   time: string
@@ -17,7 +16,7 @@ export interface AreaChartProps {
 export const AreaChart: React.FC<AreaChartProps> = ({
   data,
   isLoading,
-  tooltip = (n) => format(n),
+  tooltip,
   withXAxis = false,
 }): JSX.Element => {
   const max = Math.max(...data.map((d) => d.value)) * 1.02

@@ -4,16 +4,17 @@ import { Time } from "@perfolio/util/time"
 import { AssetsOverTime, toTimeseries, rebalance } from "@perfolio/feature/finance/returns"
 import { usePortfolioHistory } from "@perfolio/hooks"
 import { format } from "@perfolio/util/numbers"
+import { Downsampling } from "@perfolio/downsampling"
 
 type Data = {
-  time: string
+  time: number
   value: number
 }[]
 
 const plotAbsolute = (timeline: AssetsOverTime): Data => {
   return Object.entries(timeline).map(([time, assets]) => {
     return {
-      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
+      time: Time.fromTimestamp(Number(time)).unix(),
       value: Object.values(assets)
         .map((asset) => asset.quantity * asset.value)
         .reduce((acc, val) => acc + val),
@@ -25,7 +26,7 @@ const plotRelative = (timeline: AssetsOverTime): Data => {
   const index = rebalance(timeline)
   const data = Object.entries(index).map(([time, value]) => {
     return {
-      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
+      time: Time.fromTimestamp(Number(time)).unix(),
       value,
     }
   })
@@ -51,7 +52,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   /**
    * Filter by range and return either absolute or relative history
    */
-  const data = useMemo<Data>(() => {
+  const data = useMemo(() => {
     if (!portfolioHistory) {
       return []
     }
@@ -63,7 +64,12 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
       }
     })
 
-    return aggregate === "Absolute" ? plotAbsolute(selectedHistory) : plotRelative(selectedHistory)
+    const rawData =
+      aggregate === "Absolute" ? plotAbsolute(selectedHistory) : plotRelative(selectedHistory)
+    return Downsampling.largestTriangle(
+      rawData.map(({ time, value }) => ({ x: time, y: value })),
+      1000,
+    ).map(({ x, y }) => ({ time: Time.fromTimestamp(x).toDate().toLocaleDateString(), value: y }))
   }, [aggregate, portfolioHistory, range])
 
   return (
