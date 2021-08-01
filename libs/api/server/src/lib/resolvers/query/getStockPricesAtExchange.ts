@@ -1,8 +1,8 @@
-import { ResolverFn, Price } from "@perfolio/api/graphql"
+import { ResolverFn, ValueAtTime } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 
 export const getStockPricesAtExchange: ResolverFn<
-  Price[],
+  ValueAtTime[],
   unknown,
   Context,
   { ticker: string; mic: string; start: number; end?: number }

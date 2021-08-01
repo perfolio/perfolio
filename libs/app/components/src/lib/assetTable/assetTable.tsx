@@ -86,17 +86,6 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
          */
         .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
         .map((holding) => {
-          if (!holding?.asset?.company) {
-            return {
-              asset: <Cell.Loading />,
-              chart: <Cell.Loading />,
-              quantity: <Cell.Loading />,
-              costPerShare: <Cell.Loading />,
-              pricePerShare: <Cell.Loading />,
-              change: <Cell.Loading />,
-            }
-          }
-
           const change =
             aggregation === "Absolute"
               ? (holding.value - costPerShare[holding.asset.id]) * holding.quantity
@@ -106,9 +95,9 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           return {
             asset: (
               <Cell.Profile
-                src={holding.asset.company?.logo}
-                title={holding.asset.company?.name}
-                subtitle={holding.asset.company?.ticker}
+                src={holding.asset.logo}
+                title={holding.asset.name}
+                subtitle={holding.asset.ticker}
               />
             ),
             chart: (
@@ -124,8 +113,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                   }
                 >
                   <Text>
-                    {holding.asset.company.name} represents{" "}
-                    {format(weight, { percent: true, suffix: "%" })} of your portfolio.
+                    {holding.asset.name} represents {format(weight, { percent: true, suffix: "%" })}{" "}
+                    of your portfolio.
                   </Text>
                 </Tooltip>
               </Cell.Cell>

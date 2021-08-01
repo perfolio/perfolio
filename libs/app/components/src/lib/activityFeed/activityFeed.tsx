@@ -3,10 +3,10 @@ import { Time } from "@perfolio/util/time"
 import React from "react"
 import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
-import { useTransactions, useCompanyFromIsin } from "@perfolio/hooks"
+import { useTransactions, useExchangeTradedAsset } from "@perfolio/hooks"
 
 interface TransactionActivityItemProps {
-  transaction: Omit<Transaction, "userId">
+  transaction: Omit<Transaction, "userId" | "assetId">
   isFirst?: boolean
 }
 
@@ -14,8 +14,8 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
-  const { company, isLoading } = useCompanyFromIsin({
-    isin: transaction.asset.id,
+  const { asset, isLoading } = useExchangeTradedAsset({
+    id: transaction.asset.id,
   })
   return (
     <li
@@ -23,7 +23,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
         "border-t border-gray-100": !isFirst,
       })}
     >
-      {isLoading || !company ? (
+      {isLoading || !asset ? (
         <Loading />
       ) : (
         <>
@@ -35,8 +35,8 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
           </div>
           <Text size="sm">
             You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
-            <span className="font-semibold">{company.ticker}</span> shares at ${transaction.value}{" "}
-            per share.
+            <span className="font-semibold">{asset.ticker}</span> shares at ${transaction.value} per
+            share.
           </Text>
         </>
       )}
@@ -55,7 +55,7 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
       <p className="text-base font-semibold text-gray-800">Recent Activity</p>
       <ul>
         {last5Transactions?.map((tx, i) => (
-          <TransactionActivityItem key={tx.id} transaction={tx as Transaction} isFirst={i === 0} />
+          <TransactionActivityItem key={tx.id} transaction={tx} isFirst={i === 0} />
         ))}
       </ul>
     </>

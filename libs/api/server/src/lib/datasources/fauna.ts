@@ -1,7 +1,7 @@
 import { DataSource } from "apollo-datasource"
 import {
   CreateTransaction,
-  Transaction,
+  TransactionSchemaFragment,
   CreateUserSettings,
   UpdateUserSettings,
 } from "@perfolio/api/graphql"
@@ -11,18 +11,11 @@ export class Fauna extends DataSource {
   constructor() {
     super()
   }
-  public async createTransaction(tx: CreateTransaction): Promise<Transaction> {
+  public async createTransaction(tx: CreateTransaction): Promise<TransactionSchemaFragment> {
     const createdTransaction = await db().transaction.create(tx)
 
     return {
-      asset: {
-        ticker: createdTransaction.data.assetId,
-        id: createdTransaction.data.assetId,
-      },
-      executedAt: createdTransaction.data.executedAt,
-      userId: createdTransaction.data.userId,
-      volume: createdTransaction.data.volume,
-      value: createdTransaction.data.value,
+      ...createdTransaction.data,
       id: createdTransaction.id,
     }
   }
