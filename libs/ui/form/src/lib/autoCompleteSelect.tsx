@@ -77,7 +77,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={selected?.company.logo ?? ""} size="xs" />
+            <Avatar src={selected?.asset.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -105,7 +105,7 @@ export function AutoCompleteSelect<Option>({
             >
               {state === State.Done ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  {selected?.company.name}
+                  {selected?.asset.name}
                 </div>
               ) : (
                 <input
@@ -161,9 +161,9 @@ export function AutoCompleteSelect<Option>({
                           )}
                         >
                           <Profile
-                            image={option.company.logo}
-                            subtitle={option.company.ticker}
-                            title={option.company.name}
+                            image={option.asset.logo}
+                            subtitle={option.asset.ticker}
+                            title={option.asset.name}
                             tag={option.isin}
                           />
                         </button>

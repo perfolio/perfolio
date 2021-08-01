@@ -7,6 +7,7 @@ import {
 import { client } from "../client"
 import { useClerk } from "@clerk/clerk-react"
 import { USE_TRANSACTIONS_QUERY_KEY } from "../queries/useTransactions"
+import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
 import { ensureAccessToken } from "../ensureAccessToken"
 
 export const useCreateTransaction = () => {
@@ -25,6 +26,7 @@ export const useCreateTransaction = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(USE_TRANSACTIONS_QUERY_KEY)
+        queryClient.invalidateQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY)
       },
     },
   )

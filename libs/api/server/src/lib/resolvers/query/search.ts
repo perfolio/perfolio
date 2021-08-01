@@ -40,7 +40,12 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
       return {
         isin,
         ticker,
-        company,
+        asset: {
+          id: isin,
+          ticker,
+          name: company.name,
+          logo: company.logo,
+        },
       }
     }),
   )
@@ -49,7 +54,7 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
    * Update our internal isin map if necessary
    */
   let hasUpdated = false
-  value.forEach(({ isin, ticker, company: { name } }) => {
+  value.forEach(({ isin, ticker, asset: { name } }) => {
     if (!isinMap.data.matches.map((m) => m.isin).includes(isin)) {
       isinMap.data.matches.push({ isin, ticker, name })
       hasUpdated = true

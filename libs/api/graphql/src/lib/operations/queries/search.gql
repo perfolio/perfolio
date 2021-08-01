@@ -1,7 +1,11 @@
 query search($fragment: String!) {
   search(fragment: $fragment) {
+    __typename
+
     isin
-    company {
+    asset {
+      __typename
+
       logo
       ticker
       name

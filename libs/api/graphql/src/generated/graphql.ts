@@ -5,7 +5,6 @@ export type Maybe<T> = T | null | undefined
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } &
   { [P in K]-?: NonNullable<T[P]> }
 /** All built-in and custom scalars, mapped to their actual values */
@@ -19,75 +18,42 @@ export type Scalars = {
   Timestamp: any
 }
 
-export type Asset = Crypto | Stock
+/** Common fields on all assets */
+export type Asset = {
+  /** Globally unique id */
+  id: Scalars["ID"]
+}
 
 /** The value and volume of an asset over time. */
 export type AssetHistory = {
   __typename?: "AssetHistory"
+  /** For reference */
+  assetId: Scalars["String"]
   /** The asset */
-  asset: Asset
+  asset: ExchangeTradedAsset
   /** Value and Quantity for each day */
   history: Array<ValueAndQuantityAtTime>
 }
 
-/** The interval for timeseries */
-export enum AssetType {
-  /** Ownership of a fraction of a corporation or fund. */
-  Stock = "STOCK",
-}
-
-/** A publicly traded company */
-export type Company = {
-  __typename?: "Company"
-  /** Street address of the company if available */
-  address?: Maybe<Scalars["String"]>
-  /** Street address of the company if available */
-  address2?: Maybe<Scalars["String"]>
-  /** Name of the CEO of the company */
-  ceo?: Maybe<Scalars["String"]>
-  /** City of the company if available */
-  city?: Maybe<Scalars["String"]>
-  /** Country of the company if available */
-  country?: Maybe<Scalars["String"]>
-  /**
-   * Return the latest price
-   * Computed value
-   */
-  currentValue: Scalars["Float"]
-  /** Description for the company */
-  description?: Maybe<Scalars["String"]>
-  /** Number of employees */
-  employees?: Maybe<Scalars["Int"]>
-  /** Refers to the industry the company belongs to */
-  industry?: Maybe<Scalars["String"]>
-  /** Refers to the common issue type of the stock. */
-  issueType?: Maybe<IssueType>
-  /** Url of the logo */
-  logo: Scalars["String"]
-  /** Name of the company */
-  name: Scalars["String"]
-  /** Phone Number of the company if available */
-  phone?: Maybe<Scalars["String"]>
-  /**
-   * Primary SIC Code for the ticker (if available)
-   * @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
-   */
-  primarySicCode?: Maybe<Scalars["Int"]>
-  /** Refers to the sector the company belongs to. */
-  sector?: Maybe<Scalars["String"]>
-  /** Name of the CEO of the company */
-  securityName?: Maybe<Scalars["String"]>
-  /** State of the company if available */
-  state?: Maybe<Scalars["String"]>
-  /** An array of Strings used to classify the company. */
-  tags?: Maybe<Array<Maybe<Scalars["String"]>>>
-  /** Ticker of the company */
-  ticker: Scalars["String"]
-  /** Website of the company */
-  website?: Maybe<Scalars["String"]>
-  /** Zip code of the company if available */
-  zip?: Maybe<Scalars["String"]>
-}
+/** Stocks such as company shares and funds. */
+export type CompanyStock = ExchangeTradedAsset &
+  Asset & {
+    __typename?: "CompanyStock"
+    /** For stocks we are always using the isin as id. */
+    id: Scalars["ID"]
+    /** International Securities Indentification Number */
+    isin: Scalars["String"]
+    /** The companys name */
+    name: Scalars["String"]
+    /** The companys logo url */
+    logo: Scalars["String"]
+    /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
+    ticker: Scalars["String"]
+    /** The main sector of this company */
+    sector: Scalars["String"]
+    /** The country where this company is registered */
+    country: Scalars["String"]
+  }
 
 /** Create a new transaction */
 export type CreateTransaction = {
@@ -101,6 +67,8 @@ export type CreateTransaction = {
   value: Scalars["Float"]
   /** How many shares/items the user bought or sold */
   volume: Scalars["Float"]
+  /** The market identifier code where the user intends to sell this asset */
+  mic?: Maybe<Scalars["String"]>
 }
 
 /** Create a new user settings object when a new user signs up */
@@ -116,35 +84,45 @@ export type CreateUserSettings = {
   userId: Scalars["ID"]
 }
 
-export type Crypto = IAsset & {
-  __typename?: "Crypto"
-  id: Scalars["ID"]
-  name: Scalars["String"]
-}
+/** Crypto */
+export type Crypto = ExchangeTradedAsset &
+  Asset & {
+    __typename?: "Crypto"
+    /** A globally unique id */
+    id: Scalars["ID"]
+    /** Dummy field */
+    name: Scalars["String"]
+    /** A */
+    ticker: Scalars["String"]
+    /** B */
+    logo: Scalars["String"]
+  }
 
 /** An exchange where shares are traded */
 export type Exchange = {
   __typename?: "Exchange"
   /** Exchange abbreviation */
   abbreviation: Scalars["String"]
-  /** Exchange Suffix to be added for symbols on that exchange */
-  suffix?: Maybe<Scalars["String"]>
   /** Market Identifier Code using ISO 10383 */
   mic: Scalars["String"]
   /** Full name of the exchange. */
   name: Scalars["String"]
   /** 2 letter case insensitive string of country codes using ISO 3166-1 alpha-2 */
   region: Scalars["String"]
+  /** Exchange Suffix to be added for symbols on that exchange */
+  suffix?: Maybe<Scalars["String"]>
 }
 
-export type Holding = {
-  __typename?: "Holding"
-  asset: Asset
-  quantity: Scalars["Float"]
-}
-
-export type IAsset = {
+/** A sub type of assets that are all traded at exchanges */
+export type ExchangeTradedAsset = {
+  /** A globally unique id */
   id: Scalars["ID"]
+  /** The ticker as used by the exchanges. */
+  ticker: Scalars["String"]
+  /** Human readable name */
+  name: Scalars["String"]
+  /** URL to the logo or image */
+  logo: Scalars["String"]
 }
 
 /** The interval for timeseries */
@@ -155,34 +133,6 @@ export enum Interval {
   Monthly = "MONTHLY",
   /** One rate per year */
   Annual = "ANNUAL",
-}
-
-/** Issue types for stock assets */
-export enum IssueType {
-  /** ADR */
-  Ad = "AD",
-  /** Closed End Fund */
-  Cef = "CEF",
-  /** Common Stock */
-  Cs = "CS",
-  /** Other */
-  Empty = "EMPTY",
-  /** ETF */
-  Et = "ET",
-  /** Open Ended Fund */
-  Oef = "OEF",
-  /** Preferred Stock */
-  Ps = "PS",
-  /** Right */
-  Rt = "RT",
-  /** Structured Product */
-  Struct = "STRUCT",
-  /** Unit */
-  Ut = "UT",
-  /** When Issued */
-  Wi = "WI",
-  /** Warrant */
-  Wt = "WT",
 }
 
 /** Available mutations */
@@ -225,27 +175,19 @@ export type MutationUpdateUserSettingsArgs = {
   userSettings: UpdateUserSettings
 }
 
-export type Price = {
-  __typename?: "Price"
-  value: Scalars["Float"]
-  time: Scalars["Timestamp"]
-}
-
 /** Available queries */
 export type Query = {
   __typename?: "Query"
-  /** Return a list of all companies that can be traded at a certain exchange */
-  getAvailableCompaniesAtExchange: Array<Company>
-  /** Return the daily closing prices for a stock at a specific exchange */
-  getStockPricesAtExchange: Array<Price>
-  /** Return a company by its symbol */
-  getCompany?: Maybe<Company>
+  /** Load an exchange traded asset by its id */
+  getExchangeTradedAsset?: Maybe<ExchangeTradedAsset>
   /** Get a list of all availale exchanges */
   getExchanges: Array<Exchange>
   /** Return all assets over time for a given user */
   getPortfolioHistory: Array<AssetHistory>
   /** Get the risk free rates for a given interval */
-  getRiskFreeRates: Array<RiskFreeRate>
+  getRiskFreeRates: Array<ValueAtTime>
+  /** Return the daily closing prices for a stock at a specific exchange */
+  getStockPricesAtExchange: Array<ValueAtTime>
   /** Return all transactions of a user */
   getTransactions: Array<Transaction>
   /** Return the user's settings */
@@ -256,25 +198,11 @@ export type Query = {
    * The fragment will be compared against the ticker and company name.
    */
   search: Array<SearchResult>
-  getCompanyFromIsin?: Maybe<Company>
 }
 
 /** Available queries */
-export type QueryGetAvailableCompaniesAtExchangeArgs = {
-  mic: Scalars["String"]
-}
-
-/** Available queries */
-export type QueryGetStockPricesAtExchangeArgs = {
-  ticker: Scalars["String"]
-  mic: Scalars["String"]
-  start: Scalars["Timestamp"]
-  end?: Maybe<Scalars["Timestamp"]>
-}
-
-/** Available queries */
-export type QueryGetCompanyArgs = {
-  ticker: Scalars["String"]
+export type QueryGetExchangeTradedAssetArgs = {
+  id: Scalars["ID"]
 }
 
 /** Available queries */
@@ -286,6 +214,14 @@ export type QueryGetPortfolioHistoryArgs = {
 export type QueryGetRiskFreeRatesArgs = {
   interval: Interval
   begin: Scalars["Timestamp"]
+  end?: Maybe<Scalars["Timestamp"]>
+}
+
+/** Available queries */
+export type QueryGetStockPricesAtExchangeArgs = {
+  ticker: Scalars["String"]
+  mic: Scalars["String"]
+  start: Scalars["Timestamp"]
   end?: Maybe<Scalars["Timestamp"]>
 }
 
@@ -304,52 +240,26 @@ export type QuerySearchArgs = {
   fragment: Scalars["String"]
 }
 
-/** Available queries */
-export type QueryGetCompanyFromIsinArgs = {
-  isin: Scalars["ID"]
-}
-
-/**
- * The risk free rate from the european central bank
- *
- * This was meant to be a map with a time as key and the rate as value
- * but graphql does not handle maps.
- */
-export type RiskFreeRate = {
-  __typename?: "RiskFreeRate"
-  /** Rate */
-  rate: Scalars["Float"]
-  /** Timestamp of a specific day */
-  time: Scalars["Timestamp"]
-}
-
+/** The found company from a user search. */
 export type SearchResult = {
   __typename?: "SearchResult"
+  /** For reference */
+  assetId: Scalars["String"]
+  /** All company data itself */
+  asset: ExchangeTradedAsset
+  /** The isin of the company */
   isin: Scalars["ID"]
+  /** The ticker of the company */
   ticker: Scalars["ID"]
-  company: Company
-}
-
-/** Stocks such as company shares and funds. */
-export type Stock = IAsset & {
-  __typename?: "Stock"
-  /** For stocks we are always using the isin as id. */
-  id: Scalars["ID"]
-  /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
-  ticker: Scalars["String"]
-  /**
-   * The associated company if available
-   *
-   * This probably does not carry much meaningful data for ETFs etc.
-   */
-  company?: Maybe<Company>
 }
 
 /** A transactions represents a single purchase or sale of any number of shares of a single asset. */
 export type Transaction = {
   __typename?: "Transaction"
+  /** Reference to the actual asset */
+  assetId: Scalars["String"]
   /** The of asset. Stocks, Crypto, Real estate for example. */
-  asset: Asset
+  asset: ExchangeTradedAsset
   /** A timestamp when the transaction was executed */
   executedAt: Scalars["Timestamp"]
   /** A globally unique identifier for each transaction */
@@ -364,6 +274,8 @@ export type Transaction = {
    * negative if sold
    */
   volume: Scalars["Float"]
+  /** The market identifier code where the user intends to sell this asset */
+  mic?: Maybe<Scalars["String"]>
 }
 
 /** Update only some values. */
@@ -377,13 +289,6 @@ export type UpdateUserSettings = {
   defaultExchange?: Maybe<Scalars["String"]>
   /** The unique user id */
   userId: Scalars["ID"]
-}
-
-export type User = {
-  __typename?: "User"
-  id: Scalars["ID"]
-  email: Scalars["String"]
-  name: Scalars["String"]
 }
 
 /** Settings that can be customized by the user such as preferences as well as defaults */
@@ -406,6 +311,15 @@ export type ValueAndQuantityAtTime = {
   /** A timestamp when this value and quantity was */
   time: Scalars["Timestamp"]
   /** The value of each share/item */
+  value: Scalars["Float"]
+}
+
+/** Anything that has a changing value over time can use this. */
+export type ValueAtTime = {
+  __typename?: "ValueAtTime"
+  /** A unix timestamp. */
+  time: Scalars["Timestamp"]
+  /** Can be anything really. Prices, percentages, or something else entirely. */
   value: Scalars["Float"]
 }
 
@@ -505,66 +419,52 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Asset: ResolversTypes["Crypto"] | ResolversTypes["Stock"]
-  AssetHistory: ResolverTypeWrapper<
-    Omit<AssetHistory, "asset"> & { asset: ResolversTypes["Asset"] }
-  >
-  AssetType: AssetType
-  Company: ResolverTypeWrapper<Company>
-  String: ResolverTypeWrapper<Scalars["String"]>
-  Float: ResolverTypeWrapper<Scalars["Float"]>
-  Int: ResolverTypeWrapper<Scalars["Int"]>
-  CreateTransaction: CreateTransaction
+  Asset: ResolversTypes["CompanyStock"] | ResolversTypes["Crypto"]
   ID: ResolverTypeWrapper<Scalars["ID"]>
+  AssetHistory: ResolverTypeWrapper<AssetHistory>
+  String: ResolverTypeWrapper<Scalars["String"]>
+  CompanyStock: ResolverTypeWrapper<CompanyStock>
+  CreateTransaction: CreateTransaction
+  Float: ResolverTypeWrapper<Scalars["Float"]>
   CreateUserSettings: CreateUserSettings
   Crypto: ResolverTypeWrapper<Crypto>
   Exchange: ResolverTypeWrapper<Exchange>
-  Holding: ResolverTypeWrapper<Omit<Holding, "asset"> & { asset: ResolversTypes["Asset"] }>
-  IAsset: ResolversTypes["Crypto"] | ResolversTypes["Stock"]
+  ExchangeTradedAsset: ResolversTypes["CompanyStock"] | ResolversTypes["Crypto"]
   Interval: Interval
-  IssueType: IssueType
   Mutation: ResolverTypeWrapper<{}>
-  Price: ResolverTypeWrapper<Price>
   Query: ResolverTypeWrapper<{}>
-  RiskFreeRate: ResolverTypeWrapper<RiskFreeRate>
   SearchResult: ResolverTypeWrapper<SearchResult>
-  Stock: ResolverTypeWrapper<Stock>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
-  Transaction: ResolverTypeWrapper<Omit<Transaction, "asset"> & { asset: ResolversTypes["Asset"] }>
+  Transaction: ResolverTypeWrapper<Transaction>
   UpdateUserSettings: UpdateUserSettings
-  User: ResolverTypeWrapper<User>
   UserSettings: ResolverTypeWrapper<UserSettings>
   ValueAndQuantityAtTime: ResolverTypeWrapper<ValueAndQuantityAtTime>
+  ValueAtTime: ResolverTypeWrapper<ValueAtTime>
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
 }>
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Asset: ResolversParentTypes["Crypto"] | ResolversParentTypes["Stock"]
-  AssetHistory: Omit<AssetHistory, "asset"> & { asset: ResolversParentTypes["Asset"] }
-  Company: Company
-  String: Scalars["String"]
-  Float: Scalars["Float"]
-  Int: Scalars["Int"]
-  CreateTransaction: CreateTransaction
+  Asset: ResolversParentTypes["CompanyStock"] | ResolversParentTypes["Crypto"]
   ID: Scalars["ID"]
+  AssetHistory: AssetHistory
+  String: Scalars["String"]
+  CompanyStock: CompanyStock
+  CreateTransaction: CreateTransaction
+  Float: Scalars["Float"]
   CreateUserSettings: CreateUserSettings
   Crypto: Crypto
   Exchange: Exchange
-  Holding: Omit<Holding, "asset"> & { asset: ResolversParentTypes["Asset"] }
-  IAsset: ResolversParentTypes["Crypto"] | ResolversParentTypes["Stock"]
+  ExchangeTradedAsset: ResolversParentTypes["CompanyStock"] | ResolversParentTypes["Crypto"]
   Mutation: {}
-  Price: Price
   Query: {}
-  RiskFreeRate: RiskFreeRate
   SearchResult: SearchResult
-  Stock: Stock
   Timestamp: Scalars["Timestamp"]
-  Transaction: Omit<Transaction, "asset"> & { asset: ResolversParentTypes["Asset"] }
+  Transaction: Transaction
   UpdateUserSettings: UpdateUserSettings
-  User: User
   UserSettings: UserSettings
   ValueAndQuantityAtTime: ValueAndQuantityAtTime
+  ValueAtTime: ValueAtTime
   Boolean: Scalars["Boolean"]
 }>
 
@@ -572,43 +472,31 @@ export type AssetResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Asset"] = ResolversParentTypes["Asset"],
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<"Crypto" | "Stock", ParentType, ContextType>
+  __resolveType: TypeResolveFn<"CompanyStock" | "Crypto", ParentType, ContextType>
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
 }>
 
 export type AssetHistoryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["AssetHistory"] = ResolversParentTypes["AssetHistory"],
 > = ResolversObject<{
-  asset?: Resolver<ResolversTypes["Asset"], ParentType, ContextType>
+  assetId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  asset?: Resolver<ResolversTypes["ExchangeTradedAsset"], ParentType, ContextType>
   history?: Resolver<Array<ResolversTypes["ValueAndQuantityAtTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
-export type CompanyResolvers<
+export type CompanyStockResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes["Company"] = ResolversParentTypes["Company"],
+  ParentType extends ResolversParentTypes["CompanyStock"] = ResolversParentTypes["CompanyStock"],
 > = ResolversObject<{
-  address?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  address2?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  ceo?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  city?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  country?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  currentValue?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  description?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  employees?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
-  industry?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  issueType?: Resolver<Maybe<ResolversTypes["IssueType"]>, ParentType, ContextType>
-  logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  phone?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  primarySicCode?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
-  sector?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  securityName?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  state?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes["String"]>>>, ParentType, ContextType>
+  logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  website?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
-  zip?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  sector?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  country?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -618,6 +506,8 @@ export type CryptoResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -626,28 +516,22 @@ export type ExchangeResolvers<
   ParentType extends ResolversParentTypes["Exchange"] = ResolversParentTypes["Exchange"],
 > = ResolversObject<{
   abbreviation?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  suffix?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   mic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   region?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  suffix?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
-export type HoldingResolvers<
+export type ExchangeTradedAssetResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes["Holding"] = ResolversParentTypes["Holding"],
+  ParentType extends ResolversParentTypes["ExchangeTradedAsset"] = ResolversParentTypes["ExchangeTradedAsset"],
 > = ResolversObject<{
-  asset?: Resolver<ResolversTypes["Asset"], ParentType, ContextType>
-  quantity?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}>
-
-export type IAssetResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["IAsset"] = ResolversParentTypes["IAsset"],
-> = ResolversObject<{
-  __resolveType: TypeResolveFn<"Crypto" | "Stock", ParentType, ContextType>
+  __resolveType: TypeResolveFn<"CompanyStock" | "Crypto", ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
 }>
 
 export type MutationResolvers<
@@ -686,36 +570,15 @@ export type MutationResolvers<
   >
 }>
 
-export type PriceResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["Price"] = ResolversParentTypes["Price"],
-> = ResolversObject<{
-  value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  time?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}>
-
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
-  getAvailableCompaniesAtExchange?: Resolver<
-    Array<ResolversTypes["Company"]>,
+  getExchangeTradedAsset?: Resolver<
+    Maybe<ResolversTypes["ExchangeTradedAsset"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryGetAvailableCompaniesAtExchangeArgs, "mic">
-  >
-  getStockPricesAtExchange?: Resolver<
-    Array<ResolversTypes["Price"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetStockPricesAtExchangeArgs, "ticker" | "mic" | "start">
-  >
-  getCompany?: Resolver<
-    Maybe<ResolversTypes["Company"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetCompanyArgs, "ticker">
+    RequireFields<QueryGetExchangeTradedAssetArgs, "id">
   >
   getExchanges?: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
   getPortfolioHistory?: Resolver<
@@ -725,10 +588,16 @@ export type QueryResolvers<
     RequireFields<QueryGetPortfolioHistoryArgs, "userId">
   >
   getRiskFreeRates?: Resolver<
-    Array<ResolversTypes["RiskFreeRate"]>,
+    Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
     RequireFields<QueryGetRiskFreeRatesArgs, "interval" | "begin">
+  >
+  getStockPricesAtExchange?: Resolver<
+    Array<ResolversTypes["ValueAtTime"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetStockPricesAtExchangeArgs, "ticker" | "mic" | "start">
   >
   getTransactions?: Resolver<
     Array<ResolversTypes["Transaction"]>,
@@ -748,40 +617,16 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySearchArgs, "fragment">
   >
-  getCompanyFromIsin?: Resolver<
-    Maybe<ResolversTypes["Company"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetCompanyFromIsinArgs, "isin">
-  >
-}>
-
-export type RiskFreeRateResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["RiskFreeRate"] = ResolversParentTypes["RiskFreeRate"],
-> = ResolversObject<{
-  rate?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  time?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
 export type SearchResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["SearchResult"] = ResolversParentTypes["SearchResult"],
 > = ResolversObject<{
+  assetId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  asset?: Resolver<ResolversTypes["ExchangeTradedAsset"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  company?: Resolver<ResolversTypes["Company"], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}>
-
-export type StockResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["Stock"] = ResolversParentTypes["Stock"],
-> = ResolversObject<{
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  company?: Resolver<Maybe<ResolversTypes["Company"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -794,22 +639,14 @@ export type TransactionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Transaction"] = ResolversParentTypes["Transaction"],
 > = ResolversObject<{
-  asset?: Resolver<ResolversTypes["Asset"], ParentType, ContextType>
+  assetId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  asset?: Resolver<ResolversTypes["ExchangeTradedAsset"], ParentType, ContextType>
   executedAt?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   userId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   volume?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}>
-
-export type UserResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"],
-> = ResolversObject<{
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  mic?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -832,25 +669,30 @@ export type ValueAndQuantityAtTimeResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
+export type ValueAtTimeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["ValueAtTime"] = ResolversParentTypes["ValueAtTime"],
+> = ResolversObject<{
+  time?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
+  value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}>
+
 export type Resolvers<ContextType = any> = ResolversObject<{
   Asset?: AssetResolvers<ContextType>
   AssetHistory?: AssetHistoryResolvers<ContextType>
-  Company?: CompanyResolvers<ContextType>
+  CompanyStock?: CompanyStockResolvers<ContextType>
   Crypto?: CryptoResolvers<ContextType>
   Exchange?: ExchangeResolvers<ContextType>
-  Holding?: HoldingResolvers<ContextType>
-  IAsset?: IAssetResolvers<ContextType>
+  ExchangeTradedAsset?: ExchangeTradedAssetResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
-  Price?: PriceResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
-  RiskFreeRate?: RiskFreeRateResolvers<ContextType>
   SearchResult?: SearchResultResolvers<ContextType>
-  Stock?: StockResolvers<ContextType>
   Timestamp?: GraphQLScalarType
   Transaction?: TransactionResolvers<ContextType>
-  User?: UserResolvers<ContextType>
   UserSettings?: UserSettingsResolvers<ContextType>
   ValueAndQuantityAtTime?: ValueAndQuantityAtTimeResolvers<ContextType>
+  ValueAtTime?: ValueAtTimeResolvers<ContextType>
 }>
 
 /**
@@ -858,6 +700,11 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>
+
+export type TransactionSchemaFragment = { __typename?: "Transaction" } & Pick<
+  Transaction,
+  "id" | "assetId" | "userId" | "executedAt" | "value" | "volume"
+>
 
 export type CreateTransactionMutationVariables = Exact<{
   transaction: CreateTransaction
@@ -905,29 +752,14 @@ export type UpdateUserSettingsMutation = { __typename?: "Mutation" } & {
     }
 }
 
-export type GetCompanyQueryVariables = Exact<{
-  ticker: Scalars["String"]
+export type GetExchangeTradedAssetQueryVariables = Exact<{
+  id: Scalars["ID"]
 }>
 
-export type GetCompanyQuery = { __typename?: "Query" } & {
-  getCompany?: Maybe<
-    { __typename?: "Company" } & Pick<
-      Company,
-      "ticker" | "logo" | "name" | "description" | "sector"
-    >
-  >
-}
-
-export type GetCompanyFromIsinQueryVariables = Exact<{
-  isin: Scalars["ID"]
-}>
-
-export type GetCompanyFromIsinQuery = { __typename?: "Query" } & {
-  getCompanyFromIsin?: Maybe<
-    { __typename?: "Company" } & Pick<
-      Company,
-      "ticker" | "logo" | "name" | "description" | "sector"
-    >
+export type GetExchangeTradedAssetQuery = { __typename?: "Query" } & {
+  getExchangeTradedAsset?: Maybe<
+    | ({ __typename: "CompanyStock" } & Pick<CompanyStock, "id" | "ticker" | "logo" | "name">)
+    | ({ __typename: "Crypto" } & Pick<Crypto, "id" | "ticker" | "logo" | "name">)
   >
 }
 
@@ -935,7 +767,7 @@ export type GetExchangesQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetExchangesQuery = { __typename?: "Query" } & {
   getExchanges: Array<
-    { __typename?: "Exchange" } & Pick<
+    { __typename: "Exchange" } & Pick<
       Exchange,
       "name" | "region" | "mic" | "suffix" | "abbreviation"
     >
@@ -948,24 +780,20 @@ export type GetPortfolioHistoryQueryVariables = Exact<{
 
 export type GetPortfolioHistoryQuery = { __typename?: "Query" } & {
   getPortfolioHistory: Array<
-    { __typename?: "AssetHistory" } & {
-      asset:
-        | ({ __typename?: "Crypto" } & Pick<Crypto, "id" | "name">)
-        | ({ __typename?: "Stock" } & Pick<Stock, "id" | "ticker"> & {
-              company?: Maybe<
-                { __typename?: "Company" } & Pick<
-                  Company,
-                  "name" | "logo" | "sector" | "country" | "ticker" | "currentValue"
-                >
-              >
-            })
-      history: Array<
-        { __typename?: "ValueAndQuantityAtTime" } & Pick<
-          ValueAndQuantityAtTime,
-          "value" | "time" | "quantity"
+    { __typename?: "AssetHistory" } & Pick<AssetHistory, "assetId"> & {
+        asset:
+          | ({ __typename: "CompanyStock" } & Pick<
+              CompanyStock,
+              "sector" | "country" | "id" | "ticker" | "name" | "logo"
+            >)
+          | ({ __typename: "Crypto" } & Pick<Crypto, "id" | "ticker" | "name" | "logo">)
+        history: Array<
+          { __typename?: "ValueAndQuantityAtTime" } & Pick<
+            ValueAndQuantityAtTime,
+            "value" | "time" | "quantity"
+          >
         >
-      >
-    }
+      }
   >
 }
 
@@ -975,13 +803,13 @@ export type GetTransactionsQueryVariables = Exact<{
 
 export type GetTransactionsQuery = { __typename?: "Query" } & {
   getTransactions: Array<
-    { __typename?: "Transaction" } & Pick<
+    { __typename: "Transaction" } & Pick<
       Transaction,
       "id" | "userId" | "executedAt" | "value" | "volume"
     > & {
         asset:
-          | ({ __typename?: "Crypto" } & Pick<Crypto, "id">)
-          | ({ __typename?: "Stock" } & Pick<Stock, "id" | "ticker">)
+          | ({ __typename: "CompanyStock" } & Pick<CompanyStock, "id" | "ticker" | "logo" | "name">)
+          | ({ __typename: "Crypto" } & Pick<Crypto, "id" | "ticker" | "logo" | "name">)
       }
   >
 }
@@ -992,8 +820,8 @@ export type GetUserSettingsQueryVariables = Exact<{
 
 export type GetUserSettingsQuery = { __typename?: "Query" } & {
   getUserSettings?: Maybe<
-    { __typename?: "UserSettings" } & Pick<UserSettings, "defaultCurrency"> & {
-        defaultExchange: { __typename?: "Exchange" } & Pick<
+    { __typename: "UserSettings" } & Pick<UserSettings, "defaultCurrency"> & {
+        defaultExchange: { __typename: "Exchange" } & Pick<
           Exchange,
           "abbreviation" | "suffix" | "mic" | "name" | "region"
         >
@@ -1007,12 +835,24 @@ export type SearchQueryVariables = Exact<{
 
 export type SearchQuery = { __typename?: "Query" } & {
   search: Array<
-    { __typename?: "SearchResult" } & Pick<SearchResult, "isin"> & {
-        company: { __typename?: "Company" } & Pick<Company, "logo" | "ticker" | "name">
+    { __typename: "SearchResult" } & Pick<SearchResult, "isin"> & {
+        asset:
+          | ({ __typename: "CompanyStock" } & Pick<CompanyStock, "logo" | "ticker" | "name">)
+          | ({ __typename: "Crypto" } & Pick<Crypto, "logo" | "ticker" | "name">)
       }
   >
 }
 
+export const TransactionSchemaFragmentDoc = gql`
+  fragment TransactionSchema on Transaction {
+    id
+    assetId
+    userId
+    executedAt
+    value
+    volume
+  }
+`
 export const CreateTransactionDocument = gql`
   mutation CreateTransaction($transaction: CreateTransaction!) {
     createTransaction(transaction: $transaction) {
@@ -1050,31 +890,21 @@ export const UpdateUserSettingsDocument = gql`
     }
   }
 `
-export const GetCompanyDocument = gql`
-  query getCompany($ticker: String!) {
-    getCompany(ticker: $ticker) {
+export const GetExchangeTradedAssetDocument = gql`
+  query getExchangeTradedAsset($id: ID!) {
+    getExchangeTradedAsset(id: $id) {
+      __typename
+      id
       ticker
       logo
       name
-      description
-      sector
-    }
-  }
-`
-export const GetCompanyFromIsinDocument = gql`
-  query getCompanyFromIsin($isin: ID!) {
-    getCompanyFromIsin(isin: $isin) {
-      ticker
-      logo
-      name
-      description
-      sector
     }
   }
 `
 export const GetExchangesDocument = gql`
   query getExchanges {
     getExchanges {
+      __typename
       name
       region
       mic
@@ -1086,22 +916,19 @@ export const GetExchangesDocument = gql`
 export const GetPortfolioHistoryDocument = gql`
   query getPortfolioHistory($userId: String!) {
     getPortfolioHistory(userId: $userId) {
+      assetId
       asset {
-        ... on Stock {
-          id
-          ticker
-          company {
-            name
-            logo
-            sector
-            country
-            ticker
-            currentValue
-          }
+        id
+        ticker
+        name
+        logo
+        ... on CompanyStock {
+          __typename
+          sector
+          country
         }
         ... on Crypto {
-          id
-          name
+          __typename
         }
       }
       history {
@@ -1115,14 +942,19 @@ export const GetPortfolioHistoryDocument = gql`
 export const GetTransactionsDocument = gql`
   query getTransactions($userId: ID!) {
     getTransactions(userId: $userId) {
+      __typename
       id
       asset {
-        ... on Stock {
-          id
-          ticker
+        __typename
+        id
+        ticker
+        logo
+        name
+        ... on CompanyStock {
+          __typename
         }
         ... on Crypto {
-          id
+          __typename
         }
       }
       userId
@@ -1135,8 +967,10 @@ export const GetTransactionsDocument = gql`
 export const GetUserSettingsDocument = gql`
   query getUserSettings($userId: ID!) {
     getUserSettings(userId: $userId) {
+      __typename
       defaultCurrency
       defaultExchange {
+        __typename
         abbreviation
         suffix
         mic
@@ -1149,8 +983,10 @@ export const GetUserSettingsDocument = gql`
 export const SearchDocument = gql`
   query search($fragment: String!) {
     search(fragment: $fragment) {
+      __typename
       isin
-      company {
+      asset {
+        __typename
         logo
         ticker
         name
@@ -1210,19 +1046,12 @@ export function getSdk<C>(requester: Requester<C>) {
         options,
       )
     },
-    getCompany(variables: GetCompanyQueryVariables, options?: C): Promise<GetCompanyQuery> {
-      return requester<GetCompanyQuery, GetCompanyQueryVariables>(
-        GetCompanyDocument,
-        variables,
-        options,
-      )
-    },
-    getCompanyFromIsin(
-      variables: GetCompanyFromIsinQueryVariables,
+    getExchangeTradedAsset(
+      variables: GetExchangeTradedAssetQueryVariables,
       options?: C,
-    ): Promise<GetCompanyFromIsinQuery> {
-      return requester<GetCompanyFromIsinQuery, GetCompanyFromIsinQueryVariables>(
-        GetCompanyFromIsinDocument,
+    ): Promise<GetExchangeTradedAssetQuery> {
+      return requester<GetExchangeTradedAssetQuery, GetExchangeTradedAssetQueryVariables>(
+        GetExchangeTradedAssetDocument,
         variables,
         options,
       )

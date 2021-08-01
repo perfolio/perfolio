@@ -16,10 +16,7 @@ export const usePortfolio = () => {
 
   const portfolio = portfolioHistory?.map((h) => {
     return {
-      asset: {
-        company: "company" in h.asset ? h.asset.company : undefined,
-        id: h.asset.id,
-      },
+      asset: h.asset,
       ...getLastValid(h.history),
     }
   })
