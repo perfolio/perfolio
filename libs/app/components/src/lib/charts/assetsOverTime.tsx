@@ -4,7 +4,7 @@ import { Time } from "@perfolio/util/time"
 import { AssetsOverTime, toTimeseries, rebalance } from "@perfolio/feature/finance/returns"
 import { usePortfolioHistory } from "@perfolio/hooks"
 import { format } from "@perfolio/util/numbers"
-import { Downsampling } from "@perfolio/downsampling"
+// import { Downsampling } from "@perfolio/downsampling"
 
 type Data = {
   time: number
@@ -66,10 +66,14 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
 
     const rawData =
       aggregate === "Absolute" ? plotAbsolute(selectedHistory) : plotRelative(selectedHistory)
-    return Downsampling.largestTriangle(
-      rawData.map(({ time, value }) => ({ x: time, y: value })),
-      1000,
-    ).map(({ x, y }) => ({ time: Time.fromTimestamp(x).toDate().toLocaleDateString(), value: y }))
+    return rawData.map(({ time, value }) => ({
+      time: Time.fromTimestamp(time).toDate().toLocaleDateString(),
+      value,
+    }))
+    // return Downsampling.largestTriangle(
+    //   rawData.map(({ time, value }) => ({ x: time, y: value })),
+    //   1000,
+    // ).map(({ x, y }) => ({ time: Time.fromTimestamp(x).toDate().toLocaleDateString(), value: y }))
   }, [aggregate, portfolioHistory, range])
 
   return (

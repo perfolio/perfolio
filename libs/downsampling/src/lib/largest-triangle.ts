@@ -38,6 +38,9 @@ export function largestTriangle(data: Point[], threshold: number): Point[] {
   if (data.length <= threshold) {
     return data
   }
+  console.log("abc")
+  console.time("Downsample")
+
   /**
    *
    * Split the data across all buckets.
@@ -68,5 +71,6 @@ export function largestTriangle(data: Point[], threshold: number): Point[] {
     reducedData.push(bestPoint)
   }
   reducedData.push(data[data.length - 1])
+  console.timeEnd("Downsample")
   return reducedData
 }
