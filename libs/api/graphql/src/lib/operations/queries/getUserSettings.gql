@@ -1,7 +1,11 @@
 query getUserSettings($userId: ID!) {
   getUserSettings(userId: $userId) {
+    __typename
+
     defaultCurrency
     defaultExchange {
+      __typename
+
       abbreviation
       suffix
       mic
