@@ -2,20 +2,20 @@ import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage } from "next"
-import { Stock } from "@perfolio/api/graphql"
+import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/api/graphql"
-import { useDeleteTransaction, useCompanyFromIsin, useTransactions } from "@perfolio/hooks"
+import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
 export interface TransactionItemProps {
-  transaction: Transaction
+  transaction: Omit<Transaction, "assetId">
   isLast: boolean
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
-  const { company } = useCompanyFromIsin({
-    isin: transaction.asset.id,
+  const { asset } = useExchangeTradedAsset({
+    id: transaction.asset.id,
   })
   const deleteTransaction = useDeleteTransaction()
 
@@ -28,7 +28,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
               {new Date(transaction.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-dark dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {company?.logo ? <Avatar size="sm" src={company?.logo} /> : <Loading />}
+              {asset?.logo ? <Avatar size="sm" src={asset.logo} /> : <Loading />}
             </div>
           </div>
         </div>
@@ -42,12 +42,12 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
         )}
       >
         <div className="flex flex-grow gap-4">
-          {company ? (
-            <Description title={company.name}>
+          {asset ? (
+            <Description title={asset.name}>
               {`You ${transaction.volume > 0 ? "bought" : "sold"} ${Math.abs(
                 transaction.volume,
               ).toFixed(2)} share${transaction.volume === 1 ? "" : "s"} of ${
-                company.ticker
+                asset.ticker
               } at $${transaction.value.toFixed(2)} per share`}
             </Description>
           ) : null}
@@ -102,7 +102,7 @@ const TransactionsPage: NextPage = () => {
                 ?.map((tx, i) => (
                   <TransactionItem
                     key={tx.id}
-                    transaction={{ ...tx, asset: tx.asset as Stock }}
+                    transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset }}
                     isLast={i === transactions.length - 1}
                   />
                 ))}

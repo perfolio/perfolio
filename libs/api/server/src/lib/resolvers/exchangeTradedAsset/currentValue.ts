@@ -1,8 +1,8 @@
-import { Company, ResolverFn } from "@perfolio/api/graphql"
+import { ExchangeTradedAsset, ResolverFn } from "@perfolio/api/graphql"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
 import { Context } from "../../context"
 
-export const currentValue: ResolverFn<number, Company, Context, unknown> = async (
+export const currentValue: ResolverFn<number, ExchangeTradedAsset, Context, unknown> = async (
   { ticker },
   _args,
   ctx,

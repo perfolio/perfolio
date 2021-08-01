@@ -1,9 +1,9 @@
-import { CreateTransaction, ResolverFn, Transaction } from "@perfolio/api/graphql"
+import { CreateTransaction, ResolverFn, TransactionSchemaFragment } from "@perfolio/api/graphql"
 import { AuthorizationError } from "@perfolio/util/errors"
 import { Context } from "../../context"
 
 export const createTransaction: ResolverFn<
-  Transaction,
+  TransactionSchemaFragment,
   unknown,
   Context,
   { transaction: CreateTransaction }

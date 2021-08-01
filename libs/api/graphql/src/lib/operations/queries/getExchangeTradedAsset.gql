@@ -1,0 +1,9 @@
+query getExchangeTradedAsset($id: ID!) {
+  getExchangeTradedAsset(id: $id) {
+    __typename
+    id
+    ticker
+    logo
+    name
+  }
+}
