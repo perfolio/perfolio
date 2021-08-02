@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql"
 import { DocumentNode } from "graphql"
 import gql from "graphql-tag"
-export type Maybe<T> = T | null | undefined
+export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
@@ -210,6 +210,7 @@ export type QueryGetExchangeTradedAssetArgs = {
 /** Available queries */
 export type QueryGetRelativePortfolioHistoryArgs = {
   userId: Scalars["String"]
+  since?: Maybe<Scalars["Int"]>
 }
 
 /** Available queries */
@@ -440,6 +441,7 @@ export type ResolversTypes = ResolversObject<{
   Interval: Interval
   Mutation: ResolverTypeWrapper<{}>
   Query: ResolverTypeWrapper<{}>
+  Int: ResolverTypeWrapper<Scalars["Int"]>
   SearchResult: ResolverTypeWrapper<SearchResult>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
   Transaction: ResolverTypeWrapper<Transaction>
@@ -465,6 +467,7 @@ export type ResolversParentTypes = ResolversObject<{
   ExchangeTradedAsset: ResolversParentTypes["CompanyStock"] | ResolversParentTypes["Crypto"]
   Mutation: {}
   Query: {}
+  Int: Scalars["Int"]
   SearchResult: SearchResult
   Timestamp: Scalars["Timestamp"]
   Transaction: Transaction
@@ -812,6 +815,7 @@ export type GetPortfolioHistoryQuery = { __typename?: "Query" } & {
 
 export type GetRelativePortfolioHistoryQueryVariables = Exact<{
   userId: Scalars["String"]
+  since?: Maybe<Scalars["Int"]>
 }>
 
 export type GetRelativePortfolioHistoryQuery = { __typename?: "Query" } & {
@@ -963,8 +967,8 @@ export const GetPortfolioHistoryDocument = gql`
   }
 `
 export const GetRelativePortfolioHistoryDocument = gql`
-  query getRelativePortfolioHistory($userId: String!) {
-    getRelativePortfolioHistory(userId: $userId) {
+  query getRelativePortfolioHistory($userId: String!, $since: Int) {
+    getRelativePortfolioHistory(userId: $userId, since: $since) {
       time
       value
     }

@@ -1,15 +1,12 @@
 import { useQuery } from "react-query"
-import { useAbsolutePortfolioHistory } from "./useAbsolutePortfolioHistory"
 import { Mean } from "@perfolio/feature/finance/kpis"
+import { ValueAtTime } from "@perfolio/api/graphql"
 
 export const USE_ABSOLUTE_MEAN = "USE_ABSOLUTE_MEAN"
 
-export const useAbsoluteMean = (range: number) => {
-  const { absolutePortfolioHistory, ...meta } = useAbsolutePortfolioHistory()
-  const { data } = useQuery([USE_ABSOLUTE_MEAN, { range, absolutePortfolioHistory }], () =>
-    Mean.getAbsolute(
-      absolutePortfolioHistory.filter(({ time }) => time >= range).map(({ value }) => value),
-    ),
+export const useAbsoluteMean = (absolutePortfolioHistory: ValueAtTime[]) => {
+  const { data, ...meta } = useQuery([USE_ABSOLUTE_MEAN, { absolutePortfolioHistory }], () =>
+    Mean.getAbsolute(absolutePortfolioHistory.map(({ value }) => value)),
   )
 
   return { absoluteMean: data ?? 0, ...meta }

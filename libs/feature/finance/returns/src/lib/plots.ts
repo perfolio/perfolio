@@ -37,13 +37,16 @@ export const plotRelative = (history: AssetHistory): { time: string; value: numb
  *
  * Sorting by time first, then assetId
  */
-export const toTimeseries = (assetHistory: Omit<AssetHistory, "asset">[]): AssetsOverTime => {
+export const toTimeseries = (
+  assetHistory: Omit<AssetHistory, "asset">[],
+  since?: number,
+): AssetsOverTime => {
   const timeline: AssetsOverTime = {}
   assetHistory.forEach(({ assetId, history }) => {
     ;[...history]
       .sort((a, b) => a.time - b.time)
       .forEach((day) => {
-        if (day.value > 0) {
+        if (day.value > 0 && day.time >= (since ?? Number.NEGATIVE_INFINITY)) {
           if (!timeline[day.time]) {
             timeline[day.time] = {}
           }

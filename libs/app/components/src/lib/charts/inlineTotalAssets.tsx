@@ -1,19 +1,19 @@
 import React, { useMemo } from "react"
 import { AreaChart } from "@perfolio/ui/charts"
-import { useAbsolutePortfolioHistory } from "@perfolio/hooks"
+import { useAbsolutePortfolioHistory, usePortfolioHistory } from "@perfolio/hooks"
 import { format } from "@perfolio/util/numbers"
 import { useCurrentAbsoluteValue } from "@perfolio/hooks"
 import { Downsampling } from "@perfolio/downsampling"
 import { Time } from "@perfolio/util/time"
 export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
-  const { absolutePortfolioHistory, isLoading } = useAbsolutePortfolioHistory()
+  const { portfolioHistory } = usePortfolioHistory()
+  const { absolutePortfolioHistory, isLoading } = useAbsolutePortfolioHistory(portfolioHistory)
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const data = useMemo(() => {
     const downsampled = Downsampling.largestTriangle(
       absolutePortfolioHistory.map(({ time, value }) => ({ x: time, y: value })),
       500,
     )
-    console.log({ downsampled })
     return downsampled.map(({ x, y }) => ({
       time: Time.fromTimestamp(x).toDate().toLocaleDateString(),
       value: y,

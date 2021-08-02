@@ -383,7 +383,12 @@ type Query {
   """
   Return an index for the performance of the users portfolio
   """
-  getRelativePortfolioHistory("The unique id of a user" userId: String!): [ValueAtTime!]!
+  getRelativePortfolioHistory(
+    "The unique id of a user"
+    userId: String!
+    "unix timestamp where to begin calculation"
+    since: Int
+  ): [ValueAtTime!]!
 
   """
   Return all assets over time for a given user
