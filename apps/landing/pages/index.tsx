@@ -50,8 +50,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section id="features" className="flex flex-col justify-center ">
-          <SectionTitle tag="whyPerfolio" title="headerWhy"
-          />
+          <SectionTitle tag="whyPerfolio" title="headerWhy" />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
             {[
@@ -95,7 +94,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </ul>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
-          <SectionTitle tag= "freePricing" title= "subheaderPricing" />
+          <SectionTitle tag="freePricing" title="subheaderPricing" />
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 ">
             <Price
@@ -157,7 +156,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               <div className="flex flex-col items-center justify-center mt-4 space-y-2 text-center">
                 <h2 className="text-lg font-medium leading-6 text-black">Perfolio</h2>
                 <p className="text-base leading-6 text-left text-gray-600 md:text md:text-center">
-                { t("perfolioDescription") }
+                  {t("perfolioDescription")}
                 </p>
               </div>
             </div>
@@ -174,10 +173,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div>
               <h2 className="mb-3 font-semibold tracking-wide text-gray-900 uppercase sm:text-lg sm:leading-snug">
-                { t("ctaContactHeader") }
+                {t("ctaContactHeader")}
               </h2>
               <p className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                { t("ctaContactSubheader") }
+                {t("ctaContactSubheader")}
               </p>
             </div>
             <Button kind="cta" href="https://app.perfol.io/subscribe">
@@ -238,4 +237,3 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
 }
 
 export default IndexPage
-
