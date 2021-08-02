@@ -238,3 +238,4 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
 }
 
 export default IndexPage
+
