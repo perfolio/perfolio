@@ -50,7 +50,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section id="features" className="flex flex-col justify-center ">
-          <SectionTitle tag="whyPerfolio" title="headerWhy" />
+          <SectionTitle tag="whyPerfolio" title="headerWhy"
+          />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
             {[
