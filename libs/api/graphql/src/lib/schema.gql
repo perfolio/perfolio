@@ -381,6 +381,11 @@ type Query {
   getExchanges: [Exchange!]!
 
   """
+  Return an index for the performance of the users portfolio
+  """
+  getRelativePortfolioHistory("The unique id of a user" userId: String!): [ValueAtTime!]!
+
+  """
   Return all assets over time for a given user
   """
   getPortfolioHistory(

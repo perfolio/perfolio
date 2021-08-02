@@ -1,5 +1,6 @@
 import { Resolvers } from "@perfolio/api/graphql"
 import { Context } from "./context"
+import { getRelativePortfolioHistory } from "./resolvers/query/getRelativePortfolioHistory"
 import { getExchanges } from "./resolvers/query/getExchanges"
 import { search } from "./resolvers/query/search"
 import { getUserSettings } from "./resolvers/query/getUserSettings"
@@ -18,6 +19,8 @@ import { updateUserSettings } from "./resolvers/mutation/updateUserSettings"
 export const resolvers: Resolvers<Context> = {
   Query: {
     getExchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
+    getRelativePortfolioHistory: (_parent, { userId }, ctx) =>
+      getRelativePortfolioHistory(ctx, userId),
     getExchanges,
     search,
     getUserSettings,
@@ -25,7 +28,7 @@ export const resolvers: Resolvers<Context> = {
     getTransactions,
     // @ts-expect-error Remaining fields are resolved later
 
-    getPortfolioHistory,
+    getPortfolioHistory: (_parent, { userId }, ctx) => getPortfolioHistory(ctx, userId),
     getStockPricesAtExchange,
   },
 

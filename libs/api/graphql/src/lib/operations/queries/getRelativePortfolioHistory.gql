@@ -1,0 +1,6 @@
+query getRelativePortfolioHistory($userId: String!) {
+  getRelativePortfolioHistory(userId: $userId) {
+    time
+    value
+  }
+}
