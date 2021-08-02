@@ -1,4 +1,5 @@
 import { env } from "@perfolio/util/env"
+import { createHash } from "crypto"
 
 export class Key {
   public readonly parameters?: Record<string, unknown>
@@ -13,10 +14,14 @@ export class Key {
   }
 
   public toString(): string {
-    return JSON.stringify({
-      parameters: this.parameters,
-      environment: this.environment,
-    })
+    return createHash("md5")
+      .update(
+        JSON.stringify({
+          parameters: this.parameters,
+          environment: this.environment,
+        }),
+      )
+      .digest("hex")
   }
 }
 
