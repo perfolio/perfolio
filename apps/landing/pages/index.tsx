@@ -55,40 +55,34 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
             {[
               {
-                icon: <FlagIcon />,
-                title: t("independent"),
-                description:
-                  "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
-              },
-              {
                 icon: <ChartSquareBarIcon />,
-                title: "Complex made easy",
-                description:
-                  "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
+                title: t("complexMadeEasy"),
+                description: "complexMadeEasyDescription",
               },
               {
                 icon: <HomeIcon />,
-                title: "All in one place",
-                description:
-                  "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
+                title: t("allInOnePlace"),
+                description: "allInOnePlaceDescription",
               },
               {
                 icon: <DatabaseIcon />,
-                title: "Highest data quality",
-                description:
-                  "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
-              },
-              {
-                icon: <ShieldCheckIcon />,
-                title: "Privacy and Security",
-                description:
-                  "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
+                title: t("highestDataQuality"),
+                description: "highestDataQualityDescription",
               },
               {
                 icon: <CreditCardIcon />,
-                title: "Fair pricing",
-                description:
-                  "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
+                title: t("fairPricing"),
+                description: "fairPricingDescription",
+              },
+              {
+                icon: <ShieldCheckIcon />,
+                title: t("privacyAndSecurity"),
+                description: "PrivacyAndSecurityDescription",
+              },
+              {
+                icon: <FlagIcon />,
+                title: t("independent"),
+                description: "independentDescription",
               },
             ].map((f, index) => {
               return (
@@ -100,7 +94,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </ul>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
-          <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
+          <SectionTitle tag="FairPricing" title="Start for free, cancel anytime!" />
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 ">
             <Price
@@ -162,9 +156,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               <div className="flex flex-col items-center justify-center mt-4 space-y-2 text-center">
                 <h2 className="text-lg font-medium leading-6 text-black">Perfolio</h2>
                 <p className="text-base leading-6 text-left text-gray-600 md:text md:text-center">
-                  At Perfolio, we believe that investment decisions should always be based on as
-                  much well-founded information as possible. It is our mission to provide our users
-                  the most relevant and accurate financial information available.
+                { "perfolioDescription" }
                 </p>
               </div>
             </div>
@@ -174,12 +166,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                   return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
                 })}
               </div>
-              <p className="mt-8 text-center text-gray-600">
-                We are a motivated team of enthusiastic techies who are passionate about capital
-                market topics. Bringing together different backgrounds and skills, we want to
-                revolutionize the way investors track their assets and measure the success of their
-                investment strategy. We are always happy to chat - drop us a message!
-              </p>
             </div>
           </div>
         </Section>
