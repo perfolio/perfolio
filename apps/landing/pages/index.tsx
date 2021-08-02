@@ -50,39 +50,39 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section id="features" className="flex flex-col justify-center ">
-          <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
+          <SectionTitle tag="whyPerfolio" title="headerWhy" />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
             {[
               {
                 icon: <ChartSquareBarIcon />,
                 title: t("complexMadeEasy"),
-                description: "complexMadeEasyDescription",
+                description: t("complexMadeEasyDescription"),
               },
               {
                 icon: <HomeIcon />,
                 title: t("allInOnePlace"),
-                description: "allInOnePlaceDescription",
+                description: t("allInOnePlaceDescription"),
               },
               {
                 icon: <DatabaseIcon />,
                 title: t("highestDataQuality"),
-                description: "highestDataQualityDescription",
+                description: t("highestDataQualityDescription"),
               },
               {
                 icon: <CreditCardIcon />,
                 title: t("fairPricing"),
-                description: "fairPricingDescription",
+                description: t("fairPricingDescription"),
               },
               {
                 icon: <ShieldCheckIcon />,
                 title: t("privacyAndSecurity"),
-                description: "PrivacyAndSecurityDescription",
+                description: t("PrivacyAndSecurityDescription"),
               },
               {
                 icon: <FlagIcon />,
                 title: t("independent"),
-                description: "independentDescription",
+                description: t("independentDescription"),
               },
             ].map((f, index) => {
               return (
@@ -94,7 +94,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </ul>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
-          <SectionTitle tag="FairPricing" title="Start for free, cancel anytime!" />
+          <SectionTitle tag= "freePricing" title= "subheaderPricing" />
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 ">
             <Price
@@ -136,7 +136,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <SectionTitle tag="Our Team" title="Who is behind this?" />
+          <SectionTitle tag="teamHeader" title="teamSubheader" />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
@@ -156,7 +156,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               <div className="flex flex-col items-center justify-center mt-4 space-y-2 text-center">
                 <h2 className="text-lg font-medium leading-6 text-black">Perfolio</h2>
                 <p className="text-base leading-6 text-left text-gray-600 md:text md:text-center">
-                { "perfolioDescription" }
+                { t("perfolioDescription") }
                 </p>
               </div>
             </div>
@@ -173,10 +173,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           <div className="flex flex-col items-center justify-between md:flex-row">
             <div>
               <h2 className="mb-3 font-semibold tracking-wide text-gray-900 uppercase sm:text-lg sm:leading-snug">
-                Get in touch
+                { t("ctaContactHeader") }
               </h2>
               <p className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                Curious for more?
+                { t("ctaContactSubheader") }
               </p>
             </div>
             <Button kind="cta" href="https://app.perfol.io/subscribe">
