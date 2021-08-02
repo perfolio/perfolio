@@ -11,7 +11,7 @@ import {
   AggregateOptions,
   Sidebar,
 } from "@perfolio/app/components"
-import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
+import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { getCurrencySymbol } from "@perfolio/util/currency"
@@ -23,6 +23,7 @@ import {
   useAbsoluteMean,
   useRelativeMean,
   useAbsolutePortfolioHistory,
+  usePortfolioHistory,
 } from "@perfolio/hooks"
 import { Time } from "@perfolio/util/time"
 
@@ -43,10 +44,12 @@ const KPI = ({
   label,
   value,
   color,
+  isLoading,
 }: {
   label: string
   value: string
   color?: string
+  isLoading?: boolean
 }): JSX.Element => {
   return (
     <div className="flex justify-center">
@@ -57,10 +60,10 @@ const KPI = ({
         <span
           className={cn(
             "text-lg font-bold leading-3 sm:text-xl md:text-2xl lg:text-3xl",
-            color ?? "text-gray-800",
+            !isLoading && color ? color : "text-gray-800",
           )}
         >
-          {value}
+          {isLoading ? <Loading /> : value}
         </span>
       </div>
     </div>
@@ -71,21 +74,29 @@ const App: NextPage = () => {
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
-  const { absolutePortfolioHistory } = useAbsolutePortfolioHistory()
-  const { relativePortfolioHistory } = useRelativePortfolioHistory()
-
-  console.log({ relativePortfolioHistory })
+  const { portfolioHistory } = usePortfolioHistory()
+  const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
+    portfolioHistory,
+    ranges[range],
+  )
+  const { relativePortfolioHistory, isLoading: relativeIsLoading } = useRelativePortfolioHistory(
+    ranges[range],
+  )
 
   const absoluteChange =
     absolutePortfolioHistory.length > 0
       ? currentAbsoluteValue - absolutePortfolioHistory[0].value
       : 0
-  const relativeChange = 0
-  // relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1 ?? 0
+  const relativeChange =
+    relativePortfolioHistory.length > 0
+      ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
+      : 0
+
+  console.log({ relativePortfolioHistory, relativeChange })
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
-  const { absoluteMean } = useAbsoluteMean(ranges[range])
-  const { relativeMean } = useRelativeMean(ranges[range])
+  const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
+  const { relativeMean } = useRelativeMean(relativePortfolioHistory)
 
   const { standardDeviation: relativeSTD } = useStandardDeviation(
     relativePortfolioHistory.map(({ value }) => value),
@@ -122,9 +133,13 @@ const App: NextPage = () => {
                     Total Assets
                   </h4>
                   <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    {format(currentAbsoluteValue, {
-                      suffix: getCurrencySymbol(settings?.defaultCurrency),
-                    })}
+                    {absoluteIsLoading ? (
+                      <Loading />
+                    ) : (
+                      format(currentAbsoluteValue, {
+                        suffix: getCurrencySymbol(settings?.defaultCurrency),
+                      })
+                    )}
                   </span>
                 </div>
               </div>
@@ -139,6 +154,10 @@ const App: NextPage = () => {
                         ? "text-success"
                         : "text-error"
                     }
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
+                    }
                     value={
                       aggregation === "Absolute"
                         ? format(absoluteMean, {
@@ -152,7 +171,18 @@ const App: NextPage = () => {
               >
                 @webersni
               </Tooltip>
-              <Tooltip trigger={<KPI label="Standard Deviation" value={format(relativeSTD)} />}>
+              <Tooltip
+                trigger={
+                  <KPI
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
+                    }
+                    label="Standard Deviation"
+                    value={format(relativeSTD)}
+                  />
+                }
+              >
                 @webersni A large standard deviation is a sign of greater risk blabla Nico mach
                 endlich!
               </Tooltip>
@@ -165,6 +195,10 @@ const App: NextPage = () => {
                       (aggregation === "Absolute" && absoluteChange >= 0)
                         ? "text-success"
                         : "text-error"
+                    }
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
                     }
                     value={
                       aggregation === "Absolute"

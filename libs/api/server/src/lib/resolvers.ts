@@ -19,8 +19,8 @@ import { updateUserSettings } from "./resolvers/mutation/updateUserSettings"
 export const resolvers: Resolvers<Context> = {
   Query: {
     getExchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
-    getRelativePortfolioHistory: (_parent, { userId }, ctx) =>
-      getRelativePortfolioHistory(ctx, userId),
+    getRelativePortfolioHistory: (_parent, { userId, since }, ctx) =>
+      getRelativePortfolioHistory(ctx, userId, since ?? undefined),
     getExchanges,
     search,
     getUserSettings,
