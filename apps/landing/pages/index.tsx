@@ -77,7 +77,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               {
                 icon: <ShieldCheckIcon />,
                 title: t("privacyAndSecurity"),
-                description: t("PrivacyAndSecurityDescription"),
+                description: t("privacyAndSecurityDescription"),
               },
               {
                 icon: <FlagIcon />,
