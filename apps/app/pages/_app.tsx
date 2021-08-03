@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
-import { QueryClientProvider, QueryClient } from "react-query"
+import { QueryClientProvider } from "react-query"
+import { PersistendQueryClient } from "@perfolio/app/query-client"
 import {
   ClerkProvider,
   SignedIn,
@@ -8,16 +9,13 @@ import {
   ClerkLoaded,
 } from "@clerk/clerk-react"
 import Head from "next/head"
-import LogRocket from "logrocket"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import "tailwindcss/tailwind.css"
-import { Provider as ApolloProvider } from "@perfolio/api/client"
+import { JWTProvider } from "@perfolio/api/client"
 import { useRouter } from "next/router"
 
-LogRocket.init("perfolio/app")
-
-const publicPages = ["/auth/sign-in/[[...index]]", "/auth/sign-up/[[...index]]"]
+const publicPages = ["/subscribe"]
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -51,15 +49,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         ></link>
       </Head>
       <IdProvider>
-        <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
-          <ClerkLoaded>
-            <ApolloProvider>
-              {publicPages.includes(router.pathname) ? (
-                <Component {...pageProps} />
-              ) : (
-                <>
-                  <SignedIn>
-                    <QueryClientProvider client={new QueryClient()}>
+        <JWTProvider>
+          <QueryClientProvider client={PersistendQueryClient()}>
+            <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
+              <ClerkLoaded>
+                {publicPages.includes(router.pathname) ? (
+                  <Component {...pageProps} />
+                ) : (
+                  <>
+                    <SignedIn>
                       <OnboardingModal />
                       <div
                         className={`${
@@ -68,16 +66,16 @@ function MyApp({ Component, pageProps }: AppProps) {
                       >
                         <Component {...pageProps} />
                       </div>
-                    </QueryClientProvider>
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              )}
-            </ApolloProvider>
-          </ClerkLoaded>
-        </ClerkProvider>
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn />
+                    </SignedOut>
+                  </>
+                )}
+              </ClerkLoaded>
+            </ClerkProvider>
+          </QueryClientProvider>
+        </JWTProvider>
       </IdProvider>
     </>
   )

@@ -1,16 +1,15 @@
 import { Resolvers } from "@perfolio/api/graphql"
 import { Context } from "./context"
+import { getRelativePortfolioHistory } from "./resolvers/query/getRelativePortfolioHistory"
 import { getExchanges } from "./resolvers/query/getExchanges"
 import { search } from "./resolvers/query/search"
-import { getCompany } from "./resolvers/query/getCompany"
 import { getUserSettings } from "./resolvers/query/getUserSettings"
 import { getTransactions } from "./resolvers/query/getTransactions"
 import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
-import { getCompanyFromIsin } from "./resolvers/query/getCompanyFromIsin"
-import { logo } from "./resolvers/company/logo"
-import { currentValue } from "./resolvers/company/currentValue"
-import { asset } from "./resolvers/transaction/asset"
-import { company as stockCompany } from "./resolvers/stock/company"
+import { getStockPricesAtExchange } from "./resolvers/query/getStockPricesAtExchange"
+import { getExchangeTradedAsset } from "./resolvers/getExchangeTradedAsset"
+import { sector } from "./resolvers/companyStock/sector"
+import { country } from "./resolvers/companyStock/country"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
 import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
@@ -19,48 +18,43 @@ import { updateUserSettings } from "./resolvers/mutation/updateUserSettings"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
-    // @ts-expect-error Missing fields will be handled by the Company resolver
-    getCompany,
+    getExchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
+    getRelativePortfolioHistory: (_parent, { userId, since }, ctx) =>
+      getRelativePortfolioHistory(ctx, userId, since ?? undefined),
     getExchanges,
     search,
     getUserSettings,
+    // @ts-expect-error Remaining fields are resolved later
     getTransactions,
-    getPortfolioHistory,
-    // @ts-expect-error Missing fields will be handled by the SearchResult resolver
+    // @ts-expect-error Remaining fields are resolved later
 
-    getCompanyFromIsin,
+    getPortfolioHistory: (_parent, { userId }, ctx) => getPortfolioHistory(ctx, userId),
+    getStockPricesAtExchange,
   },
 
-  Company: {
-    logo,
-    currentValue,
+  AssetHistory: {
+    asset: ({ assetId }, _args, ctx) => getExchangeTradedAsset(ctx, assetId),
   },
-  Stock: {
-    // @ts-expect-error Missing fields will be handled by the Company resolver
-    company: stockCompany,
-  },
-
   Mutation: {
+    // @ts-expect-error Remaining fields are resolved later
     createTransaction,
     deleteTransaction,
     createUserSettings,
     updateUserSettings,
     subscribeToNewsletter,
   },
-  Asset: {
-    __resolveType(obj) {
-      if ("ticker" in obj) {
-        return "Stock"
-      }
-      if ("name" in obj) {
-        return "Crypto"
-      }
-      return null
+  ExchangeTradedAsset: {
+    __resolveType() {
+      // TODO: Implement actual resolver logic
+      return "CompanyStock"
     },
+  },
+  CompanyStock: {
+    sector,
+    country,
   },
 
   Transaction: {
-    // @ts-expect-error Missing fields will be handled by the Asset resolver
-    asset,
+    asset: ({ assetId }, _args, ctx) => getExchangeTradedAsset(ctx, assetId),
   },
 }

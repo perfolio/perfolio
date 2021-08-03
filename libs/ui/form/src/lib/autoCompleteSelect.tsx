@@ -2,8 +2,8 @@ import React, { useEffect, Fragment, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import cn from "classnames"
 import { Transition } from "@headlessui/react"
-import { useSearchQuery } from "@perfolio/api/graphql"
-import { Profile, Avatar, Loading, Text, Tooltip } from "@perfolio/ui/components"
+import { useSearch } from "@perfolio/hooks"
+import { Profile, Avatar, Loading, Description, Tooltip } from "@perfolio/ui/components"
 export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
   /**
@@ -54,16 +54,13 @@ export function AutoCompleteSelect<Option>({
   /**
    * User search value
    */
-  const [search, setSearch] = useState("")
+  const [fragment, setFragment] = useState("")
 
   /**
    * All matches on our database
    */
-  const { data: searchResult, loading } = useSearchQuery({
-    variables: { fragment: search },
-    skip: search.length < 3,
-  })
-  const options = searchResult?.search ?? []
+  const { search, isLoading } = useSearch({ fragment })
+  const options = search ?? []
   const selected = options.find((o) => o.isin === isin)
 
   return (
@@ -80,7 +77,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={selected?.company.logo ?? ""} size="xs" />
+            <Avatar src={selected?.asset.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -108,7 +105,7 @@ export function AutoCompleteSelect<Option>({
             >
               {state === State.Done ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  {selected?.company.name}
+                  {selected?.asset.name}
                 </div>
               ) : (
                 <input
@@ -118,9 +115,9 @@ export function AutoCompleteSelect<Option>({
                    * If propagation is not stopped the click will also trigger the div.Button
                    * and the input loses focus.
                    */
-                  value={search}
+                  value={fragment}
                   onChange={(e) => {
-                    setSearch(e.currentTarget.value)
+                    setFragment(e.currentTarget.value)
                     setState(State.Selecting)
                   }}
                 />
@@ -133,14 +130,17 @@ export function AutoCompleteSelect<Option>({
               leaveTo="opacity-0"
               show={state === State.Selecting}
             >
-              <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {loading ? (
+              <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-xl max-h-60 focus:outline-none">
+                {isLoading ? (
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>
                 ) : options.length === 0 ? (
-                  <li className="relative w-full p-2 cursor-pointer">
-                    <Text>No results found</Text>
+                  <li className="relative w-full p-8">
+                    <Description title="No results found">
+                      We are continuously improving our service, please enter the ISIN manually to
+                      add it to our database.
+                    </Description>
                   </li>
                 ) : (
                   options.map((option, i) => {
@@ -152,15 +152,18 @@ export function AutoCompleteSelect<Option>({
                             setValue(name, option?.isin)
                             setState(State.Done)
                           }}
-                          className={cn("relative p-2 cursor-pointer w-full focus:outline-none", {
-                            "bg-gray-100": option?.isin === isin,
-                            "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
-                          })}
+                          className={cn(
+                            "relative p-2 cursor-pointer w-full focus:outline-none hover:bg-gray-50 duration-500 transform",
+                            {
+                              "bg-gray-100": option?.isin === isin,
+                              "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
+                            },
+                          )}
                         >
                           <Profile
-                            image={option.company.logo}
-                            subtitle={option.company.ticker}
-                            title={option.company.name}
+                            image={option.asset.logo}
+                            subtitle={option.asset.ticker}
+                            title={option.asset.name}
                             tag={option.isin}
                           />
                         </button>

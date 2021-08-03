@@ -96,7 +96,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="freePricing" title="subheaderPricing" />
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 ">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <Price
               title="Try for free"
               price={0}

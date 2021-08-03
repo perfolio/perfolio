@@ -42,6 +42,15 @@
     "app-middleware": {
       "tags": []
     },
+    "app-query-client": {
+      "tags": []
+    },
+    "downsampling": {
+      "tags": []
+    },
+    "feature-asset-search": {
+      "tags": []
+    },
     "feature-email": {
       "tags": []
     },
@@ -57,10 +66,10 @@
     "feature-tokens": {
       "tags": []
     },
-    "integrations-bankofengland": {
+    "hooks": {
       "tags": []
     },
-    "integrations-cookies": {
+    "integrations-bankofengland": {
       "tags": []
     },
     "integrations-ecb": {
@@ -82,9 +91,6 @@
       "tags": []
     },
     "landing": {
-      "tags": []
-    },
-    "queries": {
       "tags": []
     },
     "types": {

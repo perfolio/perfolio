@@ -6,16 +6,6 @@ scalar Timestamp
 """
 The interval for timeseries
 """
-enum AssetType {
-  """
-  Ownership of a fraction of a corporation or fund.
-  """
-  STOCK
-}
-
-"""
-The interval for timeseries
-"""
 enum Interval {
   """
   One rate per day
@@ -34,235 +24,113 @@ enum Interval {
 }
 
 """
-The risk free rate from the european central bank
-
-This was meant to be a map with a time as key and the rate as value
-but graphql does not handle maps.
+A sub type of assets that are all traded at exchanges
 """
-type RiskFreeRate {
+interface ExchangeTradedAsset implements Asset {
   """
-  Rate
+  A globally unique id
   """
-  rate: Float!
+  id: ID!
 
   """
-  Timestamp of a specific day
-  """
-  time: Timestamp!
-}
-"""
-Issue types for stock assets
-"""
-enum IssueType {
-  """
-  ADR
-  """
-  AD
-
-  """
-  Closed End Fund
-  """
-  CEF
-
-  """
-  Common Stock
-  """
-  CS
-
-  """
-  Other
-  """
-  EMPTY
-
-  """
-  ETF
-  """
-  ET
-  """
-  Open Ended Fund
-  """
-  OEF
-  """
-  Preferred Stock
-  """
-  PS
-  """
-  Right
-  """
-  RT
-  """
-  Structured Product
-  """
-  STRUCT
-  """
-  Unit
-  """
-  UT
-  """
-  When Issued
-  """
-  WI
-  """
-  Warrant
-  """
-  WT
-}
-
-"""
-A publicly traded company
-"""
-type Company {
-  # """
-  # Isin is the global unique id
-  # """
-  # isin: ID!
-
-  """
-  Street address of the company if available
-  """
-  address: String
-
-  """
-  Street address of the company if available
-  """
-  address2: String
-
-  """
-  Name of the CEO of the company
-  """
-  ceo: String
-
-  """
-  City of the company if available
-  """
-  city: String
-
-  """
-  Country of the company if available
-  """
-  country: String
-
-  """
-  Return the latest price
-  Computed value
-  """
-  currentValue: Float!
-
-  """
-  Description for the company
-  """
-  description: String
-
-  """
-  Number of employees
-  """
-  employees: Int
-
-  """
-  Refers to the industry the company belongs to
-  """
-  industry: String
-
-  """
-  Refers to the common issue type of the stock.
-  """
-  issueType: IssueType
-
-  """
-  Url of the logo
-  """
-  logo: String!
-
-  """
-  Name of the company
-  """
-  name: String
-
-  """
-  Phone Number of the company if available
-  """
-  phone: String
-
-  """
-  Primary SIC Code for the ticker (if available)
-  @see https://en.wikipedia.org/wiki/Standard_Industrial_Classification
-  """
-  primarySicCode: Int
-
-  """
-  Refers to the sector the company belongs to.
-  """
-  sector: String
-
-  """
-  Name of the CEO of the company
-  """
-  securityName: String
-
-  """
-  State of the company if available
-  """
-  state: String
-
-  """
-  An array of Strings used to classify the company.
-  """
-  tags: [String]
-
-  """
-  Ticker of the company
+  The ticker as used by the exchanges.
   """
   ticker: String!
 
   """
-  Website of the company
+  Human readable name
   """
-  website: String
+  name: String!
 
   """
-  Zip code of the company if available
+  URL to the logo or image
   """
-  zip: String
+  logo: String!
 }
 
 """
 Stocks such as company shares and funds.
 """
-type Stock implements IAsset {
+type CompanyStock implements ExchangeTradedAsset & Asset {
   """
   For stocks we are always using the isin as id.
   """
   id: ID!
+
+  """
+  International Securities Indentification Number
+  """
+  isin: String!
+
+  """
+  The companys name
+  """
+  name: String!
+
+  """
+  The companys logo url
+  """
+  logo: String!
+
   """
   The ticker of a stock. This does not include pre/suffixes for different exchanges
   """
   ticker: String!
-  """
-  The associated company if available
 
-  This probably does not carry much meaningful data for ETFs etc.
   """
-  company: Company
+  The main sector of this company
+  """
+  sector: String!
+  """
+  The country where this company is registered
+  """
+  country: String!
 }
-type Crypto implements IAsset {
+"""
+Crypto
+"""
+type Crypto implements ExchangeTradedAsset & Asset {
+  """
+  A globally unique id
+  """
   id: ID!
+  """
+  Dummy field
+  """
   name: String!
+  """
+  A
+  """
+  ticker: String!
+
+  """
+  B
+  """
+  logo: String!
 }
 
-interface IAsset {
+"""
+Common fields on all assets
+"""
+interface Asset {
+  """
+  Globally unique id
+  """
   id: ID!
 }
-
-union Asset = Crypto | Stock
 
 """
 A transactions represents a single purchase or sale of any number of shares of a single asset.
 """
 type Transaction {
   """
+  Reference to the actual asset
+  """
+  assetId: String!
+  """
   The of asset. Stocks, Crypto, Real estate for example.
   """
-  asset: Asset!
+  asset: ExchangeTradedAsset!
 
   """
   A timestamp when the transaction was executed
@@ -290,6 +158,11 @@ type Transaction {
   negative if sold
   """
   volume: Float!
+
+  """
+  The market identifier code where the user intends to sell this asset
+  """
+  mic: String
 }
 
 """
@@ -320,6 +193,11 @@ input CreateTransaction {
   How many shares/items the user bought or sold
   """
   volume: Float!
+
+  """
+  The market identifier code where the user intends to sell this asset
+  """
+  mic: String
 }
 
 """
@@ -334,12 +212,6 @@ type UserSettings {
   The user's default exchange. At the start only 1 exchange can be used.
   """
   defaultExchange: Exchange!
-}
-
-type User {
-  id: ID!
-  email: String!
-  name: String!
 }
 
 """
@@ -389,11 +261,6 @@ type Exchange {
   abbreviation: String!
 
   """
-  Exchange Suffix to be added for symbols on that exchange
-  """
-  suffix: String
-
-  """
   Market Identifier Code using ISO 10383
   """
   mic: String!
@@ -407,6 +274,11 @@ type Exchange {
   2 letter case insensitive string of country codes using ISO 3166-1 alpha-2
   """
   region: String!
+
+  """
+  Exchange Suffix to be added for symbols on that exchange
+  """
+  suffix: String
 }
 
 """
@@ -430,19 +302,18 @@ type ValueAndQuantityAtTime {
   value: Float!
 }
 
-type Holding {
-  asset: Asset!
-  quantity: Float!
-}
-
 """
 The value and volume of an asset over time.
 """
 type AssetHistory {
   """
+  For reference
+  """
+  assetId: String!
+  """
   The asset
   """
-  asset: Asset!
+  asset: ExchangeTradedAsset!
 
   """
   Value and Quantity for each day
@@ -451,57 +322,73 @@ type AssetHistory {
 }
 
 """
-
+Anything that has a changing value over time can use this.
 """
-type Price {
-  value: Float!
+type ValueAtTime {
+  """
+  A unix timestamp.
+  """
   time: Timestamp!
+  """
+  Can be anything really. Prices, percentages, or something else entirely.
+  """
+  value: Float!
 }
-
+"""
+The found company from a user search.
+"""
 type SearchResult {
+  """
+  For reference
+  """
+  assetId: String!
+  """
+  All company data itself
+  """
+  asset: ExchangeTradedAsset!
+  """
+  The isin of the company
+  """
   isin: ID!
+  """
+  The ticker of the company
+  """
   ticker: ID!
-  company: Company!
 }
 
 """
 Available queries
 """
 type Query {
-  """
-  Return a list of all companies that can be traded at a certain exchange
-  """
-  getAvailableCompaniesAtExchange(
-    """
-    The market identifier code
-    """
-    mic: String!
-  ): [Company!]!
+  # """
+  # Return a list of all companies that can be traded at a certain exchange
+  # """
+  # getAvailableCompaniesAtExchange(
+  #   """
+  #   The market identifier code
+  #   """
+  #   mic: String!
+  # ): [Company!]!
 
   """
-  Return the daily closing prices for a stock at a specific exchange
+  Load an exchange traded asset by its id
   """
-  getStockPricesAtExchange(
-    ticker: String!
-    mic: String!
-    start: Timestamp!
-    end: Timestamp!
-  ): [Price!]!
-
-  """
-  Return a company by its symbol
-  """
-  getCompany(
-    """
-    The company symbol as used by IEXCloud
-    """
-    ticker: String!
-  ): Company
+  getExchangeTradedAsset("The globally unique id" id: ID!): ExchangeTradedAsset
 
   """
   Get a list of all availale exchanges
   """
   getExchanges: [Exchange!]!
+
+  """
+  Return an index for the performance of the users portfolio
+  """
+  getRelativePortfolioHistory(
+    "The unique id of a user"
+    userId: String!
+    "unix timestamp where to begin calculation"
+    since: Int
+  ): [ValueAtTime!]!
 
   """
   Return all assets over time for a given user
@@ -530,7 +417,28 @@ type Query {
     Defaults to `today`
     """
     end: Timestamp
-  ): [RiskFreeRate!]!
+  ): [ValueAtTime!]!
+  """
+  Return the daily closing prices for a stock at a specific exchange
+  """
+  getStockPricesAtExchange(
+    """
+    The ticker of a company.
+    """
+    ticker: String!
+    """
+    The Market Identifier Code of the exchange.
+    """
+    mic: String!
+    """
+    The start time to filter prices
+    """
+    start: Timestamp!
+    """
+    Optionally set an end time, defaults to now.
+    """
+    end: Timestamp
+  ): [ValueAtTime!]!
 
   """
   Return all transactions of a user
@@ -563,8 +471,6 @@ type Query {
     """
     fragment: String!
   ): [SearchResult!]!
-
-  getCompanyFromIsin(isin: ID!): Company
 }
 
 """

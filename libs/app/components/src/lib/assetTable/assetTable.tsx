@@ -1,24 +1,14 @@
 import React, { useMemo } from "react"
-// import { Table, Simple, Icon, Tag } from "@perfolio/ui/components"
-import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
+import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import {
-  useGetPortfolioHistoryQuery,
-  useGetTransactionsQuery,
-  ValueAndQuantityAtTime,
-} from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
+import { useTransactions, usePortfolio } from "@perfolio/hooks"
 
 export interface AssetTableProps {
   aggregation: "Absolute" | "Relative"
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const user = useUser()
-  const portfolioHistoryResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
-  const portfolioHistory = portfolioHistoryResponse.data?.getPortfolioHistory
-  const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
-  const transactions = transactionsResponse.data?.getTransactions
+  const { transactions } = useTransactions()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
@@ -45,37 +35,23 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
     return costPerShare
   }, [transactions])
 
-  const portfolio = React.useMemo(() => {
-    const getLastValid = (
-      history: ValueAndQuantityAtTime[],
-    ): { quantity: number; value: number } => {
-      const sorted = [...history].sort((a, b) => b.time - a.time)
-
-      for (const day of sorted) {
-        if (day.value > 0) {
-          return day
-        }
-      }
-      throw new Error("Nothing found")
-    }
-    return portfolioHistory?.map((h) => {
-      return {
-        asset: {
-          company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
-          id: h.asset.id,
-        },
-        ...getLastValid(h.history),
-      }
-    })
-  }, [portfolioHistory])
+  const { portfolio } = usePortfolio()
+  const totalValue = (portfolio ?? []).reduce(
+    (acc, { value, quantity }) => acc + value * quantity,
+    0,
+  )
 
   return (
-    <Table<"asset" | "quantity" | "costPerShare" | "pricePerShare" | "change">
+    <Table<"asset" | "chart" | "quantity" | "costPerShare" | "pricePerShare" | "change">
       columns={[
         {
           Header: "Asset",
           accessor: "asset",
           align: "text-left",
+        },
+        {
+          Header: "Weight",
+          accessor: "chart",
         },
         {
           Header: "Quantity",
@@ -103,29 +79,45 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           align: "text-right",
         },
       ]}
-      data={[...(portfolio ?? [])]
+      data={(portfolio ?? [])
         /**
          * Sort by total value descending
          * The largest position is at the top of the table
          */
         .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
         .map((holding) => {
-          if (!holding?.asset?.company) {
-            return {
-              asset: <Cell.Loading />,
-              quantity: <Cell.Loading />,
-              costPerShare: <Cell.Loading />,
-              pricePerShare: <Cell.Loading />,
-              change: <Cell.Loading />,
-            }
-          }
+          const change =
+            aggregation === "Absolute"
+              ? (holding.value - costPerShare[holding.asset.id]) * holding.quantity
+              : holding.value / costPerShare[holding.asset.id] - 1
+
+          const weight = (holding.quantity * holding.value) / totalValue
           return {
             asset: (
               <Cell.Profile
-                src={holding.asset.company?.logo}
-                title={holding.asset.company?.name}
-                subtitle={holding.asset.company?.ticker}
+                src={holding.asset.logo}
+                title={holding.asset.name}
+                subtitle={holding.asset.ticker}
               />
+            ),
+            chart: (
+              <Cell.Cell>
+                <Tooltip
+                  trigger={
+                    <div className="flex h-2 overflow-hidden rounded bg-primary-light">
+                      <div
+                        style={{ width: `${weight * 100}%` }}
+                        className="flex w-full h-2 mb-4 overflow-hidden rounded bg-primary"
+                      ></div>
+                    </div>
+                  }
+                >
+                  <Text>
+                    {holding.asset.name} represents {format(weight, { percent: true, suffix: "%" })}{" "}
+                    of your portfolio.
+                  </Text>
+                </Tooltip>
+              </Cell.Cell>
             ),
             quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
             costPerShare: (
@@ -137,18 +129,18 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               <Cell.Text align="text-right">{format(holding.value, { suffix: "€" })}</Cell.Text>
             ),
             change: (
-              <Cell.Text align="text-right">
-                {aggregation === "Absolute"
-                  ? format((holding.value - costPerShare[holding.asset.id]) * holding.quantity, {
-                      suffix: "€",
-                      sign: true,
-                    })
-                  : format(holding.value / costPerShare[holding.asset.id] - 1, {
-                      percent: true,
-                      suffix: "%",
-                      sign: true,
-                    })}
-              </Cell.Text>
+              <Cell.Tag
+                align="text-right"
+                textColor={change > 0 ? "text-success-dark" : "text-error-dark"}
+                bgColor={change > 0 ? "bg-success-light" : "bg-error-light"}
+              >
+                {format(
+                  change,
+                  aggregation === "Absolute"
+                    ? { suffix: "€", sign: true }
+                    : { percent: true, suffix: "%", sign: true },
+                )}
+              </Cell.Tag>
             ),
           }
         })}

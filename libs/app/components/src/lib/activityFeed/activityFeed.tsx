@@ -1,15 +1,12 @@
-import {
-  useGetTransactionsQuery,
-  Transaction,
-  useGetCompanyFromIsinQuery,
-} from "@perfolio/api/graphql"
+import { Transaction } from "@perfolio/api/graphql"
 import { Time } from "@perfolio/util/time"
 import React from "react"
 import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
-import { useUser } from "@clerk/clerk-react"
+import { useTransactions, useExchangeTradedAsset } from "@perfolio/hooks"
+
 interface TransactionActivityItemProps {
-  transaction: Omit<Transaction, "userId">
+  transaction: Omit<Transaction, "userId" | "assetId">
   isFirst?: boolean
 }
 
@@ -17,17 +14,16 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
-  const { data, loading } = useGetCompanyFromIsinQuery({
-    variables: { isin: transaction.asset.id },
+  const { asset, isLoading } = useExchangeTradedAsset({
+    id: transaction.asset.id,
   })
-  const company = data?.getCompanyFromIsin
   return (
     <li
       className={cn(" py-4", {
         "border-t border-gray-100": !isFirst,
       })}
     >
-      {loading || !company ? (
+      {isLoading || !asset ? (
         <Loading />
       ) : (
         <>
@@ -39,8 +35,8 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
           </div>
           <Text size="sm">
             You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
-            <span className="font-semibold">{company.ticker}</span> shares at ${transaction.value}{" "}
-            per share.
+            <span className="font-semibold">{asset.ticker}</span> shares at ${transaction.value} per
+            share.
           </Text>
         </>
       )}
@@ -49,9 +45,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const user = useUser()
-  const { data } = useGetTransactionsQuery({ variables: { userId: user.id } })
-  const transactions = data?.getTransactions
+  const { transactions } = useTransactions()
   const last5Transactions = transactions
     ? [...transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []
@@ -61,7 +55,7 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
       <p className="text-base font-semibold text-gray-800">Recent Activity</p>
       <ul>
         {last5Transactions?.map((tx, i) => (
-          <TransactionActivityItem key={tx.id} transaction={tx as Transaction} isFirst={i === 0} />
+          <TransactionActivityItem key={tx.id} transaction={tx} isFirst={i === 0} />
         ))}
       </ul>
     </>

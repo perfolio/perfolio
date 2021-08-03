@@ -1,7 +1,5 @@
-import React, { useState, useMemo } from "react"
+import React, { useState } from "react"
 import { NextPage } from "next"
-import { useUser } from "@clerk/clerk-react"
-import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
 import {
   AppLayout,
   DiversificationChart,
@@ -13,24 +11,32 @@ import {
   AggregateOptions,
   Sidebar,
 } from "@perfolio/app/components"
-import { toTimeseries, rebalance, AssetsOverTime } from "@perfolio/feature/finance/returns"
-import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
+import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
-import { Mean, standardDeviation } from "@perfolio/feature/finance/kpis"
 import { getCurrencySymbol } from "@perfolio/util/currency"
-import { useGetUserSettingsQuery } from "@perfolio/api/graphql"
-import { useCurrentValue } from "@perfolio/queries"
+import {
+  useRelativePortfolioHistory,
+  useStandardDeviation,
+  useUserSettings,
+  useCurrentAbsoluteValue,
+  useAbsoluteMean,
+  useRelativeMean,
+  useAbsolutePortfolioHistory,
+  usePortfolioHistory,
+} from "@perfolio/hooks"
+import { Time } from "@perfolio/util/time"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
+const today = Time.today().unix()
 const ranges: Record<Range, number> = {
-  "1W": new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).getTime(),
-  "1M": new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).getTime(),
-  "3M": new Date(Date.now() - 1000 * 60 * 60 * 24 * 30 * 3).getTime(),
-  "6M": new Date(Date.now() - 1000 * 60 * 60 * 24 * 30 * 6).getTime(),
-  "1Y": new Date(Date.now() - 1000 * 60 * 60 * 24 * 365).getTime(),
-  YTD: new Date(new Date().getFullYear(), 0).getTime(),
+  "1W": today - Time.toSeconds("7d"),
+  "1M": today - Time.toSeconds("30d"),
+  "3M": today - Time.toSeconds("90d"),
+  "6M": today - Time.toSeconds("180d"),
+  "1Y": today - Time.toSeconds("365d"),
+  YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
   ALL: Number.NEGATIVE_INFINITY,
 }
 
@@ -38,10 +44,12 @@ const KPI = ({
   label,
   value,
   color,
+  isLoading,
 }: {
   label: string
   value: string
   color?: string
+  isLoading?: boolean
 }): JSX.Element => {
   return (
     <div className="flex justify-center">
@@ -52,10 +60,10 @@ const KPI = ({
         <span
           className={cn(
             "text-lg font-bold leading-3 sm:text-xl md:text-2xl lg:text-3xl",
-            color ?? "text-gray-800",
+            !isLoading && color ? color : "text-gray-800",
           )}
         >
-          {value}
+          {isLoading ? <Loading /> : value}
         </span>
       </div>
     </div>
@@ -63,55 +71,35 @@ const KPI = ({
 }
 
 const App: NextPage = () => {
-  const user = useUser()
-  const { currentValue } = useCurrentValue()
+  const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
-  const settingsResponse = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const settings = settingsResponse.data?.getUserSettings
-  const historyResponse = useGetPortfolioHistoryQuery({
-    variables: { userId: user.id },
-  })
-  const history = historyResponse.data?.getPortfolioHistory
+  const { settings } = useUserSettings()
+  const { portfolioHistory } = usePortfolioHistory()
+  const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
+    portfolioHistory,
+    ranges[range],
+  )
+  const { relativePortfolioHistory, isLoading: relativeIsLoading } = useRelativePortfolioHistory(
+    ranges[range],
+  )
 
-  const selectedHistory = useMemo<AssetsOverTime>(() => {
-    if (!history) {
-      return []
-    }
-    const series = toTimeseries(history)
-    const selectedHistory: AssetsOverTime = {}
-    Object.keys(series).forEach((time) => {
-      if (Number(time) * 1000 >= ranges[range]) {
-        selectedHistory[Number(time)] = series[Number(time)]
-      }
-    })
-    return selectedHistory
-  }, [history, range])
+  const absoluteChange =
+    absolutePortfolioHistory.length > 0
+      ? currentAbsoluteValue - absolutePortfolioHistory[0].value
+      : 0
+  const relativeChange =
+    relativePortfolioHistory.length > 0
+      ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
+      : 0
 
-  const index = useMemo(() => rebalance(selectedHistory), [selectedHistory])
-  const firstValue = useMemo(() => {
-    let firstValue = 0
-    Object.values(Object.values(selectedHistory)[0] ?? {}).forEach((asset) => {
-      if (asset.value > 0) {
-        firstValue += asset.quantity * asset.value
-      }
-    })
-    return firstValue
-  }, [selectedHistory])
-
-  const absoluteChange = currentValue - firstValue
-  const relativeChange = index ? Object.values(index)[Object.values(index).length - 1] - 1 : 0
+  console.log({ relativePortfolioHistory, relativeChange })
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
-  const absoluteTimeseries = Object.values(selectedHistory).map((assets) => {
-    return Object.values(assets)
-      .map((asset) => asset.quantity * asset.value)
-      .reduce((acc, val) => acc + val)
-  })
-  const absoluteMean = useMemo(() => Mean.getAbsolute(absoluteTimeseries), [absoluteTimeseries])
-  const relativeMean = useMemo(() => Mean.getRelative(Object.values(index)), [index])
-  const relativeSTD = useMemo(
-    () => (index && Object.keys(index).length >= 2 ? standardDeviation(Object.values(index)) : 0),
-    [index],
+  const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
+  const { relativeMean } = useRelativeMean(relativePortfolioHistory)
+
+  const { standardDeviation: relativeSTD } = useStandardDeviation(
+    relativePortfolioHistory.map(({ value }) => value),
   )
 
   return (
@@ -145,7 +133,13 @@ const App: NextPage = () => {
                     Total Assets
                   </h4>
                   <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    {format(currentValue, { suffix: getCurrencySymbol(settings?.defaultCurrency) })}
+                    {absoluteIsLoading ? (
+                      <Loading />
+                    ) : (
+                      format(currentAbsoluteValue, {
+                        suffix: getCurrencySymbol(settings?.defaultCurrency),
+                      })
+                    )}
                   </span>
                 </div>
               </div>
@@ -156,9 +150,13 @@ const App: NextPage = () => {
                     label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
                     color={
                       (aggregation === "Relative" && relativeMean >= 0) ||
-                      (aggregation === "Absolute" && absoluteMean > 0)
+                      (aggregation === "Absolute" && absoluteMean >= 0)
                         ? "text-success"
                         : "text-error"
+                    }
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
                     }
                     value={
                       aggregation === "Absolute"
@@ -173,17 +171,34 @@ const App: NextPage = () => {
               >
                 @webersni
               </Tooltip>
-              <Tooltip trigger={<KPI label="Standard Deviation" value={format(relativeSTD)} />}>
-                @webersni
+              <Tooltip
+                trigger={
+                  <KPI
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
+                    }
+                    label="Standard Deviation"
+                    value={format(relativeSTD)}
+                  />
+                }
+              >
+                @webersni A large standard deviation is a sign of greater risk blabla Nico mach
+                endlich!
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
                     label="Change"
                     color={
-                      aggregation === "Relative" && relativeChange >= 0
+                      (aggregation === "Relative" && relativeChange >= 0) ||
+                      (aggregation === "Absolute" && absoluteChange >= 0)
                         ? "text-success"
                         : "text-error"
+                    }
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
                     }
                     value={
                       aggregation === "Absolute"
@@ -211,7 +226,7 @@ const App: NextPage = () => {
             </div>
             <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
           </div>
-          <div>
+          <div className="mt-16">
             <div className="py-4 md:py-6">
               <Heading h3>Current Assets</Heading>
             </div>

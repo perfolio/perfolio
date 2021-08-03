@@ -1,6 +1,5 @@
 import React from "react"
-import { AreaChart as Chart, XAxis, Tooltip, Area, ResponsiveContainer } from "recharts"
-import { format } from "util"
+import { AreaChart as Chart, XAxis, Tooltip, Area, ResponsiveContainer, YAxis } from "recharts"
 import { Loading } from "@perfolio/ui/components"
 type Data = {
   time: string
@@ -10,14 +9,18 @@ type Data = {
 export interface AreaChartProps {
   data: Data
   isLoading?: boolean
-  formatTooltip?: (n: number) => string
+  tooltip?: (n: number) => string
+  withXAxis?: boolean
 }
 
 export const AreaChart: React.FC<AreaChartProps> = ({
   data,
   isLoading,
-  formatTooltip = (n) => format(n),
+  tooltip,
+  withXAxis = false,
 }): JSX.Element => {
+  const max = Math.max(...data.map((d) => d.value)) * 1.02
+  const min = Math.min(...data.map((d) => d.value)) * 0.98
   return (
     <ResponsiveContainer width="100%" height="100%">
       {isLoading ? (
@@ -30,21 +33,24 @@ export const AreaChart: React.FC<AreaChartProps> = ({
               <stop offset="100%" stopColor="#3548c8" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <Tooltip
-            content={({ active, payload }) => {
-              if (!active || !payload) {
-                return null
-              }
+          {tooltip ? (
+            <Tooltip
+              content={({ active, payload }) => {
+                if (!active || !payload) {
+                  return null
+                }
 
-              const { time, value } = payload[0].payload
-              return (
-                <div className="flex flex-col p-4 text-center shadow-lg bg-gray-50">
-                  <span className="text-xl font-medium">{formatTooltip(value)}</span>
-                  <span className="text-sm text-gray-700">{time}</span>
-                </div>
-              )
-            }}
-          />
+                const { time, value } = payload[0].payload
+                return (
+                  <div className="flex flex-col p-4 text-center shadow-lg bg-gray-50">
+                    <span className="text-xl font-medium">{tooltip(value)}</span>
+                    <span className="text-sm text-gray-700">{time}</span>
+                  </div>
+                )
+              }}
+            />
+          ) : null}
+          <YAxis hide domain={[min, max]} />
           <Area
             type="monotone"
             dataKey="value"
@@ -52,7 +58,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
             strokeWidth={2}
             fill="url(#gradient)"
           />
-          <XAxis dataKey="time" minTickGap={100} />
+          {withXAxis ? <XAxis dataKey="time" minTickGap={100} /> : null}
         </Chart>
       )}
     </ResponsiveContainer>

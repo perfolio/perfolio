@@ -28,8 +28,10 @@ module.exports = {
     "<rootDir>/apps/api",
     "<rootDir>/libs/api/apollo",
     "<rootDir>/libs/api/graphql",
-    "<rootDir>/libs/integrations/cookies",
     "<rootDir>/libs/api/client",
-    "<rootDir>/libs/queries",
+    "<rootDir>/libs/hooks/queries",
+    "<rootDir>/libs/feature/asset-search",
+    "<rootDir>/libs/app/query-client",
+    "<rootDir>/libs/downsampling",
   ],
 }

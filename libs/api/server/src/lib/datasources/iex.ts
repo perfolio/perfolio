@@ -1,5 +1,5 @@
 import { DataSource } from "apollo-datasource"
-import { Exchange, IssueType, Company } from "@perfolio/api/graphql"
+import { CompanyStock, Exchange } from "@perfolio/api/graphql"
 import * as cloud from "@perfolio/integrations/iexcloud"
 import { Time } from "@perfolio/util/time"
 import { HTTPError } from "@perfolio/util/errors"
@@ -8,6 +8,7 @@ import {
   GetSymbolsAtExchangeResponse,
   SearchResponse,
 } from "@perfolio/integrations/iexcloud"
+import { ApolloCache, Key } from "@perfolio/integrations/redis"
 
 export class IEX extends DataSource {
   constructor() {
@@ -15,14 +16,17 @@ export class IEX extends DataSource {
   }
 
   public async getLogo(ticker: string): Promise<string> {
-    const res = await cloud.getLogo(ticker)
-    return res.url ?? ""
-  }
+    const key = new Key({ dataSource: "iex", operation: "getLogo", ticker })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<string>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
 
-  public async getCompaniesFromFigis(figis: string[]): Promise<Company[]> {
-    const symbols = await cloud.getFigiMapping(...figis)
-    const companies = await Promise.all(symbols.map(({ symbol }) => this.getCompany(symbol)))
-    return companies.filter((c) => c !== null) as Company[]
+    const res = await cloud.getLogo(ticker)
+    const value = res.url
+    await cache.set("30d", { key, value })
+    return value
   }
 
   public async getCompanyFromIsin(isin: string) {
@@ -35,7 +39,13 @@ export class IEX extends DataSource {
     return await this.getCompany(ticker)
   }
 
-  public async getCompany(ticker: string) {
+  public async getCompany(ticker: string): Promise<Omit<CompanyStock, "id" | "isin"> | null> {
+    const key = new Key({ dataSource: "IEX", operation: "getCompany", ticker })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<Omit<CompanyStock, "id" | "isin">>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
     const company = await cloud.getCompany(ticker).catch((err) => {
       if (err instanceof HTTPError) {
         /**
@@ -48,39 +58,33 @@ export class IEX extends DataSource {
       }
       throw err
     })
+    if (!company || !company.companyName || !company.sector || !company.country) {
+      await cache.set("24h", { key, value: null })
+      return null
+    }
+    const logo = await cloud.getLogo(ticker)
     /**
      * Transform company from iex schema to one we want to use.
      */
-    return company
-      ? {
-          name: (company.companyName as string) ?? undefined,
-          /**
-           * Copy the rest
-           */
-          ticker: ticker,
-          industry: (company.industry as string) ?? undefined,
-          website: (company.website as string) ?? undefined,
-          description: (company.description as string) ?? undefined,
-          ceo: (company.CEO as string) ?? undefined,
-          issueType: (company as unknown as IssueType) ?? undefined,
-          sector: (company.sector as string) ?? undefined,
-          employees: (company.employees as number) ?? undefined,
-          securityName: (company.securityName as string) ?? undefined,
-          primarySicCode: (company.primarySicCode as number) ?? undefined,
-          address: (company.address as string) ?? undefined,
-          address2: (company.address2 as string) ?? undefined,
-          tags: (company.tags as string[]) ?? undefined,
-          state: (company.state as string) ?? undefined,
-          city: (company.city as string) ?? undefined,
-          zip: (company.zip as string) ?? undefined,
-          country: (company.country as string) ?? undefined,
-          phone: (company.phone as string) ?? undefined,
-        }
-      : null
+    const value = {
+      name: company.companyName as string,
+      ticker,
+      logo: logo.url,
+      sector: company.sector as string,
+      country: company.country as string,
+    }
+    await cache.set("30d", { key, value })
+    return value
   }
   async getExchanges(): Promise<Exchange[]> {
+    const key = new Key({ dataSource: "IEX", operation: "getExchanges" })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<Exchange[]>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
     const exchanges = await cloud.getExchanges()
-    return exchanges.map((e) => {
+    const value = exchanges.map((e) => {
       return {
         abbreviation: e.exchange,
         name: e.description,
@@ -89,12 +93,22 @@ export class IEX extends DataSource {
         mic: e.mic,
       }
     })
+    await cache.set("24h", { key, value })
+    return value
   }
 
   async getExchange({ mic }: { mic: string }): Promise<Exchange | null> {
+    const key = new Key({ dataSource: "IEX", operation: "getExchange", mic })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<Exchange>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
     const exchanges = await this.getExchanges()
-    const exchange = exchanges.find((exchange) => exchange.mic.toLowerCase() === mic.toLowerCase())
-    return exchange ?? null
+    const value =
+      exchanges.find((exchange) => exchange.mic.toLowerCase() === mic.toLowerCase()) ?? null
+    await cache.set("24h", { key, value })
+    return value
   }
 
   async search({ fragment }: { fragment: string }): Promise<SearchResponse> {
@@ -102,26 +116,57 @@ export class IEX extends DataSource {
   }
 
   async getPrices({ ticker }: { ticker: string }): Promise<{ [time: number]: number }> {
+    const key = new Key({ dataSource: "IEX", operation: "getPrices", ticker })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<{ [time: number]: number }>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
     const allPrices = await cloud.getHistory(ticker)
-    const formatted: { [time: number]: number } = {}
+    const value: { [time: number]: number } = {}
     allPrices.forEach(({ date, close }) => {
       const time = Time.fromString(date).unix()
-      formatted[time] = close
+      value[time] = close
     })
-    return formatted
+    await cache.set("1h", { key, value })
+    return value
   }
   async getCurrentPrice({ ticker }: { ticker: string }): Promise<number> {
-    return await cloud.getCurrentPrice(ticker)
+    const key = new Key({ dataSource: "IEX", operation: "getCurrentPrice", ticker })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<number>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
+    const value = await cloud.getCurrentPrice(ticker)
+    await cache.set("30m", { key, value })
+    return value
   }
   async getSymbolsAtExchange({
     exchange,
   }: {
     exchange: string
   }): Promise<GetSymbolsAtExchangeResponse> {
-    return await cloud.getSymbolsAtExchange(exchange)
+    const key = new Key({ dataSource: "IEX", operation: "getSymbolsAtExchange", exchange })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<GetSymbolsAtExchangeResponse>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
+    const value = await cloud.getSymbolsAtExchange(exchange)
+    await cache.set("30d", { key, value })
+    return value
   }
 
-  async getIsinMapping({ isin }: { isin: string }): Promise<GetIsinMappingResponse> {
-    return await cloud.getIsinMapping(isin)
+  async getIsinMapping(isin: string): Promise<GetIsinMappingResponse> {
+    const key = new Key({ dataSource: "IEX", operation: "getIsinMapping", isin })
+    const cache = new ApolloCache()
+    const cachedValue = await cache.get<GetIsinMappingResponse>(key)
+    if (cachedValue) {
+      return cachedValue
+    }
+    const value = await cloud.getIsinMapping(isin)
+    await cache.set("30d", { key, value })
+    return value
   }
 }

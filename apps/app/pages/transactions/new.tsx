@@ -9,61 +9,10 @@ import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
-import {
-  useGetUserSettingsQuery,
-  useCreateTransactionMutation,
-  useGetTransactionsQuery,
-  Asset,
-} from "@perfolio/api/graphql"
+import { Asset } from "@perfolio/api/graphql"
+
+import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useUser } from "@clerk/clerk-react"
-// const Suggestion: React.FC<{
-//   tx: Transaction
-//   setValue: (val: { name: string; ticker: string; isin: string, exchange:string }) => void
-//   trigger: () => void
-// }> = ({ tx, setValue, trigger }): JSX.Element => {
-//   const { ticker } = useTickerFromisin({ isin: tx.data.assetId })
-//   const { company } = useCompany(ticker)
-//   return (
-//     <li className="flex items-center justify-between w-full gap-4 py-3">
-//       <div className="flex items-center w-3/5 gap-2">
-//         <div>{company?.logo ? <Avatar src={company.logo} /> : <Loading />}</div>
-//         <div className="overflow-hidden">
-//           <Text truncate bold>
-//             {company?.name}
-//           </Text>
-//           <Text size="sm">{tx.data.assetId}</Text>
-//         </div>
-//       </div>
-//       <div className="flex flex-col items-end w-2/5 space-y-1">
-//         <span className="text-sm text-right text-gray-600">{`added ${Time.ago(
-//           tx.ts / 1_000_000,
-//         )}`}</span>
-//         <div>
-//           <Button
-//             kind="secondary"
-//             size="small"
-//             onClick={() => {
-//               console.log({
-//                 name: company?.name ?? "",
-//                 ticker: company?.ticker ?? "",
-//                 isin: tx.data.assetId,
-//               })
-//               setValue({
-//                 name: company?.name ?? "",
-//                 ticker: company?.ticker ?? "",
-//                 isin: tx.data.assetId,
-//                 exchange: ""
-//               })
-//               trigger()
-//             }}
-//           >
-//             Add
-//           </Button>
-//         </div>
-//       </div>
-//     </li>
-//   )
-// }
 
 const validation = z.object({
   isin: z.string(),
@@ -81,11 +30,12 @@ const NewTransactionPage: NextPage = () => {
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
-  const [createTransaction] = useCreateTransactionMutation()
-  const transactionsResponse = useGetTransactionsQuery({ variables: { userId: user.id } })
+  const createTransaction = useCreateTransaction()
+  const { transactions } = useTransactions()
   const uniqueAssets: Record<string, Asset> = {}
-  transactionsResponse.data?.getTransactions
-    ?.sort((a, b) => b.executedAt - a.executedAt)
+
+  ;(transactions ?? [])
+    .sort((a, b) => b.executedAt - a.executedAt)
     .forEach((tx) => {
       if (!(tx.asset.id in uniqueAssets)) {
         uniqueAssets[tx.asset.id] = tx.asset as Asset
@@ -93,8 +43,7 @@ const NewTransactionPage: NextPage = () => {
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const { data } = useGetUserSettingsQuery({ variables: { userId: user.id } })
-  const settings = data?.getUserSettings
+  const { settings } = useUserSettings()
   return (
     <AppLayout
       sidebar={
@@ -166,7 +115,7 @@ const NewTransactionPage: NextPage = () => {
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
                           assetId: isin,
                         }
-                        await createTransaction({ variables: { transaction } }).catch((err) => {
+                        await createTransaction.mutateAsync({ transaction }).catch((err) => {
                           setFormError(
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )

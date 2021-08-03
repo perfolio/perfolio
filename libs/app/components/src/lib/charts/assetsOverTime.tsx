@@ -1,38 +1,13 @@
 import React, { useMemo } from "react"
 import { AreaChart } from "@perfolio/ui/charts"
-import { Time } from "@perfolio/util/time"
-import { AssetsOverTime, toTimeseries, rebalance } from "@perfolio/feature/finance/returns"
-import { useGetPortfolioHistoryQuery } from "@perfolio/api/graphql"
+import {
+  useAbsolutePortfolioHistory,
+  usePortfolioHistory,
+  useRelativePortfolioHistory,
+} from "@perfolio/hooks"
 import { format } from "@perfolio/util/numbers"
-import { useUser } from "@clerk/clerk-react"
-
-type Data = {
-  time: string
-  value: number
-}[]
-
-const plotAbsolute = (timeline: AssetsOverTime): Data => {
-  return Object.entries(timeline).map(([time, assets]) => {
-    return {
-      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
-      value: Object.values(assets)
-        .map((asset) => asset.quantity * asset.value)
-        .reduce((acc, val) => acc + val),
-    }
-  })
-}
-
-const plotRelative = (timeline: AssetsOverTime): Data => {
-  const index = rebalance(timeline)
-  const data = Object.entries(index).map(([time, value]) => {
-    return {
-      time: Time.fromTimestamp(Number(time)).toDate().toLocaleDateString(),
-      value,
-    }
-  })
-  return data
-}
-
+import { Downsampling } from "@perfolio/downsampling"
+import { Time } from "@perfolio/util/time"
 export type AggregateOptions = "Relative" | "Absolute"
 
 export interface AssetsOverTimeChartProps {
@@ -48,34 +23,36 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   aggregate = "Absolute",
   range,
 }): JSX.Element => {
-  const user = useUser()
-  const historyResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
-  const history = historyResponse.data?.getPortfolioHistory
-  const isLoading = historyResponse.loading
-  /**
-   * Filter by range and return either absolute or relative history
-   */
-  const data = useMemo<Data>(() => {
-    if (!history) {
-      return []
-    }
-    const series = toTimeseries(history)
-    const selectedHistory: AssetsOverTime = {}
-    Object.keys(series).forEach((time) => {
-      if (Number(time) * 1000 >= range) {
-        selectedHistory[Number(time)] = series[Number(time)]
-      }
-    })
+  const { portfolioHistory } = usePortfolioHistory()
+  const { absolutePortfolioHistory, isLoading: absoluteLoading } = useAbsolutePortfolioHistory(
+    portfolioHistory,
+    range,
+  )
+  const { relativePortfolioHistory, isLoading: relativeLoading } =
+    useRelativePortfolioHistory(range)
 
-    return aggregate === "Absolute" ? plotAbsolute(selectedHistory) : plotRelative(selectedHistory)
-  }, [aggregate, history, range])
+  const data = useMemo(() => {
+    const choice =
+      aggregate === "Absolute"
+        ? absolutePortfolioHistory
+        : (relativePortfolioHistory as { time: number; value: number }[])
 
+    const downsampled = Downsampling.largestTriangle(
+      choice.map(({ time, value }) => ({ x: time, y: value })),
+      500,
+    )
+    return downsampled.map(({ x, y }) => ({
+      time: Time.fromTimestamp(x).toDate().toLocaleDateString(),
+      value: y,
+    }))
+  }, [absolutePortfolioHistory, relativePortfolioHistory, aggregate])
   return (
     <div className="w-full h-56">
       <AreaChart
-        isLoading={isLoading}
+        isLoading={absoluteLoading || relativeLoading}
         data={data}
-        formatTooltip={(n) => format(n, { suffix: aggregate === "Absolute" ? "€" : undefined })}
+        withXAxis
+        tooltip={(n) => format(n, { suffix: aggregate === "Absolute" ? "€" : undefined })}
       />
     </div>
   )

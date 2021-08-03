@@ -271,6 +271,69 @@
         }
       }
     },
+    "app-query-client": {
+      "root": "libs/app/query-client",
+      "sourceRoot": "libs/app/query-client/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/app/query-client/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/app/query-client"],
+          "options": {
+            "jestConfig": "libs/app/query-client/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "downsampling": {
+      "root": "libs/downsampling",
+      "sourceRoot": "libs/downsampling/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/downsampling/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/downsampling"],
+          "options": {
+            "jestConfig": "libs/downsampling/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "feature-asset-search": {
+      "root": "libs/feature/asset-search",
+      "sourceRoot": "libs/feature/asset-search/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/feature/asset-search/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/feature/asset-search"],
+          "options": {
+            "jestConfig": "libs/feature/asset-search/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "feature-email": {
       "root": "libs/feature/email",
       "sourceRoot": "libs/feature/email/src",
@@ -376,6 +439,27 @@
         }
       }
     },
+    "hooks": {
+      "root": "libs/hooks",
+      "sourceRoot": "libs/hooks/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/hooks/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/hooks"],
+          "options": {
+            "jestConfig": "libs/hooks/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-bankofengland": {
       "root": "libs/integrations/bankofengland",
       "sourceRoot": "libs/integrations/bankofengland/src",
@@ -392,27 +476,6 @@
           "outputs": ["coverage/libs/integrations/bankofengland"],
           "options": {
             "jestConfig": "libs/integrations/bankofengland/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "integrations-cookies": {
-      "root": "libs/integrations/cookies",
-      "sourceRoot": "libs/integrations/cookies/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/integrations/cookies/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/integrations/cookies"],
-          "options": {
-            "jestConfig": "libs/integrations/cookies/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -601,27 +664,6 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
-    "queries": {
-      "root": "libs/queries",
-      "sourceRoot": "libs/queries/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/queries"],
-          "options": {
-            "jestConfig": "libs/queries/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

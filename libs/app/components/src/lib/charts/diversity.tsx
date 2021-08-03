@@ -3,8 +3,7 @@ import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import { useGetPortfolioHistoryQuery, ValueAndQuantityAtTime } from "@perfolio/api/graphql"
-import { useUser } from "@clerk/clerk-react"
+import { usePortfolio } from "@perfolio/hooks"
 
 const COLORS = [
   "#D7DDFC",
@@ -18,32 +17,7 @@ const COLORS = [
   "#0A1060",
 ].sort(() => Math.random() - 0.5)
 export const DiversificationChart: React.FC = (): JSX.Element => {
-  const user = useUser()
-  const portfolioResponse = useGetPortfolioHistoryQuery({ variables: { userId: user.id } })
-  const portfolio = React.useMemo(() => {
-    const getLastValid = (
-      history: ValueAndQuantityAtTime[],
-    ): { quantity: number; value: number } => {
-      const sorted = [...history].sort((a, b) => b.time - a.time)
-
-      for (const day of sorted) {
-        if (day.value > 0) {
-          return day
-        }
-      }
-      throw new Error("Nothing found")
-    }
-
-    return portfolioResponse.data?.getPortfolioHistory?.map((h) => {
-      return {
-        asset: {
-          company: h.asset.__typename === "Stock" ? h.asset.company : undefined,
-          id: h.asset.id,
-        },
-        ...getLastValid(h.history),
-      }
-    })
-  }, [portfolioResponse.data])
+  const { portfolio } = usePortfolio()
 
   /**
    * Aggregate by sector
@@ -56,7 +30,8 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     portfolio
       .filter((h) => !!h)
       .forEach((holding) => {
-        const sector = holding?.asset.company?.sector
+        const sector =
+          holding.asset.__typename === "CompanyStock" ? holding.asset.sector : undefined
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
@@ -80,7 +55,8 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       .filter((h) => !!h)
       .forEach((holding) => {
         if (holding) {
-          const country = holding.asset.company?.country
+          const country =
+            holding.asset.__typename === "CompanyStock" ? holding.asset.country : undefined
           if (country) {
             if (!tmp[country]) {
               tmp[country] = 0
