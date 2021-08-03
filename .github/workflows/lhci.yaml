@@ -5,7 +5,7 @@ jobs:
   landing:
     name: LHCI @ landing
     runs-on: ubuntu-latest
-    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == "Preview - landing-perfolio" }}
+    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview – landing-perfolio' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
   app:
     name: LHCI @ app
     runs-on: ubuntu-latest
-    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == "Preview - app-perfolio" }}
+    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview - app-perfolio' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
