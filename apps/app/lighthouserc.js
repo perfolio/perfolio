@@ -1,8 +1,5 @@
 module.exports = {
   ci: {
-    collect: {
-      urls: ["/subscribe"],
-    },
     upload: {
       target: "temporary-public-storage",
     },
