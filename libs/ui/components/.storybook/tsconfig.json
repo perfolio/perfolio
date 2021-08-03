@@ -5,5 +5,9 @@
     "outDir": ""
   },
   "exclude": ["../**/*.test.ts", "../**/*.test.js", "../**/*.test.tsx", "../**/*.test.jsx"],
-  "include": ["../src/**/*", "*.js"]
+  "include": ["../src/**/*", "*.js"],
+  "files": [
+    "../../../../node_modules/@nrwl/react/typings/cssmodule.d.ts",
+    "../../../../node_modules/@nrwl/react/typings/image.d.ts"
+  ]
 }
