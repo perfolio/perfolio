@@ -18,6 +18,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v8
         with:
           configPath: "./lighthouserc.js"
+          runs: 3
           urls: |
             ${{ github.event.deployment_status.target_url }}/subscribe
         env:
