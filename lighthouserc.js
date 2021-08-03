@@ -1,9 +1,5 @@
 module.exports = {
   ci: {
-    collect: {
-      staticDistDir: "dist/apps/landing/.next/server/pages",
-      maxAutodiscoverUrls: 0,
-    },
     upload: {
       target: "temporary-public-storage",
     },
@@ -11,7 +7,9 @@ module.exports = {
       assertions: {
         "categories:accessibility": ["error", { minScore: 0.5 }],
         "categories:best-practices": ["error", { minScore: 0.7 }],
-        "categories:seo": ["error", { minScore: 0.93 }],
+        "categories:seo": ["error", { minScore: 0.7 }],
+
+        "first-contentful-paint": ["error", { minScore: 0.6 }],
       },
     },
   },

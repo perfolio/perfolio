@@ -65,8 +65,8 @@ const NewTransactionPage: NextPage = () => {
                   label="Asset"
                   help={
                     <Description title="TODO: @webersni">
-                      Search for your asset. Try "microsoft" Only stocks from your selected exchange
-                      will be shown here. If you would like to change this, please{" "}
+                      Search for your asset. Try &quot;microsoft&quot; Only stocks from your
+                      selected exchange will be shown here. If you would like to change this, please{" "}
                       <Link href="/settings/stocks">
                         <a className="underline text-info-400">go to settings</a>
                       </Link>
