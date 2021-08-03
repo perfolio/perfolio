@@ -72,7 +72,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
  * / page.
  */
 const TransactionsPage: NextPage = () => {
-  const { transactions, isLoading } = useTransactions()
+  const { transactions, isLoading, error } = useTransactions()
   return (
     <AppLayout
       sidebar={
@@ -86,6 +86,7 @@ const TransactionsPage: NextPage = () => {
           <Main.Header.Title title="My Transactions" />
         </Main.Header>
         <Main.Content>
+          {error ? <div>{JSON.stringify(error)}</div> : null}
           {isLoading ? (
             <Loading />
           ) : !transactions || transactions.length === 0 ? (
