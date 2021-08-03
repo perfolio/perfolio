@@ -1,0 +1,54 @@
+name: LHCI
+
+on: ["deployment_status"]
+jobs:
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: ["app", "landing"]
+    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview – ${{ matrix.app }}-perfolio' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
+          run_install: true
+
+      - name: run Lighthouse CI on Landing
+        if: ${{matrix.app}} == "landing"
+        run: |
+          pnpm lhci autorun --config=./apps/landing/lighthouserc.js \
+          --collect.url=${{ github.event.deployment_status.target_url }} \
+          --collect.url=${{ github.event.deployment_status.target_url }}/imprint \
+          --collect.url=${{ github.event.deployment_status.target_url }}/privacy
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          NEXT_PUBLIC_CLERK_FRONTEND_API: ${{ secrets.NEXT_PUBLIC_CLERK_FRONTEND_API }}
+
+      - name: run Lighthouse CI on App
+        if: ${{matrix.app}} == "app"
+        run: |
+          pnpm lhci autorun --config=./apps/app/lighthouserc.js \
+          --collect.url=${{ github.event.deployment_status.target_url }}/subscribe
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          NEXT_PUBLIC_CLERK_FRONTEND_API: ${{ secrets.NEXT_PUBLIC_CLERK_FRONTEND_API }}
