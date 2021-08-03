@@ -1,9 +1,8 @@
-name: LHCI
+name: Lighthouse
 
 on: ["deployment_status"]
 jobs:
   landing:
-    name: LHCI @ landing
     runs-on: ubuntu-latest
     if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview – landing-perfolio' }}
     steps:
@@ -26,7 +25,6 @@ jobs:
           NEXT_PUBLIC_CLERK_FRONTEND_API: ${{ secrets.NEXT_PUBLIC_CLERK_FRONTEND_API }}
 
   app:
-    name: LHCI @ app
     runs-on: ubuntu-latest
     if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview - app-perfolio' }}
     steps:
