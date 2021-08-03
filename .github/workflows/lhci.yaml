@@ -15,11 +15,13 @@ jobs:
           node-version: 14
 
       - name: run lhci
-        run: |
-          npx @lhci/cli autorun \
-          --collect.url=${{ github.event.deployment_status.target_url }} \
-          --collect.url=${{ github.event.deployment_status.target_url }}/imprint \
-          --collect.url=${{ github.event.deployment_status.target_url }}/privacy
+        uses: treosh/lighthouse-ci-action@v8
+        with:
+          configPath: "./lighthouserc.js"
+          urls: |
+            ${{ github.event.deployment_status.target_url }}
+            ${{ github.event.deployment_status.target_url }}/imprint
+            ${{ github.event.deployment_status.target_url }}/privacy
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
