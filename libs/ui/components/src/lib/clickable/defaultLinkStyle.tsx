@@ -1,7 +1,7 @@
 import React from "react"
 import { Loading } from "../loading/loading"
 type Justify = "start" | "center" | "end" | "between" | "around"
-type Size = "small" | "medium" | "large" | "auto"
+type Size = "sm" | "md" | "lg" | "auto"
 export interface DefaultLinkStyleProps {
   /**
    * The type must be defined but is actually never used.
@@ -27,7 +27,7 @@ export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
   loading,
   prefix,
   suffix,
-  size = "medium",
+  size = "md",
 }): JSX.Element => {
   return (
     <div
@@ -59,9 +59,9 @@ export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
 
 const spacing = (size: Size): string => {
   const options: Record<Size, string> = {
-    small: "gap-x-1",
-    medium: "gap-x-2",
-    large: "gap-x-3",
+    sm: "gap-x-1",
+    md: "gap-x-2",
+    lg: "gap-x-3",
     auto: "gap-x-2",
   }
   return options[size]
@@ -69,9 +69,9 @@ const spacing = (size: Size): string => {
 
 const iconSize = (size: Size): string => {
   const options: Record<Size, string> = {
-    small: "w-4 h-4",
-    medium: "w-5 h-5",
-    large: "w-6 h-6",
+    sm: "w-4 h-4",
+    md: "w-5 h-5",
+    lg: "w-6 h-6",
     auto: "w-5 h-5",
   }
   return options[size]
@@ -79,9 +79,9 @@ const iconSize = (size: Size): string => {
 
 const text = (size: Size): string => {
   const options: Record<Size, string> = {
-    small: "text-sm",
-    medium: "text-medium",
-    large: "text-medium font-medium",
+    sm: "text-small",
+    md: "text-medium",
+    lg: "text-medium font-medium",
     auto: "text-medium",
   }
   return options[size]

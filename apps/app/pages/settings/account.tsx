@@ -57,7 +57,7 @@ export const Setting: React.FC<SettingProps> = ({
               handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
             }
             kind={button?.kind ?? "primary"}
-            size="small"
+            size="sm"
             type="submit"
             disabled={ctx.formState.isSubmitting}
           >

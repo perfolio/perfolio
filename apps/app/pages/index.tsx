@@ -10,8 +10,9 @@ import {
   InlineTotalAssetChart,
   AggregateOptions,
   Sidebar,
+  NoTransactionsModal,
 } from "@perfolio/app/components"
-import { Heading, Loading, ToggleGroup, Tooltip, Button } from "@perfolio/ui/components"
+import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/util/numbers"
 import { getCurrencySymbol } from "@perfolio/util/currency"
@@ -80,7 +81,7 @@ const App: NextPage = () => {
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
-  const { portfolioHistory } = usePortfolioHistory()
+  const { portfolioHistory, isLoading: portfolioHistoryIsLoading } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
     portfolioHistory,
     ranges[range],
@@ -111,143 +112,130 @@ const App: NextPage = () => {
     <AppLayout
       sidebar={
         <Sidebar aboveFold={<InlineTotalAssetChart />}>
-          {portfolioHistory.length > 0 ? (
-            <>
-              <div className="w-full pb-4 md:w-full sm:w-1/2">
-                <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
-              </div>
-              <div className="w-full py-4 md:w-full sm:w-1/2">
-                <ActivityFeed />
-              </div>
-            </>
-          ) : null}
+          <div className="w-full pb-4 md:w-full sm:w-1/2">
+            <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
+          </div>
+          <div className="w-full py-4 md:w-full sm:w-1/2">
+            <ActivityFeed />
+          </div>
         </Sidebar>
       }
     >
       <Main>
         <Main.Header>
           <Main.Header.Title title="Overview" />
-          {portfolioHistory.length > 0 ? (
-            <ToggleGroup<AggregateOptions>
-              options={["Relative", "Absolute"]}
-              selected={aggregation}
-              setSelected={setAggregation}
-            />
-          ) : null}
+
+          <ToggleGroup<AggregateOptions>
+            options={["Relative", "Absolute"]}
+            selected={aggregation}
+            setSelected={setAggregation}
+          />
         </Main.Header>
         <Main.Content>
-          {portfolioHistory.length === 0 ? (
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <p className="text-gray-700">Looks like you don&apos;t have any transactions yet</p>
-              <Button size="large" kind="primary" href="/transactions/new">
-                Add transaction
-              </Button>
-            </div>
-          ) : (
-            <>
-              <div className="py-4 sm:py-6 md:py-8">
-                <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
-                  <Tooltip
-                    trigger={
-                      <KPI
-                        label="Total Assets"
-                        value={currentAbsoluteValue}
-                        format={(n) =>
-                          format(n, {
-                            suffix: getCurrencySymbol(settings?.defaultCurrency),
-                          })
-                        }
-                        isLoading={aggregation === "Absolute" && absoluteIsLoading}
-                      />
+          {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
+            <NoTransactionsModal />
+          ) : null}
+          <div className="py-4 sm:py-6 md:py-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
+              <Tooltip
+                trigger={
+                  <KPI
+                    label="Total Assets"
+                    value={currentAbsoluteValue}
+                    format={(n) =>
+                      format(n, {
+                        suffix: getCurrencySymbol(settings?.defaultCurrency),
+                      })
                     }
-                  >
-                    @webersni
-                  </Tooltip>
-
-                  <Tooltip
-                    trigger={
-                      <KPI
-                        enableColor
-                        label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
-                        value={aggregation === "Absolute" ? absoluteMean : relativeMean}
-                        format={(n) =>
-                          aggregation === "Absolute"
-                            ? format(n, {
-                                suffix: getCurrencySymbol(settings?.defaultCurrency),
-                                sign: true,
-                              })
-                            : format(n, { suffix: "%", percent: true, sign: true })
-                        }
-                        isLoading={
-                          (aggregation === "Absolute" && absoluteIsLoading) ||
-                          (aggregation === "Relative" && relativeIsLoading)
-                        }
-                      />
-                    }
-                  >
-                    @webersni
-                  </Tooltip>
-                  <Tooltip
-                    trigger={
-                      <KPI
-                        isLoading={
-                          (aggregation === "Absolute" && absoluteIsLoading) ||
-                          (aggregation === "Relative" && relativeIsLoading)
-                        }
-                        label="Standard Deviation"
-                        value={relativeSTD}
-                        format={(n) => format(n)}
-                      />
-                    }
-                  >
-                    @webersni A large standard deviation is a sign of greater risk blabla Nico mach
-                    endlich!
-                  </Tooltip>
-                  <Tooltip
-                    trigger={
-                      <KPI
-                        label="Change"
-                        enableColor
-                        isLoading={
-                          (aggregation === "Absolute" && absoluteIsLoading) ||
-                          (aggregation === "Relative" && relativeIsLoading)
-                        }
-                        value={aggregation === "Absolute" ? absoluteChange : relativeChange}
-                        format={(n) =>
-                          aggregation === "Absolute"
-                            ? format(n, {
-                                suffix: getCurrencySymbol(settings?.defaultCurrency),
-                                sign: true,
-                              })
-                            : format(n, { suffix: "%", percent: true, sign: true })
-                        }
-                      />
-                    }
-                  >
-                    @webersni
-                  </Tooltip>
-                </div>
-              </div>
-              <Main.Divider />
-              <div className="pt-2 space-y-8">
-                <div className="flex justify-center md:justify-end">
-                  <ToggleGroup<Range>
-                    options={Object.keys(ranges) as Range[]}
-                    selected={range}
-                    setSelected={setRange}
+                    isLoading={aggregation === "Absolute" && absoluteIsLoading}
                   />
-                </div>
-                <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
-              </div>
-              <div className="mt-16">
-                <div className="py-4 md:py-6">
-                  <Heading h3>Current Assets</Heading>
-                </div>
+                }
+              >
+                @webersni
+              </Tooltip>
 
-                <AssetTable aggregation={aggregation} />
-              </div>
-            </>
-          )}
+              <Tooltip
+                trigger={
+                  <KPI
+                    enableColor
+                    label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
+                    value={aggregation === "Absolute" ? absoluteMean : relativeMean}
+                    format={(n) =>
+                      aggregation === "Absolute"
+                        ? format(n, {
+                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(n, { suffix: "%", percent: true, sign: true })
+                    }
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
+                    }
+                  />
+                }
+              >
+                @webersni
+              </Tooltip>
+              <Tooltip
+                trigger={
+                  <KPI
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
+                    }
+                    label="Standard Deviation"
+                    value={relativeSTD}
+                    format={(n) => format(n)}
+                  />
+                }
+              >
+                @webersni A large standard deviation is a sign of greater risk blabla Nico mach
+                endlich!
+              </Tooltip>
+              <Tooltip
+                trigger={
+                  <KPI
+                    label="Change"
+                    enableColor
+                    isLoading={
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
+                    }
+                    value={aggregation === "Absolute" ? absoluteChange : relativeChange}
+                    format={(n) =>
+                      aggregation === "Absolute"
+                        ? format(n, {
+                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(n, { suffix: "%", percent: true, sign: true })
+                    }
+                  />
+                }
+              >
+                @webersni
+              </Tooltip>
+            </div>
+          </div>
+          <Main.Divider />
+          <div className="pt-2 space-y-8">
+            <div className="flex justify-center md:justify-end">
+              <ToggleGroup<Range>
+                options={Object.keys(ranges) as Range[]}
+                selected={range}
+                setSelected={setRange}
+              />
+            </div>
+            <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
+          </div>
+          <div className="mt-16">
+            <div className="py-4 md:py-6">
+              <Heading h3>Current Assets</Heading>
+            </div>
+
+            <AssetTable aggregation={aggregation} />
+          </div>
         </Main.Content>
       </Main>
     </AppLayout>
