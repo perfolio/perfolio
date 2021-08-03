@@ -24,24 +24,3 @@ jobs:
             ${{ github.event.deployment_status.target_url }}/privacy
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-  app:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview - app-perfolio' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v2.1.5
-        with:
-          node-version: 14
-
-      - name: run lhci
-        uses: treosh/lighthouse-ci-action@v8
-        with:
-          configPath: "./lighthouserc.js"
-          urls: |
-            ${{ github.event.deployment_status.target_url }}/subscribe
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
