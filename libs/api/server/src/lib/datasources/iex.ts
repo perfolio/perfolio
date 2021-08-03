@@ -30,11 +30,15 @@ export class IEX extends DataSource {
   }
 
   public async getCompanyFromIsin(isin: string) {
-    const isinMapping = await cloud.getIsinMapping(isin)
+    const isinMapping = await this.getIsinMapping(isin)
     const ticker = isinMapping.find((i) => !i.symbol.includes("-"))?.symbol
 
     if (!ticker) {
-      throw new Error(`No symbol found for ${isin}`)
+      throw new Error(
+        `No symbol found for ${isin}, available symbols are : ${JSON.stringify(
+          isinMapping.map(({ symbol }) => symbol),
+        )}`,
+      )
     }
     return await this.getCompany(ticker)
   }
