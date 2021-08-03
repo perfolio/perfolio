@@ -1,13 +1,13 @@
 import { usePortfolio } from "./usePortfolio"
 
-export const useCurrentValue = () => {
+export const useCurrentAbsoluteValue = () => {
   const { portfolio, ...meta } = usePortfolio()
-  let currentValue = 0
+  let currentAbsoluteValue = 0
   if (portfolio) {
     Object.values(portfolio).forEach((e) => {
-      currentValue += e.quantity * e.value
+      currentAbsoluteValue += e.quantity * e.value
     })
   }
 
-  return { currentValue, ...meta }
+  return { currentAbsoluteValue, ...meta }
 }

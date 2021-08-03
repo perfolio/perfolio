@@ -15,7 +15,7 @@ import "tailwindcss/tailwind.css"
 import { JWTProvider } from "@perfolio/api/client"
 import { useRouter } from "next/router"
 
-const publicPages = ["/auth/sign-in/[[...index]]", "/auth/sign-up/[[...index]]"]
+const publicPages = ["/subscribe"]
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -49,15 +49,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         ></link>
       </Head>
       <IdProvider>
-        <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
-          <ClerkLoaded>
-            {publicPages.includes(router.pathname) ? (
-              <Component {...pageProps} />
-            ) : (
-              <>
-                <SignedIn>
-                  <JWTProvider>
-                    <QueryClientProvider client={PersistendQueryClient()}>
+        <JWTProvider>
+          <QueryClientProvider client={PersistendQueryClient()}>
+            <ClerkProvider frontendApi={frontendApi} navigate={(to) => router.push(to)}>
+              <ClerkLoaded>
+                {publicPages.includes(router.pathname) ? (
+                  <Component {...pageProps} />
+                ) : (
+                  <>
+                    <SignedIn>
                       <OnboardingModal />
                       <div
                         className={`${
@@ -66,16 +66,16 @@ function MyApp({ Component, pageProps }: AppProps) {
                       >
                         <Component {...pageProps} />
                       </div>
-                    </QueryClientProvider>
-                  </JWTProvider>
-                </SignedIn>
-                <SignedOut>
-                  <RedirectToSignIn />
-                </SignedOut>
-              </>
-            )}
-          </ClerkLoaded>
-        </ClerkProvider>
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn />
+                    </SignedOut>
+                  </>
+                )}
+              </ClerkLoaded>
+            </ClerkProvider>
+          </QueryClientProvider>
+        </JWTProvider>
       </IdProvider>
     </>
   )

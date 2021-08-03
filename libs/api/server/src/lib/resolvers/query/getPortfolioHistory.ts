@@ -1,16 +1,14 @@
-import { ResolverFn, TransactionSchemaFragment, AssetHistory } from "@perfolio/api/graphql"
+import { TransactionSchemaFragment, AssetHistory } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { AuthorizationError } from "@perfolio/util/errors"
 import { Time } from "@perfolio/util/time"
 
 type AssetHistoryWithoutAsset = Omit<AssetHistory, "asset"> & { assetId: string }
 
-export const getPortfolioHistory: ResolverFn<
-  AssetHistoryWithoutAsset[],
-  unknown,
-  Context,
-  { userId: string }
-> = async (_parent, { userId }, ctx, _info) => {
+export const getPortfolioHistory = async (
+  ctx: Context,
+  userId: string,
+): Promise<AssetHistoryWithoutAsset[]> => {
   const { sub } = ctx.authenticateUser()
   if (sub !== userId) {
     throw new AuthorizationError("getPortfolioHistory", "wrong user id")

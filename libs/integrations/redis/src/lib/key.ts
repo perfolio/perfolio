@@ -1,8 +1,10 @@
 import { env } from "@perfolio/util/env"
+import { createHash } from "crypto"
 
 export class Key {
   public readonly parameters?: Record<string, unknown>
   public readonly environment: string
+  public readonly version = "v1"
 
   constructor(parameters?: Record<string, unknown>) {
     this.parameters = parameters
@@ -13,10 +15,15 @@ export class Key {
   }
 
   public toString(): string {
-    return JSON.stringify({
-      parameters: this.parameters,
-      environment: this.environment,
-    })
+    return createHash("md5")
+      .update(
+        JSON.stringify({
+          parameters: this.parameters,
+          environment: this.environment,
+          version: this.version,
+        }),
+      )
+      .digest("hex")
   }
 }
 
