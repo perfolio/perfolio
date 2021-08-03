@@ -292,6 +292,27 @@
         }
       }
     },
+    "downsampling": {
+      "root": "libs/downsampling",
+      "sourceRoot": "libs/downsampling/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/downsampling/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/downsampling"],
+          "options": {
+            "jestConfig": "libs/downsampling/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "feature-asset-search": {
       "root": "libs/feature/asset-search",
       "sourceRoot": "libs/feature/asset-search/src",

@@ -1,5 +1,5 @@
 import Redis from "ioredis"
-import { convertTime } from "@perfolio/util/time"
+import { Time } from "@perfolio/util/time"
 import { Key, Value } from "./key"
 
 export abstract class Cache {
@@ -22,11 +22,15 @@ export abstract class Cache {
        * a pipeline for only 1 transaction.
        */
       if (data.length === 1) {
-        await redis.setex(data[0].key.toString(), convertTime(ttl), JSON.stringify(data[0].value))
+        await redis.setex(
+          data[0].key.toString(),
+          Time.toSeconds(ttl),
+          JSON.stringify(data[0].value),
+        )
       } else {
         const pipeline = redis.pipeline()
         data.forEach(({ key, value }) => {
-          pipeline.setex(key.toString(), convertTime(ttl), JSON.stringify(value))
+          pipeline.setex(key.toString(), Time.toSeconds(ttl), JSON.stringify(value))
         })
         await pipeline.exec()
       }

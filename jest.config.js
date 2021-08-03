@@ -32,5 +32,6 @@ module.exports = {
     "<rootDir>/libs/hooks/queries",
     "<rootDir>/libs/feature/asset-search",
     "<rootDir>/libs/app/query-client",
+    "<rootDir>/libs/downsampling",
   ],
 }

@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql"
 import { DocumentNode } from "graphql"
 import gql from "graphql-tag"
-export type Maybe<T> = T | null | undefined
+export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
@@ -182,6 +182,8 @@ export type Query = {
   getExchangeTradedAsset?: Maybe<ExchangeTradedAsset>
   /** Get a list of all availale exchanges */
   getExchanges: Array<Exchange>
+  /** Return an index for the performance of the users portfolio */
+  getRelativePortfolioHistory: Array<ValueAtTime>
   /** Return all assets over time for a given user */
   getPortfolioHistory: Array<AssetHistory>
   /** Get the risk free rates for a given interval */
@@ -203,6 +205,12 @@ export type Query = {
 /** Available queries */
 export type QueryGetExchangeTradedAssetArgs = {
   id: Scalars["ID"]
+}
+
+/** Available queries */
+export type QueryGetRelativePortfolioHistoryArgs = {
+  userId: Scalars["String"]
+  since?: Maybe<Scalars["Int"]>
 }
 
 /** Available queries */
@@ -433,6 +441,7 @@ export type ResolversTypes = ResolversObject<{
   Interval: Interval
   Mutation: ResolverTypeWrapper<{}>
   Query: ResolverTypeWrapper<{}>
+  Int: ResolverTypeWrapper<Scalars["Int"]>
   SearchResult: ResolverTypeWrapper<SearchResult>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
   Transaction: ResolverTypeWrapper<Transaction>
@@ -458,6 +467,7 @@ export type ResolversParentTypes = ResolversObject<{
   ExchangeTradedAsset: ResolversParentTypes["CompanyStock"] | ResolversParentTypes["Crypto"]
   Mutation: {}
   Query: {}
+  Int: Scalars["Int"]
   SearchResult: SearchResult
   Timestamp: Scalars["Timestamp"]
   Transaction: Transaction
@@ -581,6 +591,12 @@ export type QueryResolvers<
     RequireFields<QueryGetExchangeTradedAssetArgs, "id">
   >
   getExchanges?: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
+  getRelativePortfolioHistory?: Resolver<
+    Array<ResolversTypes["ValueAtTime"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetRelativePortfolioHistoryArgs, "userId">
+  >
   getPortfolioHistory?: Resolver<
     Array<ResolversTypes["AssetHistory"]>,
     ParentType,
@@ -797,6 +813,17 @@ export type GetPortfolioHistoryQuery = { __typename?: "Query" } & {
   >
 }
 
+export type GetRelativePortfolioHistoryQueryVariables = Exact<{
+  userId: Scalars["String"]
+  since?: Maybe<Scalars["Int"]>
+}>
+
+export type GetRelativePortfolioHistoryQuery = { __typename?: "Query" } & {
+  getRelativePortfolioHistory: Array<
+    { __typename?: "ValueAtTime" } & Pick<ValueAtTime, "time" | "value">
+  >
+}
+
 export type GetTransactionsQueryVariables = Exact<{
   userId: Scalars["ID"]
 }>
@@ -939,6 +966,14 @@ export const GetPortfolioHistoryDocument = gql`
     }
   }
 `
+export const GetRelativePortfolioHistoryDocument = gql`
+  query getRelativePortfolioHistory($userId: String!, $since: Int) {
+    getRelativePortfolioHistory(userId: $userId, since: $since) {
+      time
+      value
+    }
+  }
+`
 export const GetTransactionsDocument = gql`
   query getTransactions($userId: ID!) {
     getTransactions(userId: $userId) {
@@ -1069,6 +1104,16 @@ export function getSdk<C>(requester: Requester<C>) {
     ): Promise<GetPortfolioHistoryQuery> {
       return requester<GetPortfolioHistoryQuery, GetPortfolioHistoryQueryVariables>(
         GetPortfolioHistoryDocument,
+        variables,
+        options,
+      )
+    },
+    getRelativePortfolioHistory(
+      variables: GetRelativePortfolioHistoryQueryVariables,
+      options?: C,
+    ): Promise<GetRelativePortfolioHistoryQuery> {
+      return requester<GetRelativePortfolioHistoryQuery, GetRelativePortfolioHistoryQueryVariables>(
+        GetRelativePortfolioHistoryDocument,
         variables,
         options,
       )
