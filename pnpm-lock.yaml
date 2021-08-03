@@ -55,7 +55,6 @@ specifiers:
   '@types/ioredis': ^4.26.6
   '@types/jest': 26.0.8
   '@types/jsonwebtoken': ^8.5.4
-  '@types/md5': ^2.3.1
   '@types/micro-cors': ^0.1.2
   '@types/node': 14.14.33
   '@types/react': 17.0.3
@@ -98,7 +97,6 @@ specifiers:
   jest: 26.2.2
   jsonwebtoken: ^8.5.1
   lint-staged: ^11.1.1
-  md5: ^2.3.0
   micro: ^9.3.4
   next: 10.0.0
   next-plausible: ^1.9.0
@@ -212,7 +210,6 @@ devDependencies:
   '@types/ioredis': 4.26.6
   '@types/jest': 26.0.8
   '@types/jsonwebtoken': 8.5.4
-  '@types/md5': 2.3.1
   '@types/micro-cors': 0.1.2
   '@types/node': 14.14.33
   '@types/react': 17.0.3
@@ -241,7 +238,6 @@ devDependencies:
   husky: 6.0.0
   jest: 26.2.2_ts-node@9.1.1
   lint-staged: 11.1.1
-  md5: 2.3.0
   nx: 12.6.2
   postcss: 8.3.6
   prettier: 2.3.2
@@ -6912,12 +6908,6 @@ packages:
     resolution: {integrity: sha512-30nFYpceM/ZEvhGiqWjm5quLUxNeld0HCzJEXMZZDpq53FPkS85mTwkWtCXzCqq8s5JYLgM5W392a02xn8Bdaw==}
     dependencies:
       '@types/react': 17.0.3
-    dev: true
-
-  /@types/md5/2.3.1:
-    resolution: {integrity: sha512-OK3oe+ALIoPSo262lnhAYwpqFNXbiwH2a+0+Z5YBnkQEwWD8fk5+PIeRhYA48PzvX9I4SGNpWy+9bLj8qz92RQ==}
-    dependencies:
-      '@types/node': 14.14.33
     dev: true
 
   /@types/mdast/3.0.7:
