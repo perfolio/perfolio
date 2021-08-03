@@ -90,7 +90,7 @@ const TransactionsPage: NextPage = () => {
             <Loading />
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
-              <p className="text-gray-700">Looks like you don't have any transactions yet</p>
+              <p className="text-gray-700">Looks like you don&apos;t have any transactions yet</p>
               <Button size="large" kind="primary" href="/transactions/new">
                 Add transaction
               </Button>

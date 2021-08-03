@@ -171,16 +171,7 @@
             }
           }
         },
-        "lhci": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              {
-                "command": "pnpm nx build app --prod && pnpm lhci autorun --config=./apps/app/lighthouserc.js"
-              }
-            ]
-          }
-        },
+
         "export": {
           "executor": "@nrwl/next:export",
           "options": {
@@ -642,16 +633,7 @@
             "buildTarget": "landing:build:production"
           }
         },
-        "lhci": {
-          "executor": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              {
-                "command": "pnpm nx build landing --prod && pnpm lhci autorun --config=./apps/landing/lighthouserc.js"
-              }
-            ]
-          }
-        },
+
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/apps/landing"],

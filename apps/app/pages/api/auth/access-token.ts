@@ -6,7 +6,10 @@ interface RequestWithSession extends NextApiRequest {
   session: Session
 }
 
-export default async (req: RequestWithSession, res: NextApiResponse): Promise<void> => {
+export default async function handler(
+  req: RequestWithSession,
+  res: NextApiResponse,
+): Promise<void> {
   const logger = new Logger()
   const sessionId = req.body.sessionId
   if (!sessionId) {
