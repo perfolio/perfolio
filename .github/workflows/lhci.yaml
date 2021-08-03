@@ -16,7 +16,7 @@ jobs:
 
       - name: run lhci
         run: |
-          npx lhci autorun --config=./apps/landing/lighthouserc.js \
+          npx @lhci/cli autorun --config=./apps/landing/lighthouserc.js \
           --collect.url=${{ github.event.deployment_status.target_url }} \
           --collect.url=${{ github.event.deployment_status.target_url }}/imprint \
           --collect.url=${{ github.event.deployment_status.target_url }}/privacy
@@ -38,7 +38,7 @@ jobs:
 
       - name: run lhci
         run: |
-          npx lhci autorun --config=./apps/app/lighthouserc.js \
+          npx @lhci/cli autorun --config=./apps/app/lighthouserc.js \
           --collect.url=${{ github.event.deployment_status.target_url }}/subscribe
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
