@@ -111,7 +111,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
                   <Button
                     onClick={() => setStep(step > 0 ? step - 1 : 0)}
                     kind="secondary"
-                    size="small"
+                    size="sm"
                   >
                     Back
                   </Button>
@@ -138,7 +138,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
                     }
                   }}
                   kind={"primary"}
-                  size="small"
+                  size="sm"
                   type="submit"
                   disabled={ctx.formState.isSubmitting}
                 >
