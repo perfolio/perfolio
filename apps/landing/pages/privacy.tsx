@@ -16,12 +16,13 @@ export const Privacy: NextPage = () => {
 
           <p>
             Mit der folgenden Datenschutzerklärung möchten wir Sie darüber aufklären, welche Arten
-            Ihrer personenbezogenen Daten (nachfolgend auch kurz als "Daten“ bezeichnet) wir zu
-            welchen Zwecken und in welchem Umfang verarbeiten. Die Datenschutzerklärung gilt für
-            alle von uns durchgeführten Verarbeitungen personenbezogener Daten, sowohl im Rahmen der
-            Erbringung unserer Leistungen als auch insbesondere auf unseren Webseiten, in mobilen
-            Applikationen sowie innerhalb externer Onlinepräsenzen, wie z.B. unserer
-            Social-Media-Profile (nachfolgend zusammenfassend bezeichnet als "Onlineangebot“).
+            Ihrer personenbezogenen Daten (nachfolgend auch kurz als &quot;Daten&quot; bezeichnet)
+            wir zu welchen Zwecken und in welchem Umfang verarbeiten. Die Datenschutzerklärung gilt
+            für alle von uns durchgeführten Verarbeitungen personenbezogener Daten, sowohl im Rahmen
+            der Erbringung unserer Leistungen als auch insbesondere auf unseren Webseiten, in
+            mobilen Applikationen sowie innerhalb externer Onlinepräsenzen, wie z.B. unserer
+            Social-Media-Profile (nachfolgend zusammenfassend bezeichnet als
+            &quot;Onlineangebot&quot;).
           </p>
           <p>Die verwendeten Begriffe sind nicht geschlechtsspezifisch.</p>
           <p>Stand: 21. August 2020</p>
@@ -298,7 +299,7 @@ export const Privacy: NextPage = () => {
             Stelle, an der ein Video geschaut wurde, gehören. Zu dem Begriff der Cookies zählen wir
             ferner andere Technologien, die die gleichen Funktionen wie Cookies erfüllen (z.B., wenn
             Angaben der Nutzer anhand pseudonymer Onlinekennzeichnungen gespeichert werden, auch als
-            "Nutzer-IDs" bezeichnet)
+            &quot;Nutzer-IDs&quot; bezeichnet)
           </p>
           <p>
             <strong>Die folgenden Cookie-Typen und Funktionen werden unterschieden:</strong>
@@ -338,10 +339,11 @@ export const Privacy: NextPage = () => {
               die Interessen eines Nutzers oder sein Verhalten (z.B. Betrachten bestimmter Inhalte,
               Nutzen von Funktionen etc.) auf einzelnen Webseiten in einem Nutzerprofil gespeichert
               werden. Solche Profile dienen dazu, den Nutzern z.B. Inhalte anzuzeigen, die ihren
-              potentiellen Interessen entsprechen. Dieses Verfahren wird auch als "Tracking", d.h.,
-              Nachverfolgung der potentiellen Interessen der Nutzer bezeichnet. . Soweit wir Cookies
-              oder "Tracking"-Technologien einsetzen, informieren wir Sie gesondert in unserer
-              Datenschutzerklärung oder im Rahmen der Einholung einer Einwilligung.
+              potentiellen Interessen entsprechen. Dieses Verfahren wird auch als
+              &quot;Tracking&quot;, d.h., Nachverfolgung der potentiellen Interessen der Nutzer
+              bezeichnet. . Soweit wir Cookies oder &quot;Tracking&quot;-Technologien einsetzen,
+              informieren wir Sie gesondert in unserer Datenschutzerklärung oder im Rahmen der
+              Einholung einer Einwilligung.
             </li>
           </ul>
 
@@ -367,9 +369,9 @@ export const Privacy: NextPage = () => {
             davon, ob die Verarbeitung auf Grundlage einer Einwilligung oder gesetzlichen Erlaubnis
             erfolgt, haben Sie jederzeit die Möglichkeit, eine erteilte Einwilligung zu widerrufen
             oder der Verarbeitung Ihrer Daten durch Cookie-Technologien zu widersprechen
-            (zusammenfassend als "Opt-Out" bezeichnet). Sie können Ihren Widerspruch zunächst
-            mittels der Einstellungen Ihres Browsers erklären, z.B., indem Sie die Nutzung von
-            Cookies deaktivieren (wobei hierdurch auch die Funktionsfähigkeit unseres
+            (zusammenfassend als &quot;Opt-Out&quot; bezeichnet). Sie können Ihren Widerspruch
+            zunächst mittels der Einstellungen Ihres Browsers erklären, z.B., indem Sie die Nutzung
+            von Cookies deaktivieren (wobei hierdurch auch die Funktionsfähigkeit unseres
             Onlineangebotes eingeschränkt werden kann). Ein Widerspruch gegen den Einsatz von
             Cookies zu Zwecken des Onlinemarketings kann auch mittels einer Vielzahl von Diensten,
             vor allem im Fall des Trackings, über die Webseiten{" "}
@@ -410,7 +412,7 @@ export const Privacy: NextPage = () => {
 
           <p>
             Wir verarbeiten Daten unserer Vertrags- und Geschäftspartner, z.B. Kunden und
-            Interessenten (zusammenfassend bezeichnet als "Vertragspartner") im Rahmen von
+            Interessenten (zusammenfassend bezeichnet als &quot;Vertragspartner&quot;) im Rahmen von
             vertraglichen und vergleichbaren Rechtsverhältnissen sowie damit verbundenen Maßnahmen
             und im Rahmen der Kommunikation mit den Vertragspartnern (oder vorvertraglich), z.B., um
             Anfragen zu beantworten.
@@ -449,13 +451,14 @@ export const Privacy: NextPage = () => {
           </p>
           <p>
             <strong>Kundenkonto</strong>: Vertragspartner können innerhalb unseres Onlineangebotes
-            ein Konto anlegen (z.B. Kunden- bzw. Nutzerkonto, kurz "Kundenkonto"). Falls die
-            Registrierung eines Kundenkontos erforderlich ist, werden Vertragspartner hierauf ebenso
-            hingewiesen wie auf die für die Registrierung erforderlichen Angaben. Die Kundenkonten
-            sind nicht öffentlich und können von Suchmaschinen nicht indexiert werden. Im Rahmen der
-            Registrierung sowie anschließender Anmeldungen und Nutzungen des Kundenkontos speichern
-            wir die IP-Adressen der Kunden nebst den Zugriffszeitpunkten, um die Registrierung
-            nachweisen und etwaigem Missbrauch des Kundenkontos vorbeugen zu können.
+            ein Konto anlegen (z.B. Kunden- bzw. Nutzerkonto, kurz &quot;Kundenkonto&quot;). Falls
+            die Registrierung eines Kundenkontos erforderlich ist, werden Vertragspartner hierauf
+            ebenso hingewiesen wie auf die für die Registrierung erforderlichen Angaben. Die
+            Kundenkonten sind nicht öffentlich und können von Suchmaschinen nicht indexiert werden.
+            Im Rahmen der Registrierung sowie anschließender Anmeldungen und Nutzungen des
+            Kundenkontos speichern wir die IP-Adressen der Kunden nebst den Zugriffszeitpunkten, um
+            die Registrierung nachweisen und etwaigem Missbrauch des Kundenkontos vorbeugen zu
+            können.
           </p>
           <p>
             Wenn Kunden ihr Kundenkonto gekündigt haben, werden die das Kundenkonto betreffenden
@@ -466,12 +469,12 @@ export const Privacy: NextPage = () => {
           <p>
             <strong>Angebot von Software- und Plattformleistungen</strong>: Wir verarbeiten die
             Daten unserer Nutzer, angemeldeter und etwaiger Testnutzer (nachfolgend einheitlich als
-            "Nutzer" bezeichnet), um ihnen gegenüber unsere vertraglichen Leistungen erbringen zu
-            können sowie auf Grundlage berechtigter Interessen, um die Sicherheit unseres Angebotes
-            gewährleisten und es weiterentwickeln zu können. Die erforderlichen Angaben sind als
-            solche im Rahmen des Auftrags-, Bestell- bzw. vergleichbaren Vertragsschlusses
-            gekennzeichnet und umfassen die zur Leistungserbringung und Abrechnung benötigten
-            Angaben sowie Kontaktinformationen, um etwaige Rücksprachen halten zu können.
+            &quot;Nutzer&quot; bezeichnet), um ihnen gegenüber unsere vertraglichen Leistungen
+            erbringen zu können sowie auf Grundlage berechtigter Interessen, um die Sicherheit
+            unseres Angebotes gewährleisten und es weiterentwickeln zu können. Die erforderlichen
+            Angaben sind als solche im Rahmen des Auftrags-, Bestell- bzw. vergleichbaren
+            Vertragsschlusses gekennzeichnet und umfassen die zur Leistungserbringung und Abrechnung
+            benötigten Angaben sowie Kontaktinformationen, um etwaige Rücksprachen halten zu können.
           </p>
           <ul>
             <li>
@@ -530,11 +533,11 @@ export const Privacy: NextPage = () => {
             ihre Stabilität sicherzustellen.
           </p>
           <p>
-            <strong>Content-Delivery-Network</strong>: Wir setzen ein "Content-Delivery-Network"
-            (CDN) ein. Ein CDN ist ein Dienst, mit dessen Hilfe Inhalte eines Onlineangebotes,
-            insbesondere große Mediendateien, wie Grafiken oder Programm-Skripte, mit Hilfe regional
-            verteilter und über das Internet verbundener Server schneller und sicherer ausgeliefert
-            werden können.
+            <strong>Content-Delivery-Network</strong>: Wir setzen ein
+            &quot;Content-Delivery-Network&quot; (CDN) ein. Ein CDN ist ein Dienst, mit dessen Hilfe
+            Inhalte eines Onlineangebotes, insbesondere große Mediendateien, wie Grafiken oder
+            Programm-Skripte, mit Hilfe regional verteilter und über das Internet verbundener Server
+            schneller und sicherer ausgeliefert werden können.
           </p>
           <ul>
             <li>
@@ -640,7 +643,7 @@ export const Privacy: NextPage = () => {
 
           <p>
             Wir versenden Newsletter, E-Mails und weitere elektronische Benachrichtigungen
-            (nachfolgend "Newsletter“) nur mit der Einwilligung der Empfänger oder einer
+            (nachfolgend &quot;Newsletter&quot;) nur mit der Einwilligung der Empfänger oder einer
             gesetzlichen Erlaubnis. Sofern im Rahmen einer Anmeldung zum Newsletter dessen Inhalte
             konkret umschrieben werden, sind sie für die Einwilligung der Nutzer maßgeblich. Im
             Übrigen enthalten unsere Newsletter Informationen zu unseren Leistungen und uns.
@@ -671,7 +674,7 @@ export const Privacy: NextPage = () => {
             möglich, sofern zugleich das ehemalige Bestehen einer Einwilligung bestätigt wird. Im
             Fall von Pflichten zur dauerhaften Beachtung von Widersprüchen behalten wir uns die
             Speicherung der E-Mail-Adresse alleine zu diesem Zweck in einer Sperrliste (sogenannte
-            "Blacklist") vor.
+            &quot;Blacklist&quot;) vor.
           </p>
           <p>
             Die Protokollierung des Anmeldeverfahrens erfolgt auf Grundlage unserer berechtigten
@@ -695,11 +698,11 @@ export const Privacy: NextPage = () => {
           </p>
           <p>
             <strong>Analyse und Erfolgsmessung</strong>: Die Newsletter enthalten einen sogenannte
-            "web-beacon“, d.h., eine pixelgroße Datei, die beim Öffnen des Newsletters von unserem
-            Server, bzw., sofern wir einen Versanddienstleister einsetzen, von dessen Server
+            &quot;web-beacon&quot;, d.h., eine pixelgroße Datei, die beim Öffnen des Newsletters von
+            unserem Server, bzw., sofern wir einen Versanddienstleister einsetzen, von dessen Server
             abgerufen wird. Im Rahmen dieses Abrufs werden zunächst technische Informationen, wie
             Informationen zum Browser und Ihrem System, als auch Ihre IP-Adresse und der Zeitpunkt
-            des Abrufs, erhoben.{" "}
+            des Abrufs, erhoben.
           </p>
           <p>
             Diese Informationen werden zur technischen Verbesserung unseres Newsletters anhand der
@@ -760,9 +763,9 @@ export const Privacy: NextPage = () => {
            */}
           <ul>
             <li>
-              <strong>Mailchimp:</strong> E-Mail-Marketing-Plattform; Dienstanbieter: "Mailchimp" -
-              Rocket Science Group, LLC, 675 Ponce De Leon Ave NE #5000, Atlanta, GA 30308, USA;
-              Website:{" "}
+              <strong>Mailchimp:</strong> E-Mail-Marketing-Plattform; Dienstanbieter:
+              &quot;Mailchimp&quot; - Rocket Science Group, LLC, 675 Ponce De Leon Ave NE #5000,
+              Atlanta, GA 30308, USA; Website:{" "}
               <a href="https://mailchimp.com" target="_blank" rel="noreferrer">
                 https://mailchimp.com
               </a>
@@ -776,12 +779,12 @@ export const Privacy: NextPage = () => {
           <h2 id="m408">Umfragen und Befragungen</h2>
 
           <p>
-            Die von uns durchgeführten Umfragen und Befragungen (nachfolgend "Befragungen") werden
-            anonym ausgewertet. Eine Verarbeitung personenbezogener Daten erfolgt nur insoweit, als
-            dies zu Bereitstellung und technischen Durchführung der Umfragen erforderlich ist (z.B.
-            Verarbeitung der IP-Adresse, um die Umfrage im Browser des Nutzers darzustellen oder
-            mithilfe eines temporären Cookies (Session-Cookie) eine Wiederaufnahme der Umfrage zu
-            ermöglichen) oder Nutzer eingewilligt haben.
+            Die von uns durchgeführten Umfragen und Befragungen (nachfolgend
+            &quot;Befragungen&quot;) werden anonym ausgewertet. Eine Verarbeitung personenbezogener
+            Daten erfolgt nur insoweit, als dies zu Bereitstellung und technischen Durchführung der
+            Umfragen erforderlich ist (z.B. Verarbeitung der IP-Adresse, um die Umfrage im Browser
+            des Nutzers darzustellen oder mithilfe eines temporären Cookies (Session-Cookie) eine
+            Wiederaufnahme der Umfrage zu ermöglichen) oder Nutzer eingewilligt haben.
           </p>
           <p>
             <strong>Hinweise zu Rechtsgrundlagen:</strong> Sofern wir die Teilnehmer um eine
@@ -949,44 +952,44 @@ export const Privacy: NextPage = () => {
           </p>
           <ul className="glossary">
             <li>
-              <strong>Content Delivery Network (CDN):</strong> Ein "Content Delivery Network" (CDN)
-              ist ein Dienst, mit dessen Hilfe Inhalte eines Onlineangebotes, insbesondere große
-              Mediendateien, wie Grafiken oder Programm-Skripte mit Hilfe regional verteilter und
-              über das Internet verbundener Server, schneller und sicherer ausgeliefert werden
-              können.{" "}
+              <strong>Content Delivery Network (CDN):</strong> Ein &quot;Content Delivery
+              Network&quot; (CDN) ist ein Dienst, mit dessen Hilfe Inhalte eines Onlineangebotes,
+              insbesondere große Mediendateien, wie Grafiken oder Programm-Skripte mit Hilfe
+              regional verteilter und über das Internet verbundener Server, schneller und sicherer
+              ausgeliefert werden können.{" "}
             </li>
             <li>
-              <strong>Personenbezogene Daten:</strong> "Personenbezogene Daten“ sind alle
+              <strong>Personenbezogene Daten:</strong> &quot;Personenbezogene Daten&quot; sind alle
               Informationen, die sich auf eine identifizierte oder identifizierbare natürliche
-              Person (im Folgenden "betroffene Person“) beziehen; als identifizierbar wird eine
-              natürliche Person angesehen, die direkt oder indirekt, insbesondere mittels Zuordnung
-              zu einer Kennung wie einem Namen, zu einer Kennnummer, zu Standortdaten, zu einer
-              Online-Kennung (z.B. Cookie) oder zu einem oder mehreren besonderen Merkmalen
+              Person (im Folgenden &quot;betroffene Person&quot;) beziehen; als identifizierbar wird
+              eine natürliche Person angesehen, die direkt oder indirekt, insbesondere mittels
+              Zuordnung zu einer Kennung wie einem Namen, zu einer Kennnummer, zu Standortdaten, zu
+              einer Online-Kennung (z.B. Cookie) oder zu einem oder mehreren besonderen Merkmalen
               identifiziert werden kann, die Ausdruck der physischen, physiologischen, genetischen,
               psychischen, wirtschaftlichen, kulturellen oder sozialen Identität dieser natürlichen
               Person sind.{" "}
             </li>
             <li>
-              <strong>Tracking:</strong> Vom "Tracking“ spricht man, wenn das Verhalten von Nutzern
-              über mehrere Onlineangebote hinweg nachvollzogen werden kann. Im Regelfall werden im
-              Hinblick auf die genutzten Onlineangebote Verhaltens- und Interessensinformationen in
-              Cookies oder auf Servern der Anbieter der Trackingtechnologien gespeichert
-              (sogenanntes Profiling). Diese Informationen können anschließend z.B. eingesetzt
-              werden, um den Nutzern Werbeanzeigen anzuzeigen, die voraussichtlich deren Interessen
-              entsprechen.{" "}
+              <strong>Tracking:</strong> Vom &quot;Tracking&quot; spricht man, wenn das Verhalten
+              von Nutzern über mehrere Onlineangebote hinweg nachvollzogen werden kann. Im Regelfall
+              werden im Hinblick auf die genutzten Onlineangebote Verhaltens- und
+              Interessensinformationen in Cookies oder auf Servern der Anbieter der
+              Trackingtechnologien gespeichert (sogenanntes Profiling). Diese Informationen können
+              anschließend z.B. eingesetzt werden, um den Nutzern Werbeanzeigen anzuzeigen, die
+              voraussichtlich deren Interessen entsprechen.
             </li>
             <li>
-              <strong>Verantwortlicher:</strong> Als "Verantwortlicher“ wird die natürliche oder
-              juristische Person, Behörde, Einrichtung oder andere Stelle, die allein oder gemeinsam
-              mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten
-              entscheidet, bezeichnet.{" "}
+              <strong>Verantwortlicher:</strong> Als &quot;Verantwortlicher&quot; wird die
+              natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die
+              allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von
+              personenbezogenen Daten entscheidet, bezeichnet.
             </li>
             <li>
-              <strong>Verarbeitung:</strong> "Verarbeitung" ist jeder mit oder ohne Hilfe
+              <strong>Verarbeitung:</strong> &quot;Verarbeitung&quot; ist jeder mit oder ohne Hilfe
               automatisierter Verfahren ausgeführte Vorgang oder jede solche Vorgangsreihe im
               Zusammenhang mit personenbezogenen Daten. Der Begriff reicht weit und umfasst
               praktisch jeden Umgang mit Daten, sei es das Erheben, das Auswerten, das Speichern,
-              das Übermitteln oder das Löschen.{" "}
+              das Übermitteln oder das Löschen.
             </li>
           </ul>
           <p className="seal">
