@@ -6,9 +6,9 @@ export const GetPriceResponseValidator = z.array(
   z
     .object({
       /**
-       * Adjusted data for historical dates. Split adjusted only.
+       * Fully adjusted for historical dates.
        */
-      close: z.number(),
+      fClose: z.number(),
     })
     .nonstrict(),
 )
@@ -41,7 +41,8 @@ export async function getPrice(symbol: string, time: Time): Promise<GetPriceResp
         throw err
       }
     })
-  return GetPriceResponseValidator.parse(res)[0] ?? { close: -1 }
+  const validated = GetPriceResponseValidator.parse(res)
+  return { close: validated[0].fClose ?? -1 }
 }
 
 export const GetHistoryResponseValidator = z.array(
