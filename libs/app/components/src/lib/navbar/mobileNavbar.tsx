@@ -45,13 +45,13 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
           </ul>
           <ul className="flex items-center justify-center h-20 space-x-8 text-gray-700 border-t border-gray-300">
             {/* <li>
-              <Link size="large" prefix={<BellIcon />} href="/" />
+              <Link size="lg" prefix={<BellIcon />} href="/" />
             </li> */}
             <li>
-              <Link size="large" prefix={<AdjustmentsIcon />} href="/settings/account" />
+              <Link size="lg" prefix={<AdjustmentsIcon />} href="/settings/account" />
             </li>
             <li>
-              <Link size="large" prefix={<DotsVerticalIcon />} href="/" />
+              <Link size="lg" prefix={<DotsVerticalIcon />} href="/" />
             </li>
             <li>
               <button

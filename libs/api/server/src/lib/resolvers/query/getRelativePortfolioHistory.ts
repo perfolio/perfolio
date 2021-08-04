@@ -28,7 +28,6 @@ export const getRelativePortfolioHistory = async (
     time: Number(time),
     value,
   }))
-  ctx.logger.debug({ value: value[0] })
   await cache.set("1h", { key, value })
   return value
 }

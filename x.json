@@ -1,0 +1,510 @@
+{
+  "externals": ["next"],
+  "optimization": {
+    "emitOnErrors": true,
+    "checkWasmTypes": false,
+    "nodeEnv": false,
+    "splitChunks": {
+      "cacheGroups": {
+        "framework": {
+          "chunks": "all",
+          "name": "framework",
+          "test": {},
+          "priority": 40,
+          "enforce": true
+        },
+        "lib": { "priority": 30, "minChunks": 1, "reuseExistingChunk": true },
+        "commons": { "name": "commons", "minChunks": 11, "priority": 20 }
+      },
+      "maxInitialRequests": 25,
+      "minSize": 20000
+    },
+    "runtimeChunk": { "name": "webpack" },
+    "minimize": true,
+    "minimizer": [null, null]
+  },
+  "context": "/home/chronark/github/perfolio/perfolio/apps/app",
+  "node": {},
+  "watchOptions": {
+    "aggregateTimeout": 5,
+    "ignored": ["**/.git/**", "**/node_modules/**", "**/.next/**", "**/.#*"]
+  },
+  "output": {
+    "environment": {
+      "arrowFunction": false,
+      "bigIntLiteral": false,
+      "const": false,
+      "destructuring": false,
+      "dynamicImport": false,
+      "forOf": false,
+      "module": false
+    },
+    "publicPath": "/_next/",
+    "path": "/home/chronark/github/perfolio/perfolio/dist/apps/app/.next",
+    "filename": "static/chunks/[name]-[contenthash].js",
+    "library": "_N_E",
+    "libraryTarget": "assign",
+    "hotUpdateChunkFilename": "static/webpack/[id].[fullhash].hot-update.js",
+    "hotUpdateMainFilename": "static/webpack/[fullhash].[runtime].hot-update.json",
+    "chunkFilename": "static/chunks/[name].[contenthash].js",
+    "strictModuleExceptionHandling": true,
+    "webassemblyModuleFilename": "static/wasm/[modulehash].wasm"
+  },
+  "performance": false,
+  "resolve": {
+    "extensions": [".mjs", ".js", ".tsx", ".ts", ".jsx", ".json", ".wasm"],
+    "modules": [
+      "node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/pnpm@6.11.5/node_modules/pnpm/bin/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/pnpm@6.11.5/node_modules/pnpm/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/pnpm@6.11.5/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules",
+      "/home/chronark/n/pnpm-global/node_modules",
+      "/home/chronark/n/node_modules",
+      "/home/chronark/node_modules",
+      "/home/node_modules",
+      "/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/pnpm/bin/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/pnpm/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/nx@12.6.3/node_modules/nx/bin/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/nx@12.6.3/node_modules/nx/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/nx@12.6.3/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules",
+      "/home/chronark/github/perfolio/node_modules",
+      "/home/chronark/github/node_modules",
+      "/home/chronark/node_modules",
+      "/home/node_modules",
+      "/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/nx/bin/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/nx/node_modules",
+      "/home/chronark/github/perfolio/perfolio"
+    ],
+    "alias": {
+      "next": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next",
+      "private-next-pages": "/home/chronark/github/perfolio/perfolio/apps/app/pages",
+      "private-dot-next": "/home/chronark/github/perfolio/perfolio/dist/apps/app/.next",
+      "unfetch$": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/fetch/index.js",
+      "isomorphic-unfetch$": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/fetch/index.js",
+      "whatwg-fetch$": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/fetch/whatwg-fetch.js",
+      "object-assign$": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/object-assign.js",
+      "object.assign/auto": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/object.assign/auto.js",
+      "object.assign/implementation": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/object.assign/implementation.js",
+      "object.assign$": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/object.assign/index.js",
+      "object.assign/polyfill": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/object.assign/polyfill.js",
+      "object.assign/shim": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/polyfills/object.assign/shim.js",
+      "url": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/native-url@0.3.4/node_modules/native-url/dist/index.js",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/next-server/lib/router/utils/resolve-rewrites.js": false
+    },
+    "fallback": {
+      "assert": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/assert@2.0.0/node_modules/assert/build/assert.js",
+      "buffer": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/buffer@5.6.0/node_modules/buffer/index.js",
+      "constants": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/constants-browserify@1.0.0/node_modules/constants-browserify/constants.json",
+      "crypto": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/crypto-browserify@3.12.0/node_modules/crypto-browserify/index.js",
+      "domain": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/domain-browser@4.19.0/node_modules/domain-browser/source/index.js",
+      "http": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/stream-http@3.1.1/node_modules/stream-http/index.js",
+      "https": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/https-browserify@1.0.0/node_modules/https-browserify/index.js",
+      "os": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/os-browserify@0.3.0/node_modules/os-browserify/browser.js",
+      "path": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/path-browserify@1.0.1/node_modules/path-browserify/index.js",
+      "punycode": "punycode",
+      "process": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/process@0.11.10/node_modules/process/browser.js",
+      "querystring": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/querystring-es3@0.2.1/node_modules/querystring-es3/index.js",
+      "stream": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/stream-browserify@3.0.0/node_modules/stream-browserify/index.js",
+      "string_decoder": "string_decoder",
+      "sys": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/util@0.12.3/node_modules/util/util.js",
+      "timers": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/timers-browserify@2.0.12/node_modules/timers-browserify/main.js",
+      "tty": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/tty-browserify@0.0.1/node_modules/tty-browserify/index.js",
+      "util": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/util@0.12.3/node_modules/util/util.js",
+      "vm": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/vm-browserify@1.1.2/node_modules/vm-browserify/index.js",
+      "zlib": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/browserify-zlib@0.2.0/node_modules/browserify-zlib/lib/index.js"
+    },
+    "mainFields": ["browser", "module", "main"],
+    "plugins": [
+      {
+        "paths": {
+          "@perfolio/api/client": ["libs/api/client/src/index.ts"],
+          "@perfolio/api/graphql": ["libs/api/graphql/src/index.ts"],
+          "@perfolio/api/server": ["libs/api/server/src/index.ts"],
+          "@perfolio/app/components": ["libs/app/components/src/index.ts"],
+          "@perfolio/app/middleware": ["libs/app/middleware/src/index.ts"],
+          "@perfolio/app/query-client": ["libs/app/query-client/src/index.ts"],
+          "@perfolio/downsampling": ["libs/downsampling/src/index.ts"],
+          "@perfolio/feature/asset-search": ["libs/feature/asset-search/src/index.ts"],
+          "@perfolio/feature/email": ["libs/feature/email/src/index.ts"],
+          "@perfolio/feature/finance/kpis": ["libs/feature/finance/kpis/src/index.ts"],
+          "@perfolio/feature/finance/returns": ["libs/feature/finance/returns/src/index.ts"],
+          "@perfolio/feature/i18n": ["libs/feature/i18n/src/index.ts"],
+          "@perfolio/feature/tokens": ["libs/feature/tokens/src/index.ts"],
+          "@perfolio/hooks": ["libs/hooks/src/index.ts"],
+          "@perfolio/integrations/bankofengland": ["libs/integrations/bankofengland/src/index.ts"],
+          "@perfolio/integrations/ecb": ["libs/integrations/ecb/src/index.ts"],
+          "@perfolio/integrations/fauna": ["libs/integrations/fauna/src/index.ts"],
+          "@perfolio/integrations/iexcloud": ["libs/integrations/iexcloud/src/index.ts"],
+          "@perfolio/integrations/localstorage": ["libs/integrations/localstorage/src/index.ts"],
+          "@perfolio/integrations/openfigi": ["libs/integrations/openfigi/src/index.ts"],
+          "@perfolio/integrations/redis": ["libs/integrations/redis/src/index.ts"],
+          "@perfolio/types": ["libs/types/src/index.ts"],
+          "@perfolio/ui/charts": ["libs/ui/charts/src/index.ts"],
+          "@perfolio/ui/components": ["libs/ui/components/src/index.ts"],
+          "@perfolio/ui/form": ["libs/ui/form/src/index.ts"],
+          "@perfolio/util/currency": ["libs/util/currency/src/index.ts"],
+          "@perfolio/util/env": ["libs/util/env/src/index.ts"],
+          "@perfolio/util/errors": ["libs/util/errors/src/index.ts"],
+          "@perfolio/util/numbers": ["libs/util/numbers/src/index.ts"],
+          "@perfolio/util/time": ["libs/util/time/src/index.ts"]
+        },
+        "resolvedBaseUrl": "/home/chronark/github/perfolio/perfolio"
+      }
+    ]
+  },
+  "resolveLoader": {
+    "alias": {
+      "emit-file-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/emit-file-loader",
+      "error-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/error-loader",
+      "next-babel-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/next-babel-loader",
+      "next-client-pages-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/next-client-pages-loader",
+      "next-image-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/next-image-loader",
+      "next-serverless-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/next-serverless-loader",
+      "noop-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/noop-loader",
+      "next-style-loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/webpack/loaders/next-style-loader"
+    },
+    "modules": [
+      "node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/pnpm@6.11.5/node_modules/pnpm/bin/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/pnpm@6.11.5/node_modules/pnpm/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/pnpm@6.11.5/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/.pnpm/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules",
+      "/home/chronark/n/pnpm-global/node_modules",
+      "/home/chronark/n/node_modules",
+      "/home/chronark/node_modules",
+      "/home/node_modules",
+      "/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/pnpm/bin/node_modules",
+      "/home/chronark/n/pnpm-global/5/node_modules/pnpm/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/nx@12.6.3/node_modules/nx/bin/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/nx@12.6.3/node_modules/nx/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/nx@12.6.3/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules",
+      "/home/chronark/github/perfolio/node_modules",
+      "/home/chronark/github/node_modules",
+      "/home/chronark/node_modules",
+      "/home/node_modules",
+      "/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/nx/bin/node_modules",
+      "/home/chronark/github/perfolio/perfolio/node_modules/nx/node_modules"
+    ],
+    "plugins": []
+  },
+  "module": {
+    "rules": [
+      { "test": {}, "resolve": { "fullySpecified": false } },
+      {
+        "test": {},
+        "include": ["/home/chronark/github/perfolio/perfolio/apps/app", {}, {}, {}, {}],
+        "use": {
+          "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/build/babel/loader/index.js",
+          "options": {
+            "configFile": "/home/chronark/github/perfolio/perfolio/apps/app/.babelrc",
+            "isServer": false,
+            "distDir": "/home/chronark/github/perfolio/perfolio/dist/apps/app/.next",
+            "pagesDir": "/home/chronark/github/perfolio/perfolio/apps/app/pages",
+            "cwd": "/home/chronark/github/perfolio/perfolio/apps/app",
+            "cache": false,
+            "development": false,
+            "hasReactRefresh": false,
+            "hasJsxRuntime": true,
+            "babelrc": true,
+            "rootMode": "upward"
+          }
+        }
+      },
+      {
+        "oneOf": [
+          { "test": {}, "loader": "noop-loader", "options": { "__next_css_remove": true } },
+          {
+            "test": {},
+            "issuer": {},
+            "use": {
+              "loader": "error-loader",
+              "options": {
+                "reason": "CSS \u001b[1mcannot\u001b[22m be imported within \u001b[36mpages/_document.js\u001b[39m. Please move global styles to \u001b[36mpages/_app.js\u001b[39m."
+              }
+            }
+          },
+          {
+            "sideEffects": false,
+            "test": {},
+            "issuer": {
+              "not": [{}],
+              "or": [
+                "/home/chronark/github/perfolio/perfolio/apps/app",
+                "/home/chronark/github/perfolio/perfolio/libs"
+              ]
+            },
+            "use": [
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/mini-css-extract-plugin/loader.js",
+                "options": { "publicPath": "/_next/", "esModule": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/css-loader/cjs.js",
+                "options": {
+                  "importLoaders": 1,
+                  "sourceMap": true,
+                  "esModule": false,
+                  "modules": {
+                    "exportLocalsConvention": "asIs",
+                    "exportOnlyLocals": false,
+                    "mode": "pure"
+                  }
+                }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/postcss-loader/cjs.js",
+                "options": {
+                  "postcssOptions": { "plugins": [null, null], "config": false },
+                  "sourceMap": true
+                }
+              }
+            ]
+          },
+          {
+            "sideEffects": false,
+            "test": {},
+            "issuer": {
+              "not": [{}],
+              "or": [
+                "/home/chronark/github/perfolio/perfolio/apps/app",
+                "/home/chronark/github/perfolio/perfolio/libs"
+              ]
+            },
+            "use": [
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/mini-css-extract-plugin/loader.js",
+                "options": { "publicPath": "/_next/", "esModule": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/css-loader/cjs.js",
+                "options": {
+                  "importLoaders": 3,
+                  "sourceMap": true,
+                  "esModule": false,
+                  "modules": {
+                    "exportLocalsConvention": "asIs",
+                    "exportOnlyLocals": false,
+                    "mode": "pure"
+                  }
+                }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/postcss-loader/cjs.js",
+                "options": {
+                  "postcssOptions": { "plugins": [null, null], "config": false },
+                  "sourceMap": true
+                }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/resolve-url-loader/index.js",
+                "options": { "sourceMap": true }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/sass-loader/cjs.js",
+                "options": { "sourceMap": true, "sassOptions": {} }
+              }
+            ]
+          },
+          {
+            "test": [{}, {}],
+            "use": {
+              "loader": "error-loader",
+              "options": {
+                "reason": "CSS Modules \u001b[1mcannot\u001b[22m be imported from within \u001b[1mnode_modules\u001b[22m.\nRead more: https://nextjs.org/docs/messages/css-modules-npm"
+              }
+            }
+          },
+          {
+            "sideEffects": true,
+            "test": {},
+            "include": { "and": [{}] },
+            "issuer": {
+              "not": [{}],
+              "or": [
+                "/home/chronark/github/perfolio/perfolio/apps/app",
+                "/home/chronark/github/perfolio/perfolio/libs"
+              ]
+            },
+            "use": [
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/mini-css-extract-plugin/loader.js",
+                "options": { "publicPath": "/_next/", "esModule": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/css-loader/cjs.js",
+                "options": { "importLoaders": 1, "sourceMap": true, "modules": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/postcss-loader/cjs.js",
+                "options": {
+                  "postcssOptions": { "plugins": [null, null], "config": false },
+                  "sourceMap": true
+                }
+              }
+            ]
+          },
+          {
+            "sideEffects": true,
+            "test": {},
+            "issuer": {
+              "and": ["/home/chronark/github/perfolio/perfolio/apps/app/pages/_app.tsx"]
+            },
+            "use": [
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/mini-css-extract-plugin/loader.js",
+                "options": { "publicPath": "/_next/", "esModule": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/css-loader/cjs.js",
+                "options": { "importLoaders": 1, "sourceMap": true, "modules": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/postcss-loader/cjs.js",
+                "options": {
+                  "postcssOptions": { "plugins": [null, null], "config": false },
+                  "sourceMap": true
+                }
+              }
+            ]
+          },
+          {
+            "sideEffects": true,
+            "test": {},
+            "issuer": {
+              "and": ["/home/chronark/github/perfolio/perfolio/apps/app/pages/_app.tsx"]
+            },
+            "use": [
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/mini-css-extract-plugin/loader.js",
+                "options": { "publicPath": "/_next/", "esModule": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/css-loader/cjs.js",
+                "options": { "importLoaders": 3, "sourceMap": true, "modules": false }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/postcss-loader/cjs.js",
+                "options": {
+                  "postcssOptions": { "plugins": [null, null], "config": false },
+                  "sourceMap": true
+                }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/resolve-url-loader/index.js",
+                "options": { "sourceMap": true }
+              },
+              {
+                "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/sass-loader/cjs.js",
+                "options": { "sourceMap": true, "sassOptions": {} }
+              }
+            ]
+          },
+          {
+            "test": [{}, {}],
+            "issuer": { "and": [{}] },
+            "use": {
+              "loader": "error-loader",
+              "options": {
+                "reason": "Global CSS \u001b[1mcannot\u001b[22m be imported from within \u001b[1mnode_modules\u001b[22m.\nRead more: https://nextjs.org/docs/messages/css-npm"
+              }
+            }
+          },
+          {
+            "test": [{}, {}],
+            "use": {
+              "loader": "error-loader",
+              "options": {
+                "reason": "Global CSS \u001b[1mcannot\u001b[22m be imported from files other than your \u001b[1mCustom <App>\u001b[22m. Please move all global CSS imports to \u001b[36mpages/_app.tsx\u001b[39m. Or convert the import to Component-Level CSS (CSS Modules).\nRead more: https://nextjs.org/docs/messages/css-global"
+              }
+            }
+          },
+          {
+            "issuer": {},
+            "exclude": [{}, {}, {}, {}],
+            "use": {
+              "loader": "/home/chronark/github/perfolio/perfolio/node_modules/.pnpm/next@11.0.1_f31b35bdaa3b7c2fce82404f09d2dac4/node_modules/next/dist/compiled/file-loader/cjs.js",
+              "options": { "name": "static/media/[name].[hash].[ext]" }
+            }
+          }
+        ]
+      }
+    ],
+    "strictExportPresence": false
+  },
+  "plugins": [
+    { "definitions": { "Buffer": ["buffer", "Buffer"], "process": ["process"] } },
+    {
+      "definitions": {
+        "process.env.NEXT_PUBLIC_PERFOLIO_API": "\"http://localhost:8080\"",
+        "process.env.NEXT_PUBLIC_CLERK_FRONTEND_API": "\"clerk.04rjd.s7qnn.lcl.dev\"",
+        "process.env.NEXT_PUBLIC_PERFOLIO_API_URL": "\"http://localhost:8080\"",
+        "process.env.NODE_ENV": "\"production\"",
+        "process.browser": "true",
+        "process.env.__NEXT_TRAILING_SLASH": "false",
+        "process.env.__NEXT_BUILD_INDICATOR": "true",
+        "process.env.__NEXT_PLUGINS": "false",
+        "process.env.__NEXT_STRICT_MODE": "false",
+        "process.env.__NEXT_REACT_ROOT": "false",
+        "process.env.__NEXT_OPTIMIZE_FONTS": "true",
+        "process.env.__NEXT_OPTIMIZE_IMAGES": "false",
+        "process.env.__NEXT_OPTIMIZE_CSS": "false",
+        "process.env.__NEXT_SCROLL_RESTORATION": "false",
+        "process.env.__NEXT_IMAGE_OPTS": "{\"deviceSizes\":[640,750,828,1080,1200,1920,2048,3840],\"imageSizes\":[16,32,48,64,96,128,256,384],\"path\":\"/_next/image\",\"loader\":\"default\"}",
+        "process.env.__NEXT_ROUTER_BASEPATH": "\"\"",
+        "process.env.__NEXT_HAS_REWRITES": "false",
+        "process.env.__NEXT_I18N_SUPPORT": "false",
+        "process.env.__NEXT_ANALYTICS_ID": "\"\""
+      }
+    },
+    {
+      "filename": "react-loadable-manifest.json",
+      "pagesDir": "/home/chronark/github/perfolio/perfolio/apps/app/pages"
+    },
+    { "ampPages": {} },
+    { "options": { "resourceRegExp": {}, "contextRegExp": {} } },
+    { "options": { "resourceRegExp": {}, "contextRegExp": {} } },
+    {
+      "buildId": "svfQ9ufH447ps3ribxhcM",
+      "rewrites": { "beforeFiles": [], "afterFiles": [], "fallback": [] },
+      "isDevFallback": false
+    },
+    {},
+    {},
+    {
+      "_sortedModulesCache": {},
+      "options": {
+        "filename": "static/css/[contenthash].css",
+        "ignoreOrder": true,
+        "experimentalUseImportModule": true,
+        "chunkFilename": "static/css/[contenthash].css"
+      },
+      "runtimeOptions": { "linkType": "text/css" },
+      "__next_css_remove": true
+    }
+  ],
+  "snapshot": { "managedPaths": ["/home/chronark/github/perfolio/perfolio/node_modules"] },
+  "cache": {
+    "type": "filesystem",
+    "version": "11.0.1|{\"pageExtensions\":[\"tsx\",\"ts\",\"jsx\",\"js\"],\"trailingSlash\":false,\"buildActivity\":true,\"plugins\":false,\"reactStrictMode\":false,\"optimizeFonts\":true,\"optimizeImages\":false,\"optimizeCss\":false,\"scrollRestoration\":false,\"basePath\":\"\",\"pageEnv\":false,\"excludeDefaultMomentLocales\":true,\"assetPrefix\":\"\",\"disableOptimizedLoading\":false,\"target\":\"server\",\"reactProductionProfiling\":false,\"webpack\":true,\"hasRewrites\":false}",
+    "cacheDirectory": "/home/chronark/github/perfolio/perfolio/dist/apps/app/.next/cache/webpack",
+    "buildDependencies": {
+      "config": ["/home/chronark/github/perfolio/perfolio/apps/app/next.config.js"]
+    }
+  },
+  "mode": "production",
+  "name": "client",
+  "target": "web",
+  "bail": true,
+  "devtool": false
+}

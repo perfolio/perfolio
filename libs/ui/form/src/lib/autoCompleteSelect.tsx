@@ -38,7 +38,11 @@ export function AutoCompleteSelect<Option>({
   name,
 }: AutoCompleteSelectProps<Option>): JSX.Element {
   const [state, setState] = useState<State>(State.Start)
-  const { setValue, watch } = useFormContext()
+  const {
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useFormContext()
 
   const isin = watch(name)
 
@@ -62,7 +66,9 @@ export function AutoCompleteSelect<Option>({
   const { search, isLoading } = useSearch({ fragment })
   const options = search ?? []
   const selected = options.find((o) => o.isin === isin)
-
+  const error = Array.isArray(errors[name])
+    ? errors[name].join(", ")
+    : errors[name]?.message || errors[name]
   return (
     <div className="w-full text-gray-800">
       <label
@@ -110,7 +116,14 @@ export function AutoCompleteSelect<Option>({
               ) : (
                 <input
                   type="text"
-                  className="w-full h-full text-center focus:bg-gray-50 focus:outline-none"
+                  className={cn(
+                    "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
+                    {
+                      "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
+                      "border-error focus:border-error-dark focus:bg-error-light": error,
+                      "appearance-none bg-transparent": isSubmitting,
+                    },
+                  )}
                   /**
                    * If propagation is not stopped the click will also trigger the div.Button
                    * and the input loses focus.

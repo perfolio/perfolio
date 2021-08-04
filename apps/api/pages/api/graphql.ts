@@ -8,7 +8,7 @@ import { NextApiRequest, NextApiResponse } from "next"
  */
 import "ts-tiny-invariant"
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   /**
    * Return ok to preflight cors requests
    */

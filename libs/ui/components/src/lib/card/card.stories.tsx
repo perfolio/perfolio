@@ -22,10 +22,10 @@ export const Default = () => (
     <Card.Footer>
       <Card.Footer.Status>200 OK</Card.Footer.Status>
       <Card.Footer.Actions>
-        <Button kind="secondary" size="small" href="#">
+        <Button kind="secondary" size="sm" href="#">
           Undo
         </Button>
-        <Button kind="primary" size="small" href="#">
+        <Button kind="primary" size="sm" href="#">
           Save
         </Button>
       </Card.Footer.Actions>

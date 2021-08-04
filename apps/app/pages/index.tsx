@@ -10,6 +10,7 @@ import {
   InlineTotalAssetChart,
   AggregateOptions,
   Sidebar,
+  NoTransactionsModal,
 } from "@perfolio/app/components"
 import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
@@ -43,13 +44,15 @@ const ranges: Record<Range, number> = {
 const KPI = ({
   label,
   value,
-  color,
+  enableColor,
   isLoading,
+  format,
 }: {
   label: string
-  value: string
-  color?: string
+  value: number
+  enableColor?: boolean
   isLoading?: boolean
+  format: (n: number) => string
 }): JSX.Element => {
   return (
     <div className="flex justify-center">
@@ -60,10 +63,14 @@ const KPI = ({
         <span
           className={cn(
             "text-lg font-bold leading-3 sm:text-xl md:text-2xl lg:text-3xl",
-            !isLoading && color ? color : "text-gray-800",
+            !isLoading && enableColor
+              ? value >= 0
+                ? "text-success"
+                : "text-error"
+              : "text-gray-800",
           )}
         >
-          {isLoading ? <Loading /> : value}
+          {isLoading ? <Loading /> : format(value)}
         </span>
       </div>
     </div>
@@ -74,7 +81,7 @@ const App: NextPage = () => {
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
-  const { portfolioHistory } = usePortfolioHistory()
+  const { portfolioHistory, isLoading: portfolioHistoryIsLoading } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
     portfolioHistory,
     ranges[range],
@@ -92,7 +99,6 @@ const App: NextPage = () => {
       ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
       : 0
 
-  console.log({ relativePortfolioHistory, relativeChange })
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
   const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
@@ -118,6 +124,7 @@ const App: NextPage = () => {
       <Main>
         <Main.Header>
           <Main.Header.Title title="Overview" />
+
           <ToggleGroup<AggregateOptions>
             options={["Relative", "Absolute"]}
             selected={aggregation}
@@ -125,46 +132,45 @@ const App: NextPage = () => {
           />
         </Main.Header>
         <Main.Content>
+          {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
+            <NoTransactionsModal />
+          ) : null}
           <div className="py-4 sm:py-6 md:py-8">
             <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
-              <div className="flex justify-center">
-                <div className="flex flex-col space-y-3">
-                  <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
-                    Total Assets
-                  </h4>
-                  <span className="text-lg font-bold leading-3 text-gray-800 dark:text-gray-100 sm:text-xl md:text-2xl lg:text-3xl">
-                    {absoluteIsLoading ? (
-                      <Loading />
-                    ) : (
-                      format(currentAbsoluteValue, {
+              <Tooltip
+                trigger={
+                  <KPI
+                    label="Total Assets"
+                    value={currentAbsoluteValue}
+                    format={(n) =>
+                      format(n, {
                         suffix: getCurrencySymbol(settings?.defaultCurrency),
                       })
-                    )}
-                  </span>
-                </div>
-              </div>
+                    }
+                    isLoading={aggregation === "Absolute" && absoluteIsLoading}
+                  />
+                }
+              >
+                @webersni
+              </Tooltip>
 
               <Tooltip
                 trigger={
                   <KPI
+                    enableColor
                     label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
-                    color={
-                      (aggregation === "Relative" && relativeMean >= 0) ||
-                      (aggregation === "Absolute" && absoluteMean >= 0)
-                        ? "text-success"
-                        : "text-error"
+                    value={aggregation === "Absolute" ? absoluteMean : relativeMean}
+                    format={(n) =>
+                      aggregation === "Absolute"
+                        ? format(n, {
+                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(n, { suffix: "%", percent: true, sign: true })
                     }
                     isLoading={
                       (aggregation === "Absolute" && absoluteIsLoading) ||
                       (aggregation === "Relative" && relativeIsLoading)
-                    }
-                    value={
-                      aggregation === "Absolute"
-                        ? format(absoluteMean, {
-                            suffix: getCurrencySymbol(settings?.defaultCurrency),
-                            sign: true,
-                          })
-                        : format(relativeMean, { suffix: "%", percent: true, sign: true })
                     }
                   />
                 }
@@ -179,7 +185,8 @@ const App: NextPage = () => {
                       (aggregation === "Relative" && relativeIsLoading)
                     }
                     label="Standard Deviation"
-                    value={format(relativeSTD)}
+                    value={relativeSTD}
+                    format={(n) => format(n)}
                   />
                 }
               >
@@ -190,23 +197,19 @@ const App: NextPage = () => {
                 trigger={
                   <KPI
                     label="Change"
-                    color={
-                      (aggregation === "Relative" && relativeChange >= 0) ||
-                      (aggregation === "Absolute" && absoluteChange >= 0)
-                        ? "text-success"
-                        : "text-error"
-                    }
+                    enableColor
                     isLoading={
                       (aggregation === "Absolute" && absoluteIsLoading) ||
                       (aggregation === "Relative" && relativeIsLoading)
                     }
-                    value={
+                    value={aggregation === "Absolute" ? absoluteChange : relativeChange}
+                    format={(n) =>
                       aggregation === "Absolute"
-                        ? format(absoluteChange, {
+                        ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
                           })
-                        : format(relativeChange, { suffix: "%", percent: true, sign: true })
+                        : format(n, { suffix: "%", percent: true, sign: true })
                     }
                   />
                 }

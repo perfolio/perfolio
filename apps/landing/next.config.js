@@ -11,7 +11,7 @@ module.exports = withNx({
       /**
        * Allows us to use `fs` in getServerSideProps
        */
-      config.node = { fs: "empty" }
+      config.resolve.fallback.fs = false
     }
     return config
   },
