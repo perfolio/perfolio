@@ -30,11 +30,15 @@ export class IEX extends DataSource {
   }
 
   public async getCompanyFromIsin(isin: string) {
-    const isinMapping = await cloud.getIsinMapping(isin)
+    const isinMapping = await this.getIsinMapping(isin)
     const ticker = isinMapping.find((i) => !i.symbol.includes("-"))?.symbol
 
     if (!ticker) {
-      throw new Error(`No symbol found for ${isin}`)
+      throw new Error(
+        `No symbol found for ${isin}, available symbols are : ${JSON.stringify(
+          isinMapping.map(({ symbol }) => symbol),
+        )}`,
+      )
     }
     return await this.getCompany(ticker)
   }
@@ -166,7 +170,7 @@ export class IEX extends DataSource {
       return cachedValue
     }
     const value = await cloud.getIsinMapping(isin)
-    await cache.set("30d", { key, value })
+    await cache.set(value.length > 0 ? "30d" : "1h", { key, value })
     return value
   }
 }

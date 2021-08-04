@@ -21,12 +21,12 @@ export const useCreateTransaction = () => {
   >(
     async (variables) => {
       const accessToken = await ensureAccessToken(token, clerk.session?.id)
-      return client(accessToken).CreateTransaction(variables)
+      return await client(accessToken).CreateTransaction(variables)
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(USE_TRANSACTIONS_QUERY_KEY)
-        queryClient.invalidateQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY)
+        queryClient.resetQueries(USE_TRANSACTIONS_QUERY_KEY)
+        queryClient.resetQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY)
       },
     },
   )
