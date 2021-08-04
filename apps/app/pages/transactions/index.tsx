@@ -55,7 +55,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
         <div className="flex-shrink-0">
           <AsyncButton
             kind="secondary"
-            size="small"
+            size="sm"
             onClick={async () => {
               await deleteTransaction.mutateAsync({ transactionId: transaction.id })
             }}
@@ -92,7 +92,7 @@ const TransactionsPage: NextPage = () => {
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-gray-700">Looks like you don&apos;t have any transactions yet</p>
-              <Button size="large" kind="primary" href="/transactions/new">
+              <Button size="lg" kind="primary" href="/transactions/new">
                 Add transaction
               </Button>
             </div>
