@@ -8,7 +8,7 @@ export interface LoadingProps {
   bg?: string
 
   /**
-   * Override black color
+   * Override
    */
   color?: string
 }
@@ -22,7 +22,7 @@ export const Loading: React.FC<LoadingProps> = ({ size = "md", bg, color }): JSX
         {
           rounded: bg,
         },
-        color ?? "text-black",
+        color,
       )}
     >
       <svg
