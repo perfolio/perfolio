@@ -9,3 +9,4 @@ export * from "./lib/header/header"
 
 export * from "./lib/main"
 export * from "./lib/sidebar/sidebar"
+export * from "./lib/no-transactions-modal/no-transactions-modal"

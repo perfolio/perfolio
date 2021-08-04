@@ -45,6 +45,6 @@ export async function handleSubmit<FieldValues>(
         })
         .finally(() => setSubmitting(false))
     },
-    (err) => console.error(err),
+    (err) => console.error("Form invalid", err),
   )()
 }
