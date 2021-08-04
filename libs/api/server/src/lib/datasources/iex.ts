@@ -170,7 +170,7 @@ export class IEX extends DataSource {
       return cachedValue
     }
     const value = await cloud.getIsinMapping(isin)
-    await cache.set("30d", { key, value })
+    await cache.set(value.length > 0 ? "30d" : "1h", { key, value })
     return value
   }
 }
