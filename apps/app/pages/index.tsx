@@ -10,6 +10,7 @@ import {
   InlineTotalAssetChart,
   AggregateOptions,
   Sidebar,
+  NoTransactionsModal,
 } from "@perfolio/app/components"
 import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
@@ -80,7 +81,7 @@ const App: NextPage = () => {
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
-  const { portfolioHistory } = usePortfolioHistory()
+  const { portfolioHistory, isLoading: portfolioHistoryIsLoading } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
     portfolioHistory,
     ranges[range],
@@ -98,7 +99,6 @@ const App: NextPage = () => {
       ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
       : 0
 
-  console.log({ relativePortfolioHistory, relativeChange })
   const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
   const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
@@ -124,6 +124,7 @@ const App: NextPage = () => {
       <Main>
         <Main.Header>
           <Main.Header.Title title="Overview" />
+
           <ToggleGroup<AggregateOptions>
             options={["Relative", "Absolute"]}
             selected={aggregation}
@@ -131,6 +132,9 @@ const App: NextPage = () => {
           />
         </Main.Header>
         <Main.Content>
+          {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
+            <NoTransactionsModal />
+          ) : null}
           <div className="py-4 sm:py-6 md:py-8">
             <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
               <Tooltip
