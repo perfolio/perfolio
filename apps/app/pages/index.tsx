@@ -81,6 +81,10 @@ const App: NextPage = () => {
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
+  /**
+   * Prefetch all possible ranges
+   */
+
   const { portfolioHistory, isLoading: portfolioHistoryIsLoading } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
     portfolioHistory,
