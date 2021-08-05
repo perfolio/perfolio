@@ -152,7 +152,7 @@ const App: NextPage = () => {
                   />
                 }
               >
-                @webersni
+                The current aggregate value of all assets added into Perfolio by you.
               </Tooltip>
 
               <Tooltip
@@ -176,7 +176,7 @@ const App: NextPage = () => {
                   />
                 }
               >
-                @webersni
+                The average profit earned by your assets within a given period of time.
               </Tooltip>
               <Tooltip
                 trigger={
@@ -191,8 +191,9 @@ const App: NextPage = () => {
                   />
                 }
               >
-                @webersni A large standard deviation is a sign of greater risk blabla Nico mach
-                endlich!
+                A statistical measure for asset value stability. 
+                Standard deviation describes how widely asset prices are scattered around an average price.
+                The higher the standard deviation, the less stable the value of your assets.
               </Tooltip>
               <Tooltip
                 trigger={
@@ -215,7 +216,7 @@ const App: NextPage = () => {
                   />
                 }
               >
-                @webersni
+                The percent change of your asset value within a given period of time.
               </Tooltip>
             </div>
           </div>
