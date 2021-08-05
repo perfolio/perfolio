@@ -14,8 +14,8 @@ export const getPortfolioHistory = async (
     throw new AuthorizationError("getPortfolioHistory", "wrong user id")
   }
 
-  const userSettings = await ctx.dataSources.fauna.getUserSettings(userId)
-  const mic = userSettings?.data.defaultExchange
+  const userSettings = await ctx.dataSources.prisma.getUserSettings(userId)
+  const mic = userSettings?.defaultExchange
   if (!mic) {
     throw new Error(`Unable to find defaultExchange in user settings`)
   }
@@ -24,17 +24,12 @@ export const getPortfolioHistory = async (
     throw new Error(`No exchange found: ${mic}`)
   }
 
-  const transactions = await ctx.dataSources.fauna.getTransactions(userId)
+  const transactions = await ctx.dataSources.prisma.getTransactions(userId)
   if (!transactions || transactions.length === 0) {
     return []
   }
-  transactions.sort((a, b) => a.data.executedAt - b.data.executedAt)
-  const transactionsByAsset = groupTransactionsByAsset(
-    transactions.map((t) => ({
-      ...t.data,
-      id: t.id,
-    })),
-  )
+  transactions.sort((a, b) => a.executedAt - b.executedAt)
+  const transactionsByAsset = groupTransactionsByAsset(transactions)
   const history: { [assetId: string]: { time: number; quantity: number; value: number }[] } = {}
 
   Object.keys(transactionsByAsset).forEach((assetId) => {
@@ -69,7 +64,7 @@ export const getPortfolioHistory = async (
   /**
    * Build a timeline for each asset for each day.
    */
-  const startDay = Time.fromTimestamp(transactions[0].data.executedAt)
+  const startDay = Time.fromTimestamp(transactions[0].executedAt)
   for (const [assetId, transactions] of Object.entries(transactionsByAsset)) {
     /**
      * How many shares does the user have on the current day

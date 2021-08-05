@@ -20,7 +20,7 @@ export const createUserSettings: ResolverFn<
     throw new Error(`Invalid default exchange`)
   }
 
-  const createdSettings = await ctx.dataSources.fauna.createUserSettings(userSettings)
+  const createdSettings = await ctx.dataSources.prisma.createUserSettings(userSettings)
 
   return {
     ...createdSettings,

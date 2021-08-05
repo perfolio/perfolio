@@ -6,15 +6,15 @@ export const deleteTransaction: ResolverFn<string, unknown, Context, { transacti
   async (_parent, { transactionId }, ctx, _info) => {
     const { sub } = ctx.authenticateUser()
 
-    const transaction = await ctx.dataSources.fauna.getTransaction(transactionId)
+    const transaction = await ctx.dataSources.prisma.getTransaction(transactionId)
     if (!transaction) {
       throw new Error("No transaction found")
     }
 
-    if (sub !== transaction.data.userId) {
+    if (sub !== transaction.userId) {
       throw new AuthorizationError("deleteTransaction", "wrong user id")
     }
 
-    await ctx.dataSources.fauna.deleteTransaction(transaction)
+    await ctx.dataSources.prisma.deleteTransaction(transaction.id)
     return transaction.id
   }

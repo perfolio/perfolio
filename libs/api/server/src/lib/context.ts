@@ -3,11 +3,13 @@ import { IncomingMessage } from "http"
 import { AuthenticationError } from "@perfolio/util/errors"
 import { Claims, JWT } from "@perfolio/feature/tokens"
 import { Logger } from "tslog"
+import { PrismaClient } from "@prisma/client"
 
 export type Context = {
   dataSources: DataSources
   authenticateUser: () => Claims
   logger: Logger
+  prisma: PrismaClient
 }
 
 export const context = (ctx: { req: IncomingMessage }) => {
@@ -28,5 +30,6 @@ export const context = (ctx: { req: IncomingMessage }) => {
     ...ctx,
     authenticateUser,
     logger,
+    prisma: new PrismaClient({}),
   }
 }

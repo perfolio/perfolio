@@ -1,9 +1,10 @@
-import { CreateTransaction, ResolverFn, TransactionSchemaFragment } from "@perfolio/api/graphql"
+import { CreateTransaction, ResolverFn } from "@perfolio/api/graphql"
+import { Transaction as TransactionModel } from "@perfolio/integrations/prisma"
 import { AuthorizationError } from "@perfolio/util/errors"
 import { Context } from "../../context"
 
 export const createTransaction: ResolverFn<
-  TransactionSchemaFragment,
+  TransactionModel,
   unknown,
   Context,
   { transaction: CreateTransaction }
@@ -12,5 +13,5 @@ export const createTransaction: ResolverFn<
   if (sub !== transaction.userId) {
     throw new AuthorizationError("createTransaction", "wrong user id")
   }
-  return await ctx.dataSources.fauna.createTransaction(transaction)
+  return await ctx.dataSources.prisma.createTransaction(transaction)
 }
