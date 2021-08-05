@@ -31,6 +31,9 @@ jobs:
           version: latest
           run_install: true
 
+      - name: Build
+        run: pnpm build
+
       - name: Lint
         run: pnpm fmt
 
