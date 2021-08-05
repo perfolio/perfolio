@@ -23,7 +23,7 @@ export const updateUserSettings: ResolverFn<
     }
   }
 
-  const updatedSettings = await ctx.dataSources.fauna.updateUserSettings(userSettings)
+  const updatedSettings = await ctx.dataSources.prisma.updateUserSettings(userSettings)
   if (!exchange) {
     exchange = await ctx.dataSources.iex.getExchange({ mic: updatedSettings.defaultExchange })
   }

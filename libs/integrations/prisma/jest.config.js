@@ -1,14 +1,15 @@
 module.exports = {
-  displayName: "db",
+  displayName: "prisma",
   preset: "../../../jest.preset.js",
   globals: {
     "ts-jest": {
-      tsconfig: "<rootDir>/tsconfig.test.json",
+      tsconfig: "<rootDir>/tsconfig.spec.json",
     },
   },
+  testEnvironment: "node",
   transform: {
     "^.+\\.[tj]sx?$": "ts-jest",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "../../../coverage/libs/integrations/fauna",
+  coverageDirectory: "../../../coverage/libs/integrations/prisma",
 }

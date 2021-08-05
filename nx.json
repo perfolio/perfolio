@@ -75,9 +75,6 @@
     "integrations-ecb": {
       "tags": []
     },
-    "integrations-fauna": {
-      "tags": []
-    },
     "integrations-iexcloud": {
       "tags": []
     },
@@ -85,6 +82,9 @@
       "tags": []
     },
     "integrations-openfigi": {
+      "tags": []
+    },
+    "integrations-prisma": {
       "tags": []
     },
     "integrations-redis": {
