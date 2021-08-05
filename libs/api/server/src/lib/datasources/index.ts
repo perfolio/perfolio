@@ -1,4 +1,4 @@
-import { Fauna } from "./fauna"
+import { Prisma } from "./prisma"
 import { IEX } from "./iex"
 import { OpenFigi } from "./openfigi"
 import { Sendgrid } from "./sendgrid"
@@ -6,7 +6,7 @@ import { Sendgrid } from "./sendgrid"
 export type DataSources = {
   iex: IEX
   sendgrid: Sendgrid
-  fauna: Fauna
+  prisma: Prisma
   openFigi: OpenFigi
 }
 
@@ -14,7 +14,7 @@ export const dataSources = (): DataSources => {
   return {
     iex: new IEX(),
     sendgrid: new Sendgrid(),
-    fauna: new Fauna(),
+    prisma: new Prisma(),
     openFigi: new OpenFigi(),
   }
 }

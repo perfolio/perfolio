@@ -23,8 +23,10 @@ export const resolvers: Resolvers<Context> = {
       getRelativePortfolioHistory(ctx, userId, since ?? undefined),
     getExchanges,
     search,
+    // @ts-expect-error Remaining fields are resolved later
     getUserSettings,
     // @ts-expect-error Remaining fields are resolved later
+
     getTransactions,
     // @ts-expect-error Remaining fields are resolved later
 
