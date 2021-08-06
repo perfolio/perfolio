@@ -8,7 +8,8 @@ export const getTransactions: ResolverFn<
   Context,
   { userId: string }
 > = async (_parent, { userId }, ctx, _info) => {
-  const { sub } = ctx.authenticateUser()
+  const { sub } = await ctx.authenticateUser()
+
   if (sub !== userId) {
     throw new AuthorizationError("getTransactions", "wrong user id")
   }

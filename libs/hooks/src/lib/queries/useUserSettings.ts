@@ -1,20 +1,18 @@
-import { useAccessToken } from "./useAccessToken"
 import { useQuery } from "react-query"
 import { GetUserSettingsQuery } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { useUser } from "@clerk/clerk-react"
+import { useAuth0 } from "@auth0/auth0-react"
 
 export const USE_USER_SETTINGS_QUERY_KEY = "getUserSettings"
 
 export const useUserSettings = () => {
-  const { token } = useAccessToken()
-  const user = useUser()
+  const { getAccessTokenSilently, user } = useAuth0()
 
   const { data, ...meta } = useQuery<GetUserSettingsQuery, Error>(
     USE_USER_SETTINGS_QUERY_KEY,
-    () => client(token!).getUserSettings({ userId: user.id }),
+    async () => client(await getAccessTokenSilently()).getUserSettings({ userId: user!.sub! }),
     {
-      enabled: !!token,
+      enabled: !!user?.sub,
     },
   )
 

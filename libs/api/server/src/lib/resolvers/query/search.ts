@@ -9,7 +9,7 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   ctx,
   { path },
 ) => {
-  ctx.authenticateUser()
+  await ctx.authenticateUser()
 
   fragment = fragment.toLowerCase()
 
