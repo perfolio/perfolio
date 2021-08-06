@@ -6,7 +6,7 @@ type IsinTickerPair = { isin: string; ticker: string }
 export async function search(
   fragment: string,
   stockMap: StockMap[],
-  getSymbolsFromIsin: (isin: string) => Promise<string[]>,
+  getTickerFromIsin: (isin: string) => Promise<string>,
 ): Promise<IsinTickerPair[]> {
   fragment = fragment.toLowerCase()
   const isinMatcher = RegExp(/^[a-z]{2}[a-z0-9]{9}[0-9]$/)
@@ -15,6 +15,7 @@ export async function search(
    */
   if (isinMatcher.test(fragment)) {
     const isin = fragment.toUpperCase()
+    console.log({ isin })
 
     /**
      * If we have the isin in our database we can simply return it and be done.
@@ -26,8 +27,7 @@ export async function search(
     /**
      * Otherwise we have to lookup the isin in iex and update our internal isin map
      */
-    const symbols = await getSymbolsFromIsin(isin)
-    const ticker = symbols.find((i) => !i.includes("-"))
+    const ticker = await getTickerFromIsin(isin)
     if (!ticker) {
       throw new Error(`No matching ticker found for isin: ${isin}`)
     }

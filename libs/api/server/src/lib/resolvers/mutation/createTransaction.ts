@@ -13,5 +13,5 @@ export const createTransaction: ResolverFn<
   if (sub !== transaction.userId) {
     throw new AuthorizationError("createTransaction", "wrong user id")
   }
-  return await ctx.dataSources.prisma.createTransaction(transaction)
+  return await ctx.dataSources.prisma.transaction.create({ data: transaction })
 }
