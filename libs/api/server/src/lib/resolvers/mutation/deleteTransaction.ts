@@ -4,7 +4,7 @@ import { Context } from "../../context"
 
 export const deleteTransaction: ResolverFn<string, unknown, Context, { transactionId: string }> =
   async (_parent, { transactionId }, ctx, _info) => {
-    const { sub } = ctx.authenticateUser()
+    const { sub } = await ctx.authenticateUser()
 
     const transaction = await ctx.dataSources.prisma.getTransaction(transactionId)
     if (!transaction) {

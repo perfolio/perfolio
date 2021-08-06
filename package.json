@@ -33,8 +33,7 @@
   },
   "private": true,
   "dependencies": {
-    "@clerk/clerk-react": "^1.16.0",
-    "@clerk/clerk-sdk-node": "^0.5.1",
+    "@auth0/auth0-react": "^1.6.0",
     "@hapi/iron": "^6.0.0",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
@@ -64,6 +63,7 @@
     "graphql-tag": "^2.12.5",
     "ioredis": "^4.27.7",
     "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.0.4",
     "micro": "^9.3.4",
     "next": "11.0.1",
     "next-plausible": "^1.9.0",

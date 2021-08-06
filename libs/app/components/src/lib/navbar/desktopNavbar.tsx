@@ -6,11 +6,11 @@ import { Icon, Logo, Loading } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
-import { useClerk } from "@clerk/clerk-react"
+import { useAuth0 } from "@auth0/auth0-react"
 import { useIsFetching } from "react-query"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
-  const clerk = useClerk()
+  const { logout } = useAuth0()
   const isFetching = useIsFetching()
   return (
     <nav className="w-full">
@@ -74,13 +74,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button
-                onClick={async () => {
-                  await clerk.session?.end()
-                  clerk.setSession(null)
-                }}
-                className="focus:outline-none"
-              >
+              <button onClick={() => logout()} className="focus:outline-none">
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />
                 </Icon>

@@ -9,7 +9,7 @@ export const getPortfolioHistory = async (
   ctx: Context,
   userId: string,
 ): Promise<AssetHistoryWithoutAsset[]> => {
-  const { sub } = ctx.authenticateUser()
+  const { sub } = await ctx.authenticateUser()
   if (sub !== userId) {
     throw new AuthorizationError("getPortfolioHistory", "wrong user id")
   }
