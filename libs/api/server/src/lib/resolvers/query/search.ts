@@ -25,7 +25,6 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   if (!isinMap) {
     throw new Error(`No isin map found in prisma`)
   }
-  ctx.logger.debug({ isinMap })
 
   const searchResult = await searchAssets(fragment, isinMap, (isin) => getTickerFromIsin(ctx, isin))
   const value = await Promise.all(
