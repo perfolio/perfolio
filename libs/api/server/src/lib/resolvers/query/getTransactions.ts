@@ -14,5 +14,5 @@ export const getTransactions: ResolverFn<
     throw new AuthorizationError("getTransactions", "wrong user id")
   }
 
-  return await ctx.dataSources.prisma.getTransactions(userId)
+  return await ctx.dataSources.prisma.transaction.findMany({ where: { userId } })
 }

@@ -13,5 +13,5 @@ export const getUserSettings: ResolverFn<
     throw new AuthorizationError("getUserSettings", "wrong user id")
   }
 
-  return await ctx.dataSources.prisma.getUserSettings(userId)
+  return await ctx.dataSources.prisma.userSettings.findUnique({ where: { userId } })
 }

@@ -2,6 +2,7 @@ import { TransactionSchemaFragment, AssetHistory } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { AuthorizationError } from "@perfolio/util/errors"
 import { Time } from "@perfolio/util/time"
+import { getTickerFromIsin } from "../../util/getTickerFromIsin"
 
 type AssetHistoryWithoutAsset = Omit<AssetHistory, "asset"> & { assetId: string }
 
@@ -14,7 +15,7 @@ export const getPortfolioHistory = async (
     throw new AuthorizationError("getPortfolioHistory", "wrong user id")
   }
 
-  const userSettings = await ctx.dataSources.prisma.getUserSettings(userId)
+  const userSettings = await ctx.dataSources.prisma.userSettings.findUnique({ where: { userId } })
   const mic = userSettings?.defaultExchange
   if (!mic) {
     throw new Error(`Unable to find defaultExchange in user settings`)
@@ -24,7 +25,7 @@ export const getPortfolioHistory = async (
     throw new Error(`No exchange found: ${mic}`)
   }
 
-  const transactions = await ctx.dataSources.prisma.getTransactions(userId)
+  const transactions = await ctx.dataSources.prisma.transaction.findMany({ where: { userId } })
   if (!transactions || transactions.length === 0) {
     return []
   }
@@ -38,16 +39,7 @@ export const getPortfolioHistory = async (
 
   const priceResponse = await Promise.all(
     Object.keys(history).map(async (isin) => {
-      const isinMap = await ctx.dataSources.iex.getIsinMapping(isin)
-
-      const ticker = isinMap.find((i) => i.exchange === exchange.abbreviation)?.symbol
-      if (!ticker) {
-        throw new Error(
-          `No symbol found for isin ${isin} and exchange: ${JSON.stringify(
-            exchange,
-          )}, available exchanges are: ${JSON.stringify(isinMap)} `,
-        )
-      }
+      const ticker = await getTickerFromIsin(ctx, isin)
 
       return ctx.dataSources.iex.getPrices({ ticker })
     }),
