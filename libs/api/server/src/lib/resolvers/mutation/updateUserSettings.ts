@@ -8,7 +8,7 @@ export const updateUserSettings: ResolverFn<
   Context,
   { userSettings: UpdateUserSettings }
 > = async (_parent, { userSettings }, ctx, _info) => {
-  const { sub } = ctx.authenticateUser()
+  const { sub } = await ctx.authenticateUser()
   if (sub !== userSettings.userId) {
     throw new AuthorizationError("updateUserSettings", "wrong user id")
   }

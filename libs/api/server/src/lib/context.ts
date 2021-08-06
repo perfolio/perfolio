@@ -7,21 +7,24 @@ import { PrismaClient } from "@prisma/client"
 
 export type Context = {
   dataSources: DataSources
-  authenticateUser: () => Claims
+  authenticateUser: () => Promise<Claims>
   logger: Logger
   prisma: PrismaClient
 }
 
 export const context = (ctx: { req: IncomingMessage }) => {
   const logger = new Logger()
-  const authenticateUser = () => {
+  const authenticateUser = async () => {
     try {
-      const jwt = ctx.req.headers?.authorization
-      if (!jwt) {
+      const token = ctx.req.headers?.authorization
+      if (!token) {
         throw new AuthenticationError("missing authorization header")
       }
-      return JWT.verify(jwt)
+      const jwt = JWT.getInstance()
+
+      return await jwt.verify(token)
     } catch (err) {
+      logger.error(err)
       throw new AuthenticationError("invalid token")
     }
   }

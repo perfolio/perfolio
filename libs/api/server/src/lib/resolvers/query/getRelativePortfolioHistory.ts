@@ -10,7 +10,7 @@ export const getRelativePortfolioHistory = async (
   userId: string,
   since?: number,
 ): Promise<ValueAtTime[]> => {
-  const { sub } = ctx.authenticateUser()
+  const { sub } = await ctx.authenticateUser()
   if (sub !== userId) {
     throw new AuthorizationError("getRelativePortfolioHistory", "userId does not match")
   }
@@ -30,7 +30,6 @@ export const getRelativePortfolioHistory = async (
       value,
     }))
     .filter(({ value }) => !Number.isNaN(value))
-  ctx.logger.debug({ value })
   await cache.set("1h", { key, value })
   return value
 }

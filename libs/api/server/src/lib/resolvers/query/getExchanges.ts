@@ -8,7 +8,7 @@ type C = Context
 type A = unknown
 
 export const getExchanges: ResolverFn<R, P, C, A> = async (_parent, _args, ctx, { path }) => {
-  ctx.authenticateUser()
+  await ctx.authenticateUser()
 
   const key = new Key({ path })
   const cache = new ApolloCache()

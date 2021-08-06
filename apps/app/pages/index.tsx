@@ -27,6 +27,7 @@ import {
   usePortfolioHistory,
 } from "@perfolio/hooks"
 import { Time } from "@perfolio/util/time"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -242,4 +243,4 @@ const App: NextPage = () => {
     </AppLayout>
   )
 }
-export default App
+export default withAuthenticationRequired(App)

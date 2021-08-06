@@ -1,20 +1,16 @@
-import { JWTContext } from "@perfolio/api/client"
-import { useContext } from "react"
-import { useQuery } from "react-query"
-import { useClerk } from "@clerk/clerk-react"
-import { ensureAccessToken } from "../ensureAccessToken"
-/**
- * Load a token from memory or fetch a new one if necessary
- * @returns A valid access token
- */
+import { useAuth0 } from "@auth0/auth0-react"
 export function useAccessToken() {
-  const clerk = useClerk()
-  const { token, setToken } = useContext(JWTContext)
+  const { getAccessTokenSilently } = useAuth0()
 
-  const { data, ...meta } = useQuery<string | undefined, Error>("accessToken", async () => {
-    const accessToken = await ensureAccessToken(token, clerk.session?.id)
-    setToken(accessToken)
-    return accessToken
-  })
-  return { token: data, ...meta }
+  const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE
+  if (!audience) {
+    throw new Error(`NEXT_PUBLIC_AUTH0_AUDIENCE env missing`)
+  }
+
+  return {
+    getAccessToken: () =>
+      getAccessTokenSilently({
+        audience,
+      }),
+  }
 }
