@@ -1,13 +1,12 @@
 import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
 import { Context } from "../context"
+import { getTickerFromIsin } from "./getTickerFromIsin"
 
 export const getExchangeTradedAsset = async (
   ctx: Context,
   id: string,
 ): Promise<ExchangeTradedAsset> => {
-  ctx.authenticateUser()
-
   const key = new Key({ resolver: "getExchangeTradedAsset", id })
   const cache = new ApolloCache()
 
@@ -16,7 +15,8 @@ export const getExchangeTradedAsset = async (
     return cachedValue
   }
 
-  const company = await ctx.dataSources.iex.getCompanyFromIsin(id)
+  const ticker = await getTickerFromIsin(ctx, id)
+  const company = await ctx.dataSources.iex.getCompany(ticker)
   if (!company) {
     throw new Error(`No company found for isin: ${id}`)
   }
