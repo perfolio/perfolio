@@ -15,7 +15,6 @@ export async function search(
    */
   if (isinMatcher.test(fragment)) {
     const isin = fragment.toUpperCase()
-    console.log({ isin })
 
     /**
      * If we have the isin in our database we can simply return it and be done.
