@@ -26,11 +26,11 @@ resource "doppler_secret" "database_url_prod" {
   project = "api-perfolio"
   config  = "prod"
   name    = "DATABASE_URL_DIRECT"
-  value   = var.database_urls.direct
+  value   = var.database_urls.prod
 }
 resource "doppler_secret" "database_url_staging" {
   project = "api-perfolio"
   config  = "preview"
   name    = "DATABASE_URL_DIRECT"
-  value   = var.database_urls.direct
+  value   = var.database_urls.staging
 }
