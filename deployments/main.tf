@@ -31,10 +31,11 @@ provider "doppler" {
 module "doppler" {
   source = "./doppler"
   database_urls = {
-    prod    = module.digitalocean.database_url_prod,
-    staging = module.digitalocean.database_url_staging,
-    dev     = module.digitalocean.database_url_dev,
-    shadow  = module.digitalocean.database_url_shadow
+    direct       = module.digitalocean.database_cluster_uri
+    prod_pool    = module.digitalocean.database_url_prod_pool,
+    staging_pool = module.digitalocean.database_url_staging_pool,
+    dev_pool     = module.digitalocean.database_url_dev_pool,
+    shadow       = module.digitalocean.database_url_shadow
   }
 }
 
