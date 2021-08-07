@@ -13,9 +13,9 @@ import "ts-tiny-invariant"
  * Initialize a JWT singleton here to cache the JWKS data while the lambda remains hot.
  * Without caching we are calling the jwks endpoint for every request, adding ~ 600ms of latency
  */
-JWT.init(`https://${env.require("NEXT_PUBLIC_AUTH0_DOMAIN")}/.well-known/jwks.json`, {
-  audience: env.require("NEXT_PUBLIC_AUTH0_AUDIENCE"),
-  issuer: env.require("NEXT_PUBLIC_AUTH0_ISSUER"),
+JWT.init(`https://${env.require("AUTH0_DOMAIN")}/.well-known/jwks.json`, {
+  audience: env.require("AUTH0_AUDIENCE"),
+  issuer: env.require("AUTH0_ISSUER"),
 })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
