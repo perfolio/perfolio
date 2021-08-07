@@ -35,10 +35,6 @@
     "app-components": {
       "tags": []
     },
-    "app-e2e": {
-      "tags": [],
-      "implicitDependencies": ["app"]
-    },
     "app-middleware": {
       "tags": []
     },
