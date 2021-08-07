@@ -40,7 +40,7 @@ resource "digitalocean_database_db" "dev" {
   name       = "dev"
 }
 
-resource "digitalocean_database_connection_pool" "pool_dev" {
+resource "digitalocean_database_connection_pool" "dev" {
   cluster_id = digitalocean_database_cluster.staging.id
   name       = "pool_dev"
   mode       = "transaction"
