@@ -22,3 +22,9 @@ resource "doppler_secret" "database_url_shadow" {
   name    = "SHADOW_DATABASE_URL"
   value   = var.database_urls.shadow
 }
+resource "doppler_secret" "database_url_direct" {
+  project = "api-perfolio"
+  config  = "prod"
+  name    = "DATABASE_URL_DIRECT"
+  value   = var.database_urls.direct
+}
