@@ -17,3 +17,9 @@ resource "doppler_secret" "database_url_dev" {
   name    = "DATABASE_URL"
   value   = "${var.database_urls.dev}?bgbouncer=true"
 }
+resource "doppler_secret" "database_url_shadow" {
+  project = "api-perfolio"
+  config  = "dev"
+  name    = "SHADOW_DATABASE_URL"
+  value   = "${var.database_urls.shadow}?bgbouncer=true"
+}

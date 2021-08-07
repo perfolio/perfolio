@@ -49,3 +49,19 @@ resource "digitalocean_database_connection_pool" "dev" {
   user       = "doadmin"
 }
 
+
+
+resource "digitalocean_database_db" "shadow" {
+  cluster_id = digitalocean_database_cluster.cluster.id
+  name       = "shadow"
+}
+
+resource "digitalocean_database_connection_pool" "shadow" {
+  cluster_id = digitalocean_database_cluster.cluster.id
+  name       = "shadow"
+  mode       = "transaction"
+  size       = 1
+  db_name    = digitalocean_database_db.shadow.name
+  user       = "doadmin"
+}
+
