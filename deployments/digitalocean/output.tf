@@ -9,3 +9,6 @@ output "database_url_staging" {
 output "database_url_dev" {
   value = digitalocean_database_connection_pool.dev.uri
 }
+output "database_url_shadow" {
+  value = digitalocean_database_connection_pool.shadow.uri
+}
