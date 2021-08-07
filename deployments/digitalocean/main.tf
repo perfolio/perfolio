@@ -14,7 +14,7 @@ resource "digitalocean_database_db" "prod" {
 }
 
 resource "digitalocean_database_connection_pool" "prod" {
-  cluster_id = digitalocean_database_cluster.prod.id
+  cluster_id = digitalocean_database_cluster.cluster.id
   name       = "pool_prod"
   mode       = "transaction"
   size       = 20
