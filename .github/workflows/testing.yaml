@@ -33,6 +33,8 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          NEXT_PUBLIC_AUTH0_CLIENT_ID: "string"
 
       - name: Lint
         run: pnpm fmt
