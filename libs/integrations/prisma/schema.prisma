@@ -1,7 +1,7 @@
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-      shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    provider          = "postgresql"
+    url               = env("DATABASE_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 
 }
 
@@ -9,28 +9,25 @@ generator client {
     provider = "prisma-client-js"
 }
 
-
 model User {
-    id                String     @id @default(uuid())
-    name String @unique
+    id    String @id @default(uuid())
+    name  String @unique
     email String @unique
 
     // transactions Transaction[]
 }
 
-
-
 model Transaction {
-    id String @id @default(uuid())
-     createdAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
-    
+
     assetId String
 
     executedAt Int
-    volume Float
-    value Float
-    
+    volume     Float
+    value      Float
+
     // user User @relation(fields: [userId], references:[id])
     userId String
 
@@ -48,14 +45,11 @@ model UserSettings {
     userId String @unique
 
     defaultCurrency Currency
-    defaultExchange String
+    defaultExchangeMic String
 }
-
-
-
 
 model StockMap {
     ticker String @id
-    isin String @unique
-    name String @unique
+    isin   String @unique
+    name   String @unique
 }
