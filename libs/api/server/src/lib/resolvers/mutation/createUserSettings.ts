@@ -23,7 +23,8 @@ export const createUserSettings: ResolverFn<
 
   const createdSettings = await ctx.dataSources.prisma.userSettings.create({
     data: {
-      ...userSettings,
+      userId: userSettings.userId,
+      defaultExchangeMic: userSettings.defaultExchange,
       defaultCurrency: userSettings.defaultCurrency as Currency,
     },
   })

@@ -27,11 +27,11 @@ export const updateUserSettings: ResolverFn<
     where: { userId: userSettings.userId },
     data: {
       defaultCurrency: (userSettings.defaultCurrency as Currency) ?? undefined,
-      defaultExchange: userSettings.defaultExchange ?? undefined,
+      defaultExchangeMic: userSettings.defaultExchange ?? undefined,
     },
   })
   if (!exchange) {
-    exchange = await ctx.dataSources.iex.getExchange({ mic: updatedSettings.defaultExchange })
+    exchange = await ctx.dataSources.iex.getExchange({ mic: updatedSettings.defaultExchangeMic })
   }
 
   return {
