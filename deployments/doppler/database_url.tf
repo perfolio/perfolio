@@ -1,4 +1,3 @@
-
 resource "doppler_secret" "database_url_prod" {
   project = "api-perfolio"
   config  = "prod"

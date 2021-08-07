@@ -1,10 +1,10 @@
 variable "database_urls" {
   type = object({
-    cluster = string
-    dev     = string
-    staging = string
-    prod    = string
-    shadow  = string
+    cluster      = string
+    shadow       = string
+    dev_pool     = string
+    staging_pool = string
+    prod_pool    = string
   })
   sensitive = true
 }
