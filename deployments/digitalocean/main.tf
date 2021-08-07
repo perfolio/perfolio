@@ -28,7 +28,7 @@ resource "digitalocean_database_db" "staging" {
 }
 
 resource "digitalocean_database_connection_pool" "staging" {
-  cluster_id = digitalocean_database_cluster.staging.id
+  cluster_id = digitalocean_database_cluster.cluster.id
   name       = "pool_staging"
   mode       = "transaction"
   size       = 20
@@ -41,7 +41,7 @@ resource "digitalocean_database_db" "dev" {
 }
 
 resource "digitalocean_database_connection_pool" "dev" {
-  cluster_id = digitalocean_database_cluster.staging.id
+  cluster_id = digitalocean_database_cluster.cluster.id
   name       = "pool_dev"
   mode       = "transaction"
   size       = 20
