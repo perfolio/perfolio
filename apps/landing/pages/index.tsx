@@ -50,7 +50,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section id="features" className="flex flex-col justify-center ">
-          <SectionTitle tag="whyPerfolio" title="headerWhy" />
+          <SectionTitle tag={t("whyPerfolio")} title={t("headerWhy")} />
 
           <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
             {[
@@ -94,16 +94,16 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </ul>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
-          <SectionTitle tag="freePricing" title="subheaderPricing" />
+          <SectionTitle tag={t("headerPricing")} title={t("subheaderPricing")} />
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <Price
               title="Try for free"
               price={0}
               bullets={[
-                "Manual data import",
-                "Performance dashboard and key figures",
-                "Chart diagram of sectors",
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="https://accounts.perfol.io/sign-up"
               submitText="Try for free"
@@ -113,9 +113,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               price={3.99}
               interval="month"
               bullets={[
-                "Manual data import",
-                "Performance dashboard and key figures",
-                "Chart diagram of sectors",
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="https://accounts.perfol.io/sign-up"
               submitText="Get started"
@@ -125,9 +125,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               price={8.99}
               interval="month"
               bullets={[
-                "Manual data import",
-                "Performance dashboard and key figures",
-                "Chart diagram of sectors",
+                t("proPlanFeatureFreePlan")
               ]}
               href="https://accounts.perfol.io/sign-up"
               highlighted
@@ -136,7 +134,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <SectionTitle tag="teamHeader" title="teamSubheader" />
+          <SectionTitle tag={t("teamHeader")} title={t("teamSubheader")} />
 
           <div className="flex flex-col items-center mt-10 md:flex-row">
             <div className="text-center md:w-1/3 md:pr-8 md:py-8">
