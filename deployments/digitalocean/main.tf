@@ -13,7 +13,7 @@ resource "digitalocean_database_db" "prod" {
   name       = "prod"
 }
 
-resource "digitalocean_database_connection_pool" "prod" {
+resource "digitalocean_database_connection_pool" "prod_pool" {
   cluster_id = digitalocean_database_cluster.cluster.id
   name       = "prod"
   mode       = "transaction"
@@ -27,7 +27,7 @@ resource "digitalocean_database_db" "staging" {
   name       = "staging"
 }
 
-resource "digitalocean_database_connection_pool" "staging" {
+resource "digitalocean_database_connection_pool" "staging_pool" {
   cluster_id = digitalocean_database_cluster.cluster.id
   name       = "staging"
   mode       = "transaction"
@@ -40,7 +40,7 @@ resource "digitalocean_database_db" "dev" {
   name       = "dev"
 }
 
-resource "digitalocean_database_connection_pool" "dev" {
+resource "digitalocean_database_connection_pool" "dev_pool" {
   cluster_id = digitalocean_database_cluster.cluster.id
   name       = "dev"
   mode       = "transaction"
@@ -56,7 +56,7 @@ resource "digitalocean_database_db" "shadow" {
   name       = "shadow"
 }
 
-resource "digitalocean_database_connection_pool" "shadow" {
+resource "digitalocean_database_connection_pool" "shadow_pool" {
   cluster_id = digitalocean_database_cluster.cluster.id
   name       = "shadow"
   mode       = "transaction"
