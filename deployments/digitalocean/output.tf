@@ -2,18 +2,18 @@ output "database_cluster_uri" {
   value = digitalocean_database_cluster.cluster.uri
 }
 output "database_url_prod_pool" {
-  value = digitalocean_database_connection_pool.prod.uri
+  value = digitalocean_database_connection_pool.prod_pool.uri
 }
 
 
 
 output "database_url_staging" {
-  value = digitalocean_database_connection_pool.staging.uri
+  value = digitalocean_database_connection_pool.staging_pool.uri
 }
 
 output "database_url_dev" {
-  value = digitalocean_database_connection_pool.dev.uri
+  value = digitalocean_database_connection_pool.dev_pool.uri
 }
 output "database_url_shadow" {
-  value = digitalocean_database_connection_pool.shadow.uri
+  value = digitalocean_database_connection_pool.shadow_pool.uri
 }

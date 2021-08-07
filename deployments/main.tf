@@ -31,7 +31,7 @@ provider "doppler" {
 module "doppler" {
   source = "./doppler"
   database_urls = {
-    direct = module.digitalocean.cluster_uri
+    direct       = module.digitalocean.cluster_uri
     prod_pool    = module.digitalocean.database_url_prod_pool,
     staging_pool = module.digitalocean.database_url_staging_pool,
     dev_pool     = module.digitalocean.database_url_dev_pool,
