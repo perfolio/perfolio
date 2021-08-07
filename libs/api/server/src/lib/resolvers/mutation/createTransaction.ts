@@ -23,7 +23,7 @@ export const createTransaction: ResolverFn<
 
   const isin = transaction.assetId
   const isinMap = await ctx.dataSources.iex.getIsinMapping(isin)
-  const exchange = await ctx.dataSources.iex.getExchange({ mic: userSettings.defaultExchange })
+  const exchange = await ctx.dataSources.iex.getExchange({ mic: userSettings.defaultExchangeMic })
   if (!exchange) {
     throw new Error("Invalid exchange")
   }
