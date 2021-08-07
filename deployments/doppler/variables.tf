@@ -1,6 +1,7 @@
 variable "database_urls" {
   type = object({
-    direct       = string
+    prod       = string
+    staging = string
     shadow       = string
     dev_pool     = string
     staging_pool = string
