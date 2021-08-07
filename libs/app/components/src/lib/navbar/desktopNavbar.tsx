@@ -2,14 +2,16 @@ import React from "react"
 import { NavbarProps } from "./types"
 import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
-import { Icon, Logo } from "@perfolio/ui/components"
-
+import { Icon, Logo, Loading } from "@perfolio/ui/components"
+import { Transition } from "@headlessui/react"
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
-import { useClerk } from "@clerk/clerk-react"
+import { useAuth0 } from "@auth0/auth0-react"
+import { useIsFetching } from "react-query"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
-  const clerk = useClerk()
+  const { logout } = useAuth0()
+  const isFetching = useIsFetching()
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -47,21 +49,32 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
               </div>
             </li> */}
             <li className="text-gray-200 hover:text-gray-50">
-              <a href="/settings/account">
-                <Icon size="sm" label="Settings">
-                  <AdjustmentsIcon />
-                </Icon>
-              </a>
+              <Icon size="sm" label="Fetching data">
+                <Transition
+                  show={isFetching > 0}
+                  enter="transition ease-in-out duration-1000 transform"
+                  enterFrom=" opacity-0"
+                  enterTo="opacity-100"
+                  leave="transition ease-in-out duration-1000 transform"
+                  leaveFrom="opacity-100"
+                  leaveTo=" opacity-0"
+                >
+                  <Loading />
+                </Transition>
+              </Icon>
+            </li>
+            <li className="text-gray-200 hover:text-gray-50">
+              <Link href="/settings/account">
+                <a>
+                  <Icon size="sm" label="Settings">
+                    <AdjustmentsIcon />
+                  </Icon>
+                </a>
+              </Link>
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button
-                onClick={async () => {
-                  await clerk.session?.end()
-                  clerk.setSession(null)
-                }}
-                className="focus:outline-none"
-              >
+              <button onClick={() => logout()} className="focus:outline-none">
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />
                 </Icon>

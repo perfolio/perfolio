@@ -171,7 +171,6 @@
             }
           }
         },
-
         "export": {
           "executor": "@nrwl/next:export",
           "options": {
@@ -493,27 +492,6 @@
         }
       }
     },
-    "integrations-fauna": {
-      "root": "libs/integrations/fauna",
-      "sourceRoot": "libs/integrations/fauna/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/integrations/fauna/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/integrations/fauna"],
-          "options": {
-            "jestConfig": "libs/integrations/fauna/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "integrations-iexcloud": {
       "root": "libs/integrations/iexcloud",
       "sourceRoot": "libs/integrations/iexcloud/src",
@@ -577,6 +555,37 @@
         }
       }
     },
+    "integrations-prisma": {
+      "root": "libs/integrations/prisma",
+      "sourceRoot": "libs/integrations/prisma/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "yarn prisma generate --schema=./libs/integrations/prisma/schema.prisma"
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/prisma/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/prisma"],
+          "options": {
+            "jestConfig": "libs/integrations/prisma/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-redis": {
       "root": "libs/integrations/redis",
       "sourceRoot": "libs/integrations/redis/src",
@@ -633,7 +642,6 @@
             "buildTarget": "landing:build:production"
           }
         },
-
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/apps/landing"],

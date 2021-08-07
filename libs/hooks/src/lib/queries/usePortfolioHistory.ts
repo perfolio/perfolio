@@ -1,19 +1,17 @@
-import { useAccessToken } from "./useAccessToken"
 import { useQuery } from "react-query"
 import { GetPortfolioHistoryQuery } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { useUser } from "@clerk/clerk-react"
+import { useAuth0 } from "@auth0/auth0-react"
 
 export const USE_PORTFOLIO_HISTORY_QUERY_KEY = "USE_PORTFOLIO_HISTORY_QUERY_KEY"
 
 export const usePortfolioHistory = () => {
-  const { token } = useAccessToken()
-  const user = useUser()
+  const { user, getAccessTokenSilently } = useAuth0()
   const { data, ...meta } = useQuery<GetPortfolioHistoryQuery, Error>(
     [USE_PORTFOLIO_HISTORY_QUERY_KEY],
-    () => client(token!).getPortfolioHistory({ userId: user.id }),
+    async () => client(await getAccessTokenSilently()).getPortfolioHistory({ userId: user!.sub! }),
     {
-      enabled: !!token,
+      enabled: !!user?.sub,
     },
   )
 

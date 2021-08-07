@@ -1,14 +1,14 @@
 import { UpdateUserSettings, ResolverFn, UserSettings, Exchange } from "@perfolio/api/graphql"
 import { AuthorizationError } from "@perfolio/util/errors"
 import { Context } from "../../context"
-
+import { Currency } from "@perfolio/integrations/prisma"
 export const updateUserSettings: ResolverFn<
   UserSettings,
   unknown,
   Context,
   { userSettings: UpdateUserSettings }
 > = async (_parent, { userSettings }, ctx, _info) => {
-  const { sub } = ctx.authenticateUser()
+  const { sub } = await ctx.authenticateUser()
   if (sub !== userSettings.userId) {
     throw new AuthorizationError("updateUserSettings", "wrong user id")
   }
@@ -23,7 +23,13 @@ export const updateUserSettings: ResolverFn<
     }
   }
 
-  const updatedSettings = await ctx.dataSources.fauna.updateUserSettings(userSettings)
+  const updatedSettings = await ctx.dataSources.prisma.userSettings.update({
+    where: { userId: userSettings.userId },
+    data: {
+      defaultCurrency: (userSettings.defaultCurrency as Currency) ?? undefined,
+      defaultExchange: userSettings.defaultExchange ?? undefined,
+    },
+  })
   if (!exchange) {
     exchange = await ctx.dataSources.iex.getExchange({ mic: updatedSettings.defaultExchange })
   }
