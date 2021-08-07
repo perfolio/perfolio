@@ -3,6 +3,7 @@ variable "database_urls" {
     dev     = string
     staging = string
     prod    = string
+    shadow  = string
   })
   sensitive = true
 }

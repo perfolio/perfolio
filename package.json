@@ -29,7 +29,9 @@
     "help": "nx help",
     "tsc": "tsc -p tsconfig.base.json --pretty",
     "build:storybook": "nx build-storybook ui-components",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:migrate": "prisma migrate dev --schema=libs/integrations/prisma/schema.prisma",
+    "db:push": "prisma db push --schema=libs/integrations/prisma/schema.prisma"
   },
   "private": true,
   "dependencies": {
