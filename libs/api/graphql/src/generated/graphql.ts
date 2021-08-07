@@ -306,6 +306,8 @@ export type UserSettings = {
   defaultCurrency: Scalars["String"]
   /** The user's default exchange. At the start only 1 exchange can be used. */
   defaultExchange: Exchange
+  /** Used to store the exchange in the db */
+  defaultExchangeMic: Scalars["String"]
 }
 
 /**
@@ -672,6 +674,7 @@ export type UserSettingsResolvers<
 > = ResolversObject<{
   defaultCurrency?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   defaultExchange?: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
+  defaultExchangeMic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
