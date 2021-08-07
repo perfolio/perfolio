@@ -2,7 +2,7 @@ resource "doppler_secret" "database_url_prod" {
   project = "api-perfolio"
   config  = "prod"
   name    = "DATABASE_URL"
-  value   = var.database_urls.prod
+  value   = var.database_urls.prod_pool
 }
 resource "doppler_secret" "database_url_staging" {
   project = "api-perfolio"
@@ -26,5 +26,5 @@ resource "doppler_secret" "database_url_direct" {
   project = "api-perfolio"
   config  = "prod"
   name    = "DATABASE_URL_DIRECT"
-  value   = var.database_urls.direct_pool
+  value   = var.database_urls.direct
 }
