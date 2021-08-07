@@ -17,7 +17,7 @@ resource "digitalocean_database_connection_pool" "prod" {
   cluster_id = digitalocean_database_cluster.cluster.id
   name       = "prod"
   mode       = "transaction"
-  size       = 10
+  size       = 5
   db_name    = digitalocean_database_db.prod.name
   user       = "doadmin"
 }
