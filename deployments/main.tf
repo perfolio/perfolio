@@ -41,4 +41,3 @@ module "cloudflare" {
   source = "./cloudflare"
   config = var.cloudflare
 }
-
