@@ -13,7 +13,7 @@ resource "digitalocean_database_db" "prod" {
   name       = "prod"
 }
 
-resource "digitalocean_database_connection_pool" "pool_prod" {
+resource "digitalocean_database_connection_pool" "prod" {
   cluster_id = digitalocean_database_cluster.prod.id
   name       = "pool_prod"
   mode       = "transaction"
@@ -27,7 +27,7 @@ resource "digitalocean_database_db" "staging" {
   name       = "staging"
 }
 
-resource "digitalocean_database_connection_pool" "pool_staging" {
+resource "digitalocean_database_connection_pool" "staging" {
   cluster_id = digitalocean_database_cluster.staging.id
   name       = "pool_staging"
   mode       = "transaction"
