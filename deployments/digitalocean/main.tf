@@ -45,7 +45,7 @@ resource "digitalocean_database_connection_pool" "dev" {
   name       = "dev"
   mode       = "transaction"
   size       = 5
-  db_name    = digitalocean_database_db.staging.name
+  db_name    = digitalocean_database_db.dev.name
   user       = "doadmin"
 }
 
