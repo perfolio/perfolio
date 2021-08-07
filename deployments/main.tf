@@ -34,6 +34,7 @@ module "doppler" {
     prod    = module.digitalocean.database_url_prod,
     staging = module.digitalocean.database_url_staging,
     dev     = module.digitalocean.database_url_dev,
+    shadow  = module.digitalocean.database_url_shadow
   }
 }
 
