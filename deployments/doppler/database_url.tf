@@ -7,7 +7,7 @@ resource "doppler_secret" "database_url_prod" {
 }
 resource "doppler_secret" "database_url_staging" {
   project = "api-perfolio"
-  config  = "staging"
+  config  = "preview"
   name    = "DATABASE_URL"
   value   = "${var.database_urls.staging}?bgbouncer=true"
 }
