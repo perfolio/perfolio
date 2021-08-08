@@ -52,7 +52,7 @@ module.exports = {
 
     extend: {
       fontFamily: {
-        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        sans: ["Montserrat", ...defaultTheme.fontFamily.sans],
         system: defaultTheme.fontFamily.sans,
       },
     },
