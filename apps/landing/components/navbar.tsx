@@ -25,10 +25,10 @@ export const Navbar: React.FC = () => {
 
         {/* Desktop */}
         <div className="relative items-center hidden space-x-3 md:inline-flex md:ml-5 lg:justify-end">
-          <Button href="https://accounts.perfol.io/sign-in" kind="plain">
+          <Button href="https://app.perfol.io/sign-in" kind="plain">
             Sign in
           </Button>
-          <Button size="auto" kind="cta" href="https://accounts.perfol.io/sign-up">
+          <Button size="auto" kind="cta" href="https://app.perfol.io/sign-up">
             Start for free
           </Button>
         </div>
@@ -43,7 +43,7 @@ export const Navbar: React.FC = () => {
           leaveFrom="translate-x-0 opacity-100"
           leaveTo="translate-x-full opacity-0"
         >
-          <Button kind="cta" href="https://accounts.perfol.io/sign-up">
+          <Button kind="cta" href="https://app.perfol.io/sign-up">
             Start for free
           </Button>
         </Transition>
