@@ -5,6 +5,9 @@ output "database_url_prod" {
 output "database_url_preview" {
   value = "postgresql://${digitalocean_database_cluster.cluster.user}:${digitalocean_database_cluster.cluster.password}@${digitalocean_database_cluster.cluster.host}:${digitalocean_database_cluster.cluster.port}/${digitalocean_database_db.preview.name}?sslmode=require"
 }
+output "database_url_dev" {
+  value = "postgresql://${digitalocean_database_cluster.cluster.user}:${digitalocean_database_cluster.cluster.password}@${digitalocean_database_cluster.cluster.host}:${digitalocean_database_cluster.cluster.port}/${digitalocean_database_db.dev.name}?sslmode=require"
+}
 output "database_url_shadow" {
   value = "postgresql://${digitalocean_database_cluster.cluster.user}:${digitalocean_database_cluster.cluster.password}@${digitalocean_database_cluster.cluster.host}:${digitalocean_database_cluster.cluster.port}/${digitalocean_database_db.shadow.name}?sslmode=require"
 }
