@@ -8,6 +8,7 @@ import { getTransactions } from "./resolvers/query/getTransactions"
 import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
 import { getStockPricesAtExchange } from "./resolvers/query/getStockPricesAtExchange"
 import { getExchangeTradedAsset } from "./util/getExchangeTradedAsset"
+import { getExchangeFromMic } from "./util/getExchangeFromMic"
 import { sector } from "./resolvers/companyStock/sector"
 import { country } from "./resolvers/companyStock/country"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
@@ -34,6 +35,10 @@ export const resolvers: Resolvers<Context> = {
     getStockPricesAtExchange,
   },
 
+  UserSettings: {
+    defaultExchange: ({ defaultExchangeMic }, _args, ctx) =>
+      getExchangeFromMic(ctx, defaultExchangeMic),
+  },
   AssetHistory: {
     asset: ({ assetId }, _args, ctx) => getExchangeTradedAsset(ctx, assetId),
   },

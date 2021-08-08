@@ -16,7 +16,7 @@ export const getPortfolioHistory = async (
   }
 
   const userSettings = await ctx.dataSources.prisma.userSettings.findUnique({ where: { userId } })
-  const mic = userSettings?.defaultExchange
+  const mic = userSettings?.defaultExchangeMic
   if (!mic) {
     throw new Error(`Unable to find defaultExchange in user settings`)
   }
