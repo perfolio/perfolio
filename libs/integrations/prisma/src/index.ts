@@ -8,7 +8,10 @@ export type { StockMap, Transaction, User, UserSettings, Currency } from "@prism
  */
 export class PrismaClient extends BaseClient {
   constructor() {
-    const url = process.env["DATABASE_URL"]
+    const url = process.env["DATABASE_URL_POOL"]
+    if (!url) {
+      throw new Error(`DATABASE_URL_POOL is undefined`)
+    }
 
     super({ datasources: { db: { url: `${url}&pgbouncer=true` } } })
   }
