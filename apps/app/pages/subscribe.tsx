@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { Logo, Button } from "@perfolio/ui/components"
 import { z } from "zod"
 import { Form, Field, handleSubmit } from "@perfolio/ui/form"
@@ -7,8 +7,15 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Description } from "@perfolio/ui/components"
 import { useSubscribeToNewsletter } from "@perfolio/hooks"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
-const Subscribe: NextPage = () => {
+interface PageProps {
+  translations: Record<string, string>
+}
+const Subscribe: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  console.log(t("hello")) // @madsjordt remove this line
+
   const validation = z.object({ email: z.string().email() })
 
   const ctx = useForm<z.infer<typeof validation>>({
@@ -91,3 +98,12 @@ const Subscribe: NextPage = () => {
 }
 
 export default Subscribe
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

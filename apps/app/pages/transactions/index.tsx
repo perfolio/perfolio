@@ -1,13 +1,15 @@
 import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/api/graphql"
 import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
   isLast: boolean
@@ -67,11 +69,15 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
     </div>
   )
 }
-
+interface PageProps {
+  translations: Record<string, string>
+}
 /**
  * / page.
  */
-const TransactionsPage: NextPage = () => {
+const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  console.log(t("hello")) // @madsjordt remove this line
   const { transactions, isLoading, error } = useTransactions()
   return (
     <AppLayout
@@ -116,3 +122,12 @@ const TransactionsPage: NextPage = () => {
 }
 
 export default TransactionsPage
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

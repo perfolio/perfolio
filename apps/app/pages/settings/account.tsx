@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout } from "@perfolio/app/components"
 import { z } from "zod"
@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
 import { Card, Button } from "@perfolio/ui/components"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+
 interface SettingProps {
   validation: z.AnyZodObject
   title: string
@@ -68,11 +70,15 @@ export const Setting: React.FC<SettingProps> = ({
     </Card>
   )
 }
-
+interface PageProps {
+  translations: Record<string, string>
+}
 /**
  * / page.
  */
-const SettingsPage: NextPage = () => {
+const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  console.log(t("hello")) // @madsjordt remove this line
   const router = useRouter()
 
   return (
@@ -123,3 +129,12 @@ const SettingsPage: NextPage = () => {
 }
 
 export default SettingsPage
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

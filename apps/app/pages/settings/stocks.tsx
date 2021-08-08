@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout } from "@perfolio/app/components"
 import { z } from "zod"
@@ -12,6 +12,7 @@ import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -71,11 +72,15 @@ const Setting: React.FC<SettingProps> = ({
     </Card>
   )
 }
-
+interface PageProps {
+  translations: Record<string, string>
+}
 /**
  * / page.
  */
-const SettingsPage: NextPage = () => {
+const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  console.log(t("hello")) // @madsjordt remove this line
   const { user } = useAuth0()
   const { settings } = useUserSettings()
 
@@ -195,3 +200,12 @@ const SettingsPage: NextPage = () => {
   )
 }
 export default withAuthenticationRequired(SettingsPage)
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

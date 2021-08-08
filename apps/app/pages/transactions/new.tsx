@@ -4,13 +4,13 @@ import { z } from "zod"
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
 import { Time } from "@perfolio/util/time"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
-
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useAuth0 } from "@auth0/auth0-react"
 
@@ -20,11 +20,15 @@ const validation = z.object({
   value: z.string().transform((x: string) => parseInt(x)),
   executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
 })
-
+interface PageProps {
+  translations: Record<string, string>
+}
 /**
  * / page.
  */
-const NewTransactionPage: NextPage = () => {
+const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  console.log(t("hello")) // @madsjordt remove this line
   const { user } = useAuth0()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -164,3 +168,12 @@ const NewTransactionPage: NextPage = () => {
   )
 }
 export default NewTransactionPage
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

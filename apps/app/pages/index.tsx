@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import {
   AppLayout,
   DiversificationChart,
@@ -27,6 +27,7 @@ import {
 } from "@perfolio/hooks"
 import { Time } from "@perfolio/util/time"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -77,7 +78,14 @@ const KPI = ({
   )
 }
 
-const App: NextPage = () => {
+interface PageProps {
+  translations: Record<string, string>
+}
+
+const App: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  console.log(t("hello")) // @madsjordt remove this line
+
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
@@ -243,3 +251,12 @@ const App: NextPage = () => {
   )
 }
 export default withAuthenticationRequired(App)
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}
