@@ -124,9 +124,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               title="Pro"
               price={8.99}
               interval="month"
-              bullets={[
-                t("proPlanFeatureFreePlan")
-              ]}
+              bullets={[t("proPlanFeatureFreePlan")]}
               href="https://app.perfol.io/sign-up"
               highlighted
               submitText="Take off"
@@ -189,7 +187,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
 }
 
 export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["common", "landing"])
+  const translations = getTranslations(locale, ["landing"])
   return {
     props: {
       members: [
