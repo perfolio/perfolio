@@ -22,17 +22,17 @@ resource "digitalocean_database_connection_pool" "prod_pool" {
   user       = "doadmin"
 }
 
-resource "digitalocean_database_db" "staging" {
+resource "digitalocean_database_db" "preview" {
   cluster_id = digitalocean_database_cluster.cluster.id
-  name       = "staging"
+  name       = "preview"
 }
 
-resource "digitalocean_database_connection_pool" "staging_pool" {
+resource "digitalocean_database_connection_pool" "preview_pool" {
   cluster_id = digitalocean_database_cluster.cluster.id
-  name       = "staging_pool"
+  name       = "preview_pool"
   mode       = "transaction"
   size       = 5
-  db_name    = digitalocean_database_db.staging.name
+  db_name    = digitalocean_database_db.preview.name
   user       = "doadmin"
 }
 resource "digitalocean_database_db" "dev" {
