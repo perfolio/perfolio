@@ -105,7 +105,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 t("basicPlanFeaturePerformance"),
                 t("basicPlanFeatureChart"),
               ]}
-              href="https://accounts.perfol.io/sign-up"
+              href="https://app.perfol.io/sign-up"
               submitText="Try for free"
             />
             <Price
@@ -117,7 +117,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 t("basicPlanFeaturePerformance"),
                 t("basicPlanFeatureChart"),
               ]}
-              href="https://accounts.perfol.io/sign-up"
+              href="https://app.perfol.io/sign-up"
               submitText="Get started"
             />
             <Price
@@ -127,7 +127,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               bullets={[
                 t("proPlanFeatureFreePlan")
               ]}
-              href="https://accounts.perfol.io/sign-up"
+              href="https://app.perfol.io/sign-up"
               highlighted
               submitText="Take off"
             />
