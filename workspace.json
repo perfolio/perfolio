@@ -632,6 +632,27 @@
         }
       }
     },
+    "toaster": {
+      "root": "libs/toaster",
+      "sourceRoot": "libs/toaster/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/toaster/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/toaster"],
+          "options": {
+            "jestConfig": "libs/toaster/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "types": {
       "root": "libs/types",
       "sourceRoot": "libs/types/src",

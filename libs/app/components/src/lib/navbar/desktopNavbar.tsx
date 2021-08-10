@@ -2,16 +2,18 @@ import React from "react"
 import { NavbarProps } from "./types"
 import { DesktopNavMenu } from "./desktopNavMenu"
 import { DesktopNavLink } from "./desktopNavLink"
-import { Icon, Logo, Loading } from "@perfolio/ui/components"
+import { Icon, Logo, Loading, Button } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useIsFetching } from "react-query"
+import { useToaster } from "@perfolio/toaster"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const { logout } = useAuth0()
   const isFetching = useIsFetching()
+  const { addToast } = useToaster()
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -32,6 +34,11 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
                   )}
                 </li>
               ))}
+              <li>
+                <Button kind="cta" onClick={() => addToast({ content: "Hello", role: "info" })}>
+                  Create Toast
+                </Button>
+              </li>
             </ul>
           </div>
         </li>
