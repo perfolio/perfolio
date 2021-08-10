@@ -1,5 +1,6 @@
 import React from "react"
 import { Logo } from "@perfolio/ui/components"
+import { useI18n } from "@perfolio/feature/i18n"
 
 import Link from "next/link"
 /* eslint-disable-next-line */
@@ -49,6 +50,7 @@ const socialMedia = () => {
 }
 
 export const Footer = () => {
+  const { t } = useI18n()
   return (
     <footer className="border-t border-gray-300 bg-gradient-to-t from-white to-gray-50 ">
       <div className="container flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800">
@@ -62,13 +64,13 @@ export const Footer = () => {
         </div>
         <div className="flex flex-row space-x-4 text-right md:items-center md:justify-between md:space-x-16">
           {footerLink("Perfolio", "/")}
-          {footerLink("Contact", "mailto:info@perfol.io")}
+          {footerLink(t("contactFooter"), "mailto:info@perfol.io")}
         </div>
         <div className="flex flex-col items-center justify-between w-full space-y-2 text-sm md:space-y-0 md:flex-row">
           <div className="items-center justify-start hidden md:w-1/3 md:flex">{socialMedia()}</div>
           <div className="flex items-center justify-center space-x-4 md:w-1/3">
-            {footerLink("Imprint", "/imprint")}
-            {footerLink("Privacy", "/privacy")}
+            {footerLink(t("imprintFooter"), "/imprint")}
+            {footerLink(t("privacyFooter"), "/privacy")}
           </div>
           <div className="flex items-center justify-end md:w-1/3">
             <span>© Copyright 2020 - {new Date().getFullYear()}. All Rights Reserved.</span>

@@ -77,7 +77,7 @@ const Subscribe: NextPage<PageProps> = ({ translations }) => {
                   type="submit"
                   disabled={ctx.formState.isSubmitting}
                 >
-                  Subscribe
+                  {t("subscribeButton")}
                 </Button>
               </>
             )}

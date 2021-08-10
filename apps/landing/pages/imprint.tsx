@@ -1,8 +1,15 @@
 import React from "react"
 import { Navbar, Section } from "../components"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { IndexPageProps } from "."
 
-export const Imprint: NextPage = () => {
+export interface ImprintPageProps {
+  translations: Record<string, string>
+}
+
+export const Imprint: NextPage<IndexPageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -101,4 +108,9 @@ export const Imprint: NextPage = () => {
   )
 }
 
-export default Imprint
+export const getStaticProps: GetStaticProps<ImprintPageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["landing"])
+  return { props:translations }
+}
+
+export default Imprint 

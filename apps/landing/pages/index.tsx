@@ -22,6 +22,8 @@ import {
 } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
+
+
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
   translations: Record<string, string>

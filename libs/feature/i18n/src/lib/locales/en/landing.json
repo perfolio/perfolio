@@ -17,6 +17,9 @@
   "independentDescription": "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
   "headerPricing": "subscription model",
   "subheaderPricing": "Start for free, choose what suits you best!",
+  "tryForFreeButton": "Try for free",
+  "getStartedButton": "One month free trial",
+  "takeOffButton": "One month free trial",
   "basicPlanFeatureData": "Manual data import",
   "basicPlanFeaturePerformance": "Performance dashboard and key figures",
   "basicPlanFeatureChart": "Diversification chart diagram",
@@ -29,5 +32,9 @@
   "signInButton": "Sign in",
   "startForFreeButton": "Start for free",
   "signUpButton": "Sign up",
-  "contactButton": "Contact"
+  "contactButton": "Contact",
+  "subscribeButton": "Subscribe",
+  "contactFooter": "Contact",
+  "imprintFooter": "Imprint",
+  "privacyFooter": "Privacy"
 }
