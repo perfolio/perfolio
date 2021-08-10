@@ -25,5 +25,9 @@
   "teamSubheader": "Who is behind this?",
   "perfolioDescription": "At Perfolio, we believe that investment decisions should always be based on as much well-founded information as possible. It is our mission to provide our users the most relevant and accurate financial information available.",
   "ctaContactHeader": "get in touch",
-  "ctaContactSubheader": "Curious for more?"
+  "ctaContactSubheader": "Curious for more?",
+  "signInButton": "Sign in",
+  "startForFreeButton": "Start for free",
+  "signUpButton": "Sign up",
+  "contactButton": "Contact"
 }

@@ -2,8 +2,10 @@ import React, { useState } from "react"
 import { Logo, Button } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
+import { useI18n } from "@perfolio/feature/i18n"
 
 export const Navbar: React.FC = () => {
+  const { t } = useI18n()
   const [scrolled, setScrolled] = useState(false)
 
   const handleScroll = () => {
@@ -26,10 +28,10 @@ export const Navbar: React.FC = () => {
         {/* Desktop */}
         <div className="relative items-center hidden space-x-3 md:inline-flex md:ml-5 lg:justify-end">
           <Button href="https://app.perfol.io/sign-in" kind="plain">
-            Sign in
+            {t("signInButton")}
           </Button>
           <Button size="auto" kind="cta" href="https://app.perfol.io/sign-up">
-            Start for free
+            {t("startForFreeButton")}
           </Button>
         </div>
         {/* Mobile */}
@@ -44,7 +46,7 @@ export const Navbar: React.FC = () => {
           leaveTo="translate-x-full opacity-0"
         >
           <Button kind="cta" href="https://app.perfol.io/sign-up">
-            Start for free
+            {t("startForFreeButton")}
           </Button>
         </Transition>
       </div>
