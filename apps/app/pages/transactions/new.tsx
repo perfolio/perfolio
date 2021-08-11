@@ -67,11 +67,11 @@ const NewTransactionPage: NextPage = () => {
                   name="isin"
                   label="Asset"
                   help={
-                    <Description title="TODO: @webersni">
-                      Search for your asset. Try &quot;microsoft&quot; Only stocks from your
-                      selected exchange will be shown here. If you would like to change this, please{" "}
+                    <Description title="Add transaction">
+                      Search for the asset you want to add. Only stocks listed on your selected exchange
+                      will be displayed here. If you want to change this, please{" "}
                       <Link href="/settings/stocks">
-                        <a className="underline text-info-400">go to settings</a>
+                        <a className="underline text-info-400">go to settings.</a>
                       </Link>
                     </Description>
                   }
