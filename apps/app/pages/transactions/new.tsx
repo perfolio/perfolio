@@ -12,7 +12,7 @@ import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 
 const validation = z.object({
   isin: z.string(),
@@ -163,4 +163,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default NewTransactionPage
+export default withAuthenticationRequired(NewTransactionPage)
