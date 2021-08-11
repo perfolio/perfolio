@@ -11,7 +11,7 @@ import cn from "classnames"
 import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { useUser } from "@clerk/clerk-react"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -76,7 +76,7 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const user = useUser()
+  const { user } = useAuth0()
   const { settings } = useUserSettings()
 
   const { exchanges } = useExchanges()
@@ -92,7 +92,7 @@ const SettingsPage: NextPage = () => {
   const updateSettings = useUpdateUserSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
-      userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency },
+      userSettings: { userId: user!.sub!, defaultCurrency: values.defaultCurrency },
     })
   }
 
@@ -103,7 +103,7 @@ const SettingsPage: NextPage = () => {
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
       userSettings: {
-        userId: user.id,
+        userId: user!.sub!,
         defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
       },
     })
@@ -194,4 +194,4 @@ const SettingsPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default SettingsPage
+export default withAuthenticationRequired(SettingsPage)

@@ -163,7 +163,7 @@ export class IEX extends DataSource {
   }
 
   async getIsinMapping(isin: string): Promise<GetIsinMappingResponse> {
-    const key = new Key({ dataSource: "IEX", operation: "getIsinMapping", isin })
+    const key = new Key({ v: 1, dataSource: "IEX", operation: "getIsinMapping", isin })
     const cache = new ApolloCache()
     const cachedValue = await cache.get<GetIsinMappingResponse>(key)
     if (cachedValue) {

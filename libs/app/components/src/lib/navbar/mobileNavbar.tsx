@@ -7,10 +7,10 @@ import { Link, Logo } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
-import { useClerk } from "@clerk/clerk-react"
+import { useAuth0 } from "@auth0/auth0-react"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const clerk = useClerk()
+  const { logout } = useAuth0()
   return (
     <nav className="flex items-center justify-between w-full">
       <NextLink href="/">
@@ -54,13 +54,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <Link size="lg" prefix={<DotsVerticalIcon />} href="/" />
             </li>
             <li>
-              <button
-                className="pb-1 xl:ml-6 2xl:ml-9"
-                onClick={async () => {
-                  await clerk.session?.end()
-                  clerk.setSession(null)
-                }}
-              >
+              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => logout()}>
                 <LogoutIcon className="w-6 h-6 text-white" />
               </button>
             </li>

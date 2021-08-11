@@ -35,10 +35,6 @@
     "app-components": {
       "tags": []
     },
-    "app-e2e": {
-      "tags": [],
-      "implicitDependencies": ["app"]
-    },
     "app-middleware": {
       "tags": []
     },
@@ -75,9 +71,6 @@
     "integrations-ecb": {
       "tags": []
     },
-    "integrations-fauna": {
-      "tags": []
-    },
     "integrations-iexcloud": {
       "tags": []
     },
@@ -87,10 +80,16 @@
     "integrations-openfigi": {
       "tags": []
     },
+    "integrations-prisma": {
+      "tags": []
+    },
     "integrations-redis": {
       "tags": []
     },
     "landing": {
+      "tags": []
+    },
+    "toaster": {
       "tags": []
     },
     "types": {

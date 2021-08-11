@@ -2,6 +2,7 @@ import { ResolverFn, SearchResult } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
 import { search as searchAssets } from "@perfolio/feature/asset-search"
+import { getTickerFromIsin } from "../../util/getTickerFromIsin"
 
 export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: string }> = async (
   _parent,
@@ -9,7 +10,7 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   ctx,
   { path },
 ) => {
-  ctx.authenticateUser()
+  await ctx.authenticateUser()
 
   fragment = fragment.toLowerCase()
 
@@ -20,17 +21,12 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   if (cachedValue) {
     return cachedValue
   }
-  const isinMap = await ctx.dataSources.fauna.getIsinMap()
+  const isinMap = await ctx.dataSources.prisma.stockMap.findMany()
   if (!isinMap) {
-    throw new Error(`No isin map found in fauna`)
+    throw new Error(`No isin map found in prisma`)
   }
 
-  const getSymbolsFromIsin = async (isin: string): Promise<string[]> => {
-    const isins = await ctx.dataSources.iex.getIsinMapping(isin)
-    return isins.map(({ symbol }) => symbol)
-  }
-
-  const searchResult = await searchAssets(fragment, isinMap.data.matches, getSymbolsFromIsin)
+  const searchResult = await searchAssets(fragment, isinMap, (isin) => getTickerFromIsin(ctx, isin))
   const value = await Promise.all(
     searchResult.map(async ({ isin, ticker }) => {
       const company = await ctx.dataSources.iex.getCompany(ticker)
@@ -53,16 +49,15 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   /**
    * Update our internal isin map if necessary
    */
-  let hasUpdated = false
-  value.forEach(({ isin, ticker, asset: { name } }) => {
-    if (!isinMap.data.matches.map((m) => m.isin).includes(isin)) {
-      isinMap.data.matches.push({ isin, ticker, name })
-      hasUpdated = true
+  value.forEach(async ({ isin, ticker, asset: { name } }) => {
+    if (!isinMap.map((m) => m.isin).includes(isin)) {
+      await ctx.dataSources.prisma.stockMap.upsert({
+        where: { ticker },
+        update: { isin, ticker, name },
+        create: { isin, ticker, name },
+      })
     }
   })
-  if (hasUpdated) {
-    await ctx.dataSources.fauna.updateIsinMap(isinMap)
-  }
 
   await cache.set(value.length > 0 ? "30d" : "1d", { key, value })
   return value.map((v) => v as SearchResult)

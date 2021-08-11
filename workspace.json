@@ -171,7 +171,6 @@
             }
           }
         },
-
         "export": {
           "executor": "@nrwl/next:export",
           "options": {
@@ -211,32 +210,6 @@
           "options": {
             "jestConfig": "libs/app/components/jest.config.js",
             "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "app-e2e": {
-      "root": "apps/app-e2e",
-      "sourceRoot": "apps/app-e2e/src",
-      "projectType": "application",
-      "targets": {
-        "e2e": {
-          "executor": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/app-e2e/cypress.json",
-            "tsConfig": "apps/app-e2e/tsconfig.e2e.json",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "app:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/app-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -493,27 +466,6 @@
         }
       }
     },
-    "integrations-fauna": {
-      "root": "libs/integrations/fauna",
-      "sourceRoot": "libs/integrations/fauna/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/integrations/fauna/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/integrations/fauna"],
-          "options": {
-            "jestConfig": "libs/integrations/fauna/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "integrations-iexcloud": {
       "root": "libs/integrations/iexcloud",
       "sourceRoot": "libs/integrations/iexcloud/src",
@@ -577,6 +529,38 @@
         }
       }
     },
+    "integrations-prisma": {
+      "root": "libs/integrations/prisma",
+      "sourceRoot": "libs/integrations/prisma/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "yarn prisma generate --schema=./libs/integrations/prisma/schema.prisma",
+                "forwardAllArgs": false
+              }
+            ]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/prisma/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/prisma"],
+          "options": {
+            "jestConfig": "libs/integrations/prisma/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-redis": {
       "root": "libs/integrations/redis",
       "sourceRoot": "libs/integrations/redis/src",
@@ -633,7 +617,6 @@
             "buildTarget": "landing:build:production"
           }
         },
-
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/apps/landing"],
@@ -646,6 +629,27 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "toaster": {
+      "root": "libs/toaster",
+      "sourceRoot": "libs/toaster/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/toaster/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/toaster"],
+          "options": {
+            "jestConfig": "libs/toaster/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

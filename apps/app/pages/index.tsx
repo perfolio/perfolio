@@ -10,7 +10,6 @@ import {
   InlineTotalAssetChart,
   AggregateOptions,
   Sidebar,
-  NoTransactionsModal,
 } from "@perfolio/app/components"
 import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
@@ -27,6 +26,7 @@ import {
   usePortfolioHistory,
 } from "@perfolio/hooks"
 import { Time } from "@perfolio/util/time"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -82,7 +82,7 @@ const App: NextPage = () => {
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
 
-  const { portfolioHistory, isLoading: portfolioHistoryIsLoading } = usePortfolioHistory()
+  const { portfolioHistory } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
     portfolioHistory,
     ranges[range],
@@ -133,9 +133,9 @@ const App: NextPage = () => {
           />
         </Main.Header>
         <Main.Content>
-          {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
+          {/* {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
             <NoTransactionsModal />
-          ) : null}
+          ) : null} */}
           <div className="py-4 sm:py-6 md:py-8">
             <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
               <Tooltip
@@ -243,4 +243,4 @@ const App: NextPage = () => {
     </AppLayout>
   )
 }
-export default App
+export default withAuthenticationRequired(App)

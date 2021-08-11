@@ -1,4 +1,5 @@
 import { CreateUserSettings, ResolverFn, UserSettings } from "@perfolio/api/graphql"
+import { Currency } from "@perfolio/integrations/prisma"
 import { AuthorizationError } from "@perfolio/util/errors"
 import { Context } from "../../context"
 
@@ -8,7 +9,7 @@ export const createUserSettings: ResolverFn<
   Context,
   { userSettings: CreateUserSettings }
 > = async (_parent, { userSettings }, ctx, _info) => {
-  const { sub } = ctx.authenticateUser()
+  const { sub } = await ctx.authenticateUser()
   if (sub !== userSettings.userId) {
     throw new AuthorizationError("createUserSettings", "wrong user id")
   }
@@ -20,7 +21,13 @@ export const createUserSettings: ResolverFn<
     throw new Error(`Invalid default exchange`)
   }
 
-  const createdSettings = await ctx.dataSources.fauna.createUserSettings(userSettings)
+  const createdSettings = await ctx.dataSources.prisma.userSettings.create({
+    data: {
+      userId: userSettings.userId,
+      defaultExchangeMic: userSettings.defaultExchange,
+      defaultCurrency: userSettings.defaultCurrency as Currency,
+    },
+  })
 
   return {
     ...createdSettings,

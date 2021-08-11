@@ -8,6 +8,14 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "2.21.0"
     }
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "2.10.1"
+    }
+    doppler = {
+      source  = "DopplerHQ/doppler"
+      version = "1.0.0"
+    }
   }
 
 }
