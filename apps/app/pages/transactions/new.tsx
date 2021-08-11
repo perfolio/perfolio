@@ -10,9 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
+import { CheckIcon } from "@heroicons/react/outline"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useAuth0 } from "@auth0/auth0-react"
+import { useToaster } from "@perfolio/toaster"
 
 const validation = z.object({
   isin: z.string(),
@@ -26,6 +28,7 @@ const validation = z.object({
  */
 const NewTransactionPage: NextPage = () => {
   const { user } = useAuth0()
+  const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),
@@ -119,6 +122,14 @@ const NewTransactionPage: NextPage = () => {
                           setFormError(
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )
+                        })
+                        addToast({
+                          icon: <CheckIcon />,
+                          role: "info",
+                          title: "Transaction added",
+                          content: `You ${
+                            volume > 0 ? "bought" : "sold"
+                          } ${volume} shares of ${isin}`,
                         })
                       },
                       setSubmitting,
