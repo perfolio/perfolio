@@ -539,7 +539,8 @@
           "options": {
             "commands": [
               {
-                "command": "yarn prisma generate --schema=./libs/integrations/prisma/schema.prisma"
+                "command": "yarn prisma generate --schema=./libs/integrations/prisma/schema.prisma",
+                "forwardAllArgs": false
               }
             ]
           }
