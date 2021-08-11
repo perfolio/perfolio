@@ -10,9 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
+import { CheckIcon } from "@heroicons/react/outline"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
-import { useUser } from "@clerk/clerk-react"
+import { useToaster } from "@perfolio/toaster"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 
 const validation = z.object({
   isin: z.string(),
@@ -25,7 +27,8 @@ const validation = z.object({
  * / page.
  */
 const NewTransactionPage: NextPage = () => {
-  const user = useUser()
+  const { user } = useAuth0()
+  const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),
@@ -109,7 +112,7 @@ const NewTransactionPage: NextPage = () => {
                       ctx,
                       async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
-                          userId: user.id,
+                          userId: user!.sub!,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
@@ -119,6 +122,14 @@ const NewTransactionPage: NextPage = () => {
                           setFormError(
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )
+                        })
+                        addToast({
+                          icon: <CheckIcon />,
+                          role: "info",
+                          title: "Transaction added",
+                          content: `You ${
+                            volume > 0 ? "bought" : "sold"
+                          } ${volume} shares of ${isin}`,
                         })
                       },
                       setSubmitting,
@@ -163,4 +174,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default NewTransactionPage
+export default withAuthenticationRequired(NewTransactionPage)

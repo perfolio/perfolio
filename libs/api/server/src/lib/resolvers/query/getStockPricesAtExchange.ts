@@ -7,7 +7,7 @@ export const getStockPricesAtExchange: ResolverFn<
   Context,
   { ticker: string; mic: string; start: number; end?: number }
 > = async (_parent, { ticker, mic, start, end }, ctx, _info) => {
-  ctx.authenticateUser()
+  await ctx.authenticateUser()
 
   const exchange = await ctx.dataSources.iex.getExchange({ mic })
   if (!exchange) {

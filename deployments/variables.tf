@@ -1,6 +1,8 @@
 
 variable "checkly_api_key" {
-  type = string
+  type      = string
+  sensitive = true
+
 }
 
 variable "cloudflare" {
@@ -12,4 +14,14 @@ variable "cloudflare" {
   })
   sensitive = true
 
+}
+
+variable "digitalocean_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "doppler_token" {
+  type      = string
+  sensitive = true
 }

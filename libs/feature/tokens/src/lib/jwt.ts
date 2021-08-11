@@ -1,60 +1,70 @@
 import jwt from "jsonwebtoken"
-import { env } from "@perfolio/util/env"
 import { z } from "zod"
+import jwksClient from "jwks-rsa"
 
 export const payload = z.object({
   iss: z.string(),
   iat: z.number(),
   exp: z.number().int(),
-  aud: z.string(),
+  aud: z.array(z.string()),
   sub: z.string(),
 })
 
 export type Claims = z.infer<typeof payload>
 export class JWT {
-  private static readonly issuer = "perfolio"
-  private static readonly audience = "perfolio"
-  private static readonly algorithm = "HS256"
-
-  public static sign(subject: string): string {
-    const secret = env.require("JWT_SIGNING_KEY")
-
-    return jwt.sign({}, secret, {
-      algorithm: JWT.algorithm,
-      expiresIn: "5m",
-      audience: JWT.audience,
-      issuer: JWT.issuer,
-      subject,
+  private static instance: JWT
+  private jwks: jwksClient.JwksClient
+  private audience: string
+  private issuer: string
+  private constructor(jwksUri: string, claims: { audience: string; issuer: string }) {
+    this.jwks = jwksClient({
+      jwksUri,
     })
+    this.audience = claims.audience
+    this.issuer = claims.issuer
   }
 
-  public static verify(encoded: string): Claims {
-    const secret = env.require("JWT_SIGNING_KEY")
-    const decoded = jwt.verify(encoded, secret, {
-      audience: JWT.audience,
-      issuer: JWT.issuer,
-    })
+  public static getInstance(): JWT {
+    if (!JWT.instance) {
+      throw new Error("JWT is not yet initialized")
+    }
+    return JWT.instance
+  }
 
+  public static init(jwksUri: string, claims: { audience: string; issuer: string }): JWT {
+    if (JWT.instance) {
+      throw new Error(`JWT is already initialized`)
+    }
+    JWT.instance = new JWT(jwksUri, claims)
+    return JWT.instance
+  }
+
+  public async verify(encoded: string): Promise<Claims> {
+    const { header } = JWT.decode(encoded)
+    const key = await this.jwks.getSigningKey(header.kid)
+
+    const decoded = jwt.verify(encoded, key.getPublicKey(), {
+      audience: this.audience,
+      issuer: this.issuer,
+    })
     return payload.parse(decoded)
   }
-  public static isValid(token: string): boolean {
+  public async isValid(token: string): Promise<boolean> {
     try {
-      JWT.verify(token)
+      await this.verify(token)
       return true
     } catch {
       return false
     }
   }
 
-  public static decode(token: string): jwt.JwtPayload {
-    const claims = jwt.decode(token)
-    if (!claims) {
+  public static decode(token: string): jwt.Jwt {
+    const decoded = jwt.decode(token, { complete: true })
+    if (!decoded) {
       throw new Error(`Unable to decode token: ${token}`)
     }
-    if (typeof claims === "string") {
-      throw new Error(`Unable to parse claims: ${claims}`)
-    }
-    return claims
+
+    return decoded
   }
   /**
    * Return in how many seconds the jwt will expire.
@@ -62,8 +72,8 @@ export class JWT {
    * Will be negative if it has expired already
    */
   public static expiresIn(token: string): number {
-    const claims = JWT.decode(token)
+    const { payload } = JWT.decode(token)
 
-    return claims.exp ?? 0 - Math.floor(Date.now() / 1000)
+    return payload.exp ?? 0 - Math.floor(Date.now() / 1000)
   }
 }

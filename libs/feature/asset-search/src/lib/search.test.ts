@@ -38,14 +38,14 @@ const isinMap = [
   },
 ]
 
-const fakeGetSymbolsFromIsin = async (isin: string): Promise<string[]> => {
+const fakeGetTickerFromIsin = async (isin: string): Promise<string> => {
   switch (isin) {
     case "US1111111111":
-      return Promise.resolve(["SYMBOL1", "SYMBOL2"])
+      return Promise.resolve("SYMBOL1")
     case "DE2222222222":
-      return Promise.resolve(["SYMBOL3", "SYMBOL4"])
+      return Promise.resolve("SYMBOL2")
     default:
-      return []
+      throw new Error(`Exhausted dummy data`)
   }
 }
 
@@ -95,7 +95,7 @@ describe("search()", () => {
 
   testCases.forEach((tc) => {
     test(tc.name, async () => {
-      const result = await search(tc.fragment, isinMap, fakeGetSymbolsFromIsin)
+      const result = await search(tc.fragment, isinMap, fakeGetTickerFromIsin)
       expect(result).toEqual(tc.expected)
     })
   })
