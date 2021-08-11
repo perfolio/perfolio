@@ -58,6 +58,7 @@
     "apollo-server-micro": "~3.0.2",
     "apollo-server-plugin-response-cache": "^3.1.1",
     "classnames": "^2.3.1",
+    "framer-motion": "^4.1.17",
     "core-js": "^3.16.1",
     "fuse.js": "^6.4.6",
     "graphql": "^15.5.1",
