@@ -64,7 +64,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           align: "text-right",
           tooltip: (
             <Tooltip>
-              <Description title="TODO:">@webersni</Description>
+              <Description title="Cost per share">The average cost you have to pay for a
+              single portfolio position in a specified currency.</Description>
             </Tooltip>
           ),
         },
