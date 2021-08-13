@@ -10,6 +10,7 @@ import Link from "next/link"
 import cn from "classnames"
 import { Card, Button } from "@perfolio/ui/components"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -128,7 +129,6 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
@@ -138,3 +138,4 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
     },
   }
 }
+export default withAuthenticationRequired(SettingsPage)

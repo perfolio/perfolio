@@ -7,6 +7,7 @@ import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/api/graphql"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
@@ -121,7 +122,6 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default TransactionsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
@@ -131,3 +131,4 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
     },
   }
 }
+export default withAuthenticationRequired(TransactionsPage)

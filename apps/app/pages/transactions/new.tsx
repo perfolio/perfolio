@@ -11,8 +11,11 @@ import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { CheckIcon } from "@heroicons/react/outline"
+
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useToaster } from "@perfolio/toaster"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 
 const validation = z.object({
   isin: z.string(),
@@ -30,6 +33,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   console.log(t("hello")) // @madsjordt remove this line
   const { user } = useAuth0()
+  const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),
@@ -68,11 +72,11 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   name="isin"
                   label="Asset"
                   help={
-                    <Description title="TODO: @webersni">
-                      Search for your asset. Try &quot;microsoft&quot; Only stocks from your
-                      selected exchange will be shown here. If you would like to change this, please{" "}
+                    <Description title="Add transaction">
+                      Search for the asset you want to add. Only stocks listed on your selected exchange
+                      will be displayed here. If you want to change this, please{" "}
                       <Link href="/settings/stocks">
-                        <a className="underline text-info-400">go to settings</a>
+                        <a className="underline text-info-400">go to settings.</a>
                       </Link>
                     </Description>
                   }
@@ -124,6 +128,14 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                             `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
                           )
                         })
+                        addToast({
+                          icon: <CheckIcon />,
+                          role: "info",
+                          title: "Transaction added",
+                          content: `You ${
+                            volume > 0 ? "bought" : "sold"
+                          } ${volume} shares of ${isin}`,
+                        })
                       },
                       setSubmitting,
                       setFormError,
@@ -167,7 +179,6 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     </AppLayout>
   )
 }
-export default NewTransactionPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
@@ -177,3 +188,4 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
     },
   }
 }
+export default withAuthenticationRequired(NewTransactionPage)

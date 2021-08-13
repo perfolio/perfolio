@@ -539,7 +539,8 @@
           "options": {
             "commands": [
               {
-                "command": "yarn prisma generate --schema=./libs/integrations/prisma/schema.prisma"
+                "command": "yarn prisma generate --schema=./libs/integrations/prisma/schema.prisma",
+                "forwardAllArgs": false
               }
             ]
           }
@@ -628,6 +629,27 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/landing/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "toaster": {
+      "root": "libs/toaster",
+      "sourceRoot": "libs/toaster/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/toaster/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/toaster"],
+          "options": {
+            "jestConfig": "libs/toaster/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

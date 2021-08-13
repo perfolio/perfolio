@@ -6,6 +6,7 @@ import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import { Auth0Provider } from "@auth0/auth0-react"
 import { I18nProvider } from "@perfolio/feature/i18n"
+import { ToastProvider } from "@perfolio/toaster"
 import "tailwindcss/tailwind.css"
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -31,21 +32,23 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Perfolio</title>
       </Head>
       <IdProvider>
-        <Auth0Provider
-          domain={auth0Domain}
-          clientId={auth0ClientId}
-          redirectUri={typeof window !== "undefined" ? window.location.origin : "/"}
-          cacheLocation="localstorage"
-          audience={auth0Audience}
-          useRefreshToken={true}
-        >
-          <QueryClientProvider client={PersistendQueryClient()}>
-            <OnboardingModal />
-            <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-              <Component {...pageProps} />
-            </div>
-          </QueryClientProvider>
-        </Auth0Provider>
+        <ToastProvider>
+          <Auth0Provider
+            domain={auth0Domain}
+            clientId={auth0ClientId}
+            redirectUri={typeof window !== "undefined" ? window.location.origin : "/"}
+            cacheLocation="localstorage"
+            audience={auth0Audience}
+            useRefreshToken={true}
+          >
+            <QueryClientProvider client={PersistendQueryClient()}>
+              <OnboardingModal />
+              <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+                <Component {...pageProps} />
+              </div>
+            </QueryClientProvider>
+          </Auth0Provider>
+        </ToastProvider>
       </IdProvider>
     </I18nProvider>
   )
