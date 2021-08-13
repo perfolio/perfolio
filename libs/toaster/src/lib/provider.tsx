@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion"
+import { AnimateSharedLayout } from "framer-motion"
 import React, { createContext, useState } from "react"
 import { ToastProps, Toast } from "./toast"
 
@@ -37,7 +37,6 @@ export const ToastProvider: React.FC = ({ children }) => {
    * Increment this version to invalidate the local storage on all clients.
    */
   const [toasts, setToasts] = useState<ToastProps[]>([])
-  console.log({ toasts })
   return (
     <ToasterContext.Provider
       value={{
@@ -47,11 +46,11 @@ export const ToastProvider: React.FC = ({ children }) => {
     >
       {children}
       <div className="absolute bottom-0 right-0 flex flex-col gap-4 p-8 m-4">
-        <AnimatePresence>
+        <AnimateSharedLayout>
           {toasts.map((props) => (
             <Toast key={props.id} {...props} />
           ))}
-        </AnimatePresence>
+        </AnimateSharedLayout>
       </div>
       {/* <div className="absolute bottom-0 right-0 flex flex-col p-8 m-4" id="toasterPortal"></div> */}
     </ToasterContext.Provider>
