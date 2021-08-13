@@ -32,9 +32,6 @@ export const useToaster = (): ToastHook => {
         {
           ...toast,
           id: uuid(),
-          remove: (id: string): void => {
-            ctx.setToasts(ctx.toasts.filter((t) => t.id !== id))
-          },
         },
       ])
     },
