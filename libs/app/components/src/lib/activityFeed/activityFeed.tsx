@@ -4,7 +4,7 @@ import React from "react"
 import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
 import { useTransactions, useExchangeTradedAsset } from "@perfolio/hooks"
-
+import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion"
 interface TransactionActivityItemProps {
   transaction: Omit<Transaction, "userId" | "assetId">
   isFirst?: boolean
@@ -18,7 +18,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
     id: transaction.asset.id,
   })
   return (
-    <li
+    <div
       className={cn(" py-4", {
         "border-t border-gray-100": !isFirst,
       })}
@@ -40,7 +40,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
           </Text>
         </>
       )}
-    </li>
+    </div>
   )
 }
 
@@ -53,11 +53,22 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
   return (
     <>
       <p className="text-base font-semibold text-gray-800">Recent Activity</p>
-      <ul>
-        {last5Transactions?.map((tx, i) => (
-          <TransactionActivityItem key={tx.id} transaction={tx} isFirst={i === 0} />
-        ))}
-      </ul>
+      <AnimateSharedLayout>
+        <AnimatePresence>
+          {last5Transactions?.map((tx, i) => (
+            <motion.div
+              layout
+              key={tx.id}
+              initial={{ opacity: 0, scaleY: 0 }}
+              animate={{ opacity: 1, scaleY: 1 }}
+              exit={{ opacity: 0, scaleY: 0 }}
+              transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
+            >
+              <TransactionActivityItem transaction={tx} isFirst={i === 0} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </AnimateSharedLayout>
     </>
   )
 }

@@ -11,6 +11,11 @@ import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 import { useToaster } from "@perfolio/toaster"
 import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
+import {
+  AnimatePresence,
+  AnimateSharedLayout,
+  motion,
+} from ".pnpm/framer-motion@4.1.17_react-dom@17.0.2+react@17.0.2/node_modules/framer-motion"
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
   isLast: boolean
@@ -105,17 +110,28 @@ const TransactionsPage: NextPage = () => {
               </Button>
             </div>
           ) : (
-            <div>
-              {[...transactions]
-                .sort((a, b) => b.executedAt - a.executedAt)
-                ?.map((tx, i) => (
-                  <TransactionItem
-                    key={tx.id}
-                    transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset }}
-                    isLast={i === transactions.length - 1}
-                  />
-                ))}
-            </div>
+            <AnimateSharedLayout>
+              <AnimatePresence>
+                {[...transactions]
+                  .sort((a, b) => b.executedAt - a.executedAt)
+                  ?.map((tx, i) => (
+                    <motion.div
+                      layout
+                      key={tx.id}
+                      initial={{ opacity: 0, scaleY: 0 }}
+                      animate={{ opacity: 1, scaleY: 1 }}
+                      exit={{ opacity: 0, scaleY: 0 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
+                    >
+                      <TransactionItem
+                        key={tx.id}
+                        transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset }}
+                        isLast={i === transactions.length - 1}
+                      />
+                    </motion.div>
+                  ))}
+              </AnimatePresence>
+            </AnimateSharedLayout>
           )}
         </Main.Content>
       </Main>
