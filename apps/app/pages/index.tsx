@@ -191,9 +191,9 @@ const App: NextPage = () => {
                   />
                 }
               >
-                A statistical measure for asset value stability. 
-                Standard deviation describes how widely asset prices are scattered around an average price.
-                The higher the standard deviation, the less stable the value of your assets.
+                A statistical measure for asset value stability. Standard deviation describes how
+                widely asset prices are scattered around an average price. The higher the standard
+                deviation, the less stable the value of your assets.
               </Tooltip>
               <Tooltip
                 trigger={

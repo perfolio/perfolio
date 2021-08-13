@@ -1,6 +1,5 @@
 import { ValueAtTime } from "@perfolio/api/graphql"
 import { Context } from "../../context"
-import { AuthorizationError } from "@perfolio/util/errors"
 import { getPortfolioHistory } from "./getPortfolioHistory"
 import { rebalance, toTimeseries } from "@perfolio/feature/finance/returns"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
@@ -10,10 +9,8 @@ export const getRelativePortfolioHistory = async (
   userId: string,
   since?: number,
 ): Promise<ValueAtTime[]> => {
-  const { sub } = await ctx.authenticateUser()
-  if (sub !== userId) {
-    throw new AuthorizationError("getRelativePortfolioHistory", "userId does not match")
-  }
+  await ctx.authorizeUser((uid) => uid === userId)
+
   const assetHistory = await getPortfolioHistory(ctx, userId)
   const key = new Key({ v: 2, resolver: "getRelativePortfolioHistory", assetHistory, since })
   const cache = new ApolloCache()
