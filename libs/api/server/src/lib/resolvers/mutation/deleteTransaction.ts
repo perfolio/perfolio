@@ -4,7 +4,7 @@ import { Context } from "../../context"
 
 export const deleteTransaction: ResolverFn<string, unknown, Context, { transactionId: string }> =
   async (_parent, { transactionId }, ctx, _info) => {
-    const { sub } = await ctx.authenticateUser()
+    const { userId, root } = await ctx.authenticateUser()
 
     const transaction = await ctx.dataSources.prisma.transaction.findUnique({
       where: { id: transactionId },
@@ -13,8 +13,8 @@ export const deleteTransaction: ResolverFn<string, unknown, Context, { transacti
       throw new Error("No transaction found")
     }
 
-    if (sub !== transaction.userId) {
-      throw new AuthorizationError("deleteTransaction", "wrong user id")
+    if (!root && userId !== transaction.userId) {
+      throw new AuthorizationError("wrong user id")
     }
 
     await ctx.dataSources.prisma.transaction.delete({ where: { id: transactionId } })

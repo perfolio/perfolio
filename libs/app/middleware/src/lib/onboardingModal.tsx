@@ -63,12 +63,14 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   const steps: { title: string; description: string; fields: React.ReactNode | null }[] = [
     {
       title: "Welcome",
-      description: "Please help us configure perfolio to your preferences. Select a default country and exchange in the next steps.",
+      description:
+        "Please help us configure perfolio to your preferences. Select a default country and exchange in the next steps.",
       fields: null,
     },
     {
       title: "Step 1: Select your default region",
-      description: "Please select the country you usually trade at. In most cases, this is the country where your exchange is located.",
+      description:
+        "Please select the country you usually trade at. In most cases, this is the country where your exchange is located.",
       fields: (
         <Field.Select
           onChange={setRegion}

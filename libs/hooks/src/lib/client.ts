@@ -14,7 +14,7 @@ export function client(token?: string): Sdk {
     }
     const graphqlClient = new GraphQLClient(`${baseUrl}/api/graphql`)
     if (token) {
-      graphqlClient.setHeader("Authorization", token)
+      graphqlClient.setHeader("Authorization", `Bearer ${token}`)
     }
     const res = await graphqlClient.request(doc, vars)
 

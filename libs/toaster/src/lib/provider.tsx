@@ -45,7 +45,7 @@ export const ToastProvider: React.FC = ({ children }) => {
       }}
     >
       {children}
-      <div className="absolute bottom-0 right-0 flex flex-col gap-4 p-8 m-4">
+      <div className="fixed bottom-0 right-0 flex flex-col gap-4 p-8 m-4">
         <AnimateSharedLayout>
           {toasts.map((props) => (
             <Toast key={props.id} {...props} />

@@ -1,5 +1,4 @@
 import { UpdateUserSettings, ResolverFn, UserSettings, Exchange } from "@perfolio/api/graphql"
-import { AuthorizationError } from "@perfolio/util/errors"
 import { Context } from "../../context"
 import { Currency } from "@perfolio/integrations/prisma"
 export const updateUserSettings: ResolverFn<
@@ -8,10 +7,7 @@ export const updateUserSettings: ResolverFn<
   Context,
   { userSettings: UpdateUserSettings }
 > = async (_parent, { userSettings }, ctx, _info) => {
-  const { sub } = await ctx.authenticateUser()
-  if (sub !== userSettings.userId) {
-    throw new AuthorizationError("updateUserSettings", "wrong user id")
-  }
+  await ctx.authorizeUser((userId) => userId === userSettings.userId)
 
   let exchange: Exchange | null = null
   if (userSettings.defaultExchange) {

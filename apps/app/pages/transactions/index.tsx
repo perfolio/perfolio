@@ -8,6 +8,8 @@ import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/api/graphql"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+
+import { useToaster } from "@perfolio/toaster"
 import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
@@ -15,6 +17,7 @@ export interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
+  const { addToast } = useToaster()
   const { asset } = useExchangeTradedAsset({
     id: transaction.asset.id,
   })
@@ -59,6 +62,10 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             size="sm"
             onClick={async () => {
               await deleteTransaction.mutateAsync({ transactionId: transaction.id })
+              addToast({
+                title: "Transaction deleted",
+                content: `You deleted transaction ${transaction.id}`,
+              })
             }}
           >
             Delete
