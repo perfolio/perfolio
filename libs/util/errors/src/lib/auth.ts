@@ -13,11 +13,10 @@ export class AuthenticationError extends GenericError {
 
 export class AuthorizationError extends GenericError {
   /**
-   * @param action - What the user was trying to do
    * @param reason - Why the user is not allowed to do this
    */
-  constructor(action: string, reason: string) {
-    super("AuthorizationError", `You are not allowed to do this: ${action}: ${reason}`, {
+  constructor(reason: string) {
+    super("AuthorizationError", `You are not allowed to do this: ${reason}`, {
       logLevel: "error",
     })
   }

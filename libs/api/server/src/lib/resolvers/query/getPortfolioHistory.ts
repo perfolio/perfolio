@@ -1,6 +1,5 @@
 import { TransactionSchemaFragment, AssetHistory } from "@perfolio/api/graphql"
 import { Context } from "../../context"
-import { AuthorizationError } from "@perfolio/util/errors"
 import { Time } from "@perfolio/util/time"
 import { getTickerFromIsin } from "../../util/getTickerFromIsin"
 
@@ -10,10 +9,7 @@ export const getPortfolioHistory = async (
   ctx: Context,
   userId: string,
 ): Promise<AssetHistoryWithoutAsset[]> => {
-  const { sub } = await ctx.authenticateUser()
-  if (sub !== userId) {
-    throw new AuthorizationError("getPortfolioHistory", "wrong user id")
-  }
+  await ctx.authorizeUser((uid) => uid === userId)
 
   const userSettings = await ctx.dataSources.prisma.userSettings.findUnique({ where: { userId } })
   const mic = userSettings?.defaultExchangeMic
