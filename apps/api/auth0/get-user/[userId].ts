@@ -1,4 +1,3 @@
-import Stripe from "stripe"
 import {
   NextApiRequest,
   NextApiResponse,
@@ -7,9 +6,9 @@ import { PrismaClient } from "@perfolio/integrations/prisma"
 import { env } from "@perfolio/util/env"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     res.status(405)
-    res.setHeader("Access-Control-Allow-Methods", "POST")
+    res.setHeader("Access-Control-Allow-Methods", "GET")
     return res.end()
   }
 
@@ -21,30 +20,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.end("Unauthorized")
   }
 
-  const { userId, email } = req.body
+  const { userId } = req.query
   if (!userId) {
     res.status(400)
     return res.end("Missing userId")
   }
-  if (!email) {
-    res.status(400)
-    return res.end("Missing email")
-  }
-  const stripe = new Stripe(env.require("STRIPE_SECRET"), { apiVersion: "2020-08-27" })
-  const customer = await stripe.customers.create({ email })
 
-  await new PrismaClient().user.upsert({
-    where: { id: userId },
-    create: {
-      id: userId,
-      email,
-      stripeCustomerId: customer.id,
-      // stripeSubscriptionId: customer.subscriptions?.data[0].id
-    },
-    update: {
-      id: userId,
-      email,
-    },
-  })
+  const user = await new PrismaClient().user.findUnique({ where: { id: userId as string } })
+  if (!user) {
+    res.status(400)
+    return res.end("No user found")
+  }
+  res.json({ payedUntil: user.payedUntil })
   res.end()
 }
