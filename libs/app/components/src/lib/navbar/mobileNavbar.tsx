@@ -7,10 +7,8 @@ import { Link, Logo } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
-import { useAuth0 } from "@auth0/auth0-react"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const { logout } = useAuth0()
   return (
     <nav className="flex items-center justify-between w-full">
       <NextLink href="/">
@@ -54,9 +52,11 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <Link size="lg" prefix={<DotsVerticalIcon />} href="/" />
             </li>
             <li>
-              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => logout()}>
-                <LogoutIcon className="w-6 h-6 text-white" />
-              </button>
+              <Link href="/api/auth/logout">
+                <a className="pb-1 xl:ml-6 2xl:ml-9">
+                  <LogoutIcon className="w-6 h-6 text-white" />
+                </a>
+              </Link>
             </li>
           </ul>
         </Transition>

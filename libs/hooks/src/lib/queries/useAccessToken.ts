@@ -1,16 +1,17 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import { useQuery } from "react-query"
+
 export function useAccessToken() {
-  const { getAccessTokenSilently } = useAuth0()
+  const { data, ...meta } = useQuery<{ accessToken: string }, Error>(
+    "GET_ACCESS_TOKEN",
+    async () => {
+      const res = await fetch("/api/auth/access-token")
 
-  const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE
-  if (!audience) {
-    throw new Error(`NEXT_PUBLIC_AUTH0_AUDIENCE env missing`)
-  }
-
-  return {
-    getAccessToken: () =>
-      getAccessTokenSilently({
-        audience,
-      }),
-  }
+      if (!res.ok) {
+        throw new Error(`Unable to reach token endpoint`)
+      }
+      return await res.json()
+    },
+    { staleTime: 4 * 60 * 1000, cacheTime: 4 * 60 * 1000 },
+  )
+  return { accessToken: data?.accessToken, ...meta }
 }

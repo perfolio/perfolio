@@ -11,7 +11,7 @@ import cn from "classnames"
 import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -76,7 +76,7 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const { user } = useAuth0()
+  const { user } = useUser()
   const { settings } = useUserSettings()
 
   const { exchanges } = useExchanges()
@@ -194,4 +194,4 @@ const SettingsPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(SettingsPage)
+export default withPageAuthRequired(SettingsPage)

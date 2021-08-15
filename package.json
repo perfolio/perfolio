@@ -36,7 +36,7 @@
   },
   "private": true,
   "dependencies": {
-    "@auth0/auth0-react": "^1.6.0",
+    "@auth0/nextjs-auth0": "^1.5.0",
     "@hapi/iron": "^6.0.0",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",

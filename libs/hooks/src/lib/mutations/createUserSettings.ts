@@ -5,18 +5,18 @@ import {
 } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { USE_USER_SETTINGS_QUERY_KEY } from "../queries/useUserSettings"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAccessToken } from "../queries/useAccessToken"
 
 export const useCreateUserSettings = () => {
   const queryClient = useQueryClient()
-  const { getAccessTokenSilently } = useAuth0()
+  const { accessToken } = useAccessToken()
   const { data, ...meta } = useMutation<
     CreateUserSettingsMutation,
     Error,
     CreateUserSettingsMutationVariables
   >(
     async (variables) => {
-      return client(await getAccessTokenSilently()).CreateUserSettings(variables)
+      return client(accessToken).CreateUserSettings(variables)
     },
     {
       onSuccess: () => {

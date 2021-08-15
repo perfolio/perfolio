@@ -111,7 +111,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
-              href="https://app.perfol.io/sign-up"
+              href="/api/auth/login"
               submitText="Try for free"
             />
             <Price
@@ -123,7 +123,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
-              href="https://app.perfol.io/sign-up"
+              href="/api/auth/login"
               submitText="Get started"
             />
             <Price
@@ -135,7 +135,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
-              href="https://app.perfol.io/sign-up"
+              href="/api/auth/login"
               highlighted
               submitText="Take off"
             />

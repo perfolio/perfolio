@@ -9,6 +9,12 @@ generator client {
     provider = "prisma-client-js"
 }
 
+
+enum Plan {
+    TRIAL
+    PRO
+}
+
 model User {
     id    String @id @default(uuid())
     email String @unique
@@ -17,6 +23,8 @@ model User {
     // stripeSubscriptionId String @unique
     // Unix timestamp with second precision
     payedUntil           Int    @default(0)
+
+    plan Plan @default(TRIAL)
 
 
     // transactions Transaction[]

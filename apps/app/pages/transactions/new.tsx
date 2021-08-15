@@ -14,7 +14,7 @@ import { CheckIcon } from "@heroicons/react/outline"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0"
 
 const validation = z.object({
   isin: z.string(),
@@ -27,7 +27,7 @@ const validation = z.object({
  * / page.
  */
 const NewTransactionPage: NextPage = () => {
-  const { user } = useAuth0()
+  const { user } = useUser()
   const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -174,4 +174,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(NewTransactionPage)
+export default withPageAuthRequired(NewTransactionPage)

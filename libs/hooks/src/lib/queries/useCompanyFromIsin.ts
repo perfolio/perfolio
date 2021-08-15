@@ -4,14 +4,15 @@ import {
   GetExchangeTradedAssetQueryVariables,
 } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAccessToken } from "./useAccessToken"
 
 export const useExchangeTradedAsset = (variables: GetExchangeTradedAssetQueryVariables) => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { accessToken } = useAccessToken()
 
   const { data, ...meta } = useQuery<GetExchangeTradedAssetQuery, Error>(
     ["getCompanyFromIsin", variables],
-    async () => client(await getAccessTokenSilently()).getExchangeTradedAsset(variables),
+    async () => client(accessToken).getExchangeTradedAsset(variables),
+    { enabled: !!accessToken },
   )
 
   return { asset: data?.getExchangeTradedAsset, ...meta }
