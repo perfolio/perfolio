@@ -113,6 +113,7 @@ specifiers:
   react-table: ^7.7.0
   recharts: ^2.1.0
   regenerator-runtime: 0.13.7
+  stripe: ^8.169.0
   supabase: ^0.5.0
   tailwindcss: ~2.1.4
   tailwindcss-debug-screens: ^2.0.0
@@ -170,6 +171,7 @@ dependencies:
   react-table: 7.7.0_react@17.0.2
   recharts: 2.1.0_react-dom@17.0.2+react@17.0.2
   regenerator-runtime: 0.13.7
+  stripe: 8.169.0
   tslib: 2.3.0
   tslog: 3.2.0
   uuid: 8.3.2
@@ -19573,6 +19575,14 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
     dev: true
+
+  /stripe/8.169.0:
+    resolution: {integrity: sha512-h4JVMGnhYwkEu8dFHX0MewtTFEWcjJQ2zTiFcvhW5toa/2JcEeObfwH27Z29A6t/6s2vnXrXxEnuyL7gBBAXqA==}
+    engines: {node: ^8.1 || >=10.*}
+    dependencies:
+      '@types/node': 14.14.33
+      qs: 6.10.1
+    dev: false
 
   /style-inject/0.3.0:
     resolution: {integrity: sha512-IezA2qp+vcdlhJaVm5SOdPPTUu0FCEqfNSli2vRuSIBbu5Nq5UvygTk/VzeCqfLz2Atj3dVII5QBKGZRZ0edzw==}
