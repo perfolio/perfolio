@@ -40,11 +40,11 @@ model User {
   plan       Plan     @default(TRIAL)
 }
 
-model VerificationRequest {
+model AuthenticationRequest {
   id String @id @default(uuid())
 
   // Hash of the email where the request is sent to
-  identifier String
+  identifier String @unique
 
   // We send a 6 digit number to the user
   // this is the hash of it
@@ -53,7 +53,6 @@ model VerificationRequest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([identifier, token])
 }
 
 model Transaction {

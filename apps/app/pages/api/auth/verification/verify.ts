@@ -1,10 +1,8 @@
 import { NextApiHandler } from "next"
 import { z } from "zod"
-import crypto from "crypto"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { AuthenticationError } from "@perfolio/util/errors"
-import { v4 as uuid } from "uuid"
-import { JWT, seal, setCookie } from "@perfolio/auth"
+import { Auth, JWT, seal, setCookie } from "@perfolio/auth"
 /**
  * This lambda receives the email and the token entered by the user and verifies them.
  *
@@ -16,10 +14,6 @@ const validation = z.object({
   email: z.string().email(),
   otp: z.string().regex(/^(\d){6}$/),
 })
-
-const sha256 = (secret: string): string => {
-  return crypto.createHash("sha256").update(secret).digest("hex")
-}
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
@@ -33,35 +27,10 @@ const handler: NextApiHandler = async (req, res) => {
       throw err
     })
     const prisma = new PrismaClient()
-    const verificationRequest = await prisma.verificationRequest.findUnique({
-      where: {
-        identifier_token: {
-          identifier: email,
-          token: sha256(otp),
-        },
-      },
+    const auth = new Auth(prisma)
+    await auth.verifyAuthenticationRequest(email, otp).catch((err) => {
+      throw new AuthenticationError(`Unable to verify request: ${err}`)
     })
-
-    if (!verificationRequest) {
-      res.status(401)
-      throw new AuthenticationError("No verification request found")
-    }
-    await prisma.verificationRequest
-      .delete({ where: { id: verificationRequest.id } })
-      .catch((err) => {
-        res.status(500)
-        throw new Error(`Unable to delete verification request: ${err}`)
-      })
-
-    if (verificationRequest.expires.getTime() < Date.now()) {
-      res.status(401)
-      throw new AuthenticationError("Verification request has expired")
-    }
-
-    if (sha256(otp) !== verificationRequest.token) {
-      res.status(401)
-      throw new AuthenticationError("Token mismatch")
-    }
 
     // If we reach this point the user is authenticated and we can create tokens
 
@@ -71,20 +40,10 @@ const handler: NextApiHandler = async (req, res) => {
       throw new Error("No user found with that email")
     }
 
-    const sessionToken = uuid()
-    const hashedSessionToken = sha256(sessionToken)
-
-    // Delete all existing sessions
-    await prisma.session.deleteMany({ where: { user: { email } } })
-
-    await prisma.session.create({
-      data: {
-        userId: user.id,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 7), // 7 days ttl
-        sessionToken: hashedSessionToken,
-      },
+    const { sessionToken } = await auth.createSession(user.id).catch((err) => {
+      res.status(500)
+      throw new Error(`Unable to create session: ${err}`)
     })
-
     /**
      * Set the sessionToken as cookie
      */

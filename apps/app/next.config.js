@@ -7,6 +7,8 @@ module.exports = withNx({
     if (!isServer) {
       config.resolve.fallback.fs = false
       config.resolve.fallback.child_process = false
+      config.resolve.fallback["mock-aws-s3"] = false
+      config.resolve.fallback["aws-sdk"] = false
     }
 
     return config
