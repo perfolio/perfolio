@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
 import { Card, Button } from "@perfolio/ui/components"
-import { withPageAuthRequired } from "@auth0/nextjs-auth0"
+import { withAuthenticationRequired } from "@perfolio/app/middleware"
 interface SettingProps {
   validation: z.AnyZodObject
   title: string
@@ -123,4 +123,4 @@ const SettingsPage: NextPage = () => {
   )
 }
 
-export default withPageAuthRequired(SettingsPage)
+export default withAuthenticationRequired(SettingsPage)

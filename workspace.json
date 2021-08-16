@@ -18,57 +18,6 @@
     }
   },
   "projects": {
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/next:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "root": "apps/api",
-            "outputPath": "dist/apps/api"
-          },
-          "configurations": {
-            "production": {}
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "api:build",
-            "dev": true
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "api:build:production",
-              "dev": false
-            }
-          }
-        },
-        "export": {
-          "executor": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "api:build:production"
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.{ts,tsx,js,jsx}"]
-          }
-        }
-      }
-    },
     "api-client": {
       "root": "libs/api/client",
       "sourceRoot": "libs/api/client/src",
@@ -256,6 +205,27 @@
         }
       }
     },
+    "auth": {
+      "root": "libs/auth",
+      "sourceRoot": "libs/auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/auth/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/auth"],
+          "options": {
+            "jestConfig": "libs/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "downsampling": {
       "root": "libs/downsampling",
       "sourceRoot": "libs/downsampling/src",
@@ -377,27 +347,6 @@
           "outputs": ["coverage/libs/feature/i18n"],
           "options": {
             "jestConfig": "libs/feature/i18n/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "feature-tokens": {
-      "root": "libs/feature/tokens",
-      "sourceRoot": "libs/feature/tokens/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/feature/tokens/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/feature/tokens"],
-          "options": {
-            "jestConfig": "libs/feature/tokens/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -577,6 +526,27 @@
           "outputs": ["coverage/libs/integrations/redis"],
           "options": {
             "jestConfig": "libs/integrations/redis/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "integrations-sendgrid": {
+      "root": "libs/integrations/sendgrid",
+      "sourceRoot": "libs/integrations/sendgrid/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/integrations/sendgrid/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/integrations/sendgrid"],
+          "options": {
+            "jestConfig": "libs/integrations/sendgrid/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -14,7 +14,7 @@ import { CheckIcon } from "@heroicons/react/outline"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0"
+import { useUser } from "@perfolio/hooks"
 
 const validation = z.object({
   isin: z.string(),
@@ -112,7 +112,7 @@ const NewTransactionPage: NextPage = () => {
                       ctx,
                       async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
-                          userId: user!.sub!,
+                          userId: user!.id!,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
@@ -174,4 +174,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withPageAuthRequired(NewTransactionPage)
+export default NewTransactionPage

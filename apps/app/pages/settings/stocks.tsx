@@ -8,10 +8,10 @@ import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
-import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
+import { useUser, useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0"
+import { withAuthenticationRequired } from "@perfolio/app/middleware"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -92,7 +92,7 @@ const SettingsPage: NextPage = () => {
   const updateSettings = useUpdateUserSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
-      userSettings: { userId: user!.sub!, defaultCurrency: values.defaultCurrency },
+      userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency },
     })
   }
 
@@ -103,7 +103,7 @@ const SettingsPage: NextPage = () => {
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
       userSettings: {
-        userId: user!.sub!,
+        userId: user.id,
         defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
       },
     })
@@ -194,4 +194,4 @@ const SettingsPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withPageAuthRequired(SettingsPage)
+export default withAuthenticationRequired(SettingsPage)

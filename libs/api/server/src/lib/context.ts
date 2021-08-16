@@ -1,7 +1,7 @@
 import { DataSources } from "./datasources"
 import { IncomingMessage } from "http"
 import { AuthenticationError, AuthorizationError } from "@perfolio/util/errors"
-import { Claims, JWT } from "@perfolio/feature/tokens"
+import { Claims, JWT } from "@perfolio/auth"
 import { Logger } from "tslog"
 import { PrismaClient } from "@prisma/client"
 import { env } from "@perfolio/util/env"

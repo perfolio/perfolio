@@ -17,9 +17,6 @@
     }
   },
   "projects": {
-    "api": {
-      "tags": []
-    },
     "api-client": {
       "tags": []
     },
@@ -41,6 +38,7 @@
     "app-query-client": {
       "tags": []
     },
+    "auth": {},
     "downsampling": {
       "tags": []
     },
@@ -57,9 +55,6 @@
       "tags": []
     },
     "feature-i18n": {
-      "tags": []
-    },
-    "feature-tokens": {
       "tags": []
     },
     "hooks": {
@@ -84,6 +79,9 @@
       "tags": []
     },
     "integrations-redis": {
+      "tags": []
+    },
+    "integrations-sendgrid": {
       "tags": []
     },
     "landing": {

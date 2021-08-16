@@ -12,7 +12,7 @@ import path from "path"
 import { env } from "@perfolio/util/env"
 
 import { dataSources } from "./datasources"
-// import { JWT } from "@perfolio/feature/tokens"
+// import { JWT } from "@perfolio/authentication"
 
 export type ApolloHandlerConfig = {
   logger?: Logger

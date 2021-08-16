@@ -10,3 +10,6 @@ export * from "./lib/header/header"
 export * from "./lib/main"
 export * from "./lib/sidebar/sidebar"
 export * from "./lib/no-transactions-modal/no-transactions-modal"
+
+export * from "./lib/auth/requestForm"
+export * from "./lib/auth/verifyForm"

@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 import { client } from "../client"
 import { useAccessToken } from "./useAccessToken"
-import { useUser } from "@auth0/nextjs-auth0"
+import { useUser } from "./useUser"
 export const USE_RELATIVE_PORTFOLIO_HISTORY = "USE_RELATIVE_PORTFOLIO_HISTORY"
 
 export const useRelativePortfolioHistory = (since?: number) => {
@@ -11,11 +11,11 @@ export const useRelativePortfolioHistory = (since?: number) => {
     [USE_RELATIVE_PORTFOLIO_HISTORY, { since }],
     async () =>
       await client(accessToken).getRelativePortfolioHistory({
-        userId: user!.sub!,
+        userId: user!.id!,
         since,
       }),
     {
-      enabled: !!user?.sub && !!accessToken,
+      enabled: !!user?.id && !!accessToken,
     },
   )
 

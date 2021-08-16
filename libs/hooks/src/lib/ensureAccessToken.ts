@@ -1,5 +1,5 @@
 import { HTTPError, JsonUnmarshalError, AuthenticationError } from "@perfolio/util/errors"
-import { JWT } from "@perfolio/feature/tokens"
+import { JWT } from "@perfolio/auth"
 const getNewToken = async (sessionId: string): Promise<string> => {
   const path = "/api/auth/access-token"
   const res = await fetch(path, {
