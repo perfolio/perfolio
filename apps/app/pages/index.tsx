@@ -84,7 +84,6 @@ interface PageProps {
 
 const App: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  console.log(t("hello")) // @madsjordt remove this line
 
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
@@ -108,7 +107,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
       ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
       : 0
 
-  const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
+  const [aggregation, setAggregation] = useState<AggregateOptions>(t("RelPicked"))
 
   const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
   const { relativeMean } = useRelativeMean(relativePortfolioHistory)
@@ -132,10 +131,10 @@ const App: NextPage<PageProps> = ({ translations }) => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title="Overview" />
+          <Main.Header.Title title={t("mainHeaderTitle")} />
 
           <ToggleGroup<AggregateOptions>
-            options={["Relative", "Absolute"]}
+            options={[t("RelPicked"), t("AbsPicked"),]}
             selected={aggregation}
             setSelected={setAggregation}
           />
@@ -149,28 +148,28 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Tooltip
                 trigger={
                   <KPI
-                    label="Total Assets"
+                    label={t("totalAssetsLabel")}
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
                         suffix: getCurrencySymbol(settings?.defaultCurrency),
                       })
                     }
-                    isLoading={aggregation === "Absolute" && absoluteIsLoading}
+                    isLoading={aggregation === t("AbsPicked") && absoluteIsLoading}
                   />
                 }
               >
-                The current aggregate value of all assets added into Perfolio by you.
+                t(totalAssetsTooltip)
               </Tooltip>
 
               <Tooltip
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
-                    value={aggregation === "Absolute" ? absoluteMean : relativeMean}
+                    label={aggregation === t("AbsPicked") ? t("AbsPicked") : t("meanReturnLabel")}
+                    value={aggregation === t("AbsPicked") ? absoluteMean : relativeMean}
                     format={(n) =>
-                      aggregation === "Absolute"
+                      aggregation === t("AbsPicked")
                         ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
@@ -178,43 +177,41 @@ const App: NextPage<PageProps> = ({ translations }) => {
                         : format(n, { suffix: "%", percent: true, sign: true })
                     }
                     isLoading={
-                      (aggregation === "Absolute" && absoluteIsLoading) ||
-                      (aggregation === "Relative" && relativeIsLoading)
+                      (aggregation === t("AbsPicked") && absoluteIsLoading) ||
+                      (aggregation === t("RelPicked") && relativeIsLoading)
                     }
                   />
                 }
               >
-                The average profit earned by your assets within a given period of time.
+                t(meanChangeTooltip)
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
                     isLoading={
-                      (aggregation === "Absolute" && absoluteIsLoading) ||
-                      (aggregation === "Relative" && relativeIsLoading)
+                      (aggregation === t("AbsPicked") && absoluteIsLoading) ||
+                      (aggregation === t("RelPicked") && relativeIsLoading)
                     }
-                    label="Standard Deviation"
+                    label={t("stdDevLabel")}
                     value={relativeSTD}
                     format={(n) => format(n)}
                   />
                 }
               >
-                A statistical measure for asset value stability. 
-                Standard deviation describes how widely asset prices are scattered around an average price.
-                The higher the standard deviation, the less stable the value of your assets.
+                t(stdDevTooltip)
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
-                    label="Change"
+                    label={t("changeLabel")}
                     enableColor
                     isLoading={
-                      (aggregation === "Absolute" && absoluteIsLoading) ||
-                      (aggregation === "Relative" && relativeIsLoading)
+                      (aggregation === t("AbsPicked") && absoluteIsLoading) ||
+                      (aggregation === t("RelPicked") && relativeIsLoading)
                     }
-                    value={aggregation === "Absolute" ? absoluteChange : relativeChange}
+                    value={aggregation === t("AbsPicked") ? absoluteChange : relativeChange}
                     format={(n) =>
-                      aggregation === "Absolute"
+                      aggregation === t("AbsPicked")
                         ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
@@ -224,7 +221,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   />
                 }
               >
-                The percent change of your asset value within a given period of time.
+                t(changeTooltip)
               </Tooltip>
             </div>
           </div>
@@ -241,7 +238,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">
-              <Heading h3>Current Assets</Heading>
+              <Heading h3>t(assetTableHeading)</Heading>
             </div>
 
             <AssetTable aggregation={aggregation} />

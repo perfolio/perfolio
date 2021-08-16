@@ -14,7 +14,6 @@ interface PageProps {
 }
 const Subscribe: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  console.log(t("hello")) // @madsjordt remove this line
 
   const validation = z.object({ email: z.string().email() })
 
