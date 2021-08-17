@@ -2,13 +2,13 @@ import React from "react"
 import { Navbar, Section } from "../components"
 import { NextPage, GetStaticProps } from "next"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
-import { IndexPageProps } from "."
+//import { IndexPageProps } from "."
 
 export interface ImprintPageProps {
   translations: Record<string, string>
 }
 
-export const Imprint: NextPage<IndexPageProps> = ({ translations }) => {
+const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   return (
     <div>
@@ -110,7 +110,7 @@ export const Imprint: NextPage<IndexPageProps> = ({ translations }) => {
 
 export const getStaticProps: GetStaticProps<ImprintPageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["landing"])
-  return { props:translations }
+  return { props: translations }
 }
 
-export default Imprint 
+export default Imprint

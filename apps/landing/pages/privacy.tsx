@@ -2,13 +2,12 @@ import React from "react"
 import { Navbar, Section } from "../components"
 import { NextPage, GetStaticProps } from "next"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
-import { IndexPageProps } from "."
 
 export interface PrivacyPageProps {
   translations: Record<string, string>
 }
 
-export const Privacy: NextPage<IndexPageProps> = ({ translations }) => {
+const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   return (
     <div>
@@ -1017,7 +1016,7 @@ export const Privacy: NextPage<IndexPageProps> = ({ translations }) => {
 
 export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["landing"])
-  return { props:translations }
+  return { props: translations }
 }
 
 export default Privacy

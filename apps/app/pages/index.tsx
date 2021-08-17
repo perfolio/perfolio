@@ -134,7 +134,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
           <Main.Header.Title title={t("mainHeaderTitle")} />
 
           <ToggleGroup<AggregateOptions>
-            options={[t("RelPicked"), t("AbsPicked"),]}
+            options={[t("RelPicked"), t("AbsPicked")]}
             selected={aggregation}
             setSelected={setAggregation}
           />

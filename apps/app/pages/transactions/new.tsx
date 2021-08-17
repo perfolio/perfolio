@@ -73,8 +73,8 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   label="Asset"
                   help={
                     <Description title="Add transaction">
-                      Search for the asset you want to add. Only stocks listed on your selected exchange
-                      will be displayed here. If you want to change this, please{" "}
+                      Search for the asset you want to add. Only stocks listed on your selected
+                      exchange will be displayed here. If you want to change this, please{" "}
                       <Link href="/settings/stocks">
                         <a className="underline text-info-400">go to settings.</a>
                       </Link>

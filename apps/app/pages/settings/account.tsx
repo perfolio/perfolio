@@ -129,7 +129,6 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {

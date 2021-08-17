@@ -22,8 +22,6 @@ import {
 } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
-
-
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
   translations: Record<string, string>
@@ -108,7 +106,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 t("basicPlanFeatureChart"),
               ]}
               href="https://app.perfol.io/sign-up"
-              submitText="Try for free"
+              submitText={t("tryForFreeButton")}
             />
             <Price
               title="Basic"
@@ -120,7 +118,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 t("basicPlanFeatureChart"),
               ]}
               href="https://app.perfol.io/sign-up"
-              submitText="Get started"
+              submitText={t("getStartedButton")}
             />
             <Price
               title="Pro"
@@ -129,7 +127,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               bullets={[t("proPlanFeatureFreePlan")]}
               href="https://app.perfol.io/sign-up"
               highlighted
-              submitText="Take off"
+              submitText={t("takeOffButton")}
             />
           </div>
         </Section>
@@ -178,7 +176,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               </p>
             </div>
             <Button kind="cta" href="https://app.perfol.io/subscribe">
-              Subscribe
+              {t("subscribeButton")}
             </Button>
           </div>
         </Section>
