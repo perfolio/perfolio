@@ -50,11 +50,11 @@ const Subscribe: NextPage<PageProps> = ({ translations }) => {
           </div>
           <div className="w-full max-w-sm px-6 space-y-4">
             {subscribed ? (
-              <Description title="Thank you!">We will be in touch</Description>
+              <Description title={t("subscribeTitle")}>{t("subscribeDescription")}</Description>
             ) : (
               <>
                 <Form ctx={ctx} formError={formError}>
-                  <Field.Input label="Email" name="email" type="email" />
+                  <Field.Input label={t("emailLabel")} name="email" type="email" />
                 </Form>
                 <Button
                   loading={submitting}
