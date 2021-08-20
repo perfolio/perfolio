@@ -4,6 +4,7 @@ import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/compone
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 import { usePortfolio } from "@perfolio/hooks"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 const COLORS = [
   "#D7DDFC",
@@ -71,7 +72,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
   }, [portfolio])
 
   /**
-   * Selection can either be "sectors" or "counrties"
+   * Selection can either be "sectors" or "countries"
    */
   const [selected, setSelected] = useState("Sectors")
 
@@ -116,11 +117,8 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         <div className="flex items-center space-x-2">
           <Heading h4>Diversification</Heading>
           <Tooltip side="right">
-            <Description title="Diversification">
-              Stock market diversity is a measure of the distribution of capital in an equity
-              market. Diversification is higher when capital is more evenly distributed among the
-              stocks in the market, and is lower when capital is more concentrated into a few of the
-              largest companies.
+            <Description title={t("diversityLabel")}>
+              {t("diversityTooltip")}
             </Description>
           </Tooltip>
         </div>
