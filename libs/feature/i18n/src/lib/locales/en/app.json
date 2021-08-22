@@ -2,7 +2,7 @@
   "relativePicked": "relative",
   "absPicked": "absolute",
   "mainHeaderTitle": "Overview",
-  "totalAssetsLabel": "Total Assets",
+  "totalAssetsLabel": "Total Value",
   "totalAssetsTooltip": "The current aggregate value of all assets added into Perfolio by you.",
   "meanReturnLabel": "Mean Return",
   "meanChangeTooltip": "The average profit earned by your assets within a given period of time.",
@@ -26,7 +26,7 @@
   "assetTableComposition1": "represents",
   "assetTableComposition2": "of your portfolio.",
   "diversityLabel": "Diversification",
-  "diversityTooltip": "Stock market diversity is a measure of the distribution of capital in an equity market. Diversification is higher when capital is more evenly distributed among the stocks in the market, and is lower when capital is more concentrated into a few of the largest companies.",
+  "diversityTooltip": "Diversification is a measure of the extent to which the capital tied up in a portfolio is spread across different industries, regions, etc. High diversification means that the investment capital is evenly spread across different markets, while low diversification with a strong focus on a few key areas can entail higher risks.",
   "headerLabelDash": "Dashboard",
   "headerLabelTrans": "Transactions",
   "headerLabelMyTrans": "My Transactions",
@@ -35,8 +35,5 @@
   "headerDescrAddTrans": "Add a transaction by entering data yourself",
   "noTransactionsTitle": "Your portfolio seems to be empty",
   "noTransactionsText": "Looks like you did not add any transactions yet.",
-  "noTransactionsAdd": "Add transaction",
-  "": "",
-  "": "",
-  "": "",
+  "noTransactionsAdd": "Add transaction"
 }
