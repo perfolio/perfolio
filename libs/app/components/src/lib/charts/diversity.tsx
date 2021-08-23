@@ -117,9 +117,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         <div className="flex items-center space-x-2">
           <Heading h4>Diversification</Heading>
           <Tooltip side="right">
-            <Description title={t("diversityLabel")}>
-              {t("diversityTooltip")}
-            </Description>
+            <Description title={t("diversityLabel")}>{t("diversityTooltip")}</Description>
           </Tooltip>
         </div>
         <ToggleGroup

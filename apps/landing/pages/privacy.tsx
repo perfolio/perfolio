@@ -1020,7 +1020,7 @@ export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale 
     props: {
       translations,
     },
-}
+  }
 }
 
 export default Privacy

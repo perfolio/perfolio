@@ -114,7 +114,7 @@ export const getStaticProps: GetStaticProps<ImprintPageProps> = async ({ locale 
     props: {
       translations,
     },
-}
+  }
 }
 
 export default Imprint
