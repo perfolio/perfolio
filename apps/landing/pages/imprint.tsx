@@ -110,7 +110,11 @@ const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
 
 export const getStaticProps: GetStaticProps<ImprintPageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["landing"])
-  return { props: translations }
+  return {
+    props: {
+      translations,
+    },
+}
 }
 
 export default Imprint
