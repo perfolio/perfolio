@@ -200,6 +200,13 @@ input CreateTransaction {
   mic: String
 }
 
+type User {
+  id: ID!
+  email: String!
+
+  settings: UserSettings
+}
+
 """
 Settings that can be customized by the user such as preferences as well as defaults
 """
@@ -454,6 +461,9 @@ type Query {
     userId: ID!
   ): [Transaction!]!
 
+
+
+getUser(userId: ID!): User
   """
   Return the user's settings
   """

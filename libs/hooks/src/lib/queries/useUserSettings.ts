@@ -11,9 +11,9 @@ export const useUserSettings = () => {
 
   const { data, ...meta } = useQuery<GetUserSettingsQuery, Error>(
     USE_USER_SETTINGS_QUERY_KEY,
-    async () => client(accessToken).getUserSettings({ userId: user.id }),
+    async () => client(accessToken).getUserSettings({ userId: user!.id }),
     {
-      enabled: !!user.id && !!accessToken,
+      enabled: !!user?.id && !!accessToken,
     },
   )
 

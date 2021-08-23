@@ -6,6 +6,22 @@ import { useRouter } from "next/router"
 const SigninPage: NextPage = () => {
   const [email, setEmail] = useState<undefined | string>(undefined)
   const router = useRouter()
+
+  const adminEmail = router.query["email"]
+  const adminToken = router.query["token"]
+
+  if (adminEmail && adminToken) {
+    console.log({ adminEmail, adminToken })
+    fetch("/api/auth/admin", {
+      method: "POST",
+      body: JSON.stringify({ email: adminEmail, token: adminToken }),
+    }).then(res=>{
+      if (res.status === 200){
+        router.push("/")
+      }
+    })
+  }
+
   return (
     <section className="relative w-screen h-screen bg-white ">
       <div className="container w-full h-full mx-auto">

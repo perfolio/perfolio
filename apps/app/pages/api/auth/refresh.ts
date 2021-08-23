@@ -1,6 +1,8 @@
 import { NextApiHandler } from "next"
 import { PrismaClient } from "@perfolio/integrations/prisma"
-import { JWT, Auth } from "@perfolio/auth"
+import { JWT, Auth, SessionCookie } from "@perfolio/auth"
+import { AuthenticationError } from "@perfolio/util/errors"
+import {Logger} from "tslog"
 /**
  * Retrieve the session id from cookies and create a new session and access token
  */
@@ -11,9 +13,12 @@ const handler: NextApiHandler = async (req, res) => {
     res.setHeader("Allow", "GET")
     return res.end()
   }
-  const auth = new Auth(new PrismaClient())
+  const logger = new Logger()
+  const prisma = new PrismaClient()
+  const auth = new Auth(prisma)
+  const cookie = new SessionCookie(req, res)
   try {
-    const { sessionToken } = await auth.getSessionCookie(req).catch((err) => {
+    const sessionToken = await cookie.getSessionToken().catch((err) => {
       res.status(500)
       throw new Error(`Unable to get session cookie: ${err}`)
     })
@@ -23,21 +28,22 @@ const handler: NextApiHandler = async (req, res) => {
       throw new Error(`No user found`)
     }
 
-    const session = await auth.createSession(user.id).catch((err) => {
-      res.status(500)
-      throw new Error(`Unable to create session: ${err}`)
-    })
+    /**
+     * Create a new session token
+     */
+    const { newSessionToken} = await auth.refreshSessionToken(sessionToken)
 
-    await auth.setSessionCookie(res, session.sessionToken).catch((err) => {
+    await cookie.set(newSessionToken).catch((err) => {
       res.status(500)
       throw new Error(`Unable to set session cookie: ${err}`)
     })
 
     const accessToken = JWT.sign(user.id, user.plan)
-
+    logger.debug({accessToken})
     res.json({ accessToken })
   } catch (err) {
-    auth.removeSessionCookie(res)
+    logger.error(err)
+    // cookie.remove()
     return res.send(err)
   } finally {
     res.end()

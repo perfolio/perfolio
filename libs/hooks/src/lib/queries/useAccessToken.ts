@@ -1,30 +1,36 @@
-import { useRouter } from "next/router"
-import { useQuery } from "react-query"
+import { JWT } from "@perfolio/auth"
+import { Time } from "@perfolio/util/time"
+import { useQuery, useQueryClient } from "react-query"
 
 export const USE_ACCESS_TOKEN_QUERY_KEY = "ACCESS_TOKEN"
 
-export function useAccessToken(opts: { redirectTo: string } = { redirectTo: "/auth/sign-in" }) {
-  const router = useRouter()
+export function useAccessToken() {
+  const queryClient = useQueryClient()
+
   const { data, ...meta } = useQuery<{ accessToken: string }, Error>(
     USE_ACCESS_TOKEN_QUERY_KEY,
     async () => {
       const res = await fetch("/api/auth/refresh")
-      console.log({ res })
       if (!res.ok) {
         throw new Error(`Unable to reach token endpoint`)
       }
       return await res.json()
     },
     {
-      staleTime: 4 * 60 * 1000,
-      cacheTime: 4 * 60 * 1000,
-      onSettled(data) {
-        if (!data) {
-          console.log("settled", { data })
-          router.push(opts.redirectTo)
-        }
-      },
+      staleTime: Time.toSeconds("5m"),
+      cacheTime: Time.toSeconds("5m"),
     },
   )
+
+  /**
+   * Automatically invalidate expired tokens
+   */
+  if (data?.accessToken) {
+    const { exp } = JWT.decode(data.accessToken)
+    if (exp < Date.now() / 1000 - 10) {
+      queryClient.invalidateQueries(USE_ACCESS_TOKEN_QUERY_KEY)
+    }
+  }
+
   return { accessToken: data?.accessToken, ...meta }
 }
