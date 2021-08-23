@@ -25,8 +25,6 @@ resource "doppler_secret" "database_url_shadow" {
   name    = "SHADOW_DATABASE_URL"
   value   = var.database_urls.shadow
 }
-
-
 resource "doppler_secret" "database_url_dev_pool" {
   project = "app-perfolio"
   config  = "dev"
