@@ -19,7 +19,7 @@ export const useCreateUserSettings = () => {
       return client(accessToken).CreateUserSettings(variables)
     },
     {
-      onSuccess: () => {
+      onSettled: () => {
         queryClient.resetQueries(USE_USER_SETTINGS_QUERY_KEY)
       },
     },

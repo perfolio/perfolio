@@ -99,7 +99,6 @@ export function withAuthenticationRequired(
 ): NextPage {
   return function Wrap(props) {
     const { accessToken, isLoading } = useAccessToken()
-
     if (isLoading) {
       return <FullscreenSpinner />
     }

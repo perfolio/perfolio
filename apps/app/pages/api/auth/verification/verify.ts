@@ -2,7 +2,7 @@ import { NextApiHandler } from "next"
 import { z } from "zod"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { AuthenticationError } from "@perfolio/util/errors"
-import { Auth, JWT, seal, setCookie } from "@perfolio/auth"
+import { Auth, JWT } from "@perfolio/auth"
 /**
  * This lambda receives the email and the token entered by the user and verifies them.
  *
@@ -32,13 +32,12 @@ const handler: NextApiHandler = async (req, res) => {
       throw new AuthenticationError(`Unable to verify request: ${err}`)
     })
 
-    // If we reach this point the user is authenticated and we can create tokens
-
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) {
       res.status(500)
       throw new Error("No user found with that email")
     }
+    // If we reach this point the user is authenticated and we can create tokens
 
     const { sessionToken } = await auth.createSession(user.id).catch((err) => {
       res.status(500)
@@ -47,12 +46,10 @@ const handler: NextApiHandler = async (req, res) => {
     /**
      * Set the sessionToken as cookie
      */
-    const sealed = await seal(sessionToken).catch((err) => {
+    await auth.setSessionCookie(res, sessionToken).catch((err) => {
       res.status(500)
-      throw new Error(`Unable to seal cookie: ${err}`)
+      throw new Error(`Unable to set session cookie: ${err}`)
     })
-
-    setCookie(res, sealed)
 
     const accessToken = JWT.sign(user.id, user.plan)
 

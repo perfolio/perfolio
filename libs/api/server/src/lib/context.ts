@@ -23,7 +23,6 @@ export const context = (ctx: { req: IncomingMessage }) => {
     if (!token) {
       throw new AuthenticationError("missing authorization header")
     }
-    logger.debug({ token })
     if (token.startsWith("Bearer ")) {
       let claims: Claims
       try {
@@ -46,7 +45,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
     throw new AuthenticationError("Invalid token")
   }
 
-  const authorizeUser = async (authorizer: (claims: Claims) => Promise<void>): Promise<void> => {
+  const authorizeUser = async (authorize: (claims: Claims) => Promise<void>): Promise<void> => {
     const { claims, root } = await authenticateUser()
     if (root) {
       return
@@ -54,7 +53,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
     if (!claims) {
       throw new AuthorizationError("No claims found")
     }
-    if (!authorizer(claims)) {
+    if (!authorize(claims)) {
       throw new AuthorizationError("UserId does not match")
     }
   }

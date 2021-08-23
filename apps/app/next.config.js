@@ -6,9 +6,6 @@ module.exports = withNx({
     //  Fixes npm packages that depend on `child_process` module
     if (!isServer) {
       config.resolve.fallback.fs = false
-      config.resolve.fallback.child_process = false
-      config.resolve.fallback["mock-aws-s3"] = false
-      config.resolve.fallback["aws-sdk"] = false
     }
 
     return config

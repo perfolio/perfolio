@@ -1,7 +1,8 @@
 import { PrismaClient, User } from "@perfolio/integrations/prisma"
 import crypto from "crypto"
 import { Time } from "@perfolio/util/time"
-import bcrypt from "bcrypt"
+import { getCookie, removeCookie, seal, setCookie, unseal } from "./cookies"
+import { NextApiRequest, NextApiResponse } from "next"
 
 export type AuthService = {
   createSession: (userId: string) => Promise<{ sessionToken: string }>
@@ -9,6 +10,10 @@ export type AuthService = {
 
   createAuthenticationRequest: (email: string) => Promise<{ otp: string }>
   verifyAuthenticationRequest: (email: string, otp: string) => Promise<{ userId: string }>
+
+  setSessionCookie: (res: NextApiResponse, sessionToken: string) => Promise<void>
+  getSessionCookie: (req: NextApiRequest) => Promise<{ sessionToken: string }>
+  removeSessionCookie: (res: NextApiResponse) => void
 }
 
 export class Auth implements AuthService {
@@ -22,6 +27,18 @@ export class Auth implements AuthService {
 
   private sha256(value: string): string {
     return crypto.createHash("sha256").update(value).digest("hex")
+  }
+
+  public async setSessionCookie(res: NextApiResponse, sessionToken: string): Promise<void> {
+    const sealed = await seal(sessionToken)
+    setCookie(res, sealed)
+  }
+  public async getSessionCookie(req: NextApiRequest): Promise<{ sessionToken: string }> {
+    const cookie = getCookie(req)
+    return await unseal(cookie)
+  }
+  public removeSessionCookie(res: NextApiResponse): void {
+    removeCookie(res)
   }
 
   public async createSession(userId: string): Promise<{ sessionToken: string }> {
@@ -69,7 +86,7 @@ export class Auth implements AuthService {
     const otp = crypto.randomInt(0, 999999).toString().padStart(6, "0")
 
     const expires = new Date(Date.now() + this.authenticationRequestTTL)
-    const hashedToken = bcrypt.hashSync(otp, 10)
+    const hashedToken = this.sha256(otp)
     await this.prisma.authenticationRequest.upsert({
       where: {
         identifier: email,
@@ -104,7 +121,7 @@ export class Auth implements AuthService {
       throw new Error("VerificationRequest is no longer valid")
     }
 
-    if (!bcrypt.compareSync(otp, verificationRequest.token)) {
+    if (this.sha256(otp) !== verificationRequest.token) {
       throw new Error("Token mismatch")
     }
 
