@@ -4,6 +4,7 @@
   "mainHeaderTitle": "Overview",
   "totalAssetsLabel": "Total Value",
   "totalAssetsTooltip": "The current aggregate value of all assets added into Perfolio by you.",
+  "meanChangeLabel" : "Mean Change",
   "meanReturnLabel": "Mean Return",
   "meanChangeTooltip": "The average profit earned by your assets within a given period of time.",
   "stdDevLabel": "Standard Deviation",

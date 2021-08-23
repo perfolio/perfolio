@@ -107,7 +107,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
       ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
       : 0
 
-  const [aggregation, setAggregation] = useState<AggregateOptions>(t("RelPicked"))
+  const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
 
   const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
   const { relativeMean } = useRelativeMean(relativePortfolioHistory)
@@ -134,7 +134,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
           <Main.Header.Title title={t("mainHeaderTitle")} />
 
           <ToggleGroup<AggregateOptions>
-            options={[t("RelPicked"), t("AbsPicked")]}
+            options={[("Relative"), ("Absolute")]}
             selected={aggregation}
             setSelected={setAggregation}
           />
@@ -155,21 +155,21 @@ const App: NextPage<PageProps> = ({ translations }) => {
                         suffix: getCurrencySymbol(settings?.defaultCurrency),
                       })
                     }
-                    isLoading={aggregation === t("AbsPicked") && absoluteIsLoading}
+                    isLoading={aggregation === "Absolute" && absoluteIsLoading}
                   />
                 }
               >
-                t(totalAssetsTooltip)
+                {t("totalAssetsTooltip")}
               </Tooltip>
 
               <Tooltip
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === t("AbsPicked") ? t("AbsPicked") : t("meanReturnLabel")}
-                    value={aggregation === t("AbsPicked") ? absoluteMean : relativeMean}
+                    label={aggregation === "Absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
+                    value={aggregation === "Absolute" ? absoluteMean : relativeMean}
                     format={(n) =>
-                      aggregation === t("AbsPicked")
+                      aggregation === "Absolute"
                         ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
@@ -177,20 +177,20 @@ const App: NextPage<PageProps> = ({ translations }) => {
                         : format(n, { suffix: "%", percent: true, sign: true })
                     }
                     isLoading={
-                      (aggregation === t("AbsPicked") && absoluteIsLoading) ||
-                      (aggregation === t("RelPicked") && relativeIsLoading)
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
                     }
                   />
                 }
               >
-                t(meanChangeTooltip)
+                {t("meanChangeTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
                     isLoading={
-                      (aggregation === t("AbsPicked") && absoluteIsLoading) ||
-                      (aggregation === t("RelPicked") && relativeIsLoading)
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
                     }
                     label={t("stdDevLabel")}
                     value={relativeSTD}
@@ -198,7 +198,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   />
                 }
               >
-                t(stdDevTooltip)
+                {t("stdDevTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
@@ -206,12 +206,12 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     label={t("changeLabel")}
                     enableColor
                     isLoading={
-                      (aggregation === t("AbsPicked") && absoluteIsLoading) ||
-                      (aggregation === t("RelPicked") && relativeIsLoading)
+                      (aggregation === "Absolute" && absoluteIsLoading) ||
+                      (aggregation === "Relative" && relativeIsLoading)
                     }
-                    value={aggregation === t("AbsPicked") ? absoluteChange : relativeChange}
+                    value={aggregation === "Absolute" ? absoluteChange : relativeChange}
                     format={(n) =>
-                      aggregation === t("AbsPicked")
+                      aggregation === "Absolute"
                         ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
@@ -221,7 +221,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   />
                 }
               >
-                t(changeTooltip)
+                {t("changeTooltip")}
               </Tooltip>
             </div>
           </div>
@@ -238,7 +238,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">
-              <Heading h3>t(assetTableHeading)</Heading>
+              <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
 
             <AssetTable aggregation={aggregation} />

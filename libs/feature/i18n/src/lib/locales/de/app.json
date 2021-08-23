@@ -4,6 +4,7 @@
   "mainHeaderTitle": "Übersicht",
   "totalAssetsLabel": "Gesamtwert",
   "totalAssetsTooltip": "Der aktuelle Gesamtwert aller deiner Vermögenswerte.",
+  "meanChangeLabel" : "Durchschnittliche Veränderung",
   "meanReturnLabel": "Durchschnittsrendite",
   "meanChangeTooltip": "Der durchschnittliche Ertrag deiner Vermögenswerte innerhalb eines bestimmten Zeitraums.",
   "stdDevLabel": "Standardabweichung",
