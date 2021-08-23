@@ -9,7 +9,7 @@ import { Exchange } from "@perfolio/api/graphql"
 
 import { useExchanges, useUserSettings, useCreateUserSettings } from "@perfolio/hooks"
 import { getCurrency } from "@perfolio/util/currency"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useUser } from "@perfolio/hooks"
 /**
  * Check whether a user has settings in the database. If not they are presented
  * a modal to insert settings for the first time
@@ -20,7 +20,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     defaultExchange: z.string(),
   })
 
-  const { user } = useAuth0()
+  const { user } = useUser()
 
   const { exchanges } = useExchanges()
 
@@ -41,7 +41,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     }
     await createUserSettings.mutateAsync({
       userSettings: {
-        userId: user!.sub!,
+        userId: user!.id!,
         defaultCurrency: values.defaultCurrency,
         defaultExchange: defaultExchange.mic,
       },

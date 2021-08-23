@@ -8,7 +8,7 @@ export const createUserSettings: ResolverFn<
   Context,
   { userSettings: CreateUserSettings }
 > = async (_parent, { userSettings }, ctx, _info) => {
-  await ctx.authorizeUser((userId) => userId === userSettings.userId)
+  await ctx.authorizeUser(({ sub }) => sub === userSettings.userId)
 
   const exchange = await ctx.dataSources.iex.getExchange({
     mic: userSettings.defaultExchange,

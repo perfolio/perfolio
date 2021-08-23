@@ -27,7 +27,9 @@ export abstract class GenericError extends Error {
     super(message)
     this.name = name
 
-    const logger = new Logger()
+    const logger = new Logger({
+      name,
+    })
 
     switch (logLevel) {
       case "debug":

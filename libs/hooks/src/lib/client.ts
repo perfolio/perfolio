@@ -8,11 +8,7 @@ import { GraphQLClient } from "graphql-request"
  */
 export function client(token?: string): Sdk {
   async function requester<R, V>(doc: DocumentNode, vars?: V): Promise<R> {
-    const baseUrl = process.env.NEXT_PUBLIC_PERFOLIO_API
-    if (!baseUrl) {
-      throw new Error("NEXT_PUBLIC_PERFOLIO_API env not found")
-    }
-    const graphqlClient = new GraphQLClient(`${baseUrl}/api/graphql`)
+    const graphqlClient = new GraphQLClient("/api/graphql")
     if (token) {
       graphqlClient.setHeader("Authorization", `Bearer ${token}`)
     }
