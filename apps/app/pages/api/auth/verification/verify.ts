@@ -32,10 +32,9 @@ const handler: NextApiHandler = async (req, res) => {
       throw new AuthenticationError(`Unable to verify request: ${err}`)
     })
 
-    const user = await prisma.user.findUnique({ where: { email } })
+    let user = await prisma.user.findUnique({ where: { email } })
     if (!user) {
-      res.status(500)
-      throw new Error("No user found with that email")
+      user = await prisma.user.create({ data: { email } })
     }
     // If we reach this point the user is authenticated and we can create tokens
 
