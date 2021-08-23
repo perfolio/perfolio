@@ -7,7 +7,7 @@ export const getUserSettings: ResolverFn<
   Context,
   { userId: string }
 > = async (_parent, { userId }, ctx, _info) => {
-  await ctx.authorizeUser((uid) => uid === userId)
+  await ctx.authorizeUser(({ sub }) => sub === userId)
 
   return await ctx.dataSources.prisma.userSettings.findUnique({ where: { userId } })
 }

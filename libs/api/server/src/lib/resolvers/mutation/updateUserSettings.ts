@@ -7,7 +7,7 @@ export const updateUserSettings: ResolverFn<
   Context,
   { userSettings: UpdateUserSettings }
 > = async (_parent, { userSettings }, ctx, _info) => {
-  await ctx.authorizeUser((userId) => userId === userSettings.userId)
+  await ctx.authorizeUser(({ sub }) => sub === userSettings.userId)
 
   let exchange: Exchange | null = null
   if (userSettings.defaultExchange) {

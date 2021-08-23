@@ -8,7 +8,7 @@ export const createTransaction: ResolverFn<
   Context,
   { transaction: CreateTransaction }
 > = async (_parent, { transaction }, ctx, _info) => {
-  await ctx.authorizeUser((userId) => userId === transaction.userId)
+  await ctx.authorizeUser(({ sub }) => sub === transaction.userId)
 
   const userSettings = await ctx.dataSources.prisma.userSettings.findUnique({
     where: { userId: transaction.userId },

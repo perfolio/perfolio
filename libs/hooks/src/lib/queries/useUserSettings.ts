@@ -1,18 +1,19 @@
 import { useQuery } from "react-query"
 import { GetUserSettingsQuery } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { useAuth0 } from "@auth0/auth0-react"
-
+import { useAccessToken } from "./useAccessToken"
+import { useUser } from "./useUser"
 export const USE_USER_SETTINGS_QUERY_KEY = "getUserSettings"
 
 export const useUserSettings = () => {
-  const { getAccessTokenSilently, user } = useAuth0()
+  const { user } = useUser()
+  const { accessToken } = useAccessToken()
 
   const { data, ...meta } = useQuery<GetUserSettingsQuery, Error>(
     USE_USER_SETTINGS_QUERY_KEY,
-    async () => client(await getAccessTokenSilently()).getUserSettings({ userId: user!.sub! }),
+    async () => client(accessToken).getUserSettings({ userId: user.id }),
     {
-      enabled: !!user?.sub,
+      enabled: !!user.id && !!accessToken,
     },
   )
 

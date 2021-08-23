@@ -3,14 +3,14 @@ import { MobileNavLink } from "./mobileNavLink"
 import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
 import { DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
-import { Link, Logo } from "@perfolio/ui/components"
+import { Link, Logo, Icon } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useLogout } from "@perfolio/hooks"
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const { logout } = useAuth0()
+  const logout = useLogout()
   return (
     <nav className="flex items-center justify-between w-full">
       <NextLink href="/">
@@ -54,8 +54,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <Link size="lg" prefix={<DotsVerticalIcon />} href="/" />
             </li>
             <li>
-              <button className="pb-1 xl:ml-6 2xl:ml-9" onClick={() => logout()}>
-                <LogoutIcon className="w-6 h-6 text-white" />
+              <button className="focus:outline-none" onClick={() => logout.mutate()}>
+                <Icon size="sm" label="Sign out">
+                  <LogoutIcon />
+                </Icon>
               </button>
             </li>
           </ul>

@@ -5,10 +5,10 @@ import {
 } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { USE_TRANSACTIONS_QUERY_KEY } from "../queries/useTransactions"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAccessToken } from "../queries/useAccessToken"
 
 export const useDeleteTransaction = () => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { accessToken } = useAccessToken()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
     DeleteTransactionMutation,
@@ -16,7 +16,7 @@ export const useDeleteTransaction = () => {
     DeleteTransactionMutationVariables
   >(
     async (variables) => {
-      return client(await getAccessTokenSilently()).DeleteTransaction(variables)
+      return client(accessToken).DeleteTransaction(variables)
     },
     {
       onSuccess: () => {

@@ -9,7 +9,7 @@ export const getRelativePortfolioHistory = async (
   userId: string,
   since?: number,
 ): Promise<ValueAtTime[]> => {
-  await ctx.authorizeUser((uid) => uid === userId)
+  await ctx.authorizeUser(({ sub }) => sub === userId)
 
   const assetHistory = await getPortfolioHistory(ctx, userId)
   const key = new Key({ v: 2, resolver: "getRelativePortfolioHistory", assetHistory, since })

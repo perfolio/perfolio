@@ -9,7 +9,7 @@ export const getPortfolioHistory = async (
   ctx: Context,
   userId: string,
 ): Promise<AssetHistoryWithoutAsset[]> => {
-  await ctx.authorizeUser((uid) => uid === userId)
+  await ctx.authorizeUser(({ sub }) => sub === userId)
 
   const userSettings = await ctx.dataSources.prisma.userSettings.findUnique({ where: { userId } })
   const mic = userSettings?.defaultExchangeMic

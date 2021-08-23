@@ -7,7 +7,6 @@ import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/api/graphql"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 import { useToaster } from "@perfolio/toaster"
 import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
@@ -139,4 +138,4 @@ const TransactionsPage: NextPage = () => {
   )
 }
 
-export default withAuthenticationRequired(TransactionsPage)
+export default TransactionsPage

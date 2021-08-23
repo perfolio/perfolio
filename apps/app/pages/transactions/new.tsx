@@ -14,7 +14,7 @@ import { CheckIcon } from "@heroicons/react/outline"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
+import { useUser } from "@perfolio/hooks"
 
 const validation = z.object({
   isin: z.string(),
@@ -27,7 +27,7 @@ const validation = z.object({
  * / page.
  */
 const NewTransactionPage: NextPage = () => {
-  const { user } = useAuth0()
+  const { user } = useUser()
   const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -112,7 +112,7 @@ const NewTransactionPage: NextPage = () => {
                       ctx,
                       async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
-                          userId: user!.sub!,
+                          userId: user!.id!,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
@@ -174,4 +174,4 @@ const NewTransactionPage: NextPage = () => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(NewTransactionPage)
+export default NewTransactionPage
