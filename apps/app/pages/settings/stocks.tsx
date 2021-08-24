@@ -12,6 +12,7 @@ import { useUser, useUserSettings, useExchanges, useUpdateUserSettings } from "@
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { withAuthenticationRequired } from "@perfolio/app/middleware"
+import { AuthenticationError } from "@perfolio/util/errors"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -91,6 +92,9 @@ const SettingsPage: NextPage = () => {
 
   const updateSettings = useUpdateUserSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
+    if (!user) {
+      throw new AuthenticationError("User is undefined")
+    }
     await updateSettings.mutateAsync({
       userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency },
     })
@@ -101,6 +105,9 @@ const SettingsPage: NextPage = () => {
     defaultExchange: z.string(),
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
+    if (!user) {
+      throw new AuthenticationError("User is undefined")
+    }
     await updateSettings.mutateAsync({
       userSettings: {
         userId: user.id,

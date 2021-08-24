@@ -843,6 +843,32 @@
           }
         }
       }
+    },
+    "app-e2e": {
+      "root": "apps/app-e2e",
+      "sourceRoot": "apps/app-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/app-e2e/cypress.json",
+            "tsConfig": "apps/app-e2e/tsconfig.e2e.json",
+            "devServerTarget": "app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/app-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
     }
   }
 }

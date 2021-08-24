@@ -31,7 +31,6 @@ export const Toast: React.FC<ToastProps> = ({
   const [visible, setVisible] = useState(true)
   const remove = () => setVisible(false)
   useEffect(() => {
-    console.log({ ttl })
     if (ttl <= 0) {
       return
     }

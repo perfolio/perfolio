@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Perfolio</title>
       </Head>
+
       <IdProvider>
         <ToastProvider>
           <QueryClientProvider client={PersistendQueryClient()}>

@@ -18,13 +18,17 @@ const handler: NextApiHandler = async (req, res) => {
       res.setHeader("Allow", "POST")
       return res.end()
     }
-
-    const auth = new Auth(new PrismaClient())
+    const prisma = new PrismaClient()
+    const auth = new Auth(prisma)
 
     const { email } = await validation.parseAsync(req.body).catch((err) => {
       res.status(400)
       throw err
     })
+    const user = await prisma.user.findUnique({ where: { email } })
+    if (!user) {
+      await prisma.user.create({ data: { email } })
+    }
     const { otp } = await auth.createAuthenticationRequest(email).catch((err) => {
       res.status(500)
       throw new Error(`Unable to create session in database: ${err}`)

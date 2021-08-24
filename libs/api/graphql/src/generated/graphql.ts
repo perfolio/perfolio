@@ -192,6 +192,8 @@ export type Query = {
   getStockPricesAtExchange: Array<ValueAtTime>
   /** Return all transactions of a user */
   getTransactions: Array<Transaction>
+  /** Load a user by their id */
+  getUser?: Maybe<User>
   /** Return the user's settings */
   getUserSettings?: Maybe<UserSettings>
   /**
@@ -235,6 +237,11 @@ export type QueryGetStockPricesAtExchangeArgs = {
 
 /** Available queries */
 export type QueryGetTransactionsArgs = {
+  userId: Scalars["ID"]
+}
+
+/** Available queries */
+export type QueryGetUserArgs = {
   userId: Scalars["ID"]
 }
 
@@ -297,6 +304,17 @@ export type UpdateUserSettings = {
   defaultExchange?: Maybe<Scalars["String"]>
   /** The unique user id */
   userId: Scalars["ID"]
+}
+
+/** A user of perfol.io */
+export type User = {
+  __typename?: "User"
+  /** A unique identifier: stored as uuid */
+  id: Scalars["ID"]
+  /** The user's email */
+  email: Scalars["String"]
+  /** The user's settings */
+  settings?: Maybe<UserSettings>
 }
 
 /** Settings that can be customized by the user such as preferences as well as defaults */
@@ -448,6 +466,7 @@ export type ResolversTypes = ResolversObject<{
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
   Transaction: ResolverTypeWrapper<Transaction>
   UpdateUserSettings: UpdateUserSettings
+  User: ResolverTypeWrapper<User>
   UserSettings: ResolverTypeWrapper<UserSettings>
   ValueAndQuantityAtTime: ResolverTypeWrapper<ValueAndQuantityAtTime>
   ValueAtTime: ResolverTypeWrapper<ValueAtTime>
@@ -474,6 +493,7 @@ export type ResolversParentTypes = ResolversObject<{
   Timestamp: Scalars["Timestamp"]
   Transaction: Transaction
   UpdateUserSettings: UpdateUserSettings
+  User: User
   UserSettings: UserSettings
   ValueAndQuantityAtTime: ValueAndQuantityAtTime
   ValueAtTime: ValueAtTime
@@ -623,6 +643,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetTransactionsArgs, "userId">
   >
+  getUser?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetUserArgs, "userId">
+  >
   getUserSettings?: Resolver<
     Maybe<ResolversTypes["UserSettings"]>,
     ParentType,
@@ -668,6 +694,16 @@ export type TransactionResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
+export type UserResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"],
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  settings?: Resolver<Maybe<ResolversTypes["UserSettings"]>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}>
+
 export type UserSettingsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["UserSettings"] = ResolversParentTypes["UserSettings"],
@@ -709,6 +745,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   SearchResult?: SearchResultResolvers<ContextType>
   Timestamp?: GraphQLScalarType
   Transaction?: TransactionResolvers<ContextType>
+  User?: UserResolvers<ContextType>
   UserSettings?: UserSettingsResolvers<ContextType>
   ValueAndQuantityAtTime?: ValueAndQuantityAtTimeResolvers<ContextType>
   ValueAtTime?: ValueAtTimeResolvers<ContextType>

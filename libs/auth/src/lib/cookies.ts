@@ -1,78 +1,67 @@
 import { serialize } from "cookie"
-import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next"
 import { Time } from "@perfolio/util/time"
 import Iron from "@hapi/iron"
 import { env } from "@perfolio/util/env"
 
-const TOKEN_NAME = "PERFOLIO_SESSION"
-const MAX_AGE = Time.toSeconds("7d") // 7 hours
+export class SessionCookie {
+  private readonly name = "PERFOLIO_SESSION"
+  private readonly maxAge = Time.toSeconds("7d")
+  private cookies: Record<string, string>
+  private setCookie: (cookie: string) => void
 
-/**
- * Save a cookie to the user's browser.
- */
-export function setCookie(res: NextApiResponse, value: string): void {
-  const cookie = serialize(TOKEN_NAME, value, {
-    /**
-     * HTTP-ONLY cookies can only be read server side.
-     */
-    httpOnly: true,
-    maxAge: MAX_AGE,
-    path: "/",
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  })
-
-  res.setHeader("Set-Cookie", cookie)
-}
-
-/**
- * Delete a cookie from the user's browser.
- */
-export function removeCookie(res: NextApiResponse): void {
-  const cookie = serialize(TOKEN_NAME, "", {
-    httpOnly: true,
-    maxAge: -1,
-    path: "/",
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  })
-  res.setHeader("Set-Cookie", cookie)
-}
-
-export const ERR_TOKEN_NOT_FOUND = new Error("No token is found in your cookies")
-
-/**
- * Overload for getServersideProps.
- */
-export function getCookie(ctx: GetServerSidePropsContext): string
-/**
- * Overload for api routes.
- */
-export function getCookie(req: NextApiRequest): string
-/**
- * Load a fauna token from cookies.
- * Works with next api routes and getServerSideProps.
- *
- * @throws ERR_TOKEN_NOT_FOUND.
- */
-export function getCookie(arg0: GetServerSidePropsContext | NextApiRequest): string {
-  const cookies: Record<string, string> =
-    "cookies" in arg0
-      ? (arg0 as NextApiRequest).cookies
-      : (arg0 as GetServerSidePropsContext).req.cookies
-
-  const token = cookies[TOKEN_NAME]
-  if (!token) {
-    throw ERR_TOKEN_NOT_FOUND
+  constructor(
+    req: { cookies: Record<string, string> },
+    res: { setHeader: (name: string, value: string) => void },
+  ) {
+    this.cookies = req.cookies
+    this.setCookie = (cookie: string) => res.setHeader("Set-Cookie", cookie)
   }
-  return token
-}
 
-export async function seal(sessionToken: string): Promise<string> {
-  return await Iron.seal({ sessionToken }, env.require("COOKIE_SECRET"), Iron.defaults)
-}
-export async function unseal(cookie: string): Promise<{ sessionToken: string }> {
-  return (await Iron.unseal(cookie, env.require("COOKIE_SECRET"), Iron.defaults)) as {
-    sessionToken: string
+  /**
+   * Save a cookie to the user's browser.
+   */
+  async set(sessionToken: string): Promise<void> {
+    const cookie = serialize(this.name, await this.seal(sessionToken), {
+      /**
+       * HTTP-ONLY cookies can only be read server side.
+       */
+      httpOnly: true,
+      maxAge: this.maxAge,
+      path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    })
+    console.log({ cookie })
+
+    this.setCookie(cookie)
+  }
+
+  /**
+   * Delete a cookie from the user's browser.
+   */
+  public remove(): void {
+    const cookie = serialize(this.name, "", {
+      httpOnly: true,
+      maxAge: -1,
+      path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    })
+    this.setCookie(cookie)
+  }
+
+  public async getSessionToken(): Promise<string> {
+    const cookie = this.cookies[this.name]
+    if (!cookie) {
+      throw new Error(`No session cookie found`)
+    }
+    return await this.unseal(cookie)
+  }
+
+  private async seal(sessionToken: string): Promise<string> {
+    return await Iron.seal(sessionToken, env.require("COOKIE_SECRET"), Iron.defaults)
+  }
+  private async unseal(cookie: string): Promise<string> {
+    return (await Iron.unseal(cookie, env.require("COOKIE_SECRET"), Iron.defaults)) as string
   }
 }

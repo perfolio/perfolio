@@ -95,6 +95,7 @@
     "@graphql-codegen/typescript-resolvers": "1.19.5",
     "@lhci/cli": "^0.8.0",
     "@nrwl/cli": "12.6.5",
+    "@nrwl/cypress": "^12.7.2",
     "@nrwl/eslint-plugin-nx": "12.6.5",
     "@nrwl/jest": "12.6.5",
     "@nrwl/linter": "12.6.5",
