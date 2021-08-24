@@ -17,6 +17,7 @@ export function useAccessToken() {
       return await res.json()
     },
     {
+      retry: false,
       cacheTime: Time.toSeconds("4m"), // 1 minute less than the jwt expiry time
       staleTime: Time.toSeconds("4m"),
     },

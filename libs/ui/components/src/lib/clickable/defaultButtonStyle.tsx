@@ -45,11 +45,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
       `}
     >
       {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
-      {loading ? (
-        <Loading color={kind === "primary" ? "text-white" : undefined} />
-      ) : (
-        <span className={text(size)}>{children}</span>
-      )}
+      {loading ? <Loading /> : <span className={text(size)}>{children}</span>}
       {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
     </div>
   )

@@ -3,11 +3,14 @@ import { NextPage } from "next"
 import { Logo } from "@perfolio/ui/components"
 import { RequestForm, VerifyForm } from "@perfolio/app/components"
 import { useRouter } from "next/router"
-import { GetServerSideProps } from "next"
-import { SessionCookie } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/hooks"
 const SigninPage: NextPage = () => {
   const [email, setEmail] = useState<undefined | string>(undefined)
   const router = useRouter()
+  const { accessToken } = useAccessToken()
+  if (accessToken) {
+    router.push("/")
+  }
 
   const adminEmail = router.query["email"]
   const adminToken = router.query["token"]
@@ -69,22 +72,3 @@ const SigninPage: NextPage = () => {
 }
 
 export default SigninPage
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const cookie = new SessionCookie(req, res)
-
-  /**
-   * If a valid cookie is found we redirect to `/` where an access token is fetched
-   */
-  try {
-    const sessionToken = await cookie.getSessionToken()
-    console.log({ sessionToken })
-    return {
-      redirect: { destination: "/" },
-
-      props: {},
-    }
-  } catch (err) {
-    console.error(err)
-    return { props: {} }
-  }
-}
