@@ -37,6 +37,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         rounded
         items-center
         whitespace-nowrap
+        
         justify-${justify}
         ${shadow(kind, size)}
         ${colors(kind)}
@@ -104,6 +105,9 @@ const text = (size: Size): string => {
 const shadow = (kind: Kind, size: Size): string => {
   if (kind === "plain") {
     return ""
+  }
+  if (kind === "cta") {
+    return "shadow-cta hover:shadow-lg"
   }
 
   return {
