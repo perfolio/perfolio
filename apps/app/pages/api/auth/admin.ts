@@ -2,7 +2,9 @@ import { NextApiHandler } from "next"
 import { z } from "zod"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { AuthenticationError } from "@perfolio/util/errors"
-import { Auth, JWT, SessionCookie } from "@perfolio/auth"
+import { Auth, SessionCookie } from "@perfolio/auth"
+import { env } from "@perfolio/util/env"
+import { Logger } from "tslog"
 /**
  * This lambda receives the email and the token entered by the user and verifies them.
  *
@@ -12,7 +14,7 @@ import { Auth, JWT, SessionCookie } from "@perfolio/auth"
 
 const validation = z.object({
   email: z.string().email(),
-  otp: z.string().regex(/^(\d){6}$/),
+  token: z.string().uuid(),
 })
 
 const handler: NextApiHandler = async (req, res) => {
@@ -21,29 +23,23 @@ const handler: NextApiHandler = async (req, res) => {
     res.setHeader("Allow", "POST")
     return res.end()
   }
+  const logger = new Logger({ name: "api/auth/admin" })
   try {
-    const { email, otp } = await validation.parseAsync(req.body).catch((err) => {
+    const { email, token } = await validation.parseAsync(JSON.parse(req.body)).catch((err) => {
       res.status(400)
       throw err
     })
+
+    if (token !== env.require("AUTH_ROOT_TOKEN")) {
+      throw new AuthenticationError("Wrong token")
+    }
     const prisma = new PrismaClient()
     const auth = new Auth(prisma)
     const cookie = new SessionCookie(req, res)
-    await auth.verifyAuthenticationRequest(email, otp).catch((err) => {
-      throw new AuthenticationError(`Unable to verify request: ${err}`)
-    })
 
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) {
       throw new Error(`No user found`)
-    }
-    if (!user.emailVerified) {
-      await prisma.user.update({
-        where: { email },
-        data: {
-          emailVerified: new Date(),
-        },
-      })
     }
 
     await prisma.user.update({
@@ -67,10 +63,9 @@ const handler: NextApiHandler = async (req, res) => {
       throw new Error(`Unable to set session cookie: ${err}`)
     })
 
-    const accessToken = JWT.sign(user.id, user.plan)
-
-    res.json({ accessToken })
+    res.send("ok")
   } catch (err) {
+    logger.error(err)
     return res.send(err)
   } finally {
     res.end()

@@ -7,6 +7,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures=["referentialActions"]
 }
 
 enum Plan {
@@ -16,28 +17,32 @@ enum Plan {
 
 model Session {
   id           String   @id @default(uuid())
-  userId       String   @unique
+  userId       String   
   expires      DateTime
   // sha256 of session token
   sessionToken String   @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String?
-  email     String?  @unique
-  session   Session?
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  session       Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  lastLogin DateTime?
 
   stripeCustomerId String? @unique
 
   payedUntil DateTime @default(now())
   plan       Plan     @default(TRIAL)
+
+  settings UserSettings?
 }
 
 model AuthenticationRequest {
@@ -66,7 +71,7 @@ model Transaction {
   volume     Float
   value      Float
 
-  // user User @relation(fields: [userId], references:[id])
+  // user User @relation(fields: [userId], references:[id],onDelete: Cascade)
   userId String
 }
 
@@ -82,7 +87,9 @@ model UserSettings {
 
   defaultCurrency    Currency
   defaultExchangeMic String
+  user               User @relation(fields: [userId], references: [id],onDelete: Cascade)
 }
+
 
 model StockMap {
   ticker String @id

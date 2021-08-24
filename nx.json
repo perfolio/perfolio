@@ -116,6 +116,10 @@
     },
     "util-time": {
       "tags": []
+    },
+    "app-e2e": {
+      "tags": [],
+      "implicitDependencies": []
     }
   },
   "targetDependencies": {

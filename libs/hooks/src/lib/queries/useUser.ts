@@ -9,9 +9,12 @@ export const useUser = () => {
   const { accessToken, ...meta } = useAccessToken()
 
   if (!accessToken) {
-    return { user: { id: "" }, ...meta }
+    return { user: null, ...meta }
   }
-  const claims = JWT.decode(accessToken)
-
-  return { user: { id: claims.sub }, ...meta }
+  try {
+    const claims = JWT.decode(accessToken)
+    return { user: { id: claims.sub }, ...meta }
+  } catch (err) {
+    return { user: null, ...meta }
+  }
 }

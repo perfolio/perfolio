@@ -1,19 +1,14 @@
 import { PrismaClient, User } from "@perfolio/integrations/prisma"
 import crypto from "crypto"
 import { Time } from "@perfolio/util/time"
-import { getCookie, removeCookie, seal, setCookie, unseal } from "./cookies"
-import { NextApiRequest, NextApiResponse } from "next"
 
 export type AuthService = {
   createSession: (userId: string) => Promise<{ sessionToken: string }>
+  refreshSessionToken: (sessionToken: string) => Promise<{ newSessionToken: string }>
   getUserFromSessionToken: (sessionToken: string) => Promise<User>
 
   createAuthenticationRequest: (email: string) => Promise<{ otp: string }>
   verifyAuthenticationRequest: (email: string, otp: string) => Promise<{ userId: string }>
-
-  setSessionCookie: (res: NextApiResponse, sessionToken: string) => Promise<void>
-  getSessionCookie: (req: NextApiRequest) => Promise<{ sessionToken: string }>
-  removeSessionCookie: (res: NextApiResponse) => void
 }
 
 export class Auth implements AuthService {
@@ -29,41 +24,34 @@ export class Auth implements AuthService {
     return crypto.createHash("sha256").update(value).digest("hex")
   }
 
-  public async setSessionCookie(res: NextApiResponse, sessionToken: string): Promise<void> {
-    const sealed = await seal(sessionToken)
-    setCookie(res, sealed)
-  }
-  public async getSessionCookie(req: NextApiRequest): Promise<{ sessionToken: string }> {
-    const cookie = getCookie(req)
-    return await unseal(cookie)
-  }
-  public removeSessionCookie(res: NextApiResponse): void {
-    removeCookie(res)
+  public async refreshSessionToken(sessionToken: string): Promise<{ newSessionToken: string }> {
+    const newSessionToken = crypto.randomBytes(128).toString("hex")
+    const newHashedSessionToken = this.sha256(sessionToken)
+
+    await this.prisma.session.update({
+      where: { sessionToken: this.sha256(sessionToken) },
+      data: {
+        sessionToken: newHashedSessionToken,
+      },
+    })
+    return { newSessionToken }
   }
 
   public async createSession(userId: string): Promise<{ sessionToken: string }> {
     const sessionToken = crypto.randomBytes(128).toString("hex")
     const hashedSessionToken = this.sha256(sessionToken)
 
-    // Delete all existing sessions
-
-    const expires = new Date(Date.now() + this.sessionTTL)
-
-    await this.prisma.session.upsert({
-      where: { userId },
-      update: {
-        sessionToken: hashedSessionToken,
-        expires,
-      },
-      create: {
+    await this.prisma.session.create({
+      data: {
         userId,
         sessionToken: hashedSessionToken,
-        expires,
+        expires: new Date(Date.now() + this.sessionTTL),
       },
     })
 
     return { sessionToken }
   }
+
   public async getUserFromSessionToken(sessionToken: string): Promise<User> {
     const hashedSessionToken = this.sha256(sessionToken)
     // Delete all existing sessions
@@ -77,6 +65,7 @@ export class Auth implements AuthService {
     }
 
     if (session.expires.getTime() < Date.now()) {
+      await this.prisma.session.delete({ where: { id: session.id } })
       throw new Error("Session expired")
     }
     return session.user

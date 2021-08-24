@@ -25,9 +25,8 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   const { exchanges } = useExchanges()
 
   const { settings, isLoading: userSettingsLoading } = useUserSettings()
-
   const createUserSettings = useCreateUserSettings()
-  const requiresOnboarding = !userSettingsLoading && settings === null
+  const requiresOnboarding = !!user && !userSettingsLoading && !settings
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
