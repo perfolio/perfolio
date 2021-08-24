@@ -37,6 +37,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         rounded
         items-center
         whitespace-nowrap
+        
         justify-${justify}
         ${shadow(kind, size)}
         ${colors(kind)}
@@ -45,11 +46,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
       `}
     >
       {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
-      {loading ? (
-        <Loading color={kind === "primary" ? "text-white" : undefined} />
-      ) : (
-        <span className={text(size)}>{children}</span>
-      )}
+      {loading ? <Loading /> : <span className={text(size)}>{children}</span>}
       {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
     </div>
   )
@@ -108,6 +105,9 @@ const text = (size: Size): string => {
 const shadow = (kind: Kind, size: Size): string => {
   if (kind === "plain") {
     return ""
+  }
+  if (kind === "cta") {
+    return "shadow-cta hover:shadow-lg"
   }
 
   return {

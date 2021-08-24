@@ -51,6 +51,10 @@ module.exports = {
     },
 
     extend: {
+      boxShadow: {
+        cta: "0 10px 20px -5px rgba(245, 88, 0, 0.4)",
+        ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
+      },
       fontFamily: {
         sans: ["Montserrat", ...defaultTheme.fontFamily.sans],
         system: defaultTheme.fontFamily.sans,

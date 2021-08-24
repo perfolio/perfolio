@@ -28,11 +28,10 @@ const handler: NextApiHandler = async (req, res) => {
       throw new Error(`No user found`)
     }
 
-    // /**
-    //  * Create a new session token
-    //  */
-    // const { newSessionToken} = await auth.refreshSessionToken(sessionToken)
-
+    /**
+     * Create a new session token
+     */
+    // const { newSessionToken } = await auth.refreshSessionToken(sessionToken)
     // await cookie.set(newSessionToken).catch((err) => {
     //   res.status(500)
     //   throw new Error(`Unable to set session cookie: ${err}`)
@@ -41,7 +40,7 @@ const handler: NextApiHandler = async (req, res) => {
     const accessToken = JWT.sign(user.id, user.plan)
     res.json({ accessToken })
   } catch (err) {
-    logger.debug(err)
+    logger.debug(err.message)
     cookie.remove()
     return res.send(err)
   } finally {

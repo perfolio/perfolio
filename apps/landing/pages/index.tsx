@@ -39,7 +39,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
             <HeroSection />
 
-            <div className="hidden max-w-screen-xl border rounded shadow-2xl lg:block">
+            <div className="hidden max-w-screen-xl border rounded border-gray-50 shadow-ambient lg:block">
               <Image
                 src="/img/analytics_preview.png"
                 alt="Analytics Preview"

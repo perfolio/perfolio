@@ -57,7 +57,7 @@ const KPI = ({
   return (
     <div className="flex justify-center">
       <div className="flex flex-col space-y-3">
-        <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm">
+        <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm whitespace-nowrap">
           {label}
         </h4>
         <span
