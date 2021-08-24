@@ -102,7 +102,6 @@ export function withAuthenticationRequired(
     if (isLoading) {
       return <FullscreenSpinner />
     }
-    console.log({ accessToken, isLoading })
     if (!accessToken) {
       window.location.assign(opts?.returnTo ?? "/auth/sign-in")
     }
