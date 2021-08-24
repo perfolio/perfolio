@@ -6,7 +6,6 @@ import { JWT } from "@perfolio/auth"
  * @returns
  */
 export const useUser = () => {
-  
   const { accessToken, ...meta } = useAccessToken()
 
   if (!accessToken) {

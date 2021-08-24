@@ -1,5 +1,4 @@
 import { serialize } from "cookie"
-import { NextApiRequest, NextApiResponse } from "next"
 import { Time } from "@perfolio/util/time"
 import Iron from "@hapi/iron"
 import { env } from "@perfolio/util/env"
@@ -7,12 +6,15 @@ import { env } from "@perfolio/util/env"
 export class SessionCookie {
   private readonly name = "PERFOLIO_SESSION"
   private readonly maxAge = Time.toSeconds("7d")
-  private req: NextApiRequest
-  private res: NextApiResponse
+  private cookies: Record<string, string>
+  private setCookie: (cookie: string) => void
 
-  constructor(req: NextApiRequest, res: NextApiResponse) {
-    this.req = req
-    this.res = res
+  constructor(
+    req: { cookies: Record<string, string> },
+    res: { setHeader: (name: string, value: string) => void },
+  ) {
+    this.cookies = req.cookies
+    this.setCookie = (cookie: string) => res.setHeader("Set-Cookie", cookie)
   }
 
   /**
@@ -29,8 +31,9 @@ export class SessionCookie {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     })
+    console.log({ cookie })
 
-    this.res.setHeader("Set-Cookie", cookie)
+    this.setCookie(cookie)
   }
 
   /**
@@ -44,14 +47,11 @@ export class SessionCookie {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     })
-    this.res.setHeader("Set-Cookie", cookie)
+    this.setCookie(cookie)
   }
 
   public async getSessionToken(): Promise<string> {
-    const cookies = this.req.cookies
-    console.log({cookies})
-
-    const cookie = cookies[this.name]
+    const cookie = this.cookies[this.name]
     if (!cookie) {
       throw new Error(`No session cookie found`)
     }

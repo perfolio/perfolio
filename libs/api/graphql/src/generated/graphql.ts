@@ -192,6 +192,7 @@ export type Query = {
   getStockPricesAtExchange: Array<ValueAtTime>
   /** Return all transactions of a user */
   getTransactions: Array<Transaction>
+  /** Load a user by their id */
   getUser?: Maybe<User>
   /** Return the user's settings */
   getUserSettings?: Maybe<UserSettings>
@@ -305,10 +306,14 @@ export type UpdateUserSettings = {
   userId: Scalars["ID"]
 }
 
+/** A user of perfol.io */
 export type User = {
   __typename?: "User"
+  /** A unique identifier: stored as uuid */
   id: Scalars["ID"]
+  /** The user's email */
   email: Scalars["String"]
+  /** The user's settings */
   settings?: Maybe<UserSettings>
 }
 

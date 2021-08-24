@@ -67,4 +67,8 @@ export class JWT {
 
     return claims.exp ?? 0 - Math.floor(Date.now() / 1000)
   }
+
+  public static isExpired(token: string): boolean {
+    return JWT.expiresIn(token) <= 0
+  }
 }

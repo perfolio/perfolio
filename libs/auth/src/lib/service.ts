@@ -51,7 +51,7 @@ export class Auth implements AuthService {
 
     return { sessionToken }
   }
- 
+
   public async getUserFromSessionToken(sessionToken: string): Promise<User> {
     const hashedSessionToken = this.sha256(sessionToken)
     // Delete all existing sessions

@@ -200,10 +200,23 @@ input CreateTransaction {
   mic: String
 }
 
+"""
+A user of perfol.io
+"""
 type User {
+  """
+  A unique identifier: stored as uuid
+  """
   id: ID!
+
+  """
+  The user's email
+  """
   email: String!
 
+  """
+  The user's settings
+  """
   settings: UserSettings
 }
 
@@ -461,9 +474,10 @@ type Query {
     userId: ID!
   ): [Transaction!]!
 
-
-
-getUser(userId: ID!): User
+  """
+  Load a user by their id
+  """
+  getUser("The user's id" userId: ID!): User
   """
   Return the user's settings
   """

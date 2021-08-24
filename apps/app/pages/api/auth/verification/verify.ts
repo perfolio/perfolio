@@ -28,7 +28,7 @@ const handler: NextApiHandler = async (req, res) => {
     })
     const prisma = new PrismaClient()
     const auth = new Auth(prisma)
-    const cookie = new SessionCookie(req,res)
+    const cookie = new SessionCookie(req, res)
     await auth.verifyAuthenticationRequest(email, otp).catch((err) => {
       throw new AuthenticationError(`Unable to verify request: ${err}`)
     })

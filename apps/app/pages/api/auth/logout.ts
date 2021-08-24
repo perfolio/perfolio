@@ -5,7 +5,6 @@ import { SessionCookie } from "@perfolio/auth"
  */
 
 const handler: NextApiHandler = async (req, res) => {
- 
   new SessionCookie(req, res).remove()
   res.redirect("/")
   res.end()
