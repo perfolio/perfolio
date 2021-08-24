@@ -10,25 +10,15 @@ export function useAccessToken() {
   const { data, ...meta } = useQuery<{ accessToken: string }, Error>(
     USE_ACCESS_TOKEN_QUERY_KEY,
     async () => {
-      /**
-       * If the cached access token has not expired yet we can simply return it
-       * without fetching a new one
-       */
-      const cached = queryClient.getQueryData<{ accessToken: string }>(USE_ACCESS_TOKEN_QUERY_KEY)
-
-      if (cached && !JWT.isExpired(cached.accessToken)) {
-        return cached
-      }
-
       const res = await fetch("/api/auth/refresh")
       if (!res.ok) {
         throw new Error(`Unable to reach token endpoint`)
       }
-      const { accessToken } = (await res.json()) as { accessToken: string }
-      return { accessToken }
+      return await res.json()
     },
     {
-      cacheTime: Time.toSeconds("5m"),
+      cacheTime: Time.toSeconds("4m"), // 1 minute less than the jwt expiry time
+      staleTime: Time.toSeconds("4m"),
     },
   )
 
