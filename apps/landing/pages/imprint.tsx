@@ -55,9 +55,7 @@ export const Imprint: NextPage = () => {
             <br />
             <span>
               Instagram:{" "}
-              <a href="https://www.instagram.com/perfol.io/">
-                https://www.instagram.com/perfol.io/
-              </a>
+              <a href="https://www.instagram.com/perfol.io">https://www.instagram.com/perfol.io</a>
             </span>
             <br />
             <span>
