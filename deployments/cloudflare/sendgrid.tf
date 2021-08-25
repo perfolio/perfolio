@@ -5,7 +5,7 @@ resource "cloudflare_record" "url801-perfol-io" {
   zone_id = var.config.zone_id
 }
 
-resource "cloudflare_record" "23043673-perfol-io" {
+resource "cloudflare_record" "_23043673-perfol-io" {
   name    = "23043673.perfol.io"
   value   = "sendgrid.net"
   type    = "CNAME"
