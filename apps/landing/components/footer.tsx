@@ -51,7 +51,7 @@ const socialMedia = () => {
 export const Footer = () => {
   return (
     <footer className="border-t border-gray-300 bg-gradient-to-t from-white to-gray-50 ">
-      <div className="container flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800">
+      <div className="flex flex-col items-center justify-center px-8 pt-12 pb-8 mx-auto space-y-8 text-gray-800 lg:mx-8 xl:mx-16">
         <div className="flex items-center justify-between w-full md:flex-col md:space-y-8">
           <Link href="/</div>">
             <a className="text-gray-900" aria-label="Home">
