@@ -5,7 +5,7 @@ export async function send(to: string, subject: string, body: string): Promise<v
   sendgrid.setApiKey(env.require("SENDGRID_API_KEY"))
   await sendgrid.send({
     to,
-    from: "sendgrid@chronark.com",
+    from: "noreply@perfol.io",
     subject,
     text: body,
   })
