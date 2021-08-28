@@ -3,7 +3,7 @@ import { z } from "zod"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { AuthenticationError } from "@perfolio/util/errors"
 import { Auth, SessionCookie } from "@perfolio/auth"
-import { env } from "@perfolio/util/env"
+import { env } from "@chronark/env"
 import { Logger } from "tslog"
 /**
  * This lambda receives the email and the token entered by the user and verifies them.

@@ -1,5 +1,5 @@
 import { DataSource } from "apollo-datasource"
-import { env } from "@perfolio/util/env"
+import { env } from "@chronark/env"
 export class Sendgrid extends DataSource {
   constructor() {
     super()

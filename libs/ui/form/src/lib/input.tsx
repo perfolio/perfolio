@@ -26,6 +26,8 @@ export interface InputProps {
 
   defaultValue?: string | number
   help?: React.ReactNode
+
+  placeholder?: string
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -37,6 +39,7 @@ export const Input: React.FC<InputProps> = ({
   type,
   defaultValue,
   help,
+  placeholder,
 }) => {
   const {
     register,
@@ -76,6 +79,7 @@ export const Input: React.FC<InputProps> = ({
           disabled={disabled || isSubmitting}
           {...register(name)}
           type={type}
+          placeholder={placeholder}
           className={classNames(
             "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
             {

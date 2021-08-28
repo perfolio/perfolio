@@ -5,6 +5,7 @@ specifiers:
   '@babel/preset-env': 7.12.13
   '@babel/preset-react': 7.12.13
   '@babel/preset-typescript': 7.12.13
+  '@chronark/env': ^0.0.2
   '@commitlint/config-conventional': ^12.1.4
   '@graphql-codegen/cli': ^1.21.8
   '@graphql-codegen/introspection': 1.18.2
@@ -128,6 +129,7 @@ specifiers:
   zod: ^3.8.1
 
 dependencies:
+  '@chronark/env': 0.0.2
   '@hapi/iron': 6.0.0
   '@headlessui/react': 1.4.0_react-dom@17.0.2+react@17.0.2
   '@heroicons/react': 1.0.4_react@17.0.2
@@ -1663,6 +1665,10 @@ packages:
       - supports-color
     dev: true
 
+  /@chronark/env/0.0.2:
+    resolution: {integrity: sha512-lG+teF4Xh2smwQatelPHhJ7Uj/pNLM64p7l5vj6EV5AREZKJDlUSJU8Ay9wdp//uLvjSncVc1VEk3ik7EyCUVg==}
+    dev: false
+
   /@cnakazawa/watch/1.0.4:
     resolution: {integrity: sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ==}
     engines: {node: '>=0.1.95'}
@@ -1845,7 +1851,7 @@ packages:
     optionalDependencies:
       '@babel/core': 7.12.13
       '@babel/preset-env': 7.12.13_@babel+core@7.12.13
-      babel-loader: 8.1.0_@babel+core@7.12.13
+      babel-loader: 8.2.2_@babel+core@7.12.13
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1861,7 +1867,7 @@ packages:
     optionalDependencies:
       '@babel/core': 7.12.13
       '@babel/preset-env': 7.12.13_@babel+core@7.12.13
-      babel-loader: 8.1.0_6ff0178a3e975ff0760870ba0a4cf20e
+      babel-loader: 8.2.2_6ff0178a3e975ff0760870ba0a4cf20e
     transitivePeerDependencies:
       - supports-color
 
@@ -7430,7 +7436,21 @@ packages:
       make-dir: 3.1.0
       schema-utils: 2.7.1
       webpack: 4.46.0
+
+  /babel-loader/8.2.2_@babel+core@7.12.13:
+    resolution: {integrity: sha512-JvTd0/D889PQBtUXJ2PXaKU/pjZDMtHA9V2ecm+eNRmmBCMR09a+fmpGTNwnJtFmFl5Ei7Vy47LjBb+L0wQ99g==}
+    engines: {node: '>= 8.9'}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+      webpack: '>=2'
+    dependencies:
+      '@babel/core': 7.12.13
+      find-cache-dir: 3.3.1
+      loader-utils: 1.4.0
+      make-dir: 3.1.0
+      schema-utils: 2.7.1
     dev: true
+    optional: true
 
   /babel-plugin-add-react-displayname/0.0.5:
     resolution: {integrity: sha1-M51M3be2X9YtHfnbn+BN4TQSK9U=}

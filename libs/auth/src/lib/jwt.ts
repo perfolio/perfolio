@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { env } from "@perfolio/util/env"
+import { env } from "@chronark/env"
 import { z } from "zod"
 
 export const payload = z.object({

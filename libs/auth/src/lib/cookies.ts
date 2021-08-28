@@ -1,7 +1,7 @@
 import { serialize } from "cookie"
 import { Time } from "@perfolio/util/time"
 import Iron from "@hapi/iron"
-import { env } from "@perfolio/util/env"
+import { env } from "@chronark/env"
 
 export class SessionCookie {
   private readonly name = "PERFOLIO_SESSION"
