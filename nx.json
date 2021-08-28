@@ -32,6 +32,10 @@
     "app-components": {
       "tags": []
     },
+    "app-e2e": {
+      "tags": [],
+      "implicitDependencies": []
+    },
     "app-middleware": {
       "tags": []
     },
@@ -105,9 +109,6 @@
     "util-currency": {
       "tags": []
     },
-    "util-env": {
-      "tags": []
-    },
     "util-errors": {
       "tags": []
     },
@@ -116,10 +117,6 @@
     },
     "util-time": {
       "tags": []
-    },
-    "app-e2e": {
-      "tags": [],
-      "implicitDependencies": []
     }
   },
   "targetDependencies": {

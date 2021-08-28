@@ -36,6 +36,7 @@
   },
   "private": true,
   "dependencies": {
+    "@chronark/env": "^0.0.2",
     "@hapi/iron": "^6.0.0",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.4",

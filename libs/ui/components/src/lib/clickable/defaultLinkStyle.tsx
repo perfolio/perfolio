@@ -43,7 +43,7 @@ export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
       `}
     >
       {loading ? (
-        <span className="w-4 h-4 text-yellow-400">
+        <span className="w-4 h-4">
           <Loading />
         </span>
       ) : (

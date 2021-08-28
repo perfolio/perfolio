@@ -1,4 +1,4 @@
-import { env } from "@perfolio/util/env"
+import { env } from "@chronark/env"
 import { HTTPError } from "@perfolio/util/errors"
 import { ApiConfig, PostRequest } from "./types"
 import { Logger } from "tslog"

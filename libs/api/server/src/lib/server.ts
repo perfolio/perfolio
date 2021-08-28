@@ -9,7 +9,7 @@ import { context } from "./context"
 import { resolvers } from "./resolvers"
 import fs from "fs"
 import path from "path"
-import { env } from "@perfolio/util/env"
+import { env } from "@chronark/env"
 
 import { dataSources } from "./datasources"
 // import { JWT } from "@perfolio/authentication"
@@ -33,13 +33,14 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
     /**
      * Send metrics to apollo dashboard
      */
-    apollo: env.isProduction()
-      ? {
-          key: env.require("APOLLO_KEY"),
-          graphId: env.require("APOLLO_GRAPH_ID"),
-          graphVariant: env.require("APOLLO_GRAPH_VARIANT"),
-        }
-      : undefined,
+    apollo:
+      env.require("NODE_ENV") === "production"
+        ? {
+            key: env.require("APOLLO_KEY"),
+            graphId: env.require("APOLLO_GRAPH_ID"),
+            graphVariant: env.require("APOLLO_GRAPH_VARIANT"),
+          }
+        : undefined,
     /**
      * Cache queries in redis
      * The cache ttl is defined in the graphql schema definition
