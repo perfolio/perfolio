@@ -131,7 +131,7 @@ export const Footer = () => {
                       setFormError,
                     )
                   }
-                  kind="primary"
+                  kind="cta"
                   size="auto"
                   type="submit"
                   disabled={submitting}

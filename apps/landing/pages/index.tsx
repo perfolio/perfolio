@@ -11,7 +11,6 @@ import {
   Footer,
   Price,
 } from "../components"
-import { Button } from "@perfolio/ui/components"
 import {
   ChartSquareBarIcon,
   CreditCardIcon,
@@ -181,21 +180,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 investment strategy. We are always happy to chat - drop us a message!
               </p>
             </div>
-          </div>
-        </Section>
-        <Section id="subscribe">
-          <div className="flex flex-col items-center justify-between md:flex-row">
-            <div>
-              <h2 className="mb-3 font-semibold tracking-wide text-gray-900 uppercase sm:text-lg sm:leading-snug">
-                Get in touch
-              </h2>
-              <p className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                Curious for more?
-              </p>
-            </div>
-            <Button kind="cta" href="https://app.perfol.io/subscribe">
-              Subscribe
-            </Button>
           </div>
         </Section>
       </div>
