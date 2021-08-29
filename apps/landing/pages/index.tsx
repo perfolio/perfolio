@@ -48,10 +48,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
             </div>
           </div>
         </Section>
-        <Section id="features" className="flex flex-col justify-center ">
+        <Section id="features" className="relative flex flex-col justify-center">
           <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
 
-          <ul className="flex flex-col flex-wrap mx-auto my-24 md:flex-row">
+          <ul className="grid grid-cols-1 gap-8 mx-auto my-24 md:grid-cols-2 xl:grid-cols-3">
             {[
               {
                 icon: <FlagIcon />,
@@ -91,7 +91,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               },
             ].map((f, index) => {
               return (
-                <li key={index} className="p-3 md:w-1/2 xl:w-1/3">
+                <li key={index}>
                   <Feature icon={f.icon} title={f.title} description={f.description}></Feature>
                 </li>
               )
@@ -101,11 +101,11 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 mt-20 md:grid-cols-3">
             <Price
               title="Try for free"
               price={0}
-              bullets={[
+              features={[
                 "Manual data import",
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
@@ -117,25 +117,25 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               title="Basic"
               price={3.99}
               interval="month"
-              bullets={[
+              features={[
                 "Manual data import",
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
               href="/api/auth/login"
               submitText="Get started"
+              highlighted
             />
             <Price
               title="Pro"
               price={8.99}
               interval="month"
-              bullets={[
+              features={[
                 "Manual data import",
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
               href="/api/auth/login"
-              highlighted
               submitText="Take off"
             />
           </div>

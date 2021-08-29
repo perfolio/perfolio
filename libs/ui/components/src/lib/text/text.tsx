@@ -18,7 +18,11 @@ export interface TextProps {
    */
   lineBreak?: boolean
 
-  align?: "text-left" | "text-center" | "text-right"
+  /**
+   * Available options: "text-left" | "text-center" | "text-right"
+   * Can be combined with breakpoint prefixes
+   */
+  align?: string
 
   /**
    * Use a monospace font
