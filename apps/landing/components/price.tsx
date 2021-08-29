@@ -1,12 +1,13 @@
 import React from "react"
 import { CheckIcon } from "@heroicons/react/outline"
-import { Button, Text } from "@perfolio/ui/components"
+import { Button, Icon, Text } from "@perfolio/ui/components"
+import cn from "classnames"
 
 export interface PriceProps {
   title: string
   price: number
   interval?: string
-  bullets: Array<string>
+  features: Array<string>
   href: string
   highlighted?: boolean
   submitText: string
@@ -15,33 +16,46 @@ export const Price: React.FC<PriceProps> = ({
   title,
   price,
   interval,
-  bullets,
+  features,
   href,
   highlighted,
   submitText,
 }) => {
   return (
-    <div className="flex flex-col items-center w-full max-w-md p-4 mx-auto shadow-xl sm:p-6 md:px-8 md:py-12">
-      <h3 className="text-2xl font-semibold text-gray-800 sm:text-3xl md:text-4xl">{title}</h3>
-      <div className="flex items-end mt-6 leading-7 text-black">
-        <p className="text-6xl font-semibold leading-none border-solid">{`$${price}`}</p>
-        {interval ? <p className="text-gray-700 border-solid ">/{interval}</p> : null}
+    <div
+      className={cn(
+        "relative flex flex-col justify-between p-8 transition-shadow duration-300 bg-white border border-gray-200 rounded sm:items-center hover:shadow-2xl",
+        {
+          "border-cta shadow-cta": highlighted,
+        },
+      )}
+    >
+      {highlighted ? (
+        <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
+          <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-cta">
+            Most Popular
+          </div>
+        </div>
+      ) : null}
+      <div className="text-center">
+        <div className="text-lg font-semibold">{title}</div>
+        <div className="flex items-center justify-center mt-2">
+          <div className="mr-1 text-5xl font-bold">${price}</div>
+          {interval ? <div className="text-gray-700">/ {interval}</div> : null}
+        </div>
+        <div className="mt-8 space-y-3">
+          {features.map((feature) => (
+            <div key={feature} className="flex items-center gap-2">
+              <Icon label="Checkmark" size="xs">
+                <CheckIcon className="text-black" />
+              </Icon>
+              <Text>{feature}</Text>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <ul className="my-16 space-y-4">
-        {bullets.map((bullet) => {
-          return (
-            <li key={bullet} className="flex items-center w-full text-left">
-              <span className="w-6 h-6 text-success">
-                <CheckIcon />
-              </span>
-              <Text>{bullet}</Text>
-            </li>
-          )
-        })}
-      </ul>
-      <div className="w-full">
-        <Button kind={highlighted ? "cta" : "secondary"} href={href} size="auto">
+      <div className="w-full mt-16">
+        <Button href={href} kind={highlighted ? "cta" : "secondary"} size="auto">
           {submitText}
         </Button>
       </div>

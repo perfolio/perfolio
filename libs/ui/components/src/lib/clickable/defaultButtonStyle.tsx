@@ -63,7 +63,7 @@ const colors = (kind: Kind, disabled?: boolean): string => {
     primary:
       " bg-black text-white font-medium hover:border-gray-700 border border-transparent hover:bg-white hover:text-black",
     secondary:
-      "bg-transparent border border-gray-200 text-gray-800 hover:border-gray-400 hover:text-black",
+      "bg-transparent border border-gray-300 text-gray-800 hover:border-gray-700 hover:text-black",
     alert: "bg-gradient-to-tr from-error-dark to-error text-white hover:to-error",
     cta: "bg-cta font-medium text-gray-50 justify-center w-full text-sm text-center rounded bg-gradient-to-tr sm:text-base md:text-lg hover:bg-black duration-500",
     plain:
@@ -103,7 +103,7 @@ const text = (size: Size): string => {
   return options[size]
 }
 const shadow = (kind: Kind, size: Size): string => {
-  if (kind === "plain") {
+  if (kind === "plain" || kind === "secondary") {
     return ""
   }
   if (kind === "cta") {

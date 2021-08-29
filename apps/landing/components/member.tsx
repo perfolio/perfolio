@@ -16,7 +16,7 @@ export const Member: React.FC<MemberProps> = ({ image, name, title }): JSX.Eleme
           alt={name}
           width={500}
           height={500}
-          className="object-cover rounded-full"
+          className="object-cover rounded-full "
         />
       </div>
       <span className="mt-4 font-semibold text-center text-gray-900">{name}</span>
