@@ -6,8 +6,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures=["referentialActions"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 enum Plan {
@@ -15,48 +15,35 @@ enum Plan {
   PRO
 }
 
-model Session {
-  id           String   @id @default(uuid())
-  userId       String   
-  expires      DateTime
-  // sha256 of session token
-  sessionToken String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+
 
 model User {
-  id            String    @id @default(uuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  session       Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  // AUth0 provided user id
+  id            String    @id
 
-  lastLogin DateTime?
+  stripeCustomerId String @unique
 
-  stripeCustomerId String? @unique
+  settings             UserSettings?
 
-  payedUntil DateTime @default(now())
-  plan       Plan     @default(TRIAL)
+  subscription Subscription?
 
-  settings UserSettings?
 }
 
-model AuthenticationRequest {
+model Subscription {
   id String @id @default(uuid())
 
-  // Hash of the email where the request is sent to
-  identifier String @unique
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // We send a 6 digit number to the user
-  // this is the hash of it
-  token     String
-  expires   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  currentPaymentPeriodStart DateTime?
+  currentPaymentPeriodEnd   DateTime?
+  stripeSubscriptionId      String?   @unique
+
+  // Only populated when the user has not payed yet
+  trialEnds DateTime?
+
+  plan Plan @default(TRIAL)
 
 }
 
@@ -87,9 +74,8 @@ model UserSettings {
 
   defaultCurrency    Currency
   defaultExchangeMic String
-  user               User @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
 
 model StockMap {
   ticker String @id

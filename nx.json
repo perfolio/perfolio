@@ -42,7 +42,9 @@
     "app-query-client": {
       "tags": []
     },
-    "auth": {},
+    "auth": {
+      "tags": []
+    },
     "downsampling": {
       "tags": []
     },
