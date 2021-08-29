@@ -1,21 +1,19 @@
 import { useQuery } from "react-query"
 import { client } from "../client"
-import { useAccessToken } from "./useAccessToken"
-import { useUser } from "./useUser"
+import { useAuth0 } from "@auth0/auth0-react"
 export const USE_RELATIVE_PORTFOLIO_HISTORY = "USE_RELATIVE_PORTFOLIO_HISTORY"
 
 export const useRelativePortfolioHistory = (since?: number) => {
-  const { user } = useUser()
-  const { accessToken } = useAccessToken()
+  const { getAccessTokenSilently, user } = useAuth0()
   const { data, ...meta } = useQuery(
     [USE_RELATIVE_PORTFOLIO_HISTORY, { since }],
     async () =>
-      await client(accessToken).getRelativePortfolioHistory({
-        userId: user!.id!,
+      await client(await getAccessTokenSilently()).getRelativePortfolioHistory({
+        userId: user!.sub!,
         since,
       }),
     {
-      enabled: !!user?.id && !!accessToken,
+      enabled: !!user?.sub,
     },
   )
 

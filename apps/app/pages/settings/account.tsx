@@ -1,81 +1,23 @@
-import React, { useState } from "react"
+import React from "react"
 import { NextPage } from "next"
-import { useForm } from "react-hook-form"
+
 import { AppLayout } from "@perfolio/app/components"
-import { z } from "zod"
+
 import { useRouter } from "next/router"
-import { Form, handleSubmit } from "@perfolio/ui/form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@perfolio/ui/components"
+
 import Link from "next/link"
 import cn from "classnames"
-import { Card, Button } from "@perfolio/ui/components"
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
-interface SettingProps {
-  validation: z.AnyZodObject
-  title: string
-  footer: string
-  fields: React.ReactNode
-  onSubmit: (values: Record<string, string | number>) => Promise<void>
-  button?: {
-    label?: string
-    kind?: string
-  }
-}
+import { useAuth0 } from "@auth0/auth0-react"
 
-export const Setting: React.FC<SettingProps> = ({
-  validation,
-  title,
-  footer,
-  fields,
-  onSubmit,
-  button,
-}): JSX.Element => {
-  const ctx = useForm<z.infer<typeof validation>>({
-    mode: "onBlur",
-    resolver: zodResolver(validation),
-  })
-  const [formError, setFormError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  return (
-    <Card>
-      <Card.Header>
-        <Card.Header.Title title={title} />
-      </Card.Header>
-
-      <Card.Content>
-        <Form ctx={ctx} formError={formError}>
-          {fields}
-        </Form>
-      </Card.Content>
-      <Card.Footer>
-        <Card.Footer.Status>{footer}</Card.Footer.Status>
-        <Card.Footer.Actions>
-          <Button
-            loading={submitting}
-            // eslint-disable-next-line
-            // @ts-ignore
-            onClick={() =>
-              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
-            }
-            kind={button?.kind ?? "primary"}
-            size="sm"
-            type="submit"
-            disabled={ctx.formState.isSubmitting}
-          >
-            {button?.label ?? "Save"}
-          </Button>
-        </Card.Footer.Actions>
-      </Card.Footer>
-    </Card>
-  )
-}
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 /**
  * / page.
  */
 const SettingsPage: NextPage = () => {
   const router = useRouter()
-
+  const { user } = useAuth0()
   return (
     <AppLayout
       side="left"
@@ -118,9 +60,31 @@ const SettingsPage: NextPage = () => {
         </div>
       }
     >
-      <div className="space-y-8"></div>
+      <div className="space-y-8">
+        <Button
+          onClick={async () => {
+            const res = await fetch("/api/stripe/checkout", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                priceId: "price_1JTm1QG0ZLpKb1P6SuSNh7Rb",
+                email: user?.email,
+              }),
+            })
+            if (res.status !== 200) {
+              console.error(res.body)
+            }
+            const { checkoutUrl } = (await res.json()) as { checkoutUrl: string }
+            router.push(checkoutUrl)
+          }}
+          kind="cta"
+        >
+          Pay up
+        </Button>
+      </div>
     </AppLayout>
   )
 }
-
 export default withAuthenticationRequired(SettingsPage)

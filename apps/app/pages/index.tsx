@@ -25,7 +25,7 @@ import {
   useAbsolutePortfolioHistory,
   usePortfolioHistory,
 } from "@perfolio/hooks"
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Time } from "@perfolio/util/time"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"

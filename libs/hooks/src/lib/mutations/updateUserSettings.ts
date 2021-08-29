@@ -5,10 +5,9 @@ import {
 } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { USE_USER_SETTINGS_QUERY_KEY } from "../queries/useUserSettings"
-import { useAccessToken } from "../queries/useAccessToken"
-
+import { useAuth0 } from "@auth0/auth0-react"
 export const useUpdateUserSettings = () => {
-  const { accessToken } = useAccessToken()
+  const { getAccessTokenSilently } = useAuth0()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
     UpdateUserSettingsMutation,
@@ -16,7 +15,7 @@ export const useUpdateUserSettings = () => {
     UpdateUserSettingsMutationVariables
   >(
     async (variables) => {
-      return client(accessToken).updateUserSettings(variables)
+      return client(await getAccessTokenSilently()).updateUserSettings(variables)
     },
     {
       onSuccess: () => {

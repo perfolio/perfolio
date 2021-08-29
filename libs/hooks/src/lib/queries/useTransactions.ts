@@ -1,19 +1,17 @@
 import { useQuery } from "react-query"
 import { GetTransactionsQuery } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { useUser } from "./useUser"
-import { useAccessToken } from "./useAccessToken"
+import { useAuth0 } from "@auth0/auth0-react"
 export const USE_TRANSACTIONS_QUERY_KEY = "getTransactions"
 
 export const useTransactions = () => {
-  const { user } = useUser()
-  const { accessToken } = useAccessToken()
+  const { getAccessTokenSilently, user } = useAuth0()
 
   const { data, ...meta } = useQuery<GetTransactionsQuery, Error>(
     USE_TRANSACTIONS_QUERY_KEY,
-    async () => client(accessToken).getTransactions({ userId: user!.id! }),
+    async () => client(await getAccessTokenSilently()).getTransactions({ userId: user!.sub! }),
     {
-      enabled: !!user?.id && !!accessToken,
+      enabled: !!user?.id,
     },
   )
 

@@ -8,12 +8,12 @@ import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import cn from "classnames"
-import { useUser, useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
+import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { AuthenticationError } from "@perfolio/util/errors"
-
+import { useAuth0 } from "@auth0/auth0-react"
 interface SettingProps {
   validation: z.AnyZodObject
   title: string
@@ -77,7 +77,7 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 const SettingsPage: NextPage = () => {
-  const { user } = useUser()
+  const { user } = useAuth0()
   const { settings } = useUserSettings()
 
   const { exchanges } = useExchanges()
@@ -92,11 +92,11 @@ const SettingsPage: NextPage = () => {
 
   const updateSettings = useUpdateUserSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
-    if (!user) {
+    if (!user?.sub) {
       throw new AuthenticationError("User is undefined")
     }
     await updateSettings.mutateAsync({
-      userSettings: { userId: user.id, defaultCurrency: values.defaultCurrency },
+      userSettings: { userId: user.sub, defaultCurrency: values.defaultCurrency },
     })
   }
 
@@ -105,12 +105,12 @@ const SettingsPage: NextPage = () => {
     defaultExchange: z.string(),
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
-    if (!user) {
+    if (!user?.sub) {
       throw new AuthenticationError("User is undefined")
     }
     await updateSettings.mutateAsync({
       userSettings: {
-        userId: user.id,
+        userId: user.sub,
         defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
       },
     })

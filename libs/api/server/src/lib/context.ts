@@ -26,7 +26,8 @@ export const context = (ctx: { req: IncomingMessage }) => {
     if (token.startsWith("Bearer ")) {
       let claims: Claims
       try {
-        claims = JWT.verify(token.replace("Bearer ", ""))
+        const jwt = JWT.getInstance()
+        claims = await jwt.verify(token.replace("Bearer ", ""))
       } catch (err) {
         logger.error(err)
         throw new AuthenticationError("Unable to verify token")
