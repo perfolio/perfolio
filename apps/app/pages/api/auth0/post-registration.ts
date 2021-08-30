@@ -59,12 +59,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         stripeSubscriptionId: subscription.id,
       },
     })
+    res.json({ received: true })
   } catch (err) {
     res.status(500)
     res.send(err.message)
     logger.error(err)
   } finally {
-    res.json({ received: true })
     res.end()
   }
 }
