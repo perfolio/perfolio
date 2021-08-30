@@ -49,7 +49,6 @@ export class JWT {
       audience: this.audience,
       issuer: this.issuer,
     })
-    console.log({ decoded })
     return payload.parse(decoded)
   }
   public async isValid(token: string): Promise<boolean> {

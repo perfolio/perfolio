@@ -1,0 +1,8 @@
+query getUser($userId: ID!) {
+  getUser(userId: $userId) {
+    __typename
+    id
+    email
+    stripeCustomerId
+  }
+}
