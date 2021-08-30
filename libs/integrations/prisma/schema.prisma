@@ -17,7 +17,6 @@ model User {
   email String @unique
 
   stripeCustomerId     String @unique
-  stripeSubscriptionId String @unique
 
   settings UserSettings?
 

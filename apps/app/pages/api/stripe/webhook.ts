@@ -22,8 +22,14 @@ const subscriptionValidation = z.object({
     "canceled",
     "unpaid",
   ]),
-  price: z.object({
-    product: z.string(),
+  items: z.object({
+    data: z.array(
+      z.object({
+        price: z.object({
+          product: z.string(),
+        }),
+      }),
+    ),
   }),
 })
 
@@ -61,7 +67,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     )
 
     if (event.type.startsWith("customer.subscription")) {
-      const subscription = subscriptionValidation.parse(event.object)
+      const subscription = subscriptionValidation.parse(event.data.object)
 
       const user = await prisma.user.findUnique({
         where: { stripeCustomerId: subscription.customer },
@@ -70,29 +76,43 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new Error("User not found")
       }
 
+      const authRoles: Record<string, string> = {
+        pro: "rol_Rjy99HLtin8ryEds",
+        premium: "rol_ByfhbMJUPC3PlhpD",
+      }
+      const products: Record<string, string> = {
+        prod_K8L177Ou3esVrr: "pro",
+        prod_K8L2zOY0pLY68n: "premium",
+      }
+
+      const productId = subscription.items.data[0].price.product as string
+      const product = products[productId]
+      const role = authRoles[product]
+
       if (
         event.type === "customer.subscription.created" ||
         event.type === "customer.subscription.updated"
       ) {
-        await auth0.assignRolestoUser(
-          { id: "email|6119436dd1ce9f9dc82da928" },
-          { roles: ["rol_Rjy99HLtin8ryEds"] },
-        )
+        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] })
       } else if (event.type === "customer.subscription.deleted") {
-        await auth0.removeRolesFromUser(
-          { id: "email|6119436dd1ce9f9dc82da928" },
-          { roles: ["rol_Rjy99HLtin8ryEds"] },
-        )
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: [role] })
+      } else if (event.type === "customer.subscription.trial_will_end") {
+        // Occurs three days before a subscription's trial period is scheduled to end,
+        // or when a trial is ended immediately (using trial_end=now).
+
+        await prisma.notification.create({
+          data: {
+            userId: user.id,
+            message: "Your trial will end soon",
+          },
+        })
       }
     }
 
     // invoice.payment_failed
     // notify user
-
-    // customer.subscription.trial_will_end
-    // Occurs three days before a subscription's trial period is scheduled to end, or when a trial is ended immediately (using trial_end=now).
   } catch (err) {
-    logger.error(err.message)
+    logger.error({ error: err.message })
     res.status(500)
     res.send(err.message)
   } finally {

@@ -40,7 +40,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
 
     const customer = await stripe.customers.create({ email })
-    const subscription = await stripe.subscriptions.create({
+    await stripe.subscriptions.create({
       customer: customer.id,
       trial_period_days: 30,
       items: [
@@ -56,7 +56,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         id: userId,
         email,
         stripeCustomerId: customer.id,
-        stripeSubscriptionId: subscription.id,
       },
     })
     res.json({ received: true })
