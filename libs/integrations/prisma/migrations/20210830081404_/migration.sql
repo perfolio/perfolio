@@ -1,7 +1,4 @@
 -- CreateEnum
-CREATE TYPE "Plan" AS ENUM ('TRIAL', 'PRO');
-
--- CreateEnum
 CREATE TYPE "Currency" AS ENUM ('EUR');
 
 -- CreateTable
