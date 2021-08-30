@@ -1,7 +1,7 @@
 import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
@@ -15,12 +15,15 @@ import {
   AnimateSharedLayout,
   motion,
 } from ".pnpm/framer-motion@4.1.17_react-dom@17.0.2+react@17.0.2/node_modules/framer-motion"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
   isLast: boolean
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
+  const { t } = useI18n()
   const { addToast } = useToaster()
   const { asset } = useExchangeTradedAsset({
     id: transaction.asset.id,
@@ -52,7 +55,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
         <div className="flex flex-grow gap-4">
           {asset ? (
             <Description title={asset.name}>
-              {`You ${transaction.volume > 0 ? "bought" : "sold"} ${Math.abs(
+              {`You ${transaction.volume > 0 ? t("transIndexInfoBought") : t("transIndexInfoSold")} ${Math.abs(
                 transaction.volume,
               ).toFixed(2)} share${transaction.volume === 1 ? "" : "s"} of ${
                 asset.ticker
@@ -67,12 +70,12 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             onClick={async () => {
               await deleteTransaction.mutateAsync({ transactionId: transaction.id })
               addToast({
-                title: "Transaction deleted",
-                content: `You deleted transaction ${transaction.id}`,
+                title: t("transIndexToastTitle"),
+                content: t("transIndexToastContent") + `${transaction.id}`,
               })
             }}
           >
-            Delete
+            {t("transIndexDeleteButton")}
           </AsyncButton>
         </div>
       </div>
@@ -83,7 +86,13 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
 /**
  * / page.
  */
-const TransactionsPage: NextPage = () => {
+
+ interface PageProps {
+  translations: Record<string, string>
+}
+
+const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const { transactions, isLoading, error } = useTransactions()
   return (
     <AppLayout
@@ -95,7 +104,7 @@ const TransactionsPage: NextPage = () => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title="My Transactions" />
+          <Main.Header.Title title={t("transIndexHeader")} />
         </Main.Header>
         <Main.Content>
           {error ? <div>{JSON.stringify(error)}</div> : null}
@@ -103,9 +112,9 @@ const TransactionsPage: NextPage = () => {
             <Loading />
           ) : !transactions || transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
-              <p className="text-gray-700">Looks like you don&apos;t have any transactions yet</p>
+              <p className="text-gray-700">{t("transIndexNoTrans")}</p>
               <Button size="lg" kind="primary" href="/transactions/new">
-                Add transaction
+                {t("transIndexAddTrans")}
               </Button>
             </div>
           ) : (
@@ -139,3 +148,12 @@ const TransactionsPage: NextPage = () => {
 }
 
 export default TransactionsPage
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}
