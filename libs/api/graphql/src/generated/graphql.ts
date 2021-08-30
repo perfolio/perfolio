@@ -313,6 +313,8 @@ export type User = {
   id: Scalars["ID"]
   /** The user's email */
   email: Scalars["String"]
+  /** StripeCustomerId */
+  stripeCustomerId: Scalars["String"]
   /** The user's settings */
   settings?: Maybe<UserSettings>
 }
@@ -700,6 +702,7 @@ export type UserResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  stripeCustomerId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   settings?: Resolver<Maybe<ResolversTypes["UserSettings"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
@@ -881,6 +884,14 @@ export type GetTransactionsQuery = { __typename?: "Query" } & {
   >
 }
 
+export type GetUserQueryVariables = Exact<{
+  userId: Scalars["ID"]
+}>
+
+export type GetUserQuery = { __typename?: "Query" } & {
+  getUser?: Maybe<{ __typename: "User" } & Pick<User, "id" | "email" | "stripeCustomerId">>
+}
+
 export type GetUserSettingsQueryVariables = Exact<{
   userId: Scalars["ID"]
 }>
@@ -1039,6 +1050,16 @@ export const GetTransactionsDocument = gql`
     }
   }
 `
+export const GetUserDocument = gql`
+  query getUser($userId: ID!) {
+    getUser(userId: $userId) {
+      __typename
+      id
+      email
+      stripeCustomerId
+    }
+  }
+`
 export const GetUserSettingsDocument = gql`
   query getUserSettings($userId: ID!) {
     getUserSettings(userId: $userId) {
@@ -1167,6 +1188,9 @@ export function getSdk<C>(requester: Requester<C>) {
         variables,
         options,
       )
+    },
+    getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
+      return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options)
     },
     getUserSettings(
       variables: GetUserSettingsQueryVariables,

@@ -215,6 +215,11 @@ type User {
   email: String!
 
   """
+  StripeCustomerId
+  """
+  stripeCustomerId: String!
+
+  """
   The user's settings
   """
   settings: UserSettings

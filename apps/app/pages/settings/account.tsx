@@ -4,11 +4,11 @@ import { NextPage } from "next"
 import { AppLayout } from "@perfolio/app/components"
 
 import { useRouter } from "next/router"
-import { Button } from "@perfolio/ui/components"
+import { AsyncButton } from "@perfolio/ui/components"
 
 import Link from "next/link"
 import cn from "classnames"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useUser } from "@perfolio/hooks"
 
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
@@ -17,7 +17,7 @@ import { withAuthenticationRequired } from "@auth0/auth0-react"
  */
 const SettingsPage: NextPage = () => {
   const router = useRouter()
-  const { user } = useAuth0()
+  const { user } = useUser()
   return (
     <AppLayout
       side="left"
@@ -61,28 +61,22 @@ const SettingsPage: NextPage = () => {
       }
     >
       <div className="space-y-8">
-        <Button
+        <AsyncButton
           onClick={async () => {
-            const res = await fetch("/api/stripe/checkout", {
+            console.log({ user })
+            const res = await fetch(`/api/stripe/create-portal-session/${user?.stripeCustomerId}`, {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                priceId: "price_1JTm1QG0ZLpKb1P6SuSNh7Rb",
-                email: user?.email,
-              }),
             })
             if (res.status !== 200) {
               console.error(res.body)
             }
-            const { checkoutUrl } = (await res.json()) as { checkoutUrl: string }
-            router.push(checkoutUrl)
+            const { url } = (await res.json()) as { url: string }
+            router.push(url)
           }}
           kind="cta"
         >
-          Pay up
-        </Button>
+          Open billing portal
+        </AsyncButton>
       </div>
     </AppLayout>
   )
