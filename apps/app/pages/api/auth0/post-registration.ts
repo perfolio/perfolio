@@ -1,7 +1,7 @@
 /**
  * ----------------------------------------------------------------------------
  * If you change the path of this file you must also change the url in the
- * auth0 post-login action
+ * auth0 post-registration action
  * ----------------------------------------------------------------------------
  */
 
@@ -32,10 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     logger.debug(typeof req.body, req.body, req.headers)
     const {
       body: { userId, email },
-    } = await validation.parseAsync(req).catch((err) => {
-      res.status(400)
-      throw err
-    })
+    } = await validation.parseAsync(req)
 
     const stripe = new Stripe(env.require("STRIPE_SECRET_KEY"), {
       apiVersion: "2020-08-27",
@@ -63,6 +60,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     })
   } catch (err) {
+    res.status(500)
+    res.send(err.message)
     logger.error(err)
   } finally {
     res.json({ received: true })
