@@ -34,13 +34,25 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
 
     const customer = await stripe.customers.create({ email })
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      trial_period_days: 7,
+      items: [
+        {
+          // Pro subscription
+          price: "prod_K8L177Ou3esVrr",
+        },
+      ],
+    })
 
     const prisma = new PrismaClient()
 
     await prisma.user.create({
       data: {
         id: userId,
+        email,
         stripeCustomerId: customer.id,
+        stripeSubscriptionId: subscription.id,
       },
     })
   } catch (err) {

@@ -15,51 +15,51 @@ enum Plan {
   PRO
 }
 
-
-
 model User {
-  // AUth0 provided user id
-  id            String    @id
+  // Auth0 provided user id
+  id    String @id
+  email String @unique
 
-  stripeCustomerId String @unique
+  stripeCustomerId     String @unique
+  stripeSubscriptionId String @unique
 
-  settings             UserSettings?
+  settings UserSettings?
 
-  subscription Subscription?
+  notifications Notification[]
 
+  transactions Transaction[]
 }
 
-model Subscription {
-  id String @id @default(uuid())
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  currentPaymentPeriodStart DateTime?
-  currentPaymentPeriodEnd   DateTime?
-  stripeSubscriptionId      String?   @unique
-
-  // Only populated when the user has not payed yet
-  trialEnds DateTime?
-
-  plan Plan @default(TRIAL)
-
-}
-
-model Transaction {
+// Notifications can be displayed for a user
+// Such as upcoming payments etc.
+model Notification {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  assetId String
+  readAt DateTime?
 
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  // Use to create a notification which should not be displayed right away.
+  visibleAfter  DateTime?
+  visibleBefore DateTime?
+
+  message String
+
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  assetId    String
   executedAt Int
   volume     Float
   value      Float
-
-  // user User @relation(fields: [userId], references:[id],onDelete: Cascade)
-  userId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
 }
 
 enum Currency {
@@ -67,14 +67,12 @@ enum Currency {
 }
 
 model UserSettings {
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  userId String @unique
-
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
   defaultCurrency    Currency
   defaultExchangeMic String
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String   @unique
 }
 
 model StockMap {
