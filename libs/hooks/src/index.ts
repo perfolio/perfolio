@@ -11,6 +11,7 @@ export * from "./lib/queries/useAbsolutePortfolioHistory"
 export * from "./lib/queries/useRelativeMean"
 export * from "./lib/queries/useAbsoluteMean"
 export * from "./lib/queries/useStandardDeviation"
+export * from "./lib/queries/useUser"
 
 export * from "./lib/mutations/createUserSettings"
 export * from "./lib/mutations/updateUserSettings"
