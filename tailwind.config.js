@@ -5,6 +5,9 @@ module.exports = {
   mode: "jit",
   purge: ["./**/*.{tsx,html}"],
   darkMode: "class",
+  variants: {
+    scale: ["responsive", "hover", "focus", "group-hover"],
+  },
   theme: {
     colors: {
       transparent: "transparent",

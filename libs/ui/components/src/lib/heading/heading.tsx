@@ -40,12 +40,12 @@ export const Heading: React.FC<HeadingProps> = ({
     heading,
     {
       className: cn(
-        "text-gray-800 font-semibold",
+        "text-gray-800",
         {
-          "text-6xl": heading === "h1",
-          "text-3xl": heading === "h2",
-          "text-xl": heading === "h3",
-          "text-base": heading === "h4",
+          "text-6xl font-black": heading === "h1",
+          "text-3xl font-black": heading === "h2",
+          "text-xl font-bold": heading === "h3",
+          "text-base font-semibold": heading === "h4",
         },
         color,
       ),
