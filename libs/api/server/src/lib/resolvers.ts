@@ -4,6 +4,7 @@ import { getRelativePortfolioHistory } from "./resolvers/query/getRelativePortfo
 import { getExchanges } from "./resolvers/query/getExchanges"
 import { search } from "./resolvers/query/search"
 import { getUserSettings } from "./resolvers/query/getUserSettings"
+import { getUser } from "./resolvers/query/getUser"
 import { getTransactions } from "./resolvers/query/getTransactions"
 import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
 import { getStockPricesAtExchange } from "./resolvers/query/getStockPricesAtExchange"
@@ -33,6 +34,7 @@ export const resolvers: Resolvers<Context> = {
 
     getPortfolioHistory: (_parent, { userId }, ctx) => getPortfolioHistory(ctx, userId),
     getStockPricesAtExchange,
+    getUser,
   },
 
   UserSettings: {
