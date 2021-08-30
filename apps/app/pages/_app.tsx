@@ -5,7 +5,7 @@ import Head from "next/head"
 import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import { Auth0Provider } from "@auth0/auth0-react"
-
+import { I18nProvider } from "@perfolio/feature/i18n"
 import { ToastProvider } from "@perfolio/toaster"
 import "tailwindcss/tailwind.css"
 
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <>
+    <I18nProvider>
       <Head>
         <title>Perfolio</title>
       </Head>
@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </Auth0Provider>
         </ToastProvider>
       </IdProvider>
-    </>
+    </I18nProvider>
   )
 }
 export default MyApp
