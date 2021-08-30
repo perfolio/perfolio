@@ -8,7 +8,7 @@ import {
 import { format } from "@perfolio/util/numbers"
 import { Downsampling } from "@perfolio/downsampling"
 import { Time } from "@perfolio/util/time"
-export type AggregateOptions = "Relative" | "Absolute"
+export type AggregateOptions = "relative" | "absolute"
 
 export interface AssetsOverTimeChartProps {
   /**
@@ -20,7 +20,7 @@ export interface AssetsOverTimeChartProps {
 }
 
 export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
-  aggregate = "Absolute",
+  aggregate = "absolute",
   range,
 }): JSX.Element => {
   const { portfolioHistory } = usePortfolioHistory()
@@ -33,7 +33,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
 
   const data = useMemo(() => {
     const choice =
-      aggregate === "Absolute"
+      aggregate === "absolute"
         ? absolutePortfolioHistory
         : (relativePortfolioHistory as { time: number; value: number }[])
 
@@ -52,7 +52,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
         isLoading={absoluteLoading || relativeLoading}
         data={data}
         withXAxis
-        tooltip={(n) => format(n, { suffix: aggregate === "Absolute" ? "€" : undefined })}
+        tooltip={(n) => format(n, { suffix: aggregate === "absolute" ? "€" : undefined })}
       />
     </div>
   )
