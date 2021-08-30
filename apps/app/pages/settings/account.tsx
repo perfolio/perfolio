@@ -1,17 +1,12 @@
 import React from "react"
 import { NextPage, GetStaticProps } from "next"
-
 import { AppLayout } from "@perfolio/app/components"
-
 import { useRouter } from "next/router"
 import { AsyncButton } from "@perfolio/ui/components"
-
 import Link from "next/link"
 import cn from "classnames"
 import { useUser } from "@perfolio/hooks"
-
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
-
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 /**

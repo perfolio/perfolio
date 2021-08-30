@@ -25,7 +25,6 @@ interface SettingProps {
     label?: string
     kind?: string
   }
-  translations: Record<string, string>
 }
 
 const Setting: React.FC<SettingProps> = ({
@@ -40,7 +39,7 @@ const Setting: React.FC<SettingProps> = ({
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
-  const { t } = useI18n(translations)
+  const { t } = useI18n()
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   return (
@@ -77,13 +76,13 @@ const Setting: React.FC<SettingProps> = ({
   )
 }
 
-interface PageProps {
-  translations: Record<string, string>
-}
-
 /**
  * / page.
  */
+
+ interface PageProps {
+  translations: Record<string, string>
+}
 
  const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
@@ -103,7 +102,7 @@ interface PageProps {
   const updateSettings = useUpdateUserSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
     if (!user?.sub) {
-      throw new AuthenticationError("User is undefined")
+      throw new AuthenticationError(t("setStocksAuthError"))
     }
     await updateSettings.mutateAsync({
       userSettings: { userId: user.sub, defaultCurrency: values.defaultCurrency },
@@ -116,7 +115,7 @@ interface PageProps {
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     if (!user?.sub) {
-      throw new AuthenticationError("User is undefined")
+      throw new AuthenticationError(t("setStocksAuthError"))
     }
     await updateSettings.mutateAsync({
       userSettings: {
