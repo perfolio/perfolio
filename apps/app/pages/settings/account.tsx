@@ -1,5 +1,5 @@
 import React from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 
 import { AppLayout } from "@perfolio/app/components"
 
@@ -10,12 +10,20 @@ import Link from "next/link"
 import cn from "classnames"
 import { useUser } from "@perfolio/hooks"
 
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 /**
  * / page.
  */
-const SettingsPage: NextPage = () => {
+
+interface PageProps {
+  translations: Record<string, string>
+}
+
+const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const router = useRouter()
   const { user } = useUser()
   return (
@@ -36,7 +44,7 @@ const SettingsPage: NextPage = () => {
                       },
                     )}
                   >
-                    Account
+                    {t("setAccLink")}
                   </a>
                 </Link>
               </li>
@@ -51,7 +59,7 @@ const SettingsPage: NextPage = () => {
                       },
                     )}
                   >
-                    Stocks
+                    {t("setStocksLink")}
                   </a>
                 </Link>
               </li>
@@ -75,10 +83,19 @@ const SettingsPage: NextPage = () => {
           }}
           kind="cta"
         >
-          Open billing portal
+          {t("setBillingPortal")}
         </AsyncButton>
       </div>
     </AppLayout>
   )
 }
 export default withAuthenticationRequired(SettingsPage)
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

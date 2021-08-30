@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout } from "@perfolio/app/components"
 import { z } from "zod"
@@ -14,6 +14,8 @@ import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { AuthenticationError } from "@perfolio/util/errors"
 import { useAuth0 } from "@auth0/auth0-react"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+
 interface SettingProps {
   validation: z.AnyZodObject
   title: string
@@ -23,6 +25,7 @@ interface SettingProps {
     label?: string
     kind?: string
   }
+  translations: Record<string, string>
 }
 
 const Setting: React.FC<SettingProps> = ({
@@ -37,6 +40,7 @@ const Setting: React.FC<SettingProps> = ({
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
+  const { t } = useI18n(translations)
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   return (
@@ -65,7 +69,7 @@ const Setting: React.FC<SettingProps> = ({
             type="submit"
             disabled={ctx.formState.isSubmitting}
           >
-            {button?.label ?? "Save"}
+            {button?.label ?? t("setButtonLabelSave")}
           </Button>
         </Card.Footer.Actions>
       </Card.Footer>
@@ -73,10 +77,16 @@ const Setting: React.FC<SettingProps> = ({
   )
 }
 
+interface PageProps {
+  translations: Record<string, string>
+}
+
 /**
  * / page.
  */
-const SettingsPage: NextPage = () => {
+
+ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const { user } = useAuth0()
   const { settings } = useUserSettings()
 
@@ -136,7 +146,7 @@ const SettingsPage: NextPage = () => {
                       },
                     )}
                   >
-                    Account
+                    {t("setAccLink")}
                   </a>
                 </Link>
               </li>
@@ -151,7 +161,7 @@ const SettingsPage: NextPage = () => {
                       },
                     )}
                   >
-                    Stocks
+                    {t("setStocksLink")}
                   </a>
                 </Link>
               </li>
@@ -162,13 +172,13 @@ const SettingsPage: NextPage = () => {
     >
       <div className="space-y-8">
         <Setting
-          title="Currency"
-          footer="All your assets will be converted to this currency"
+          title={t("setStocksCurrencyTitle")}
+          footer={t("setStocksCurrencyFooter")}
           validation={currencyValidation}
           onSubmit={onCurrencySubmit as (values: Record<string, string | number>) => Promise<void>}
         >
           <Field.Input
-            label="Currency"
+            label={t("setStocksCurrencyLabel")}
             hideLabel
             name="defaultCurrency"
             type="text"
@@ -176,8 +186,8 @@ const SettingsPage: NextPage = () => {
           />
         </Setting>
         <Setting
-          title="Default stock exchange"
-          footer="Your preferred exchange"
+          title={t("setStocksStockExTitle")}
+          footer={t("setStocksStockExFooter")}
           validation={exchangeValidation}
           onSubmit={onExchangeSubmit as (values: Record<string, string | number>) => Promise<void>}
         >
@@ -191,7 +201,7 @@ const SettingsPage: NextPage = () => {
             />
             <Field.Select
               options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
-              label="Exchange"
+              label={t("setStocksStockExSelect")}
               name="defaultExchange"
               defaultValue={settings?.defaultExchange?.name ?? ""}
             />
@@ -202,3 +212,12 @@ const SettingsPage: NextPage = () => {
   )
 }
 export default withAuthenticationRequired(SettingsPage)
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}
