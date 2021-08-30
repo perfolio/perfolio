@@ -46,7 +46,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       items: [
         {
           // Pro subscription
-          price: "prod_K8L177Ou3esVrr",
+          price: "price_1JU4LpG0ZLpKb1P6Szj2jJQr",
         },
       ],
     })
