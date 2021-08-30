@@ -15,7 +15,7 @@ import { PrismaClient } from "@perfolio/integrations/prisma"
 const validation = z.object({
   headers: z.object({
     "content-type": z.string().refine((h) => h === "application/json"),
-    authorization: z.string().refine((h) => h === env.require("AUTH0_HOOK_SECRET")),
+    authorization: z.string().refine((h) => h === env.require("AUTH0_WEBHOOK_TOKEN")),
   }),
   body: z.object({
     userId: z.string(),
