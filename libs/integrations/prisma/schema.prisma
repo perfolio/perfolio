@@ -10,10 +10,6 @@ generator client {
   previewFeatures = ["referentialActions"]
 }
 
-enum Plan {
-  TRIAL
-  PRO
-}
 
 model User {
   // Auth0 provided user id
