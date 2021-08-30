@@ -20,7 +20,7 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
-
+import { Text } from "@perfolio/ui/components"
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
   translations: Record<string, string>
@@ -51,57 +51,74 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section id="features" className="relative flex flex-col justify-center">
           <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
 
-          <ul className="grid grid-cols-1 gap-8 mx-auto my-24 md:grid-cols-2 xl:grid-cols-3">
-            {[
-              {
-                icon: <FlagIcon />,
-                title: t("independent"),
-                description:
-                  "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
-              },
-              {
-                icon: <ChartSquareBarIcon />,
-                title: "Complex made easy",
-                description:
-                  "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
-              },
-              {
-                icon: <HomeIcon />,
-                title: "All in one place",
-                description:
-                  "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
-              },
-              {
-                icon: <DatabaseIcon />,
-                title: "Highest data quality",
-                description:
-                  "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
-              },
-              {
-                icon: <ShieldCheckIcon />,
-                title: "Privacy and Security",
-                description:
-                  "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
-              },
-              {
-                icon: <CreditCardIcon />,
-                title: "Fair pricing",
-                description:
-                  "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
-              },
-            ].map((f, index) => {
-              return (
-                <li key={index}>
-                  <Feature icon={f.icon} title={f.title} description={f.description}></Feature>
-                </li>
-              )
-            })}
-          </ul>
+          <div className="grid max-w-screen-lg mx-auto space-y-6 lg:grid-cols-2 lg:space-y-0 lg:divide-x lg:divide-gray-300">
+            <div className="flex flex-col items-center justify-center pr-8 space-y-16">
+              {[
+                {
+                  icon: <FlagIcon />,
+                  title: t("independent"),
+                  description:
+                    "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
+                },
+                {
+                  icon: <ChartSquareBarIcon />,
+                  title: "Complex made easy",
+                  description:
+                    "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
+                },
+                {
+                  icon: <HomeIcon />,
+                  title: "All in one place",
+                  description:
+                    "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
+                },
+              ].map((f) => {
+                return (
+                  <Feature
+                    key={f.title}
+                    icon={f.icon}
+                    title={f.title}
+                    description={f.description}
+                  ></Feature>
+                )
+              })}
+            </div>
+
+            <div className="flex flex-col items-center justify-center pl-8 space-y-16">
+              {[
+                {
+                  icon: <DatabaseIcon />,
+                  title: "Highest data quality",
+                  description:
+                    "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
+                },
+                {
+                  icon: <ShieldCheckIcon />,
+                  title: "Privacy and Security",
+                  description:
+                    "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
+                },
+                {
+                  icon: <CreditCardIcon />,
+                  title: "Fair pricing",
+                  description:
+                    "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
+                },
+              ].map((f) => (
+                <Feature
+                  key={f.title}
+                  icon={f.icon}
+                  title={f.title}
+                  description={f.description}
+                ></Feature>
+              ))}
+            </div>
+          </div>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
 
-          <div className="grid grid-cols-1 gap-8 mt-20 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <Price
               title="Try for free"
               price={0}
@@ -110,11 +127,11 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
-              href="https://app.perfol.io"
+              href="/api/auth/login"
               submitText="Try for free"
             />
             <Price
-              title="Pro"
+              title="Basic"
               price={3.99}
               interval="month"
               features={[
@@ -122,12 +139,12 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
-              href="https://app.perfol.io"
+              href="/api/auth/login"
               submitText="Get started"
               highlighted
             />
             <Price
-              title="Premium"
+              title="Pro"
               price={8.99}
               interval="month"
               features={[
@@ -135,51 +152,22 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 "Performance dashboard and key figures",
                 "Chart diagram of sectors",
               ]}
-              href="https://app.perfol.io"
+              href="/api/auth/login"
               submitText="Take off"
             />
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
           <SectionTitle tag="Our Team" title="Who is behind this?" />
-
-          <div className="flex flex-col items-center mt-10 md:flex-row">
-            <div className="text-center md:w-1/3 md:pr-8 md:py-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full md:h-40 md:w-40">
-                <svg
-                  className="w-full p-3 text-white fill-current md:p-4"
-                  viewBox="0 0 354 283"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M247.35 70.671L176.678 0 0 176.678l35.336 35.336L176.678 70.671l35.336 35.336 35.336-35.336zM106.007 212.014l70.671 70.671 176.679-176.678-35.336-35.336-141.343 141.343-35.335-35.336-35.336 35.336z"
-                    fill="fill-current"
-                  />
-                </svg>
-              </div>
-              <div className="flex flex-col items-center justify-center mt-4 space-y-2 text-center">
-                <h2 className="text-lg font-medium leading-6 text-black">Perfolio</h2>
-                <p className="text-base leading-6 text-left text-gray-600 md:text md:text-center">
-                  At Perfolio, we believe that investment decisions should always be based on as
-                  much well-founded information as possible. It is our mission to provide our users
-                  the most relevant and accurate financial information available.
-                </p>
-              </div>
-            </div>
-            <div className="pt-4 mt-4 border-t border-gray-300 md:w-2/3 md:pl-8 md:py-8 md:border-l md:border-t-0 md:mt-0">
-              <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
-                {members.map((m) => {
-                  return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
-                })}
-              </div>
-              <p className="mt-8 text-center text-gray-600">
-                We are a motivated team of enthusiastic techies who are passionate about capital
-                market topics. Bringing together different backgrounds and skills, we want to
-                revolutionize the way investors track their assets and measure the success of their
-                investment strategy. We are always happy to chat - drop us a message!
-              </p>
-            </div>
+          <Text align="text-center">
+            At Perfolio, we believe that investment decisions should always be based on as much
+            well-founded information as possible. It is our mission to provide our users the most
+            relevant and accurate financial information available.
+          </Text>
+          <div className="grid w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
+            {members.map((m) => {
+              return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
+            })}
           </div>
         </Section>
       </div>

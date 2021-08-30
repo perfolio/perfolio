@@ -100,7 +100,7 @@ const App: NextPage = () => {
       ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
       : 0
 
-  const [aggregation, setAggregation] = useState<AggregateOptions>("Relative")
+  const [aggregation, setAggregation] = useState<AggregateOptions>("relative")
 
   const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
   const { relativeMean } = useRelativeMean(relativePortfolioHistory)
@@ -127,7 +127,10 @@ const App: NextPage = () => {
           <Main.Header.Title title="Overview" />
 
           <ToggleGroup<AggregateOptions>
-            options={["Relative", "Absolute"]}
+            options={[
+              { display: "Relative", id: "relative" },
+              { display: "Absolute", id: "absolute" },
+            ]}
             selected={aggregation}
             setSelected={setAggregation}
           />
@@ -148,7 +151,7 @@ const App: NextPage = () => {
                         suffix: getCurrencySymbol(settings?.defaultCurrency),
                       })
                     }
-                    isLoading={aggregation === "Absolute" && absoluteIsLoading}
+                    isLoading={aggregation === "absolute" && absoluteIsLoading}
                   />
                 }
               >
@@ -159,10 +162,10 @@ const App: NextPage = () => {
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === "Absolute" ? "Mean Change" : "Mean Return"}
-                    value={aggregation === "Absolute" ? absoluteMean : relativeMean}
+                    label={aggregation === "absolute" ? "Mean Change" : "Mean Return"}
+                    value={aggregation === "absolute" ? absoluteMean : relativeMean}
                     format={(n) =>
-                      aggregation === "Absolute"
+                      aggregation === "absolute"
                         ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
@@ -170,8 +173,8 @@ const App: NextPage = () => {
                         : format(n, { suffix: "%", percent: true, sign: true })
                     }
                     isLoading={
-                      (aggregation === "Absolute" && absoluteIsLoading) ||
-                      (aggregation === "Relative" && relativeIsLoading)
+                      (aggregation === "absolute" && absoluteIsLoading) ||
+                      (aggregation === "relative" && relativeIsLoading)
                     }
                   />
                 }
@@ -182,8 +185,8 @@ const App: NextPage = () => {
                 trigger={
                   <KPI
                     isLoading={
-                      (aggregation === "Absolute" && absoluteIsLoading) ||
-                      (aggregation === "Relative" && relativeIsLoading)
+                      (aggregation === "absolute" && absoluteIsLoading) ||
+                      (aggregation === "relative" && relativeIsLoading)
                     }
                     label="Standard Deviation"
                     value={relativeSTD}
@@ -201,12 +204,12 @@ const App: NextPage = () => {
                     label="Change"
                     enableColor
                     isLoading={
-                      (aggregation === "Absolute" && absoluteIsLoading) ||
-                      (aggregation === "Relative" && relativeIsLoading)
+                      (aggregation === "absolute" && absoluteIsLoading) ||
+                      (aggregation === "relative" && relativeIsLoading)
                     }
-                    value={aggregation === "Absolute" ? absoluteChange : relativeChange}
+                    value={aggregation === "absolute" ? absoluteChange : relativeChange}
                     format={(n) =>
-                      aggregation === "Absolute"
+                      aggregation === "absolute"
                         ? format(n, {
                             suffix: getCurrencySymbol(settings?.defaultCurrency),
                             sign: true,
@@ -224,7 +227,15 @@ const App: NextPage = () => {
           <div className="pt-2 space-y-8">
             <div className="flex justify-center md:justify-end">
               <ToggleGroup<Range>
-                options={Object.keys(ranges) as Range[]}
+                options={[
+                  { display: "1W", id: "1W" },
+                  { display: "1M", id: "1M" },
+                  { display: "3M", id: "3M" },
+                  { display: "6M", id: "6M" },
+                  { display: "1Y", id: "1Y" },
+                  { display: "YTD", id: "YTD" },
+                  { display: "ALL", id: "ALL" },
+                ]}
                 selected={range}
                 setSelected={setRange}
               />

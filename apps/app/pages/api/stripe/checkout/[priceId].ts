@@ -4,11 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { Logger } from "tslog"
 const validation = z.object({
-  headers: z.object({
-    "content-type": z.string().refine((h) => h === "application/json"),
-  }),
   query: z.object({
     priceId: z.string(),
+    customerId: z.string(),
   }),
   method: z.string().refine((m) => m === "POST"),
 })
@@ -16,9 +14,8 @@ const validation = z.object({
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const logger = new Logger({ name: "checkout session" })
   try {
-    logger.debug(typeof req.body, req.body, req.headers)
     const {
-      query: { priceId },
+      query: { priceId, customerId },
     } = validation.parse(req)
 
     const stripe = new Stripe(env.require("STRIPE_SECRET_KEY"), {
@@ -28,6 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
+      customer: customerId,
       payment_method_types: ["card"],
       line_items: [
         {
@@ -35,11 +33,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           quantity: 1,
         },
       ],
-      success_url: "http://localhost:3000/payments/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:3000",
+      success_url: req.headers["referer"] ?? "https://app.perfol.io",
+      cancel_url: req.headers["referer"] ?? "https://app.perfol.io",
     })
     if (checkoutSession.url) {
-      res.json({ checkoutUrl: checkoutSession.url })
+      res.json({ url: checkoutSession.url })
     }
   } catch (err) {
     logger.error(err)

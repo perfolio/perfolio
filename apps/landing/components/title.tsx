@@ -7,7 +7,7 @@ export interface SectionTitleProps {
 
 export const SectionTitle: React.FC<SectionTitleProps> = ({ title, tag }): JSX.Element => {
   return (
-    <div className="text-center">
+    <div className="pb-16 text-center">
       <h2 className="font-semibold tracking-wide text-black uppercase sm:text-lg sm:leading-snug">
         {tag}
       </h2>

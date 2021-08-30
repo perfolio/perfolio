@@ -4,7 +4,7 @@ import { format } from "@perfolio/util/numbers"
 import { useTransactions, usePortfolio } from "@perfolio/hooks"
 
 export interface AssetTableProps {
-  aggregation: "Absolute" | "Relative"
+  aggregation: "absolute" | "relative"
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
@@ -90,7 +90,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
         .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
         .map((holding) => {
           const change =
-            aggregation === "Absolute"
+            aggregation === "absolute"
               ? (holding.value - costPerShare[holding.asset.id]) * holding.quantity
               : holding.value / costPerShare[holding.asset.id] - 1
 
@@ -139,7 +139,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               >
                 {format(
                   change,
-                  aggregation === "Absolute"
+                  aggregation === "absolute"
                     ? { suffix: "€", sign: true }
                     : { percent: true, suffix: "%", sign: true },
                 )}
