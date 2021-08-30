@@ -5,13 +5,41 @@ import { z } from "zod"
 import { Logger } from "tslog"
 import { buffer } from "micro"
 import { PrismaClient } from "@perfolio/integrations/prisma"
-import { Time } from "@perfolio/util/time"
+import { ManagementClient } from "auth0"
 
-const validation = z.object({
+const subscriptionValidation = z.object({
+  id: z.string(),
+  object: z.string().refine((object) => object === "subscription"),
+  current_period_end: z.number().int(),
+  current_period_start: z.number().int(),
+  customer: z.string(),
+  status: z.enum([
+    "incomplete",
+    "incomplete_expired",
+    "trialing",
+    "active",
+    "past_due",
+    "canceled",
+    "unpaid",
+  ]),
+  price: z.object({
+    product: z.string(),
+  }),
+})
+
+const requestValidation = z.object({
   method: z.string().refine((m) => m === "POST"),
   headers: z.object({
     "stripe-signature": z.string(),
   }),
+})
+
+const prisma = new PrismaClient()
+
+const auth0 = new ManagementClient({
+  domain: env.require("NEXT_PUBLIC_AUTH0_DOMAIN"),
+  clientId: env.require("AUTH0_MANAGEMENT_CLIENT_ID"),
+  clientSecret: env.require("AUTH0_MANAGEMENT_CLIENT_SECRET"),
 })
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -19,7 +47,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const {
       headers: { "stripe-signature": signature },
-    } = validation.parse(req)
+    } = requestValidation.parse(req)
 
     const stripe = new Stripe(env.require("STRIPE_SECRET_KEY"), {
       apiVersion: "2020-08-27",
@@ -31,59 +59,40 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       signature,
       env.require("STRIPE_WEBHOOK_SECRET"),
     )
-    // logger.info({ event })
 
-    const prisma = new PrismaClient()
+    if (event.type.startsWith("customer.subscription")) {
+      const subscription = subscriptionValidation.parse(event.object)
 
-    if (event.type === "checkout.session.completed") {
-      // Payment is successful and the subscription is created.
-      // You should provision the subscription and save the customer ID to your database.
-
-      const { id: stripeSubscriptionId, customer: stripeCustomerId } = z
-        .object({
-          id: z.string(),
-          customer: z.string(),
-          customer_details: z.object({
-            email: z.string().email(),
-          }),
-        })
-        .parse(event.data.object)
-
-      const user = await prisma.user.findUnique({ where: { stripeCustomerId } })
-      if (!user) {
-        throw new Error(`No user found`)
-      }
-
-      const stripeSubscription = await stripe.subscriptions.retrieve(stripeSubscriptionId)
-
-      logger.debug(event)
-      const update = {
-        stripeSubscriptionId,
-        stripeCustomerId,
-        payedUntil: Time.fromTimestamp(stripeSubscription.current_period_end).toDate(),
-      }
-      await prisma.subscription.upsert({
-        where: { stripeSubscriptionId },
-        update,
-        create: { ...update, userId: user.id },
+      const user = await prisma.user.findUnique({
+        where: { stripeCustomerId: subscription.customer },
       })
-      logger.debug("Subscription updated")
+      if (!user) {
+        throw new Error("User not found")
+      }
+
+      if (
+        event.type === "customer.subscription.created" ||
+        event.type === "customer.subscription.updated"
+      ) {
+        await auth0.assignRolestoUser(
+          { id: "email|6119436dd1ce9f9dc82da928" },
+          { roles: ["rol_Rjy99HLtin8ryEds"] },
+        )
+      } else if (event.type === "customer.subscription.deleted") {
+        await auth0.removeRolesFromUser(
+          { id: "email|6119436dd1ce9f9dc82da928" },
+          { roles: ["rol_Rjy99HLtin8ryEds"] },
+        )
+      }
     }
-    //     case 'invoice.paid':
-    //       // Continue to provision the subscription as payments continue to be made.
-    //       // Store the status in your database and check when a user accesses your service.
-    //       // This approach helps you avoid hitting rate limits.
-    //       break;
-    //     case 'invoice.payment_failed':
-    //       // The payment failed or the customer does not have a valid payment method.
-    //       // The subscription becomes past_due. Notify your customer and send them to the
-    //       // customer portal to update their payment information.
-    //       break;
-    //     default:
-    //     // Unhandled event type
-    //   }
+
+    // invoice.payment_failed
+    // notify user
+
+    // customer.subscription.trial_will_end
+    // Occurs three days before a subscription's trial period is scheduled to end, or when a trial is ended immediately (using trial_end=now).
   } catch (err) {
-    logger.error(err)
+    logger.error(err.message)
     res.status(500)
     res.send(err.message)
   } finally {

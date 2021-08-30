@@ -8,6 +8,8 @@ export const payload = z.object({
   exp: z.number().int(),
   aud: z.array(z.string()),
   sub: z.string(),
+  scope: z.string(),
+  permissions: z.array(z.string()),
 })
 
 export type Claims = z.infer<typeof payload>
@@ -47,6 +49,7 @@ export class JWT {
       audience: this.audience,
       issuer: this.issuer,
     })
+    console.log({ decoded })
     return payload.parse(decoded)
   }
   public async isValid(token: string): Promise<boolean> {
