@@ -1,3 +1,10 @@
+/**
+ * ----------------------------------------------------------------------------
+ * If you change the path of this file you must also change the url in the
+ * auth0 post-login action
+ * ----------------------------------------------------------------------------
+ */
+
 import { Stripe } from "stripe"
 import { env } from "@chronark/env"
 import { NextApiRequest, NextApiResponse } from "next"
@@ -35,40 +42,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       typescript: true,
     })
 
-    const existingUser = await prisma.user.findUnique({ where: { id: userId } })
-    if (existingUser) {
-      // I am not sure how email change works when we are only offering
-      // passwordless login, but at least we can handle it properly
-      if (existingUser.email !== email) {
-        await Promise.all([
-          prisma.user.update({ where: { id: userId }, data: { email } }),
-          stripe.customers.update(existingUser.stripeCustomerId, { email }),
-        ])
-      }
-    } else {
-      // Brand new users need a new stripe customer id and trial subscription
-
-      const customer = await stripe.customers.create({ email })
-      const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
-        trial_period_days: 30,
-        items: [
-          {
-            // Pro subscription
-            price: "prod_K8L177Ou3esVrr",
-          },
-        ],
-      })
-
-      await prisma.user.create({
-        data: {
-          id: userId,
-          email,
-          stripeCustomerId: customer.id,
-          stripeSubscriptionId: subscription.id,
+    const customer = await stripe.customers.create({ email })
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      trial_period_days: 30,
+      items: [
+        {
+          // Pro subscription
+          price: "prod_K8L177Ou3esVrr",
         },
-      })
-    }
+      ],
+    })
+
+    await prisma.user.create({
+      data: {
+        id: userId,
+        email,
+        stripeCustomerId: customer.id,
+        stripeSubscriptionId: subscription.id,
+      },
+    })
   } catch (err) {
     logger.error(err)
   } finally {
