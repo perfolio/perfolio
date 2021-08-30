@@ -1,5 +1,5 @@
 import React from "react"
-
+import { Icon } from "@perfolio/ui/components"
 /* eslint-disable-next-line */
 export interface FeatureProps {
   title: string
@@ -9,16 +9,18 @@ export interface FeatureProps {
 
 export const Feature: React.FC<FeatureProps> = ({ title, description, icon }): JSX.Element => {
   return (
-    <div className="p-4 mt-2 text-center md:p-12">
-      <div className="flex flex-col items-center justify-center space-x-4 md:space-x-0">
-        <div className="flex justify-center w-12 h-12 bg-black rounded">
-          <span className="w-full h-full p-2 text-white">{icon}</span>
-        </div>
-        <h2 className="mt-3 font-semibold tracking-wide text-gray-800 uppercase sm:text-lg sm:leading-snug">
-          {title}
-        </h2>
+    <div className="flex flex-col items-center justify-center md:flex-row md:items-start">
+      <div className="mr-4 ">
+        <Icon size="sm" label={title} color="text-gray-900">
+          {icon}{" "}
+        </Icon>
       </div>
-      <p className="mt-1 text-base leading-6text-gray-600">{description}</p>
+      <div>
+        <h6 className="mb-3 text-xl font-bold leading-5 text-center uppercase md:text-left">
+          {title}
+        </h6>
+        <p className="text-sm text-center text-gray-900 md:text-left">{description}</p>
+      </div>
     </div>
   )
 }

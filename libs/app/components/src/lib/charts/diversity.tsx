@@ -126,7 +126,10 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         </div>
         <ToggleGroup
           size="sm"
-          options={["Sectors", "Countries"]}
+          options={[
+            { display: "Sectors", id: "sectors" },
+            { display: "Countries", id: "countries" },
+          ]}
           selected={selected}
           setSelected={setSelected}
         />

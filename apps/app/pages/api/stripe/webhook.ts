@@ -85,6 +85,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         prod_K8L2zOY0pLY68n: "premium",
       }
 
+      logger.debug(subscription.items.data[0])
       const productId = subscription.items.data[0].price.product as string
       const product = products[productId]
       const role = authRoles[product]

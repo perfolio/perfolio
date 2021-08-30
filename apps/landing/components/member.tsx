@@ -9,18 +9,18 @@ export interface MemberProps {
 
 export const Member: React.FC<MemberProps> = ({ image, name, title }): JSX.Element => {
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-sm whitespace-nowrap ">
-      <div className="w-20 h-20 overflow-hidden rounded-full sm:w-32 sm:h-32 md:w-40 md:h-40">
-        <Image
-          src={image}
-          alt={name}
-          width={500}
-          height={500}
-          className="object-cover rounded-full "
-        />
+    <div className="flex space-x-4">
+      <Image
+        className="object-cover w-20 h-20 mr-4 rounded-full shadow"
+        src={image}
+        alt={name}
+        width={100}
+        height={100}
+      />
+      <div className="flex flex-col justify-center">
+        <p className="text-lg font-bold">{name}</p>
+        <p className="text-sm text-gray-800">{title}</p>
       </div>
-      <span className="mt-4 font-semibold text-center text-gray-900">{name}</span>
-      <span className="text-gray-700">{title}</span>
     </div>
   )
 }
