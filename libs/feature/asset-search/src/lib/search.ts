@@ -1,5 +1,6 @@
 import Fuse from "fuse.js"
 import { StockMap } from "@perfolio/integrations/prisma"
+import { useI18n } from "@perfolio/feature/i18n"
 
 type IsinTickerPair = { isin: string; ticker: string }
 
@@ -9,6 +10,7 @@ export async function search(
   getTickerFromIsin: (isin: string) => Promise<string>,
 ): Promise<IsinTickerPair[]> {
   fragment = fragment.toLowerCase()
+  const { t } = useI18n()
   const isinMatcher = RegExp(/^[a-z]{2}[a-z0-9]{9}[0-9]$/)
   /**
    * The user has entered a valid ISIN
@@ -28,7 +30,7 @@ export async function search(
      */
     const ticker = await getTickerFromIsin(isin)
     if (!ticker) {
-      throw new Error(`No matching ticker found for isin: ${isin}`)
+      throw new Error(t("assetSearchErrorTicker") + `${isin}`)
     }
 
     return [{ isin, ticker }]

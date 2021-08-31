@@ -2,6 +2,7 @@ import React, { useMemo } from "react"
 import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 import { useTransactions, usePortfolio } from "@perfolio/hooks"
+import { useI18n } from "@perfolio/feature/i18n"
 
 export interface AssetTableProps {
   aggregation: "absolute" | "relative"
@@ -9,6 +10,7 @@ export interface AssetTableProps {
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
   const { transactions } = useTransactions()
+  const { t } = useI18n()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
@@ -45,39 +47,38 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
     <Table<"asset" | "chart" | "quantity" | "costPerShare" | "pricePerShare" | "change">
       columns={[
         {
-          Header: "Asset",
+          Header: t("assetTableAssetHeader"),
           accessor: "asset",
           align: "text-left",
         },
         {
-          Header: "Weight",
+          Header: t("assetTableWeightHeader"),
           accessor: "chart",
         },
         {
-          Header: "Quantity",
+          Header: t("assetTableQuantHeader"),
           accessor: "quantity",
           align: "text-right",
         },
         {
-          Header: "Cost per share",
+          Header: t("assetTableCostHeader"),
           accessor: "costPerShare",
           align: "text-right",
           tooltip: (
             <Tooltip>
-              <Description title="Cost per share">
-                The average cost you have to pay for a single portfolio position in a specified
-                currency.
+              <Description title={t("assetTableCostToolTitle")}>
+                {t("assetTableCostToolDescr")}
               </Description>
             </Tooltip>
           ),
         },
         {
-          Header: "Price per share",
+          Header: t("assetTablePriceHeader"),
           accessor: "pricePerShare",
           align: "text-right",
         },
         {
-          Header: "Change",
+          Header: t("assetTableChangeHeader"),
           accessor: "change",
           align: "text-right",
         },
@@ -116,8 +117,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                   }
                 >
                   <Text>
-                    {holding.asset.name} represents {format(weight, { percent: true, suffix: "%" })}{" "}
-                    of your portfolio.
+                    {holding.asset.name} {t("assetTableComposition1")} {format(weight, { percent: true, suffix: "%" })}{" "}
+                    {t("assetTableComposition2")}
                   </Text>
                 </Tooltip>
               </Cell.Cell>

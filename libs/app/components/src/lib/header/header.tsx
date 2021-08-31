@@ -1,31 +1,33 @@
 import React from "react"
 import { DesktopNavbar, MobileNavbar } from "../navbar"
 import { ChartSquareBarIcon, PlusIcon, BookOpenIcon } from "@heroicons/react/outline"
+import { useI18n } from "@perfolio/feature/i18n"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}
 
+const { t } = useI18n()
 const menu = {
   items: [
     {
-      label: "Dashboard",
+      label: t("headerLabelDash"),
       icon: <ChartSquareBarIcon />,
       href: "/",
     },
     {
-      label: "Transactions",
+      label: t("headerLabelTrans"),
       icon: <BookOpenIcon />,
       menu: [
         {
-          name: "My Transactions",
+          name: t("headerLabelMyTrans"),
           href: "/transactions",
           icon: <BookOpenIcon />,
-          description: "See your existing transactions",
+          description: t("headerDescrMyTrans"),
         },
         {
-          name: "Add manually",
+          name: t("headerLabelAddTrans"),
           href: "/transactions/new",
           icon: <PlusIcon />,
-          description: "Add a transaction by entering data yourself",
+          description: t("headerDescrAddTrans"),
         },
       ],
     },
