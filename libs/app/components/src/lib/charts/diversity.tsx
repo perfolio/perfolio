@@ -73,11 +73,11 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
   /**
    * Selection can either be "sectors" or "counrties"
    */
-  const [selected, setSelected] = useState("Sectors")
+  const [selected, setSelected] = useState<"sectors" | "countries">("sectors")
 
   const data = useMemo(
     () =>
-      Object.entries(selected === "Countries" ? countries : sectors).map(([name, value]) => {
+      Object.entries(selected === "countries" ? countries : sectors).map(([name, value]) => {
         return {
           name,
           value,
@@ -124,9 +124,12 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
             </Description>
           </Tooltip>
         </div>
-        <ToggleGroup
+        <ToggleGroup<"sectors" | "countries">
           size="sm"
-          options={["Sectors", "Countries"]}
+          options={[
+            { display: "Sectors", id: "sectors" },
+            { display: "Countries", id: "countries" },
+          ]}
           selected={selected}
           setSelected={setSelected}
         />

@@ -1,13 +1,10 @@
 import React, { useState } from "react"
 import { NextPage, GetStaticProps } from "next"
 import { useForm } from "react-hook-form"
-import { AppLayout } from "@perfolio/app/components"
+import { AppLayout, SideNavbar } from "@perfolio/app/components"
 import { z } from "zod"
-import { useRouter } from "next/router"
 import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
-import cn from "classnames"
 import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
@@ -64,7 +61,6 @@ const Setting: React.FC<SettingProps> = ({
               handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
             }
             kind={button?.kind ?? "primary"}
-            size="sm"
             type="submit"
             disabled={ctx.formState.isSubmitting}
           >
@@ -90,8 +86,6 @@ const Setting: React.FC<SettingProps> = ({
   const { settings } = useUserSettings()
 
   const { exchanges } = useExchanges()
-
-  const router = useRouter()
 
   /**
    * The current defaultExchange
@@ -128,47 +122,7 @@ const Setting: React.FC<SettingProps> = ({
   const [region, setRegion] = useState<string>(settings?.defaultExchange?.region ?? "")
 
   return (
-    <AppLayout
-      side="left"
-      sidebar={
-        <div className="mt-4">
-          <nav className="flex-grow pb-4 pr-4 md:block md:pb-0 md:overflow-y-auto">
-            <ul className="space-y-4">
-              <li>
-                <Link href="/settings/account">
-                  <a
-                    className={cn(
-                      "block px-4 py-2transition duration-500 ease-in-out transform focus:outline-none hover:text-black",
-                      {
-                        "font-semibold text-black": router.pathname === "/settings/account",
-                        "text-gray-500": router.pathname !== "/settings/account",
-                      },
-                    )}
-                  >
-                    {t("setAccLink")}
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/settings/stocks">
-                  <a
-                    className={cn(
-                      "block px-4 py-2transition duration-500 ease-in-out transform focus:outline-none hover:text-black",
-                      {
-                        "font-semibold text-black": router.pathname === "/settings/stocks",
-                        "text-gray-500": router.pathname !== "/settings/stocks",
-                      },
-                    )}
-                  >
-                    {t("setStocksLink")}
-                  </a>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      }
-    >
+    <AppLayout side="left" sidebar={<SideNavbar />}>
       <div className="space-y-8">
         <Setting
           title={t("setStocksCurrencyTitle")}

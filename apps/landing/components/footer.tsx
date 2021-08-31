@@ -60,7 +60,7 @@ const FooterLink: React.FC<{ href: string }> = ({ href, children }): JSX.Element
   return (
     <div>
       <Link href={href}>
-        <a className="text-gray-600 transition duration-500 hover:text-black hover:font-medium ">
+        <a className="text-gray-400 transition duration-500 hover:text-gray-100 hover:font-medium ">
           {children}
         </a>
       </Link>
@@ -71,7 +71,7 @@ const FooterLink: React.FC<{ href: string }> = ({ href, children }): JSX.Element
 const FooterColumn: React.FC<{ title: string }> = ({ title, children }): JSX.Element => {
   return (
     <div className="flex items-start justify-between p-4 space-x-10 md:space-x-0 md:block">
-      <p className="w-1/2 font-medium tracking-wide text-gray-700">{title}</p>
+      <p className="w-1/2 font-medium tracking-wide text-gray-200">{title}</p>
       <div className="w-1/2 space-y-2 md:mt-2">{children}</div>
     </div>
   )
@@ -87,7 +87,7 @@ export const Footer = () => {
   const [done, setDone] = useState(false)
 
   return (
-    <footer className="bg-gray-100">
+    <footer className="bg-black">
       <div className="container px-4 py-10 mx-auto md:py-12 lg:py-16 xl:py-20 xl:px-0">
         <div className="grid row-gap-10 mb-8 lg:grid-cols-6">
           <div className="grid grid-cols-1 gap-8 lg:col-span-4 md:grid-cols-4">
@@ -112,11 +112,13 @@ export const Footer = () => {
             </FooterColumn>
           </div>
           <div className="mt-16 lg:col-span-2 lg:mt-0">
-            <p className="text-base font-medium tracking-wide text-center text-gray-700 md:text-left">
+            <p className="text-base font-medium tracking-wide text-center text-gray-200 md:text-left">
               Subscribe for updates
             </p>
             {done ? (
-              <Text align="text-center md:text-left">Thank you, we&apos;ll get back to you</Text>
+              <Text align="text-center md:text-left" color="text-gray-300">
+                Thank you, we&apos;ll get back to you
+              </Text>
             ) : (
               <Form
                 ctx={ctx}
@@ -166,10 +168,10 @@ export const Footer = () => {
           </div>
         </div>
         <div className="flex flex-col justify-between pt-5 pb-10 border-t border-gray-300 sm:flex-row">
-          <p className="text-sm text-center text-gray-600">
+          <p className="text-sm text-center text-gray-300">
             © Copyright {new Date().getFullYear()}. All rights reserved.
           </p>
-          <div className="flex items-center justify-center mt-4 space-x-4 sm:mt-0">
+          <div className="flex items-center justify-center mt-4 space-x-4 text-gray-300 sm:mt-0">
             {socialMedia()}
           </div>
         </div>
