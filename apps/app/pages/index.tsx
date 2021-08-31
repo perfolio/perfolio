@@ -134,8 +134,8 @@ const App: NextPage<PageProps> = ({ translations }) => {
 
           <ToggleGroup<AggregateOptions>
             options={[
-              { display: "Relative", id: "relative" },
-              { display: "Absolute", id: "absolute" },
+              { display: t("relPicked"), id: "relative" },
+              { display: t("absPicked"), id: "absolute" },
             ]}
             selected={aggregation}
             setSelected={setAggregation}
@@ -168,13 +168,8 @@ const App: NextPage<PageProps> = ({ translations }) => {
                 trigger={
                   <KPI
                     enableColor
-<<<<<<< HEAD
-                    label={aggregation === "Absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
-                    value={aggregation === "Absolute" ? absoluteMean : relativeMean}
-=======
-                    label={aggregation === "absolute" ? "Mean Change" : "Mean Return"}
+                    label={aggregation === "absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
                     value={aggregation === "absolute" ? absoluteMean : relativeMean}
->>>>>>> main
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
@@ -241,9 +236,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   { display: "1M", id: "1M" },
                   { display: "3M", id: "3M" },
                   { display: "6M", id: "6M" },
-                  { display: "1Y", id: "1Y" },
-                  { display: "YTD", id: "YTD" },
-                  { display: "ALL", id: "ALL" },
+                  { display: t("index1Y"), id: "1Y" },
+                  { display: t("indexYTD"), id: "YTD" },
+                  { display: t("indexAll"), id: "ALL" },
                 ]}
                 selected={range}
                 setSelected={setRange}
