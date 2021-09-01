@@ -49,7 +49,6 @@ specifiers:
   '@storybook/addon-links': ^6.3.7
   '@storybook/addon-postcss': ^2.0.0
   '@storybook/react': ^6.3.7
-  '@stripe/stripe-js': ^1.17.1
   '@tailwindcss/custom-forms': ^0.2.1
   '@tailwindcss/jit': ^0.1.18
   '@tailwindcss/typography': ^0.4.1
@@ -150,7 +149,6 @@ dependencies:
   '@radix-ui/react-toggle-group': 0.0.8_react@17.0.2
   '@radix-ui/react-tooltip': 0.0.18_react-dom@17.0.2+react@17.0.2
   '@sendgrid/mail': 7.4.6
-  '@stripe/stripe-js': 1.17.1
   apollo-datasource: 0.9.0
   apollo-server-cache-redis: 1.5.0
   apollo-server-core: 3.2.0_graphql@15.5.1
@@ -5782,10 +5780,6 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
     dev: true
-
-  /@stripe/stripe-js/1.17.1:
-    resolution: {integrity: sha512-c9MyDvdi5Xou0j0JPNy86NebtTDfh9o62Ifuzx6GSm2YO0oedBpy51WSyOue2L8Fb+mqESS5gd6mGVEIPUnXsA==}
-    dev: false
 
   /@svgr/babel-plugin-add-jsx-attribute/5.4.0:
     resolution: {integrity: sha512-ZFf2gs/8/6B8PnSofI0inYXr2SDNTDScPXhN7k5EqD4aZ3gi6u+rbmZHVB8IM3wDyx8ntKACZbtXSm7oZGRqVg==}
