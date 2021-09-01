@@ -1,7 +1,7 @@
 import { resolve } from "path"
 import fs from "fs"
 
-type Namespace = "common" | "footer" | "landing" | "app"
+type Namespace = "landing" | "app"
 type Locale = "en" | "de"
 
 /**
