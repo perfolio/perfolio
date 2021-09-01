@@ -76,12 +76,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       where: { stripeCustomerId: subscription.customer },
     })
     if (!user) {
-      throw new Error("User not found")
+      throw new Error(`User not found: ${{ stripeCustomerId: subscription.customer }}`)
     }
 
     const product = await stripe.products.retrieve(subscription.items.data[0].price.product)
 
-    const role = product.metadata["authRole"]
+    const role = product.metadata["authRole"] as string | undefined
     if (!role) {
       throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
     }
