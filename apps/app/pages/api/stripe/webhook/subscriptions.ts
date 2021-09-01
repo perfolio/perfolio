@@ -84,12 +84,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     logger.debug({ user })
 
     const authRoles: Record<string, string> = {
-      pro: "rol_Rjy99HLtin8ryEds",
-      premium: "rol_ByfhbMJUPC3PlhpD",
+      growth: "rol_Rjy99HLtin8ryEds",
+      pro: "rol_ByfhbMJUPC3PlhpD",
     }
     const products: Record<string, string> = {
-      prod_K8L177Ou3esVrr: "pro",
-      prod_K8L2zOY0pLY68n: "premium",
+      prod_K8L177Ou3esVrr: "growth",
+      prod_K8L2zOY0pLY68n: "pro",
     }
 
     logger.debug(subscription.items.data[0])
