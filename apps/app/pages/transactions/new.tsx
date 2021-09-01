@@ -4,13 +4,14 @@ import { z } from "zod"
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
 import { Time } from "@perfolio/util/time"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
 import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
 import { CheckIcon } from "@heroicons/react/outline"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
@@ -25,7 +26,13 @@ const validation = z.object({
 /**
  * / page.
  */
-const NewTransactionPage: NextPage = () => {
+
+interface PageProps {
+  translations: Record<string, string>
+}
+
+const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const { user } = useAuth0()
   const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
@@ -56,7 +63,7 @@ const NewTransactionPage: NextPage = () => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title="Add a transaction" />
+          <Main.Header.Title title={t("transNewHeader")} />
         </Main.Header>
         <Main.Content>
           <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-1">
@@ -64,13 +71,12 @@ const NewTransactionPage: NextPage = () => {
               <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
                 <Field.AutoCompleteSelect
                   name="isin"
-                  label="Asset"
+                  label={t("transNewAssetLabel")}
                   help={
-                    <Description title="Add transaction">
-                      Search for the asset you want to add. Only stocks listed on your selected
-                      exchange will be displayed here. If you want to change this, please{" "}
+                    <Description title={t("transNewFieldDescrTitle")}>
+                      {t("transNewFieldDescr")}
                       <Link href="/settings/stocks">
-                        <a className="underline text-info-400">go to settings.</a>
+                        <a className="underline text-info-400">{t("transNewFieldDescrLink")}</a>
                       </Link>
                     </Description>
                   }
@@ -78,7 +84,7 @@ const NewTransactionPage: NextPage = () => {
 
                 <Field.Input
                   name="executedAt"
-                  label="Date of transaction"
+                  label={t("transNewDateOfTrans")}
                   type="date"
                   // iconLeft={<MailIcon />}
                 />
@@ -86,13 +92,13 @@ const NewTransactionPage: NextPage = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <Field.Input
                     name="volume"
-                    label="How many shares"
+                    label={t("transNewNumberShares")}
                     type="number"
                     // iconLeft={<LockClosedIcon />}
                   />
                   <Field.Input
                     name="value"
-                    label="Cost per share"
+                    label={t("transNewCostPerShare")}
                     type="number"
                     iconLeft={
                       <div className="flex items-center justify-center w-full h-full">
@@ -118,14 +124,12 @@ const NewTransactionPage: NextPage = () => {
                           assetId: isin,
                         }
                         await createTransaction.mutateAsync({ transaction }).catch((err) => {
-                          setFormError(
-                            `Sorry, we had an unexpected error. Please try again. - ${err.toString()}`,
-                          )
+                          setFormError(t("transNewFormError") + `${err.toString()}`)
                         })
                         addToast({
                           icon: <CheckIcon />,
                           role: "info",
-                          title: "Transaction added",
+                          title: t("transNewTransAdded"),
                           content: `You ${
                             volume > 0 ? "bought" : "sold"
                           } ${volume} shares of ${isin}`,
@@ -140,7 +144,7 @@ const NewTransactionPage: NextPage = () => {
                   type="submit"
                   disabled={submitting}
                 >
-                  Add transaction
+                  {t("transNewAddTrans")}
                 </Button>
               </Form>
             </div>
@@ -174,3 +178,12 @@ const NewTransactionPage: NextPage = () => {
   )
 }
 export default NewTransactionPage
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

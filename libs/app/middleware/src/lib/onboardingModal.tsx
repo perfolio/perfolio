@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { Exchange } from "@perfolio/api/graphql"
+import { useI18n } from "@perfolio/feature/i18n"
 
 import { useExchanges, useUserSettings, useCreateUserSettings } from "@perfolio/hooks"
 import { getCurrency } from "@perfolio/util/currency"
@@ -15,6 +16,7 @@ import { useAuth0 } from "@auth0/auth0-react"
  * a modal to insert settings for the first time
  */
 export const OnboardingModal: React.FC = (): JSX.Element | null => {
+  const { t } = useI18n()
   const validation = z.object({
     defaultCurrency: z.string(),
     defaultExchange: z.string(),
@@ -36,10 +38,10 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   const onSubmit = async (values: z.infer<typeof validation>): Promise<void> => {
     const defaultExchange = exchanges?.find((e: Exchange) => e.name === values.defaultExchange)
     if (!defaultExchange) {
-      throw new Error(`No exchange found with name: ${values.defaultExchange}`)
+      throw new Error(t("onboardErrorNoExch") + `${values.defaultExchange}`)
     }
     if (!user?.sub) {
-      throw new Error(`User is not loaded yet: ${user}`)
+      throw new Error(t("onboardErrorUserNotLoaded") + `${user}`)
     }
     await createUserSettings.mutateAsync({
       userSettings: {
@@ -64,33 +66,30 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
    */
   const steps: { title: string; description: string; fields: React.ReactNode | null }[] = [
     {
-      title: "Welcome",
-      description:
-        "Please help us configure perfolio to your preferences. Select a default country and exchange in the next steps.",
+      title: t("onboardWelcomeTitle"),
+      description: t("onboardWelcomeDescr"),
       fields: null,
     },
     {
-      title: "Step 1: Select your default region",
-      description:
-        "Please select the country you usually trade at. In most cases, this is the country where your exchange is located.",
+      title: t("onboardStep1Title"),
+      description: t("onboardStep1Descr"),
       fields: (
         <Field.Select
           onChange={setRegion}
           options={[...new Set(exchanges?.map((e) => e.region))] ?? []}
-          label="Region"
+          label={t("onboardStep1Label")}
           name="defaultRegion"
         />
       ),
     },
     {
-      title: "Step 2: Select your default exchange",
-      description:
-        "The default exchange you usually trade at. Stock prices are displayed for this exchange.",
+      title: t("onboardStep2Title"),
+      description: t("onboardStep2Descr"),
       fields: (
         <div className="space-y-4">
           <Field.Select
             options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
-            label="Exchange"
+            label={t("onboardStep2Label")}
             name="defaultExchange"
           />
         </div>
@@ -103,7 +102,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
         <Form ctx={ctx} formError={formError} className="lg:w-1/3">
           <Card>
             <Card.Header>
-              <Card.Header.Title title="Welcome to Perfolio" />
+              <Card.Header.Title title={t("onboardCardTitle")} />
             </Card.Header>
             <Card.Content>
               <Description title={steps[step].title}>{steps[step].description}</Description>
@@ -146,7 +145,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
                   type="submit"
                   disabled={ctx.formState.isSubmitting}
                 >
-                  {step < steps.length - 1 ? "Next" : "Save"}
+                  {step < steps.length - 1 ? t("onboardStepsNext") : t("onboardStepsSave")}
                 </Button>
               </Card.Footer.Actions>
             </Card.Footer>

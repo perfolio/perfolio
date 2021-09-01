@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { NextPage, GetStaticProps } from "next"
 import { AppLayout, SideNavbar } from "@perfolio/app/components"
 import { getCurrencySymbol } from "@perfolio/util/currency"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 import { useRouter } from "next/router"
 import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"
@@ -30,6 +31,7 @@ type Product = {
 
 type PageProps = {
   products: Product[]
+  translations: Record<string, string>
 }
 
 const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
@@ -37,6 +39,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
   prices,
   selected,
 }): JSX.Element => {
+  const { t } = useI18n()
   const { user, isLoading } = useUser()
   const router = useRouter()
   return (
@@ -44,7 +47,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
       <div className="flex flex-col space-y-8 lg:w-3/5 2xl:w-3/4">
         <div className="flex items-center">
           <span className="font-semibold uppercase text-primary whitespace-nowrap">
-            What&apos;s included
+            {t("setPlanWhatsIncl")}
           </span>
           <div className="flex-grow w-full mx-4 border-b border-primary"></div>
         </div>
@@ -73,7 +76,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
           loading={isLoading}
           onClick={async () => {
             if (!user) {
-              console.error("User not yet loaded")
+              console.error(t("setPlanUserError"))
               return
             }
             const res = await fetch(
@@ -91,7 +94,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
           kind="primary"
           size="auto"
         >
-          Switch Plan
+          {t("setPlanSwitchPlanText")}
         </Button>
       </div>
     </div>
@@ -101,7 +104,8 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
 /**
  * / page.
  */
-const Page: NextPage<PageProps> = ({ products }) => {
+const Page: NextPage<PageProps> = ({ products, translations }) => {
+  const { t } = useI18n(translations)
   const [selected, setSelected] = useState<"monthly" | "yearly">("monthly")
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
@@ -110,18 +114,16 @@ const Page: NextPage<PageProps> = ({ products }) => {
           <div className="flex flex-col items-center p-8 my-8 space-y-6">
             <h2 className="text-5xl font-black text-gray-900 ">Pricing Plans</h2>
 
-            <Text size="lg">
-              Perfolio plans come in two flavors. Pick a plan that suits your needs.
-            </Text>
+            <Text size="lg">{t("setPlanPickPlanText")}</Text>
             <ToggleGroup
               options={[
-                { display: "Monthly billing", id: "monthly" },
-                { display: "Yearly billing", id: "yearly" },
+                { display: t("setPlanMonthlyBill"), id: "monthly" },
+                { display: t("setPlanYearlyBill"), id: "yearly" },
               ]}
               selected={selected}
               setSelected={setSelected}
             />
-            <Text size="sm">Get 2 months for free when paying yearly.</Text>
+            <Text size="sm">{t("setPlanYearlyDiscount")}</Text>
           </div>
         </Card>
         {products.map((product) => (
@@ -140,9 +142,12 @@ const Page: NextPage<PageProps> = ({ products }) => {
 }
 export default withAuthenticationRequired(Page)
 
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+
   return {
     props: {
+      translations,
       products: [
         {
           id: "prod_K8L177Ou3esVrr",

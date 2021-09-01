@@ -5,6 +5,7 @@ import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
 import { useTransactions, useExchangeTradedAsset } from "@perfolio/hooks"
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion"
+import { useI18n } from "@perfolio/feature/i18n"
 interface TransactionActivityItemProps {
   transaction: Omit<Transaction, "userId" | "assetId">
   isFirst?: boolean
@@ -14,6 +15,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
 }): JSX.Element => {
+  const { t } = useI18n()
   const { asset, isLoading } = useExchangeTradedAsset({
     id: transaction.asset.id,
   })
@@ -29,7 +31,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
         <>
           <div className="flex items-center justify-between">
             <Text size="sm" bold>
-              New Transaction
+              {t("activFeedNewTrans")}
             </Text>
             <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
           </div>
@@ -46,13 +48,14 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
   const { transactions } = useTransactions()
+  const { t } = useI18n()
   const last5Transactions = transactions
     ? [...transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []
 
   return (
     <>
-      <p className="text-base font-semibold text-gray-800">Recent Activity</p>
+      <p className="text-base font-semibold text-gray-800">{t("activFeedRecentActiv")}</p>
       <AnimateSharedLayout>
         <AnimatePresence>
           {last5Transactions?.map((tx, i) => (
