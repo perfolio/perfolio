@@ -2,20 +2,22 @@ import React from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import cn from "classnames"
+import { useI18n } from "@perfolio/feature/i18n"
 export const SideNavbar: React.FC = (): JSX.Element => {
   const router = useRouter()
+  const { t } = useI18n()
 
   const links: { href: string; label: string }[] = [
     {
-      label: "Account",
+      label: t("sideNavBarLabelAcc"),
       href: "/settings/account",
     },
     {
-      label: "Stocks",
+      label: t("sideNavBarLabelStocks"),
       href: "/settings/stocks",
     },
     {
-      label: "Plans",
+      label: t("sideNavBarLabelPlans"),
       href: "/settings/plans",
     },
   ]

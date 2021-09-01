@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { Logo, Button } from "@perfolio/ui/components"
 import { z } from "zod"
 import { Form, Field, handleSubmit } from "@perfolio/ui/form"
@@ -7,8 +7,14 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Description } from "@perfolio/ui/components"
 import { useSubscribeToNewsletter } from "@perfolio/hooks"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
-const Subscribe: NextPage = () => {
+interface PageProps {
+  translations: Record<string, string>
+}
+
+const Subscribe: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const validation = z.object({ email: z.string().email() })
 
   const ctx = useForm<z.infer<typeof validation>>({
@@ -38,17 +44,19 @@ const Subscribe: NextPage = () => {
               </svg>
             </div>
             <div className="z-50 flex flex-col items-center justify-center px-8 space-y-4 tracking-tight text-center md:text-left md:items-start md:justify-start md:max-w-3xl">
-              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">Stay in touch</h1>
-              <h2 className="text-lg font-normal text-gray-500 ">description</h2>
+              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">
+                {t("subscribeHead1")}
+              </h1>
+              <h2 className="text-lg font-normal text-gray-500 ">{t("subscribeHead2")}</h2>
             </div>
           </div>
           <div className="w-full max-w-sm px-6 space-y-4">
             {subscribed ? (
-              <Description title="Thank you!">We will be in touch</Description>
+              <Description title={t("subscribeTitle")}>{t("subscribeDescription")}</Description>
             ) : (
               <>
                 <Form ctx={ctx} formError={formError}>
-                  <Field.Input label="Email" name="email" type="email" />
+                  <Field.Input label={t("emailLabel")} name="email" type="email" />
                 </Form>
                 <Button
                   loading={submitting}
@@ -70,7 +78,7 @@ const Subscribe: NextPage = () => {
                   type="submit"
                   disabled={ctx.formState.isSubmitting}
                 >
-                  Subscribe
+                  {t("subscribeButton")}
                 </Button>
               </>
             )}
@@ -91,3 +99,12 @@ const Subscribe: NextPage = () => {
 }
 
 export default Subscribe
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}
