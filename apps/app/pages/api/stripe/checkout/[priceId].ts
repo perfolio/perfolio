@@ -26,7 +26,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: customerId,
-      payment_method_types: ["card"],
+      payment_method_types: ["card", "sepa_debit"],
       line_items: [
         {
           price: priceId,
