@@ -93,7 +93,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!role) {
       throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
     }
-
     logger.debug(await auth0.getUsers())
 
     switch (event.type) {
