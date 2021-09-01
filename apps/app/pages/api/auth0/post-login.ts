@@ -72,7 +72,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           throw new HTTPError(500, `Unable to create subscription for user ${userId}: ${err}`)
         })
     }
-    res.json({ received: true })
+    res.json({ role: "rol_Rjy99HLtin8ryEds" })
   } catch (err) {
     res.status(err instanceof HTTPError ? err.status : 500)
     res.send(err.message)
