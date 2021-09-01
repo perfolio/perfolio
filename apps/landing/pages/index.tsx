@@ -21,6 +21,7 @@ import {
 } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Text } from "@perfolio/ui/components"
+
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
   translations: Record<string, string>
@@ -49,7 +50,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section id="features" className="relative flex flex-col justify-center">
-          <SectionTitle tag="Why Perfolio?" title="Make decisions based on data" />
+          <SectionTitle tag={t("whyPerfolio")} title={t("headerWhy")} />
 
           <div className="grid max-w-screen-lg mx-auto space-y-6 lg:grid-cols-2 lg:space-y-0 lg:divide-x lg:divide-gray-300">
             <div className="flex flex-col items-center justify-center pr-8 space-y-16">
@@ -57,20 +58,17 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 {
                   icon: <FlagIcon />,
                   title: t("independent"),
-                  description:
-                    "We are not part of any bank or insurance company. We give you an unbiased view of your portfolio, not selling any investment products.",
+                  description: t("independentDescription"),
                 },
                 {
                   icon: <ChartSquareBarIcon />,
-                  title: "Complex made easy",
-                  description:
-                    "Everybody should have access to the latest analytics methods in science. Making these methods as simple and understandable as possible is part of our core business.",
+                  title: t("complexMadeEasy"),
+                  description: t("complexMadeEasyDescription"),
                 },
                 {
                   icon: <HomeIcon />,
-                  title: "All in one place",
-                  description:
-                    "Tired of visiting several websites and apps to get an overview of your assets? Perfolio is the new home for your data",
+                  title: t("allInOnePlace"),
+                  description: t("allInOnePlaceDescription"),
                 },
               ].map((f) => {
                 return (
@@ -88,21 +86,18 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               {[
                 {
                   icon: <DatabaseIcon />,
-                  title: "Highest data quality",
-                  description:
-                    "We cleanse and analyze data according to the highest standards. With our Premium plan you get access to even better data quality.",
+                  title: t("highestDataQuality"),
+                  description: t("highestDataQualityDescription"),
                 },
                 {
                   icon: <ShieldCheckIcon />,
-                  title: "Privacy and Security",
-                  description:
-                    "We do not share your data with anyone else and store them only on servers within the EU. Privacy and security are our highest priority.",
+                  title: t("privacyAndSecurity"),
+                  description: t("privacyAndSecurityDescription"),
                 },
                 {
                   icon: <CreditCardIcon />,
-                  title: "Fair pricing",
-                  description:
-                    "Start for free! If you want more, get the plan that suits you best. No hidden fees.",
+                  title: t("fairPricing"),
+                  description: t("fairPricingDescription"),
                 },
               ].map((f) => (
                 <Feature
@@ -116,31 +111,31 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
           </div>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
-          <SectionTitle tag="Fair pricing" title="Start for free, cancel anytime!" />
+          <SectionTitle tag={t("headerPricing")} title={t("subheaderPricing")} />
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <Price
-              title="Try for free"
+              title={t("tryForFreeTitle")}
               price={0}
               features={[
-                "Manual data import",
-                "Performance dashboard and key figures",
-                "Chart diagram of sectors",
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="/api/auth/login"
-              submitText="Try for free"
+              submitText={t("tryForFreeButton")}
             />
             <Price
               title="Basic"
               price={3.99}
               interval="month"
               features={[
-                "Manual data import",
-                "Performance dashboard and key figures",
-                "Chart diagram of sectors",
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="/api/auth/login"
-              submitText="Get started"
+              submitText={t("getStartedButton")}
               highlighted
             />
             <Price
@@ -148,22 +143,18 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               price={8.99}
               interval="month"
               features={[
-                "Manual data import",
-                "Performance dashboard and key figures",
-                "Chart diagram of sectors",
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="/api/auth/login"
-              submitText="Take off"
+              submitText={t("takeOffButton")}
             />
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <SectionTitle tag="Our Team" title="Who is behind this?" />
-          <Text align="text-center">
-            At Perfolio, we believe that investment decisions should always be based on as much
-            well-founded information as possible. It is our mission to provide our users the most
-            relevant and accurate financial information available.
-          </Text>
+          <SectionTitle tag={t("teamHeader")} title={t("teamSubheader")} />
+          <Text align="text-center">{t("perfolioDescription")}</Text>
           <div className="grid w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
             {members.map((m) => {
               return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
@@ -176,8 +167,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
   )
 }
 
+export default IndexPage
+
 export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["common", "landing"])
+  const translations = getTranslations(locale, ["landing"])
   return {
     props: {
       members: [
@@ -221,5 +214,3 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
     },
   }
 }
-
-export default IndexPage

@@ -13,7 +13,15 @@ export const Standard = (args: ToggleGroupProps<string>) => (
   </div>
 )
 Standard.args = {
-  options: ["1W", "1M", "3M", "6M", "YTD", "1Y", "ALL"],
+  options: [
+    { display: "1W", id: "1w" },
+    { display: "1M", id: "1m" },
+    { display: "3M", id: "3m" },
+    { display: "6M", id: "6m" },
+    { display: "YTD", id: "ytd" },
+    { display: "1Y", id: "1y" },
+    { display: "ALL", id: "all" },
+  ],
   selected: "1M",
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSelected: () => {},

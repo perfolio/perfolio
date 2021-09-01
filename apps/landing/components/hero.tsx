@@ -10,16 +10,15 @@ export const HeroSection: React.FC = (): JSX.Element => {
         {t("headline")}
       </h1>
       <p className="text-gray-600 sm:text-lg sm:mx-auto md:text-xl lg:mx-0 sm:text-center">
-        Keeping track of all your assets and their performance is hard. Perfolio brings all
-        information to one place and gives you access to the latest analytics methods in science.
+        {t("subheadline")}
       </p>
 
       <div className="grid w-full gap-4 sm:w-1/2 md:w-1/3 lg:w-1/4 sm:grid-cols-2">
         <Button kind="cta" size="auto" href="/api/auth/login">
-          Sign up
+          {t("signUpButton")}
         </Button>
         <Button size="auto" kind="secondary" href="mailto:info@perfol.io">
-          Contact
+          {t("contactButton")}
         </Button>
       </div>
     </div>
