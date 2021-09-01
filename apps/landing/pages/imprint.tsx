@@ -9,7 +9,7 @@ export interface ImprintPageProps {
 }
 
 export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+  useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">

@@ -171,7 +171,7 @@ export const Footer = () => {
         </div>
         <div className="flex flex-col justify-between pt-5 pb-10 border-t border-gray-300 sm:flex-row">
           <p className="text-sm text-center text-gray-300">
-            {t("footerCopyright1")}{new Date().getFullYear()}{t("footerCopyright2")}.
+            © Copyright {new Date().getFullYear()}. {t("allRightsReserved")}
           </p>
           <div className="flex items-center justify-center mt-4 space-x-4 text-gray-300 sm:mt-0">
             {socialMedia()}

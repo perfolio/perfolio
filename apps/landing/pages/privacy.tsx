@@ -8,7 +8,7 @@ export interface PrivacyPageProps {
 }
 
 export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+  useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
