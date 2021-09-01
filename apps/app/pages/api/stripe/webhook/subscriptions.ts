@@ -49,6 +49,34 @@ const auth0 = new ManagementClient({
   clientSecret: env.require("AUTH0_MANAGEMENT_CLIENT_SECRET"),
 })
 
+/**
+ * Remove roles from a user
+ */
+const removeRoles = async (
+  auth0: ManagementClient,
+  userId: string,
+  roles: string[],
+): Promise<void> => {
+  if (roles.length > 0) {
+    await auth0.removeRolesFromUser({ id: userId }, { roles }).catch((err) => {
+      throw new HTTPError(500, `Unable to remove roles ${roles} from user ${userId}: ${err}`)
+    })
+  }
+}
+
+/**
+ * Add roles to a user
+ */
+const addRoles = async (
+  auth0: ManagementClient,
+  userId: string,
+  roles: string[],
+): Promise<void> => {
+  await auth0.assignRolestoUser({ id: userId }, { roles }).catch((err) => {
+    throw new HTTPError(500, `Unable to assign role ${roles} to user ${userId}: ${err}`)
+  })
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const logger = new Logger({ name: "Stripe Webhook" })
   try {
@@ -70,7 +98,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!event.type.startsWith("customer.subscription")) {
       return res.send(`Wrong webhook, this webhook only handles customer.subscription events`)
     }
-    logger.debug("event", event.type)
     const subscription = subscriptionValidation.parse(event.data.object)
 
     const user = await prisma.user.findUnique({
@@ -79,59 +106,45 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!user) {
       throw new Error(`User not found: ${{ stripeCustomerId: subscription.customer }}`)
     }
-    logger.debug("Found user", user)
 
     const product = await stripe.products
       .retrieve(subscription.items.data[0].price.product)
       .catch((err) => {
-        logger.error(err)
-        throw new HTTPError(500, `Product could not be found`)
+        throw new HTTPError(500, `Product could not be found: ${err}`)
       })
     logger.debug({ product })
 
-    const role = product.metadata["authRole"] as string | undefined
-    if (!role) {
+    /**
+     * New access role for the new subscribed plan
+     */
+    const newRole = product.metadata["authRole"] as string | undefined
+    if (!newRole) {
       throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
     }
-    logger.debug((await auth0.getUsers()).map((user) => user.email))
 
+    /**
+     * Subscription roles the user currently has
+     */
     const existingRoles = (await auth0.getUserRoles({ id: user.id }))
       .filter((role) => role.name?.startsWith("subscription:") && !!role.id)
       .map((role) => role.id!)
 
+    /**
+     * Act on the different types of events
+     */
     switch (event.type) {
       case "customer.subscription.created":
-        await auth0.removeRolesFromUser({ id: user.id }, { roles: existingRoles }).catch((err) => {
-          throw new HTTPError(
-            500,
-            `Unable to remove roles ${existingRoles} from user ${user.id}: ${err}`,
-          )
-        })
-
-        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] }).catch((err) => {
-          throw new HTTPError(500, `Unable to assign role ${role} to user ${user.id}: ${err}`)
-        })
+        await removeRoles(auth0, user.id, existingRoles)
+        await addRoles(auth0, user.id, [newRole])
         break
 
       case "customer.subscription.updated":
-        await auth0.removeRolesFromUser({ id: user.id }, { roles: existingRoles }).catch((err) => {
-          throw new HTTPError(
-            500,
-            `Unable to remove roles ${existingRoles} from user ${user.id}: ${err}`,
-          )
-        })
-        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] }).catch((err) => {
-          throw new HTTPError(500, `Unable to assign role ${role} to user ${user.id}: ${err}`)
-        })
+        await removeRoles(auth0, user.id, existingRoles)
+        await addRoles(auth0, user.id, [newRole])
         break
 
       case "customer.subscription.deleted":
-        await auth0.removeRolesFromUser({ id: user.id }, { roles: existingRoles }).catch((err) => {
-          throw new HTTPError(
-            500,
-            `Unable to remove roles ${existingRoles} from user ${user.id}: ${err}`,
-          )
-        })
+        await removeRoles(auth0, user.id, existingRoles)
         break
 
       case "customer.subscription.trial_will_end":
