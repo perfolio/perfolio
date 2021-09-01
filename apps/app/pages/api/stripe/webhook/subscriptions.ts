@@ -95,22 +95,42 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
     logger.debug((await auth0.getUsers()).map((user) => user.email))
 
+    const existingRoles = (await auth0.getUserRoles({ id: user.id }))
+      .filter((role) => role.name?.startsWith("subscription:") && !!role.id)
+      .map((role) => role.id!)
+
     switch (event.type) {
       case "customer.subscription.created":
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: existingRoles }).catch((err) => {
+          throw new HTTPError(
+            500,
+            `Unable to remove roles ${existingRoles} from user ${user.id}: ${err}`,
+          )
+        })
+
         await auth0.assignRolestoUser({ id: user.id }, { roles: [role] }).catch((err) => {
           throw new HTTPError(500, `Unable to assign role ${role} to user ${user.id}: ${err}`)
         })
         break
 
       case "customer.subscription.updated":
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: existingRoles }).catch((err) => {
+          throw new HTTPError(
+            500,
+            `Unable to remove roles ${existingRoles} from user ${user.id}: ${err}`,
+          )
+        })
         await auth0.assignRolestoUser({ id: user.id }, { roles: [role] }).catch((err) => {
           throw new HTTPError(500, `Unable to assign role ${role} to user ${user.id}: ${err}`)
         })
         break
 
       case "customer.subscription.deleted":
-        await auth0.removeRolesFromUser({ id: user.id }, { roles: [role] }).catch((err) => {
-          throw new HTTPError(500, `Unable to remove role ${role} from user ${user.id}: ${err}`)
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: existingRoles }).catch((err) => {
+          throw new HTTPError(
+            500,
+            `Unable to remove roles ${existingRoles} from user ${user.id}: ${err}`,
+          )
         })
         break
 
