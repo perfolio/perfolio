@@ -6,6 +6,7 @@ import { Logger } from "tslog"
 import { buffer } from "micro"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { ManagementClient } from "auth0"
+import { HTTPError } from "@perfolio/util/errors"
 
 const subscriptionValidation = z.object({
   id: z.string(),
@@ -80,7 +81,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
     logger.debug("Found user", user)
 
-    const product = await stripe.products.retrieve(subscription.items.data[0].price.product)
+    const product = await stripe.products
+      .retrieve(subscription.items.data[0].price.product)
+      .catch((err) => {
+        logger.error(err)
+        throw new HTTPError(500, `Product could not be found`)
+      })
+    logger.debug({ product })
 
     const role = product.metadata["authRole"] as string | undefined
     if (!role) {
@@ -89,15 +96,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     switch (event.type) {
       case "customer.subscription.created":
-        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] })
+        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] }).catch((err) => {
+          throw new HTTPError(500, `Unable to assign role ${role} to user ${user.id}: ${err}`)
+        })
         break
 
       case "customer.subscription.updated":
-        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] })
+        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] }).catch((err) => {
+          throw new HTTPError(500, `Unable to assign role ${role} to user ${user.id}: ${err}`)
+        })
         break
 
       case "customer.subscription.deleted":
-        await auth0.removeRolesFromUser({ id: user.id }, { roles: [role] })
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: [role] }).catch((err) => {
+          throw new HTTPError(500, `Unable to remove role ${role} from user ${user.id}: ${err}`)
+        })
         break
 
       case "customer.subscription.trial_will_end":
@@ -113,7 +126,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   } catch (err) {
     logger.error({ error: err.message })
-    res.status(500)
+
+    res.status(err instanceof HTTPError ? err.status : 500)
     res.send(err.message)
   } finally {
     res.end()
