@@ -41,13 +41,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const customer = await stripe.customers.create({ email })
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         id: userId,
         email,
         stripeCustomerId: customer.id,
       },
     })
+    logger.debug("Created new user", user)
     await stripe.subscriptions.create({
       customer: customer.id,
       trial_period_days: 7,
