@@ -4,6 +4,7 @@ import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/compone
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
 import { usePortfolio } from "@perfolio/hooks"
+import { useI18n } from "@perfolio/feature/i18n"
 
 const COLORS = [
   "#D7DDFC",
@@ -17,6 +18,7 @@ const COLORS = [
   "#0A1060",
 ].sort(() => Math.random() - 0.5)
 export const DiversificationChart: React.FC = (): JSX.Element => {
+  const { t } = useI18n()
   const { portfolio } = usePortfolio()
 
   /**
@@ -71,7 +73,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
   }, [portfolio])
 
   /**
-   * Selection can either be "sectors" or "counrties"
+   * Selection can either be "sectors" or "countries"
    */
   const [selected, setSelected] = useState<"sectors" | "countries">("sectors")
 
@@ -114,21 +116,16 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     <div className="w-full h-full space-y-2">
       <div className="flex justify-between">
         <div className="flex items-center space-x-2">
-          <Heading h4>Diversification</Heading>
+          <Heading h4>{t("diversityHeading")}</Heading>
           <Tooltip side="right">
-            <Description title="Diversification">
-              Stock market diversity is a measure of the distribution of capital in an equity
-              market. Diversification is higher when capital is more evenly distributed among the
-              stocks in the market, and is lower when capital is more concentrated into a few of the
-              largest companies.
-            </Description>
+            <Description title={t("diversityTitle")}>{t("diversityTooltip")}</Description>
           </Tooltip>
         </div>
         <ToggleGroup<"sectors" | "countries">
           size="sm"
           options={[
-            { display: "Sectors", id: "sectors" },
-            { display: "Countries", id: "countries" },
+            { display: t("diversityToggleSectors"), id: "sectors" },
+            { display: t("diversityToggleCountries"), id: "countries" },
           ]}
           selected={selected}
           setSelected={setSelected}
