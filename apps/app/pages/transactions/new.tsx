@@ -27,11 +27,11 @@ const validation = z.object({
  * / page.
  */
 
- interface PageProps {
+interface PageProps {
   translations: Record<string, string>
 }
 
-const NewTransactionPage: NextPage<PageProps> = ( {translations} ) => {
+const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { user } = useAuth0()
   const { addToast } = useToaster()
@@ -124,9 +124,7 @@ const NewTransactionPage: NextPage<PageProps> = ( {translations} ) => {
                           assetId: isin,
                         }
                         await createTransaction.mutateAsync({ transaction }).catch((err) => {
-                          setFormError(
-                            t("transNewFormError") + `${err.toString()}`,
-                          )
+                          setFormError(t("transNewFormError") + `${err.toString()}`)
                         })
                         addToast({
                           icon: <CheckIcon />,

@@ -1,7 +1,4 @@
-import { useI18n } from "@perfolio/feature/i18n"
-
 export async function subscribe(email: string) {
-  const { t } = useI18n()
   const apiKey = process.env["SENDGRID_TOKEN"]
   if (!apiKey) {
     throw new Error("`NX_SENDGRID_TOKEN` must be defined")
@@ -20,7 +17,7 @@ export async function subscribe(email: string) {
   })
   const json = await res.json()
   if (!json.job_id) {
-    throw new Error(t("emailSubsMailError"))
+    throw new Error("Unable to add new email right now, please try again later")
   }
   return
 }

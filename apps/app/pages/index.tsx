@@ -25,6 +25,8 @@ import {
   useAbsolutePortfolioHistory,
   usePortfolioHistory,
 } from "@perfolio/hooks"
+import { OnboardingModal } from "@perfolio/app/middleware"
+
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Time } from "@perfolio/util/time"
@@ -129,6 +131,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
       }
     >
       <Main>
+        <OnboardingModal />
         <Main.Header>
           <Main.Header.Title title={t("mainHeaderTitle")} />
 

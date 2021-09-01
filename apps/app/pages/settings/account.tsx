@@ -1,5 +1,5 @@
 import React from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 
 import { AppLayout, SideNavbar } from "@perfolio/app/components"
 

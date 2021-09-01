@@ -2,7 +2,6 @@ import type { AppProps } from "next/app"
 import { QueryClientProvider } from "react-query"
 import { PersistendQueryClient } from "@perfolio/app/query-client"
 import Head from "next/head"
-import { OnboardingModal } from "@perfolio/app/middleware"
 import { IdProvider } from "@radix-ui/react-id"
 import { Auth0Provider } from "@auth0/auth0-react"
 import { I18nProvider } from "@perfolio/feature/i18n"
@@ -43,7 +42,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             useRefreshToken={true}
           >
             <QueryClientProvider client={PersistendQueryClient()}>
-              <OnboardingModal />
               <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
                 <Component {...pageProps} />
               </div>

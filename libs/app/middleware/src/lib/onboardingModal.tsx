@@ -67,14 +67,12 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
   const steps: { title: string; description: string; fields: React.ReactNode | null }[] = [
     {
       title: t("onboardWelcomeTitle"),
-      description:
-        t("onboardWelcomeDescr"),
+      description: t("onboardWelcomeDescr"),
       fields: null,
     },
     {
       title: t("onboardStep1Title"),
-      description:
-        t("onboardStep1Descr"),
+      description: t("onboardStep1Descr"),
       fields: (
         <Field.Select
           onChange={setRegion}
@@ -86,8 +84,7 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     },
     {
       title: t("onboardStep2Title"),
-      description:
-        t("onboardStep2Descr"),
+      description: t("onboardStep2Descr"),
       fields: (
         <div className="space-y-4">
           <Field.Select

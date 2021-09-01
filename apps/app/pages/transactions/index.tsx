@@ -55,11 +55,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
         <div className="flex flex-grow gap-4">
           {asset ? (
             <Description title={asset.name}>
-              {`You ${transaction.volume > 0 ? t("transIndexInfoBought") : t("transIndexInfoSold")} ${Math.abs(
-                transaction.volume,
-              ).toFixed(2)} share${transaction.volume === 1 ? "" : "s"} of ${
-                asset.ticker
-              } at $${transaction.value.toFixed(2)} per share`}
+              {`You ${
+                transaction.volume > 0 ? t("transIndexInfoBought") : t("transIndexInfoSold")
+              } ${Math.abs(transaction.volume).toFixed(2)} share${
+                transaction.volume === 1 ? "" : "s"
+              } of ${asset.ticker} at $${transaction.value.toFixed(2)} per share`}
             </Description>
           ) : null}
         </div>
@@ -87,7 +87,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
  * / page.
  */
 
- interface PageProps {
+interface PageProps {
   translations: Record<string, string>
 }
 

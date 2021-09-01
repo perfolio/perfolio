@@ -44,7 +44,9 @@ const Subscribe: NextPage<PageProps> = ({ translations }) => {
               </svg>
             </div>
             <div className="z-50 flex flex-col items-center justify-center px-8 space-y-4 tracking-tight text-center md:text-left md:items-start md:justify-start md:max-w-3xl">
-              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">{t("subscribeHead1")}</h1>
+              <h1 className="text-4xl font-bold text-gray-900 xl:text-7xl">
+                {t("subscribeHead1")}
+              </h1>
               <h2 className="text-lg font-normal text-gray-500 ">{t("subscribeHead2")}</h2>
             </div>
           </div>

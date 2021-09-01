@@ -114,9 +114,7 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
           <div className="flex flex-col items-center p-8 my-8 space-y-6">
             <h2 className="text-5xl font-black text-gray-900 ">Pricing Plans</h2>
 
-            <Text size="lg">
-              {t("setPlanPickPlanText")}
-            </Text>
+            <Text size="lg">{t("setPlanPickPlanText")}</Text>
             <ToggleGroup
               options={[
                 { display: t("setPlanMonthlyBill"), id: "monthly" },
@@ -144,10 +142,12 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
 }
 export default withAuthenticationRequired(Page)
 
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const { t } = useI18n()
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+
   return {
     props: {
+      translations,
       products: [
         {
           id: "prod_K8L177Ou3esVrr",
@@ -192,15 +192,6 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
           },
         },
       ],
-    },
-  }
-}
-
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["app"])
-  return {
-    props: {
-      translations,
     },
   }
 }

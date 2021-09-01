@@ -76,11 +76,11 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 
- interface PageProps {
+interface PageProps {
   translations: Record<string, string>
 }
 
- const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { user } = useAuth0()
   const { settings } = useUserSettings()

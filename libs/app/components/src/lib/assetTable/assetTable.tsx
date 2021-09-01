@@ -117,8 +117,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                   }
                 >
                   <Text>
-                    {holding.asset.name} {t("assetTableComposition1")} {format(weight, { percent: true, suffix: "%" })}{" "}
-                    {t("assetTableComposition2")}
+                    {holding.asset.name} {t("assetTableComposition1")}{" "}
+                    {format(weight, { percent: true, suffix: "%" })} {t("assetTableComposition2")}
                   </Text>
                 </Tooltip>
               </Cell.Cell>
