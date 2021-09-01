@@ -9,7 +9,7 @@
     "build": "nx run-many --target=build --all --with-deps",
     "test": "nx run-many --target=test --all",
     "fmt": "pnpm lint && pnpm prettier --loglevel=warn --write .",
-    "lint": "nx workspace-lint && nx lint && pnpm lint:graphql",
+    "lint": "nx workspace-lint && nx run-many --target=lint --all && pnpm lint:graphql",
     "lint:graphql": "graphql-schema-linter -c .",
     "e2e": "nx run-many --target=e2e --all",
     "affected:apps": "nx affected:apps",

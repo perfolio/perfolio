@@ -1,5 +1,5 @@
 import React from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 
 import { AppLayout, SideNavbar } from "@perfolio/app/components"
 
@@ -7,13 +7,19 @@ import { useRouter } from "next/router"
 import { AsyncButton } from "@perfolio/ui/components"
 
 import { useUser } from "@perfolio/hooks"
-
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 /**
  * / page.
  */
-const SettingsPage: NextPage = () => {
+
+interface PageProps {
+  translations: Record<string, string>
+}
+
+const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const router = useRouter()
   const { user } = useUser()
   return (
@@ -37,7 +43,7 @@ const SettingsPage: NextPage = () => {
           }}
           kind="cta"
         >
-          Open billing portal
+          {t("setBillingPortal")}
         </AsyncButton>
         <AsyncButton
           onClick={async () => {
@@ -67,3 +73,12 @@ const SettingsPage: NextPage = () => {
   )
 }
 export default withAuthenticationRequired(SettingsPage)
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}

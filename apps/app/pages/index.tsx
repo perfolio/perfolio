@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage } from "next"
+import { NextPage, GetStaticProps } from "next"
 import {
   AppLayout,
   DiversificationChart,
@@ -25,7 +25,10 @@ import {
   useAbsolutePortfolioHistory,
   usePortfolioHistory,
 } from "@perfolio/hooks"
+import { OnboardingModal } from "@perfolio/app/middleware"
+
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Time } from "@perfolio/util/time"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
@@ -77,7 +80,12 @@ const KPI = ({
   )
 }
 
-const App: NextPage = () => {
+interface PageProps {
+  translations: Record<string, string>
+}
+
+const App: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { settings } = useUserSettings()
@@ -123,13 +131,14 @@ const App: NextPage = () => {
       }
     >
       <Main>
+        <OnboardingModal />
         <Main.Header>
-          <Main.Header.Title title="Overview" />
+          <Main.Header.Title title={t("mainHeaderTitle")} />
 
           <ToggleGroup<AggregateOptions>
             options={[
-              { display: "Relative", id: "relative" },
-              { display: "Absolute", id: "absolute" },
+              { display: t("relPicked"), id: "relative" },
+              { display: t("absPicked"), id: "absolute" },
             ]}
             selected={aggregation}
             setSelected={setAggregation}
@@ -144,7 +153,7 @@ const App: NextPage = () => {
               <Tooltip
                 trigger={
                   <KPI
-                    label="Total Assets"
+                    label={t("totalAssetsLabel")}
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
@@ -155,14 +164,14 @@ const App: NextPage = () => {
                   />
                 }
               >
-                The current aggregate value of all assets added into Perfolio by you.
+                {t("totalAssetsTooltip")}
               </Tooltip>
 
               <Tooltip
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === "absolute" ? "Mean Change" : "Mean Return"}
+                    label={aggregation === "absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
                     value={aggregation === "absolute" ? absoluteMean : relativeMean}
                     format={(n) =>
                       aggregation === "absolute"
@@ -179,7 +188,7 @@ const App: NextPage = () => {
                   />
                 }
               >
-                The average profit earned by your assets within a given period of time.
+                {t("meanReturnTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
@@ -188,20 +197,18 @@ const App: NextPage = () => {
                       (aggregation === "absolute" && absoluteIsLoading) ||
                       (aggregation === "relative" && relativeIsLoading)
                     }
-                    label="Standard Deviation"
+                    label={t("stdDevLabel")}
                     value={relativeSTD}
                     format={(n) => format(n)}
                   />
                 }
               >
-                A statistical measure for asset value stability. Standard deviation describes how
-                widely asset prices are scattered around an average price. The higher the standard
-                deviation, the less stable the value of your assets.
+                {t("stdDevTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
-                    label="Change"
+                    label={t("changeLabel")}
                     enableColor
                     isLoading={
                       (aggregation === "absolute" && absoluteIsLoading) ||
@@ -219,7 +226,7 @@ const App: NextPage = () => {
                   />
                 }
               >
-                The percent change of your asset value within a given period of time.
+                {t("changeTooltip")}
               </Tooltip>
             </div>
           </div>
@@ -232,9 +239,9 @@ const App: NextPage = () => {
                   { display: "1M", id: "1M" },
                   { display: "3M", id: "3M" },
                   { display: "6M", id: "6M" },
-                  { display: "1Y", id: "1Y" },
-                  { display: "YTD", id: "YTD" },
-                  { display: "ALL", id: "ALL" },
+                  { display: t("index1Y"), id: "1Y" },
+                  { display: t("indexYTD"), id: "YTD" },
+                  { display: t("indexAll"), id: "ALL" },
                 ]}
                 selected={range}
                 setSelected={setRange}
@@ -244,7 +251,7 @@ const App: NextPage = () => {
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">
-              <Heading h3>Current Assets</Heading>
+              <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
 
             <AssetTable aggregation={aggregation} />
@@ -256,3 +263,12 @@ const App: NextPage = () => {
 }
 
 export default withAuthenticationRequired(App)
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = getTranslations(locale, ["app"])
+  return {
+    props: {
+      translations,
+    },
+  }
+}
