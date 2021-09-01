@@ -78,6 +78,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!user) {
       throw new Error(`User not found: ${{ stripeCustomerId: subscription.customer }}`)
     }
+    logger.debug("Found user", user)
 
     const product = await stripe.products.retrieve(subscription.items.data[0].price.product)
 
