@@ -50,15 +50,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       typescript: true,
     })
 
-    const customer = await stripe.customers.create({ email })
-
-    const user = await prisma.user.create({
-      data: {
-        id: userId,
-        email,
-        stripeCustomerId: customer.id,
-      },
+    const customer = await stripe.customers.create({ email }).catch((err) => {
+      throw new HTTPError(500, `Unable to create customer in stripe ${email}: ${err}`)
     })
+
+    const user = await prisma.user
+      .create({
+        data: {
+          id: userId,
+          email,
+          stripeCustomerId: customer.id,
+        },
+      })
+      .catch((err) => {
+        throw new HTTPError(500, `Unable to create user in database: ${err}`)
+      })
+
     await stripe.subscriptions
       .create({
         customer: user.stripeCustomerId,
@@ -74,9 +81,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new HTTPError(500, `Unable to create subscription for user ${userId}: ${err}`)
       })
 
-    await auth0.assignRolestoUser({ id: user.id }, { roles: ["rol_Rjy99HLtin8ryEds"] })
+    const growthRole = "rol_Rjy99HLtin8ryEds"
+    await auth0.assignRolestoUser({ id: user.id }, { roles: [growthRole] }).catch((err) => {
+      throw new HTTPError(500, `Unable to assign role ${growthRole} to user ${user.id}: ${err}`)
+    })
 
-    logger.debug("Created new user", user)
     res.json({ received: true })
   } catch (err) {
     res.status(err instanceof HTTPError ? err.status : 500)
