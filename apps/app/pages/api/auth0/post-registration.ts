@@ -11,6 +11,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { Logger } from "tslog"
 import { PrismaClient } from "@perfolio/integrations/prisma"
+import { HTTPError } from "@perfolio/util/errors"
 
 const validation = z.object({
   headers: z.object({
@@ -51,7 +52,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     logger.debug("Created new user", user)
     res.json({ received: true })
   } catch (err) {
-    res.status(500)
+    res.status(err instanceof HTTPError ? err.status : 500)
+
     res.send(err.message)
     logger.error(err)
   } finally {
