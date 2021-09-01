@@ -11,6 +11,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { Logger } from "tslog"
 import { PrismaClient } from "@perfolio/integrations/prisma"
+import { HTTPError } from "@perfolio/util/errors"
 
 const validation = z.object({
   headers: z.object({
@@ -27,11 +28,11 @@ const validation = z.object({
 const prisma = new PrismaClient()
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const logger = new Logger({ name: "on registration" })
+  const logger = new Logger({ name: "on login" })
   try {
     logger.debug(typeof req.body, req.body, req.headers)
     const {
-      body: { userId, email },
+      body: { userId },
     } = await validation.parseAsync(req)
 
     const stripe = new Stripe(env.require("STRIPE_SECRET_KEY"), {
@@ -39,16 +40,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       typescript: true,
     })
 
-    const customer = await stripe.customers.create({ email })
-
-    const user = await prisma.user.create({
-      data: {
-        id: userId,
-        email,
-        stripeCustomerId: customer.id,
-      },
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
     })
-    logger.debug("Created new user", user)
+    if (!user) {
+      throw new HTTPError(500, `User not found: ${{ userId }}`)
+    }
+
+    const customer = await stripe.customers.retrieve(user.stripeCustomerId)
+    if (!customer) {
+      throw new HTTPError(500, `Customer not found: ${{ customer: user.stripeCustomerId }}`)
+    }
+    await stripe.subscriptions.create({
+      customer: customer.id,
+      trial_period_days: 7,
+      items: [
+        {
+          // Pro subscription
+          price: "price_1JU4LpG0ZLpKb1P6Szj2jJQr",
+        },
+      ],
+    })
     res.json({ received: true })
   } catch (err) {
     res.status(500)
