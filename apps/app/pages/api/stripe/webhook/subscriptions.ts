@@ -65,37 +65,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       signature,
       env.require("STRIPE_WEBHOOK_SECRET"),
     )
-    logger.debug("event", event.type)
 
     if (!event.type.startsWith("customer.subscription")) {
-      throw new Error(`Wrong webhook, this webhook only handles customer.subscription events`)
+      return res.send(`Wrong webhook, this webhook only handles customer.subscription events`)
     }
+    logger.debug("event", event.type)
     const subscription = subscriptionValidation.parse(event.data.object)
-    logger.debug({ subscription })
 
     const user = await prisma.user.findUnique({
       where: { stripeCustomerId: subscription.customer },
     })
     if (!user) {
-      logger.debug(await prisma.user.findMany())
-
       throw new Error("User not found")
     }
-    logger.debug({ user })
 
-    const authRoles: Record<string, string> = {
-      growth: "rol_Rjy99HLtin8ryEds",
-      pro: "rol_ByfhbMJUPC3PlhpD",
-    }
-    const products: Record<string, string> = {
-      prod_K8L177Ou3esVrr: "growth",
-      prod_K8L2zOY0pLY68n: "pro",
-    }
+    const product = await stripe.products.retrieve(subscription.items.data[0].price.product)
 
-    logger.debug(subscription.items.data[0])
-    const productId = subscription.items.data[0].price.product as string
-    const product = products[productId]
-    const role = authRoles[product]
+    const role = product.metadata["authRole"]
+    if (!role) {
+      throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
+    }
 
     switch (event.type) {
       case "customer.subscription.created":
