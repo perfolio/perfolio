@@ -95,27 +95,30 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const product = products[productId]
     const role = authRoles[product]
 
-    if (
-      event.type === "customer.subscription.created" ||
-      event.type === "customer.subscription.updated"
-    ) {
-      await auth0.assignRolestoUser({ id: user.id }, { roles: [role] })
-    } else if (event.type === "customer.subscription.deleted") {
-      await auth0.removeRolesFromUser({ id: user.id }, { roles: [role] })
-    } else if (event.type === "customer.subscription.trial_will_end") {
-      // Occurs three days before a subscription's trial period is scheduled to end,
-      // or when a trial is ended immediately (using trial_end=now).
+    switch (event.type) {
+      case "customer.subscription.created":
+        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] })
+        break
 
-      await prisma.notification.create({
-        data: {
-          userId: user.id,
-          message: "Your trial will end soon",
-        },
-      })
+      case "customer.subscription.updated":
+        await auth0.assignRolestoUser({ id: user.id }, { roles: [role] })
+        break
+
+      case "customer.subscription.deleted":
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: [role] })
+        break
+
+      case "customer.subscription.trial_will_end":
+        await prisma.notification.create({
+          data: {
+            userId: user.id,
+            message: "Your trial will end soon",
+          },
+        })
+        break
+      default:
+        break
     }
-
-    // invoice.payment_failed
-    // notify user
   } catch (err) {
     logger.error({ error: err.message })
     res.status(500)
