@@ -77,6 +77,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       where: { stripeCustomerId: subscription.customer },
     })
     if (!user) {
+      logger.debug(await prisma.user.findMany())
+
       throw new Error("User not found")
     }
     logger.debug({ user })
