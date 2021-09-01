@@ -65,9 +65,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       signature,
       env.require("STRIPE_WEBHOOK_SECRET"),
     )
-
+    logger.debug("event", event.type)
     if (event.type.startsWith("customer.subscription")) {
       const subscription = subscriptionValidation.parse(event.data.object)
+      logger.debug({ subscription })
 
       const user = await prisma.user.findUnique({
         where: { stripeCustomerId: subscription.customer },
@@ -75,6 +76,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (!user) {
         throw new Error("User not found")
       }
+      logger.debug({ user })
 
       const authRoles: Record<string, string> = {
         pro: "rol_Rjy99HLtin8ryEds",
