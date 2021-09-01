@@ -151,7 +151,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
       products: [
         {
           id: "prod_K8L177Ou3esVrr",
-          name: "Pro",
+          name: "Growth",
           description:
             "Morbi non lacinia risus. Suspendisse placerat metus sit amet orci scelerisque condimentum. Suspendisse nulla quam, dignissim id sagittis a, ornare ac augue. Vivamus semper, leo quis volutpat luctus, nisi libero.",
           features: ["This", "That", "Stuff"],
@@ -172,7 +172,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
         },
         {
           id: "prod_K8L2zOY0pLY68n",
-          name: "Premium",
+          name: "Pro",
           description:
             "Nulla aliquet ullamcorper dignissim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus lobortis metus nunc, eget ornare elit condimentum a. Class aptent taciti sociosqu.",
           features: ["This", "That", "Stuff"],
