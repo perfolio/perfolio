@@ -104,7 +104,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       where: { stripeCustomerId: subscription.customer },
     })
     if (!user) {
-      throw new Error(`User not found: ${{ stripeCustomerId: subscription.customer }}`)
+      throw new Error(
+        `User not found: ${JSON.stringify({ stripeCustomerId: subscription.customer })}`,
+      )
     }
 
     const product = await stripe.products
