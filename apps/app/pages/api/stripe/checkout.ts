@@ -47,10 +47,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const checkoutSession = await stripe.checkout.sessions.create({
         mode: "subscription",
         customer: customerId,
+        customer_update: {
+          address: "auto",
+        },
         payment_method_types: ["card"],
         allow_promotion_codes: true,
         billing_address_collection: "auto",
-        // automatic_tax: {enabled:true},
+        automatic_tax: { enabled: true },
         // consent_collection:{promotions: "auto"},
         line_items: [
           {
@@ -58,7 +61,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             quantity: 1,
           },
         ],
-        // discounts:[{coupon: "svrvhdxa"}],
+
         success_url: req.headers["referer"] ?? "https://app.perfol.io",
         cancel_url: req.headers["referer"] ?? "https://app.perfol.io",
       })
