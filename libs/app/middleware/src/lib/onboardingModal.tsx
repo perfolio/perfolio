@@ -8,7 +8,7 @@ import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { Exchange } from "@perfolio/api/graphql"
 import { useI18n } from "@perfolio/feature/i18n"
 
-import { useExchanges, useUserSettings, useCreateUserSettings } from "@perfolio/hooks"
+import { useExchanges, useSettings, useCreateSettings } from "@perfolio/hooks"
 import { getCurrency } from "@perfolio/util/currency"
 import { useAuth0 } from "@auth0/auth0-react"
 /**
@@ -26,8 +26,8 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
 
   const { exchanges } = useExchanges()
 
-  const { settings, isSuccess } = useUserSettings()
-  const createUserSettings = useCreateUserSettings()
+  const { settings, isSuccess } = useSettings()
+  const createSettings = useCreateSettings()
   const requiresOnboarding = !!user && !settings && isSuccess
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({
@@ -43,8 +43,8 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     if (!user?.sub) {
       throw new Error(t("onboardErrorUserNotLoaded") + `${user}`)
     }
-    await createUserSettings.mutateAsync({
-      userSettings: {
+    await createSettings.mutateAsync({
+      settings: {
         userId: user.sub,
         defaultCurrency: values.defaultCurrency,
         defaultExchange: defaultExchange.mic,

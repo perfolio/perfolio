@@ -7,6 +7,7 @@ import { buffer } from "micro"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { ManagementClient } from "auth0"
 import { HTTPError } from "@perfolio/util/errors"
+import { idGenerator } from "@perfolio/id"
 
 const subscriptionValidation = z.object({
   id: z.string(),
@@ -152,6 +153,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       case "customer.subscription.trial_will_end":
         await prisma.notification.create({
           data: {
+            id: idGenerator.id("notification"),
             userId: user.id,
             message: "Your trial will end soon",
           },

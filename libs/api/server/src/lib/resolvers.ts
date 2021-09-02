@@ -3,7 +3,7 @@ import { Context } from "./context"
 import { getRelativePortfolioHistory } from "./resolvers/query/getRelativePortfolioHistory"
 import { getExchanges } from "./resolvers/query/getExchanges"
 import { search } from "./resolvers/query/search"
-import { getUserSettings } from "./resolvers/query/getUserSettings"
+import { getSettings } from "./resolvers/query/getSettings"
 import { getUser } from "./resolvers/query/getUser"
 import { getTransactions } from "./resolvers/query/getTransactions"
 import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
@@ -15,8 +15,8 @@ import { country } from "./resolvers/companyStock/country"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
 import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
-import { createUserSettings } from "./resolvers/mutation/createUserSettings"
-import { updateUserSettings } from "./resolvers/mutation/updateUserSettings"
+import { createSettings } from "./resolvers/mutation/createSettings"
+import { updateSettings } from "./resolvers/mutation/updateSettings"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
@@ -26,7 +26,8 @@ export const resolvers: Resolvers<Context> = {
     getExchanges,
     search,
     // @ts-expect-error Remaining fields are resolved later
-    getUserSettings,
+
+    getSettings,
     // @ts-expect-error Remaining fields are resolved later
 
     getTransactions,
@@ -37,7 +38,7 @@ export const resolvers: Resolvers<Context> = {
     getUser,
   },
 
-  UserSettings: {
+  Settings: {
     defaultExchange: ({ defaultExchangeMic }, _args, ctx) =>
       getExchangeFromMic(ctx, defaultExchangeMic),
   },
@@ -48,8 +49,8 @@ export const resolvers: Resolvers<Context> = {
     // @ts-expect-error Remaining fields are resolved later
     createTransaction,
     deleteTransaction,
-    createUserSettings,
-    updateUserSettings,
+    createSettings,
+    updateSettings,
     subscribeToNewsletter,
   },
   ExchangeTradedAsset: {
