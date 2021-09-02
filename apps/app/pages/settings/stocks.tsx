@@ -5,7 +5,7 @@ import { AppLayout, SideNavbar } from "@perfolio/app/components"
 import { z } from "zod"
 import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUserSettings, useExchanges, useUpdateUserSettings } from "@perfolio/hooks"
+import { useSettings, useExchanges, useUpdateSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
@@ -83,7 +83,7 @@ interface PageProps {
 const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { user } = useAuth0()
-  const { settings } = useUserSettings()
+  const { settings } = useSettings()
 
   const { exchanges } = useExchanges()
 
@@ -93,13 +93,13 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
 
   const currencyValidation = z.object({ defaultCurrency: z.string().min(3).max(3) })
 
-  const updateSettings = useUpdateUserSettings()
+  const updateSettings = useUpdateSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
     if (!user?.sub) {
       throw new AuthenticationError(t("setStocksAuthError"))
     }
     await updateSettings.mutateAsync({
-      userSettings: { userId: user.sub, defaultCurrency: values.defaultCurrency },
+      settings: { userId: user.sub, defaultCurrency: values.defaultCurrency },
     })
   }
 
@@ -112,7 +112,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
       throw new AuthenticationError(t("setStocksAuthError"))
     }
     await updateSettings.mutateAsync({
-      userSettings: {
+      settings: {
         userId: user.sub,
         defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
       },

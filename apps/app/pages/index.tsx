@@ -18,7 +18,7 @@ import { getCurrencySymbol } from "@perfolio/util/currency"
 import {
   useRelativePortfolioHistory,
   useStandardDeviation,
-  useUserSettings,
+  useSettings,
   useCurrentAbsoluteValue,
   useAbsoluteMean,
   useRelativeMean,
@@ -88,7 +88,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
-  const { settings } = useUserSettings()
+  const { settings } = useSettings()
 
   const { portfolioHistory } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
