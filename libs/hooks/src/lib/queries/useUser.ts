@@ -9,7 +9,11 @@ export const useUser = () => {
 
   const { data, ...meta } = useQuery<GetUserQuery, Error>(
     USE_USER,
-    async () => client(await getAccessTokenSilently()).getUser({ userId: user!.sub! }),
+    async () => {
+      const token = await getAccessTokenSilently()
+      console.log({ token })
+      return client(await getAccessTokenSilently()).getUser({ userId: user!.sub! })
+    },
     {
       enabled: !!user?.sub,
     },
