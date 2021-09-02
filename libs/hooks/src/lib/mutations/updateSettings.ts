@@ -1,21 +1,18 @@
 import { useMutation, useQueryClient } from "react-query"
-import {
-  UpdateUserSettingsMutation,
-  UpdateUserSettingsMutationVariables,
-} from "@perfolio/api/graphql"
+import { UpdateSettingsMutation, UpdateSettingsMutationVariables } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { USE_USER_SETTINGS_QUERY_KEY } from "../queries/useUserSettings"
+import { USE_USER_SETTINGS_QUERY_KEY } from "../queries/useSettings"
 import { useAuth0 } from "@auth0/auth0-react"
-export const useUpdateUserSettings = () => {
+export const useUpdateSettings = () => {
   const { getAccessTokenSilently } = useAuth0()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
-    UpdateUserSettingsMutation,
+    UpdateSettingsMutation,
     Error,
-    UpdateUserSettingsMutationVariables
+    UpdateSettingsMutationVariables
   >(
     async (variables) => {
-      return client(await getAccessTokenSilently()).updateUserSettings(variables)
+      return client(await getAccessTokenSilently()).updateSettings(variables)
     },
     {
       onSuccess: () => {
@@ -24,5 +21,5 @@ export const useUpdateUserSettings = () => {
     },
   )
 
-  return { settings: data?.updateUserSettings, ...meta }
+  return { settings: data?.updateSettings, ...meta }
 }

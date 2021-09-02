@@ -18,7 +18,7 @@ model User {
 
   stripeCustomerId     String @unique
 
-  settings UserSettings?
+  settings Settings?
 
   notifications Notification[]
 
@@ -28,7 +28,7 @@ model User {
 // Notifications can be displayed for a user
 // Such as upcoming payments etc.
 model Notification {
-  id        String   @id @default(uuid())
+  id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -46,7 +46,7 @@ model Notification {
 }
 
 model Transaction {
-  id         String   @id @default(uuid())
+  id         String   @id
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   assetId    String
@@ -61,7 +61,7 @@ enum Currency {
   EUR
 }
 
-model UserSettings {
+model Settings {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   defaultCurrency    Currency
