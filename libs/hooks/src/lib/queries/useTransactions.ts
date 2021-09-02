@@ -11,7 +11,7 @@ export const useTransactions = () => {
     USE_TRANSACTIONS_QUERY_KEY,
     async () => client(await getAccessTokenSilently()).getTransactions({ userId: user!.sub! }),
     {
-      enabled: !!user?.id,
+      enabled: !!user?.sub,
     },
   )
 
