@@ -15,7 +15,7 @@ import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 import { useTransactions, useSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
-import { useAuth0 } from "@auth0/auth0-react"
+import {useRouter} from "next/router"
 const validation = z.object({
   isin: z.string(),
   volume: z.string().transform((x: string) => parseInt(x)),
@@ -33,7 +33,8 @@ interface PageProps {
 
 const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  const { user } = useAuth0()
+  const router = useRouter()
+  
   const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -53,6 +54,9 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const { settings } = useSettings()
+
+  const portfolioId = router.query.portfolioId as string 
+
   return (
     <AppLayout
       sidebar={
@@ -117,7 +121,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                       ctx,
                       async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
-                          userId: user!.sub!,
+                          portfolioId,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),

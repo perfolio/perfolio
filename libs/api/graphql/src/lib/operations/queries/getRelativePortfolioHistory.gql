@@ -1,5 +1,5 @@
-query getRelativePortfolioHistory($userId: String!, $since: Int) {
-  getRelativePortfolioHistory(userId: $userId, since: $since) {
+query getRelativePortfolioHistory($portfolioId: String!, $since: Int) {
+  getRelativePortfolioHistory(portfolioId: $portfolioId, since: $since) {
     time
     value
   }

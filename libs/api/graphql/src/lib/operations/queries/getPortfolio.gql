@@ -1,0 +1,13 @@
+query getPortfolio($portfolioId: ID!) {
+  getPortfolio(portfolioId: $portfolioId) {
+    __typename
+    id
+    name
+    primary
+    transactions {
+        id
+    }
+    
+
+  }
+}

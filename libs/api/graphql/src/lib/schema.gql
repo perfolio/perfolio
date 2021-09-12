@@ -180,9 +180,9 @@ input CreateTransaction {
   executedAt: Timestamp!
 
   """
-  The owner of this transaction
+  The portfolio of this transaction
   """
-  userId: ID!
+  portfolioId: ID!
 
   """
   How much each share/item was bought/sold for
@@ -223,6 +223,11 @@ type User {
   The user's settings
   """
   settings: Settings
+
+  """
+  All portfolios that the user has created
+  """
+  portfolios: [Portfolio!]!
 }
 
 """
@@ -386,6 +391,59 @@ type SearchResult {
 }
 
 """
+Access scope
+"""
+enum Access {
+  """
+  Everyone has access
+  """
+  PUBLIC
+
+  """
+  Only the createor and shared users have access
+  """
+  PRIVATE
+}
+
+type Portfolio {
+  """
+  unique id
+  """
+  id: ID!
+
+  """
+  Human readable name for the portfolio
+  """
+  name: String!
+
+  """
+  The owner of this portfolio
+  """
+  user: User!
+
+  """
+  The primary portfolio will be displayed by default
+  """
+  primary: Boolean!
+
+  """
+  Public portfolios can be seen by anyone with the portfolio id
+  Private portfolios are only visible to the owner and users who were
+  granted access.
+  """
+  access: Access
+  """
+  Ids of users who have read access for this portfolio
+  """
+  grantReadAccess: [ID!]!
+
+  """
+  Associated transactions
+  """
+  transactions: [Transaction!]!
+}
+
+"""
 Available queries
 """
 type Query {
@@ -398,6 +456,20 @@ type Query {
   #   """
   #   mic: String!
   # ): [Company!]!
+
+  """
+  Load all portfolios from the user
+  """
+  getPortfolios("user id" userId: ID!): [Portfolio!]!
+
+  """
+  Load a portfolio
+  """
+  getPortfolio("portfolioId" portfolioId: ID!): Portfolio!
+  """
+  load the users primary portfolio
+  """
+  getPrimaryPortfolio("user id" userID: ID!): Portfolio!
 
   """
   Load an exchange traded asset by its id
@@ -413,8 +485,8 @@ type Query {
   Return an index for the performance of the users portfolio
   """
   getRelativePortfolioHistory(
-    "The unique id of a user"
-    userId: String!
+    "The unique id of a portfolio"
+    portfolioId: String!
     "unix timestamp where to begin calculation"
     since: Int
   ): [ValueAtTime!]!
@@ -424,9 +496,9 @@ type Query {
   """
   getPortfolioHistory(
     """
-    The users unique id
+    The portfolio id
     """
-    userId: String!
+    portfolioId: String!
   ): [AssetHistory!]!
 
   """
@@ -474,9 +546,9 @@ type Query {
   """
   getTransactions(
     """
-    The user' unique id
+    The portfolio unique id
     """
-    userId: ID!
+    portfolioId: ID!
   ): [Transaction!]!
 
   """

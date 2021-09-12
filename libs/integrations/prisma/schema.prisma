@@ -11,18 +11,19 @@ generator client {
 }
 
 
+
 model User {
   // Auth0 provided user id
   id    String @id
   email String @unique
 
-  stripeCustomerId     String @unique
+  stripeCustomerId String @unique
 
   settings Settings?
 
   notifications Notification[]
 
-  transactions Transaction[]
+  portfolios Portfolio[]
 }
 
 // Notifications can be displayed for a user
@@ -46,15 +47,15 @@ model Notification {
 }
 
 model Transaction {
-  id         String   @id
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  assetId    String
-  executedAt Int
-  volume     Float
-  value      Float
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
+  id          String    @id
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  assetId     String
+  executedAt  Int
+  volume      Float
+  value       Float
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  portfolioId String
 }
 
 enum Currency {
@@ -74,4 +75,37 @@ model StockMap {
   ticker String @id
   isin   String @unique
   name   String @unique
+}
+
+enum Access {
+  PUBLIC
+  PRIVATE
+}
+
+model Portfolio {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Human readable name for the portfolio
+  name String
+
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+
+  // The primary portfolio will be displayed by default
+  primary Boolean @default(false)
+
+
+  // Public portfolios can be seen by anyone with the portfolio id
+  // Private portfolios are only visible to the owner and users who were
+  // granted access.
+  access Access @default(PRIVATE)
+
+  // Ids of users who have read access for this portfolio
+  grantReadAccess String[]
+
+  transactions Transaction[]
 }

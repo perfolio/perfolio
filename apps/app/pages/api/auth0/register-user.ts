@@ -13,6 +13,7 @@ import { Logger } from "tslog"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { HTTPError } from "@perfolio/util/errors"
 import { ManagementClient } from "auth0"
+import { idGenerator } from "@perfolio/id"
 const validation = z.object({
   headers: z.object({
     "content-type": z.string().refine((h) => h === "application/json"),
@@ -60,6 +61,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: userId,
           email,
           stripeCustomerId: customer.id,
+          portfolios: {
+            create: {
+              id: idGenerator.id("portfolio"),
+              name: "primary",
+              primary: true,
+            },
+          },
         },
       })
       .catch((err) => {

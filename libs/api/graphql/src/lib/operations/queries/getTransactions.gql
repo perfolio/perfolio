@@ -1,5 +1,5 @@
-query getTransactions($userId: ID!) {
-  getTransactions(userId: $userId) {
+query getTransactions($portfolioId: ID!) {
+  getTransactions(portfolioId: $portfolioId) {
     __typename
 
     id

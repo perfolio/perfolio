@@ -21,8 +21,8 @@ import { updateSettings } from "./resolvers/mutation/updateSettings"
 export const resolvers: Resolvers<Context> = {
   Query: {
     getExchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
-    getRelativePortfolioHistory: (_parent, { userId, since }, ctx) =>
-      getRelativePortfolioHistory(ctx, userId, since ?? undefined),
+    getRelativePortfolioHistory: (_parent, { portfolioId, since }, ctx) =>
+      getRelativePortfolioHistory(ctx, portfolioId, since ?? undefined),
     getExchanges,
     search,
     // @ts-expect-error Remaining fields are resolved later
