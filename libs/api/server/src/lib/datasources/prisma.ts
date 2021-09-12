@@ -9,8 +9,8 @@ export class Prisma extends DataSource {
     super()
     this.client = new PrismaClient()
   }
-  public get userSettings() {
-    return this.client.userSettings
+  public get settings() {
+    return this.client.settings
   }
   public get transaction() {
     return this.client.transaction

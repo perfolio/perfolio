@@ -13,7 +13,7 @@ import { Asset } from "@perfolio/api/graphql"
 import { CheckIcon } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
-import { useTransactions, useUserSettings, useCreateTransaction } from "@perfolio/hooks"
+import { useTransactions, useSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
 import { useAuth0 } from "@auth0/auth0-react"
 const validation = z.object({
@@ -52,7 +52,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const { settings } = useUserSettings()
+  const { settings } = useSettings()
   return (
     <AppLayout
       sidebar={

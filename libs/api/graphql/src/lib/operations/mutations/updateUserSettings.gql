@@ -1,5 +1,5 @@
-mutation updateUserSettings($userSettings: UpdateUserSettings!) {
-  updateUserSettings(userSettings: $userSettings) {
+mutation updateSettings($settings: UpdateSettings!) {
+  updateSettings(settings: $settings) {
     defaultCurrency
     defaultExchange {
       mic

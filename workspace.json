@@ -399,6 +399,38 @@
         }
       }
     },
+    "id": {
+      "root": "libs/id",
+      "sourceRoot": "libs/id/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/id",
+            "tsConfig": "libs/id/tsconfig.lib.json",
+            "packageJson": "libs/id/package.json",
+            "main": "libs/id/src/index.ts",
+            "assets": ["libs/id/*.md"]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/id/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/id"],
+          "options": {
+            "jestConfig": "libs/id/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "integrations-bankofengland": {
       "root": "libs/integrations/bankofengland",
       "sourceRoot": "libs/integrations/bankofengland/src",

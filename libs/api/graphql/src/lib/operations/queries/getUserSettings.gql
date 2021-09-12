@@ -1,5 +1,5 @@
-query getUserSettings($userId: ID!) {
-  getUserSettings(userId: $userId) {
+query getSettings($userId: ID!) {
+  getSettings(userId: $userId) {
     __typename
 
     defaultCurrency

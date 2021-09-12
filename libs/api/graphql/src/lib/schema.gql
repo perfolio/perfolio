@@ -222,13 +222,13 @@ type User {
   """
   The user's settings
   """
-  settings: UserSettings
+  settings: Settings
 }
 
 """
 Settings that can be customized by the user such as preferences as well as defaults
 """
-type UserSettings {
+type Settings {
   """
   The user's default currency. Everything will be converted to this currency.
   """
@@ -246,7 +246,7 @@ type UserSettings {
 """
 Create a new user settings object when a new user signs up
 """
-input CreateUserSettings {
+input CreateSettings {
   """
   The user's default currency. Everything will be converted to this currency.
   """
@@ -264,7 +264,7 @@ input CreateUserSettings {
 """
 Update only some values.
 """
-input UpdateUserSettings {
+input UpdateSettings {
   """
   The user's default currency. Everything will be converted to this currency.
   """
@@ -486,12 +486,12 @@ type Query {
   """
   Return the user's settings
   """
-  getUserSettings(
+  getSettings(
     """
     The user' unique id
     """
     userId: ID!
-  ): UserSettings
+  ): Settings
 
   """
   Return matching isins for a given search string
@@ -518,10 +518,10 @@ type Mutation {
   """
   Create and store settings for the first time. For example when a new user signs up.
   """
-  createUserSettings(
-    "A complete userSettings object that can be written to the databse as is"
-    userSettings: CreateUserSettings!
-  ): UserSettings!
+  createSettings(
+    "A complete settings object that can be written to the databse as is"
+    settings: CreateSettings!
+  ): Settings!
 
   """
   Delete a single transaction from the database
@@ -536,8 +536,5 @@ type Mutation {
   """
   Only update some values in the user settings.
   """
-  updateUserSettings(
-    "A partial userSettings object"
-    userSettings: UpdateUserSettings!
-  ): UserSettings!
+  updateSettings("A partial settings object" settings: UpdateSettings!): Settings!
 }
