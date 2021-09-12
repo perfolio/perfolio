@@ -40,7 +40,7 @@ CREATE TABLE "Transaction" (
 );
 
 -- CreateTable
-CREATE TABLE "UserSettings" (
+CREATE TABLE "Settings" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "defaultCurrency" "Currency" NOT NULL,
@@ -67,7 +67,7 @@ CREATE UNIQUE INDEX "User.stripeCustomerId_unique" ON "User"("stripeCustomerId")
 CREATE UNIQUE INDEX "User.stripeSubscriptionId_unique" ON "User"("stripeSubscriptionId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserSettings.userId_unique" ON "UserSettings"("userId");
+CREATE UNIQUE INDEX "Settings.userId_unique" ON "Settings"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StockMap.isin_unique" ON "StockMap"("isin");
@@ -82,4 +82,4 @@ ALTER TABLE "Notification" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON
 ALTER TABLE "Transaction" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSettings" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Settings" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

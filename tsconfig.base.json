@@ -47,6 +47,7 @@
       "@perfolio/feature/finance/returns": ["libs/feature/finance/returns/src/index.ts"],
       "@perfolio/feature/i18n": ["libs/feature/i18n/src/index.ts"],
       "@perfolio/hooks": ["libs/hooks/src/index.ts"],
+      "@perfolio/id": ["libs/id/src/index.ts"],
       "@perfolio/integrations/bankofengland": ["libs/integrations/bankofengland/src/index.ts"],
       "@perfolio/integrations/ecb": ["libs/integrations/ecb/src/index.ts"],
       "@perfolio/integrations/iexcloud": ["libs/integrations/iexcloud/src/index.ts"],

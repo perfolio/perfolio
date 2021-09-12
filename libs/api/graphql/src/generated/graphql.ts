@@ -55,6 +55,19 @@ export type CompanyStock = ExchangeTradedAsset &
     country: Scalars["String"]
   }
 
+/** Create a new user settings object when a new user signs up */
+export type CreateSettings = {
+  /** The user's default currency. Everything will be converted to this currency. */
+  defaultCurrency: Scalars["String"]
+  /**
+   * The user's default exchange. At the start only 1 exchange can be used.
+   * This must be the MIC!
+   */
+  defaultExchange: Scalars["String"]
+  /** The unique user id */
+  userId: Scalars["ID"]
+}
+
 /** Create a new transaction */
 export type CreateTransaction = {
   /** The asset id identifies the asset, this will be prefixed by 'stock_' for stocks */
@@ -69,19 +82,6 @@ export type CreateTransaction = {
   volume: Scalars["Float"]
   /** The market identifier code where the user intends to sell this asset */
   mic?: Maybe<Scalars["String"]>
-}
-
-/** Create a new user settings object when a new user signs up */
-export type CreateUserSettings = {
-  /** The user's default currency. Everything will be converted to this currency. */
-  defaultCurrency: Scalars["String"]
-  /**
-   * The user's default exchange. At the start only 1 exchange can be used.
-   * This must be the MIC!
-   */
-  defaultExchange: Scalars["String"]
-  /** The unique user id */
-  userId: Scalars["ID"]
 }
 
 /** Crypto */
@@ -141,13 +141,13 @@ export type Mutation = {
   /** Create a new transaction */
   createTransaction?: Maybe<Transaction>
   /** Create and store settings for the first time. For example when a new user signs up. */
-  createUserSettings: UserSettings
+  createSettings: Settings
   /** Delete a single transaction from the database */
   deleteTransaction: Scalars["ID"]
   /** Enter the user's email into our newsletter list. */
   subscribeToNewsletter: Scalars["String"]
   /** Only update some values in the user settings. */
-  updateUserSettings: UserSettings
+  updateSettings: Settings
 }
 
 /** Available mutations */
@@ -156,8 +156,8 @@ export type MutationCreateTransactionArgs = {
 }
 
 /** Available mutations */
-export type MutationCreateUserSettingsArgs = {
-  userSettings: CreateUserSettings
+export type MutationCreateSettingsArgs = {
+  settings: CreateSettings
 }
 
 /** Available mutations */
@@ -171,8 +171,8 @@ export type MutationSubscribeToNewsletterArgs = {
 }
 
 /** Available mutations */
-export type MutationUpdateUserSettingsArgs = {
-  userSettings: UpdateUserSettings
+export type MutationUpdateSettingsArgs = {
+  settings: UpdateSettings
 }
 
 /** Available queries */
@@ -195,7 +195,7 @@ export type Query = {
   /** Load a user by their id */
   getUser?: Maybe<User>
   /** Return the user's settings */
-  getUserSettings?: Maybe<UserSettings>
+  getSettings?: Maybe<Settings>
   /**
    * Return matching isins for a given search string
    *
@@ -246,7 +246,7 @@ export type QueryGetUserArgs = {
 }
 
 /** Available queries */
-export type QueryGetUserSettingsArgs = {
+export type QueryGetSettingsArgs = {
   userId: Scalars["ID"]
 }
 
@@ -266,6 +266,17 @@ export type SearchResult = {
   isin: Scalars["ID"]
   /** The ticker of the company */
   ticker: Scalars["ID"]
+}
+
+/** Settings that can be customized by the user such as preferences as well as defaults */
+export type Settings = {
+  __typename?: "Settings"
+  /** The user's default currency. Everything will be converted to this currency. */
+  defaultCurrency: Scalars["String"]
+  /** The user's default exchange. At the start only 1 exchange can be used. */
+  defaultExchange: Exchange
+  /** Used to store the exchange in the db */
+  defaultExchangeMic: Scalars["String"]
 }
 
 /** A transactions represents a single purchase or sale of any number of shares of a single asset. */
@@ -294,7 +305,7 @@ export type Transaction = {
 }
 
 /** Update only some values. */
-export type UpdateUserSettings = {
+export type UpdateSettings = {
   /** The user's default currency. Everything will be converted to this currency. */
   defaultCurrency?: Maybe<Scalars["String"]>
   /**
@@ -316,18 +327,7 @@ export type User = {
   /** StripeCustomerId */
   stripeCustomerId: Scalars["String"]
   /** The user's settings */
-  settings?: Maybe<UserSettings>
-}
-
-/** Settings that can be customized by the user such as preferences as well as defaults */
-export type UserSettings = {
-  __typename?: "UserSettings"
-  /** The user's default currency. Everything will be converted to this currency. */
-  defaultCurrency: Scalars["String"]
-  /** The user's default exchange. At the start only 1 exchange can be used. */
-  defaultExchange: Exchange
-  /** Used to store the exchange in the db */
-  defaultExchangeMic: Scalars["String"]
+  settings?: Maybe<Settings>
 }
 
 /**
@@ -454,9 +454,9 @@ export type ResolversTypes = ResolversObject<{
   AssetHistory: ResolverTypeWrapper<AssetHistory>
   String: ResolverTypeWrapper<Scalars["String"]>
   CompanyStock: ResolverTypeWrapper<CompanyStock>
+  CreateSettings: CreateSettings
   CreateTransaction: CreateTransaction
   Float: ResolverTypeWrapper<Scalars["Float"]>
-  CreateUserSettings: CreateUserSettings
   Crypto: ResolverTypeWrapper<Crypto>
   Exchange: ResolverTypeWrapper<Exchange>
   ExchangeTradedAsset: ResolversTypes["CompanyStock"] | ResolversTypes["Crypto"]
@@ -465,11 +465,11 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>
   Int: ResolverTypeWrapper<Scalars["Int"]>
   SearchResult: ResolverTypeWrapper<SearchResult>
+  Settings: ResolverTypeWrapper<Settings>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
   Transaction: ResolverTypeWrapper<Transaction>
-  UpdateUserSettings: UpdateUserSettings
+  UpdateSettings: UpdateSettings
   User: ResolverTypeWrapper<User>
-  UserSettings: ResolverTypeWrapper<UserSettings>
   ValueAndQuantityAtTime: ResolverTypeWrapper<ValueAndQuantityAtTime>
   ValueAtTime: ResolverTypeWrapper<ValueAtTime>
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
@@ -482,9 +482,9 @@ export type ResolversParentTypes = ResolversObject<{
   AssetHistory: AssetHistory
   String: Scalars["String"]
   CompanyStock: CompanyStock
+  CreateSettings: CreateSettings
   CreateTransaction: CreateTransaction
   Float: Scalars["Float"]
-  CreateUserSettings: CreateUserSettings
   Crypto: Crypto
   Exchange: Exchange
   ExchangeTradedAsset: ResolversParentTypes["CompanyStock"] | ResolversParentTypes["Crypto"]
@@ -492,11 +492,11 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {}
   Int: Scalars["Int"]
   SearchResult: SearchResult
+  Settings: Settings
   Timestamp: Scalars["Timestamp"]
   Transaction: Transaction
-  UpdateUserSettings: UpdateUserSettings
+  UpdateSettings: UpdateSettings
   User: User
-  UserSettings: UserSettings
   ValueAndQuantityAtTime: ValueAndQuantityAtTime
   ValueAtTime: ValueAtTime
   Boolean: Scalars["Boolean"]
@@ -578,11 +578,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateTransactionArgs, "transaction">
   >
-  createUserSettings?: Resolver<
-    ResolversTypes["UserSettings"],
+  createSettings?: Resolver<
+    ResolversTypes["Settings"],
     ParentType,
     ContextType,
-    RequireFields<MutationCreateUserSettingsArgs, "userSettings">
+    RequireFields<MutationCreateSettingsArgs, "settings">
   >
   deleteTransaction?: Resolver<
     ResolversTypes["ID"],
@@ -596,11 +596,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationSubscribeToNewsletterArgs, "email">
   >
-  updateUserSettings?: Resolver<
-    ResolversTypes["UserSettings"],
+  updateSettings?: Resolver<
+    ResolversTypes["Settings"],
     ParentType,
     ContextType,
-    RequireFields<MutationUpdateUserSettingsArgs, "userSettings">
+    RequireFields<MutationUpdateSettingsArgs, "settings">
   >
 }>
 
@@ -651,11 +651,11 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryGetUserArgs, "userId">
   >
-  getUserSettings?: Resolver<
-    Maybe<ResolversTypes["UserSettings"]>,
+  getSettings?: Resolver<
+    Maybe<ResolversTypes["Settings"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryGetUserSettingsArgs, "userId">
+    RequireFields<QueryGetSettingsArgs, "userId">
   >
   search?: Resolver<
     Array<ResolversTypes["SearchResult"]>,
@@ -673,6 +673,16 @@ export type SearchResultResolvers<
   asset?: Resolver<ResolversTypes["ExchangeTradedAsset"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}>
+
+export type SettingsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Settings"] = ResolversParentTypes["Settings"],
+> = ResolversObject<{
+  defaultCurrency?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  defaultExchange?: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
+  defaultExchangeMic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -703,17 +713,7 @@ export type UserResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   stripeCustomerId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  settings?: Resolver<Maybe<ResolversTypes["UserSettings"]>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}>
-
-export type UserSettingsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["UserSettings"] = ResolversParentTypes["UserSettings"],
-> = ResolversObject<{
-  defaultCurrency?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  defaultExchange?: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
-  defaultExchangeMic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  settings?: Resolver<Maybe<ResolversTypes["Settings"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -746,10 +746,10 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   SearchResult?: SearchResultResolvers<ContextType>
+  Settings?: SettingsResolvers<ContextType>
   Timestamp?: GraphQLScalarType
   Transaction?: TransactionResolvers<ContextType>
   User?: UserResolvers<ContextType>
-  UserSettings?: UserSettingsResolvers<ContextType>
   ValueAndQuantityAtTime?: ValueAndQuantityAtTimeResolvers<ContextType>
   ValueAtTime?: ValueAtTimeResolvers<ContextType>
 }>
@@ -773,12 +773,12 @@ export type CreateTransactionMutation = { __typename?: "Mutation" } & {
   createTransaction?: Maybe<{ __typename?: "Transaction" } & Pick<Transaction, "id">>
 }
 
-export type CreateUserSettingsMutationVariables = Exact<{
-  userSettings: CreateUserSettings
+export type CreateSettingsMutationVariables = Exact<{
+  settings: CreateSettings
 }>
 
-export type CreateUserSettingsMutation = { __typename?: "Mutation" } & {
-  createUserSettings: { __typename?: "UserSettings" } & Pick<UserSettings, "defaultCurrency"> & {
+export type CreateSettingsMutation = { __typename?: "Mutation" } & {
+  createSettings: { __typename?: "Settings" } & Pick<Settings, "defaultCurrency"> & {
       defaultExchange: { __typename?: "Exchange" } & Pick<Exchange, "mic">
     }
 }
@@ -801,12 +801,12 @@ export type SubscribeToNewsletterMutationMutation = { __typename?: "Mutation" } 
   "subscribeToNewsletter"
 >
 
-export type UpdateUserSettingsMutationVariables = Exact<{
-  userSettings: UpdateUserSettings
+export type UpdateSettingsMutationVariables = Exact<{
+  settings: UpdateSettings
 }>
 
-export type UpdateUserSettingsMutation = { __typename?: "Mutation" } & {
-  updateUserSettings: { __typename?: "UserSettings" } & Pick<UserSettings, "defaultCurrency"> & {
+export type UpdateSettingsMutation = { __typename?: "Mutation" } & {
+  updateSettings: { __typename?: "Settings" } & Pick<Settings, "defaultCurrency"> & {
       defaultExchange: { __typename?: "Exchange" } & Pick<Exchange, "mic">
     }
 }
@@ -892,13 +892,13 @@ export type GetUserQuery = { __typename?: "Query" } & {
   getUser?: Maybe<{ __typename: "User" } & Pick<User, "id" | "email" | "stripeCustomerId">>
 }
 
-export type GetUserSettingsQueryVariables = Exact<{
+export type GetSettingsQueryVariables = Exact<{
   userId: Scalars["ID"]
 }>
 
-export type GetUserSettingsQuery = { __typename?: "Query" } & {
-  getUserSettings?: Maybe<
-    { __typename: "UserSettings" } & Pick<UserSettings, "defaultCurrency"> & {
+export type GetSettingsQuery = { __typename?: "Query" } & {
+  getSettings?: Maybe<
+    { __typename: "Settings" } & Pick<Settings, "defaultCurrency"> & {
         defaultExchange: { __typename: "Exchange" } & Pick<
           Exchange,
           "abbreviation" | "suffix" | "mic" | "name" | "region"
@@ -938,9 +938,9 @@ export const CreateTransactionDocument = gql`
     }
   }
 `
-export const CreateUserSettingsDocument = gql`
-  mutation CreateUserSettings($userSettings: CreateUserSettings!) {
-    createUserSettings(userSettings: $userSettings) {
+export const CreateSettingsDocument = gql`
+  mutation CreateSettings($settings: CreateSettings!) {
+    createSettings(settings: $settings) {
       defaultCurrency
       defaultExchange {
         mic
@@ -958,9 +958,9 @@ export const SubscribeToNewsletterMutationDocument = gql`
     subscribeToNewsletter(email: $email)
   }
 `
-export const UpdateUserSettingsDocument = gql`
-  mutation updateUserSettings($userSettings: UpdateUserSettings!) {
-    updateUserSettings(userSettings: $userSettings) {
+export const UpdateSettingsDocument = gql`
+  mutation updateSettings($settings: UpdateSettings!) {
+    updateSettings(settings: $settings) {
       defaultCurrency
       defaultExchange {
         mic
@@ -1060,9 +1060,9 @@ export const GetUserDocument = gql`
     }
   }
 `
-export const GetUserSettingsDocument = gql`
-  query getUserSettings($userId: ID!) {
-    getUserSettings(userId: $userId) {
+export const GetSettingsDocument = gql`
+  query getSettings($userId: ID!) {
+    getSettings(userId: $userId) {
       __typename
       defaultCurrency
       defaultExchange {
@@ -1103,12 +1103,12 @@ export function getSdk<C>(requester: Requester<C>) {
         options,
       )
     },
-    CreateUserSettings(
-      variables: CreateUserSettingsMutationVariables,
+    CreateSettings(
+      variables: CreateSettingsMutationVariables,
       options?: C,
-    ): Promise<CreateUserSettingsMutation> {
-      return requester<CreateUserSettingsMutation, CreateUserSettingsMutationVariables>(
-        CreateUserSettingsDocument,
+    ): Promise<CreateSettingsMutation> {
+      return requester<CreateSettingsMutation, CreateSettingsMutationVariables>(
+        CreateSettingsDocument,
         variables,
         options,
       )
@@ -1132,12 +1132,12 @@ export function getSdk<C>(requester: Requester<C>) {
         SubscribeToNewsletterMutationMutationVariables
       >(SubscribeToNewsletterMutationDocument, variables, options)
     },
-    updateUserSettings(
-      variables: UpdateUserSettingsMutationVariables,
+    updateSettings(
+      variables: UpdateSettingsMutationVariables,
       options?: C,
-    ): Promise<UpdateUserSettingsMutation> {
-      return requester<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>(
-        UpdateUserSettingsDocument,
+    ): Promise<UpdateSettingsMutation> {
+      return requester<UpdateSettingsMutation, UpdateSettingsMutationVariables>(
+        UpdateSettingsDocument,
         variables,
         options,
       )
@@ -1192,12 +1192,9 @@ export function getSdk<C>(requester: Requester<C>) {
     getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
       return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options)
     },
-    getUserSettings(
-      variables: GetUserSettingsQueryVariables,
-      options?: C,
-    ): Promise<GetUserSettingsQuery> {
-      return requester<GetUserSettingsQuery, GetUserSettingsQueryVariables>(
-        GetUserSettingsDocument,
+    getSettings(variables: GetSettingsQueryVariables, options?: C): Promise<GetSettingsQuery> {
+      return requester<GetSettingsQuery, GetSettingsQueryVariables>(
+        GetSettingsDocument,
         variables,
         options,
       )
