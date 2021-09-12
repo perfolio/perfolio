@@ -1,12 +1,14 @@
 import { v4 as uuid } from "uuid"
 
 const perfolioIds = {
+  
   user: "u",
   transaction: "tx",
   settings: "s",
   watchlist: "w",
   notification: "n",
   portfolio: "p",
+  refreshToken: "rft",
 }
 
 /**
