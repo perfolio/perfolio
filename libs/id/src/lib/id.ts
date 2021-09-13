@@ -7,6 +7,8 @@ const perfolioIds = {
   settings: "set",
   watchlist: "wl",
   notification: "n",
+  portfolio: "p",
+  refreshToken: "rft",
 }
 
 /**
