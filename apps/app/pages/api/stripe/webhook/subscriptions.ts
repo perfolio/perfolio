@@ -2,10 +2,9 @@ import { Stripe } from "stripe"
 import { env } from "@chronark/env"
 import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
-import { Logger } from "tslog"
+import { Logger } from "@perfolio/logger"
 import { buffer } from "micro"
-import { PrismaClient } from "@perfolio/integrations/prisma"
-import { ManagementClient } from "auth0"
+import { PrismaClient, Role } from "@perfolio/integrations/prisma"
 import { HTTPError } from "@perfolio/util/errors"
 import { idGenerator } from "@perfolio/id"
 
@@ -44,37 +43,12 @@ const requestValidation = z.object({
 
 const prisma = new PrismaClient()
 
-const auth0 = new ManagementClient({
-  domain: env.require("NEXT_PUBLIC_AUTH0_DOMAIN"),
-  clientId: env.require("AUTH0_MANAGEMENT_CLIENT_ID"),
-  clientSecret: env.require("AUTH0_MANAGEMENT_CLIENT_SECRET"),
-})
-
-/**
- * Remove roles from a user
- */
-const removeRoles = async (
-  auth0: ManagementClient,
-  userId: string,
-  roles: string[],
-): Promise<void> => {
-  if (roles.length > 0) {
-    await auth0.removeRolesFromUser({ id: userId }, { roles }).catch((err) => {
-      throw new HTTPError(500, `Unable to remove roles ${roles} from user ${userId}: ${err}`)
-    })
-  }
-}
-
-/**
- * Add roles to a user
- */
-const addRoles = async (
-  auth0: ManagementClient,
-  userId: string,
-  roles: string[],
-): Promise<void> => {
-  await auth0.assignRolestoUser({ id: userId }, { roles }).catch((err) => {
-    throw new HTTPError(500, `Unable to assign role ${roles} to user ${userId}: ${err}`)
+const setRoles = async (prisma: PrismaClient, userId: string, roles: Role[]): Promise<void> => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      roles,
+    },
   })
 }
 
@@ -104,6 +78,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const user = await prisma.user.findUnique({
       where: { stripeCustomerId: subscription.customer },
     })
+
     if (!user) {
       throw new Error(
         `User not found: ${JSON.stringify({ stripeCustomerId: subscription.customer })}`,
@@ -115,39 +90,40 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       .catch((err) => {
         throw new HTTPError(500, `Product could not be found: ${err}`)
       })
-    logger.debug({ product })
 
     /**
      * New access role for the new subscribed plan
      */
-    const newRole = product.metadata["authRole"] as string | undefined
-    if (!newRole) {
+    const authRole = product.metadata["authRole"] as string | undefined
+    if (!authRole) {
       throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
     }
 
-    /**
-     * Subscription roles the user currently has
-     */
-    const existingRoles = (await auth0.getUserRoles({ id: user.id }))
-      .filter((role) => role.name?.startsWith("subscription:") && !!role.id)
-      .map((role) => role.id!)
-
+    let newRoles: Role[] = []
+    switch (authRole) {
+      case "sub_growth":
+        newRoles = [Role.SUB_GROWTH]
+        break
+      case "sub_pro":
+        newRoles = [Role.SUB_PRO]
+        break
+      default:
+        break
+    }
     /**
      * Act on the different types of events
      */
     switch (event.type) {
       case "customer.subscription.created":
-        await removeRoles(auth0, user.id, existingRoles)
-        await addRoles(auth0, user.id, [newRole])
+        await setRoles(prisma, user.id, newRoles)
         break
 
       case "customer.subscription.updated":
-        await removeRoles(auth0, user.id, existingRoles)
-        await addRoles(auth0, user.id, [newRole])
+        await setRoles(prisma, user.id, newRoles)
         break
 
       case "customer.subscription.deleted":
-        await removeRoles(auth0, user.id, existingRoles)
+        await setRoles(prisma, user.id, [])
         break
 
       case "customer.subscription.trial_will_end":
@@ -163,7 +139,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         break
     }
   } catch (err) {
-    logger.error({ error: err.message })
+    logger.error("Error", { error: err.message })
 
     res.status(err instanceof HTTPError ? err.status : 500)
     res.send(err.message)

@@ -27,7 +27,7 @@ import {
 } from "@perfolio/hooks"
 import { OnboardingModal } from "@perfolio/app/middleware"
 
-import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { withAuthenticationRequired } from "@perfolio/app/middleware"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Time } from "@perfolio/util/time"
 

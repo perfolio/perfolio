@@ -2,13 +2,13 @@ import { useQuery } from "react-query"
 import { SearchQuery, SearchQueryVariables } from "@perfolio/api/graphql"
 
 import { client } from "../client"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth } from "@perfolio/auth"
 export const useSearch = (variables: SearchQueryVariables) => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
 
   const { data, ...meta } = useQuery<SearchQuery, Error>(
     ["search", variables],
-    async () => client(await getAccessTokenSilently()).search(variables),
+    async () => client(await getAccessToken()).search(variables),
     {
       enabled: variables.fragment.length > 0,
     },

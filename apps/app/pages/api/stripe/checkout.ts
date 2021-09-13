@@ -1,7 +1,7 @@
 import { Stripe } from "stripe"
 import { env } from "@chronark/env"
 import { NextApiRequest, NextApiResponse } from "next"
-import { Logger } from "tslog"
+import { Logger } from "@perfolio/logger"
 import { HTTPError } from "@perfolio/util/errors"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
