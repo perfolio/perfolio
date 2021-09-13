@@ -20,7 +20,7 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
           <span>German only</span>
           <h1>Imprint / Impressum</h1>
           <h2>Angaben gemäß § 5 TMG</h2>
-          <span>Jordt Kohler Mackintosh Meister Meister Thomas Webersinke GbR</span>
+          <span>Jordt Kohler Meister Meister Thomas Webersinke GbR</span>
           <br></br>
           <span>Treibberg 9</span>
           <br></br>
@@ -34,7 +34,6 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
           <div className="flex flex-col">
             <span>Mads Jordt</span>
             <span>Kevin Kohler</span>
-            <span>Lauren Mackintosh</span>
             <span>Luis Meister</span>
             <span>Lukas Meister</span>
             <span>Andreas Thomas</span>
@@ -50,7 +49,7 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
 
           <h2>Verantwortliche im Sinne von § 18 Abs. 2 MStV</h2>
           <div className="flex flex-col">
-            <span>Lauren Mackintosh</span>
+            <span>Nicolas Webersinke</span>
             <span>Marketing & Sales</span>
             <span>Treibberg 9</span>
             <span>90403 Nürnberg</span>
