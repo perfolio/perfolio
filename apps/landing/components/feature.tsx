@@ -9,8 +9,8 @@ export interface FeatureProps {
 
 export const Feature: React.FC<FeatureProps> = ({ title, description, icon }): JSX.Element => {
   return (
-    <div className="flex flex-col items-center justify-center md:flex-row md:items-start">
-      <div className="mr-4 ">
+    <div className="flex flex-col items-center justify-center space-y-2 md:space-y-0 md:flex-row md:items-start">
+      <div className="md:mr-4">
         <Icon size="sm" label={title} color="text-gray-900">
           {icon}{" "}
         </Icon>
