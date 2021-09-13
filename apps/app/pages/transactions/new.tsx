@@ -12,10 +12,10 @@ import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
 import { CheckIcon } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
-
+import { withAuthenticationRequired } from "@perfolio/app/middleware"
 import { useTransactions, useSettings, useCreateTransaction } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useUser } from "@perfolio/hooks"
 const validation = z.object({
   isin: z.string(),
   volume: z.string().transform((x: string) => parseInt(x)),
@@ -33,7 +33,7 @@ interface PageProps {
 
 const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  const { user } = useAuth0()
+  const { user } = useUser()
   const { addToast } = useToaster()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
@@ -117,7 +117,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                       ctx,
                       async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
-                          userId: user!.sub!,
+                          userId: user!.id!,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
@@ -177,7 +177,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     </AppLayout>
   )
 }
-export default NewTransactionPage
+export default withAuthenticationRequired(NewTransactionPage)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

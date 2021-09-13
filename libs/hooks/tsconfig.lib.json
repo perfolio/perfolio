@@ -9,5 +9,5 @@
     "../../node_modules/@nrwl/react/typings/image.d.ts"
   ],
   "exclude": ["**/*.test.ts", "**/*.test.tsx"],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "../auth/src/lib/getAccessToken.tsx"]
 }

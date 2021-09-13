@@ -7,11 +7,11 @@ import { Transition } from "@headlessui/react"
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 import { useIsFetching } from "react-query"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useLogout } from "@perfolio/hooks"
+
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const isFetching = useIsFetching()
-  const { logout } = useAuth0()
-
+  const logout = useLogout()
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -74,7 +74,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button className="focus:outline-none" onClick={() => logout()}>
+              <button className="focus:outline-none" onClick={() => logout.mutate()}>
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />
                 </Icon>
