@@ -35,6 +35,22 @@
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
+    },
+    {
+      "files": ["*.graphql", "*.gql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"],
+      "rules": {
+        // "avoid-duplicate-fields": "error",
+        // "avoid-operation-name-prefix": "error",
+        // "no-opperaton-name-suffix": "error",
+        // "no-unreachable-types": "error",
+        // "no-unused-variables": "error",
+        // "require-description": "error",
+        // "unique-type-names": "error",
+        // "unique-enum-value-names": "error",
+        // "unique-field-definition-names": "error"
+      }
     }
   ]
 }

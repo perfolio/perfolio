@@ -1,6 +1,6 @@
 import { PrismaClient as BaseClient } from "@prisma/client"
-export type { StockMap, Transaction, User, Settings, Currency } from "@prisma/client"
-
+export type { StockMap, Transaction, User, Settings } from "@prisma/client"
+export { Currency, Role } from "@prisma/client"
 /**
  * Inject the `pgbouncer=true` flag into the url.
  * This is done here because we require the url without pgbouncer for the migration

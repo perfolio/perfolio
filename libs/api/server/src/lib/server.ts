@@ -2,7 +2,7 @@ import { ApolloServer } from "apollo-server-micro"
 // import { BaseRedisCache } from "apollo-server-cache-redis"
 
 // import Redis from "ioredis"
-import { Logger } from "tslog"
+import { Logger } from "@perfolio/logger"
 import { context } from "./context"
 // import responseCachePlugin from "apollo-server-plugin-response-cache"
 
