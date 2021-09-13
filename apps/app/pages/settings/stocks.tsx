@@ -8,9 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useSettings, useExchanges, useUpdateSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
-import { AuthenticationError } from "@perfolio/util/errors"
-import { useAuth0 } from "@auth0/auth0-react"
+import { withAuthenticationRequired } from "@perfolio/app/middleware"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 interface SettingProps {
@@ -82,7 +80,6 @@ interface PageProps {
 
 const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  const { user } = useAuth0()
   const { settings } = useSettings()
 
   const { exchanges } = useExchanges()
@@ -95,11 +92,8 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
 
   const updateSettings = useUpdateSettings()
   const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
-    if (!user?.sub) {
-      throw new AuthenticationError(t("setStocksAuthError"))
-    }
     await updateSettings.mutateAsync({
-      settings: { userId: user.sub, defaultCurrency: values.defaultCurrency },
+      settings: { defaultCurrency: values.defaultCurrency as "EUR" },
     })
   }
 
@@ -108,12 +102,8 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     defaultExchange: z.string(),
   })
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
-    if (!user?.sub) {
-      throw new AuthenticationError(t("setStocksAuthError"))
-    }
     await updateSettings.mutateAsync({
       settings: {
-        userId: user.sub,
         defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
       },
     })

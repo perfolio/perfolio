@@ -9,5 +9,9 @@ export const getUser: ResolverFn<UserModel | null, unknown, Context, { userId: s
 ) => {
   await ctx.authorizeUser(({ sub }) => sub === userId)
 
-  return await ctx.dataSources.prisma.user.findUnique({ where: { id: userId } })
+  const user = await ctx.dataSources.prisma.user.findUnique({ where: { id: userId } })
+  if (!user) {
+    throw new Error(`No user found: ${userId}`)
+  }
+  return user
 }

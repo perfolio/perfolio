@@ -1,11 +1,12 @@
 import { v4 as uuid } from "uuid"
 
 const perfolioIds = {
-  user: "user",
+  user: "u",
+  authenticationRequest: "ar",
   transaction: "tx",
   settings: "set",
-  watchlist: "watch",
-  notification: "notif",
+  watchlist: "wl",
+  notification: "n",
 }
 
 /**

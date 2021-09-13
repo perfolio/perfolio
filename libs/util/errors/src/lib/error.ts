@@ -1,4 +1,4 @@
-import { Logger } from "tslog"
+import { Logger } from "@perfolio/logger"
 export interface ErrorOptions {
   /**
    * Log the error.

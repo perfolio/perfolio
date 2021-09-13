@@ -96,6 +96,9 @@
     "landing": {
       "tags": []
     },
+    "logger": {
+      "tags": []
+    },
     "toaster": {
       "tags": []
     },

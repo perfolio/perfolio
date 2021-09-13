@@ -324,10 +324,10 @@ export type User = {
   id: Scalars["ID"]
   /** The user's email */
   email: Scalars["String"]
-  /** StripeCustomerId */
-  stripeCustomerId: Scalars["String"]
   /** The user's settings */
   settings?: Maybe<Settings>
+  /** Stripe customer id */
+  stripeCustomerId: Scalars["ID"]
 }
 
 /**
@@ -712,8 +712,8 @@ export type UserResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  stripeCustomerId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   settings?: Resolver<Maybe<ResolversTypes["Settings"]>, ParentType, ContextType>
+  stripeCustomerId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
