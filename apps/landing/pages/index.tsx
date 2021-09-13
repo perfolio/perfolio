@@ -52,8 +52,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section id="features" className="relative flex flex-col justify-center">
           <SectionTitle tag={t("whyPerfolio")} title={t("headerWhy")} />
 
-          <div className="grid max-w-screen-lg mx-auto space-y-6 lg:grid-cols-2 lg:space-y-0 lg:divide-x lg:divide-gray-300">
-            <div className="flex flex-col items-center justify-center pr-8 space-y-16">
+          <div className="grid max-w-screen-lg mx-auto space-y-16 lg:grid-cols-2 lg:space-y-0 lg:divide-x lg:divide-gray-300">
+            <div className="flex flex-col items-center justify-center space-y-16 lg:pr-8">
               {[
                 {
                   icon: <FlagIcon />,
@@ -82,7 +82,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
               })}
             </div>
 
-            <div className="flex flex-col items-center justify-center pl-8 space-y-16">
+            <div className="flex flex-col items-center justify-center space-y-16 lg:pl-8">
               {[
                 {
                   icon: <DatabaseIcon />,
@@ -113,20 +113,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section id="pricing" className="flex flex-col justify-center">
           <SectionTitle tag={t("headerPricing")} title={t("subheaderPricing")} />
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="flex flex-col items-center justify-center space-y-8 md:flex-row md:space-y-0 md:space-x-8">
             <Price
-              title={t("tryForFreeTitle")}
-              price={0}
-              features={[
-                t("basicPlanFeatureData"),
-                t("basicPlanFeaturePerformance"),
-                t("basicPlanFeatureChart"),
-              ]}
-              href="/api/auth/login"
-              submitText={t("tryForFreeButton")}
-            />
-            <Price
-              title="Basic"
+              title="Growth"
               price={3.99}
               interval="month"
               features={[
@@ -193,11 +182,6 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
           name: "Kevin Kohler",
           title: "Customer Relations",
           image: "/img/kevin.jpeg",
-        },
-        {
-          name: "Lauren Mackintosh",
-          title: "Marketing & Sales",
-          image: "/img/lauren.jpeg",
         },
         {
           name: "Luis Meister",
