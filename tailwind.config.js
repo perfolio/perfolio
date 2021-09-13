@@ -33,7 +33,7 @@ module.exports = {
       },
 
       cta: {
-        DEFAULT: "#F55800",
+        DEFAULT: "#3548c8",
       },
 
       success: {
@@ -55,7 +55,7 @@ module.exports = {
 
     extend: {
       boxShadow: {
-        cta: "0 10px 20px -5px rgba(245, 88, 0, 0.4)",
+        cta: "0 10px 20px -5px rgba(53, 72, 200, 0.4)",
         ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
       },
       fontFamily: {
