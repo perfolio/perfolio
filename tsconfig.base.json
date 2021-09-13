@@ -56,6 +56,7 @@
       "@perfolio/integrations/prisma": ["libs/integrations/prisma/src/index.ts"],
       "@perfolio/integrations/redis": ["libs/integrations/redis/src/index.ts"],
       "@perfolio/integrations/sendgrid": ["libs/integrations/sendgrid/src/index.ts"],
+      "@perfolio/logger": ["libs/logger/src/index.ts"],
       "@perfolio/toaster": ["libs/toaster/src/index.ts"],
       "@perfolio/types": ["libs/types/src/index.ts"],
       "@perfolio/ui/charts": ["libs/ui/charts/src/index.ts"],

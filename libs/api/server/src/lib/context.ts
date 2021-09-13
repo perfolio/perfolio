@@ -2,7 +2,7 @@ import { DataSources } from "./datasources"
 import { IncomingMessage } from "http"
 import { AuthenticationError, AuthorizationError } from "@perfolio/util/errors"
 import { Claims, JWT } from "@perfolio/auth"
-import { Logger } from "tslog"
+import { Logger } from "@perfolio/logger"
 import { PrismaClient } from "@prisma/client"
 import { env } from "@chronark/env"
 
@@ -26,8 +26,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
     if (token.startsWith("Bearer ")) {
       let claims: Claims
       try {
-        const jwt = JWT.getInstance()
-        claims = await jwt.verify(token.replace("Bearer ", ""))
+        claims = JWT.verify(token.replace("Bearer ", ""))
       } catch (err) {
         logger.error(err)
         throw new AuthenticationError("Unable to verify token")

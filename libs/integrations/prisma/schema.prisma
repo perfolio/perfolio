@@ -10,19 +10,76 @@ generator client {
   previewFeatures = ["referentialActions"]
 }
 
-
 model User {
   // Auth0 provided user id
   id    String @id
   email String @unique
 
-  stripeCustomerId     String @unique
+  emailVerified DateTime?
+
+
+  refreshTokens RefreshToken[]
+
 
   settings Settings?
 
   notifications Notification[]
 
   transactions Transaction[]
+
+  logins Login[]
+
+
+
+  stripeCustomerId String @unique
+  stripeSubscriptionId String @unique
+  currentPaymentPeriodStart DateTime
+  currentPaymentPeriodEnd   DateTime
+
+ roles Role[]
+}
+
+enum Role {
+  SUB_GROWTH
+  SUB_PRO
+}
+
+model RefreshToken {
+  tokenHash String   @id
+  expires   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // If a refresh token is used a second time, it is likely by a malicious 3rd party
+  // All refresh tokens are immediately invalidated and the user is forced to log in again.
+  used Boolean @default(false)
+
+}
+
+model AuthenticationRequest {
+  hashedToken String @id
+
+  // Hash of the email where the request is sent to
+  identifier String @unique
+
+  // We send a 6 digit number to the user
+  expires   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Login {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  time DateTime @default(now())
+
+
+  @@id([userId, time])
 }
 
 // Notifications can be displayed for a user

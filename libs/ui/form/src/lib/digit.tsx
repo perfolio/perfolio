@@ -46,7 +46,6 @@ export const Digit: React.FC<DigitInputProps> = ({ focus, onChange, name, setFoc
         pattern="[\d]{1}"
         onChange={(e) => {
           const { value } = e.currentTarget
-          console.log(name, "changed", value)
           setHasValue(value !== "")
           if (onChange && value !== "") {
             onChange()

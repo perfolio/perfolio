@@ -6,10 +6,10 @@ import {
 import { client } from "../client"
 import { USE_TRANSACTIONS_QUERY_KEY } from "../queries/useTransactions"
 import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth } from "@perfolio/auth"
 
 export const useCreateTransaction = () => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
     CreateTransactionMutation,
@@ -17,7 +17,7 @@ export const useCreateTransaction = () => {
     CreateTransactionMutationVariables
   >(
     async (variables) => {
-      return await client(await getAccessTokenSilently()).CreateTransaction(variables)
+      return await client(await getAccessToken()).CreateTransaction(variables)
     },
     {
       onSuccess: () => {
