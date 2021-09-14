@@ -1,13 +1,11 @@
 import { Resolvers } from "@perfolio/api/graphql"
 import { Context } from "./context"
-import { getRelativePortfolioHistory } from "./resolvers/query/getRelativePortfolioHistory"
-import { getExchanges } from "./resolvers/query/getExchanges"
+import { relativePortfolioHistory } from "./resolvers/query/relativePortfolioHistory"
+import { exchanges } from "./resolvers/query/exchanges"
 import { search } from "./resolvers/query/search"
-import { getSettings } from "./resolvers/query/getSettings"
-import { getUser } from "./resolvers/query/getUser"
-import { getTransactions } from "./resolvers/query/getTransactions"
-import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
-import { getStockPricesAtExchange } from "./resolvers/query/getStockPricesAtExchange"
+import { user } from "./resolvers/query/user"
+import { portfolioHistory } from "./resolvers/query/portfolioHistory"
+import { stockPricesAtExchange } from "./resolvers/query/stockPricesAtExchange"
 import { getExchangeTradedAsset } from "./util/getExchangeTradedAsset"
 import { getExchangeFromMic } from "./util/getExchangeFromMic"
 import { sector } from "./resolvers/companyStock/sector"
@@ -20,22 +18,21 @@ import { updateSettings } from "./resolvers/mutation/updateSettings"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
-    getExchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
-    getRelativePortfolioHistory: (_parent, { userId, since }, ctx) =>
-      getRelativePortfolioHistory(ctx, userId, since ?? undefined),
-    getExchanges,
+    exchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
+    relativePortfolioHistory: (_parent, { portfolioId, since }, ctx) =>
+      relativePortfolioHistory(ctx, portfolioId, since ?? undefined),
+    exchanges,
     search,
-    // @ts-expect-error Remaining fields are resolved later
-
-    getSettings,
     // @ts-expect-error Remaining fields are resolved later
 
     getTransactions,
     // @ts-expect-error Remaining fields are resolved later
 
-    getPortfolioHistory: (_parent, { userId }, ctx) => getPortfolioHistory(ctx, userId),
-    getStockPricesAtExchange,
-    getUser,
+    portfolioHistory: (_parent, { userId }, ctx) => portfolioHistory(ctx, userId),
+    stockPricesAtExchange,
+    // @ts-expect-error Remaining fields are resolved later
+
+    user,
   },
 
   Settings: {

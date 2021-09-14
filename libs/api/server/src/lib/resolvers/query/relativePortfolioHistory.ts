@@ -1,17 +1,17 @@
 import { ValueAtTime } from "@perfolio/api/graphql"
 import { Context } from "../../context"
-import { getPortfolioHistory } from "./getPortfolioHistory"
+import { portfolioHistory } from "./portfolioHistory"
 import { rebalance, toTimeseries } from "@perfolio/feature/finance/returns"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
 
-export const getRelativePortfolioHistory = async (
+export const relativePortfolioHistory = async (
   ctx: Context,
   userId: string,
   since?: number,
 ): Promise<ValueAtTime[]> => {
   await ctx.authorizeUser(({ sub }) => sub === userId)
 
-  const assetHistory = await getPortfolioHistory(ctx, userId)
+  const assetHistory = await portfolioHistory(ctx, userId)
   const key = new Key({ v: 2, resolver: "getRelativePortfolioHistory", assetHistory, since })
   const cache = new ApolloCache()
 

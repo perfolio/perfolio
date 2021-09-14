@@ -1,14 +1,14 @@
 import { useQuery } from "react-query"
-import { GetExchangesQuery } from "@perfolio/api/graphql"
+import { ExchangesQuery } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { useAuth } from "@perfolio/auth"
 
 export const useExchanges = () => {
   const { getAccessToken } = useAuth()
 
-  const { data, ...meta } = useQuery<GetExchangesQuery, Error>(["useExchanges"], async () =>
-    client(await getAccessToken()).getExchanges(),
+  const { data, ...meta } = useQuery<ExchangesQuery, Error>(["useExchanges"], async () =>
+    client(await getAccessToken()).exchanges(),
   )
 
-  return { exchanges: data?.getExchanges, ...meta }
+  return { exchanges: data?.exchanges, ...meta }
 }

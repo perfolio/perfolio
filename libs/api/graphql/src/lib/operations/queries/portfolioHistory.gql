@@ -1,5 +1,5 @@
-query getPortfolioHistory($userId: String!) {
-  getPortfolioHistory(userId: $userId) {
+query portfolioHistory($portfolioId: ID!) {
+  portfolioHistory(portfolioId: $portfolioId) {
     assetId
     asset {
       id

@@ -1,0 +1,29 @@
+query portfolio($portfolioId: ID!) {
+  portfolio(portfolioId: $portfolioId) {
+    __typename
+    id
+    name
+    primary
+
+    transactions {
+      id
+      asset {
+        __typename
+        id
+        ticker
+        logo
+        name
+        ... on CompanyStock {
+          __typename
+        }
+        ... on Crypto {
+          __typename
+        }
+      }
+      userId
+      executedAt
+      value
+      volume
+    }
+  }
+}

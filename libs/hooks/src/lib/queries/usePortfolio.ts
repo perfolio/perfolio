@@ -1,25 +1,21 @@
-import { ValueAndQuantityAtTime } from "@perfolio/api/graphql"
-import { usePortfolioHistory } from "./usePortfolioHistory"
+import { PortfolioQuery } from "@perfolio/api/graphql"
+import { useQuery } from "react-query"
+import { useAuth } from "@perfolio/auth"
+import { client } from "../client"
+import { useRouter } from "next/router"
+
+
+const USE_PORTFOLIO_QUERY_KEY = (portfolioId: string) => `USE_PORTFOLIO_QUERY_KEY_${portfolioId}`
+
 export const usePortfolio = () => {
-  const { portfolioHistory, ...meta } = usePortfolioHistory()
+  const { getAccessToken } = useAuth()
+  const router = useRouter()
+  const portfolioId = router.query.portfolioId as string
 
-  const getLastValid = (history: ValueAndQuantityAtTime[]): { quantity: number; value: number } => {
-    const sorted = [...history].sort((a, b) => b.time - a.time)
-
-    for (const day of sorted) {
-      if (day.value > 0) {
-        return day
-      }
-    }
-    throw new Error("Nothing found")
-  }
-
-  const portfolio = portfolioHistory?.map((h) => {
-    return {
-      asset: h.asset,
-      ...getLastValid(h.history),
-    }
-  })
-
-  return { portfolio, ...meta }
+  const { data, ...meta } = useQuery<PortfolioQuery, Error>(
+    USE_PORTFOLIO_QUERY_KEY(portfolioId),
+    async () => client(await getAccessToken()).portfolio({portfolioId}),
+  )
+  return { portfolio: data?.portfolio, ...meta }
 }
+

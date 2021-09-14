@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "react-query"
 import { CreateSettingsMutation, CreateSettingsMutationVariables } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { USE_USER_SETTINGS_QUERY_KEY } from "../queries/useSettings"
+import { USE_USER_QUERY_KEY } from "../queries/useUser"
 import { useAuth } from "@perfolio/auth"
 export const useCreateSettings = () => {
   const queryClient = useQueryClient()
@@ -12,11 +12,11 @@ export const useCreateSettings = () => {
     CreateSettingsMutationVariables
   >(
     async (variables) => {
-      return client(await getAccessToken()).CreateSettings(variables)
+      return client(await getAccessToken()).createSettings(variables)
     },
     {
       onSettled: () => {
-        queryClient.resetQueries(USE_USER_SETTINGS_QUERY_KEY)
+        queryClient.resetQueries(USE_USER_QUERY_KEY)
       },
     },
   )

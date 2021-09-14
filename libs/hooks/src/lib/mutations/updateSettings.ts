@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "react-query"
 import { UpdateSettingsMutation, UpdateSettings } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { USE_USER_SETTINGS_QUERY_KEY } from "../queries/useSettings"
+import { USE_USER_QUERY_KEY } from "../queries/useUser"
 import { useAuth } from "@perfolio/auth"
 
 export const useUpdateSettings = () => {
@@ -21,7 +21,7 @@ export const useUpdateSettings = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(USE_USER_SETTINGS_QUERY_KEY)
+        queryClient.invalidateQueries(USE_USER_QUERY_KEY)
       },
     },
   )

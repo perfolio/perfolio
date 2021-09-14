@@ -1,11 +1,11 @@
-import { TransactionSchemaFragment, AssetHistory } from "@perfolio/api/graphql"
+import { AssetHistory } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { Time } from "@perfolio/util/time"
 import { getTickerFromIsin } from "../../util/getTickerFromIsin"
-
+import {Transaction as TransactionModel} from "@perfolio/integrations/prisma"
 type AssetHistoryWithoutAsset = Omit<AssetHistory, "asset"> & { assetId: string }
 
-export const getPortfolioHistory = async (
+export const portfolioHistory = async (
   ctx: Context,
   userId: string,
 ): Promise<AssetHistoryWithoutAsset[]> => {
@@ -21,7 +21,9 @@ export const getPortfolioHistory = async (
     throw new Error(`No exchange found: ${mic}`)
   }
 
-  const transactions = await ctx.dataSources.prisma.transaction.findMany({ where: { userId } })
+  const transactions = await ctx.dataSources.prisma.transaction.findMany({
+    where: { portfolio: { userId } },
+  })
   if (!transactions || transactions.length === 0) {
     return []
   }
@@ -89,10 +91,10 @@ export const getPortfolioHistory = async (
 /**
  * Aggregate all transactions by their assetId
  */
-function groupTransactionsByAsset(transactions: TransactionSchemaFragment[]): {
-  [assetId: string]: TransactionSchemaFragment[]
+function groupTransactionsByAsset(transactions: TransactionModel[]): {
+  [assetId: string]: TransactionModel[]
 } {
-  const transactionsByAsset: Record<string, TransactionSchemaFragment[]> = {}
+  const transactionsByAsset: Record<string, TransactionModel[]> = {}
   transactions.forEach((tx) => {
     if (!(tx.assetId in transactionsByAsset)) {
       transactionsByAsset[tx.assetId] = []

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import { useTransactions, usePortfolio } from "@perfolio/hooks"
+import {  useCurrentPorfolioState, usePortfolio } from "@perfolio/hooks"
 import { useI18n } from "@perfolio/feature/i18n"
 
 export interface AssetTableProps {
@@ -9,12 +9,13 @@ export interface AssetTableProps {
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const { transactions } = useTransactions()
+ 
+  const { portfolio } = usePortfolio()
   const { t } = useI18n()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
-    transactions?.forEach((tx) => {
+    portfolio?.transactions?.forEach((tx) => {
       if (!transactionsFIFO[tx.asset.id]) {
         transactionsFIFO[tx.asset.id] = []
       }
@@ -35,10 +36,10 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
       costPerShare[assetId] = values.reduce((acc, value) => acc + value, 0) / values.length
     })
     return costPerShare
-  }, [transactions])
+  }, [portfolio?.transactions])
 
-  const { portfolio } = usePortfolio()
-  const totalValue = (portfolio ?? []).reduce(
+  const { currentPorfolioState } = useCurrentPorfolioState()
+  const totalValue = (currentPorfolioState ?? []).reduce(
     (acc, { value, quantity }) => acc + value * quantity,
     0,
   )
@@ -83,7 +84,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
           align: "text-right",
         },
       ]}
-      data={(portfolio ?? [])
+      data={(currentPorfolioState ?? [])
         /**
          * Sort by total value descending
          * The largest position is at the top of the table

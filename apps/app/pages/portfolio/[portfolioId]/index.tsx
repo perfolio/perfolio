@@ -18,7 +18,7 @@ import { getCurrencySymbol } from "@perfolio/util/currency"
 import {
   useRelativePortfolioHistory,
   useStandardDeviation,
-  useSettings,
+  useUser,
   useCurrentAbsoluteValue,
   useAbsoluteMean,
   useRelativeMean,
@@ -86,9 +86,10 @@ interface PageProps {
 
 const App: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
+ 
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
-  const { settings } = useSettings()
+  const { user } = useUser()
 
   const { portfolioHistory } = usePortfolioHistory()
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
@@ -157,7 +158,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
-                        suffix: getCurrencySymbol(settings?.defaultCurrency),
+                        suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                       })
                     }
                     isLoading={aggregation === "absolute" && absoluteIsLoading}
@@ -176,7 +177,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                             sign: true,
                           })
                         : format(n, { suffix: "%", percent: true, sign: true })
@@ -218,7 +219,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                            suffix: getCurrencySymbol(settings?.defaultCurrency),
+                            suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                             sign: true,
                           })
                         : format(n, { suffix: "%", percent: true, sign: true })

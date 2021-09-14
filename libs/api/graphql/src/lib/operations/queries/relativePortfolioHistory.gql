@@ -1,0 +1,6 @@
+query relativePortfolioHistory($portfolioId: ID!, $since: Int) {
+  relativePortfolioHistory(portfolioId: $portfolioId, since: $since) {
+    time
+    value
+  }
+}
