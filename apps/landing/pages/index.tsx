@@ -123,7 +123,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 t("basicPlanFeaturePerformance"),
                 t("basicPlanFeatureChart"),
               ]}
-              href="/api/auth/login"
+              href="https://app.perfol.io/auth/sign-in"
               submitText={t("getStartedButton")}
               highlighted
             />
@@ -136,7 +136,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                 t("basicPlanFeaturePerformance"),
                 t("basicPlanFeatureChart"),
               ]}
-              href="/api/auth/login"
+              href="https://app.perfol.io/auth/sign-in"
               submitText={t("takeOffButton")}
             />
           </div>
