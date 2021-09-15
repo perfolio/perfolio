@@ -1,8 +1,5 @@
 import { useQuery } from "react-query"
-import {
-  ExchangeTradedAssetQuery,
-  ExchangeTradedAssetQueryVariables,
-} from "@perfolio/api/graphql"
+import { ExchangeTradedAssetQuery, ExchangeTradedAssetQueryVariables } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { useAuth } from "@perfolio/auth"
 

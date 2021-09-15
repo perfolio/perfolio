@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import {  useCurrentPorfolioState, usePortfolio } from "@perfolio/hooks"
+import { useCurrentPorfolioState, usePortfolio } from "@perfolio/hooks"
 import { useI18n } from "@perfolio/feature/i18n"
 
 export interface AssetTableProps {
@@ -9,7 +9,6 @@ export interface AssetTableProps {
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
- 
   const { portfolio } = usePortfolio()
   const { t } = useI18n()
 

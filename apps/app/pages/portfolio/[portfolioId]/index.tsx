@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetStaticProps, GetStaticPaths } from "next"
 import {
   AppLayout,
   DiversificationChart,
@@ -86,7 +86,7 @@ interface PageProps {
 
 const App: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
- 
+
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
   const { user } = useUser()
@@ -264,6 +264,13 @@ const App: NextPage<PageProps> = ({ translations }) => {
 }
 
 export default withAuthenticationRequired(App)
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: false,
+  }
+}
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

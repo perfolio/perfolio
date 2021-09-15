@@ -257,7 +257,7 @@ type Portfolio {
   The primary portfolio will be displayed by default
   """
   primary: Boolean!
-  
+
   """
   Associated transactions
   """

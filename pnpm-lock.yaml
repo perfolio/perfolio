@@ -32,7 +32,7 @@ specifiers:
   '@nrwl/tao': 12.6.5
   '@nrwl/web': 12.6.5
   '@nrwl/workspace': 12.6.5
-  '@prisma/client': ^2.30.3
+  '@prisma/client': '3'
   '@radix-ui/react-accessible-icon': ^0.0.15
   '@radix-ui/react-avatar': ^0.0.14
   '@radix-ui/react-dialog': ^0.0.19
@@ -108,7 +108,7 @@ specifiers:
   nx: ^12.9.0
   postcss: ^8.3.6
   prettier: 2.3.2
-  prisma: ^2.30.3
+  prisma: '3'
   react: 17.0.2
   react-dom: 17.0.2
   react-hook-form: ^7.15.2
@@ -137,7 +137,7 @@ dependencies:
   '@heroicons/react': 1.0.4_react@17.0.2
   '@hookform/resolvers': 2.8.0_react-hook-form@7.15.3
   '@nrwl/next': 12.6.5_a46a64cbfb385f8a485a1f94663d0afc
-  '@prisma/client': 2.30.3_prisma@2.30.3
+  '@prisma/client': 3.0.2_prisma@3.0.2
   '@radix-ui/react-accessible-icon': 0.0.15_react@17.0.2
   '@radix-ui/react-avatar': 0.0.14_react@17.0.2
   '@radix-ui/react-dialog': 0.0.19_ba191c0052acfa37659f3ba04a2d9405
@@ -251,7 +251,7 @@ devDependencies:
   nx: 12.9.0
   postcss: 8.3.6
   prettier: 2.3.2
-  prisma: 2.30.3
+  prisma: 3.0.2
   stripe: 8.174.0
   tailwindcss: 2.1.4_4dc2d3db2b138fb8fa7d5c7b0c803aba
   tailwindcss-debug-screens: 2.1.0_tailwindcss@2.1.4
@@ -1859,7 +1859,7 @@ packages:
     optionalDependencies:
       '@babel/core': 7.12.13
       '@babel/preset-env': 7.12.13_@babel+core@7.12.13
-      babel-loader: 8.1.0_@babel+core@7.12.13
+      babel-loader: 8.2.2_@babel+core@7.12.13
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1875,7 +1875,7 @@ packages:
     optionalDependencies:
       '@babel/core': 7.12.13
       '@babel/preset-env': 7.12.13_@babel+core@7.12.13
-      babel-loader: 8.1.0_6ff0178a3e975ff0760870ba0a4cf20e
+      babel-loader: 8.2.2_6ff0178a3e975ff0760870ba0a4cf20e
     transitivePeerDependencies:
       - supports-color
 
@@ -4105,9 +4105,9 @@ packages:
     resolution: {integrity: sha512-HnUhk1Sy9IuKrxEMdIRCxpIqPw6BFsbYSEUO9p/hNw5sMld/+3OLMWQP80F8/db9qsv3qUjs7ZR5bS/R+iinXw==}
     dev: true
 
-  /@prisma/client/2.30.3_prisma@2.30.3:
-    resolution: {integrity: sha512-Ey2miZ+Hne12We3rA8XrlPoAF0iuKEhw5IK2nropaelSt0Ju3b2qSz9Qt50a/1Mx3+7yRSu/iSXt8y9TUMl/Yw==}
-    engines: {node: '>=12.2'}
+  /@prisma/client/3.0.2_prisma@3.0.2:
+    resolution: {integrity: sha512-6SrDYY2Yr5AmYpVB3XAXFqfzxKMdDTemXR7FmfXthnxWhQHoBwRLNZ3B3GyI/MmWa5tr+kaaGDJjp1LU0vuYvQ==}
+    engines: {node: '>=12.6'}
     requiresBuild: true
     peerDependencies:
       prisma: '*'
@@ -4115,16 +4115,16 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20
-      prisma: 2.30.3
+      '@prisma/engines-version': 2.31.0-32.2452cc6313d52b8b9a96999ac0e974d0aedf88db
+      prisma: 3.0.2
     dev: false
 
-  /@prisma/engines-version/2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20:
-    resolution: {integrity: sha512-/iDRgaoSQC77WN2oDsOM8dn61fykm6tnZUAClY+6p+XJbOEgZ9gy4CKuKTBgrjSGDVjtQ/S2KGcYd3Ring8xaw==}
+  /@prisma/engines-version/2.31.0-32.2452cc6313d52b8b9a96999ac0e974d0aedf88db:
+    resolution: {integrity: sha512-iArSApZZImVmT9oC/rGOjzvpG2AOqlIeqYcVnop9poA3FxD4zfVPbNPH9DTgOWhc06OkBHujJZeAcsNddVabIQ==}
     dev: false
 
-  /@prisma/engines/2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20:
-    resolution: {integrity: sha512-WPnA/IUrxDihrRhdP6+8KAVSwsc0zsh8ioPYsLJjOhzVhwpRbuFH2tJDRIAbc+qFh+BbTIZbeyBYt8fpNXaYQQ==}
+  /@prisma/engines/2.31.0-32.2452cc6313d52b8b9a96999ac0e974d0aedf88db:
+    resolution: {integrity: sha512-Q9CwN6e5E5Abso7J3A1fHbcF4NXGRINyMnf7WQ07fXaebxTTARY5BNUzy2Mo5uH82eRVO5v7ImNuR044KTjLJg==}
     requiresBuild: true
     dev: true
 
@@ -7718,7 +7718,21 @@ packages:
       make-dir: 3.1.0
       schema-utils: 2.7.1
       webpack: 4.46.0
+
+  /babel-loader/8.2.2_@babel+core@7.12.13:
+    resolution: {integrity: sha512-JvTd0/D889PQBtUXJ2PXaKU/pjZDMtHA9V2ecm+eNRmmBCMR09a+fmpGTNwnJtFmFl5Ei7Vy47LjBb+L0wQ99g==}
+    engines: {node: '>= 8.9'}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+      webpack: '>=2'
+    dependencies:
+      '@babel/core': 7.12.13
+      find-cache-dir: 3.3.2
+      loader-utils: 1.4.0
+      make-dir: 3.1.0
+      schema-utils: 2.7.1
     dev: true
+    optional: true
 
   /babel-plugin-add-react-displayname/0.0.5:
     resolution: {integrity: sha1-M51M3be2X9YtHfnbn+BN4TQSK9U=}
@@ -17450,13 +17464,13 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /prisma/2.30.3:
-    resolution: {integrity: sha512-48qYba2BIyUmXuosBZs0g3kYGrxKvo4VkSHYOuLlDdDirmKyvoY2hCYMUYHSx3f++8ovfgs+MX5KmNlP+iAZrQ==}
-    engines: {node: '>=12.2'}
+  /prisma/3.0.2:
+    resolution: {integrity: sha512-TyOCbtWGDVdWvsM1RhUzJXoGClXGalHhyYWIc5eizSF8T1ScGiOa34asBUdTnXOUBFSErbsqMNw40DHAteBm1A==}
+    engines: {node: '>=12.6'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 2.30.1-2.b8c35d44de987a9691890b3ddf3e2e7effb9bf20
+      '@prisma/engines': 2.31.0-32.2452cc6313d52b8b9a96999ac0e974d0aedf88db
     dev: true
 
   /prismjs/1.24.1:

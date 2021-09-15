@@ -4,7 +4,6 @@ import { useAuth } from "@perfolio/auth"
 import { client } from "../client"
 import { useRouter } from "next/router"
 
-
 const USE_PORTFOLIO_QUERY_KEY = (portfolioId: string) => `USE_PORTFOLIO_QUERY_KEY_${portfolioId}`
 
 export const usePortfolio = () => {
@@ -14,8 +13,7 @@ export const usePortfolio = () => {
 
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
     USE_PORTFOLIO_QUERY_KEY(portfolioId),
-    async () => client(await getAccessToken()).portfolio({portfolioId}),
+    async () => client(await getAccessToken()).portfolio({ portfolioId }),
   )
   return { portfolio: data?.portfolio, ...meta }
 }
-
