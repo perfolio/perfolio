@@ -57,7 +57,6 @@ export class TokenRefreshRequester {
    * the previous promise instead.
    */
   public async refreshAccessToken(): Promise<{ accessToken: string }> {
-    console.log("Requested refresh", { inflight: !!this.inflightRequest })
     if (!this.inflightRequest) {
       this.inflightRequest = this.makeRequest()
     }

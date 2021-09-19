@@ -1,17 +1,31 @@
-import { TransactionSchemaFragment, AssetHistory } from "@perfolio/api/graphql"
+import { AssetHistory } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 import { Time } from "@perfolio/util/time"
 import { getTickerFromIsin } from "../../util/getTickerFromIsin"
-
+import { Transaction as TransactionModel } from "@perfolio/integrations/prisma"
 type AssetHistoryWithoutAsset = Omit<AssetHistory, "asset"> & { assetId: string }
 
-export const getPortfolioHistory = async (
+export const getAbsolutePortfolioHistory = async (
   ctx: Context,
-  userId: string,
+  portfolioId: string,
 ): Promise<AssetHistoryWithoutAsset[]> => {
-  await ctx.authorizeUser(({ sub }) => sub === userId)
+  const portfolio = await ctx.prisma.portfolio.findUnique({
+    where: { id: portfolioId },
+    include: { transactions: true },
+  })
+  if (!portfolio) {
+    throw new Error(`Portfolio not found: ${portfolioId}`)
+  }
 
-  const settings = await ctx.dataSources.prisma.settings.findUnique({ where: { userId } })
+  await ctx.authorizeUser(({ sub }) => sub === portfolio.userId)
+
+  if (!portfolio.transactions || portfolio.transactions.length === 0) {
+    return []
+  }
+
+  const settings = await ctx.dataSources.prisma.settings.findUnique({
+    where: { userId: portfolio.userId },
+  })
   const mic = settings?.defaultExchangeMic
   if (!mic) {
     throw new Error(`Unable to find defaultExchange in user settings`)
@@ -21,12 +35,8 @@ export const getPortfolioHistory = async (
     throw new Error(`No exchange found: ${mic}`)
   }
 
-  const transactions = await ctx.dataSources.prisma.transaction.findMany({ where: { userId } })
-  if (!transactions || transactions.length === 0) {
-    return []
-  }
-  transactions.sort((a, b) => a.executedAt - b.executedAt)
-  const transactionsByAsset = groupTransactionsByAsset(transactions)
+  portfolio.transactions.sort((a, b) => a.executedAt - b.executedAt)
+  const transactionsByAsset = groupTransactionsByAsset(portfolio.transactions)
   const history: { [assetId: string]: { time: number; quantity: number; value: number }[] } = {}
 
   Object.keys(transactionsByAsset).forEach((assetId) => {
@@ -52,7 +62,7 @@ export const getPortfolioHistory = async (
   /**
    * Build a timeline for each asset for each day.
    */
-  const startDay = Time.fromTimestamp(transactions[0].executedAt)
+  const startDay = Time.fromTimestamp(portfolio.transactions[0].executedAt)
   for (const [assetId, transactions] of Object.entries(transactionsByAsset)) {
     /**
      * How many shares does the user have on the current day
@@ -89,10 +99,10 @@ export const getPortfolioHistory = async (
 /**
  * Aggregate all transactions by their assetId
  */
-function groupTransactionsByAsset(transactions: TransactionSchemaFragment[]): {
-  [assetId: string]: TransactionSchemaFragment[]
+function groupTransactionsByAsset(transactions: TransactionModel[]): {
+  [assetId: string]: TransactionModel[]
 } {
-  const transactionsByAsset: Record<string, TransactionSchemaFragment[]> = {}
+  const transactionsByAsset: Record<string, TransactionModel[]> = {}
   transactions.forEach((tx) => {
     if (!(tx.assetId in transactionsByAsset)) {
       transactionsByAsset[tx.assetId] = []

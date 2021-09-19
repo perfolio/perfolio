@@ -13,7 +13,7 @@ generates:
       # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
       useIndexSignature: true
       showUnusedMappers: true
-      # maybeValue: T | null | undefined
+      maybeValue: T | undefined
 hooks:
   afterOneFileWrite:
     - prettier --write

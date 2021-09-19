@@ -8,10 +8,16 @@ export const createTransaction: ResolverFn<
   Context,
   { transaction: CreateTransaction }
 > = async (_parent, { transaction }, ctx, _info) => {
-  await ctx.authorizeUser(({ sub }) => sub === transaction.userId)
+  const portfolio = await ctx.prisma.portfolio.findUnique({
+    where: { id: transaction.portfolioId },
+  })
+  if (!portfolio) {
+    throw new Error(`Portfolio does not exist: ${transaction.portfolioId}`)
+  }
+  await ctx.authorizeUser(({ sub }) => sub === portfolio.userId)
 
   const settings = await ctx.dataSources.prisma.settings.findUnique({
-    where: { userId: transaction.userId },
+    where: { userId: portfolio.userId },
   })
   if (!settings) {
     throw new Error(`No user settings found`)

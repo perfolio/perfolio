@@ -64,6 +64,15 @@ const handler: NextApiHandler = async (req, res) => {
           stripeSubscriptionId: subscription.id,
           currentPaymentPeriodStart: new Date(subscription.current_period_start),
           currentPaymentPeriodEnd: new Date(subscription.current_period_end),
+          portfolios: {
+            create: [
+              {
+                id: idGenerator.id("portfolio"),
+                name: "My Portfolio",
+                primary: true,
+              },
+            ],
+          },
         },
       })
     }

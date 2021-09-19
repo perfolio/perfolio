@@ -11,7 +11,6 @@ const SigninPage: NextPage = () => {
   const adminToken = router.query["token"]
 
   if (adminEmail && adminToken) {
-    console.log({ adminEmail, adminToken })
     fetch("/api/auth/admin", {
       method: "POST",
       body: JSON.stringify({ email: adminEmail, token: adminToken }),

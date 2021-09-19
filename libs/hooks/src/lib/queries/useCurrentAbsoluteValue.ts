@@ -1,10 +1,10 @@
-import { usePortfolio } from "./usePortfolio"
+import { useCurrentPorfolioState } from "./useCurrentPortfolioState"
 
 export const useCurrentAbsoluteValue = () => {
-  const { portfolio, ...meta } = usePortfolio()
+  const { currentPorfolioState, ...meta } = useCurrentPorfolioState()
   let currentAbsoluteValue = 0
-  if (portfolio) {
-    Object.values(portfolio).forEach((e) => {
+  if (currentPorfolioState) {
+    Object.values(currentPorfolioState).forEach((e) => {
       currentAbsoluteValue += e.quantity * e.value
     })
   }

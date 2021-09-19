@@ -7,7 +7,7 @@ type P = unknown
 type C = Context
 type A = unknown
 
-export const getExchanges: ResolverFn<R, P, C, A> = async (_parent, _args, ctx, { path }) => {
+export const exchanges: ResolverFn<R, P, C, A> = async (_parent, _args, ctx, { path }) => {
   await ctx.authenticateUser()
 
   const key = new Key({ path })
