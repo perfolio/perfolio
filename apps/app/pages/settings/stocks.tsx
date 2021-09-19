@@ -104,7 +104,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
       settings: {
-        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
+        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic,
       },
     })
   }

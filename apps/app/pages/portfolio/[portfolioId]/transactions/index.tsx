@@ -1,7 +1,7 @@
 import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
@@ -15,6 +15,7 @@ import {
   motion,
 } from ".pnpm/framer-motion@4.1.17_react-dom@17.0.2+react@17.0.2/node_modules/framer-motion"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import router from "next/router"
 
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
@@ -113,7 +114,11 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
           ) : !portfolio?.transactions || portfolio.transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-gray-700">{t("transIndexNoTrans")}</p>
-              <Button size="lg" kind="primary" href="/transactions/new">
+              <Button
+                size="lg"
+                kind="primary"
+                href={`/portfolio/${router.query.portfolioId}/transactions/new`}
+              >
                 {t("transIndexAddTrans")}
               </Button>
             </div>
@@ -149,7 +154,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
 
 export default TransactionsPage
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {

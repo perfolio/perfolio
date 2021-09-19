@@ -1,6 +1,8 @@
 query relativePortfolioHistory($portfolioId: ID!, $since: Int) {
-  relativePortfolioHistory(portfolioId: $portfolioId, since: $since) {
-    time
-    value
+  portfolio(portfolioId: $portfolioId) {
+    relativeHistory(since: $since) {
+      time
+      value
+    }
   }
 }

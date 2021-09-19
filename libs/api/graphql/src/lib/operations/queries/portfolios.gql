@@ -1,0 +1,9 @@
+query getUserPortfolios($userId: ID!) {
+  user(userId: $userId) {
+    portfolios {
+      name
+      id
+      primary
+    }
+  }
+}

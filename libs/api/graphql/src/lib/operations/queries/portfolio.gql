@@ -20,7 +20,7 @@ query portfolio($portfolioId: ID!) {
           __typename
         }
       }
-      userId
+      portfolioId
       executedAt
       value
       volume

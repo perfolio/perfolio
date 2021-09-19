@@ -143,9 +143,9 @@ type Transaction {
   id: ID!
 
   """
-  The owner of this transaction
+  The portfolio of this transaction
   """
-  userId: ID!
+  portfolioId: ID!
 
   """
   How much each share/item was bought/sold for
@@ -262,6 +262,16 @@ type Portfolio {
   Associated transactions
   """
   transactions: [Transaction!]!
+
+  """
+  Return an index for the performance of the users portfolio
+  """
+  relativeHistory("unix timestamp where to begin calculation" since: Int): [ValueAtTime!]!
+
+  """
+  Return all assets over time for a given user
+  """
+  absoluteHistory: [AssetHistory!]!
 }
 
 input CreatePortfolio {
@@ -480,26 +490,6 @@ type Query {
   Get a list of all availale exchanges
   """
   exchanges: [Exchange!]!
-
-  """
-  Return an index for the performance of the users portfolio
-  """
-  relativePortfolioHistory(
-    "The unique id of a portfolio"
-    portfolioId: ID!
-    "unix timestamp where to begin calculation"
-    since: Int
-  ): [ValueAtTime!]!
-
-  """
-  Return all assets over time for a given user
-  """
-  portfolioHistory(
-    """
-    The portfolio unique id
-    """
-    portfolioId: ID!
-  ): [AssetHistory!]!
 
   """
   Get the risk free rates for a given interval

@@ -4,7 +4,7 @@ import { z } from "zod"
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
 import { Time } from "@perfolio/util/time"
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
@@ -180,7 +180,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
 }
 export default withAuthenticationRequired(NewTransactionPage)
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {

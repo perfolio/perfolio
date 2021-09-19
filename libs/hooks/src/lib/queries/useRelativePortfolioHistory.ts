@@ -13,5 +13,5 @@ export const useRelativePortfolioHistory = (since?: number) => {
     return await client(token).relativePortfolioHistory({ portfolioId, since })
   })
 
-  return { relativePortfolioHistory: data?.relativePortfolioHistory ?? [], ...meta }
+  return { relativePortfolioHistory: data?.portfolio?.relativeHistory ?? [], ...meta }
 }

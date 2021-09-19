@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql"
 import { DocumentNode } from "graphql"
 import gql from "graphql-tag"
-export type Maybe<T> = T | null
+export type Maybe<T> = T | undefined
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
@@ -223,6 +223,14 @@ export type Portfolio = {
   primary: Scalars["Boolean"]
   /** Associated transactions */
   transactions: Array<Transaction>
+  /** Return an index for the performance of the users portfolio */
+  relativeHistory: Array<ValueAtTime>
+  /** Return all assets over time for a given user */
+  absoluteHistory: Array<AssetHistory>
+}
+
+export type PortfolioRelativeHistoryArgs = {
+  since?: Maybe<Scalars["Int"]>
 }
 
 /** Available queries */
@@ -232,10 +240,6 @@ export type Query = {
   exchangeTradedAsset?: Maybe<ExchangeTradedAsset>
   /** Get a list of all availale exchanges */
   exchanges: Array<Exchange>
-  /** Return an index for the performance of the users portfolio */
-  relativePortfolioHistory: Array<ValueAtTime>
-  /** Return all assets over time for a given user */
-  portfolioHistory: Array<AssetHistory>
   /** Get the risk free rates for a given interval */
   riskFreeRates: Array<ValueAtTime>
   /** Return the daily closing prices for a stock at a specific exchange */
@@ -255,17 +259,6 @@ export type Query = {
 /** Available queries */
 export type QueryExchangeTradedAssetArgs = {
   id: Scalars["ID"]
-}
-
-/** Available queries */
-export type QueryRelativePortfolioHistoryArgs = {
-  portfolioId: Scalars["ID"]
-  since?: Maybe<Scalars["Int"]>
-}
-
-/** Available queries */
-export type QueryPortfolioHistoryArgs = {
-  portfolioId: Scalars["ID"]
 }
 
 /** Available queries */
@@ -333,8 +326,8 @@ export type Transaction = {
   executedAt: Scalars["Timestamp"]
   /** A globally unique identifier for each transaction */
   id: Scalars["ID"]
-  /** The owner of this transaction */
-  userId: Scalars["ID"]
+  /** The portfolio of this transaction */
+  portfolioId: Scalars["ID"]
   /** How much each share/item was bought/sold for */
   value: Scalars["Float"]
   /**
@@ -510,8 +503,8 @@ export type ResolversTypes = ResolversObject<{
   Interval: Interval
   Mutation: ResolverTypeWrapper<{}>
   Portfolio: ResolverTypeWrapper<Portfolio>
-  Query: ResolverTypeWrapper<{}>
   Int: ResolverTypeWrapper<Scalars["Int"]>
+  Query: ResolverTypeWrapper<{}>
   SearchResult: ResolverTypeWrapper<SearchResult>
   Settings: ResolverTypeWrapper<Settings>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
@@ -539,8 +532,8 @@ export type ResolversParentTypes = ResolversObject<{
   ExchangeTradedAsset: ResolversParentTypes["CompanyStock"] | ResolversParentTypes["Crypto"]
   Mutation: {}
   Portfolio: Portfolio
-  Query: {}
   Int: Scalars["Int"]
+  Query: {}
   SearchResult: SearchResult
   Settings: Settings
   Timestamp: Scalars["Timestamp"]
@@ -668,6 +661,13 @@ export type PortfolioResolvers<
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType>
   primary?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
   transactions?: Resolver<Array<ResolversTypes["Transaction"]>, ParentType, ContextType>
+  relativeHistory?: Resolver<
+    Array<ResolversTypes["ValueAtTime"]>,
+    ParentType,
+    ContextType,
+    RequireFields<PortfolioRelativeHistoryArgs, never>
+  >
+  absoluteHistory?: Resolver<Array<ResolversTypes["AssetHistory"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -682,18 +682,6 @@ export type QueryResolvers<
     RequireFields<QueryExchangeTradedAssetArgs, "id">
   >
   exchanges?: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
-  relativePortfolioHistory?: Resolver<
-    Array<ResolversTypes["ValueAtTime"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryRelativePortfolioHistoryArgs, "portfolioId">
-  >
-  portfolioHistory?: Resolver<
-    Array<ResolversTypes["AssetHistory"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryPortfolioHistoryArgs, "portfolioId">
-  >
   riskFreeRates?: Resolver<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
@@ -760,7 +748,7 @@ export type TransactionResolvers<
   asset?: Resolver<ResolversTypes["ExchangeTradedAsset"], ParentType, ContextType>
   executedAt?: Resolver<ResolversTypes["Timestamp"], ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  userId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  portfolioId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   volume?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   mic?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
@@ -825,7 +813,7 @@ export type IResolvers<ContextType = any> = Resolvers<ContextType>
 
 export type TransactionSchemaFragment = { __typename?: "Transaction" } & Pick<
   Transaction,
-  "id" | "assetId" | "userId" | "executedAt" | "value" | "volume"
+  "id" | "assetId" | "executedAt" | "value" | "volume" | "portfolioId"
 >
 
 export type CreatePortfolioMutationVariables = Exact<{
@@ -914,7 +902,7 @@ export type PortfolioQuery = { __typename?: "Query" } & {
         transactions: Array<
           { __typename?: "Transaction" } & Pick<
             Transaction,
-            "id" | "userId" | "executedAt" | "value" | "volume"
+            "id" | "portfolioId" | "executedAt" | "value" | "volume"
           > & {
               asset:
                 | ({ __typename: "CompanyStock" } & Pick<
@@ -933,21 +921,37 @@ export type PortfolioHistoryQueryVariables = Exact<{
 }>
 
 export type PortfolioHistoryQuery = { __typename?: "Query" } & {
-  portfolioHistory: Array<
-    { __typename?: "AssetHistory" } & Pick<AssetHistory, "assetId"> & {
-        asset:
-          | ({ __typename: "CompanyStock" } & Pick<
-              CompanyStock,
-              "sector" | "country" | "id" | "ticker" | "name" | "logo"
-            >)
-          | ({ __typename: "Crypto" } & Pick<Crypto, "id" | "ticker" | "name" | "logo">)
-        history: Array<
-          { __typename?: "ValueAndQuantityAtTime" } & Pick<
-            ValueAndQuantityAtTime,
-            "value" | "time" | "quantity"
-          >
-        >
-      }
+  portfolio?: Maybe<
+    { __typename?: "Portfolio" } & {
+      absoluteHistory: Array<
+        { __typename?: "AssetHistory" } & Pick<AssetHistory, "assetId"> & {
+            asset:
+              | ({ __typename: "CompanyStock" } & Pick<
+                  CompanyStock,
+                  "sector" | "country" | "id" | "ticker" | "name" | "logo"
+                >)
+              | ({ __typename: "Crypto" } & Pick<Crypto, "id" | "ticker" | "name" | "logo">)
+            history: Array<
+              { __typename?: "ValueAndQuantityAtTime" } & Pick<
+                ValueAndQuantityAtTime,
+                "value" | "time" | "quantity"
+              >
+            >
+          }
+      >
+    }
+  >
+}
+
+export type GetUserPortfoliosQueryVariables = Exact<{
+  userId: Scalars["ID"]
+}>
+
+export type GetUserPortfoliosQuery = { __typename?: "Query" } & {
+  user?: Maybe<
+    { __typename?: "User" } & {
+      portfolios: Array<{ __typename?: "Portfolio" } & Pick<Portfolio, "name" | "id" | "primary">>
+    }
   >
 }
 
@@ -957,8 +961,10 @@ export type RelativePortfolioHistoryQueryVariables = Exact<{
 }>
 
 export type RelativePortfolioHistoryQuery = { __typename?: "Query" } & {
-  relativePortfolioHistory: Array<
-    { __typename?: "ValueAtTime" } & Pick<ValueAtTime, "time" | "value">
+  portfolio?: Maybe<
+    { __typename?: "Portfolio" } & {
+      relativeHistory: Array<{ __typename?: "ValueAtTime" } & Pick<ValueAtTime, "time" | "value">>
+    }
   >
 }
 
@@ -999,10 +1005,10 @@ export const TransactionSchemaFragmentDoc = gql`
   fragment TransactionSchema on Transaction {
     id
     assetId
-    userId
     executedAt
     value
     volume
+    portfolioId
   }
 `
 export const CreatePortfolioDocument = gql`
@@ -1094,7 +1100,7 @@ export const PortfolioDocument = gql`
             __typename
           }
         }
-        userId
+        portfolioId
         executedAt
         value
         volume
@@ -1104,35 +1110,50 @@ export const PortfolioDocument = gql`
 `
 export const PortfolioHistoryDocument = gql`
   query portfolioHistory($portfolioId: ID!) {
-    portfolioHistory(portfolioId: $portfolioId) {
-      assetId
-      asset {
-        id
-        ticker
-        name
-        logo
-        ... on CompanyStock {
-          __typename
-          sector
-          country
+    portfolio(portfolioId: $portfolioId) {
+      absoluteHistory {
+        assetId
+        asset {
+          id
+          ticker
+          name
+          logo
+          ... on CompanyStock {
+            __typename
+            sector
+            country
+          }
+          ... on Crypto {
+            __typename
+          }
         }
-        ... on Crypto {
-          __typename
+        history {
+          value
+          time
+          quantity
         }
       }
-      history {
-        value
-        time
-        quantity
+    }
+  }
+`
+export const GetUserPortfoliosDocument = gql`
+  query getUserPortfolios($userId: ID!) {
+    user(userId: $userId) {
+      portfolios {
+        name
+        id
+        primary
       }
     }
   }
 `
 export const RelativePortfolioHistoryDocument = gql`
   query relativePortfolioHistory($portfolioId: ID!, $since: Int) {
-    relativePortfolioHistory(portfolioId: $portfolioId, since: $since) {
-      time
-      value
+    portfolio(portfolioId: $portfolioId) {
+      relativeHistory(since: $since) {
+        time
+        value
+      }
     }
   }
 `
@@ -1264,6 +1285,16 @@ export function getSdk<C>(requester: Requester<C>) {
     ): Promise<PortfolioHistoryQuery> {
       return requester<PortfolioHistoryQuery, PortfolioHistoryQueryVariables>(
         PortfolioHistoryDocument,
+        variables,
+        options,
+      )
+    },
+    getUserPortfolios(
+      variables: GetUserPortfoliosQueryVariables,
+      options?: C,
+    ): Promise<GetUserPortfoliosQuery> {
+      return requester<GetUserPortfoliosQuery, GetUserPortfoliosQueryVariables>(
+        GetUserPortfoliosDocument,
         variables,
         options,
       )

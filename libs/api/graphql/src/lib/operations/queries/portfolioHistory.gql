@@ -1,26 +1,28 @@
 query portfolioHistory($portfolioId: ID!) {
-  portfolioHistory(portfolioId: $portfolioId) {
-    assetId
-    asset {
-      id
-      ticker
-      name
-      logo
+  portfolio(portfolioId: $portfolioId) {
+    absoluteHistory {
+      assetId
+      asset {
+        id
+        ticker
+        name
+        logo
 
-      ... on CompanyStock {
-        __typename
-        sector
-        country
-      }
+        ... on CompanyStock {
+          __typename
+          sector
+          country
+        }
 
-      ... on Crypto {
-        __typename
+        ... on Crypto {
+          __typename
+        }
       }
-    }
-    history {
-      value
-      time
-      quantity
+      history {
+        value
+        time
+        quantity
+      }
     }
   }
 }

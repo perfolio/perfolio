@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage, GetStaticProps, GetStaticPaths } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import {
   AppLayout,
   DiversificationChart,
@@ -25,7 +25,6 @@ import {
   useAbsolutePortfolioHistory,
   usePortfolioHistory,
 } from "@perfolio/hooks"
-import { OnboardingModal } from "@perfolio/app/middleware"
 
 import { withAuthenticationRequired } from "@perfolio/app/middleware"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
@@ -132,7 +131,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
       }
     >
       <Main>
-        <OnboardingModal />
+        {/* <OnboardingModal /> */}
         <Main.Header>
           <Main.Header.Title title={t("mainHeaderTitle")} />
 
@@ -265,14 +264,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
 
 export default withAuthenticationRequired(App)
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: false,
-  }
-}
-
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {

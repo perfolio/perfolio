@@ -27,7 +27,6 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
       <div className="space-y-8">
         <AsyncButton
           onClick={async () => {
-            console.log({ user })
             if (!user) {
               console.error("User not yet loaded")
               return

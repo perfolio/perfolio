@@ -10,7 +10,6 @@ export const usePortfolio = () => {
   const { getAccessToken } = useAuth()
   const router = useRouter()
   const portfolioId = router.query.portfolioId as string
-
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
     USE_PORTFOLIO_QUERY_KEY(portfolioId),
     async () => client(await getAccessToken()).portfolio({ portfolioId }),

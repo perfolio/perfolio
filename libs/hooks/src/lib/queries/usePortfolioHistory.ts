@@ -17,5 +17,5 @@ export const usePortfolioHistory = () => {
     },
   )
 
-  return { portfolioHistory: data?.portfolioHistory ?? [], ...meta }
+  return { portfolioHistory: data?.portfolio?.absoluteHistory ?? [], ...meta }
 }
