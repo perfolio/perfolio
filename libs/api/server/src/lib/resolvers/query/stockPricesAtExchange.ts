@@ -1,7 +1,7 @@
 import { ResolverFn, ValueAtTime } from "@perfolio/api/graphql"
 import { Context } from "../../context"
 
-export const getStockPricesAtExchange: ResolverFn<
+export const stockPricesAtExchange: ResolverFn<
   ValueAtTime[],
   unknown,
   Context,

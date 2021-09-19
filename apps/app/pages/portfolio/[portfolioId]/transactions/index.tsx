@@ -1,21 +1,21 @@
 import React from "react"
 import { AsyncButton, Button } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/api/graphql"
-
 import { useToaster } from "@perfolio/toaster"
-import { useDeleteTransaction, useExchangeTradedAsset, useTransactions } from "@perfolio/hooks"
+import { useDeleteTransaction, useExchangeTradedAsset, usePortfolio } from "@perfolio/hooks"
 import {
   AnimatePresence,
   AnimateSharedLayout,
   motion,
 } from ".pnpm/framer-motion@4.1.17_react-dom@17.0.2+react@17.0.2/node_modules/framer-motion"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import router from "next/router"
 
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
@@ -93,7 +93,8 @@ interface PageProps {
 
 const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  const { transactions, isLoading, error } = useTransactions()
+
+  const { portfolio, isLoading, error } = usePortfolio()
   return (
     <AppLayout
       sidebar={
@@ -110,17 +111,21 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
           {error ? <div>{JSON.stringify(error)}</div> : null}
           {isLoading ? (
             <Loading />
-          ) : !transactions || transactions.length === 0 ? (
+          ) : !portfolio?.transactions || portfolio.transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-2">
               <p className="text-gray-700">{t("transIndexNoTrans")}</p>
-              <Button size="lg" kind="primary" href="/transactions/new">
+              <Button
+                size="lg"
+                kind="primary"
+                href={`/portfolio/${router.query.portfolioId}/transactions/new`}
+              >
                 {t("transIndexAddTrans")}
               </Button>
             </div>
           ) : (
             <AnimateSharedLayout>
               <AnimatePresence>
-                {[...transactions]
+                {[...portfolio.transactions]
                   .sort((a, b) => b.executedAt - a.executedAt)
                   ?.map((tx, i) => (
                     <motion.div
@@ -134,7 +139,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
                       <TransactionItem
                         key={tx.id}
                         transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset }}
-                        isLast={i === transactions.length - 1}
+                        isLast={i === portfolio.transactions.length - 1}
                       />
                     </motion.div>
                   ))}
@@ -149,7 +154,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
 
 export default TransactionsPage
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {

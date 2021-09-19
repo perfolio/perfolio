@@ -4,7 +4,7 @@ import { z } from "zod"
 import { Button, Description } from "@perfolio/ui/components"
 import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
 import { Time } from "@perfolio/util/time"
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getCurrencySymbol } from "@perfolio/util/currency"
@@ -13,9 +13,9 @@ import { Asset } from "@perfolio/api/graphql"
 import { CheckIcon } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { withAuthenticationRequired } from "@perfolio/app/middleware"
-import { useTransactions, useSettings, useCreateTransaction } from "@perfolio/hooks"
+import { useUser, useCreateTransaction, usePortfolio } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
-import { useUser } from "@perfolio/hooks"
+import { useRouter } from "next/router"
 const validation = z.object({
   isin: z.string(),
   volume: z.string().transform((x: string) => parseInt(x)),
@@ -35,15 +35,17 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { user } = useUser()
   const { addToast } = useToaster()
+  const router = useRouter()
+  const portfolioId = router.query.portfolioId as string
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
   const createTransaction = useCreateTransaction()
-  const { transactions } = useTransactions()
+  const { portfolio } = usePortfolio()
   const uniqueAssets: Record<string, Asset> = {}
 
-  ;(transactions ?? [])
+  ;(portfolio?.transactions ?? [])
     .sort((a, b) => b.executedAt - a.executedAt)
     .forEach((tx) => {
       if (!(tx.asset.id in uniqueAssets)) {
@@ -52,7 +54,6 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const { settings } = useSettings()
   return (
     <AppLayout
       sidebar={
@@ -103,7 +104,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                     iconLeft={
                       <div className="flex items-center justify-center w-full h-full">
                         <span className="font-medium text-gray-700">
-                          {getCurrencySymbol(settings?.defaultCurrency)}
+                          {getCurrencySymbol(user?.settings?.defaultCurrency)}
                         </span>
                       </div>
                     }
@@ -117,7 +118,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                       ctx,
                       async ({ isin, volume, value, executedAt }) => {
                         const transaction = {
-                          userId: user!.id!,
+                          portfolioId,
                           volume: Number(volume),
                           value: Number(value),
                           executedAt: Time.fromString(executedAt as unknown as string).unix(),
@@ -179,7 +180,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
 }
 export default withAuthenticationRequired(NewTransactionPage)
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {

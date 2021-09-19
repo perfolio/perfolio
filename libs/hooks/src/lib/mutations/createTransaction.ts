@@ -4,7 +4,6 @@ import {
   CreateTransactionMutationVariables,
 } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { USE_TRANSACTIONS_QUERY_KEY } from "../queries/useTransactions"
 import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
 import { useAuth } from "@perfolio/auth"
 
@@ -17,11 +16,10 @@ export const useCreateTransaction = () => {
     CreateTransactionMutationVariables
   >(
     async (variables) => {
-      return await client(await getAccessToken()).CreateTransaction(variables)
+      return await client(await getAccessToken()).createTransaction(variables)
     },
     {
       onSuccess: () => {
-        queryClient.resetQueries(USE_TRANSACTIONS_QUERY_KEY)
         queryClient.resetQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY)
       },
     },

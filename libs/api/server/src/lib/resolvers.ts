@@ -1,13 +1,12 @@
 import { Resolvers } from "@perfolio/api/graphql"
 import { Context } from "./context"
-import { getRelativePortfolioHistory } from "./resolvers/query/getRelativePortfolioHistory"
-import { getExchanges } from "./resolvers/query/getExchanges"
+import { exchanges } from "./resolvers/query/exchanges"
 import { search } from "./resolvers/query/search"
-import { getSettings } from "./resolvers/query/getSettings"
-import { getUser } from "./resolvers/query/getUser"
-import { getTransactions } from "./resolvers/query/getTransactions"
-import { getPortfolioHistory } from "./resolvers/query/getPortfolioHistory"
-import { getStockPricesAtExchange } from "./resolvers/query/getStockPricesAtExchange"
+import { user } from "./resolvers/query/user"
+import { getRelativePortfolioHistory } from "./resolvers/portfolio/relativeHistory"
+import { getAbsolutePortfolioHistory } from "./resolvers/portfolio/absoluteHistory"
+import { getTransactionsOfPortfolio } from "./resolvers/portfolio/transaction"
+import { stockPricesAtExchange } from "./resolvers/query/stockPricesAtExchange"
 import { getExchangeTradedAsset } from "./util/getExchangeTradedAsset"
 import { getExchangeFromMic } from "./util/getExchangeFromMic"
 import { sector } from "./resolvers/companyStock/sector"
@@ -17,25 +16,28 @@ import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
 import { createSettings } from "./resolvers/mutation/createSettings"
 import { updateSettings } from "./resolvers/mutation/updateSettings"
+import { getPortfolioById } from "./resolvers/query/portfolio"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
-    getExchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
-    getRelativePortfolioHistory: (_parent, { userId, since }, ctx) =>
-      getRelativePortfolioHistory(ctx, userId, since ?? undefined),
-    getExchanges,
+    exchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
+    exchanges,
     search,
-    // @ts-expect-error Remaining fields are resolved later
+    stockPricesAtExchange,
 
-    getSettings,
     // @ts-expect-error Remaining fields are resolved later
-
-    getTransactions,
+    portfolio: (_parent, { portfolioId }, ctx) => getPortfolioById(ctx, portfolioId),
     // @ts-expect-error Remaining fields are resolved later
+    user,
+  },
+  Portfolio: {
+    // @ts-expect-error Remaining fields are resolved later
+    transactions: ({ id }, _args, ctx) => getTransactionsOfPortfolio(ctx, id),
+    relativeHistory: ({ id }, { since }, ctx) =>
+      getRelativePortfolioHistory(ctx, id, since ?? undefined),
 
-    getPortfolioHistory: (_parent, { userId }, ctx) => getPortfolioHistory(ctx, userId),
-    getStockPricesAtExchange,
-    getUser,
+    // @ts-expect-error Remaining fields are resolved later
+    absoluteHistory: ({ id }, _args, ctx) => getAbsolutePortfolioHistory(ctx, id),
   },
 
   Settings: {

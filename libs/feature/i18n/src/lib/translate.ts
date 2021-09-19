@@ -21,7 +21,7 @@ const loadTranslation = (namespace: Namespace, locale: Locale): Promise<Record<s
   try {
     return JSON.parse(fs.readFileSync(path).toString())
   } catch (err) {
-    throw new Error(`Unable to load locale from ${path}: ${err}`)
+    throw new Error(`Unable to load locale "${locale}"" from ${path}: ${err}`)
   }
 }
 
