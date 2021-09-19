@@ -5,7 +5,7 @@ import { AppLayout, SideNavbar } from "@perfolio/app/components"
 import { z } from "zod"
 import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useSettings, useExchanges, useUpdateSettings } from "@perfolio/hooks"
+import { useUser, useExchanges, useUpdateSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { withAuthenticationRequired } from "@perfolio/app/middleware"
@@ -80,7 +80,7 @@ interface PageProps {
 
 const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
-  const { settings } = useSettings()
+  const { user } = useUser()
 
   const { exchanges } = useExchanges()
 
@@ -104,12 +104,12 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
       settings: {
-        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic ?? null,
+        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic,
       },
     })
   }
 
-  const [region, setRegion] = useState<string>(settings?.defaultExchange?.region ?? "")
+  const [region, setRegion] = useState<string>(user?.settings?.defaultExchange?.region ?? "")
 
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
@@ -125,7 +125,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
             hideLabel
             name="defaultCurrency"
             type="text"
-            defaultValue={settings?.defaultCurrency ?? ""}
+            defaultValue={user?.settings?.defaultCurrency ?? ""}
           />
         </Setting>
         <Setting
@@ -140,13 +140,13 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
               options={[...new Set(exchanges?.map((e) => e.region))] ?? []}
               label="Region"
               name="defaultRegion"
-              defaultValue={settings?.defaultExchange.region}
+              defaultValue={user?.settings?.defaultExchange.region}
             />
             <Field.Select
               options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
               label={t("setStocksStockExSelect")}
               name="defaultExchange"
-              defaultValue={settings?.defaultExchange?.name ?? ""}
+              defaultValue={user?.settings?.defaultExchange?.name ?? ""}
             />
           </div>
         </Setting>

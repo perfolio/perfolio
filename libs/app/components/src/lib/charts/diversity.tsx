@@ -3,7 +3,7 @@ import { PieChart, Sector, Cell, Pie, ResponsiveContainer } from "recharts"
 import { Tooltip, ToggleGroup, Heading, Description } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { format } from "@perfolio/util/numbers"
-import { usePortfolio } from "@perfolio/hooks"
+import { useCurrentPorfolioState } from "@perfolio/hooks"
 import { useI18n } from "@perfolio/feature/i18n"
 
 const COLORS = [
@@ -19,17 +19,17 @@ const COLORS = [
 ].sort(() => Math.random() - 0.5)
 export const DiversificationChart: React.FC = (): JSX.Element => {
   const { t } = useI18n()
-  const { portfolio } = usePortfolio()
+  const { currentPorfolioState } = useCurrentPorfolioState()
 
   /**
    * Aggregate by sector
    */
   const sectors: { [sector: string]: number } = useMemo(() => {
     const tmp: { [sector: string]: number } = {}
-    if (!portfolio) {
+    if (!currentPorfolioState) {
       return tmp
     }
-    portfolio
+    currentPorfolioState
       .filter((h) => !!h)
       .forEach((holding) => {
         const sector =
@@ -43,17 +43,17 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         }
       })
     return tmp
-  }, [portfolio])
+  }, [currentPorfolioState])
 
   /**
    * Aggregate by country
    */
   const countries: { [country: string]: number } = useMemo(() => {
     const tmp: { [country: string]: number } = {}
-    if (!portfolio) {
+    if (!currentPorfolioState) {
       return tmp
     }
-    portfolio
+    currentPorfolioState
       .filter((h) => !!h)
       .forEach((holding) => {
         if (holding) {
@@ -70,7 +70,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       })
 
     return tmp
-  }, [portfolio])
+  }, [currentPorfolioState])
 
   /**
    * Selection can either be "sectors" or "countries"

@@ -1,4 +1,4 @@
-mutation CreateSettings($settings: CreateSettings!) {
+mutation createSettings($settings: CreateSettings!) {
   createSettings(settings: $settings) {
     defaultCurrency
     defaultExchange {
