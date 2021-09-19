@@ -1,8 +1,8 @@
 fragment TransactionSchema on Transaction {
   id
   assetId
-  userId
   executedAt
   value
   volume
+  portfolioId
 }

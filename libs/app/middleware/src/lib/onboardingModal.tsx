@@ -7,9 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { Exchange } from "@perfolio/api/graphql"
 import { useI18n } from "@perfolio/feature/i18n"
-import { useUser } from "@perfolio/hooks"
 
-import { useExchanges, useSettings, useCreateSettings } from "@perfolio/hooks"
+import { useExchanges, useUser, useCreateSettings } from "@perfolio/hooks"
 import { getCurrency } from "@perfolio/util/currency"
 /**
  * Check whether a user has settings in the database. If not they are presented
@@ -22,13 +21,12 @@ export const OnboardingModal: React.FC = (): JSX.Element | null => {
     defaultExchange: z.string(),
   })
 
-  const { user } = useUser()
+  const { user, isSuccess } = useUser()
 
   const { exchanges } = useExchanges()
 
-  const { settings, isSuccess } = useSettings()
   const createSettings = useCreateSettings()
-  const requiresOnboarding = !!user && !settings && isSuccess
+  const requiresOnboarding = !!user && !user.settings && isSuccess
   const [step, setStep] = useState(0)
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",

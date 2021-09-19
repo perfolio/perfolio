@@ -21,4 +21,7 @@ export class Prisma extends DataSource {
   public get user() {
     return this.client.user
   }
+  public get portfolio() {
+    return this.client.portfolio
+  }
 }

@@ -4,7 +4,7 @@ import {
   DeleteTransactionMutationVariables,
 } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { USE_TRANSACTIONS_QUERY_KEY } from "../queries/useTransactions"
+import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
 import { useAuth } from "@perfolio/auth"
 
 export const useDeleteTransaction = () => {
@@ -16,11 +16,11 @@ export const useDeleteTransaction = () => {
     DeleteTransactionMutationVariables
   >(
     async (variables) => {
-      return client(await getAccessToken()).DeleteTransaction(variables)
+      return client(await getAccessToken()).deleteTransaction(variables)
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(USE_TRANSACTIONS_QUERY_KEY)
+        queryClient.invalidateQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY)
       },
     },
   )

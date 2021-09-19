@@ -143,9 +143,9 @@ type Transaction {
   id: ID!
 
   """
-  The owner of this transaction
+  The portfolio of this transaction
   """
-  userId: ID!
+  portfolioId: ID!
 
   """
   How much each share/item was bought/sold for
@@ -180,9 +180,9 @@ input CreateTransaction {
   executedAt: Timestamp!
 
   """
-  The owner of this transaction
+  The portfolio of this transaction
   """
-  userId: ID!
+  portfolioId: ID!
 
   """
   How much each share/item was bought/sold for
@@ -223,6 +223,88 @@ type User {
   Stripe customer id
   """
   stripeCustomerId: ID!
+
+  portfolios: [Portfolio!]!
+}
+
+"""
+Access scope
+"""
+enum Access {
+  """
+  Everyone has access
+  """
+  PUBLIC
+  """
+  Only the createor and shared users have access
+  """
+  PRIVATE
+}
+type Portfolio {
+  """
+  unique id
+  """
+  id: ID!
+  """
+  Human readable name for the portfolio
+  """
+  name: String!
+  """
+  The owner of this portfolio
+  """
+  user: User!
+  """
+  The primary portfolio will be displayed by default
+  """
+  primary: Boolean!
+
+  """
+  Associated transactions
+  """
+  transactions: [Transaction!]!
+
+  """
+  Return an index for the performance of the users portfolio
+  """
+  relativeHistory("unix timestamp where to begin calculation" since: Int): [ValueAtTime!]!
+
+  """
+  Return all assets over time for a given user
+  """
+  absoluteHistory: [AssetHistory!]!
+}
+
+input CreatePortfolio {
+  """
+  unique id
+  """
+  id: ID!
+  """
+  Human readable name for the portfolio
+  """
+  name: String!
+  """
+  The owner of this portfolio
+  """
+  userId: ID!
+  """
+  The primary portfolio will be displayed by default
+  """
+  primary: Boolean
+  """
+  Public portfolios can be seen by anyone with the portfolio id
+  Private portfolios are only visible to the owner and users who were
+  granted access.
+  """
+  access: Access
+  """
+  Ids of users who have read access for this portfolio
+  """
+  grantReadAccess: [ID!]
+  """
+  Associated transactions
+  """
+  transactions: [CreateTransaction!]
 }
 
 """
@@ -402,37 +484,17 @@ type Query {
   """
   Load an exchange traded asset by its id
   """
-  getExchangeTradedAsset("The globally unique id" id: ID!): ExchangeTradedAsset
+  exchangeTradedAsset("The globally unique id" id: ID!): ExchangeTradedAsset
 
   """
   Get a list of all availale exchanges
   """
-  getExchanges: [Exchange!]!
-
-  """
-  Return an index for the performance of the users portfolio
-  """
-  getRelativePortfolioHistory(
-    "The unique id of a user"
-    userId: String!
-    "unix timestamp where to begin calculation"
-    since: Int
-  ): [ValueAtTime!]!
-
-  """
-  Return all assets over time for a given user
-  """
-  getPortfolioHistory(
-    """
-    The users unique id
-    """
-    userId: String!
-  ): [AssetHistory!]!
+  exchanges: [Exchange!]!
 
   """
   Get the risk free rates for a given interval
   """
-  getRiskFreeRates(
+  riskFreeRates(
     """
     The interval for each datapoint
     """
@@ -450,7 +512,7 @@ type Query {
   """
   Return the daily closing prices for a stock at a specific exchange
   """
-  getStockPricesAtExchange(
+  stockPricesAtExchange(
     """
     The ticker of a company.
     """
@@ -470,28 +532,19 @@ type Query {
   ): [ValueAtTime!]!
 
   """
-  Return all transactions of a user
+  Return a portfolio by its id
   """
-  getTransactions(
+  portfolio(
     """
-    The user' unique id
+    The portfolio' unique id
     """
-    userId: ID!
-  ): [Transaction!]!
+    portfolioId: ID!
+  ): Portfolio
 
   """
   Load a user by their id
   """
-  getUser("The user's id" userId: ID!): User
-  """
-  Return the user's settings
-  """
-  getSettings(
-    """
-    The user' unique id
-    """
-    userId: ID!
-  ): Settings
+  user("The user's id" userId: ID!): User
 
   """
   Return matching isins for a given search string
@@ -510,6 +563,16 @@ type Query {
 Available mutations
 """
 type Mutation {
+  """
+  Create a new portfolio
+  """
+  createPortfolio(
+    """
+    The portfolio you want to create
+    """
+    portfolio: CreatePortfolio!
+  ): Portfolio!
+
   """
   Create a new transaction
   """

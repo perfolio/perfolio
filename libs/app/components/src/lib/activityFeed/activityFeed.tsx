@@ -3,7 +3,7 @@ import { Time } from "@perfolio/util/time"
 import React from "react"
 import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
-import { useTransactions, useExchangeTradedAsset } from "@perfolio/hooks"
+import { usePortfolio, useExchangeTradedAsset } from "@perfolio/hooks"
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion"
 import { useI18n } from "@perfolio/feature/i18n"
 interface TransactionActivityItemProps {
@@ -47,10 +47,10 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const { transactions } = useTransactions()
+  const { portfolio } = usePortfolio()
   const { t } = useI18n()
-  const last5Transactions = transactions
-    ? [...transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
+  const last5Transactions = portfolio?.transactions
+    ? [...portfolio?.transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []
 
   return (

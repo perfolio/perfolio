@@ -1,18 +1,15 @@
 import { useQuery } from "react-query"
-import {
-  GetExchangeTradedAssetQuery,
-  GetExchangeTradedAssetQueryVariables,
-} from "@perfolio/api/graphql"
+import { ExchangeTradedAssetQuery, ExchangeTradedAssetQueryVariables } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { useAuth } from "@perfolio/auth"
 
-export const useExchangeTradedAsset = (variables: GetExchangeTradedAssetQueryVariables) => {
+export const useExchangeTradedAsset = (variables: ExchangeTradedAssetQueryVariables) => {
   const { getAccessToken } = useAuth()
 
-  const { data, ...meta } = useQuery<GetExchangeTradedAssetQuery, Error>(
+  const { data, ...meta } = useQuery<ExchangeTradedAssetQuery, Error>(
     ["getCompanyFromIsin", variables],
-    async () => client(await getAccessToken()).getExchangeTradedAsset(variables),
+    async () => client(await getAccessToken()).exchangeTradedAsset(variables),
   )
 
-  return { asset: data?.getExchangeTradedAsset, ...meta }
+  return { asset: data?.exchangeTradedAsset, ...meta }
 }
