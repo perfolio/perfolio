@@ -48,7 +48,10 @@ const handler: NextApiHandler = async (req, res) => {
           items: [
             {
               // Growth subscription
-              price: "price_1JU4LpG0ZLpKb1P6Szj2jJQr",
+              price:
+                env.get("NODE_ENV") === "production"
+                  ? "price_1JU4LpG0ZLpKb1P6Szj2jJQr"
+                  : "plan_K9CYicTThbEqNP",
             },
           ],
         })
@@ -72,6 +75,12 @@ const handler: NextApiHandler = async (req, res) => {
                 primary: true,
               },
             ],
+          },
+          settings: {
+            create: {
+              defaultCurrency: "EUR",
+              defaultExchangeMic: "xetr",
+            },
           },
         },
       })

@@ -84,6 +84,8 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
 
   const { exchanges } = useExchanges()
 
+  console.log({ user })
+
   /**
    * The current defaultExchange
    */
