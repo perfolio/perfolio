@@ -18,6 +18,9 @@ import { createSettings } from "./resolvers/mutation/createSettings"
 import { updateSettings } from "./resolvers/mutation/updateSettings"
 import { getPortfolioById } from "./resolvers/query/portfolio"
 
+import { getSettingsFromUser } from "./resolvers/user/settings"
+import { getPortfoliosFromUser } from "./resolvers/user/portfolios"
+
 export const resolvers: Resolvers<Context> = {
   Query: {
     exchangeTradedAsset: (_parent, { id }, ctx) => getExchangeTradedAsset(ctx, id),
@@ -29,6 +32,15 @@ export const resolvers: Resolvers<Context> = {
     portfolio: (_parent, { portfolioId }, ctx) => getPortfolioById(ctx, portfolioId),
     // @ts-expect-error Remaining fields are resolved later
     user,
+  },
+
+  User: {
+    // @ts-expect-error Remaining fields are resolved later
+
+    portfolios: ({ id }, _args, ctx) => getPortfoliosFromUser(ctx, id),
+    // @ts-expect-error Remaining fields are resolved later
+
+    settings: ({ id }, _args, ctx) => getSettingsFromUser(ctx, id),
   },
   Portfolio: {
     // @ts-expect-error Remaining fields are resolved later
