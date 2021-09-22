@@ -11,7 +11,7 @@ export const user: ResolverFn<UserModel | null, unknown, Context, { userId: stri
 
   const user = await ctx.dataSources.prisma.user.findUnique({
     where: { id: userId },
-    include: { portfolios: true },
+    include: { portfolios: true, settings: true },
   })
   if (!user) {
     throw new Error(`No user found: ${userId}`)
