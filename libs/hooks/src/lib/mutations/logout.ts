@@ -1,8 +1,8 @@
 import { useMutation } from "react-query"
-import { useAuth } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/auth"
 import { useRouter } from "next/router"
 export const useLogout = () => {
-  const { clearToken } = useAuth()
+  const { clearToken } = useAccessToken()
   const router = useRouter()
   return useMutation(async () => await fetch("/api/auth/sign-out"), {
     onSuccess: () => {

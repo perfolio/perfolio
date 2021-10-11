@@ -2,9 +2,9 @@ import { useQuery } from "react-query"
 import { SearchQuery, SearchQueryVariables } from "@perfolio/api/graphql"
 
 import { client } from "../client"
-import { useAuth } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/auth"
 export const useSearch = (variables: SearchQueryVariables) => {
-  const { getAccessToken } = useAuth()
+  const { getAccessToken } = useAccessToken()
 
   const { data, ...meta } = useQuery<SearchQuery, Error>(
     ["search", variables],

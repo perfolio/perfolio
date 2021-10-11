@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
 import { NextPage, GetStaticProps } from "next"
 import { usePortfolios } from "@perfolio/hooks"
 import { AppLayout } from "@perfolio/app/components"
@@ -52,7 +51,7 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default withAuthenticationRequired(IndexPage)
+export default IndexPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

@@ -1,12 +1,12 @@
 import { GetUserPortfoliosQuery } from "@perfolio/api/graphql"
 import { useQuery } from "react-query"
-import { useAuth } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/auth"
 import { client } from "../client"
 
 const USE_PORTFOLIOS_QUERY_KEY = "USE_PORTFOLIOS_QUERY_KEY"
 
 export const usePortfolios = () => {
-  const { getAccessToken, getClaims } = useAuth()
+  const { getAccessToken, getClaims } = useAccessToken()
 
   const { data, ...meta } = useQuery<GetUserPortfoliosQuery, Error>(
     USE_PORTFOLIOS_QUERY_KEY,
