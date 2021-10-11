@@ -5,10 +5,10 @@ import {
 } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
-import { useAuth } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/auth"
 
 export const useDeleteTransaction = () => {
-  const { getAccessToken } = useAuth()
+  const { getAccessToken } = useAccessToken()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
     DeleteTransactionMutation,
