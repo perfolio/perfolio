@@ -5,8 +5,7 @@ import Head from "next/head"
 import { IdProvider } from "@radix-ui/react-id"
 import { I18nProvider } from "@perfolio/feature/i18n"
 import { ToastProvider } from "@perfolio/toaster"
-// import {SignIn} from "@perfolio/app/components"
-import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/nextjs"
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs"
 import { ClerkThemeOptions } from "@clerk/types"
 import "tailwindcss/tailwind.css"
 import { AccessTokenProvider } from "@perfolio/auth"
@@ -53,9 +52,7 @@ function MyApp({
             </AccessTokenProvider>
           </SignedIn>
           <SignedOut>
-            <div className="flex items-center justify-center h-screen">
-              <SignIn />
-            </div>
+            <RedirectToSignIn />
           </SignedOut>
         </ClerkProvider>
       </IdProvider>
