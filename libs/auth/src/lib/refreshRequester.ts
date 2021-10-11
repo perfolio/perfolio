@@ -1,9 +1,6 @@
 /**
  * Use this class to make sure to guarantee that only a single refresh token request
  * is sent at a time.
- * If we would send multiple requests in parallel the returned Set-Cookie header will cause
- * lots of issues because with every refresh request a new refresh token is generated and saved
- * as cookie.
  */
 export class TokenRefreshRequester {
   private static instance: TokenRefreshRequester

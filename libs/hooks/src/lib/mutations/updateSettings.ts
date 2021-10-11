@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from "react-query"
 import { UpdateSettingsMutation, UpdateSettings } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { USE_USER_QUERY_KEY } from "../queries/useUser"
-import { useAuth } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/auth"
 
 export const useUpdateSettings = () => {
-  const { getAccessToken, getClaims } = useAuth()
+  const { getAccessToken, getClaims } = useAccessToken()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
     UpdateSettingsMutation,

@@ -4,7 +4,7 @@ import { Form, Field, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useCreateVerificationRequest } from "@perfolio/hooks"
+import { useSignUp } from "@clerk/nextjs"
 
 interface RequestFormProps {
   onSuccess: (email: string) => void
@@ -12,19 +12,19 @@ interface RequestFormProps {
 
 export const RequestForm: React.FC<RequestFormProps> = ({ onSuccess }): JSX.Element => {
   const validation = z.object({ email: z.string().email() })
+  const signUp = useSignUp()
 
   const requestContext = useForm<z.infer<typeof validation>>({
     mode: "onSubmit",
     resolver: zodResolver(validation),
     defaultValues: { email: "" },
   })
-  const createVerificationRequest = useCreateVerificationRequest()
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   return (
     <>
       <Form ctx={requestContext} formError={formError}>
-        <Field.Input label="Email" name="email" type="email" />
+        <Field.Input label="Email" name="email" type="email" placeholder="andreas@perfol.io" />
       </Form>
       <Button
         loading={submitting}
@@ -34,7 +34,9 @@ export const RequestForm: React.FC<RequestFormProps> = ({ onSuccess }): JSX.Elem
           handleSubmit<z.infer<typeof validation>>(
             requestContext,
             async ({ email }) => {
-              await createVerificationRequest.mutateAsync({ email })
+              await signUp.create({ emailAddress: email })
+              await signUp.prepareEmailAddressVerification()
+
               onSuccess(email)
             },
             setSubmitting,
