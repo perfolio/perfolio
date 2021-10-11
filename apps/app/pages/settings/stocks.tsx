@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useUser, useExchanges, useUpdateSettings } from "@perfolio/hooks"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
+
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 
 interface SettingProps {
@@ -156,7 +156,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(SettingsPage)
+export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

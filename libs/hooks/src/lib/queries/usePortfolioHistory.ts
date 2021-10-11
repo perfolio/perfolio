@@ -1,12 +1,12 @@
 import { useQuery } from "react-query"
 import { PortfolioHistoryQuery } from "@perfolio/api/graphql"
 import { client } from "../client"
-import { useAuth } from "@perfolio/auth"
+import { useAccessToken } from "@perfolio/auth"
 import { useRouter } from "next/router"
 export const USE_PORTFOLIO_HISTORY_QUERY_KEY = "USE_PORTFOLIO_HISTORY_QUERY_KEY"
 
 export const usePortfolioHistory = () => {
-  const { getAccessToken } = useAuth()
+  const { getAccessToken } = useAccessToken()
   const router = useRouter()
   const portfolioId = router.query.portfolioId as string
   const { data, ...meta } = useQuery<PortfolioHistoryQuery, Error>(
