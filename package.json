@@ -36,6 +36,8 @@
   "private": true,
   "dependencies": {
     "@chronark/env": "^0.0.2",
+    "@clerk/clerk-sdk-node": "^0.5.2",
+    "@clerk/nextjs": "^1.5.0",
     "@hapi/iron": "^6.0.0",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",

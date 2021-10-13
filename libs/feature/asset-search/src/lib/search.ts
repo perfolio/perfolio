@@ -1,6 +1,6 @@
 import Fuse from "fuse.js"
 import { StockMap } from "@perfolio/integrations/prisma"
-
+import { Logger } from "@perfolio/logger"
 type IsinTickerPair = { isin: string; ticker: string }
 
 export async function search(
@@ -8,6 +8,8 @@ export async function search(
   stockMap: StockMap[],
   getTickerFromIsin: (isin: string) => Promise<string>,
 ): Promise<IsinTickerPair[]> {
+  const logger = new Logger()
+  logger.info(`Searching for fragment: ${fragment}`)
   fragment = fragment.toLowerCase()
   const isinMatcher = RegExp(/^[a-z]{2}[a-z0-9]{9}[0-9]$/)
   /**

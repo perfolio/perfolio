@@ -4,7 +4,7 @@ import { createHash } from "crypto"
 export class Key {
   public readonly parameters?: Record<string, unknown>
   public readonly environment: string
-  public readonly version = "v1"
+  public readonly version = "v2"
 
   constructor(parameters?: Record<string, unknown>) {
     this.parameters = parameters

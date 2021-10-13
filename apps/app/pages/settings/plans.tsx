@@ -7,7 +7,7 @@ import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { useRouter } from "next/router"
 import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"
 import { useUser } from "@perfolio/hooks"
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
+
 import { Card } from "@perfolio/ui/components"
 import { CheckCircleIcon } from "@heroicons/react/solid"
 type Price = {
@@ -148,7 +148,7 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(Page)
+export default Page
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

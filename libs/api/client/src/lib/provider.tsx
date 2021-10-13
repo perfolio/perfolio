@@ -17,7 +17,7 @@ export interface IJWTContext {
  * JWTContext offers methods to get and set a jwt.
  *
  * Do not use this directly!!!
- * Use the `useAuth` hook instead
+ * Use the `useAccessToken` hook instead
  */
 export const JWTContext = createContext<IJWTContext>({
   token: null,
