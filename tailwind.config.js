@@ -59,7 +59,7 @@ module.exports = {
         ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
       },
       fontFamily: {
-        sans: ["Montserrat", ...defaultTheme.fontFamily.sans],
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
         system: defaultTheme.fontFamily.sans,
       },
     },

@@ -61,7 +61,10 @@ const FooterLink: React.FC<{ href: string }> = ({ href, children }): JSX.Element
   return (
     <div>
       <Link href={href}>
-        <a className="text-gray-400 transition duration-500 hover:text-gray-100 hover:font-medium ">
+        <a
+          className="text-gray-400 transition duration-500 hover:text-gray-100 hover:font-medium "
+          target="_string"
+        >
           {children}
         </a>
       </Link>
@@ -94,7 +97,7 @@ export const Footer = () => {
         <div className="grid row-gap-10 mb-8 lg:grid-cols-6">
           <div className="grid grid-cols-1 gap-8 lg:col-span-4 md:grid-cols-4">
             <FooterColumn title={t("footerColumnProduct")}>
-              <FooterLink href="https://app.perfol.io">app.perfol.io</FooterLink>
+              <FooterLink href="https://app.perfol.io">Portfolio Analytics</FooterLink>
             </FooterColumn>
             <div className="hidden md:block">
               <FooterColumn title={t("footerColumnMedia")}>

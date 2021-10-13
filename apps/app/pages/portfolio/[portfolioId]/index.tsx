@@ -26,7 +26,6 @@ import {
   usePortfolioHistory,
 } from "@perfolio/hooks"
 
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Time } from "@perfolio/util/time"
 
@@ -262,7 +261,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default withAuthenticationRequired(App)
+export default App
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

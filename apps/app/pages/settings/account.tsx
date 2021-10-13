@@ -8,7 +8,6 @@ import { AsyncButton } from "@perfolio/ui/components"
 
 import { useUser } from "@perfolio/hooks"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
-import { withAuthenticationRequired } from "@perfolio/app/middleware"
 
 /**
  * / page.
@@ -71,7 +70,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(SettingsPage)
+export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
