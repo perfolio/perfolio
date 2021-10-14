@@ -4,7 +4,7 @@ import { idGenerator } from "@perfolio/id"
 import { Stripe } from "stripe"
 import { env } from "@chronark/env"
 import { z } from "zod"
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 
 const validation = z.object({
   data: z.object({
@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     })
     if (!userResponse.ok) {
-      throw new HTTPError(500, `Unable to get user from clerk: ${await userResponse.text()}`)
+      throw new HttpError(500, `Unable to get user from clerk: ${await userResponse.text()}`)
     }
     const user = (await userResponse.json()) as {
       primary_email_address_id: string
@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ],
       })
       .catch((err) => {
-        throw new HTTPError(500, `Unable to create subscription for user ${email}: ${err}`)
+        throw new HttpError(500, `Unable to create subscription for user ${email}: ${err}`)
       })
 
     await prisma.user.create({
@@ -103,7 +103,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
   } catch (err) {
     console.error(err)
-    res.status(err instanceof HTTPError ? err.status : 500)
+    res.status(err instanceof HttpError ? err.status : 500)
     res.send(err.message)
   } finally {
     res.end()

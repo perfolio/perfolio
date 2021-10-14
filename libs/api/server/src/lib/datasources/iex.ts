@@ -2,7 +2,7 @@ import { DataSource } from "apollo-datasource"
 import { CompanyStock, Exchange } from "@perfolio/api/graphql"
 import * as cloud from "@perfolio/integrations/iexcloud"
 import { Time } from "@perfolio/util/time"
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 import {
   GetIsinMappingResponse,
   GetSymbolsAtExchangeResponse,
@@ -51,7 +51,7 @@ export class IEX extends DataSource {
       return cachedValue
     }
     const company = await cloud.getCompany(ticker).catch((err) => {
-      if (err instanceof HTTPError) {
+      if (err instanceof HttpError) {
         /**
          * 404 simply means the given ticker is invalid which can happen a lot when the user
          * can search for tickers.

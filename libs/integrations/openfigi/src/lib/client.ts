@@ -1,5 +1,5 @@
 import { env } from "@chronark/env"
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 import { ApiConfig, PostRequest } from "./types"
 import { Logger } from "@perfolio/logger"
 /**
@@ -54,7 +54,7 @@ export class Client {
        */
 
       if (res.status !== 200) {
-        throw new HTTPError(res.status, path)
+        throw new HttpError(res.status, path)
       }
       const unmarshalled = await res.json().catch((err) => {
         throw new Error(`Unable to unmarshal response: ${err}`)

@@ -2,7 +2,7 @@ import { NextApiHandler } from "next"
 import { PrismaClient } from "@perfolio/integrations/prisma"
 import { JWT } from "@perfolio/auth"
 import { Logger } from "@perfolio/logger"
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 import { requireSession } from "@clerk/nextjs/api"
 /**
  * Retrieve the session id from cookies and create a new session and access token
@@ -26,14 +26,14 @@ const handler: NextApiHandler = async (req, res) => {
       },
     })
     if (!user) {
-      throw new HTTPError(500, `No user found`)
+      throw new HttpError(500, `No user found`)
     }
 
     const accessToken = JWT.sign(user.id, "PRO")
     res.json({ accessToken })
   } catch (err) {
     logger.error("Fatal error", err)
-    res.status(err instanceof HTTPError ? err.status : 500)
+    res.status(err instanceof HttpError ? err.status : 500)
     return res.send(err)
   } finally {
     res.end()
