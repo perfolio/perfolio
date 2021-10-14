@@ -1,4 +1,4 @@
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 export type Interval = "daily" | "monthly" | "annual"
 export type Currency =
   | "EUR"
@@ -77,7 +77,7 @@ export async function getFXRates(interval: Interval, currency: Currency): Promis
       .join("&")}`,
   )
   if (res.status !== 200) {
-    throw new HTTPError(res.status, url)
+    throw new HttpError(res.status, url)
   }
 
   const data = await res.text()

@@ -2,7 +2,7 @@ import { Stripe } from "stripe"
 import { env } from "@chronark/env"
 import { NextApiRequest, NextApiResponse } from "next"
 import { Logger } from "@perfolio/logger"
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const logger = new Logger({ name: "manage subscription" })
@@ -41,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
        */
       const priceId = req.query.priceId as string | undefined
       if (!priceId) {
-        throw new HTTPError(400, `priceId is missing in query`)
+        throw new HttpError(400, `priceId is missing in query`)
       }
 
       const checkoutSession = await stripe.checkout.sessions.create({

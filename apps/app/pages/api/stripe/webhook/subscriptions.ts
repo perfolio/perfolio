@@ -5,7 +5,7 @@ import { z } from "zod"
 import { Logger } from "@perfolio/logger"
 import { buffer } from "micro"
 import { PrismaClient, Role } from "@perfolio/integrations/prisma"
-import { HTTPError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/util/errors"
 import { idGenerator } from "@perfolio/id"
 
 const subscriptionValidation = z.object({
@@ -88,7 +88,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const product = await stripe.products
       .retrieve(subscription.items.data[0].price.product)
       .catch((err) => {
-        throw new HTTPError(500, `Product could not be found: ${err}`)
+        throw new HttpError(500, `Product could not be found: ${err}`)
       })
 
     /**
@@ -141,7 +141,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } catch (err) {
     logger.error("Error", { error: err.message })
 
-    res.status(err instanceof HTTPError ? err.status : 500)
+    res.status(err instanceof HttpError ? err.status : 500)
     res.send(err.message)
   } finally {
     res.end()
