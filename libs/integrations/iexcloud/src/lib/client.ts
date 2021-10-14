@@ -1,5 +1,5 @@
 import { env } from "@chronark/env"
-import { HTTPError, JsonUnmarshalError } from "@perfolio/util/errors"
+import { HttpError, JsonUnmarshalError } from "@perfolio/util/errors"
 import { Logger } from "@perfolio/logger"
 /**
  * Generic api request to be extended by other request types.
@@ -92,11 +92,11 @@ export class Client {
        * We need to handle some 400 errors specifically.
        */
       if (res.status === 400) {
-        throw new HTTPError(res.status, `Unable to reach resource: ${path}: ${await res.text()}`)
+        throw new HttpError(res.status, `Unable to reach resource: ${path}: ${await res.text()}`)
       }
 
       if (res.status !== 200) {
-        throw new HTTPError(res.status, path)
+        throw new HttpError(res.status, path)
       }
       return res.json().catch((err) => {
         throw new JsonUnmarshalError(err)

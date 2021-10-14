@@ -1,9 +1,9 @@
 import { GenericError } from "./error"
 
-export class HTTPError extends GenericError {
+export class HttpError extends GenericError {
   public readonly status: number
   constructor(status: number, message?: string) {
-    super("HTTPError", `${message}: status = ${status}, ${message}`, {})
+    super("HttpError", `${message}: status = ${status}, ${message}`, {})
     this.status = status
   }
 }
