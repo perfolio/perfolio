@@ -1,4 +1,5 @@
 import { PrismaClient as BaseClient } from "@prisma/client"
+import { env } from "@chronark/env"
 export type { StockMap, Transaction, User, Settings, Portfolio } from "@prisma/client"
 export { Currency, Role } from "@prisma/client"
 /**
@@ -8,10 +9,7 @@ export { Currency, Role } from "@prisma/client"
  */
 export class PrismaClient extends BaseClient {
   constructor() {
-    const url = process.env["DATABASE_URL_POOL"]
-    if (!url) {
-      throw new Error(`DATABASE_URL_POOL is undefined`)
-    }
+    const url = env.require("DATABASE_URL_POOL")
 
     super({ datasources: { db: { url: `${url}&pgbouncer=true` } } })
   }
