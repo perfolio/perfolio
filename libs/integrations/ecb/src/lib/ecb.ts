@@ -1,4 +1,4 @@
-import { HTTPError, JsonUnmarshalError } from "@perfolio/util/errors"
+import { HttpError, JsonUnmarshalError } from "@perfolio/util/errors"
 export type Interval = "daily" | "monthly" | "annual"
 
 export const RF_IDENTIFIER_MAP: Record<Interval, string> = {
@@ -15,7 +15,7 @@ export async function getRiskFreeRates(interval: Interval): Promise<RiskFreeRate
   const url = `https://sdw-wsrest.ecb.europa.eu/service/data/${identifier}`
   const res = await fetch(url)
   if (res.status !== 200) {
-    throw new HTTPError(res.status, url)
+    throw new HttpError(res.status, url)
   }
 
   const data = (await res.json().catch((err) => {
