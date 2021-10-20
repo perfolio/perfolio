@@ -4,7 +4,7 @@ import Head from "next/head"
 import { I18nProvider } from "@perfolio/feature/i18n"
 
 import "tailwindcss/tailwind.css"
-
+import "../public/fonts/css/satoshi.css"
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <I18nProvider>
