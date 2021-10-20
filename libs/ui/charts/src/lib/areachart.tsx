@@ -35,7 +35,13 @@ export const AreaChart: React.FC<AreaChartProps> = ({
           </defs>
           {tooltip ? (
             <Tooltip
-              content={({ active, payload }) => {
+              content={({
+                active,
+                payload,
+              }: {
+                active?: boolean
+                payload?: { payload: { time: string; value: number } }[]
+              }) => {
                 if (!active || !payload) {
                   return null
                 }

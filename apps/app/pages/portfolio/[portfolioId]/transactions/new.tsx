@@ -12,6 +12,7 @@ import Link from "next/link"
 import { Asset } from "@perfolio/api/graphql"
 import { CheckIcon } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 import { useUser, useCreateTransaction, usePortfolio } from "@perfolio/hooks"
 import { useToaster } from "@perfolio/toaster"
@@ -178,7 +179,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     </AppLayout>
   )
 }
-export default NewTransactionPage
+export default withAuthenticationRequired(NewTransactionPage)
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

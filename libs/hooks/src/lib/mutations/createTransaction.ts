@@ -5,10 +5,10 @@ import {
 } from "@perfolio/api/graphql"
 import { client } from "../client"
 import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
-import { useAccessToken } from "@perfolio/auth"
+import { useAuth0 } from "@auth0/auth0-react"
 
 export const useCreateTransaction = () => {
-  const { getAccessToken } = useAccessToken()
+  const { getAccessTokenSilently } = useAuth0()
   const queryClient = useQueryClient()
   const { data, ...meta } = useMutation<
     CreateTransactionMutation,
@@ -16,7 +16,7 @@ export const useCreateTransaction = () => {
     CreateTransactionMutationVariables
   >(
     async (variables) => {
-      return await client(await getAccessToken()).createTransaction(variables)
+      return await client(await getAccessTokenSilently()).createTransaction(variables)
     },
     {
       onSuccess: () => {
