@@ -1,6 +1,7 @@
 import { NextPage, GetStaticProps } from "next"
 import { useRouter } from "next/router"
 import { useI18n, getTranslations } from "@perfolio/feature/i18n"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 interface PageProps {
   translations: Record<string, string>
@@ -19,7 +20,7 @@ const Page: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default Page
+export default withAuthenticationRequired(Page)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
