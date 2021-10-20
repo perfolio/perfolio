@@ -1,12 +1,14 @@
-import type { AppProps } from "next/app"
-import { QueryClientProvider } from "react-query"
-import { PersistendQueryClient } from "@perfolio/app/query-client"
-import Head from "next/head"
-import { IdProvider } from "@radix-ui/react-id"
-import { I18nProvider } from "@perfolio/feature/i18n"
-import { ToastProvider } from "@perfolio/toaster"
 import "tailwindcss/tailwind.css"
+import "../public/fonts/css/satoshi.css"
+
+import type { AppProps } from "next/app"
 import { Auth0Provider } from "@auth0/auth0-react"
+import Head from "next/head"
+import { I18nProvider } from "@perfolio/feature/i18n"
+import { IdProvider } from "@radix-ui/react-id"
+import { PersistendQueryClient } from "@perfolio/app/query-client"
+import { QueryClientProvider } from "react-query"
+import { ToastProvider } from "@perfolio/toaster"
 
 export default function MyApp({
   Component,
