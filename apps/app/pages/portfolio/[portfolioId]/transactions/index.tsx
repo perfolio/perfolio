@@ -16,6 +16,7 @@ import {
 } from ".pnpm/framer-motion@4.1.17_react-dom@17.0.2+react@17.0.2/node_modules/framer-motion"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import router from "next/router"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
@@ -152,7 +153,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default TransactionsPage
+export default withAuthenticationRequired(TransactionsPage)
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

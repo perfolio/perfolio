@@ -28,6 +28,7 @@ import {
 
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Time } from "@perfolio/util/time"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -83,6 +84,7 @@ interface PageProps {
 }
 
 const App: NextPage<PageProps> = ({ translations }) => {
+  useUser()
   const { t } = useI18n(translations)
 
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
@@ -261,7 +263,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default App
+export default withAuthenticationRequired(App)
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])

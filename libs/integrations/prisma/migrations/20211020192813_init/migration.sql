@@ -10,7 +10,6 @@ CREATE TYPE "Currency" AS ENUM ('EUR');
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "clerkId" TEXT NOT NULL,
     "stripeCustomerId" TEXT NOT NULL,
     "stripeSubscriptionId" TEXT NOT NULL,
     "currentPaymentPeriodStart" TIMESTAMP(3) NOT NULL,
@@ -77,9 +76,6 @@ CREATE TABLE "StockMap" (
 
     CONSTRAINT "StockMap_pkey" PRIMARY KEY ("ticker")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_clerkId_key" ON "User"("clerkId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_stripeCustomerId_key" ON "User"("stripeCustomerId");
