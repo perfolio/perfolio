@@ -1,4 +1,4 @@
-import { NextPage, GetServerSideProps } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { usePortfolios } from "@perfolio/hooks"
 import { AppLayout } from "@perfolio/app/components"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
@@ -55,7 +55,7 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
 
 export default withAuthenticationRequired(IndexPage)
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {
