@@ -1,111 +1,108 @@
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    provider          = "postgresql"
+    url               = env("DATABASE_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 
 }
 
 generator client {
-  provider        = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 model User {
-  id    String @id
+    id String @id
 
-  clerkId String @unique
+    settings Settings?
 
-  settings Settings?
+    notifications Notification[]
 
-  notifications Notification[]
-
-  portfolios Portfolio[]
+    portfolios Portfolio[]
 
 
+    stripeCustomerId          String   @unique
+    stripeSubscriptionId      String   @unique
+    currentPaymentPeriodStart DateTime
+    currentPaymentPeriodEnd   DateTime
 
-  stripeCustomerId          String   @unique
-  stripeSubscriptionId      String   @unique
-  currentPaymentPeriodStart DateTime
-  currentPaymentPeriodEnd   DateTime
-
-  roles Role[]
+    roles Role[]
 }
 
 enum Access {
-  //  Everyone has access
-  PUBLIC
-  //  Only the createor and shared users have access
-  PRIVATE
+    //  Everyone has access
+    PUBLIC
+    //  Only the createor and shared users have access
+    PRIVATE
 }
 
 model Portfolio {
-  id           String        @id
-  name         String 
-  primary      Boolean       @default(false)
-  userId       String
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
+    id           String        @id
+    name         String
+    primary      Boolean       @default(false)
+    userId       String
+    user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    transactions Transaction[]
 
-  // Public portfolios can be seen by anyone with the portfolio id
-  // Private portfolios are only visible to the owner and users who were
-  // granted access.
-  access Access @default(PRIVATE)
+    // Public portfolios can be seen by anyone with the portfolio id
+    // Private portfolios are only visible to the owner and users who were
+    // granted access.
+    access Access @default(PRIVATE)
 
-  // Ids of users who have read access for this portfolio
-  grantReadAccess String[]
+    // Ids of users who have read access for this portfolio
+    grantReadAccess String[]
 }
 
 enum Role {
-  SUB_GROWTH
-  SUB_PRO
+    SUB_GROWTH
+    SUB_PRO
 }
 
 // Notifications can be displayed for a user
 // Such as upcoming payments etc.
 model Notification {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id        String   @id
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  readAt DateTime?
+    readAt DateTime?
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
 
-  // Use to create a notification which should not be displayed right away.
-  visibleAfter  DateTime?
-  visibleBefore DateTime?
+    // Use to create a notification which should not be displayed right away.
+    visibleAfter  DateTime?
+    visibleBefore DateTime?
 
-  message String
+    message String
 
 }
 
 model Transaction {
-  id          String    @id
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  assetId     String
-  executedAt  Int
-  volume      Float
-  value       Float
-  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  portfolioId String
+    id          String    @id
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    assetId     String
+    executedAt  Int
+    volume      Float
+    value       Float
+    portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+    portfolioId String
 }
 
 enum Currency {
-  EUR
+    EUR
 }
 
 model Settings {
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  defaultCurrency    Currency
-  defaultExchangeMic String
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId             String   @unique
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @updatedAt
+    defaultCurrency    Currency
+    defaultExchangeMic String
+    user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId             String   @unique
 }
 
 model StockMap {
-  ticker String @id
-  isin   String @unique
-  name   String @unique
+    ticker String @id
+    isin   String @unique
+    name   String @unique
 }
