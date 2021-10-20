@@ -1,8 +1,10 @@
-import { NextPage, GetStaticProps } from "next"
+import { NextPage, GetServerSideProps } from "next"
 import { usePortfolios } from "@perfolio/hooks"
 import { AppLayout } from "@perfolio/app/components"
 import { getTranslations, useI18n } from "@perfolio/feature/i18n"
 import { Button, Card } from "@perfolio/ui/components"
+import React from "react"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
@@ -51,9 +53,9 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
   )
 }
 
-export default IndexPage
+export default withAuthenticationRequired(IndexPage)
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {
