@@ -16,117 +16,6 @@
       "options": {}
     }
   },
-  "projects": {
-    "api-client": {
-      "tags": []
-    },
-    "api-graphql": {
-      "tags": []
-    },
-    "api-server": {
-      "tags": []
-    },
-    "app": {
-      "tags": []
-    },
-    "app-components": {
-      "tags": []
-    },
-    "app-e2e": {
-      "tags": [],
-      "implicitDependencies": []
-    },
-    "app-middleware": {
-      "tags": []
-    },
-    "app-query-client": {
-      "tags": []
-    },
-    "auth": {
-      "tags": []
-    },
-    "downsampling": {
-      "tags": []
-    },
-    "feature-asset-search": {
-      "tags": []
-    },
-    "feature-email": {
-      "tags": []
-    },
-    "feature-finance-kpis": {
-      "tags": []
-    },
-    "feature-finance-returns": {
-      "tags": []
-    },
-    "feature-i18n": {
-      "tags": []
-    },
-    "hooks": {
-      "tags": []
-    },
-    "id": {
-      "tags": []
-    },
-    "integrations-bankofengland": {
-      "tags": []
-    },
-    "integrations-ecb": {
-      "tags": []
-    },
-    "integrations-iexcloud": {
-      "tags": []
-    },
-    "integrations-localstorage": {
-      "tags": []
-    },
-    "integrations-openfigi": {
-      "tags": []
-    },
-    "integrations-prisma": {
-      "tags": []
-    },
-    "integrations-redis": {
-      "tags": []
-    },
-    "integrations-sendgrid": {
-      "tags": []
-    },
-    "landing": {
-      "tags": []
-    },
-    "logger": {
-      "tags": []
-    },
-    "toaster": {
-      "tags": []
-    },
-    "types": {
-      "tags": []
-    },
-    "ui-charts": {
-      "tags": []
-    },
-    "ui-components": {
-      "tags": []
-    },
-    "ui-form": {
-      "tags": []
-    },
-    "util-currency": {
-      "tags": []
-    },
-    "util-errors": {
-      "tags": []
-    },
-    "util-numbers": {
-      "tags": []
-    },
-    "util-time": {
-      "tags": []
-    }
-  },
   "targetDependencies": {
     "build": [
       {
@@ -134,5 +23,22 @@
         "projects": "dependencies"
       }
     ]
-  }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "app"
 }
