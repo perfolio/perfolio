@@ -1,13 +1,14 @@
-import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import { ApolloCache, Key } from "@perfolio/integrations/redis"
+
 import { Context } from "../context"
+import { ExchangeTradedAsset } from "@perfolio/api/graphql"
 import { getTickerFromIsin } from "./getTickerFromIsin"
 
 export const getExchangeTradedAsset = async (
   ctx: Context,
   id: string,
 ): Promise<ExchangeTradedAsset> => {
-  const key = new Key({ resolver: "getExchangeTradedAsset", id })
+  const key = new Key({ resolver: getExchangeTradedAsset, id })
   const cache = new ApolloCache()
 
   const cachedValue = await cache.get<ExchangeTradedAsset>(key)

@@ -1,14 +1,16 @@
-import { DataSource } from "apollo-datasource"
-import { CompanyStock, Exchange } from "@perfolio/api/graphql"
 import * as cloud from "@perfolio/integrations/iexcloud"
-import { Time } from "@perfolio/util/time"
-import { HttpError } from "@perfolio/util/errors"
+
+import { ApolloCache, Key } from "@perfolio/integrations/redis"
+import { CompanyStock, Exchange } from "@perfolio/api/graphql"
 import {
   GetIsinMappingResponse,
   GetSymbolsAtExchangeResponse,
   SearchResponse,
 } from "@perfolio/integrations/iexcloud"
-import { ApolloCache, Key } from "@perfolio/integrations/redis"
+
+import { DataSource } from "apollo-datasource"
+import { HttpError } from "@perfolio/util/errors"
+import { Time } from "@perfolio/util/time"
 
 export class IEX extends DataSource {
   constructor() {
@@ -16,7 +18,7 @@ export class IEX extends DataSource {
   }
 
   public async getLogo(ticker: string): Promise<string> {
-    const key = new Key({ dataSource: "iex", operation: "getLogo", ticker })
+    const key = new Key({ dataSource: "IEX", operation: "getLogo", ticker })
     const cache = new ApolloCache()
     const cachedValue = await cache.get<string>(key)
     if (cachedValue) {
@@ -163,7 +165,7 @@ export class IEX extends DataSource {
   }
 
   async getIsinMapping(isin: string): Promise<GetIsinMappingResponse> {
-    const key = new Key({ v: 1, dataSource: "IEX", operation: "getIsinMapping", isin })
+    const key = new Key({ dataSource: "IEX", operation: "getIsinMapping", isin })
     const cache = new ApolloCache()
     const cachedValue = await cache.get<GetIsinMappingResponse>(key)
     if (cachedValue) {
