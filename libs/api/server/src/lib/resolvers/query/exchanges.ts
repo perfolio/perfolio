@@ -10,7 +10,7 @@ type A = unknown
 export const exchanges: ResolverFn<R, P, C, A> = async (_parent, _args, ctx, { path }) => {
   await ctx.authenticateUser()
 
-  const key = new Key({ path })
+  const key = new Key(path.typename, path.key)
   const cache = new ApolloCache()
 
   const cachedValue = await cache.get<R>(key)

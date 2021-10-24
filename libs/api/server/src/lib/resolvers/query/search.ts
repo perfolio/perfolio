@@ -13,10 +13,9 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   await ctx.authenticateUser()
 
   fragment = fragment.toLowerCase()
-
   const cache = new ApolloCache()
-  const key = new Key({ path, fragment })
-
+  const key = new Key(path.typename, path.key, { fragment })
+  ctx.logger.info("hello", { path })
   const cachedValue = await cache.get<SearchResult[]>(key)
   if (cachedValue) {
     return cachedValue
