@@ -5,7 +5,7 @@ import { useI18n } from "@perfolio/feature/i18n"
 import { useRouter } from "next/router"
 import { NavigationItem } from "../navbar/types"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface HeaderProps {}
+export interface HeaderProps { }
 
 export const Header: React.FC<HeaderProps> = (): JSX.Element => {
   const { t } = useI18n()
@@ -49,8 +49,8 @@ export const Header: React.FC<HeaderProps> = (): JSX.Element => {
   }
 
   return (
-    <div className="flex items-center h-full bg-gray-900 lg:block lg:pt-10">
-      <div className="px-4 lg:mx-8 xl:mx-16">
+    <div className="flex items-center h-full bg-gray-900 block">
+      <div className="px-4 lg:mx-8 xl:mx-16 pt-4 lg:pt-10">
         <div className="hidden xl:flex">
           <DesktopNavbar items={menu.items} />
         </div>

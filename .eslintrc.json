@@ -2,7 +2,8 @@
   "root": true,
   "ignorePatterns": ["**/*"],
   "rules": {
-    "eslint@typescript-eslint/ban-types": "off"
+    "eslint@typescript-eslint/ban-types": "off",
+    "@next/next/no-document-import-in-page": "off"
   },
   "plugins": ["@nrwl/nx"],
   "overrides": [
