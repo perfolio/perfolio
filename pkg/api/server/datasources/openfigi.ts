@@ -1,5 +1,5 @@
 import { DataSource } from "apollo-datasource"
-import { search, getTickerFromIsin } from "@perfolio/integrations/openfigi"
+import { search, getTickerFromIsin } from "@perfolio/pkg/integrations/openfigi"
 
 export class OpenFigi extends DataSource {
   constructor() {

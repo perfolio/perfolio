@@ -9,7 +9,7 @@ const USE_PORTFOLIO_QUERY_KEY = (portfolioId: string) => `USE_PORTFOLIO_QUERY_KE
 export const usePortfolio = () => {
   const { getAccessTokenSilently } = useAuth0()
   const router = useRouter()
-  const portfolioId = router.query.portfolioId as string
+  const portfolioId = router.query["portfolioId"] as string
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
     USE_PORTFOLIO_QUERY_KEY(portfolioId),
     async () => client(await getAccessTokenSilently()).portfolio({ portfolioId }),

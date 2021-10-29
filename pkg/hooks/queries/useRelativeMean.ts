@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { Mean } from "@perfolio/feature/finance/kpis"
+import { Mean } from "@perfolio/pkg/finance/kpis"
 import { ValueAtTime } from "@perfolio/pkg/api/graphql"
 export const USE_RELATIVE_MEAN = "USE_RELATIVE_MEAN"
 

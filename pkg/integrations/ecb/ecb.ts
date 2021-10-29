@@ -1,4 +1,4 @@
-import { HttpError, JsonUnmarshalError } from "@perfolio/util/errors"
+import { HttpError, JsonUnmarshalError } from "@perfolio/pkg/util/errors"
 export type Interval = "daily" | "monthly" | "annual"
 
 export const RF_IDENTIFIER_MAP: Record<Interval, string> = {
@@ -36,11 +36,11 @@ export async function getRiskFreeRates(interval: Interval): Promise<RiskFreeRate
   }
 
   const series: number[] = Object.values(
-    data.dataSets[0].series[identifier === "daily" ? "0:0:0" : "0:0:0:0:0:0:0"].observations.map(
+    data.dataSets[0]!.series[identifier === "daily" ? "0:0:0" : "0:0:0:0:0:0:0"].observations.map(
       (o) => o[0],
     ),
   )
-  const timestamps = data.structure.dimensions.observation[0].values.map((v) => v.id)
+  const timestamps = data.structure.dimensions.observation[0]!.values.map((v) => v.id)
 
   const riskFreeRates: Record<string, number> = {}
 
@@ -51,7 +51,7 @@ export async function getRiskFreeRates(interval: Interval): Promise<RiskFreeRate
   }
 
   for (let i = 0; i < series.length; i++) {
-    riskFreeRates[timestamps[i]] = series[i] / 100 / denominator[interval]
+    riskFreeRates[timestamps[i]!]! = series[i]! / 100 / denominator[interval]
   }
   return riskFreeRates
 }

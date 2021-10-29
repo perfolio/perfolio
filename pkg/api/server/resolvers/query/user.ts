@@ -1,5 +1,5 @@
 import { ResolverFn } from "@perfolio/pkg/api/graphql"
-import { User as UserModel } from "@perfolio/integrations/prisma"
+import { User as UserModel } from "@perfolio/pkg/integrations/prisma"
 import { Context } from "../../context"
 export const user: ResolverFn<UserModel | null, unknown, Context, { userId: string }> = async (
   _parent,

@@ -1,10 +1,7 @@
 import { ApolloServer } from "apollo-server-micro"
-// import { BaseRedisCache } from "apollo-server-cache-redis"
 
-// import Redis from "ioredis"
-import { Logger } from "@perfolio/logger"
+import { Logger } from "@perfolio/pkg/logger"
 import { context } from "./context"
-// import responseCachePlugin from "apollo-server-plugin-response-cache"
 
 import { resolvers } from "./resolvers"
 import fs from "fs"
@@ -12,7 +9,6 @@ import path from "path"
 import { env } from "@chronark/env"
 
 import { dataSources } from "./datasources"
-// import { JWT } from "@perfolio/authentication"
 
 export type ApolloHandlerConfig = {
   logger?: Logger
@@ -20,7 +16,7 @@ export type ApolloHandlerConfig = {
 }
 
 export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
-  const schemaPath = path.join(process.cwd(), "libs/api/graphql/src/lib/schema.gql")
+  const schemaPath = path.join(process.cwd(), "pkg/api/graphql/schema.gql")
 
   return new ApolloServer({
     typeDefs: fs.readFileSync(schemaPath, "utf-8"),
@@ -34,7 +30,7 @@ export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
      * Send metrics to apollo dashboard
      */
     apollo:
-      env.require("NODE_ENV") === "production"
+      env.get("NODE_ENV") === "production"
         ? {
             key: env.require("APOLLO_KEY"),
             graphId: env.require("APOLLO_GRAPH_ID"),

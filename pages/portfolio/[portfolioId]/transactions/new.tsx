@@ -2,20 +2,20 @@ import React, { useState } from "react"
 import { z } from "zod"
 
 import { Button, Description } from "@perfolio/ui/components"
-import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/app/components"
+import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/ui/app"
 import { Time } from "@perfolio/pkg/util/time"
 import { NextPage, GetServerSideProps } from "next"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { getCurrencySymbol } from "@perfolio/util/currency"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import Link from "next/link"
 import { Asset } from "@perfolio/pkg/api/graphql"
 import { CheckIcon } from "@heroicons/react/outline"
-import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 import { useUser, useCreateTransaction, usePortfolio } from "@perfolio/pkg/hooks"
-import { useToaster } from "@perfolio/toaster"
+import { useToaster } from "@perfolio/pkg/toaster"
 import { useRouter } from "next/router"
 const validation = z.object({
   isin: z.string(),
@@ -37,7 +37,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { user } = useUser()
   const { addToast } = useToaster()
   const router = useRouter()
-  const portfolioId = router.query.portfolioId as string
+  const portfolioId = router.query["portfolioId"] as string
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),

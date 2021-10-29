@@ -8,7 +8,7 @@ export const USE_PORTFOLIO_HISTORY_QUERY_KEY = "USE_PORTFOLIO_HISTORY_QUERY_KEY"
 export const usePortfolioHistory = () => {
   const { getAccessTokenSilently } = useAuth0()
   const router = useRouter()
-  const portfolioId = router.query.portfolioId as string
+  const portfolioId = router.query["portfolioId"] as string
   const { data, ...meta } = useQuery<PortfolioHistoryQuery, Error>(
     [USE_PORTFOLIO_HISTORY_QUERY_KEY],
     async () => {

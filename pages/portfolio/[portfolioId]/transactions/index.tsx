@@ -4,17 +4,13 @@ import { Loading } from "@perfolio/ui/components"
 import { NextPage, GetServerSideProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api/graphql"
 import classNames from "classnames"
-import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/app/components"
+import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/ui/app"
 import { Avatar, Description } from "@perfolio/ui/components"
 import { Transaction } from "@perfolio/pkg/api/graphql"
-import { useToaster } from "@perfolio/toaster"
+import { useToaster } from "@perfolio/pkg/toaster"
 import { useDeleteTransaction, useExchangeTradedAsset, usePortfolio } from "@perfolio/pkg/hooks"
-import {
-  AnimatePresence,
-  AnimateSharedLayout,
-  motion,
-} from ".pnpm/framer-motion@4.1.17_react-dom@17.0.2+react@17.0.2/node_modules/framer-motion"
-import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import router from "next/router"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
@@ -118,7 +114,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
               <Button
                 size="lg"
                 kind="primary"
-                href={`/portfolio/${router.query.portfolioId}/transactions/new`}
+                href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}
               >
                 {t("transIndexAddTrans")}
               </Button>

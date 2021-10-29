@@ -1,5 +1,5 @@
-import { ApolloCache, Key } from "@perfolio/integrations/redis"
-import { rebalance, toTimeseries } from "@perfolio/feature/finance/returns"
+import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
+import { rebalance, toTimeseries } from "@perfolio/pkg/finance/returns"
 
 import { Context } from "../../context"
 import { ValueAtTime } from "@perfolio/pkg/api/graphql"

@@ -16,7 +16,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 }): JSX.Element => {
   return (
     <>
-      <div className="h-20 md:h-42 lg:h-56">
+      <div className="h-20 md:h-42 lg:h-56 ">
         <Header />
       </div>
       <div className="px-4 lg:mx-8 xl:mx-16">

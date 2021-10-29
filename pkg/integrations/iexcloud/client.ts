@@ -1,6 +1,6 @@
 import { env } from "@chronark/env"
-import { HttpError, JsonUnmarshalError } from "@perfolio/util/errors"
-import { Logger } from "@perfolio/logger"
+import { HttpError, JsonUnmarshalError } from "@perfolio/pkg/util/errors"
+import { Logger } from "@perfolio/pkg/logger"
 /**
  * Generic api request to be extended by other request types.
  */

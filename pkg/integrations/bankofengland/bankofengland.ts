@@ -1,4 +1,4 @@
-import { HttpError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/pkg/util/errors"
 export type Interval = "daily" | "monthly" | "annual"
 export type Currency =
   | "EUR"
@@ -92,7 +92,13 @@ export async function getFXRates(interval: Interval, currency: Currency): Promis
     .map((s: string) => s.replace("\r", ""))
     .forEach((s: string) => {
       const [time, value] = s.split(",")
+      if (!time || !value) {
+        throw new Error(`Unable to split ${s}`)
+      }
       const [, month, year] = time.split(" ")
+      if (!month || !year) {
+        throw new Error(`Unale to split ${time}`)
+      }
 
       const date: Record<Interval, string> = {
         daily: time,

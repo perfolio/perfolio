@@ -2,11 +2,11 @@ import { Stripe } from "stripe"
 import { env } from "@chronark/env"
 import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
-import { Logger } from "@perfolio/logger"
+import { Logger } from "@perfolio/pkg/logger"
 import { buffer } from "micro"
-import { PrismaClient, Role } from "@perfolio/integrations/prisma"
-import { HttpError } from "@perfolio/util/errors"
-import { idGenerator } from "@perfolio/id"
+import { PrismaClient, Role } from "@perfolio/pkg/integrations/prisma"
+import { HttpError } from "@perfolio/pkg/util/errors"
+import { newId } from "@perfolio/pkg/id"
 
 const subscriptionValidation = z.object({
   id: z.string(),
@@ -129,7 +129,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       case "customer.subscription.trial_will_end":
         await prisma.notification.create({
           data: {
-            id: idGenerator.id("notification"),
+            id: newId("notification"),
             userId: user.id,
             message: "Your trial will end soon",
           },
@@ -138,7 +138,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       default:
         break
     }
-  } catch (err) {
+  } catch (error) {
+    const err = error as Error
     logger.error("Error", { error: err.message })
 
     res.status(err instanceof HttpError ? err.status : 500)

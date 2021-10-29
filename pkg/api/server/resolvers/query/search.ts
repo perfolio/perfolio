@@ -1,7 +1,7 @@
 import { ResolverFn, SearchResult } from "@perfolio/pkg/api/graphql"
 import { Context } from "../../context"
-import { ApolloCache, Key } from "@perfolio/integrations/redis"
-import { search as searchAssets } from "@perfolio/feature/asset-search"
+import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
+import { search as searchAssets } from "@perfolio/pkg/asset-search"
 import { getTickerFromIsin } from "../../util/getTickerFromIsin"
 
 export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: string }> = async (
@@ -15,7 +15,6 @@ export const search: ResolverFn<SearchResult[], unknown, Context, { fragment: st
   fragment = fragment.toLowerCase()
   const cache = new ApolloCache()
   const key = new Key(path.typename, path.key, { fragment })
-  ctx.logger.info("hello", { path })
   const cachedValue = await cache.get<SearchResult[]>(key)
   if (cachedValue) {
     return cachedValue

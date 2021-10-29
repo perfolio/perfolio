@@ -1,0 +1,19 @@
+overwrite: true
+schema: "./pkg/api/graphql/schema.gql"
+documents: "./pkg/api/graphql/{fragments,operations}/**/*.gql"
+generates:
+  ./pkg/api/graphql/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typescript-generic-sdk
+    config:
+      # Required for apollo server
+      # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
+      useIndexSignature: true
+      showUnusedMappers: true
+      maybeValue: T | undefined
+hooks:
+  afterOneFileWrite:
+    - prettier --write

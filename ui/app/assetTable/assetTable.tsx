@@ -92,8 +92,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
         .map((holding) => {
           const change =
             aggregation === "absolute"
-              ? (holding.value - costPerShare[holding.asset.id]) * holding.quantity
-              : holding.value / costPerShare[holding.asset.id] - 1
+              ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
+              : holding.value / costPerShare[holding.asset.id]! - 1
 
           const weight = (holding.quantity * holding.value) / totalValue
           return {

@@ -29,13 +29,18 @@ export default function MyApp({
     throw new Error(`
     Missing NEXT_PUBLIC_AUTH0_AUDIENCE env`)
   }
+
+  const redirectUri = `${
+    typeof window !== "undefined" ? window.location.origin : "https://perfol.io"
+  }/dashboard`
+
   return (
     <I18nProvider>
       <IdProvider>
         <Auth0Provider
           domain={auth0Domain}
           clientId={auth0ClientId}
-          redirectUri={typeof window !== "undefined" ? window.location.origin : "/"}
+          redirectUri={redirectUri}
           cacheLocation="localstorage"
           audience={auth0Audience}
           useRefreshToken={true}

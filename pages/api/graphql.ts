@@ -8,7 +8,7 @@ import { JWT } from "@perfolio/pkg/auth"
  * I have no idea what it is even for but the lambda will error out if it's not
  * loaded.
  */
-import "ts-tiny-invariant"
+// import "ts-tiny-invariant"
 
 JWT.init(`https://${env.require("NEXT_PUBLIC_AUTH0_DOMAIN")}/.well-known/jwks.json`, {
   audience: env.require("NEXT_PUBLIC_AUTH0_AUDIENCE"),
@@ -21,16 +21,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    */
   if (req.method === "OPTIONS") {
     res.status(200)
-    res.end()
-  } else {
-    const server = Server()
-    await server.start()
-    /**
-     * Handle graphql request
-     */
-    const handler = server.createHandler({ path: "/api/graphql" })
-    await handler(req, res)
+    return res.end()
   }
+
+  const server = Server()
+  await server.start()
+  /**
+   * Handle graphql request
+   */
+  const handler = server.createHandler({ path: "/api/graphql" })
+  await handler(req, res)
 }
 
 /**

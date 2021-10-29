@@ -10,11 +10,11 @@ import {
   InlineTotalAssetChart,
   AggregateOptions,
   Sidebar,
-} from "@perfolio/app/components"
+} from "@perfolio/ui/app"
 import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
 import { format } from "@perfolio/pkg/util/numbers"
-import { getCurrencySymbol } from "@perfolio/util/currency"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import {
   useRelativePortfolioHistory,
   useStandardDeviation,
@@ -26,7 +26,7 @@ import {
   usePortfolioHistory,
 } from "@perfolio/pkg/hooks"
 
-import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { Time } from "@perfolio/pkg/util/time"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 

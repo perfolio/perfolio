@@ -40,7 +40,7 @@ export const AreaChart: React.FC<AreaChartProps> = ({
                 payload,
               }: {
                 active?: boolean
-                payload?: { payload: { time: string; value: number } }[]
+                payload?: { payload?: { time: string; value: number } }[]
               }) => {
                 if (!active || !payload) {
                   return null

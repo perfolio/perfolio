@@ -1,4 +1,4 @@
-import { ApolloCache, Key } from "@perfolio/integrations/redis"
+import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
 import { ExchangeTradedAsset, ResolverFn } from "@perfolio/pkg/api/graphql"
 
 import { Context } from "../../context"

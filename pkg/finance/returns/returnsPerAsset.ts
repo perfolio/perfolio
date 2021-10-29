@@ -13,7 +13,7 @@ export const calculateReturnsPerAsset = (assetsOverTime: AssetsOverTime): Return
   const timestamps = Object.keys(assetsOverTime)
 
   for (let i = 0; i < timestamps.length; i++) {
-    const day = Object.entries(assetsOverTime)[i]
+    const day = Object.entries(assetsOverTime)[i]!
 
     const time = Number(day[0])
 
@@ -26,13 +26,13 @@ export const calculateReturnsPerAsset = (assetsOverTime: AssetsOverTime): Return
     Object.entries(assets).forEach(([assetId, today]) => {
       let yesterday: { value: number } | undefined
       try {
-        yesterday = Object.values(assetsOverTime)[i - 1][assetId]
+        yesterday = Object.values(assetsOverTime)[i - 1]![assetId]
       } catch {
         yesterday = undefined
       }
-      returns[time][assetId] =
+      returns[time]![assetId] =
         !yesterday || yesterday.value === 0 ? 0 : today.value / yesterday.value - 1
-      returns[time][assetId] = calculateReturns(today.value, yesterday?.value ?? 0)
+      returns[time]![assetId] = calculateReturns(today.value, yesterday?.value ?? 0)
     })
   }
   return returns

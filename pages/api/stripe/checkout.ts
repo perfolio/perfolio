@@ -70,8 +70,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     }
   } catch (err) {
-    logger.error(err)
-    res.send(err.message)
+    logger.error((err as Error).message)
+    res.send((err as Error).message)
   } finally {
     res.end()
   }

@@ -2,7 +2,7 @@ import { AssetHistory } from "@perfolio/pkg/api/graphql"
 import { Context } from "../../context"
 import { Time } from "@perfolio/pkg/util/time"
 import { getTickerFromIsin } from "../../util/getTickerFromIsin"
-import { Transaction as TransactionModel } from "@perfolio/integrations/prisma"
+import { Transaction as TransactionModel } from "@perfolio/pkg/integrations/prisma"
 type AssetHistoryWithoutAsset = Omit<AssetHistory, "asset"> & { assetId: string }
 
 export const getAbsolutePortfolioHistory = async (

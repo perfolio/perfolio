@@ -1,5 +1,5 @@
 import { Exchange, ResolverFn } from "@perfolio/pkg/api/graphql"
-import { ApolloCache, Key } from "@perfolio/integrations/redis"
+import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
 import { Context } from "../../context"
 
 type R = Exchange[]

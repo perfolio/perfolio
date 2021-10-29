@@ -1,7 +1,7 @@
 import { env } from "@chronark/env"
-import { HttpError } from "@perfolio/util/errors"
-import { ApiConfig, PostRequest } from "./src/lib/types"
-import { Logger } from "@perfolio/logger"
+import { HttpError } from "@perfolio/pkg/util/errors"
+import { ApiConfig, PostRequest } from "./types"
+import { Logger } from "@perfolio/pkg/logger"
 /**
  * SDK for OpenFigi resources.
  */

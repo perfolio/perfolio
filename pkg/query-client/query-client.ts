@@ -1,6 +1,7 @@
 import { QueryClient } from "react-query"
 import { persistQueryClient } from "react-query/persistQueryClient-experimental"
 import { createWebStoragePersistor } from "react-query/createWebStoragePersistor-experimental"
+import { env } from "@chronark/env"
 export const PersistendQueryClient = (): QueryClient => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -21,7 +22,7 @@ export const PersistendQueryClient = (): QueryClient => {
       /**
        * A new deployment will invalidate the cache
        */
-      buster: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
+      buster: env.get("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA"),
     })
   }
   return queryClient

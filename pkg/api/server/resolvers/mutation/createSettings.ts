@@ -1,5 +1,5 @@
 import { CreateSettings, ResolverFn, Settings } from "@perfolio/pkg/api/graphql"
-import { Currency } from "@perfolio/integrations/prisma"
+import { Currency } from "@perfolio/pkg/integrations/prisma"
 import { Context } from "../../context"
 
 export const createSettings: ResolverFn<Settings, unknown, Context, { settings: CreateSettings }> =

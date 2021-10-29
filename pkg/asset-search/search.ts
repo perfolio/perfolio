@@ -1,6 +1,6 @@
 import Fuse from "fuse.js"
-import { StockMap } from "@perfolio/integrations/prisma"
-import { Logger } from "@perfolio/logger"
+import { StockMap } from "@perfolio/pkg/integrations/prisma"
+import { Logger } from "@perfolio/pkg/logger"
 type IsinTickerPair = { isin: string; ticker: string }
 
 export async function search(

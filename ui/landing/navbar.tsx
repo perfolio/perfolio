@@ -3,9 +3,11 @@ import { Logo, Button } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
 import { useI18n } from "@perfolio/pkg/i18n"
+import { useAuth0 } from "@auth0/auth0-react"
 
 export const Navbar: React.FC = () => {
   const { t } = useI18n()
+  const { user } = useAuth0()
   const [scrolled, setScrolled] = useState(false)
 
   const handleScroll = () => {
@@ -27,12 +29,20 @@ export const Navbar: React.FC = () => {
 
         {/* Desktop */}
         <div className="relative items-center hidden space-x-3 md:inline-flex md:ml-5 lg:justify-end">
-          <Button href="https://app.perfol.io/" kind="plain">
-            {t("signInButton")}
-          </Button>
-          <Button size="auto" kind="cta" href="https://app.perfol.io/">
-            {t("startForFreeButton")}
-          </Button>
+          {user ? (
+            <Button href="/dashboard" kind="secondary" size="lg">
+              Go to dashboard
+            </Button>
+          ) : (
+            <>
+              <Button href="/dashboard" kind="plain">
+                {t("signInButton")}
+              </Button>
+              <Button size="auto" kind="cta" href="/dashboard">
+                {t("startForFreeButton")}
+              </Button>
+            </>
+          )}
         </div>
         {/* Mobile */}
         <Transition
@@ -44,11 +54,7 @@ export const Navbar: React.FC = () => {
           leave="transition ease-in-out duration-500 transform"
           leaveFrom="translate-x-0 opacity-100"
           leaveTo="translate-x-full opacity-0"
-        >
-          {/* <Button kind="cta" href="https://app.perfol.io/auth/sign-in">
-            {t("startForFreeButton")}
-          </Button> */}
-        </Transition>
+        ></Transition>
       </div>
     </nav>
   )

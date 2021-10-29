@@ -38,4 +38,4 @@ class IdGenerator<TPrefixes extends string> {
 
 const idGenerator = new IdGenerator(perfolioIds)
 
-export const id = (key: keyof typeof perfolioIds): string => idGenerator.id(key)
+export const newId = (key: keyof typeof perfolioIds): string => idGenerator.id(key)

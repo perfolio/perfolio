@@ -42,6 +42,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
 
             <div className="hidden max-w-screen-xl border rounded border-gray-50 shadow-ambient lg:block">
               <Image
+                className="border border-white rounded"
                 src="/img/analytics_preview.png"
                 alt="Analytics Preview"
                 width="1908"

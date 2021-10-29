@@ -5,6 +5,7 @@ import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 // import Link from "next/link"
 import { Button, Text } from "@perfolio/ui/components"
+import { useAuth0 } from "@auth0/auth0-react"
 
 const validation = z.object({
   email: z.string().email(),
@@ -12,6 +13,7 @@ const validation = z.object({
 
 export const HeroSection: React.FC = (): JSX.Element => {
   const { t } = useI18n()
+  const { user } = useAuth0()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onSubmit",
     resolver: zodResolver(validation),
@@ -27,7 +29,11 @@ export const HeroSection: React.FC = (): JSX.Element => {
       <p className="text-gray-600 sm:text-lg sm:mx-auto md:text-xl lg:mx-0 sm:text-center">
         {t("subheadline")}
       </p>
-      {done ? (
+      {user ? (
+        <Button href="/dashboard" kind="cta" size="auto" type="submit">
+          Go to dashboard
+        </Button>
+      ) : done ? (
         <Text align="text-center md:text-left">{t("footerSubsDone")}</Text>
       ) : (
         <Form
@@ -59,7 +65,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
                   if (res.status === 200) {
                     setDone(true)
                   } else {
-                    setFormError(res.body)
+                    setFormError(await res.text())
                   }
                 },
                 setSubmitting,
@@ -77,13 +83,13 @@ export const HeroSection: React.FC = (): JSX.Element => {
       )}
 
       {/* <div className="grid w-full gap-4 sm:w-1/2 md:w-1/3 lg:w-1/4 sm:grid-cols-2">
-        <Button kind="cta" size="auto" href="https://app.perfol.io/auth/sign-in">
-          {t("signUpButton")}
-        </Button>
-        <Button size="auto" kind="secondary" href="mailto:info@perfol.io">
-          {t("contactButton")}
-        </Button>
-      </div> */}
+      <Button kind="cta" size="auto" href="https://app.perfol.io/auth/sign-in">
+      {t("signUpButton")}
+      </Button>
+      <Button size="auto" kind="secondary" href="mailto:info@perfol.io">
+      {t("contactButton")}
+      </Button>
+    </div> */}
     </div>
   )
 }

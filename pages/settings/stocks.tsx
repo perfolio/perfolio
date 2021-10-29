@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { NextPage, GetStaticProps } from "next"
 import { useForm } from "react-hook-form"
-import { AppLayout, SideNavbar } from "@perfolio/app/components"
+import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 import { z } from "zod"
 import { Button } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,7 +10,7 @@ import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
-import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 
 interface SettingProps {
   validation: z.AnyZodObject

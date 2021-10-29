@@ -1,7 +1,7 @@
 import { Time } from "@perfolio/pkg/util/time"
 import * as z from "zod"
 import { Client } from "./client"
-import { HttpError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/pkg/util/errors"
 export const GetPriceResponseValidator = z.array(
   z
     .object({

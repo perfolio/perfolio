@@ -17,7 +17,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const { logout } = useAuth0()
   return (
     <nav className="flex items-center justify-between w-full">
-      <NextLink href="/">
+      <NextLink href="/dashboard">
         <a className="text-gray-200 hover:text-gray-50">
           <Logo />
         </a>

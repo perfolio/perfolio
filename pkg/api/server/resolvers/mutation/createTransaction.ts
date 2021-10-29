@@ -1,7 +1,7 @@
 import { CreateTransaction, ResolverFn } from "@perfolio/pkg/api/graphql"
-import { Transaction as TransactionModel } from "@perfolio/integrations/prisma"
+import { Transaction as TransactionModel } from "@perfolio/pkg/integrations/prisma"
 import { Context } from "../../context"
-import { idGenerator } from "@perfolio/id"
+import { newId } from "@perfolio/pkg/id"
 export const createTransaction: ResolverFn<
   TransactionModel,
   unknown,
@@ -37,6 +37,6 @@ export const createTransaction: ResolverFn<
   }
 
   return await ctx.dataSources.prisma.transaction.create({
-    data: { ...transaction, id: idGenerator.id("transaction") },
+    data: { ...transaction, id: newId("transaction") },
   })
 }

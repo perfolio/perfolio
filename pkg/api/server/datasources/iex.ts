@@ -1,15 +1,15 @@
-import * as cloud from "@perfolio/integrations/iexcloud"
+import * as cloud from "@perfolio/pkg/integrations/iexcloud"
 
-import { ApolloCache, Key } from "@perfolio/integrations/redis"
+import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
 import { CompanyStock, Exchange } from "@perfolio/pkg/api/graphql"
 import {
   GetIsinMappingResponse,
   GetSymbolsAtExchangeResponse,
   SearchResponse,
-} from "@perfolio/integrations/iexcloud"
+} from "@perfolio/pkg/integrations/iexcloud"
 
 import { DataSource } from "apollo-datasource"
-import { HttpError } from "@perfolio/util/errors"
+import { HttpError } from "@perfolio/pkg/util/errors"
 import { Time } from "@perfolio/pkg/util/time"
 
 export class IEX extends DataSource {

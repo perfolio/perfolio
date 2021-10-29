@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { NextPage, GetStaticProps } from "next"
-import { AppLayout, SideNavbar } from "@perfolio/app/components"
-import { getCurrencySymbol } from "@perfolio/util/currency"
-import { getTranslations, useI18n } from "@perfolio/feature/i18n"
+import { AppLayout, SideNavbar } from "@perfolio/ui/app"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 
 import { useRouter } from "next/router"
 import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"

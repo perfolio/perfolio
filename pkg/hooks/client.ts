@@ -1,6 +1,6 @@
 import { Sdk, getSdk } from "@perfolio/pkg/api/graphql"
 import { DocumentNode } from "graphql"
-import { GraphqlError } from "@perfolio/util/errors"
+import { GraphqlError } from "@perfolio/pkg/util/errors"
 import { GraphQLClient } from "graphql-request"
 
 /**

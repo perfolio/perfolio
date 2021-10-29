@@ -1,6 +1,6 @@
 import { NextPage, GetStaticProps } from "next"
 import { useRouter } from "next/router"
-import { useI18n, getTranslations } from "@perfolio/feature/i18n"
+import { useI18n, getTranslations } from "@perfolio/pkg/i18n"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 interface PageProps {
@@ -15,7 +15,7 @@ const Page: NextPage<PageProps> = ({ translations }) => {
     <div>
       {t("paymentSuccess")}
       <br></br>
-      {router.query.session_id}
+      {router.query["session_id"]}
     </div>
   )
 }

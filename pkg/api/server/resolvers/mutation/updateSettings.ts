@@ -1,6 +1,6 @@
 import { UpdateSettings, ResolverFn, Settings, Exchange } from "@perfolio/pkg/api/graphql"
 import { Context } from "../../context"
-import { Currency } from "@perfolio/integrations/prisma"
+import { Currency } from "@perfolio/pkg/integrations/prisma"
 export const updateSettings: ResolverFn<Settings, unknown, Context, { settings: UpdateSettings }> =
   async (_parent, { settings }, ctx, _info) => {
     await ctx.authorizeUser(({ sub }) => sub === settings.userId)

@@ -1,4 +1,4 @@
-import { Logger } from "@perfolio/logger"
+import { Logger } from "@perfolio/pkg/logger"
 export interface ErrorOptions {
   /**
    * Log the error.

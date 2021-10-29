@@ -17,7 +17,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
         <li className="flex items-center w-4/5 space-x-12">
-          <Link href="/">
+          <Link href="/dashboard">
             <a className="text-gray-200 hover:text-gray-50">
               <Logo withName />
             </a>

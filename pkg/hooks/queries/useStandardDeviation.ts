@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { standardDeviation } from "@perfolio/feature/finance/kpis"
+import { standardDeviation } from "@perfolio/pkg/finance/kpis"
 
 export const USE_STANDARD_DEVIATION = "USE_STANDARD_DEVIATION"
 
