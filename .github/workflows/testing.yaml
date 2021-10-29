@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          NEXT_PUBLIC_AUTH0_AUDIENCE: https://app.perfol.io
+          NEXT_PUBLIC_AUTH0_AUDIENCE: https://perfol.io
           NEXT_PUBLIC_AUTH0_ISSUER: https://perfolio.eu.auth0.com/
           NEXT_PUBLIC_AUTH0_DOMAIN: perfolio.eu.auth0.com
           NEXT_PUBLIC_AUTH0_CLIENT_ID: Xcdlqkb2M0eMEXHZ5dt2UV1IVh6tTY9W
