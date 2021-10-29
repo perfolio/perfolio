@@ -87,6 +87,7 @@
     "postcss": "^8.3.11",
     "prettier": "^2.4.1",
     "prisma": "^3.3.0",
+    "prop-types": "^15.7.2",
     "tailwindcss": "^2.2.19",
     "tailwindcss-debug-screens": "^2.2.0",
     "typescript": "4.4.4"
