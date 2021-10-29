@@ -58,7 +58,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <Link size="lg" prefix={<DotsVerticalIcon />} href="/" />
             </li>
             <li>
-              <button className="focus:outline-none" onClick={() => logout()}>
+              <button
+                className="focus:outline-none"
+                onClick={() => logout({ returnTo: "https://perfol.io" })}
+              >
                 <Icon size="sm" label={t("mobiNavBarSignOut")}>
                   <LogoutIcon />
                 </Icon>
