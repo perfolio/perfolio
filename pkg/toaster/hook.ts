@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto"
+import { v4 as uuid } from "uuid"
 import { useContext } from "react"
 import { ToasterContext } from "./provider"
 import { ToastProps } from "./toast"
@@ -31,7 +31,7 @@ export const useToaster = (): ToastHook => {
         ...ctx.toasts,
         {
           ...toast,
-          id: randomUUID(),
+          id: uuid(),
         },
       ])
     },
