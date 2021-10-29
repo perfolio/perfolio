@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
 module.exports = {
@@ -30,6 +29,11 @@ module.exports = {
         light: "#B0BCF9",
         DEFAULT: "#3548c8",
         dark: "#101974",
+      },
+      secondary: {
+        light: colors.sky["200"],
+        DEFAULT: colors.sky["500"],
+        dark: colors.sky["800"],
       },
 
       cta: {
