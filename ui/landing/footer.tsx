@@ -62,7 +62,7 @@ const FooterLink: React.FC<{ href: string }> = ({ href, children }): JSX.Element
     <div>
       <Link href={href}>
         <a
-          className="text-gray-400 transition duration-500 hover:text-gray-100 hover:font-medium "
+          className="text-gray-400 transition duration-500 hover:text-gray-100 hover:font-medium whitespace-nowrap"
           target="_string"
         >
           {children}
