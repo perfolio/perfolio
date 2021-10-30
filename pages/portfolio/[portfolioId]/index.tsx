@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { NextPage, GetServerSideProps } from "next"
+import { NextPage, GetStaticProps } from "next"
 import {
   AppLayout,
   DiversificationChart,
@@ -265,7 +265,14 @@ const App: NextPage<PageProps> = ({ translations }) => {
 
 export default withAuthenticationRequired(App)
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: "blocking",
+  }
+}
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = getTranslations(locale, ["app"])
   return {
     props: {
