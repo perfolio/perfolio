@@ -8,30 +8,31 @@ type Locale = "en" | "de"
 /**
  * Load a translations file from local fs
  */
-const loadTranslation = (namespace: Namespace, locale: Locale): Promise<Record<string, string>> => {
-  const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`]
-  let path: string
-
-  switch (env.get("VERCEL_ENV")) {
-    case "production":
-    case "preview":
-      path = join(
-        "https://raw.githubusercontent.com/perfolio/perfolio",
-        env.require("VERCEL_GIT_COMMIT_REF"),
-        ...relativePath,
-      )
-      break
-
-    default:
-      path = resolve(...relativePath)
-      break
-  }
-  console.log({ path })
-
+const loadTranslation = async (
+  namespace: Namespace,
+  locale: Locale,
+): Promise<Record<string, string>> => {
   try {
-    return JSON.parse(fs.readFileSync(path).toString())
+    const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`]
+
+    switch (env.get("VERCEL_ENV")) {
+      case "production":
+      case "preview":
+        return JSON.parse(
+          await fetch(
+            join(
+              "https://raw.githubusercontent.com/perfolio/perfolio",
+              env.require("VERCEL_GIT_COMMIT_REF"),
+              ...relativePath,
+            ),
+          ).then((res) => res.json()),
+        )
+
+      default:
+        return JSON.parse(fs.readFileSync(resolve(...relativePath)).toString())
+    }
   } catch (err) {
-    throw new Error(`Unable to load locale "${locale}" from ${path}: ${err}`)
+    throw new Error(`Unable to load locale "${locale}": ${err}`)
   }
 }
 
