@@ -32,7 +32,7 @@ export const Price: React.FC<PriceProps> = ({
     >
       {highlighted ? (
         <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
-          <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-cta">
+          <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-cta to-secondary">
             Most Popular
           </div>
         </div>
