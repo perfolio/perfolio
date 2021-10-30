@@ -24,7 +24,7 @@ const loadTranslation = async (
         ].join("/")
         return JSON.parse(
           await fetch(url)
-            .then((res) => res.json())
+            .then((res) => res.text())
             .catch((err) => {
               throw new Error(`Unable to get ${url}: ${err}`)
             }),
