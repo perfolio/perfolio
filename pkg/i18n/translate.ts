@@ -26,6 +26,7 @@ const loadTranslation = (namespace: Namespace, locale: Locale): Promise<Record<s
       path = resolve(...relativePath)
       break
   }
+  console.log({ path })
 
   try {
     return JSON.parse(fs.readFileSync(path).toString())
