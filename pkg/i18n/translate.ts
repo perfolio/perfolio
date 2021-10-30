@@ -18,7 +18,7 @@ const loadTranslation = async (
       case "production":
       case "preview":
         const url = join(
-          "https://raw.githubusercontent.com/perfolio/perfolio",
+          "raw.githubusercontent.com/perfolio/perfolio",
           env.require("VERCEL_GIT_COMMIT_REF"),
           ...relativePath,
         )
