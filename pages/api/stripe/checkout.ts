@@ -62,8 +62,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         ],
 
-        success_url: req.headers["referer"] ?? "https://app.perfol.io",
-        cancel_url: req.headers["referer"] ?? "https://app.perfol.io",
+        success_url: req.headers["referer"] ?? "https://perfol.io/dashboard",
+        cancel_url: req.headers["referer"] ?? "https://perfol.io/dashboard",
       })
       if (checkoutSession.url) {
         res.json({ url: checkoutSession.url })
