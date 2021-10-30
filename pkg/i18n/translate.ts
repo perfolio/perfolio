@@ -17,14 +17,17 @@ const loadTranslation = async (
     switch (env.get("VERCEL_ENV")) {
       case "production":
       case "preview":
+        const url = join(
+          "https://raw.githubusercontent.com/perfolio/perfolio",
+          env.require("VERCEL_GIT_COMMIT_REF"),
+          ...relativePath,
+        )
         return JSON.parse(
-          await fetch(
-            join(
-              "https://raw.githubusercontent.com/perfolio/perfolio",
-              env.require("VERCEL_GIT_COMMIT_REF"),
-              ...relativePath,
-            ),
-          ).then((res) => res.json()),
+          await fetch(url)
+            .then((res) => res.json())
+            .catch((err) => {
+              throw new Error(`Unable to get ${url}: ${err}`)
+            }),
         )
 
       default:
