@@ -160,7 +160,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
 export default withAuthenticationRequired(SettingsPage)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["app"])
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,
