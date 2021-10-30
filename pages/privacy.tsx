@@ -1017,7 +1017,7 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
 export default Privacy
 
 export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["landing"])
+  const translations = await getTranslations(locale, ["landing"])
   return {
     props: {
       translations,

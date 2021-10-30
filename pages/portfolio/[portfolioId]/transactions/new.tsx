@@ -182,7 +182,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
 export default withAuthenticationRequired(NewTransactionPage)
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["app"])
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,

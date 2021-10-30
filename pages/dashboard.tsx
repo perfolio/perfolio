@@ -56,7 +56,7 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
 export default withAuthenticationRequired(IndexPage)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["app"])
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,

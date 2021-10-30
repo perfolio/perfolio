@@ -161,7 +161,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
 export default IndexPage
 
 export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
-  const translations = getTranslations(locale, ["landing"])
+  const translations = await getTranslations(locale, ["landing"])
   return {
     props: {
       members: [

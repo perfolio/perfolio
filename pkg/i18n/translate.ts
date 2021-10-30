@@ -14,7 +14,6 @@ const loadTranslation = async (
 ): Promise<Record<string, string>> => {
   try {
     const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`]
-
     switch (env.get("VERCEL_ENV")) {
       case "production":
       case "preview":
@@ -39,11 +38,16 @@ const loadTranslation = async (
 /**
  * Return all translations for a given locale and namespaces
  */
-export function getTranslations(
+export async function getTranslations(
   locale: string | undefined,
   namespaces: Namespace[],
-): Record<string, string> {
+): Promise<Record<string, string>> {
   locale ??= "en"
 
-  return Object.assign({}, ...namespaces.map((ns) => loadTranslation(ns, locale as Locale)))
+  return Object.assign(
+    {},
+    ...(await Promise.all(
+      namespaces.map(async (ns) => await loadTranslation(ns, locale as Locale)),
+    )),
+  )
 }
