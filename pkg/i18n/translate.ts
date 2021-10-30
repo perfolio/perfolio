@@ -1,4 +1,4 @@
-import { join, resolve } from "path"
+import { resolve } from "path"
 import fs from "fs"
 import { env } from "@chronark/env"
 
@@ -17,11 +17,11 @@ const loadTranslation = async (
     switch (env.get("VERCEL_ENV")) {
       case "production":
       case "preview":
-        const url = join(
-          "https:///raw.githubusercontent.com/perfolio/perfolio",
+        const url = [
+          "https://raw.githubusercontent.com/perfolio/perfolio",
           env.require("VERCEL_GIT_COMMIT_REF"),
           ...relativePath,
-        )
+        ].join("/")
         return JSON.parse(
           await fetch(url)
             .then((res) => res.json())
