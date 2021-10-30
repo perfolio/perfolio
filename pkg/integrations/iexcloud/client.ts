@@ -47,7 +47,7 @@ export class Client {
   public readonly logger: Logger
 
   constructor(config?: ApiConfig) {
-    this.baseUrl = config?.baseUrl ?? env.require("IEX_BASE_URL")
+    this.baseUrl = config?.baseUrl ?? "https://cloud.iexapis.com/stable"
     this.token = config?.token ?? env.require("IEX_TOKEN")
     this.logger = new Logger({
       name: "IEX Client",
