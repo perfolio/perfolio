@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
         {/* Desktop */}
         <div className="relative items-center hidden space-x-3 md:inline-flex md:ml-5 lg:justify-end">
           {user ? (
-            <Button href="/dashboard" kind="secondary" size="lg">
+            <Button href="/dashboard" kind="primary" size="lg">
               Go to dashboard
             </Button>
           ) : (
