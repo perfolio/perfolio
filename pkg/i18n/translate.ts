@@ -1,5 +1,6 @@
-import { resolve } from "path"
+import { join, resolve } from "path"
 import fs from "fs"
+import { env } from "@chronark/env"
 
 type Namespace = "landing" | "app"
 type Locale = "en" | "de"
@@ -8,7 +9,14 @@ type Locale = "en" | "de"
  * Load a translations file from local fs
  */
 const loadTranslation = (namespace: Namespace, locale: Locale): Promise<Record<string, string>> => {
-  const path = resolve("public", "locales", locale, `${namespace}.json`)
+  const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`]
+  let path: string
+  if (env.get("NODE_ENV") === "production") {
+    path = join("https://raw.githubusercontent.com/perfolio/perfolio/main", ...relativePath)
+  } else {
+    path = resolve(...relativePath)
+  }
+
   try {
     return JSON.parse(fs.readFileSync(path).toString())
   } catch (err) {

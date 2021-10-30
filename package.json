@@ -6,7 +6,7 @@
     "dev": "next dev",
     "prebuild": "pnpm prisma generate && pnpm graphql-codegen",
     "build": "pnpm prebuild && next build",
-    "deploy": "pnpm build && npx prisma migrate deploy && cp -r --parents ./public ./.next/ && ls -al",
+    "deploy": "pnpm build && npx prisma migrate deploy",
     "start": "next start",
     "lint": "next lint",
     "fmt": "pnpm lint && pnpm format",
