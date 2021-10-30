@@ -1,5 +1,5 @@
 overwrite: true
-schema: "./pkg/api/graphql/schema.gql"
+schema: "./pkg/api/graphql/schema.gql.ts"
 documents: "./pkg/api/graphql/{fragments,operations}/**/*.gql"
 generates:
   ./pkg/api/graphql/generated/graphql.ts:

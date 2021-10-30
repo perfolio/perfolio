@@ -2,10 +2,9 @@ import { ApolloServer } from "apollo-server-micro"
 
 import { Logger } from "@perfolio/pkg/logger"
 import { context } from "./context"
-
+import typeDefs from "pkg/api/graphql/schema.gql"
 import { resolvers } from "./resolvers"
-import fs from "fs"
-import path from "path"
+
 import { env } from "@chronark/env"
 
 import { dataSources } from "./datasources"
@@ -16,10 +15,8 @@ export type ApolloHandlerConfig = {
 }
 
 export const Server = (config?: ApolloHandlerConfig): ApolloServer => {
-  const schemaPath = path.join(process.cwd(), "pkg/api/graphql/schema.gql")
-
   return new ApolloServer({
-    typeDefs: fs.readFileSync(schemaPath, "utf-8"),
+    typeDefs,
     dataSources,
     resolvers,
     logger: config?.logger,
