@@ -12,10 +12,7 @@
     "fmt": "pnpm lint && pnpm format",
     "format": "prettier --loglevel=warn --write .",
     "tsc": "tsc --pretty",
-    "prepare": "husky install",
-    "db:migrate": "prisma migrate dev --schema=pkg/integrations/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=pkg/integrations/prisma/schema.prisma",
-    "db:push": "prisma db push --schema=pkg/integrations/prisma/schema.prisma",
+    "prepare": "husky install && pnpm prebuild",
     "test": "echo 'currently broken'",
     "env:pull": "npx vercel env pull && mv .env .env.local"
   },
