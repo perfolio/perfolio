@@ -11,10 +11,20 @@ type Locale = "en" | "de"
 const loadTranslation = (namespace: Namespace, locale: Locale): Promise<Record<string, string>> => {
   const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`]
   let path: string
-  if (env.get("NODE_ENV") === "production") {
-    path = join("https://raw.githubusercontent.com/perfolio/perfolio/main", ...relativePath)
-  } else {
-    path = resolve(...relativePath)
+
+  switch (env.get("VERCEL_ENV")) {
+    case "production":
+    case "preview":
+      path = join(
+        "https://raw.githubusercontent.com/perfolio/perfolio",
+        env.require("VERCEL_GIT_COMMIT_REF"),
+        ...relativePath,
+      )
+      break
+
+    default:
+      path = resolve(...relativePath)
+      break
   }
 
   try {
