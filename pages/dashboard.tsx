@@ -2,24 +2,55 @@ import { NextPage, GetStaticProps } from "next"
 import { usePortfolios } from "@perfolio/pkg/hooks"
 import { AppLayout } from "@perfolio/ui/app"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
-import { Button, Card } from "@perfolio/ui/components"
-import React from "react"
+import { Button, Card, Text } from "@perfolio/ui/components"
+import React, { useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
   name,
 }): JSX.Element => {
+  const [editable, setEditable] = useState(false)
+  const [title, setTitle] = useState(name)
+  const [description, setDescription] = useState("You can place any description here")
+
+  const onSubmit = (
+    title: React.SetStateAction<string>,
+    description: React.SetStateAction<string>,
+  ) => {
+    setTitle(title)
+    setDescription(description)
+    setEditable(false)
+  }
+
   return (
     <Card>
       <div className="relative flex flex-col lg:flex-row">
-        <div className="w-full lg:w-3/5 2xl:w-3/4">
+        <div className="w-full">
           <Card.Header>
-            <Card.Header.Title title={name} />
+            <Card.Header.Title title={title} contentEditable={editable} />
           </Card.Header>
           <Card.Footer>
+            <Card.Footer.Status>
+              <Text contentEditable={editable}>{description}</Text>
+            </Card.Footer.Status>
             <Card.Footer.Actions>
-              <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+              {editable ? (
+                <Button kind="primary" onClick={() => onSubmit(title, description)}>
+                  Save
+                </Button>
+              ) : null}
+              {!editable ? <Button href={`/portfolio/${id}`}>Go to portfolio</Button> : null}
+              {!editable ? (
+                <Button kind="primary" onClick={() => setEditable(true)}>
+                  Edit
+                </Button>
+              ) : null}
+              {!editable ? (
+                <Button kind="primary" onClick={() => alert("test")}>
+                  Delete
+                </Button>
+              ) : null}
             </Card.Footer.Actions>
           </Card.Footer>
         </div>

@@ -33,6 +33,8 @@ export interface TextProps {
    * Truncate the text to prevent overflows
    */
   truncate?: boolean
+
+  contentEditable?: boolean
 }
 
 export const Text: React.FC<TextProps> = ({
@@ -44,6 +46,7 @@ export const Text: React.FC<TextProps> = ({
   align,
   mono,
   truncate,
+  contentEditable = false,
 }): JSX.Element => {
   return (
     <p
@@ -58,7 +61,12 @@ export const Text: React.FC<TextProps> = ({
         },
         align,
         color,
+        {
+          "px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none border-gray-200 focus:border-gray-700 focus:bg-gray-50":
+            contentEditable,
+        },
       )}
+      contentEditable={contentEditable}
     >
       {children}
     </p>
