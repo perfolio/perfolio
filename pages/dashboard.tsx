@@ -40,17 +40,17 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                   Save
                 </Button>
               ) : null}
-              {!editable ? <Button href={`/portfolio/${id}`}>Go to portfolio</Button> : null}
               {!editable ? (
-                <Button kind="primary" onClick={() => setEditable(true)}>
+                <Button kind="cta" onClick={() => setEditable(true)}>
                   Edit
                 </Button>
               ) : null}
               {!editable ? (
-                <Button kind="primary" onClick={() => alert("test")}>
+                <Button kind="alert" onClick={() => alert("test")}>
                   Delete
                 </Button>
               ) : null}
+              {!editable ? <Button href={`/portfolio/${id}`}>Go to portfolio</Button> : null}
             </Card.Footer.Actions>
           </Card.Footer>
         </div>
