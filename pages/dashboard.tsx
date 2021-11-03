@@ -28,11 +28,15 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
       <div className="relative flex flex-col lg:flex-row">
         <div className="w-full">
           <Card.Header>
-            <Card.Header.Title title={title} contentEditable={editable} />
+            <div onDoubleClick={() => setEditable(true)}>
+              <Card.Header.Title title={title} contentEditable={editable} />
+            </div>
           </Card.Header>
           <Card.Footer>
             <Card.Footer.Status>
-              <Text contentEditable={editable}>{description}</Text>
+              <div onDoubleClick={() => setEditable(true)}>
+                <Text contentEditable={editable}>{description}</Text>
+              </div>
             </Card.Footer.Status>
             <Card.Footer.Actions>
               {editable ? (
