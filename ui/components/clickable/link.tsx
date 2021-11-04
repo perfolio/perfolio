@@ -19,7 +19,6 @@ export const Link: React.FC<LinkProps | ButtonProps> = (props): JSX.Element => {
       size={props.size}
       prefix={props.prefix}
       suffix={props.suffix}
-      justify={props.justify}
     >
       {props.children}
     </DefaultLinkStyle>,
