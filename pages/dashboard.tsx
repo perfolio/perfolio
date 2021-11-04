@@ -9,6 +9,7 @@ import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { PencilAltIcon } from "@heroicons/react/outline"
+import { InlineTotalAssetChart } from "@perfolio/ui/app"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
@@ -51,6 +52,9 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
           )}
         </div>
       </Card.Header>
+      <Card.Content>
+        <InlineTotalAssetChart portfolioId={id} />
+      </Card.Content>
       <Card.Footer>
         <Card.Footer.Status>
           <Button href={`/portfolio/${id}`}>Go to portfolio</Button>

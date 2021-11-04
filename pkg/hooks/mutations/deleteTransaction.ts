@@ -6,10 +6,13 @@ import {
 import { client } from "../client"
 import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
 import { useAuth0 } from "@auth0/auth0-react"
+import { useRouter } from "next/router"
 
 export const useDeleteTransaction = () => {
   const { getAccessTokenSilently } = useAuth0()
+  const router = useRouter()
   const queryClient = useQueryClient()
+  const portfolioId = router.query["portfolioId"] as string
   const { data, ...meta } = useMutation<
     DeleteTransactionMutation,
     Error,
@@ -20,7 +23,7 @@ export const useDeleteTransaction = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY)
+        queryClient.invalidateQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY(portfolioId))
       },
     },
   )

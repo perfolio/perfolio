@@ -1,7 +1,8 @@
 import React from "react"
-import { AsyncButton, Button } from "@perfolio/ui/components"
+import Link from "next/link"
+import { AsyncButton } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
-import { NextPage, GetServerSideProps } from "next"
+import { NextPage, GetStaticProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api/graphql"
 import classNames from "classnames"
 import { AppLayout, ActivityFeed, Main, Sidebar } from "@perfolio/ui/app"
@@ -12,6 +13,7 @@ import { useDeleteTransaction, useExchangeTradedAsset, usePortfolio } from "@per
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import router from "next/router"
+import { DocumentAddIcon } from "@heroicons/react/outline"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 export interface TransactionItemProps {
@@ -109,16 +111,14 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
           {isLoading ? (
             <Loading />
           ) : !portfolio?.transactions || portfolio.transactions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <p className="text-gray-700">{t("transIndexNoTrans")}</p>
-              <Button
-                size="lg"
-                kind="primary"
-                href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}
-              >
-                {t("transIndexAddTrans")}
-              </Button>
-            </div>
+            <Link href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}>
+              <a className="relative block w-full p-12 text-center border border-gray-300 border-dashed rounded hover:border-gray-400 focus:outline-none">
+                <DocumentAddIcon className="w-12 h-12 max-w-sm mx-auto text-gray-400" />
+                <span className="block mt-2 text-sm font-medium text-gray-900">
+                  Add your first transaction
+                </span>
+              </a>
+            </Link>
           ) : (
             <AnimateSharedLayout>
               <AnimatePresence>
@@ -151,7 +151,14 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
 
 export default withAuthenticationRequired(TransactionsPage)
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async ({ locale }) => {
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  }
+}
+
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   const translations = await getTranslations(locale, ["app"])
   return {
     props: {

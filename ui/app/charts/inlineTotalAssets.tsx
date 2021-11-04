@@ -5,8 +5,15 @@ import { format } from "@perfolio/pkg/util/numbers"
 import { useCurrentAbsoluteValue } from "@perfolio/pkg/hooks"
 import { Downsampling } from "@perfolio/pkg/downsampling"
 import { Time } from "@perfolio/pkg/util/time"
-export const InlineTotalAssetChart: React.FC = (): JSX.Element => {
-  const { portfolioHistory } = usePortfolioHistory()
+
+export interface InlineTotalAssetChartProps {
+  portfolioId?: string
+}
+
+export const InlineTotalAssetChart: React.FC<InlineTotalAssetChartProps> = ({
+  portfolioId,
+}): JSX.Element => {
+  const { portfolioHistory } = usePortfolioHistory(portfolioId)
   const { absolutePortfolioHistory, isLoading } = useAbsolutePortfolioHistory(portfolioHistory)
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const data = useMemo(() => {
