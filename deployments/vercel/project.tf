@@ -9,6 +9,5 @@ resource "vercel_project" "perfolio" {
   framework                  = "nextjs"
   build_command              = "pnpm deploy"
   install_command            = "npm i -g pnpm && pnpm install"
-  serverless_function_region = "fra1"
 
 }
