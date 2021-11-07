@@ -10,3 +10,8 @@ variable "database_urls" {
   })
   sensitive = true
 }
+
+
+variable "team_id" {
+  type = string
+}

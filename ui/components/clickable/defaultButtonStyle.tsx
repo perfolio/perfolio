@@ -1,16 +1,16 @@
 import React from "react"
 import { Loading } from "../loading/loading"
 type Kind = "primary" | "secondary" | "alert" | "cta" | "plain"
-type Justify = "start" | "center" | "end" | "between" | "around"
 type Size = "sm" | "md" | "lg" | "auto"
+type Shape = "square" | "round" | "auto"
 
 export interface DefaultButtonStyleProps {
   kind: Kind
-  justify?: Justify
   loading?: boolean
   prefix?: React.ReactNode
   suffix?: React.ReactNode
   size?: Size
+  shape?: Shape
   disabled?: boolean
 }
 
@@ -22,11 +22,11 @@ export interface DefaultButtonStyleProps {
 export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
   children,
   kind = "primary",
-  justify = "center",
   loading,
   prefix,
   suffix,
   size = "md",
+  shape = "auto",
 }): JSX.Element => {
   return (
     <div
@@ -36,13 +36,13 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         flex
         rounded
         items-center
+        w-full
         whitespace-nowrap
-        
-        justify-${justify}
+        justify-evenly
         ${shadow(kind, size)}
         ${colors(kind)}
         ${spacing(size)}
-        ${dimensions(size)}
+        ${dimensions(size, shape)}
       `}
     >
       {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
@@ -64,7 +64,7 @@ const colors = (kind: Kind, disabled?: boolean): string => {
       " bg-black text-white font-medium hover:border-gray-700 border border-transparent hover:bg-white hover:text-black",
     secondary:
       "bg-transparent border border-gray-300 text-gray-800 hover:border-gray-700 hover:text-black",
-    alert: "bg-gradient-to-tr from-error-dark to-error text-white hover:to-error",
+    alert: "bg-error text-white border border-error hover:bg-white hover:text-error font-semibold",
     cta: "bg-gradient-to-tr from-cta to-secondary font-medium text-gray-50 justify-center w-full text-sm text-center rounded sm:text-base md:text-lg hover:bg-black duration-500",
     plain:
       "bg-transparent shadow-none hover:shadow-none hover:text-gray-800 text-gray-800 hover:font-semibold",
@@ -118,13 +118,28 @@ const shadow = (kind: Kind, size: Size): string => {
   }[size]
 }
 
-const dimensions = (size: Size): string => {
-  const options: Record<Size, string> = {
-    sm: "w-20 h-6",
-    md: "w-32 h-8",
-    lg: "w-40 h-10",
-    auto: "px-4 py-2 w-full h-10",
+const dimensions = (size: Size, shape: Shape): string => {
+  const height: Record<Size, number> = {
+    sm: 6,
+    md: 8,
+    lg: 10,
+    auto: 10,
   }
 
-  return options[size]
+  const options: Record<Size, string> = {
+    sm: `w-20 h-${height.sm}`,
+    md: `w-32 h-${height.md}`,
+    lg: `w-40 h-${height.lg}`,
+    auto: `px-4 py-2 w-full h-${height.auto}`,
+  }
+
+  switch (shape) {
+    case "square":
+      return `w-${height[size]} h-${height[size]}`
+    case "round":
+      return `w-${height[size]} h-${height[size]} rounded-full`
+
+    case "auto":
+      return options[size]
+  }
 }
