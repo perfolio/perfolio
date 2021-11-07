@@ -1,16 +1,5 @@
 
 
-provider "checkly" {
-  api_key = var.checkly_api_key
-}
-
-module "checkly" {
-  source          = "./checkly"
-  checkly_api_key = var.checkly_api_key
-}
-
-
-
 provider "cloudflare" {
   api_token = var.cloudflare.api_token
 }
@@ -24,12 +13,12 @@ module "digitalocean" {
 }
 
 
-provider "doppler" {
-  doppler_token = var.doppler_token
+provider "vercel" {
+  token = var.vercel_token
 }
 
-module "doppler" {
-  source = "./doppler"
+module "vercel" {
+  source = "./vercel"
   database_urls = {
     dev          = module.digitalocean.database_url_dev,
     preview      = module.digitalocean.database_url_preview,
