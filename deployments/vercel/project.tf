@@ -6,8 +6,8 @@ resource "vercel_project" "perfolio" {
     repo = "perfolio/perfolio"
   }
 
-  framework                  = "nextjs"
-  build_command              = "pnpm deploy"
-  install_command            = "npm i -g pnpm && pnpm install"
+  framework       = "nextjs"
+  build_command   = "pnpm deploy"
+  install_command = "npm i -g pnpm && pnpm install"
 
 }
