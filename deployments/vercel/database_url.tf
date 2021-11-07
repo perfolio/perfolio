@@ -3,7 +3,6 @@
 
 resource "vercel_secret" "database_url_dev" {
   team_id    = var.team_id
-  project_id = vercel_project.perfolio.id
   name       = "DATABASE_URL"
   value      = var.database_urls.dev
 }
@@ -18,7 +17,6 @@ resource "vercel_env" "database_url_dev" {
 
 resource "vercel_secret" "database_url_preview" {
   team_id    = var.team_id
-  project_id = vercel_project.perfolio.id
   name       = "DATABASE_URL"
   value      = var.database_urls.preview
 }
@@ -32,7 +30,6 @@ resource "vercel_env" "database_url_preview" {
 
 resource "vercel_secret" "database_url_production" {
   team_id    = var.team_id
-  project_id = vercel_project.perfolio.id
   name       = "DATABASE_URL"
   value      = var.database_urls.production
 }

@@ -14,11 +14,11 @@ module "digitalocean" {
 
 
 provider "vercel" {
-  token   = var.vercel_token
+  token = var.vercel_token
 }
 
 module "vercel" {
-  source = "./vercel"
+  source  = "./vercel"
   team_id = "team_ZYPNERZjT0L9LkPdP0Y9ZtS2"
 
   database_urls = {
