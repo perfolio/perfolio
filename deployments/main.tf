@@ -15,6 +15,7 @@ module "digitalocean" {
 
 provider "vercel" {
   token = var.vercel_token
+  team_id = "team_ZYPNERZjT0L9LkPdP0Y9ZtS2"
 }
 
 module "vercel" {

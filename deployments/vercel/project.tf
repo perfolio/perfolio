@@ -1,5 +1,5 @@
 resource "vercel_project" "perfolio" {
-  team_id = "team_ZYPNERZjT0L9LkPdP0Y9ZtS2"
+  team_id =var.team_id
   name    = "perfolio_tf"
   git_repository {
     type = "github"
