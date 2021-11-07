@@ -11,9 +11,13 @@ export const CardHeaderTitle: React.FC<CardHeaderTitleProps> = ({
   subtitle,
 }): JSX.Element => {
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col items-start">
       <span className="text-4xl font-black text-gray-900 ">{title}</span>
-      <Text>{subtitle}</Text>
+      {subtitle ? (
+        <div className="mt-4">
+          <Text>{subtitle}</Text>
+        </div>
+      ) : null}
     </div>
   )
 }

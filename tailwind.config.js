@@ -51,9 +51,9 @@ module.exports = {
         dark: "#0D298C",
       },
       error: {
-        light: "#FDE4D3",
-        DEFAULT: "#E83727",
-        dark: "#860C20",
+        light: "#FB9A7A",
+        DEFAULT: "#F23524",
+        dark: "#8C0B20",
       },
     },
 

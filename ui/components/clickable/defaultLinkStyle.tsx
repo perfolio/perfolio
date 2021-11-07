@@ -10,6 +10,7 @@ export interface DefaultLinkStyleProps {
   label?: React.ReactNode
   justify?: Justify
   loading?: boolean
+  shape?: string
   prefix?: React.ReactNode
   suffix?: React.ReactNode
   size?: Size
