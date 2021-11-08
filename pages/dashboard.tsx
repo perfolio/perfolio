@@ -10,6 +10,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { PencilAltIcon } from "@heroicons/react/outline"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
+import { DeletionModal } from "@perfolio/ui/app/deletionModal"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
@@ -18,6 +19,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
   const [editMode, setEditMode] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
+  const [deletionModalVisible, setDeletionModalVisible] = useState(false)
 
   const validation = z.object({
     title: z.string().nonempty(),
@@ -109,9 +111,20 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               >
                 Edit
               </Button>
-              <Button kind="alert" shape="square" type="button" onClick={() => alert("Watch out")}>
+              <Button
+                kind="alert"
+                shape="square"
+                type="button"
+                onClick={() => setDeletionModalVisible(true)}
+              >
                 Delete
               </Button>
+              {deletionModalVisible ? (
+                <DeletionModal
+                  onCancel={() => setDeletionModalVisible(false)}
+                  onDelete={() => setDeletionModalVisible(false)}
+                />
+              ) : null}
             </>
           )}
         </Card.Footer.Actions>
