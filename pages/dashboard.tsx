@@ -2,15 +2,16 @@ import { NextPage, GetStaticProps } from "next"
 import { usePortfolios } from "@perfolio/pkg/hooks"
 import { AppLayout } from "@perfolio/ui/app"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
-import { Button, Card, Tooltip, Text } from "@perfolio/ui/components"
-import React, { useState } from "react"
+import { Button, Card, Tooltip, Text, Icon } from "@perfolio/ui/components"
+import React, { Fragment, useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { PencilAltIcon } from "@heroicons/react/outline"
+import { DotsVerticalIcon, PencilAltIcon, TrashIcon, XIcon } from "@heroicons/react/outline"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
 import { DeletionModal } from "@perfolio/ui/app/deletionModal"
+import { Popover, Transition } from "@headlessui/react"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
@@ -29,10 +30,20 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
     resolver: zodResolver(validation),
   })
 
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(" ")
+  }
+
   return (
     <Card>
+      {deletionModalVisible ? (
+        <DeletionModal
+          onCancel={() => setDeletionModalVisible(false)}
+          onDelete={() => setDeletionModalVisible(false)}
+        />
+      ) : null}
       <Card.Header>
-        <div className="flex items-center h-12">
+        <div className="flex items-center h-12 w-full">
           {editMode ? (
             <Form
               ctx={ctx}
@@ -53,14 +64,71 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
             </Tooltip>
           )}
         </div>
+        <div>
+          <div>
+            <Popover className="relative">
+              {(open) => (
+                <>
+                  <Popover.Button
+                    className={classNames(
+                      open.open ? "text-gray-900" : "text-gray-500",
+                      "group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                    )}
+                  >
+                    <Icon size="sm" label="DotsMenu">
+                      {open.open ? <XIcon /> : <DotsVerticalIcon />}
+                    </Icon>
+                  </Popover.Button>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 translate-y-1"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                  >
+                    <Popover.Panel className="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2  max-w-xs sm:px-0">
+                      <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                        <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                          <Button
+                            kind="plain"
+                            type="button"
+                            onClick={() => {
+                              setEditMode(!editMode)
+                              open.close()
+                              open.open = false
+                            }}
+                            prefix={<PencilAltIcon />}
+                            justify="start"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            kind="plain"
+                            type="button"
+                            onClick={() => setDeletionModalVisible(true)}
+                            prefix={<TrashIcon />}
+                            justify="start"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    </Popover.Panel>
+                  </Transition>
+                </>
+              )}
+            </Popover>
+          </div>
+        </div>
       </Card.Header>
       <Card.Content>
         <InlineTotalAssetChart portfolioId={id} />
       </Card.Content>
       <Card.Footer>
-        <Card.Footer.Status>
-          <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
-        </Card.Footer.Status>
+        <Card.Footer.Status></Card.Footer.Status>
         <Card.Footer.Actions>
           {editMode ? (
             <>
@@ -103,28 +171,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
             </>
           ) : (
             <>
-              <Button
-                kind="secondary"
-                type="button"
-                onClick={() => setEditMode(true)}
-                prefix={<PencilAltIcon />}
-              >
-                Edit
-              </Button>
-              <Button
-                kind="alert"
-                shape="square"
-                type="button"
-                onClick={() => setDeletionModalVisible(true)}
-              >
-                Delete
-              </Button>
-              {deletionModalVisible ? (
-                <DeletionModal
-                  onCancel={() => setDeletionModalVisible(false)}
-                  onDelete={() => setDeletionModalVisible(false)}
-                />
-              ) : null}
+              <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
             </>
           )}
         </Card.Footer.Actions>
