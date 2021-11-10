@@ -3,7 +3,7 @@ import { Loading } from "../loading/loading"
 type Kind = "primary" | "secondary" | "alert" | "cta" | "plain"
 type Size = "sm" | "md" | "lg" | "auto"
 type Shape = "square" | "round" | "auto"
-type Justify = "start" | "center" | "end" | "between" | "around" | "evenly"
+type Justify = "evenly" | "center" | "end" | "between" | "around" | "start"
 
 export interface DefaultButtonStyleProps {
   kind: Kind
@@ -29,11 +29,10 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
   suffix,
   size = "md",
   shape = "auto",
-  justify = "evenly",
+  justify = "center",
 }): JSX.Element => {
   return (
     <>
-      {console.log("Justify: " + justify)}
       <div
         className={`
         transition
@@ -43,7 +42,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         items-center
         w-full
         whitespace-nowrap
-        justify-${justify}
+        justify-${justify} 
         ${shadow(kind, size)}
         ${colors(kind)}
         ${spacing(size)}

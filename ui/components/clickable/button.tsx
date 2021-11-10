@@ -19,6 +19,7 @@ export const Button: React.FC<LinkProps | ButtonProps> = (props): JSX.Element =>
       kind={props.kind}
       size={props.size}
       prefix={props.prefix}
+      justify={props.justify}
     >
       {props.children}
     </DefaultButtonStyle>,

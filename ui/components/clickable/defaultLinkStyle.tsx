@@ -1,6 +1,6 @@
 import React from "react"
 import { Loading } from "../loading/loading"
-type Justify = "start" | "center" | "end" | "between" | "around"
+type Justify = "start" | "center" | "end" | "between" | "around" | "evenly"
 type Size = "sm" | "md" | "lg" | "auto"
 export interface DefaultLinkStyleProps {
   /**
