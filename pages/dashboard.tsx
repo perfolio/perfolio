@@ -193,7 +193,7 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
         <Card>
-          <div className="flex flex-col items-center p-8 my-8 space-y-6 text-center">
+          <div className="flex flex-col items-center p-4 my-4 sm:p-8 sm:my-8 space-y-6 text-center">
             <Card.Header>
               <Card.Header.Title title="Your portfolios"></Card.Header.Title>
             </Card.Header>

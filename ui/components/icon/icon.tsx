@@ -19,10 +19,10 @@ export const Icon: React.FC<IconProps> = ({ size = "md", label, children, color 
     <Root label={label}>
       <div
         className={cn("focus:outline-none", color, {
-          "w-5 h-5": size === "xs",
-          "w-8 h-8": size === "sm",
-          "w-10 h-10": size === "md",
-          "w-16 h-16": size === "lg",
+          "w-3 h-3 sm:w-5 sm:h-5": size === "xs",
+          "w-6 h-6 sm:w-8 sm:h-8": size === "sm",
+          "w-8 h-8 sm:w-10 sm:h-10": size === "md",
+          "w-14 h-14 sm:w-16 sm:h-16": size === "lg",
         })}
       >
         {children}

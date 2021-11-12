@@ -90,20 +90,20 @@ const spacing = (size: Size): string => {
 
 const iconSize = (size: Size): string => {
   const options: Record<Size, string> = {
-    sm: "w-4 h-4",
-    md: "w-5 h-5",
-    lg: "w-6 h-6",
-    auto: "w-5 h-5",
+    sm: "w-3 h-3 sm:w-4 sm:h-4",
+    md: "w-4 h-4 sm:w-5 sm:h-5",
+    lg: "w-5 h-5 sm:w-6 sm:h-6",
+    auto: "w-4 h-4 sm:w-5 sm:h-5",
   }
   return options[size]
 }
 
 const text = (size: Size): string => {
   const options: Record<Size, string> = {
-    sm: "text-sm",
-    md: "text-medium",
-    lg: "text-medium font-medium",
-    auto: "text-medium",
+    sm: "text-xs sm:text-sm",
+    md: "text-sm sm:text-base",
+    lg: "text-base sm:font-medium",
+    auto: "text-base",
   }
   return options[size]
 }
@@ -124,25 +124,26 @@ const shadow = (kind: Kind, size: Size): string => {
 }
 
 const dimensions = (size: Size, shape: Shape): string => {
-  const height: Record<Size, number> = {
-    sm: 6,
-    md: 8,
-    lg: 10,
-    auto: 10,
+  // number[0] contains value for < sm, number[1] for >=sm
+  const height: Record<Size, number[]> = {
+    sm: [4, 6],
+    md: [6, 8],
+    lg: [8, 10],
+    auto: [8, 10],
   }
 
   const options: Record<Size, string> = {
-    sm: `w-20 h-${height.sm}`,
-    md: `w-32 h-${height.md}`,
-    lg: `w-40 h-${height.lg}`,
-    auto: `px-4 py-2 w-full h-${height.auto}`,
+    sm: `w-16 h-${height.sm[0]} sm:w-20 sm:h-${height.sm[1]}`,
+    md: `w-28 h-${height.md[0]} sm:w-32 sm:h-${height.md[1]}`,
+    lg: `w-36 h-${height.lg[0]} sm:w-40 sm:h-${height.lg[1]}`,
+    auto: `px-4 py-2 w-full h-${height.auto[0]} sm:h-${height.auto[1]}`,
   }
 
   switch (shape) {
     case "square":
-      return `w-${height[size]} h-${height[size]}`
+      return `w-${height[size][0]} h-${height[size][0]} sm:w-${height[size][1]} sm:h-${height[size][1]}`
     case "round":
-      return `w-${height[size]} h-${height[size]} rounded-full`
+      return `w-${height[size][0]} h-${height[size][0]} sm:w-${height[size][1]} sm:h-${height[size][1]} rounded-full`
 
     case "auto":
       return options[size]
