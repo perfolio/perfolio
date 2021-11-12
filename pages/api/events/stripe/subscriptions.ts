@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { Logger } from "@perfolio/pkg/logger"
 import { buffer } from "micro"
-import { PrismaClient, Role } from "@perfolio/pkg/integrations/prisma"
+import { PrismaClient } from "@perfolio/pkg/integrations/prisma"
 import { HttpError } from "@perfolio/pkg/util/errors"
 import { newId } from "@perfolio/pkg/id"
 
@@ -42,15 +42,6 @@ const requestValidation = z.object({
 })
 
 const prisma = new PrismaClient()
-
-const setRoles = async (prisma: PrismaClient, userId: string, roles: Role[]): Promise<void> => {
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      roles,
-    },
-  })
-}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const logger = new Logger({ name: "Stripe Webhook" })
@@ -99,32 +90,32 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
     }
 
-    let newRoles: Role[] = []
-    switch (authRole) {
-      case "sub_growth":
-        newRoles = [Role.SUB_GROWTH]
-        break
-      case "sub_pro":
-        newRoles = [Role.SUB_PRO]
-        break
-      default:
-        break
-    }
+    // let newRoles: Role[] = []
+    // switch (authRole) {
+    //   case "sub_growth":
+    //     newRoles = [Role.SUB_GROWTH]
+    //     break
+    //   case "sub_pro":
+    //     newRoles = [Role.SUB_PRO]
+    //     break
+    //   default:
+    //     break
+    // }
     /**
      * Act on the different types of events
      */
     switch (event.type) {
-      case "customer.subscription.created":
-        await setRoles(prisma, user.id, newRoles)
-        break
+      // case "customer.subscription.created":
+      //   await setRoles(prisma, user.id, newRoles)
+      //   break
 
-      case "customer.subscription.updated":
-        await setRoles(prisma, user.id, newRoles)
-        break
+      // case "customer.subscription.updated":
+      //   await setRoles(prisma, user.id, newRoles)
+      //   break
 
-      case "customer.subscription.deleted":
-        await setRoles(prisma, user.id, [])
-        break
+      // case "customer.subscription.deleted":
+      //   await setRoles(prisma, user.id, [])
+      //   break
 
       case "customer.subscription.trial_will_end":
         await prisma.notification.create({
