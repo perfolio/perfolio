@@ -33,15 +33,17 @@ export const Avatar: React.FC<AvatarProps> = ({
   const shape = square ? "rounded" : "rounded-full"
 
   return (
-    <Root
-      className={cn({
-        "w-6 h-6": size === "xs",
-        "w-8 h-8": size === "sm",
-        "w-10 h-10": size === "md",
-        "w-16 h-16": size === "lg",
-      })}
-    >
-      <Image src={src} className={shape} alt="Avatar" />
+    <Root>
+      <Image
+        src={src}
+        className={cn(shape, {
+          "w-6 h-6": size === "xs",
+          "w-8 h-8": size === "sm",
+          "w-10 h-10": size === "md",
+          "w-16 h-16": size === "lg",
+        })}
+        alt="Avatar"
+      />
       <Fallback
         className={cn(
           shape,

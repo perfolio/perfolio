@@ -63,8 +63,9 @@ export function AutoCompleteSelect<Option>({
   /**
    * All matches on our database
    */
-  const { search, isLoading } = useSearch({ fragment })
-  const options = search ?? []
+  const { search, isLoading } = useSearch(fragment)
+  console.log({ search })
+  const options = search?.documents.map((d) => d.content.asset) ?? []
   const selected = options.find((o) => o.isin === isin)
   const error = Array.isArray(errors[name])
     ? errors[name].join(", ")
@@ -83,7 +84,7 @@ export function AutoCompleteSelect<Option>({
       <div className="relative ">
         {state === State.Done ? (
           <div className="absolute inset-y-0 left-0 flex items-center w-10 h-10 p-2 overflow-hidden rounded-l pointer-events-none">
-            <Avatar src={selected?.asset.logo ?? ""} size="xs" />
+            <Avatar src={selected?.logo ?? ""} size="xs" />
           </div>
         ) : null}
 
@@ -111,7 +112,7 @@ export function AutoCompleteSelect<Option>({
             >
               {state === State.Done ? (
                 <div className="flex items-center justify-center w-full h-full">
-                  {selected?.asset.name}
+                  {selected?.ticker}
                 </div>
               ) : (
                 <input
@@ -174,10 +175,10 @@ export function AutoCompleteSelect<Option>({
                           )}
                         >
                           <Profile
-                            image={option.asset.logo}
-                            subtitle={option.asset.ticker}
-                            title={option.asset.name}
-                            tag={option.isin}
+                            image={option?.logo}
+                            subtitle={option?.ticker}
+                            title={option?.ticker}
+                            tag={option?.isin}
                           />
                         </button>
                       </li>

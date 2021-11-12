@@ -1,18 +1,39 @@
 import { useQuery } from "react-query"
-import { SearchQuery, SearchQueryVariables } from "@perfolio/pkg/api/graphql"
 
-import { client } from "../client"
-import { useAuth0 } from "@auth0/auth0-react"
-export const useSearch = (variables: SearchQueryVariables) => {
-  const { getAccessTokenSilently } = useAuth0()
+type Document = {
+  id: string
+  score: number
+  content: {
+    asset: {
+      id: string
+      isin: string
+      logo: string
+      ticker: string
+    }
+  }
+}
+type SearchResult = {
+  cache: {
+    key: string
+    hit: boolean
+  }
+  documents: Document[]
+  /**
+   * How long the request took in milliseconds
+   */
+  duration: number
+}
 
-  const { data, ...meta } = useQuery<SearchQuery, Error>(
-    ["search", variables],
-    async () => client(await getAccessTokenSilently()).search(variables),
+export const useSearch = (fragment: string) => {
+  const { data, ...meta } = useQuery<SearchResult, Error>(
+    ["search", fragment],
+    async () =>
+      fetch(`https://search.chronark.workers.dev/perfolio?q=${fragment}`).then((res) => res.json()),
     {
-      enabled: variables.fragment.length > 0,
+      enabled: fragment.length > 0,
     },
   )
+  console.log({ data })
 
-  return { search: data?.search, ...meta }
+  return { search: data, ...meta }
 }
