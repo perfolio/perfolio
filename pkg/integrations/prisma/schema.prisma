@@ -1,15 +1,15 @@
 datasource db {
-    provider          = "mysql"
-    url               = env("DATABASE_URL")
-    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-      referentialIntegrity = "prisma"
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
+    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+    referentialIntegrity = "prisma"
 
 
 }
 
 generator client {
-    provider = "prisma-client-js"
-      previewFeatures = ["referentialIntegrity"]
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 
 }
 
@@ -103,4 +103,9 @@ model Settings {
     defaultExchangeMic String
     user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId             String   @unique
+}
+
+model Newsletter {
+    email     String   @unique
+    createdAt DateTime @default(now())
 }

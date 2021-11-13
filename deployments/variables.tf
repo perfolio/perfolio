@@ -1,5 +1,3 @@
-
-
 variable "cloudflare" {
   description = "Cloudflare secrets"
   type = object({
