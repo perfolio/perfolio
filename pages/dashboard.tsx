@@ -130,14 +130,14 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
         <InlineTotalAssetChart portfolioId={id} />
       </Card.Content>
       <Card.Footer>
-        <Card.Footer.Status></Card.Footer.Status>
-        <Card.Footer.Actions>
+        <div className="sm:hidden block w-full space-y-4">
           {editMode ? (
             <>
-              <Button kind="secondary" type="button" onClick={() => setEditMode(false)}>
+              <Button size="auto" kind="secondary" type="button" onClick={() => setEditMode(false)}>
                 Cancel
               </Button>
               <Button
+                size="auto"
                 loading={submitting}
                 onClick={() =>
                   handleSubmit<z.infer<typeof validation>>(
@@ -164,7 +164,6 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                   )
                 }
                 kind="primary"
-                size="md"
                 type="submit"
                 disabled={submitting}
               >
@@ -173,10 +172,61 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
             </>
           ) : (
             <>
-              <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+              <Button size="auto" href={`/portfolio/${id}`}>
+                Go to portfolio
+              </Button>
             </>
           )}
-        </Card.Footer.Actions>
+        </div>
+        <div className="hidden sm:flex sm:w-full items-center justify-between">
+          <Card.Footer.Status></Card.Footer.Status>
+          <Card.Footer.Actions>
+            {editMode ? (
+              <>
+                <Button kind="secondary" type="button" onClick={() => setEditMode(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  loading={submitting}
+                  onClick={() =>
+                    handleSubmit<z.infer<typeof validation>>(
+                      ctx,
+                      async ({ title }) => {
+                        await new Promise((resolve) => setTimeout(resolve, 1000))
+                        console.log({ title })
+                        setEditMode(false)
+                        //  const res = await fetch("/api/subscribe", {
+                        //    headers: {
+                        //      "Content-Type": "application/json",
+                        //    },
+                        //    method: "POST",
+                        //    body: JSON.stringify({ email }),
+                        //  })
+                        //  if (res.status === 200) {
+                        //    setDone(true)
+                        //  } else {
+                        //    setFormError(await res.text())
+                        //  }
+                      },
+                      setSubmitting,
+                      setFormError,
+                    )
+                  }
+                  kind="primary"
+                  size="md"
+                  type="submit"
+                  disabled={submitting}
+                >
+                  Save
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+              </>
+            )}
+          </Card.Footer.Actions>
+        </div>
       </Card.Footer>
     </Card>
   )
