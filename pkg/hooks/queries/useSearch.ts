@@ -1,3 +1,4 @@
+import { Time } from "@perfolio/pkg/util/time"
 import { useQuery } from "react-query"
 
 type Document = {
@@ -32,6 +33,7 @@ export const useSearch = (fragment: string) => {
       fetch(`https://search.chronark.workers.dev/perfolio?q=${fragment}`).then((res) => res.json()),
     {
       enabled: fragment.length > 0,
+      cacheTime: Time.toSeconds("10m", { ms: true }),
     },
   )
   console.log({ data })
