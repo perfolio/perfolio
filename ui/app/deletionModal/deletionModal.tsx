@@ -2,6 +2,8 @@ import React, { MouseEvent } from "react"
 import { Button, Modal, Card, Text } from "@perfolio/ui/components"
 
 export interface DeletionModalProps {
+  title: string
+  description: string
   onCancel: (e?: MouseEvent<HTMLButtonElement>) => void | Promise<void>
   onDelete: (e?: MouseEvent<HTMLButtonElement>) => void | Promise<void>
 }
@@ -10,6 +12,8 @@ export interface DeletionModalProps {
  * Force the user to delete or cancel
  */
 export const DeletionModal: React.FC<DeletionModalProps> = ({
+  title,
+  description,
   onCancel,
   onDelete,
 }): JSX.Element => {
@@ -18,10 +22,10 @@ export const DeletionModal: React.FC<DeletionModalProps> = ({
       <div>
         <Card>
           <Card.Header>
-            <Card.Header.Title title="Do you really want to delete the portfolio?" />
+            <Card.Header.Title title={title} />
           </Card.Header>
           <Card.Content>
-            <Text>The given portfolio will be irrevocably deleted.</Text>
+            <Text>{description}</Text>
           </Card.Content>
           <Card.Footer>
             <Card.Footer.Status>

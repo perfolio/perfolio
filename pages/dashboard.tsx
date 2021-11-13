@@ -38,6 +38,8 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
     <Card>
       {deletionModalVisible ? (
         <DeletionModal
+          title={'Do you really want to delete "' + name + '"'}
+          description={'The portfolio called "' + name + '" will be irrevocably deleted.'}
           onCancel={() => setDeletionModalVisible(false)}
           onDelete={() => setDeletionModalVisible(false)}
         />
