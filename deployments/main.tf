@@ -7,9 +7,6 @@ provider "digitalocean" {
   token = var.digitalocean_token
 }
 
-module "digitalocean" {
-  source = "./digitalocean"
-}
 
 
 provider "vercel" {
