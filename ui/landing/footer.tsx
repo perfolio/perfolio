@@ -5,6 +5,7 @@ import { z } from "zod"
 import Link from "next/link"
 import { Button, Text } from "@perfolio/ui/components"
 import { useI18n } from "@perfolio/pkg/i18n"
+import { useSubscribeToNewsletter } from "../../pkg/hooks/mutations/subscribe"
 /* eslint-disable-next-line */
 export interface FooterProps {}
 
@@ -90,9 +91,10 @@ export const Footer = () => {
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
+  const subscribe = useSubscribeToNewsletter()
 
   return (
-    <footer className="bg-black">
+    <footer id="footer" className="bg-black">
       <div className="container px-4 py-10 mx-auto md:py-12 lg:py-16 xl:py-20 xl:px-0">
         <div className="grid row-gap-10 mb-8 lg:grid-cols-6">
           <div className="grid grid-cols-1 gap-8 lg:col-span-4 md:grid-cols-4">
@@ -144,18 +146,14 @@ export const Footer = () => {
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
                       async ({ email }) => {
-                        const res = await fetch("/api/subscribe", {
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          method: "POST",
-                          body: JSON.stringify({ email }),
-                        })
-                        if (res.status === 200) {
-                          setDone(true)
-                        } else {
-                          setFormError(res.body)
-                        }
+                        await subscribe
+                          .mutateAsync({ email })
+                          .catch((err) => {
+                            setFormError(err.message)
+                          })
+                          .finally(() => {
+                            setDone(true)
+                          })
                       },
                       setSubmitting,
                       setFormError,
