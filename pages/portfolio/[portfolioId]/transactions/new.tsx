@@ -55,6 +55,8 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     })
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  console.log(ctx.getValues())
   return (
     <AppLayout
       sidebar={

@@ -15,9 +15,6 @@ export class Prisma extends DataSource {
   public get transaction() {
     return this.client.transaction
   }
-  public get stockMap() {
-    return this.client.stockMap
-  }
   public get user() {
     return this.client.user
   }

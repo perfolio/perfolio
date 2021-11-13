@@ -31,6 +31,8 @@ export enum Access {
 export type Asset = {
   /** Globally unique id */
   id: Scalars["ID"]
+  /** Human readable name */
+  name: Scalars["String"]
 }
 
 /** The value and volume of an asset over time. */
@@ -542,6 +544,7 @@ export type AssetResolvers<
 > = ResolversObject<{
   __resolveType: TypeResolveFn<"CompanyStock" | "Crypto", ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
 }>
 
 export type AssetHistoryResolvers<
