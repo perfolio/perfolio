@@ -101,9 +101,9 @@ const iconSize = (size: Size): string => {
 const text = (size: Size): string => {
   const options: Record<Size, string> = {
     sm: "text-sm",
-    md: "text-medium",
-    lg: "text-medium font-medium",
-    auto: "text-medium",
+    md: "text-base",
+    lg: "text-base font-medium",
+    auto: "text-base",
   }
   return options[size]
 }
