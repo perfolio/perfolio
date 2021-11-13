@@ -42,7 +42,7 @@ export const Header: React.FC = (): JSX.Element => {
     menu.items.push({
       label: "Portfolios",
       icon: <BookOpenIcon />,
-      href: "/",
+      href: "/dashboard",
     })
   }
 

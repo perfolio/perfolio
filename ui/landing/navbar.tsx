@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Logo, Button } from "@perfolio/ui/components"
 import { Transition } from "@headlessui/react"
 import NextLink from "next/link"
@@ -11,12 +11,18 @@ export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false)
 
   const handleScroll = () => {
-    setScrolled(window.pageYOffset > 450)
+    setScrolled(window.scrollY > 450)
   }
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", handleScroll)
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", handleScroll)
+    }
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   return (
     <nav className="w-screen px-8">
@@ -49,12 +55,22 @@ export const Navbar: React.FC = () => {
           className="sm:hidden"
           show={scrolled}
           enter="transition ease-in-out duration-500 transform"
-          enterFrom="translate-x-full opacity-0"
-          enterTo="translate-x-0 opacity-100"
+          enterFrom="-translate-y-full opacity-0"
+          enterTo="translate-y-0 opacity-100"
           leave="transition ease-in-out duration-500 transform"
-          leaveFrom="translate-x-0 opacity-100"
-          leaveTo="translate-x-full opacity-0"
-        ></Transition>
+          leaveFrom="translate-y-0 opacity-100"
+          leaveTo="-translate-y-full opacity-0"
+        >
+          {user ? (
+            <Button href="/dashboard" kind="primary" size="lg">
+              Go to dashboard
+            </Button>
+          ) : (
+            <Button size="auto" kind="cta" href="/dashboard">
+              {t("signInButton")}
+            </Button>
+          )}
+        </Transition>
       </div>
     </nav>
   )
