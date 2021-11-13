@@ -1,6 +1,8 @@
 import { env } from "@chronark/env"
 import { HttpError, JsonUnmarshalError } from "@perfolio/pkg/util/errors"
 import { Logger } from "@perfolio/pkg/logger"
+
+// import fetch from "node-fetch"
 /**
  * Generic api request to be extended by other request types.
  */

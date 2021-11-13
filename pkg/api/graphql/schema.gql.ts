@@ -119,6 +119,11 @@ export default gql`
     Globally unique id
     """
     id: ID!
+
+    """
+    Human readable name
+    """
+    name: String!
   }
 
   """

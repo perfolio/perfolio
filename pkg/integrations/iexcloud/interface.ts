@@ -69,7 +69,7 @@ export const GetCompanyResponseValidator = z.object({
    * wt - Warrant
    * empty - Other.
    */
-  issueType: z.enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt"]),
+  issueType: z.enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt", ""]),
   /**
    * Refers to the sector the company belongs to.
    */

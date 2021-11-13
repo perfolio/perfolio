@@ -31,6 +31,8 @@ export enum Access {
 export type Asset = {
   /** Globally unique id */
   id: Scalars["ID"]
+  /** Human readable name */
+  name: Scalars["String"]
 }
 
 /** The value and volume of an asset over time. */
@@ -542,6 +544,7 @@ export type AssetResolvers<
 > = ResolversObject<{
   __resolveType: TypeResolveFn<"CompanyStock" | "Crypto", ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
 }>
 
 export type AssetHistoryResolvers<
@@ -844,11 +847,11 @@ export type DeleteTransactionMutationVariables = Exact<{
 
 export type DeleteTransactionMutation = { __typename?: "Mutation"; deleteTransaction: string }
 
-export type SubscribeToNewsletterMutationMutationVariables = Exact<{
+export type SubscribeToNewsletterMutationVariables = Exact<{
   email: Scalars["String"]
 }>
 
-export type SubscribeToNewsletterMutationMutation = {
+export type SubscribeToNewsletterMutation = {
   __typename?: "Mutation"
   subscribeToNewsletter: string
 }
@@ -1073,8 +1076,8 @@ export const DeleteTransactionDocument = gql`
     deleteTransaction(transactionId: $transactionId)
   }
 `
-export const SubscribeToNewsletterMutationDocument = gql`
-  mutation subscribeToNewsletterMutation($email: String!) {
+export const SubscribeToNewsletterDocument = gql`
+  mutation subscribeToNewsletter($email: String!) {
     subscribeToNewsletter(email: $email)
   }
 `
@@ -1269,14 +1272,15 @@ export function getSdk<C>(requester: Requester<C>) {
         options,
       )
     },
-    subscribeToNewsletterMutation(
-      variables: SubscribeToNewsletterMutationMutationVariables,
+    subscribeToNewsletter(
+      variables: SubscribeToNewsletterMutationVariables,
       options?: C,
-    ): Promise<SubscribeToNewsletterMutationMutation> {
-      return requester<
-        SubscribeToNewsletterMutationMutation,
-        SubscribeToNewsletterMutationMutationVariables
-      >(SubscribeToNewsletterMutationDocument, variables, options)
+    ): Promise<SubscribeToNewsletterMutation> {
+      return requester<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>(
+        SubscribeToNewsletterDocument,
+        variables,
+        options,
+      )
     },
     updateSettings(
       variables: UpdateSettingsMutationVariables,

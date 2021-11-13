@@ -14,7 +14,8 @@
     "tsc": "tsc --pretty",
     "prepare": "husky install && pnpm prebuild",
     "test": "echo 'currently broken'",
-    "env:pull": "npx vercel env pull && mv .env .env.local"
+    "env:pull": "npx vercel env pull",
+    "db:tunnel": "pscale connect prod main --port 33333"
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.8.0",
@@ -76,11 +77,14 @@
     "autoprefixer": "^10.4.0",
     "change-case": "^4.1.2",
     "commitlint": "^13.2.1",
+    "concurrently": "^6.4.0",
+    "esbuild": "^0.13.13",
     "eslint": "^7.32.0",
     "eslint-config-next": "12.0.1",
     "husky": "^7.0.4",
     "jest": "^27.3.1",
     "lint-staged": "^11.2.6",
+    "node-fetch": "^3.1.0",
     "postcss": "^8.3.11",
     "prettier": "^2.4.1",
     "prisma": "^3.3.0",
