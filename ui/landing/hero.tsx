@@ -6,6 +6,7 @@ import { z } from "zod"
 // import Link from "next/link"
 import { Button, Text } from "@perfolio/ui/components"
 import { useAuth0 } from "@auth0/auth0-react"
+import { useSubscribeToNewsletter } from "@perfolio/pkg/hooks"
 
 const validation = z.object({
   email: z.string().email(),
@@ -21,6 +22,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
+  const subscribe = useSubscribeToNewsletter()
   return (
     <div className="flex flex-col items-center w-full space-y-4 md:space-y-8 xl:space-y-12 ">
       <h1 className="py-3 -my-3 text-3xl font-extrabold text-transparent sm:text-center bg-clip-text bg-gradient-to-tr from-black to-gray-900 sm:text-5xl lg:text-6xl">
@@ -55,18 +57,14 @@ export const HeroSection: React.FC = (): JSX.Element => {
               handleSubmit<z.infer<typeof validation>>(
                 ctx,
                 async ({ email }) => {
-                  const res = await fetch("/api/subscribe", {
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    method: "POST",
-                    body: JSON.stringify({ email }),
-                  })
-                  if (res.status === 200) {
-                    setDone(true)
-                  } else {
-                    setFormError(await res.text())
-                  }
+                  await subscribe
+                    .mutateAsync({ email })
+                    .catch((err) => {
+                      setFormError(err.message)
+                    })
+                    .finally(() => {
+                      setDone(true)
+                    })
                 },
                 setSubmitting,
                 setFormError,

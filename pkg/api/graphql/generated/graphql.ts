@@ -847,11 +847,11 @@ export type DeleteTransactionMutationVariables = Exact<{
 
 export type DeleteTransactionMutation = { __typename?: "Mutation"; deleteTransaction: string }
 
-export type SubscribeToNewsletterMutationMutationVariables = Exact<{
+export type SubscribeToNewsletterMutationVariables = Exact<{
   email: Scalars["String"]
 }>
 
-export type SubscribeToNewsletterMutationMutation = {
+export type SubscribeToNewsletterMutation = {
   __typename?: "Mutation"
   subscribeToNewsletter: string
 }
@@ -1076,8 +1076,8 @@ export const DeleteTransactionDocument = gql`
     deleteTransaction(transactionId: $transactionId)
   }
 `
-export const SubscribeToNewsletterMutationDocument = gql`
-  mutation subscribeToNewsletterMutation($email: String!) {
+export const SubscribeToNewsletterDocument = gql`
+  mutation subscribeToNewsletter($email: String!) {
     subscribeToNewsletter(email: $email)
   }
 `
@@ -1272,14 +1272,15 @@ export function getSdk<C>(requester: Requester<C>) {
         options,
       )
     },
-    subscribeToNewsletterMutation(
-      variables: SubscribeToNewsletterMutationMutationVariables,
+    subscribeToNewsletter(
+      variables: SubscribeToNewsletterMutationVariables,
       options?: C,
-    ): Promise<SubscribeToNewsletterMutationMutation> {
-      return requester<
-        SubscribeToNewsletterMutationMutation,
-        SubscribeToNewsletterMutationMutationVariables
-      >(SubscribeToNewsletterMutationDocument, variables, options)
+    ): Promise<SubscribeToNewsletterMutation> {
+      return requester<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>(
+        SubscribeToNewsletterDocument,
+        variables,
+        options,
+      )
     },
     updateSettings(
       variables: UpdateSettingsMutationVariables,

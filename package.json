@@ -15,7 +15,7 @@
     "prepare": "husky install && pnpm prebuild",
     "test": "echo 'currently broken'",
     "env:pull": "npx vercel env pull",
-    "db:tunnel": "concurrently \"pscale connect prod init --port 3309\" \"pscale connect prod shadow --port 3310\""
+    "db:tunnel": "pscale connect prod main --port 33333"
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.8.0",
