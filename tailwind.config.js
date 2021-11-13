@@ -59,6 +59,7 @@ module.exports = {
 
     extend: {
       boxShadow: {
+        radial: "0 0 20px -5px rgba(0, 0, 0, 0.25)",
         cta: "0 10px 20px -5px rgba(53, 72, 200, 0.4)",
         ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
       },

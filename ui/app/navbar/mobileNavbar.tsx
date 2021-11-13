@@ -3,8 +3,7 @@ import { MobileNavLink } from "./mobileNavLink"
 import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
 import { DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
-import { Link, Logo, Icon } from "@perfolio/ui/components"
-import { Transition } from "@headlessui/react"
+import { Link, Logo, Icon, Drawer } from "@perfolio/ui/components"
 import NextLink from "next/link"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 import { useAuth0 } from "@auth0/auth0-react"
@@ -26,16 +25,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         <button className="w-6 h-6 cursor-pointer text-gray-50" onClick={() => setOpen(!open)}>
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </button>
-        <Transition
-          className="absolute top-0 left-0 z-20 w-full mt-20 bg-white rounded shadow-xl"
-          show={open}
-          enter="transition duration-500 ease-out"
-          enterFrom="transform opacity-0 translate-y-full"
-          enterTo="transform opacity-100 translate-y-0"
-          leave="transition duration-500 ease-out"
-          leaveFrom="transform opacity-100 translate-y-0"
-          leaveTo="transform  opacity-0 translate-y-full"
-        >
+        <Drawer open={open} setOpen={setOpen}>
           <ul className="py-1 transition duration-500 ease-out shadow opacity-100 ">
             {items.map((item) => (
               <li key={item.label}>
@@ -68,7 +58,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               </button>
             </li>
           </ul>
-        </Transition>
+        </Drawer>
       </div>
     </nav>
   )
