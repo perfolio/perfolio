@@ -38,6 +38,7 @@ specifiers:
   change-case: ^4.1.2
   classnames: ^2.3.1
   commitlint: ^13.2.1
+  concurrently: ^6.4.0
   esbuild: ^0.13.13
   eslint: ^7.32.0
   eslint-config-next: 12.0.1
@@ -133,6 +134,7 @@ devDependencies:
   autoprefixer: 10.4.0_postcss@8.3.11
   change-case: 4.1.2
   commitlint: 13.2.1
+  concurrently: 6.4.0
   esbuild: 0.13.13
   eslint: 7.32.0
   eslint-config-next: 12.0.1_b254488bed7690859822a81f0a41c857
@@ -3994,6 +3996,21 @@ packages:
   /concat-map/0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
 
+  /concurrently/6.4.0:
+    resolution: {integrity: sha512-HZ3D0RTQMH3oS4gvtYj1P+NBc6PzE2McEra6yEFcQKrUQ9HvtTGU4Dbne083F034p+LRb7kWU0tPRNvSGs1UCQ==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      date-fns: 2.25.0
+      lodash: 4.17.21
+      rxjs: 6.6.7
+      spawn-command: 0.0.2-1
+      supports-color: 8.1.1
+      tree-kill: 1.2.2
+      yargs: 16.2.0
+    dev: true
+
   /console-browserify/1.2.0:
     resolution: {integrity: sha512-ZMkYO/LkF17QvCPqM0gxw8yUzigAOZOSWSHg91FH6orS7vcEj5dVZTidN2fQ14yBSdg97RqhSNwLUXInd52OTA==}
     dev: false
@@ -4295,6 +4312,11 @@ packages:
 
   /date-fns/1.30.1:
     resolution: {integrity: sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==}
+    dev: true
+
+  /date-fns/2.25.0:
+    resolution: {integrity: sha512-ovYRFnTrbGPD4nqaEqescPEv1mNwvt+UTqI3Ay9SzNtey9NZnYu6E2qCcBBgJ6/2VF1zGGygpyTDITqpQQ5e+w==}
+    engines: {node: '>=0.11'}
     dev: true
 
   /debounce/1.2.1:
@@ -9194,6 +9216,10 @@ packages:
       whatwg-url: 7.1.0
     dev: false
 
+  /spawn-command/0.0.2-1:
+    resolution: {integrity: sha1-YvXpRmmBwbeW3Fkpk34RycaSG9A=}
+    dev: true
+
   /spdx-correct/3.1.1:
     resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}
     dependencies:
@@ -9752,6 +9778,11 @@ packages:
 
   /traverse/0.6.6:
     resolution: {integrity: sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=}
+    dev: true
+
+  /tree-kill/1.2.2:
+    resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
+    hasBin: true
     dev: true
 
   /trim-newlines/3.0.1:

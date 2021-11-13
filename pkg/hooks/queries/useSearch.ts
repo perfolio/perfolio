@@ -6,6 +6,7 @@ type Document = {
   content: {
     asset: {
       id: string
+      name: string
       isin: string
       logo: string
       ticker: string

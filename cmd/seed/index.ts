@@ -1,59 +1,65 @@
 import { getCompany, getIsinMapping, getLogo } from "@perfolio/pkg/integrations/iexcloud"
 import fs from "fs"
-import fetch from "node-fetch"
+// import fetch from "node-fetch"
 
 async function main() {
-  const allIsins = JSON.parse(fs.readFileSync("cmd/seed/isins.json").toString()) as string[]
-  allIsins.sort(() => 0.5 - Math.random())
+  let isins = JSON.parse(fs.readFileSync("cmd/seed/isins.json").toString()) as string[]
+  const assets = JSON.parse(fs.readFileSync("cmd/seed/assets.json").toString()) as {
+    asset: { isin: string }
+  }[]
+  const existingIsins = Object.values(assets).map((a) => a.asset.isin)
+
+  isins = isins.filter((isin) => !existingIsins.includes(isin))
+  console.log({ isins })
   const start = Date.now()
-  const BATCH_SIZE = 4
-  for (let i = 0; i < allIsins.length; i += BATCH_SIZE) {
-    const isins = allIsins.slice(i, Math.min(allIsins.length - 1, i + BATCH_SIZE))
 
-    await Promise.all(
-      isins.map(async (isin) => {
-        const isinMap = await getIsinMapping(isin)
-        const ticker = isinMap.find(({ symbol }) => !symbol.includes("-"))?.symbol
+  for (let i = 0; i < isins.length; i++) {
+    const isin = isins[i]
 
-        if (!ticker) {
-          return
-        }
+    const isinMap = await getIsinMapping(isin)
+    const ticker = isinMap.find(({ symbol }) => !symbol.includes("-"))?.symbol
 
-        const [company, logo] = await Promise.all([getCompany(ticker), getLogo(ticker)])
+    if (!ticker) {
+      continue
+    }
 
-        const document: {
-          asset: {
-            id: string
-            isin: string
-            logo: string
-            ticker: string
-          }
-          meta: Record<string, unknown>
-        } = {
-          asset: {
-            id: isin,
-            isin,
-            logo: logo.url,
-            ticker,
-          },
+    const [company, logo] = await Promise.all([getCompany(ticker), getLogo(ticker)])
 
-          meta: {
-            ...company,
-          },
-        }
+    const document: {
+      asset: {
+        id: string
+        isin: string
+        logo: string
+        ticker: string
+        name: string
+      }
+      meta: Record<string, unknown>
+    } = {
+      asset: {
+        id: isin,
+        name: company.companyName ?? "",
+        isin,
+        logo: logo.url,
+        ticker,
+      },
 
-        const res = await fetch("https://search-l1vg.onrender.com/ingest/perfolio", {
-          method: "POST",
-          body: JSON.stringify(document),
-        })
-        console.log(
-          ((i / allIsins.length) * 100).toFixed(2),
-          "% |",
-          isin,
-          `[ ${((Date.now() - start) / i).toFixed(2)} ms per op ]`,
-          await res.text(),
-        )
-      }),
+      meta: {
+        ...company,
+      },
+    }
+    assets.push(document)
+    fs.writeFileSync("cmd/seed/assets.json", JSON.stringify(assets))
+
+    // const res = await fetch("https://search-l1vg.onrender.com/ingest/perfolio", {
+    //   method: "POST",
+    //   body: JSON.stringify(document),
+    // })
+    console.log(
+      ((i / isins.length) * 100).toFixed(2),
+      "% |",
+      isin,
+      `[ ${((Date.now() - start) / i).toFixed(2)} ms per op ]`,
+      // await res.text(),
     )
   }
 }

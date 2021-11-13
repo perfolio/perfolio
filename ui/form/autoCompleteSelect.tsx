@@ -177,7 +177,7 @@ export function AutoCompleteSelect<Option>({
                           <Profile
                             image={option?.logo}
                             subtitle={option?.ticker}
-                            title={option?.ticker}
+                            title={option?.name}
                             tag={option?.isin}
                           />
                         </button>

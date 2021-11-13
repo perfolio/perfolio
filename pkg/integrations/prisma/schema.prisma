@@ -104,9 +104,3 @@ model Settings {
     user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId             String   @unique
 }
-
-model StockMap {
-    ticker String @id
-    isin   String @unique
-    name   String @unique
-}
