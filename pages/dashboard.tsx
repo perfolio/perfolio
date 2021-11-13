@@ -50,7 +50,14 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               formError={formError}
               className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
             >
-              <Field.Input name="title" type="text" label="Title" defaultValue={name} />
+              <Field.Input
+                name="title"
+                type="text"
+                label="Title"
+                hideLabel={true}
+                autoFocus={true}
+                defaultValue={name}
+              />
             </Form>
           ) : (
             <Tooltip

@@ -28,6 +28,7 @@ export interface InputProps {
   help?: React.ReactNode
 
   placeholder?: string
+  autoFocus?: boolean
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -40,6 +41,7 @@ export const Input: React.FC<InputProps> = ({
   defaultValue,
   help,
   placeholder,
+  autoFocus = false,
 }) => {
   const {
     register,
@@ -80,6 +82,7 @@ export const Input: React.FC<InputProps> = ({
           {...register(name)}
           type={type}
           placeholder={placeholder}
+          autoFocus={autoFocus}
           className={classNames(
             "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
             {
