@@ -59,6 +59,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                 hideLabel={true}
                 autoFocus={true}
                 defaultValue={name}
+                textAlignment="left"
               />
             </Form>
           ) : (

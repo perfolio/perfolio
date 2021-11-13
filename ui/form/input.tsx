@@ -4,6 +4,9 @@ import classNames from "classnames"
 import { ExclamationCircleIcon } from "@heroicons/react/outline"
 import cn from "classnames"
 import { Tooltip } from "@perfolio/ui/components"
+
+type TextAlignment = "left" | "center" | "right"
+
 export interface InputProps {
   disabled?: boolean
   /**
@@ -29,6 +32,7 @@ export interface InputProps {
 
   placeholder?: string
   autoFocus?: boolean
+  textAlignment?: TextAlignment
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -42,6 +46,7 @@ export const Input: React.FC<InputProps> = ({
   help,
   placeholder,
   autoFocus = false,
+  textAlignment = "center",
 }) => {
   const {
     register,
@@ -84,7 +89,12 @@ export const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           autoFocus={autoFocus}
           className={classNames(
-            "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
+            "h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
+            {
+              "text-left": textAlignment === "left",
+              "text-center": textAlignment === "center",
+              "text-right": textAlignment === "right",
+            },
             {
               "border-gray-200 focus:border-gray-700 focus:bg-gray-50": !error,
               "border-error focus:border-error-dark focus:bg-error-light": error,
