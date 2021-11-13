@@ -1,5 +1,3 @@
-
-
 variable "cloudflare" {
   description = "Cloudflare secrets"
   type = object({
@@ -9,6 +7,11 @@ variable "cloudflare" {
   })
   sensitive = true
 
+}
+
+variable "digitalocean_token" {
+  type      = string
+  sensitive = true
 }
 
 variable "vercel_token" {
