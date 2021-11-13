@@ -9,10 +9,6 @@ variable "cloudflare" {
 
 }
 
-variable "digitalocean_token" {
-  type      = string
-  sensitive = true
-}
 
 variable "vercel_token" {
   type      = string

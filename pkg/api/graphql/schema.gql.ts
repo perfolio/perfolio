@@ -453,28 +453,6 @@ export default gql`
     value: Float!
   }
   """
-  The found company from a user search.
-  """
-  type SearchResult {
-    """
-    For reference
-    """
-    assetId: String!
-    """
-    All company data itself
-    """
-    asset: ExchangeTradedAsset!
-    """
-    The isin of the company
-    """
-    isin: ID!
-    """
-    The ticker of the company
-    """
-    ticker: ID!
-  }
-
-  """
   Available queries
   """
   type Query {
@@ -552,18 +530,6 @@ export default gql`
     Load a user by their id
     """
     user("The user's id" userId: ID!): User
-
-    """
-    Return matching isins for a given search string
-
-    The fragment will be compared against the ticker and company name.
-    """
-    search(
-      """
-      A partial search from the user.
-      """
-      fragment: String!
-    ): [SearchResult!]!
   }
 
   """

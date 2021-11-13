@@ -247,12 +247,6 @@ export type Query = {
   portfolio?: Maybe<Portfolio>
   /** Get the risk free rates for a given interval */
   riskFreeRates: Array<ValueAtTime>
-  /**
-   * Return matching isins for a given search string
-   *
-   * The fragment will be compared against the ticker and company name.
-   */
-  search: Array<SearchResult>
   /** Return the daily closing prices for a stock at a specific exchange */
   stockPricesAtExchange: Array<ValueAtTime>
   /** Load a user by their id */
@@ -277,11 +271,6 @@ export type QueryRiskFreeRatesArgs = {
 }
 
 /** Available queries */
-export type QuerySearchArgs = {
-  fragment: Scalars["String"]
-}
-
-/** Available queries */
 export type QueryStockPricesAtExchangeArgs = {
   end?: Maybe<Scalars["Timestamp"]>
   mic: Scalars["String"]
@@ -292,19 +281,6 @@ export type QueryStockPricesAtExchangeArgs = {
 /** Available queries */
 export type QueryUserArgs = {
   userId: Scalars["ID"]
-}
-
-/** The found company from a user search. */
-export type SearchResult = {
-  __typename?: "SearchResult"
-  /** All company data itself */
-  asset: ExchangeTradedAsset
-  /** For reference */
-  assetId: Scalars["String"]
-  /** The isin of the company */
-  isin: Scalars["ID"]
-  /** The ticker of the company */
-  ticker: Scalars["ID"]
 }
 
 /** Settings that can be customized by the user such as preferences as well as defaults */
@@ -498,7 +474,6 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>
   Portfolio: ResolverTypeWrapper<Portfolio>
   Query: ResolverTypeWrapper<{}>
-  SearchResult: ResolverTypeWrapper<SearchResult>
   Settings: ResolverTypeWrapper<Settings>
   String: ResolverTypeWrapper<Scalars["String"]>
   Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>
@@ -527,7 +502,6 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {}
   Portfolio: Portfolio
   Query: {}
-  SearchResult: SearchResult
   Settings: Settings
   String: Scalars["String"]
   Timestamp: Scalars["Timestamp"]
@@ -689,12 +663,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryRiskFreeRatesArgs, "begin" | "interval">
   >
-  search?: Resolver<
-    Array<ResolversTypes["SearchResult"]>,
-    ParentType,
-    ContextType,
-    RequireFields<QuerySearchArgs, "fragment">
-  >
   stockPricesAtExchange?: Resolver<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
@@ -707,17 +675,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryUserArgs, "userId">
   >
-}>
-
-export type SearchResultResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes["SearchResult"] = ResolversParentTypes["SearchResult"],
-> = ResolversObject<{
-  asset?: Resolver<ResolversTypes["ExchangeTradedAsset"], ParentType, ContextType>
-  assetId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  isin?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  ticker?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
 export type SettingsResolvers<
@@ -791,7 +748,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>
   Portfolio?: PortfolioResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
-  SearchResult?: SearchResultResolvers<ContextType>
   Settings?: SettingsResolvers<ContextType>
   Timestamp?: GraphQLScalarType
   Transaction?: TransactionResolvers<ContextType>
@@ -990,21 +946,6 @@ export type RelativePortfolioHistoryQuery = {
     | undefined
 }
 
-export type SearchQueryVariables = Exact<{
-  fragment: Scalars["String"]
-}>
-
-export type SearchQuery = {
-  __typename?: "Query"
-  search: Array<{
-    __typename: "SearchResult"
-    isin: string
-    asset:
-      | { __typename: "CompanyStock"; logo: string; ticker: string; name: string }
-      | { __typename: "Crypto"; logo: string; ticker: string; name: string }
-  }>
-}
-
 export type UserQueryVariables = Exact<{
   userId: Scalars["ID"]
 }>
@@ -1193,20 +1134,6 @@ export const RelativePortfolioHistoryDocument = gql`
     }
   }
 `
-export const SearchDocument = gql`
-  query search($fragment: String!) {
-    search(fragment: $fragment) {
-      __typename
-      isin
-      asset {
-        __typename
-        logo
-        ticker
-        name
-      }
-    }
-  }
-`
 export const UserDocument = gql`
   query user($userId: ID!) {
     user(userId: $userId) {
@@ -1345,9 +1272,6 @@ export function getSdk<C>(requester: Requester<C>) {
         variables,
         options,
       )
-    },
-    search(variables: SearchQueryVariables, options?: C): Promise<SearchQuery> {
-      return requester<SearchQuery, SearchQueryVariables>(SearchDocument, variables, options)
     },
     user(variables: UserQueryVariables, options?: C): Promise<UserQuery> {
       return requester<UserQuery, UserQueryVariables>(UserDocument, variables, options)
