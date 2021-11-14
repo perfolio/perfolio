@@ -3,18 +3,29 @@ import { Context } from "../../context"
 import { Time } from "@perfolio/pkg/util/time"
 import { getTickerFromIsin } from "../../util/getTickerFromIsin"
 import { Transaction as TransactionModel } from "@perfolio/pkg/integrations/prisma"
+import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
+
 type AssetHistoryWithoutAsset = Omit<AssetHistory, "asset"> & { assetId: string }
 
 export const getAbsolutePortfolioHistory = async (
   ctx: Context,
   portfolioId: string,
 ): Promise<AssetHistoryWithoutAsset[]> => {
+  const cache = new ApolloCache()
+
   const portfolio = await ctx.prisma.portfolio.findUnique({
     where: { id: portfolioId },
     include: { transactions: true },
   })
   if (!portfolio) {
     throw new Error(`Portfolio not found: ${portfolioId}`)
+  }
+
+  const key = new Key(portfolio)
+
+  const cached = await cache.get<AssetHistoryWithoutAsset[]>(key)
+  if (cached) {
+    return cached
   }
 
   await ctx.authorizeUser(({ sub }) => sub === portfolio.userId)
@@ -58,7 +69,6 @@ export const getAbsolutePortfolioHistory = async (
   Object.keys(history).forEach((ticker, i) => {
     prices[ticker] = priceResponse[i]
   })
-
   /**
    * Build a timeline for each asset for each day.
    */
@@ -90,10 +100,14 @@ export const getAbsolutePortfolioHistory = async (
       })
     }
   }
-  return Object.entries(history).map(([assetId, history]) => ({
+
+  const value = Object.entries(history).map(([assetId, history]) => ({
     assetId,
     history,
   }))
+
+  await cache.set("2h", { key, value })
+  return value
 }
 
 /**
