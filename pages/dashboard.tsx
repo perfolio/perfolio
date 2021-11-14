@@ -45,12 +45,23 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
   return (
     <>
       <Confirmation
+        title="Delete Portfolio"
+        severity="critical"
+        confirmLabel="Delete"
         open={confirmOpen}
         setOpen={setConfirmOpen}
         onCancel={() => alert("cancel")}
         onConfirm={() => alert("confirm")}
       >
-        <Text>{`Do you really want to delete "${name}"?`}</Text>
+        <Text>
+          This will <strong>delete all your transactions</strong> of your portfolio.
+        </Text>
+        <Text>
+          Are you sure you want to delete <strong>{name}</strong>?
+        </Text>
+        <p className="p-2 border rounded bg-error-light text-error border-error bg-opacity-20">
+          <strong>Warning:</strong> This action is not reversible, Please be certain.
+        </p>
       </Confirmation>
       <Card>
         <Card.Header>
