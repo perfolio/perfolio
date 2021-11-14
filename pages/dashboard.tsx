@@ -8,10 +8,17 @@ import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { DotsVerticalIcon, PencilAltIcon, TrashIcon, XIcon } from "@heroicons/react/outline"
+import {
+  DocumentAddIcon,
+  DotsVerticalIcon,
+  PencilAltIcon,
+  TrashIcon,
+  XIcon,
+} from "@heroicons/react/outline"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
 import { DeletionModal } from "@perfolio/ui/app/deletionModal"
 import { Popover, Transition } from "@headlessui/react"
+import { EmptyState } from "@perfolio/ui/components/emptyState"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
@@ -262,6 +269,9 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
         {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
           <PortfolioCard key={p.id} {...p} />
         ))}
+        <EmptyState onClick={() => alert("test")} icon={<DocumentAddIcon />}>
+          <Text>Add another portfolio</Text>
+        </EmptyState>
       </div>
     </AppLayout>
   )

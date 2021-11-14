@@ -1,18 +1,19 @@
-import { LinkProps, ButtonProps } from "./types"
-import { ButtonController } from "./buttonController"
-import { LinkController } from "./linkController"
+import { ButtonController, ButtonControllerProps } from "./buttonController"
+import { LinkController, LinkControllerProps } from "./linkController"
 
 /**
  * Typeguard to check if props are LinkProps.
  */
-function isLink(props: ButtonProps | LinkProps): props is LinkProps {
+function isLink(props: ButtonControllerProps | LinkControllerProps): props is LinkControllerProps {
   return "href" in props
 }
 
 /**
  * Typeguard to check if props are ButtonProps.
  */
-function isButton(props: ButtonProps | LinkProps): props is ButtonProps {
+function isButton(
+  props: ButtonControllerProps | LinkControllerProps,
+): props is ButtonControllerProps {
   return "onClick" in props
 }
 
@@ -26,7 +27,10 @@ function isButton(props: ButtonProps | LinkProps): props is ButtonProps {
  * @param element - A JSXElement to display to the user.
  * @returns The element wrapped by the correct controller.
  */
-export const wrap = (props: LinkProps | ButtonProps, element: JSX.Element): JSX.Element => {
+export const wrap = (
+  props: LinkControllerProps | ButtonControllerProps,
+  element: JSX.Element,
+): JSX.Element => {
   if (isButton(props)) {
     return <ButtonController onClick={props.onClick}>{element}</ButtonController>
   }
