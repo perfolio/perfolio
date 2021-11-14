@@ -3,7 +3,7 @@ import { usePortfolios } from "@perfolio/pkg/hooks"
 import { AppLayout } from "@perfolio/ui/app"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { Button, Card, Tooltip, Text, Icon } from "@perfolio/ui/components"
-import React, { Fragment, useState } from "react"
+import React, { useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
@@ -16,18 +16,19 @@ import {
   XIcon,
 } from "@heroicons/react/outline"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
-import { DeletionModal } from "@perfolio/ui/app/deletionModal"
-import { Popover, Transition } from "@headlessui/react"
+import { Confirmation } from "@perfolio/ui/components"
+import { Popover } from "@headlessui/react"
 import { EmptyState } from "@perfolio/ui/components/emptyState"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
   name,
+  primary,
 }): JSX.Element => {
   const [editMode, setEditMode] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
-  const [deletionModalVisible, setDeletionModalVisible] = useState(false)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const validation = z.object({
     title: z.string().nonempty(),
@@ -42,62 +43,63 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
   }
 
   return (
-    <Card>
-      {deletionModalVisible ? (
-        <DeletionModal
-          title={'Do you really want to delete "' + name + '"'}
-          description={'The portfolio called "' + name + '" will be irrevocably deleted.'}
-          onCancel={() => setDeletionModalVisible(false)}
-          onDelete={() => setDeletionModalVisible(false)}
-        />
-      ) : null}
-      <Card.Header>
-        <div className="flex items-center h-12 w-full">
-          {editMode ? (
-            <Form
-              ctx={ctx}
-              formError={formError}
-              className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
-            >
-              <Field.Input
-                name="title"
-                type="text"
-                label="Title"
-                hideLabel={true}
-                autoFocus={true}
-                defaultValue={name}
-                textAlignment="left"
-              />
-            </Form>
-          ) : (
-            <Tooltip
-              trigger={
-                <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
-                  <Card.Header.Title title={name} />
-                </button>
-              }
-            >
-              <Text>Double click the title to edit</Text>
-            </Tooltip>
-          )}
-        </div>
-        <div>
+    <>
+      <Confirmation
+        open={confirmOpen}
+        setOpen={setConfirmOpen}
+        onCancel={() => alert("cancel")}
+        onConfirm={() => alert("confirm")}
+      >
+        <Text>{`Do you really want to delete "${name}"?`}</Text>
+      </Confirmation>
+      <Card>
+        <Card.Header>
+          <div className="flex items-center w-full h-12">
+            {editMode ? (
+              <Form
+                ctx={ctx}
+                formError={formError}
+                className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
+              >
+                <Field.Input
+                  name="title"
+                  type="text"
+                  label="Title"
+                  hideLabel={true}
+                  autoFocus={true}
+                  defaultValue={name}
+                  textAlignment="left"
+                />
+              </Form>
+            ) : (
+              <Tooltip
+                trigger={
+                  <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
+                    <Card.Header.Title title={name} />
+                  </button>
+                }
+              >
+                <Text>Double click the title to edit</Text>
+              </Tooltip>
+            )}
+          </div>
           <div>
-            <Popover className="relative">
-              {(open) => (
-                <>
-                  <Popover.Button
-                    className={classNames(
-                      open.open ? "text-gray-900" : "text-gray-500",
-                      "group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-                    )}
-                  >
-                    <Icon size="sm" label="DotsMenu">
-                      {open.open ? <XIcon /> : <DotsVerticalIcon />}
-                    </Icon>
-                  </Popover.Button>
+            <div>
+              <Popover className="relative">
+                {({ open, close }) => (
+                  <>
+                    <Popover.Button
+                      className={classNames(
+                        open ? "text-gray-900" : "text-gray-500",
+                        "group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                      )}
+                    >
+                      <Icon size="sm" label="DotsMenu">
+                        {open ? <XIcon /> : <DotsVerticalIcon />}
+                      </Icon>
+                    </Popover.Button>
 
-                  <Transition
+                    {/* <Transition
                     as={Fragment}
                     enter="transition ease-out duration-200"
                     enterFrom="opacity-0 translate-y-1"
@@ -105,29 +107,29 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                     leave="transition ease-in duration-150"
                     leaveFrom="opacity-100 translate-y-0"
                     leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute z-10 transform right-0 mt-2 px-2 max-w-xs sm:px-0">
-                      <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                        <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:py-4 sm:px-8">
+                  > */}
+                    <Popover.Panel className="absolute right-0 z-10 max-w-xs px-2 mt-2 transform sm:px-0">
+                      <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                        <div className="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:py-4 sm:px-8">
                           <Button
                             kind="plain"
                             type="button"
                             size="sm"
                             onClick={() => {
                               setEditMode(!editMode)
-                              open.close()
-                              open.open = false
+                              close()
+                              open = false
                             }}
                             prefix={<PencilAltIcon />}
                             justify="start"
                           >
                             Edit
                           </Button>
+
                           <Button
+                            onClick={() => setConfirmOpen(true)}
                             kind="plain"
-                            type="button"
                             size="sm"
-                            onClick={() => setDeletionModalVisible(true)}
                             prefix={<TrashIcon />}
                             justify="start"
                           >
@@ -136,74 +138,30 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                         </div>
                       </div>
                     </Popover.Panel>
-                  </Transition>
-                </>
-              )}
-            </Popover>
+                    {/* </Transition> */}
+                  </>
+                )}
+              </Popover>
+            </div>
           </div>
-        </div>
-      </Card.Header>
-      <Card.Content>
-        <InlineTotalAssetChart portfolioId={id} />
-      </Card.Content>
-      <Card.Footer>
-        <div className="sm:hidden block w-full space-y-4">
-          {editMode ? (
-            <>
-              <Button size="auto" kind="secondary" type="button" onClick={() => setEditMode(false)}>
-                Cancel
-              </Button>
-              <Button
-                size="auto"
-                loading={submitting}
-                onClick={() =>
-                  handleSubmit<z.infer<typeof validation>>(
-                    ctx,
-                    async ({ title }) => {
-                      await new Promise((resolve) => setTimeout(resolve, 1000))
-                      console.log({ title })
-                      setEditMode(false)
-                      //  const res = await fetch("/api/subscribe", {
-                      //    headers: {
-                      //      "Content-Type": "application/json",
-                      //    },
-                      //    method: "POST",
-                      //    body: JSON.stringify({ email }),
-                      //  })
-                      //  if (res.status === 200) {
-                      //    setDone(true)
-                      //  } else {
-                      //    setFormError(await res.text())
-                      //  }
-                    },
-                    setSubmitting,
-                    setFormError,
-                  )
-                }
-                kind="primary"
-                type="submit"
-                disabled={submitting}
-              >
-                Save
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button size="auto" href={`/portfolio/${id}`}>
-                Go to portfolio
-              </Button>
-            </>
-          )}
-        </div>
-        <div className="hidden sm:flex sm:w-full items-center justify-between">
-          <Card.Footer.Status></Card.Footer.Status>
-          <Card.Footer.Actions>
+        </Card.Header>
+        <Card.Content>
+          <InlineTotalAssetChart portfolioId={id} />
+        </Card.Content>
+        <Card.Footer>
+          <div className="block w-full space-y-4 sm:hidden">
             {editMode ? (
               <>
-                <Button kind="secondary" type="button" onClick={() => setEditMode(false)}>
+                <Button
+                  size="auto"
+                  kind="secondary"
+                  type="button"
+                  onClick={() => setEditMode(false)}
+                >
                   Cancel
                 </Button>
                 <Button
+                  size="auto"
                   loading={submitting}
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
@@ -230,7 +188,6 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                     )
                   }
                   kind="primary"
-                  size="md"
                   type="submit"
                   disabled={submitting}
                 >
@@ -239,13 +196,64 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               </>
             ) : (
               <>
-                <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+                <Button size="auto" href={`/portfolio/${id}`}>
+                  Go to portfolio
+                </Button>
               </>
             )}
-          </Card.Footer.Actions>
-        </div>
-      </Card.Footer>
-    </Card>
+          </div>
+          <div className="items-center justify-between hidden sm:flex sm:w-full">
+            <Card.Footer.Status>{primary ? <Text>Primary</Text> : null}</Card.Footer.Status>
+            <Card.Footer.Actions>
+              {editMode ? (
+                <>
+                  <Button kind="secondary" type="button" onClick={() => setEditMode(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    loading={submitting}
+                    onClick={() =>
+                      handleSubmit<z.infer<typeof validation>>(
+                        ctx,
+                        async ({ title }) => {
+                          await new Promise((resolve) => setTimeout(resolve, 1000))
+                          console.log({ title })
+                          setEditMode(false)
+                          //  const res = await fetch("/api/subscribe", {
+                          //    headers: {
+                          //      "Content-Type": "application/json",
+                          //    },
+                          //    method: "POST",
+                          //    body: JSON.stringify({ email }),
+                          //  })
+                          //  if (res.status === 200) {
+                          //    setDone(true)
+                          //  } else {
+                          //    setFormError(await res.text())
+                          //  }
+                        },
+                        setSubmitting,
+                        setFormError,
+                      )
+                    }
+                    kind="primary"
+                    size="md"
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    Save
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+                </>
+              )}
+            </Card.Footer.Actions>
+          </div>
+        </Card.Footer>
+      </Card>
+    </>
   )
 }
 
@@ -260,7 +268,7 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
         <Card>
-          <div className="flex flex-col items-center p-4 my-4 sm:p-8 sm:my-8 space-y-6 text-center">
+          <div className="flex flex-col items-center p-4 my-4 space-y-6 text-center sm:p-8 sm:my-8">
             <Card.Header>
               <Card.Header.Title title="Your portfolios"></Card.Header.Title>
             </Card.Header>

@@ -25,7 +25,7 @@ export const Drawer: React.FC<DrawerProps> = ({
         <div className="absolute inset-0 overflow-hidden">
           <Dialog.Overlay className="absolute inset-0" />
 
-          <div className="fixed inset-x-0 bottom-0 flex shadow-2xl h-3/4 md:pt-0">
+          <div className="fixed inset-x-0 bottom-0 flex shadow-2xl h-3/4 md:h-1/2 md:pt-0">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
