@@ -3,6 +3,8 @@ import { Loading } from "../loading/loading"
 type Kind = "primary" | "secondary" | "alert" | "cta" | "plain"
 type Size = "sm" | "md" | "lg" | "auto"
 type Shape = "square" | "round" | "auto"
+type Spacing = "start" | "center" | "end" | "evenly" | "around" | "between"
+type Justify = `justify-${Spacing}`
 
 export interface DefaultButtonStyleProps {
   kind: Kind
@@ -12,6 +14,7 @@ export interface DefaultButtonStyleProps {
   size?: Size
   shape?: Shape
   disabled?: boolean
+  justify?: Justify
 }
 
 /**
@@ -27,10 +30,12 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
   suffix,
   size = "md",
   shape = "auto",
+  justify = "justify-center",
 }): JSX.Element => {
   return (
-    <div
-      className={`
+    <>
+      <div
+        className={`
         transition
         duration-250
         flex
@@ -38,17 +43,18 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         items-center
         w-full
         whitespace-nowrap
-        justify-evenly
+        ${justify}
         ${shadow(kind, size)}
         ${colors(kind)}
         ${spacing(size)}
         ${dimensions(size, shape)}
       `}
-    >
-      {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
-      {loading ? <Loading /> : <span className={text(size)}>{children}</span>}
-      {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
-    </div>
+      >
+        {prefix ? <span className={iconSize(size)}>{prefix}</span> : null}
+        {loading ? <Loading /> : <span className={text(size)}>{children}</span>}
+        {suffix ? <span className={iconSize(size)}>{suffix}</span> : null}
+      </div>
+    </>
   )
 }
 
@@ -96,9 +102,9 @@ const iconSize = (size: Size): string => {
 const text = (size: Size): string => {
   const options: Record<Size, string> = {
     sm: "text-sm",
-    md: "text-medium",
-    lg: "text-medium font-medium",
-    auto: "text-medium",
+    md: "text-base",
+    lg: "text-base font-medium",
+    auto: "text-base",
   }
   return options[size]
 }

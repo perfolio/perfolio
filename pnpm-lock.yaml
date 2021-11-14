@@ -29,6 +29,7 @@ specifiers:
   '@types/jsonwebtoken': ^8.5.5
   '@types/micro': ^7.3.6
   '@types/node': 16.11.6
+  '@types/nprogress': ^0.2.0
   '@types/react': 17.0.33
   '@types/react-table': ^7.7.8
   '@types/uuid': ^8.3.1
@@ -56,6 +57,7 @@ specifiers:
   micro: ^9.3.4
   next: ^11.1.2
   node-fetch: ^3.1.0
+  nprogress: ^0.2.0
   postcss: ^8.3.11
   prettier: ^2.4.1
   prisma: ^3.4.2
@@ -100,6 +102,7 @@ dependencies:
   jwks-rsa: 2.0.5
   micro: 9.3.4
   next: 11.1.2_8e3522129ef2816b3c737f17aecb3a9d
+  nprogress: 0.2.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-hook-form: 7.19.5_react@17.0.2
@@ -128,6 +131,7 @@ devDependencies:
   '@types/jsonwebtoken': 8.5.5
   '@types/micro': 7.3.6
   '@types/node': 16.11.6
+  '@types/nprogress': 0.2.0
   '@types/react': 17.0.33
   '@types/react-table': 7.7.8
   '@types/uuid': 8.3.1
@@ -2724,6 +2728,10 @@ packages:
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
+    dev: true
+
+  /@types/nprogress/0.2.0:
+    resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -7886,6 +7894,10 @@ packages:
     dependencies:
       path-key: 3.1.1
     dev: true
+
+  /nprogress/0.2.0:
+    resolution: {integrity: sha1-y480xTIT2JVyP8urkH6UIq28r7E=}
+    dev: false
 
   /nullthrows/1.1.1:
     resolution: {integrity: sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==}

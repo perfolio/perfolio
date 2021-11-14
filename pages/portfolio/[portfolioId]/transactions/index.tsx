@@ -1,6 +1,5 @@
 import React from "react"
-import Link from "next/link"
-import { AsyncButton } from "@perfolio/ui/components"
+import { AsyncButton, Text } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage, GetStaticProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api/graphql"
@@ -15,6 +14,7 @@ import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import router from "next/router"
 import { DocumentAddIcon } from "@heroicons/react/outline"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { EmptyState } from "@perfolio/ui/components/emptyState"
 
 export interface TransactionItemProps {
   transaction: Omit<Transaction, "assetId">
@@ -111,14 +111,12 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
           {isLoading ? (
             <Loading />
           ) : !portfolio?.transactions || portfolio.transactions.length === 0 ? (
-            <Link href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}>
-              <a className="relative block w-full p-12 text-center border border-gray-300 border-dashed rounded hover:border-gray-400 focus:outline-none">
-                <DocumentAddIcon className="w-12 h-12 max-w-sm mx-auto text-gray-400" />
-                <span className="block mt-2 text-sm font-medium text-gray-900">
-                  Add your first transaction
-                </span>
-              </a>
-            </Link>
+            <EmptyState
+              href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}
+              icon={<DocumentAddIcon />}
+            >
+              <Text>Add your first transaction</Text>
+            </EmptyState>
           ) : (
             <AnimateSharedLayout>
               <AnimatePresence>

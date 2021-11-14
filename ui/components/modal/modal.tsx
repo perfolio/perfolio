@@ -12,8 +12,10 @@ export const Modal: React.FC<ModalProps> = ({ trigger, children }): JSX.Element 
   return (
     <Root open={trigger === null ?? undefined}>
       <Trigger>{trigger}</Trigger>
-      <Overlay className="w-screen h-screen bg-black bg-opacity-90" />
-      <Content className="flex items-center justify-center w-screen h-screen">{children}</Content>
+      <Overlay className="w-screen h-screen transition duration-1000 bg-black bg-opacity-90" />
+      <Content className="flex items-center justify-center w-screen h-screen">
+        <div>{children}</div>
+      </Content>
     </Root>
   )
 }

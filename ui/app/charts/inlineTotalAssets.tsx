@@ -27,7 +27,7 @@ export const InlineTotalAssetChart: React.FC<InlineTotalAssetChartProps> = ({
     }))
   }, [absolutePortfolioHistory])
   return (
-    <div className="flex-col justify-center hidden w-full h-20 space-y-8 bg-gray-100 rounded xl:flex">
+    <div className="flex-col justify-center w-full h-20 space-y-8 bg-gray-100 rounded flex">
       <div className="relative w-full h-full">
         <AreaChart isLoading={isLoading} data={data} />
         <div className="absolute top-0 left-0 p-4">

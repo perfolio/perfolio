@@ -50,16 +50,21 @@ module.exports = {
         DEFAULT: "#2B6AF2",
         dark: "#0D298C",
       },
+
+      warning: {
+        light: "#FFEB45",
+        DEFAULT: "#FFE207",
+        dark: "#DBBF05",
+      },
       error: {
-        light: "#FB9A7A",
-        DEFAULT: "#F23524",
-        dark: "#8C0B20",
+        light: "#FF8D75",
+        DEFAULT: "#FF1A1A",
+        dark: "#B70D2A",
       },
     },
 
     extend: {
       boxShadow: {
-        radial: "0 0 20px -5px rgba(0, 0, 0, 0.25)",
         cta: "0 10px 20px -5px rgba(53, 72, 200, 0.4)",
         ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
       },
