@@ -10,7 +10,6 @@ async function main() {
   const existingIsins = Object.values(assets).map((a) => a.asset.isin)
 
   isins = isins.filter((isin) => !existingIsins.includes(isin))
-  console.log({ isins })
   const start = Date.now()
 
   for (let i = 0; i < isins.length; i++) {

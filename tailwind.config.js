@@ -31,9 +31,9 @@ module.exports = {
         dark: "#101974",
       },
       secondary: {
-        light: colors.sky["200"],
-        DEFAULT: colors.sky["500"],
-        dark: colors.sky["800"],
+        light: "#99EAFF",
+        DEFAULT: "#009DFF",
+        dark: "#005AB7",
       },
 
       cta: {

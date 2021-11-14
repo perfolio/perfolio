@@ -2,7 +2,8 @@ import { NextPage, GetStaticProps } from "next"
 import { usePortfolios } from "@perfolio/pkg/hooks"
 import { AppLayout } from "@perfolio/ui/app"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
-import { Button, Card, Tooltip, Text, Icon } from "@perfolio/ui/components"
+import { Card, Tooltip, Text, Icon } from "@perfolio/ui/components"
+import { Button } from "@perfolio/ui/components"
 import React, { useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
@@ -51,7 +52,14 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
         open={confirmOpen}
         setOpen={setConfirmOpen}
         onCancel={() => alert("cancel")}
-        onConfirm={() => alert("confirm")}
+        onConfirm={() =>
+          new Promise((resolve) =>
+            setTimeout(() => {
+              resolve()
+              alert("Hello")
+            }, 2000),
+          )
+        }
       >
         <Text>
           This will <strong>delete all your transactions</strong> of your portfolio.
@@ -110,39 +118,30 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                       </Icon>
                     </Popover.Button>
 
-                    {/* <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  > */}
                     <Popover.Panel className="absolute right-0 z-10 max-w-xs px-2 mt-2 transform sm:px-0">
                       <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                         <div className="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:py-4 sm:px-8">
                           <Button
-                            kind="plain"
-                            type="button"
+                            type="plain"
+                            htmlType="button"
                             size="sm"
                             onClick={() => {
                               setEditMode(!editMode)
                               close()
                               open = false
                             }}
-                            prefix={<PencilAltIcon />}
-                            justify="justify-start"
+                            iconLeft={<PencilAltIcon />}
+                            justify="start"
                           >
                             Edit
                           </Button>
 
                           <Button
                             onClick={() => setConfirmOpen(true)}
-                            kind="plain"
+                            type="plain"
                             size="sm"
-                            prefix={<TrashIcon />}
-                            justify="justify-start"
+                            iconLeft={<TrashIcon />}
+                            justify="start"
                           >
                             Delete
                           </Button>
@@ -163,43 +162,25 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
           <div className="block w-full space-y-4 sm:hidden">
             {editMode ? (
               <>
-                <Button
-                  size="auto"
-                  kind="secondary"
-                  type="button"
-                  onClick={() => setEditMode(false)}
-                >
+                <Button type="secondary" size="block" onClick={() => setEditMode(false)}>
                   Cancel
                 </Button>
                 <Button
-                  size="auto"
                   loading={submitting}
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
                       ctx,
-                      async ({ title }) => {
+                      async () => {
                         await new Promise((resolve) => setTimeout(resolve, 1000))
-                        console.log({ title })
                         setEditMode(false)
-                        //  const res = await fetch("/api/subscribe", {
-                        //    headers: {
-                        //      "Content-Type": "application/json",
-                        //    },
-                        //    method: "POST",
-                        //    body: JSON.stringify({ email }),
-                        //  })
-                        //  if (res.status === 200) {
-                        //    setDone(true)
-                        //  } else {
-                        //    setFormError(await res.text())
-                        //  }
+                       
                       },
                       setSubmitting,
                       setFormError,
                     )
                   }
-                  kind="primary"
-                  type="submit"
+                  type="primary"
+                  htmlType="submit"
                   disabled={submitting}
                 >
                   Save
@@ -207,9 +188,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               </>
             ) : (
               <>
-                <Button size="auto" href={`/portfolio/${id}`}>
-                  Go to portfolio
-                </Button>
+                <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
               </>
             )}
           </div>
@@ -218,7 +197,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
             <Card.Footer.Actions>
               {editMode ? (
                 <>
-                  <Button kind="secondary" type="button" onClick={() => setEditMode(false)}>
+                  <Button type="secondary" htmlType="button" onClick={() => setEditMode(false)}>
                     Cancel
                   </Button>
                   <Button
@@ -226,30 +205,17 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                     onClick={() =>
                       handleSubmit<z.infer<typeof validation>>(
                         ctx,
-                        async ({ title }) => {
+                        async () => {
                           await new Promise((resolve) => setTimeout(resolve, 1000))
-                          console.log({ title })
                           setEditMode(false)
-                          //  const res = await fetch("/api/subscribe", {
-                          //    headers: {
-                          //      "Content-Type": "application/json",
-                          //    },
-                          //    method: "POST",
-                          //    body: JSON.stringify({ email }),
-                          //  })
-                          //  if (res.status === 200) {
-                          //    setDone(true)
-                          //  } else {
-                          //    setFormError(await res.text())
-                          //  }
                         },
                         setSubmitting,
                         setFormError,
                       )
                     }
-                    kind="primary"
+                    type="primary"
                     size="md"
-                    type="submit"
+                    htmlType="submit"
                     disabled={submitting}
                   >
                     Save
@@ -288,7 +254,7 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
         {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
           <PortfolioCard key={p.id} {...p} />
         ))}
-        <EmptyState onClick={() => alert("test")} icon={<DocumentAddIcon />}>
+        <EmptyState href="#" icon={<DocumentAddIcon />}>
           <Text>Add another portfolio</Text>
         </EmptyState>
       </div>

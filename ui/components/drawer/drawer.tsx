@@ -65,13 +65,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                         <p className="text-sm text-gray-500">{subtitle}</p>
                       </div>
                       <div className="flex items-center h-10">
-                        <Button
-                          kind="plain"
-                          type="button"
-                          shape="square"
-                          onClick={() => setOpen(false)}
-                          prefix={<XIcon />}
-                        />
+                        <Button type="secondary" onClick={() => setOpen(false)} icon={<XIcon />} />
                       </div>
                     </div>
                     <div className="w-full h-full px-4 sm:px-6">{children}</div>

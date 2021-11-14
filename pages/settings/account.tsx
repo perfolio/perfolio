@@ -4,7 +4,7 @@ import { NextPage, GetStaticProps } from "next"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 
 import { useRouter } from "next/router"
-import { AsyncButton } from "@perfolio/ui/components"
+import { Button } from "@perfolio/ui/components"
 
 import { useUser } from "@perfolio/pkg/hooks"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
@@ -25,7 +25,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
       <div className="space-y-8">
-        <AsyncButton
+        <Button
           onClick={async () => {
             if (!user) {
               console.error("User not yet loaded")
@@ -40,13 +40,12 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
             const { url } = (await res.json()) as { url: string }
             router.push(url)
           }}
-          kind="cta"
+          type="cta"
         >
           {t("setBillingPortal")}
-        </AsyncButton>
-        <AsyncButton
+        </Button>
+        <Button
           onClick={async () => {
-            console.log({ user })
             if (!user) {
               console.error("User not yet loaded")
               return
@@ -63,10 +62,10 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
             const { url } = (await res.json()) as { url: string }
             router.push(url)
           }}
-          kind="cta"
+          type="cta"
         >
           Checkout
-        </AsyncButton>
+        </Button>
       </div>
     </AppLayout>
   )

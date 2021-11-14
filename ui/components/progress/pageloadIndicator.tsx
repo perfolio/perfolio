@@ -4,7 +4,7 @@ import React, { useEffect } from "react"
 
 nProgress.configure({
   template: `
-<div class="bg-gradient-to-r from-primary to-secondary fixed z-50 top-0 left-0 w-full h-0.5" role="bar"></div>
+<div class="bg-gradient-to-r from-transparent to-primary fixed z-50 top-0 left-0 w-full h-0.5" role="bar"></div>
 `,
 })
 

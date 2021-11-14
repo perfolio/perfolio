@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
 import { z } from "zod"
 // import Link from "next/link"
-import { Button, Text, Drawer } from "@perfolio/ui/components"
+import { Button, Text, Drawer, Heading } from "@perfolio/ui/components"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useSubscribeToNewsletter } from "@perfolio/pkg/hooks"
 const validation = z.object({
@@ -67,9 +67,8 @@ export const HeroSection: React.FC = (): JSX.Element => {
                   setFormError,
                 )
               }
-              kind="cta"
-              size="auto"
-              type="submit"
+              type="cta"
+              htmlType="submit"
               disabled={submitting}
             >
               Join the waitlist
@@ -77,79 +76,79 @@ export const HeroSection: React.FC = (): JSX.Element => {
           </Form>
         )}
       </Drawer>
-      <h1 className="py-3 -my-3 text-3xl font-extrabold text-left text-transparent bg-clip-text bg-gradient-to-tr from-black to-gray-900 sm:text-5xl lg:text-6xl">
-        {t("headline")}
-      </h1>
-      <p className="text-gray-600 sm:text-lg sm:mx-auto md:text-xl lg:mx-0">{t("subheadline")}</p>
-      {user ? (
-        <Button href="/dashboard" kind="cta" size="auto" type="submit">
-          Go to dashboard
-        </Button>
-      ) : (
-        <div className="pt-8 md:pt-4">
-          <div className="flex items-center justify-center md:hidden">
-            <Button
-              onClick={() => {
-                setOpen(true)
-              }}
-              kind="plain"
-              size="lg"
-              type="submit"
-            >
-              Subscribe
-            </Button>
-            <Button href="/dashboard" kind="cta" size="lg" type="submit">
-              Sign in
-            </Button>
-          </div>
-          <div className="hidden md:block">
-            {done ? (
-              <Text align="text-center">Thank you, we'll get back to you</Text>
-            ) : (
-              <Form
-                ctx={ctx}
-                formError={formError}
-                className="flex flex-col items-start gap-4 sm:flex-row"
+      <Heading h1>{t("headline")}</Heading>
+      <Text>{t("subheadline")}</Text>
+      <div>
+        {user ? (
+          <Button href="/dashboard" type="cta" size="block">
+            Go to dashboard
+          </Button>
+        ) : (
+          <div className="pt-8 md:pt-4">
+            <div className="flex items-center justify-center md:hidden">
+              <Button
+                onClick={() => {
+                  setOpen(true)
+                }}
+                type="plain"
+                size="lg"
+                htmlType="submit"
               >
-                <Field.Input
-                  hideLabel
-                  placeholder={t("footerSubsPlaceMail")}
-                  name="email"
-                  type="email"
-                  label="email"
-                />
-
-                <Button
-                  loading={submitting}
-                  onClick={() =>
-                    handleSubmit<z.infer<typeof validation>>(
-                      ctx,
-                      async ({ email }) => {
-                        await subscribe
-                          .mutateAsync({ email })
-                          .catch((err) => {
-                            setFormError(err.message)
-                          })
-                          .finally(() => {
-                            setDone(true)
-                          })
-                      },
-                      setSubmitting,
-                      setFormError,
-                    )
-                  }
-                  kind="cta"
-                  size="auto"
-                  type="submit"
-                  disabled={submitting}
+                Subscribe
+              </Button>
+              <Button href="/dashboard" type="cta" size="lg">
+                Sign in
+              </Button>
+            </div>
+            <div className="hidden md:block">
+              {done ? (
+                <Text align="text-center">Thank you, we'll get back to you</Text>
+              ) : (
+                <Form
+                  ctx={ctx}
+                  formError={formError}
+                  className="flex flex-col items-start gap-4 sm:flex-row"
                 >
-                  Join the waitlist
-                </Button>
-              </Form>
-            )}
+                  <Field.Input
+                    hideLabel
+                    placeholder={t("footerSubsPlaceMail")}
+                    name="email"
+                    type="email"
+                    label="email"
+                  />
+
+                  <Button
+                    loading={submitting}
+                    onClick={() =>
+                      handleSubmit<z.infer<typeof validation>>(
+                        ctx,
+                        async ({ email }) => {
+                          await subscribe
+                            .mutateAsync({ email })
+                            .catch((err) => {
+                              setFormError(err.message)
+                            })
+                            .finally(() => {
+                              setDone(true)
+                            })
+                        },
+                        setSubmitting,
+                        setFormError,
+                      )
+                    }
+                    type="cta"
+                    size="block"
+                    htmlType="submit"
+                    disabled={submitting}
+                  >
+                    Join the waitlist
+                  </Button>
+                </Form>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

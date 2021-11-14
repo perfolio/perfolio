@@ -3,7 +3,7 @@ import { NextPage, GetStaticProps } from "next"
 import { useForm } from "react-hook-form"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 import { z } from "zod"
-import { Button } from "@perfolio/ui/components"
+import { Button, ButtonType } from "@perfolio/ui/components"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useUser, useExchanges, useUpdateSettings } from "@perfolio/pkg/hooks"
 import { Card } from "@perfolio/ui/components"
@@ -19,7 +19,7 @@ interface SettingProps {
   onSubmit: (values: Record<string, string | number>) => Promise<void>
   button?: {
     label?: string
-    kind?: string
+    type?: ButtonType
   }
 }
 
@@ -59,8 +59,8 @@ const Setting: React.FC<SettingProps> = ({
             onClick={() =>
               handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
             }
-            kind={button?.kind ?? "primary"}
-            type="submit"
+            type={button?.type ?? "primary"}
+            htmlType="submit"
             disabled={ctx.formState.isSubmitting}
           >
             {button?.label ?? t("setButtonLabelSave")}
@@ -84,8 +84,6 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { user } = useUser()
 
   const { exchanges } = useExchanges()
-
-  console.log({ user })
 
   /**
    * The current defaultExchange

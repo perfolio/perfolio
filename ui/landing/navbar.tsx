@@ -36,15 +36,15 @@ export const Navbar: React.FC = () => {
         {/* Desktop */}
         <div className="relative items-center hidden space-x-3 md:inline-flex md:ml-5 lg:justify-end">
           {user ? (
-            <Button href="/dashboard" kind="primary" size="lg">
+            <Button href="/dashboard" type="primary" size="lg">
               Go to dashboard
             </Button>
           ) : (
             <>
-              <Button href="/dashboard" kind="plain">
+              <Button href="/dashboard" type="plain">
                 {t("signInButton")}
               </Button>
-              <Button size="auto" kind="cta" href="/dashboard">
+              <Button type="cta" href="/dashboard">
                 {t("startForFreeButton")}
               </Button>
             </>
@@ -62,11 +62,11 @@ export const Navbar: React.FC = () => {
           leaveTo="-translate-y-full opacity-0"
         >
           {user ? (
-            <Button href="/dashboard" kind="primary" size="lg">
+            <Button href="/dashboard" type="primary" size="lg">
               Go to dashboard
             </Button>
           ) : (
-            <Button size="auto" kind="cta" href="/dashboard">
+            <Button type="cta" href="/dashboard">
               {t("signInButton")}
             </Button>
           )}
