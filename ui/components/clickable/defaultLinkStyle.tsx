@@ -1,6 +1,7 @@
 import React from "react"
 import { Loading } from "../loading/loading"
-type Justify = "start" | "center" | "end" | "between" | "around"
+type Spacing = "start" | "center" | "end" | "evenly" | "around"
+type Justify = `justify-${Spacing}`
 type Size = "sm" | "md" | "lg" | "auto"
 export interface DefaultLinkStyleProps {
   /**
@@ -38,7 +39,7 @@ export const DefaultLinkStyle: React.FC<DefaultLinkStyleProps> = ({
         rounded
         items-center
         whitespace-nowrap
-        justify-${justify} 
+    ${justify} 
         ${spacing(size)} 
       `}
     >

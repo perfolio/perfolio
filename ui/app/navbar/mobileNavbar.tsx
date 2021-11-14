@@ -1,17 +1,16 @@
 import React, { useState } from "react"
-import { MobileNavLink } from "./mobileNavLink"
-import { MobileNavMenu } from "./mobileNavMenu"
 import { NavbarProps } from "./types"
 import { DotsVerticalIcon, XIcon, LogoutIcon } from "@heroicons/react/outline"
-import { Link, Logo, Icon, Drawer } from "@perfolio/ui/components"
+import { Button, Logo, Drawer } from "@perfolio/ui/components"
 import NextLink from "next/link"
+import { Disclosure, Transition } from "@headlessui/react"
+import { ChevronUpIcon } from "@heroicons/react/outline"
+import cn from "classnames"
+import { DefaultButtonStyle } from "@perfolio/ui/components/clickable/defaultButtonStyle"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 import { useAuth0 } from "@auth0/auth0-react"
 
-import { useI18n } from "@perfolio/pkg/i18n"
-
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
-  const { t } = useI18n()
   const [open, setOpen] = useState(false)
   const { logout } = useAuth0()
   return (
@@ -26,38 +25,88 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </button>
         <Drawer open={open} setOpen={setOpen}>
-          <ul className="py-1 transition duration-500 ease-out shadow opacity-100 ">
-            {items.map((item) => (
-              <li key={item.label}>
-                {item.menu ? (
-                  <MobileNavMenu label={item.label} icon={item.icon} menu={item.menu} />
-                ) : (
-                  <MobileNavLink href={item.href ?? "/"} label={item.label} icon={item.icon} />
-                )}
+          <Drawer.Content>
+            <ul className="px-6 space-y-4">
+              {items.map((item) => (
+                <li key={item.label} className="h-8">
+                  {item.menu ? (
+                    <Disclosure>
+                      {({ open }) => (
+                        <>
+                          <Disclosure.Button className="flex items-center justify-between w-full focus:outline-none">
+                            <DefaultButtonStyle
+                              justify="justify-start"
+                              kind="plain"
+                              size="lg"
+                              prefix={item.icon}
+                            >
+                              {item.label}
+                            </DefaultButtonStyle>
+                            <ChevronUpIcon
+                              className={cn("w-5 h-5 transform duration-500", {
+                                "-rotate-180": open,
+                              })}
+                            />
+                          </Disclosure.Button>
+                          <Transition
+                            enter="transition duration-500 ease-out"
+                            enterFrom="transform opacity-0"
+                            enterTo="transform opacity-100"
+                            leave="transition duration-500 ease-out"
+                            leaveFrom="transform opacity-100"
+                            leaveTo="transform opacity-0"
+                          >
+                            <Disclosure.Panel className="ml-4">
+                              {item.menu!.map((subitem) => (
+                                <Button
+                                  justify="justify-start"
+                                  href={subitem.href}
+                                  key={subitem.name}
+                                  kind="plain"
+                                  size="lg"
+                                  prefix={subitem.icon}
+                                >
+                                  {subitem.name}
+                                </Button>
+                              ))}
+                            </Disclosure.Panel>
+                          </Transition>
+                        </>
+                      )}
+                    </Disclosure>
+                  ) : (
+                    <Button
+                      justify="justify-start"
+                      kind="plain"
+                      href={item.href ?? "/"}
+                      prefix={item.icon}
+                      size="lg"
+                    >
+                      {item.label}
+                    </Button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Drawer.Content>
+          <Drawer.Footer>
+            <ul className="flex items-center justify-center h-20 gap-4">
+              <li>
+                <Button kind="plain" prefix={<AdjustmentsIcon />} href="/settings/account">
+                  Settings
+                </Button>
               </li>
-            ))}
-          </ul>
-          <ul className="flex items-center justify-center h-20 space-x-8 text-gray-700 border-t border-gray-300">
-            {/* <li>
-              <Link size="lg" prefix={<BellIcon />} href="/" />
-            </li> */}
-            <li>
-              <Link size="lg" prefix={<AdjustmentsIcon />} href="/settings/account" />
-            </li>
-            <li>
-              <Link size="lg" prefix={<DotsVerticalIcon />} href="/" />
-            </li>
-            <li>
-              <button
-                className="focus:outline-none"
-                onClick={() => logout({ returnTo: "https://perfol.io" })}
-              >
-                <Icon size="sm" label={t("mobiNavBarSignOut")}>
-                  <LogoutIcon />
-                </Icon>
-              </button>
-            </li>
-          </ul>
+              <li>
+                <Button
+                  kind="plain"
+                  onClick={() => logout({ returnTo: "https://perfol.io" })}
+                  prefix={<LogoutIcon />}
+                >
+                  Sign out
+                </Button>
+              </li>
+            </ul>
+          </Drawer.Footer>
         </Drawer>
       </div>
     </nav>
