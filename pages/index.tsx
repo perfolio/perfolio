@@ -195,6 +195,11 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
           title: "Business Development",
           image: "/img/lukas.png",
         },
+        {
+          name: "Tobias Hassel",
+          title: "Tech",
+          image: "/img/tobi.jpg",
+        },
       ],
       translations,
     },
