@@ -3,7 +3,8 @@ import { Loading } from "../loading/loading"
 type Kind = "primary" | "secondary" | "alert" | "cta" | "plain"
 type Size = "sm" | "md" | "lg" | "auto"
 type Shape = "square" | "round" | "auto"
-type Justify = "evenly" | "center" | "end" | "between" | "around" | "start"
+type Spacing = "start" | "center" | "end" | "evenly" | "around" | "between"
+type Justify = `justify-${Spacing}`
 
 export interface DefaultButtonStyleProps {
   kind: Kind
@@ -29,7 +30,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
   suffix,
   size = "md",
   shape = "auto",
-  justify = "center",
+  justify = "justify-center",
 }): JSX.Element => {
   return (
     <>
@@ -42,7 +43,7 @@ export const DefaultButtonStyle: React.FC<DefaultButtonStyleProps> = ({
         items-center
         w-full
         whitespace-nowrap
-        justify-${justify} 
+        ${justify}
         ${shadow(kind, size)}
         ${colors(kind)}
         ${spacing(size)}

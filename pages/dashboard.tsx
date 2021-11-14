@@ -121,7 +121,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                               open = false
                             }}
                             prefix={<PencilAltIcon />}
-                            justify="start"
+                            justify="justify-start"
                           >
                             Edit
                           </Button>
@@ -131,7 +131,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                             kind="plain"
                             size="sm"
                             prefix={<TrashIcon />}
-                            justify="start"
+                            justify="justify-start"
                           >
                             Delete
                           </Button>

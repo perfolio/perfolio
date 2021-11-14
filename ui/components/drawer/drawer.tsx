@@ -1,14 +1,13 @@
-import React, { Fragment } from "react"
+import React, { Fragment, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XIcon } from "@heroicons/react/outline"
 import { Button } from "@perfolio/ui/components"
-
+import { useRouter } from "next/router"
 export interface DrawerProps {
   open: boolean
   setOpen: (b: boolean) => void
-  title?: string
+  title?: string | React.ReactNode
   subtitle?: string
-  footer?: React.ReactNode
 }
 
 export const Drawer: React.FC<DrawerProps> = ({
@@ -17,8 +16,19 @@ export const Drawer: React.FC<DrawerProps> = ({
   children,
   title,
   subtitle,
-  footer,
 }): JSX.Element => {
+  const router = useRouter()
+  useEffect(() => {
+    router.events.on("routeChangeStart", () => {
+      setOpen(false)
+    })
+    return () => {
+      router.events.off("routeChangeStart", () => {
+        setOpen(false)
+      })
+    }
+  }, [router])
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={setOpen}>
@@ -35,11 +45,11 @@ export const Drawer: React.FC<DrawerProps> = ({
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
-              <div className="w-screen">
+              <div className="relative w-screen">
                 <div className="flex flex-col h-full bg-white shadow-radial">
-                  <div className="flex-1">
+                  <div className="flex-1 ">
                     <div className="flex items-center justify-between w-full h-20 px-4 bg-gray-50 sm:px-6">
-                      <div className="space-y-1">
+                      <div>
                         <Dialog.Title className="text-lg font-medium text-gray-900">
                           {title}
                         </Dialog.Title>
@@ -56,11 +66,8 @@ export const Drawer: React.FC<DrawerProps> = ({
                         />
                       </div>
                     </div>
-                    <div className="flex items-center justify-center h-full px-4 pt-20 -mt-20 overflow-y-auto sm:px-6">
-                      <div>{children}</div>
-                    </div>
+                    {children}
                   </div>
-                  {footer}
                 </div>
               </div>
             </Transition.Child>

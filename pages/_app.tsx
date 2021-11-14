@@ -9,6 +9,7 @@ import { PersistendQueryClient } from "@perfolio/pkg/query-client"
 import { QueryClientProvider } from "react-query"
 import { ToastProvider } from "@perfolio/pkg/toaster"
 import { Auth0Provider } from "@auth0/auth0-react"
+import { PageloadIndicator } from "@perfolio/ui/components"
 
 export default function MyApp({
   Component,
@@ -48,6 +49,7 @@ export default function MyApp({
           <ToastProvider>
             <QueryClientProvider client={PersistendQueryClient()}>
               <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+                <PageloadIndicator />
                 <Component {...pageProps} />
               </div>
             </QueryClientProvider>
