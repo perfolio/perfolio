@@ -173,7 +173,6 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                       async () => {
                         await new Promise((resolve) => setTimeout(resolve, 1000))
                         setEditMode(false)
-                       
                       },
                       setSubmitting,
                       setFormError,
