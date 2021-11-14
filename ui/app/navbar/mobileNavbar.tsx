@@ -6,7 +6,7 @@ import NextLink from "next/link"
 import { Disclosure, Transition } from "@headlessui/react"
 import { ChevronUpIcon } from "@heroicons/react/outline"
 import cn from "classnames"
-import { DefaultButtonStyle } from "@perfolio/ui/components/clickable/defaultButtonStyle"
+import { ButtonStyle } from "@perfolio/ui/components"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
 import { useAuth0 } from "@auth0/auth0-react"
 
@@ -34,14 +34,14 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                       {({ open }) => (
                         <>
                           <Disclosure.Button className="flex items-center justify-between w-full focus:outline-none">
-                            <DefaultButtonStyle
-                              justify="justify-start"
-                              kind="plain"
+                            <ButtonStyle
+                              justify="start"
+                              type="plain"
                               size="lg"
-                              prefix={item.icon}
+                              iconLeft={item.icon}
                             >
                               {item.label}
-                            </DefaultButtonStyle>
+                            </ButtonStyle>
                             <ChevronUpIcon
                               className={cn("w-5 h-5 transform duration-500", {
                                 "-rotate-180": open,
@@ -59,12 +59,12 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                             <Disclosure.Panel className="ml-4">
                               {item.menu!.map((subitem) => (
                                 <Button
-                                  justify="justify-start"
+                                  justify="start"
                                   href={subitem.href}
                                   key={subitem.name}
-                                  kind="plain"
+                                  type="plain"
                                   size="lg"
-                                  prefix={subitem.icon}
+                                  iconLeft={subitem.icon}
                                 >
                                   {subitem.name}
                                 </Button>
@@ -76,10 +76,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                     </Disclosure>
                   ) : (
                     <Button
-                      justify="justify-start"
-                      kind="plain"
+                      justify="start"
+                      type="plain"
                       href={item.href ?? "/"}
-                      prefix={item.icon}
+                      iconLeft={item.icon}
                       size="lg"
                     >
                       {item.label}
@@ -92,15 +92,15 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
           <Drawer.Footer>
             <ul className="flex items-center justify-center h-20 gap-4">
               <li>
-                <Button kind="plain" prefix={<AdjustmentsIcon />} href="/settings/account">
+                <Button type="plain" iconLeft={<AdjustmentsIcon />} href="/settings/account">
                   Settings
                 </Button>
               </li>
               <li>
                 <Button
-                  kind="plain"
+                  type="plain"
                   onClick={() => logout({ returnTo: "https://perfol.io" })}
-                  prefix={<LogoutIcon />}
+                  iconLeft={<LogoutIcon />}
                 >
                   Sign out
                 </Button>

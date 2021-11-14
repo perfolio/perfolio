@@ -1,5 +1,5 @@
 import React from "react"
-import { AsyncButton, Text } from "@perfolio/ui/components"
+import { Button, Text } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import { NextPage, GetStaticProps } from "next"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api/graphql"
@@ -63,8 +63,8 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
           ) : null}
         </div>
         <div className="flex-shrink-0">
-          <AsyncButton
-            kind="secondary"
+          <Button
+            type="secondary"
             size="sm"
             onClick={async () => {
               await deleteTransaction.mutateAsync({ transactionId: transaction.id })
@@ -75,7 +75,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             }}
           >
             {t("transIndexDeleteButton")}
-          </AsyncButton>
+          </Button>
         </div>
       </div>
     </div>

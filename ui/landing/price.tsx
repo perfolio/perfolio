@@ -55,7 +55,7 @@ export const Price: React.FC<PriceProps> = ({
         </div>
       </div>
       <div className="w-full mt-16">
-        <Button href={href} kind={highlighted ? "cta" : "secondary"} size="auto">
+        <Button href={href} type={highlighted ? "cta" : "secondary"} size="block">
           {submitText}
         </Button>
       </div>

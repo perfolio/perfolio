@@ -159,9 +159,9 @@ export const Footer = () => {
                       setFormError,
                     )
                   }
-                  kind="cta"
-                  size="auto"
-                  type="submit"
+                  type="cta"
+                  size="block"
+                  htmlType="submit"
                   disabled={submitting}
                 >
                   {t("footerSubsButton")}

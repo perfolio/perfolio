@@ -64,7 +64,6 @@ export function AutoCompleteSelect<Option>({
    * All matches on our database
    */
   const { search, isLoading } = useSearch(fragment)
-  console.log({ search })
   const options = search?.documents.map((d) => d.content.asset) ?? []
   const selected = options.find((o) => o.isin === isin)
   const error = Array.isArray(errors[name])
@@ -161,7 +160,6 @@ export function AutoCompleteSelect<Option>({
                     return (
                       <li key={i}>
                         <button
-                          type="button"
                           onClick={() => {
                             setValue(name, option?.isin)
                             setState(State.Done)

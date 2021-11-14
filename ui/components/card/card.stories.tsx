@@ -1,6 +1,6 @@
 import { Card } from "./index"
 import { Text } from "../text/text"
-import { Button } from "../clickable"
+import { Button } from "@perfolio/ui/components"
 export default {
   title: "Card",
   component: Card,
@@ -22,10 +22,10 @@ export const Default = () => (
     <Card.Footer>
       <Card.Footer.Status>200 OK</Card.Footer.Status>
       <Card.Footer.Actions>
-        <Button kind="secondary" size="sm" href="#">
+        <Button type="secondary" size="sm" href="#">
           Undo
         </Button>
-        <Button kind="primary" size="sm" href="#">
+        <Button type="primary" size="sm" href="#">
           Save
         </Button>
       </Card.Footer.Actions>

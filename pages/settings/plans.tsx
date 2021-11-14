@@ -103,8 +103,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
               const { url } = (await res.json()) as { url: string }
               router.push(url)
             }}
-            kind="primary"
-            size="auto"
+            type="primary"
           >
             {t("setPlanSwitchPlanText")}
           </Button>

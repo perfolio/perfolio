@@ -20,7 +20,7 @@ export const NoTransactionsModal: React.FC = (): JSX.Element => {
           <Card.Footer>
             <Card.Footer.Status></Card.Footer.Status>
             <Card.Footer.Actions>
-              <Button size="auto" kind="primary" href="/transactions/new">
+              <Button type="primary" href="/transactions/new">
                 {t("noTransactionsAdd")}
               </Button>
             </Card.Footer.Actions>

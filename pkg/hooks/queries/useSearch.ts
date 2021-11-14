@@ -34,7 +34,6 @@ export const useSearch = (fragment: string) => {
       enabled: fragment.length > 0,
     },
   )
-  console.log({ data })
 
   return { search: data, ...meta }
 }

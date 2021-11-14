@@ -56,7 +56,6 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
-  console.log(ctx.getValues())
   return (
     <AppLayout
       sidebar={
@@ -143,9 +142,8 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                       setFormError,
                     )
                   }
-                  kind="primary"
-                  size="auto"
-                  type="submit"
+                  type="primary"
+                  htmlType="submit"
                   disabled={submitting}
                 >
                   {t("transNewAddTrans")}

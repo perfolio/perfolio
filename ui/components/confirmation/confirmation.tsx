@@ -53,10 +53,10 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
   title,
   confirmLabel,
 }): JSX.Element => {
-  const severityMapping: Record<string, "primary" | "alert"> = {
+  const severityMapping: Record<string, "primary" | "error"> = {
     info: "primary",
-    warning: "alert",
-    critical: "alert",
+    warning: "error",
+    critical: "error",
   }
 
   return (
@@ -66,23 +66,23 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
           {children}
           <div className="flex items-center justify-between w-full gap-8">
             <Button
-              size="auto"
-              kind="secondary"
+              size="block"
+              type="plain"
               onClick={async () => {
-                setOpen(false)
                 if (onCancel) {
                   await onCancel()
                 }
+                setOpen(false)
               }}
             >
               Cancel
             </Button>
             <Button
-              size="auto"
-              kind={severityMapping[severity]}
+              size="block"
+              type={severityMapping[severity]}
               onClick={async () => {
-                setOpen(false)
                 await onConfirm()
+                setOpen(false)
               }}
             >
               {confirmLabel ?? "Confirm"}
