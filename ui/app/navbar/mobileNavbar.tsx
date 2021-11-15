@@ -21,7 +21,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         </a>
       </NextLink>
       <div>
-        <button className="w-6 h-6 cursor-pointer text-gray-50" onClick={() => setOpen(!open)}>
+        <button
+          className="flex items-center w-6 h-6 cursor-pointer justi text-gray-50"
+          onClick={() => setOpen(!open)}
+        >
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </button>
         <Drawer open={open} setOpen={setOpen}>
