@@ -160,6 +160,7 @@ export function AutoCompleteSelect<Option>({
                     return (
                       <li key={i}>
                         <button
+                          type="button"
                           onClick={() => {
                             setValue(name, option?.isin)
                             setState(State.Done)

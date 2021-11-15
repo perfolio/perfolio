@@ -69,9 +69,13 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
           <Main.Header.Title title={t("transNewHeader")} />
         </Main.Header>
         <Main.Content>
-          <div className="grid grid-cols-1 divide-y divide-gray-200 lg:gap-8 lg:divide-x lg:divide-y-0 lg:grid-cols-1">
+          <div className="grid grid-cols-1 gap-8 divide-y divide-gray-200 md:gap-10 lg:gap-12 lg:divide-x lg:divide-y-0 lg:grid-cols-1">
             <div className="w-full">
-              <Form ctx={ctx} formError={formError} className="grid grid-cols-1 gap-8">
+              <Form
+                ctx={ctx}
+                formError={formError}
+                className="grid w-full grid-cols-1 gap-8 md:gap-10 lg:gap-12"
+              >
                 <Field.AutoCompleteSelect
                   name="isin"
                   label={t("transNewAssetLabel")}
@@ -92,7 +96,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   // iconLeft={<MailIcon />}
                 />
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-8 md:gap-10 lg:gap-12">
                   <Field.Input
                     name="volume"
                     label={t("transNewNumberShares")}
@@ -142,37 +146,14 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                       setFormError,
                     )
                   }
+                  size="block"
                   type="primary"
                   htmlType="submit"
-                  disabled={submitting}
                 >
                   {t("transNewAddTrans")}
                 </Button>
               </Form>
             </div>
-            {/* <div className="w-full">
-              <div className="flex items-center justify-between px-6 py-6">
-                <p className="text-sm font-semibold leading-tight text-gray-800 lg:text-xl">
-                  Suggestions
-                </p>
-              </div>
-              <div className="px-6 pt-6 overflow-x-auto">
-                <div className="w-full whitespace-nowrap">
-                  <ul className="flex flex-col divide-y divide-gray-100">
-                    {Object.values(uniqueAssets).slice(0,5).map((tx) => {
-                      return (
-                        <Suggestion
-                          key={tx.id}
-                          tx={tx}
-                          trigger={() => ctx.trigger("asset")}
-                          setValue={(asset) => ctx.setValue("asset", { ...asset, exchange: "" })}
-                        />
-                      )
-                    })}
-                  </ul>
-                </div>
-              </div>
-            </div> */}
           </div>
         </Main.Content>
       </Main>

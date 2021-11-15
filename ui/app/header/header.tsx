@@ -48,11 +48,11 @@ export const Header: React.FC = (): JSX.Element => {
 
   return (
     <div className="h-full bg-gray-900 ">
-      <div className="px-4 pt-4 lg:mx-8 xl:mx-16 lg:pt-10">
-        <div className="hidden xl:flex">
+      <div className="px-4 pt-5 lg:mx-8 xl:mx-16 lg:pt-10">
+        <div className="hidden lg:flex">
           <DesktopNavbar items={menu.items} />
         </div>
-        <div className="xl:hidden">
+        <div className="lg:hidden">
           <MobileNavbar items={menu.items} />
         </div>
       </div>
