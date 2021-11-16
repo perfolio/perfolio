@@ -166,6 +166,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                   Cancel
                 </Button>
                 <Button
+                  size="block"
                   loading={submitting}
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
@@ -187,7 +188,9 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               </>
             ) : (
               <>
-                <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+                <Button size="block" href={`/portfolio/${id}`}>
+                  Go to portfolio
+                </Button>
               </>
             )}
           </div>
