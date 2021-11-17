@@ -21,7 +21,7 @@ async function main() {
     const ticker = isinMap.find(({ symbol }) => !symbol.includes("-"))?.symbol
 
     if (!ticker) {
-      console.log({isin})
+      console.log({ isin })
       continue
     }
 

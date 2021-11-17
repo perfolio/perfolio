@@ -25,7 +25,7 @@ export const getAbsolutePortfolioHistory = async (
 
   const cached = await cache.get<AssetHistoryWithoutAsset[]>(key)
   if (cached) {
-     return cached
+    return cached
   }
 
   await ctx.authorizeUser(({ sub }) => sub === portfolio.userId)
