@@ -10,14 +10,16 @@ query portfolio($portfolioId: ID!) {
       asset {
         __typename
         id
-        ticker
-        logo
         name
-        ... on CompanyStock {
-          __typename
-        }
-        ... on Crypto {
-          __typename
+        ... on ExchangeTradedAsset {
+          ticker
+          logo
+          ... on Stock {
+            __typename
+          }
+          ... on Crypto {
+            __typename
+          }
         }
       }
       portfolioId

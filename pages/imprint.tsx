@@ -20,7 +20,7 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
           <span>German only</span>
           <h1>Imprint / Impressum</h1>
           <h2>Angaben gemäß § 5 TMG</h2>
-          <span>Jordt Kohler Meister Meister Thomas Webersinke GbR</span>
+          <span>Hassel Jordt Kohler Meister Meister Thomas Webersinke GbR</span>
           <br></br>
           <span>Treibberg 9</span>
           <br></br>
