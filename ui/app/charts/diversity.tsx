@@ -17,6 +17,7 @@ const COLORS = [
   "#101974",
   "#0A1060",
 ].sort(() => Math.random() - 0.5)
+
 export const DiversificationChart: React.FC = (): JSX.Element => {
   const { t } = useI18n()
   const { currentPorfolioState } = useCurrentPorfolioState()
@@ -32,8 +33,8 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     currentPorfolioState
       .filter((h) => !!h)
       .forEach((holding) => {
-        const sector =
-          holding.asset.__typename === "CompanyStock" ? holding.asset.sector : undefined
+        console.log({ holding })
+        const sector = holding.asset.__typename === "Company" ? holding.asset.sector : undefined
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
@@ -44,7 +45,6 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       })
     return tmp
   }, [currentPorfolioState])
-
   /**
    * Aggregate by country
    */
@@ -57,8 +57,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       .filter((h) => !!h)
       .forEach((holding) => {
         if (holding) {
-          const country =
-            holding.asset.__typename === "CompanyStock" ? holding.asset.country : undefined
+          const country = holding.asset.__typename === "Company" ? holding.asset.country : undefined
           if (country) {
             if (!tmp[country]) {
               tmp[country] = 0

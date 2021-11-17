@@ -146,7 +146,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
         <Section className="flex flex-col justify-center" id="team">
           <SectionTitle tag={t("teamHeader")} title={t("teamSubheader")} />
           <Text align="text-center">{t("perfolioDescription")}</Text>
-          <div className="grid w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
             {members.map((m) => {
               return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
             })}
@@ -194,6 +194,11 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
           name: "Lukas Meister",
           title: "Business Development",
           image: "/img/lukas.png",
+        },
+        {
+          name: "Tobias Hassel",
+          title: "Tech",
+          image: "/img/tobi.jpg",
         },
       ],
       translations,

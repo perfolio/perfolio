@@ -8,8 +8,8 @@ import { getTransactionsOfPortfolio } from "./resolvers/portfolio/transaction"
 import { stockPricesAtExchange } from "./resolvers/query/stockPricesAtExchange"
 import { getExchangeTradedAsset } from "./util/getExchangeTradedAsset"
 import { getExchangeFromMic } from "./util/getExchangeFromMic"
-import { sector } from "./resolvers/companyStock/sector"
-import { country } from "./resolvers/companyStock/country"
+import { sector } from "./resolvers/company/sector"
+import { country } from "./resolvers/company/country"
 import { subscribeToNewsletter } from "./resolvers/mutation/subscribeToNewsletter"
 import { createTransaction } from "./resolvers/mutation/createTransaction"
 import { deleteTransaction } from "./resolvers/mutation/deleteTransaction"
@@ -65,17 +65,29 @@ export const resolvers: Resolvers<Context> = {
     updateSettings,
     subscribeToNewsletter,
   },
-  ExchangeTradedAsset: {
-    __resolveType() {
-      // TODO: Implement actual resolver logic
-      return "CompanyStock"
+  Asset: {
+    __resolveType(parent) {
+      return parent.__typename
     },
   },
-  CompanyStock: {
-    sector,
+  ExchangeTradedAsset: {
+    __resolveType(parent) {
+      if ("sector" in parent) {
+        return "Company"
+      }
+      return undefined
+    },
+  },
+  Stock: {
+    __resolveType() {
+      return "Company"
+    },
     country,
   },
 
+  Company: {
+    sector,
+  },
   Transaction: {
     asset: ({ assetId }, _args, ctx) => getExchangeTradedAsset(ctx, assetId),
   },
