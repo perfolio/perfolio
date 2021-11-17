@@ -35,7 +35,7 @@ export interface ConfirmationProps {
   /**
    * Override the default title
    */
-  title?: string
+  title?: string | React.ReactNode
 
   /**
    * Override the default label on the confirm button
@@ -64,10 +64,10 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
       <Drawer.Content center>
         <div className="flex flex-col items-center gap-8">
           {children}
-          <div className="flex items-center justify-between w-full gap-8">
+          <div className="items-center justify-between block w-full gap-8 space-y-4 sm:flex sm:space-y-0">
             <Button
               size="block"
-              type="plain"
+              type="secondary"
               onClick={async () => {
                 if (onCancel) {
                   await onCancel()

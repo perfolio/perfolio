@@ -55,9 +55,9 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
          * Size for regular buttons
          */
         !icon && {
-          "w-20 h-6 text-sm shadow-sm hover:shadow-md px-2 py-1": size === "sm",
-          "w-32 h-8 text-md shadow-md hover:shadow-lg px-3 py-1": size === "md",
-          "w-40 h-10 text-lg shadow-md hover:shadow-xl px-6 py-2": size === "lg",
+          "w-20 h-6 text-sm shadow-sm hover:shadow px-2 py-1": size === "sm",
+          "w-32 h-8 text-md shadow hover:shadow-md px-3 py-1": size === "md",
+          "w-40 h-10 text-lg shadow-md hover:shadow-lg px-6 py-2": size === "lg",
           "w-full h-10 text-lg block shadow-md hover:shadow-xl px-6 py-2": size === "block",
         },
         /**
