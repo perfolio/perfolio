@@ -1,19 +1,27 @@
 overwrite: true
-schema: "./pkg/api/graphql/schema.gql.ts"
-documents: "./pkg/api/graphql/{fragments,operations}/**/*.gql"
+schema: "./pkg/api/modules/**/schema.gql.ts"
 generates:
-  ./pkg/api/graphql/generated/graphql.ts:
+  ./pkg/api/modules/:
+    preset: graphql-modules
     plugins:
       - typescript
       - typescript-resolvers
       - typescript-operations
       - typescript-generic-sdk
+    presetConfig:
+      baseTypesPath: ../generated/schema-types.ts
+      filename: generated/module-types.ts
     config:
-      # Required for apollo server
-      # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
-      useIndexSignature: true
-      showUnusedMappers: true
-      maybeValue: T | undefined
+      contextType: "GraphQLModules.Context"
+      mappers:
+        User: "@perfolio/pkg/integrations/prisma#UserModel"
+        Portfolio: "@perfolio/pkg/integrations/prisma#PortfolioModel"
+
+      # # Required for apollo server
+      # # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server
+      # useIndexSignature: true
+      # showUnusedMappers: true
+      # maybeValue: T | undefined
 hooks:
   afterOneFileWrite:
     - prettier --write
