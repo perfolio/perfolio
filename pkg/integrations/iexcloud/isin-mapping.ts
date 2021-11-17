@@ -2,24 +2,22 @@ import * as z from "zod"
 import { Client } from "./client"
 
 export const GetIsinMappingResponseValidator = z.array(
-  z
-    .object({
-      /**
-       * The ticker
-       */
-      symbol: z.string(),
+  z.object({
+    /**
+     * The ticker
+     */
+    symbol: z.string(),
 
-      /**
-       * An identifier of where the asset is listed
-       */
-      exchange: z.string(),
+    /**
+     * An identifier of where the asset is listed
+     */
+    exchange: z.string(),
 
-      /**
-       * The geographic identifier where the asset is listed
-       */
-      region: z.string(),
-    })
-    .nonstrict(),
+    /**
+     * The geographic identifier where the asset is listed
+     */
+    region: z.string(),
+  }),
 )
 
 /**

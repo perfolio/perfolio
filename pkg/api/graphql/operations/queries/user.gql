@@ -2,7 +2,6 @@ query user($userId: ID!) {
   user(userId: $userId) {
     __typename
     id
-    email
     stripeCustomerId
     settings {
       __typename
@@ -10,7 +9,6 @@ query user($userId: ID!) {
       defaultCurrency
       defaultExchange {
         __typename
-
         abbreviation
         suffix
         mic

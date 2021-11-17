@@ -21,7 +21,7 @@ const validation = z.object({
   isin: z.string(),
   volume: z.string().transform((x: string) => parseInt(x)),
   value: z.string().transform((x: string) => parseInt(x)),
-  executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
+  executedAt: z.string().refine((d)=> new Date(d).).transform((x: string) => Time.fromDate(new Date(x)).unix()),
 })
 
 /**

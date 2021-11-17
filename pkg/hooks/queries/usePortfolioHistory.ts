@@ -18,6 +18,9 @@ export const usePortfolioHistory = (portfolioId?: string) => {
       const token = await getAccessTokenSilently()
       return await client(token).portfolioHistory({ portfolioId: portfolioId! })
     },
+    {
+      enabled: !!portfolioId,
+    },
   )
 
   return { portfolioHistory: data?.portfolio?.absoluteHistory ?? [], ...meta }

@@ -13,6 +13,9 @@ export const usePortfolio = () => {
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
     USE_PORTFOLIO_QUERY_KEY(portfolioId),
     async () => client(await getAccessTokenSilently()).portfolio({ portfolioId }),
+    {
+      enabled: !!portfolioId,
+    },
   )
   return { portfolio: data?.portfolio, ...meta }
 }
