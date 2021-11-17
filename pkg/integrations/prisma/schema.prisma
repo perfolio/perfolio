@@ -109,3 +109,13 @@ model Newsletter {
     email     String   @unique
     createdAt DateTime @default(now())
 }
+
+
+model ExchangeTradedAsset {
+    id     String  @id
+    isin   String  @unique
+    ticker String  @unique
+    figi   String? @unique
+    //    Human readable name
+    name String
+}
