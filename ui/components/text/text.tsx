@@ -23,7 +23,6 @@ export interface TextProps {
    * Can be combined with breakpoint prefixes
    */
   align?: string
-
   /**
    * Use a monospace font
    */

@@ -1,6 +1,5 @@
 import React from "react"
 import { Button, Drawer } from "@perfolio/ui/components"
-import { Heading } from "../heading"
 
 export interface ConfirmationProps {
   /**
@@ -36,7 +35,7 @@ export interface ConfirmationProps {
   /**
    * Override the default title
    */
-  title?: string
+  title?: string | React.ReactNode
 
   /**
    * Override the default label on the confirm button
@@ -63,36 +62,31 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
   return (
     <Drawer open={open} setOpen={setOpen} title={title}>
       <Drawer.Content center>
-        <div className="space-y-4">
-          <div className="hidden sm:flex w-full justify-center text-center">
-            <Heading h3>{title}</Heading>
-          </div>
-          <div className="flex flex-col items-center gap-8 p-4 sm:p-8 border rounded">
-            {children}
-            <div className="block sm:flex space-y-4 sm:space-y-0 items-center justify-between w-full gap-8">
-              <Button
-                size="block"
-                type="secondary"
-                onClick={async () => {
-                  if (onCancel) {
-                    await onCancel()
-                  }
-                  setOpen(false)
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="block"
-                type={severityMapping[severity]}
-                onClick={async () => {
-                  await onConfirm()
-                  setOpen(false)
-                }}
-              >
-                {confirmLabel ?? "Confirm"}
-              </Button>
-            </div>
+        <div className="flex flex-col items-center gap-8">
+          {children}
+          <div className="items-center justify-between block w-full gap-8 space-y-4 sm:flex sm:space-y-0">
+            <Button
+              size="block"
+              type="secondary"
+              onClick={async () => {
+                if (onCancel) {
+                  await onCancel()
+                }
+                setOpen(false)
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="block"
+              type={severityMapping[severity]}
+              onClick={async () => {
+                await onConfirm()
+                setOpen(false)
+              }}
+            >
+              {confirmLabel ?? "Confirm"}
+            </Button>
           </div>
         </div>
       </Drawer.Content>

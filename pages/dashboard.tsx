@@ -3,7 +3,7 @@ import { usePortfolios } from "@perfolio/pkg/hooks"
 import { AppLayout } from "@perfolio/ui/app"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { Card, Tooltip, Text, Icon } from "@perfolio/ui/components"
-import { Button } from "@perfolio/ui/components"
+import { Button, Heading } from "@perfolio/ui/components"
 import React, { useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
@@ -46,7 +46,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
   return (
     <>
       <Confirmation
-        title="Delete Portfolio"
+        title={<span className="md:hidden">Delete Portfolio</span>}
         severity="critical"
         confirmLabel="Delete"
         open={confirmOpen}
@@ -61,15 +61,21 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
           )
         }
       >
-        <Text>
-          This will <strong>delete all your transactions</strong> of your portfolio.
-        </Text>
-        <Text>
-          Are you sure you want to delete <strong>{name}</strong>?
-        </Text>
-        <p className="p-2 border rounded bg-error-light text-error border-error bg-opacity-20">
-          <strong>Warning:</strong> This action is not reversible, Please be certain.
-        </p>
+        <div className="space-y-4">
+          <div className="justify-center hidden w-full text-center md:flex ">
+            <Heading h3>Delete Portfolio</Heading>
+          </div>
+          <div className="flex flex-col gap-4 rounded lg:p-12 lg:border">
+            <Text>
+              This will <strong>delete all your transactions</strong> of your portfolio.
+              <br />
+              Are you sure you want to delete <strong>{name}</strong>?
+            </Text>
+            <p className="p-2 border rounded bg-error-light text-error border-error bg-opacity-20">
+              <strong>Warning:</strong> This action is not reversible, Please be certain.
+            </p>
+          </div>
+        </div>
       </Confirmation>
       <Card>
         <Card.Header>
