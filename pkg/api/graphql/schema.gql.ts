@@ -53,16 +53,21 @@ export default gql`
   """
   Stocks such as company shares and funds.
   """
-  type CompanyStock implements ExchangeTradedAsset & Asset {
+  interface Stock implements ExchangeTradedAsset & Asset {
     """
-    For stocks we are always using the isin as id.
+    A globally unique id
     """
     id: ID!
 
     """
-    International Securities Indentification Number
+    International Securities Identification Number
     """
     isin: String!
+
+    """
+    Financial Instrument Global Identifier
+    """
+    figi: String!
 
     """
     The companys name
@@ -80,13 +85,54 @@ export default gql`
     ticker: String!
 
     """
-    The main sector of this company
+    The country where this company is registered
     """
-    sector: String!
+    country: String!
+  }
+
+  """
+  Company stocks
+  """
+  type Company implements Stock & ExchangeTradedAsset & Asset {
+    """
+    A globally unique id
+    """
+    id: ID!
+
+    """
+    International Securities Identification Number
+    """
+    isin: String!
+
+    """
+    Financial Instrument Global Identifier
+    """
+    figi: String!
+
+    """
+    The companys name
+    """
+    name: String!
+
+    """
+    The companys logo url
+    """
+    logo: String!
+
+    """
+    The ticker of a stock. This does not include pre/suffixes for different exchanges
+    """
+    ticker: String!
+
     """
     The country where this company is registered
     """
     country: String!
+
+    """
+    The sector of this company
+    """
+    sector: String!
   }
   """
   Crypto
@@ -137,7 +183,7 @@ export default gql`
     """
     The of asset. Stocks, Crypto, Real estate for example.
     """
-    asset: ExchangeTradedAsset!
+    asset: Asset!
 
     """
     A timestamp when the transaction was executed
@@ -215,11 +261,6 @@ export default gql`
     A unique identifier: stored as uuid
     """
     id: ID!
-
-    """
-    The user's email
-    """
-    email: String!
 
     """
     The user's settings
@@ -576,5 +617,14 @@ export default gql`
     Only update some values in the user settings.
     """
     updateSettings("A partial settings object" settings: UpdateSettings!): Settings!
+
+    """
+    Create a new record of an exchange traded asset
+    and make it searchable
+    """
+    createExchangeTradedAsset(
+      "International Securities Identification Number"
+      isin: String!
+    ): ExchangeTradedAsset
   }
 `

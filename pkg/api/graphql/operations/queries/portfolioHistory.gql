@@ -4,18 +4,21 @@ query portfolioHistory($portfolioId: ID!) {
       assetId
       asset {
         id
-        ticker
         name
-        logo
-
-        ... on CompanyStock {
+        ... on ExchangeTradedAsset {
           __typename
-          sector
-          country
-        }
+          ticker
+          logo
+          ... on Company {
+            __typename
+            country
 
-        ... on Crypto {
-          __typename
+            sector
+          }
+
+          ... on Crypto {
+            __typename
+          }
         }
       }
       history {
