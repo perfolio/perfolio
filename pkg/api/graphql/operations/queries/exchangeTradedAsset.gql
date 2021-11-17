@@ -5,5 +5,12 @@ query exchangeTradedAsset($id: ID!) {
     ticker
     logo
     name
+
+    ... on Stock {
+      ... on Company {
+        sector
+        country
+      }
+    }
   }
 }

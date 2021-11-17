@@ -1,7 +1,7 @@
 import * as cloud from "@perfolio/pkg/integrations/iexcloud"
 
 import { ApolloCache, Key } from "@perfolio/pkg/integrations/redis"
-import { CompanyStock, Exchange } from "@perfolio/pkg/api/graphql"
+import { Exchange, Company } from "@perfolio/pkg/api/graphql"
 import {
   GetIsinMappingResponse,
   GetSymbolsAtExchangeResponse,
@@ -45,10 +45,10 @@ export class IEX extends DataSource {
     return await this.getCompany(ticker)
   }
 
-  public async getCompany(ticker: string): Promise<Omit<CompanyStock, "id" | "isin"> | null> {
+  public async getCompany(ticker: string): Promise<Omit<Company, "id" | "isin"> | null> {
     const key = new Key({ dataSource: "IEX", operation: "getCompany", ticker })
     const cache = new ApolloCache()
-    const cachedValue = await cache.get<Omit<CompanyStock, "id" | "isin">>(key)
+    const cachedValue = await cache.get<Omit<Company, "id" | "isin">>(key)
     if (cachedValue) {
       return cachedValue
     }
@@ -76,6 +76,7 @@ export class IEX extends DataSource {
       name: company.companyName as string,
       ticker,
       logo: logo.url,
+      figi: "",
       sector: company.sector as string,
       country: company.country as string,
     }
