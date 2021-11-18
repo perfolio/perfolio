@@ -26,14 +26,14 @@ export const Price: React.FC<PriceProps> = ({
       className={cn(
         "relative flex flex-col justify-between p-8 transition-shadow duration-300 bg-white border border-gray-200 rounded sm:items-center hover:shadow-2xl",
         {
-          "border-cta shadow-cta": highlighted,
+          "border-primary shadow-cta": highlighted,
         },
       )}
     >
       {highlighted
         ? (
           <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
-            <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-cta to-secondary">
+            <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-primary to-secondary">
               Most Popular
             </div>
           </div>

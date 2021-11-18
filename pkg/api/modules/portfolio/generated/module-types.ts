@@ -13,21 +13,60 @@ export namespace PortfolioModule {
       | "volume"
       | "mic"
     Query: "portfolio"
-    Mutation: "createPortfolio" | "updatePortfolio" | "deletePortfolio" | "clonePortfolio"
+    Mutation:
+      | "createPortfolio"
+      | "updatePortfolio"
+      | "deletePortfolio"
+      | "clonePortfolio"
+      | "createTransaction"
+      | "updateTransaction"
+      | "deleteTransaction"
     User: "portfolio" | "portfolios"
   }
 
   interface DefinedInputFields {
     CreatePortfolio: "id" | "name" | "userId" | "primary"
     UpdatePortfolio: "id" | "name" | "primary"
+    CreateTransaction:
+      | "assetId"
+      | "executedAt"
+      | "portfolioId"
+      | "value"
+      | "volume"
+      | "mic"
+    UpdateTransaction:
+      | "id"
+      | "assetId"
+      | "executedAt"
+      | "portfolioId"
+      | "value"
+      | "volume"
+      | "mic"
   }
 
   export type Portfolio = Pick<Types.Portfolio, DefinedFields["Portfolio"]>
   export type User = Types.User
-  export type Transaction = Pick<Types.Transaction, DefinedFields["Transaction"]>
-  export type CreatePortfolio = Pick<Types.CreatePortfolio, DefinedInputFields["CreatePortfolio"]>
-  export type UpdatePortfolio = Pick<Types.UpdatePortfolio, DefinedInputFields["UpdatePortfolio"]>
+  export type Transaction = Pick<
+    Types.Transaction,
+    DefinedFields["Transaction"]
+  >
+  export type CreatePortfolio = Pick<
+    Types.CreatePortfolio,
+    DefinedInputFields["CreatePortfolio"]
+  >
+  export type UpdatePortfolio = Pick<
+    Types.UpdatePortfolio,
+    DefinedInputFields["UpdatePortfolio"]
+  >
   export type Asset = Types.Asset
+  export type CreateTransaction = Pick<
+    Types.CreateTransaction,
+    DefinedInputFields["CreateTransaction"]
+  >
+  export type UpdateTransaction = Pick<
+    Types.UpdateTransaction,
+    DefinedInputFields["UpdateTransaction"]
+  >
   export type Query = Pick<Types.Query, DefinedFields["Query"]>
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
@@ -39,8 +78,14 @@ export namespace PortfolioModule {
     Types.TransactionResolvers,
     DefinedFields["Transaction"] | "__isTypeOf"
   >
-  export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
-  export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields["Mutation"]>
+  export type QueryResolvers = Pick<
+    Types.QueryResolvers,
+    DefinedFields["Query"]
+  >
+  export type MutationResolvers = Pick<
+    Types.MutationResolvers,
+    DefinedFields["Mutation"]
+  >
   export type UserResolvers = Pick<Types.UserResolvers, DefinedFields["User"]>
 
   export interface Resolvers {
@@ -89,6 +134,9 @@ export namespace PortfolioModule {
       updatePortfolio?: gm.Middleware[]
       deletePortfolio?: gm.Middleware[]
       clonePortfolio?: gm.Middleware[]
+      createTransaction?: gm.Middleware[]
+      updateTransaction?: gm.Middleware[]
+      deleteTransaction?: gm.Middleware[]
     }
   }
 }

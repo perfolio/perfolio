@@ -1,5 +1,5 @@
 import { useAuth0, } from "@auth0/auth0-react"
-import { PortfolioHistoryQuery, } from "@perfolio/pkg/api/graphql"
+import { PortfolioHistoryQuery, } from "@perfolio/pkg/api"
 import { useRouter, } from "next/router"
 import { useQuery, } from "react-query"
 import { client, } from "../client"

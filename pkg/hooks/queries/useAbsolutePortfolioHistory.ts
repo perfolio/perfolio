@@ -1,6 +1,6 @@
 import { useQuery, } from "react-query"
 export const USE_ABSOLUTE_PORTFOLIO_HISTORY = "USE_ABSOLUTE_PORTFOLIO_HISTORY"
-import { AssetHistory, } from "@perfolio/pkg/api/graphql"
+import { AssetHistory, } from "@perfolio/pkg/api"
 import { toTimeseries, } from "@perfolio/pkg/finance/returns"
 
 export const useAbsolutePortfolioHistory = (

@@ -44,16 +44,16 @@ export function AutoCompleteSelect<Option,>({
     formState: { errors, isSubmitting, },
   } = useFormContext()
 
-  const isin = watch(name,)
+  const assetId = watch(name,)
 
   /**
    * Carry onChange event to parent
    */
   useEffect(() => {
     if (onChange) {
-      onChange(isin,)
+      onChange(assetId,)
     }
-  }, [isin, onChange,],)
+  }, [assetId, onChange,],)
 
   /**
    * User search value
@@ -65,7 +65,7 @@ export function AutoCompleteSelect<Option,>({
    */
   const { search, isLoading, } = useSearch(fragment,)
   const options = search?.documents.map((d,) => d.content.asset) ?? []
-  const selected = options.find((o,) => o.isin === isin)
+  const selected = options.find((o,) => o.id === assetId)
   const error = Array.isArray(errors[name],)
     ? errors[name].join(", ",)
     : errors[name]?.message || errors[name]
@@ -172,14 +172,14 @@ export function AutoCompleteSelect<Option,>({
                           <button
                             type="button"
                             onClick={() => {
-                              setValue(name, option?.isin,)
+                              setValue(name, option?.id,)
                               setState(State.Done,)
                             }}
                             className={cn(
                               "relative p-2 cursor-pointer w-full focus:outline-none hover:bg-gray-50 duration-500 transform",
                               {
-                                "bg-gray-100": option?.isin === isin,
-                                "bg-gradient-to-tr from-gray-50 to-gray-100": isin,
+                                "bg-gray-100": option?.id === assetId,
+                                "bg-gradient-to-tr from-gray-50 to-gray-100": assetId,
                               },
                             )}
                           >

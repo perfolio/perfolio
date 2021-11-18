@@ -1,4 +1,4 @@
-import { TransactionSchemaFragment, } from "@perfolio/pkg/api/graphql"
+import { TransactionSchemaFragment, } from "@perfolio/pkg/api"
 import { Context, } from "../../context"
 
 export async function getTransactionsOfPortfolio(

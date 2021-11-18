@@ -13,9 +13,24 @@ export namespace AssetsModule {
       | "sector"
       | "assetHistory"
     Crypto: "id" | "isin" | "name" | "ticker" | "logo" | "assetHistory"
+    Mutation: "createExchangeTradedAsset"
     Asset: "id" | "name"
-    ExchangeTradedAsset: "id" | "isin" | "ticker" | "name" | "logo" | "assetHistory"
-    Stock: "id" | "isin" | "figi" | "name" | "logo" | "ticker" | "country" | "assetHistory"
+    ExchangeTradedAsset:
+      | "id"
+      | "isin"
+      | "ticker"
+      | "name"
+      | "logo"
+      | "assetHistory"
+    Stock:
+      | "id"
+      | "isin"
+      | "figi"
+      | "name"
+      | "logo"
+      | "ticker"
+      | "country"
+      | "assetHistory"
   }
 
   export type Asset = Pick<Types.Asset, DefinedFields["Asset"]>
@@ -27,22 +42,37 @@ export namespace AssetsModule {
   export type Stock = Pick<Types.Stock, DefinedFields["Stock"]>
   export type Company = Pick<Types.Company, DefinedFields["Company"]>
   export type Crypto = Pick<Types.Crypto, DefinedFields["Crypto"]>
+  export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
   export type CompanyResolvers = Pick<
     Types.CompanyResolvers,
     DefinedFields["Company"] | "__isTypeOf"
   >
-  export type CryptoResolvers = Pick<Types.CryptoResolvers, DefinedFields["Crypto"] | "__isTypeOf">
-  export type AssetResolvers = Pick<Types.AssetResolvers, DefinedFields["Asset"]>
+  export type CryptoResolvers = Pick<
+    Types.CryptoResolvers,
+    DefinedFields["Crypto"] | "__isTypeOf"
+  >
+  export type MutationResolvers = Pick<
+    Types.MutationResolvers,
+    DefinedFields["Mutation"]
+  >
+  export type AssetResolvers = Pick<
+    Types.AssetResolvers,
+    DefinedFields["Asset"]
+  >
   export type ExchangeTradedAssetResolvers = Pick<
     Types.ExchangeTradedAssetResolvers,
     DefinedFields["ExchangeTradedAsset"]
   >
-  export type StockResolvers = Pick<Types.StockResolvers, DefinedFields["Stock"]>
+  export type StockResolvers = Pick<
+    Types.StockResolvers,
+    DefinedFields["Stock"]
+  >
 
   export interface Resolvers {
     Company?: CompanyResolvers
     Crypto?: CryptoResolvers
+    Mutation?: MutationResolvers
   }
 
   export interface MiddlewareMap {
@@ -69,6 +99,10 @@ export namespace AssetsModule {
       ticker?: gm.Middleware[]
       logo?: gm.Middleware[]
       assetHistory?: gm.Middleware[]
+    }
+    Mutation?: {
+      "*"?: gm.Middleware[]
+      createExchangeTradedAsset?: gm.Middleware[]
     }
   }
 }

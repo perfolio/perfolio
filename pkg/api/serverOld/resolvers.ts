@@ -1,4 +1,4 @@
-import { Resolvers, } from "@perfolio/pkg/api/graphql"
+import { Resolvers, } from "@perfolio/pkg/api"
 import { Context, } from "./context"
 import { country, } from "./resolvers/company/country"
 import { sector, } from "./resolvers/company/sector"

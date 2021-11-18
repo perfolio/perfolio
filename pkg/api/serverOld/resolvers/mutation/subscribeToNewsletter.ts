@@ -1,4 +1,4 @@
-import { ResolverFn, } from "@perfolio/pkg/api/graphql"
+import { ResolverFn, } from "@perfolio/pkg/api"
 import { Context, } from "../../context"
 
 export const subscribeToNewsletter: ResolverFn<string, unknown, Context, { email: string }> =

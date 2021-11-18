@@ -1,6 +1,7 @@
 import { v4 as uuid, } from "uuid"
 
 const perfolioIds = {
+  asset: "a",
   user: "u",
   authenticationRequest: "ar",
   transaction: "tx",

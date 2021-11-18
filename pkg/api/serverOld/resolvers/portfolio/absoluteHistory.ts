@@ -1,4 +1,4 @@
-import { AssetHistory, } from "@perfolio/pkg/api/graphql"
+import { AssetHistory, } from "@perfolio/pkg/api"
 import { Transaction as TransactionModel, } from "@perfolio/pkg/integrations/prisma"
 import { ApolloCache, Key, } from "@perfolio/pkg/integrations/redis"
 import { Time, } from "@perfolio/pkg/util/time"

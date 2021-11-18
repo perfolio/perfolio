@@ -9,8 +9,14 @@ export namespace UserModule {
   export type User = Pick<Types.User, DefinedFields["User"]>
   export type Query = Pick<Types.Query, DefinedFields["Query"]>
 
-  export type UserResolvers = Pick<Types.UserResolvers, DefinedFields["User"] | "__isTypeOf">
-  export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
+  export type UserResolvers = Pick<
+    Types.UserResolvers,
+    DefinedFields["User"] | "__isTypeOf"
+  >
+  export type QueryResolvers = Pick<
+    Types.QueryResolvers,
+    DefinedFields["Query"]
+  >
 
   export interface Resolvers {
     User?: UserResolvers

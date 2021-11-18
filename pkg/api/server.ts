@@ -11,7 +11,7 @@ export type ServerConfig = {
   logger?: Logger
 }
 
-export const Server = (config?: ServerConfig,): ApolloServer => {
+export const server = (config?: ServerConfig,): ApolloServer => {
   return new ApolloServer({
     schema: application.createSchemaForApollo(),
     context,

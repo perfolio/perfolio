@@ -1,4 +1,4 @@
-import { AssetHistory, } from "@perfolio/pkg/api/graphql"
+import { AssetHistory, } from "@perfolio/pkg/api"
 import { Time, } from "@perfolio/pkg/util/time"
 import { rebalance, } from "./rebalance"
 import { AssetsOverTime, } from "./types"

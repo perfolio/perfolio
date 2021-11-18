@@ -1,4 +1,4 @@
-import { ValueAndQuantityAtTime, } from "@perfolio/pkg/api/graphql"
+import { ValueAndQuantityAtTime, } from "@perfolio/pkg/api"
 import { usePortfolioHistory, } from "./usePortfolioHistory"
 
 export const useCurrentPorfolioState = () => {

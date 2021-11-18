@@ -17,6 +17,10 @@ generates:
       mappers:
         User: "@perfolio/pkg/integrations/prisma#UserModel"
         Portfolio: "@perfolio/pkg/integrations/prisma#PortfolioModel"
+        Settings: "@perfolio/pkg/integrations/prisma#SettingsModel"
+        Transaction: "@perfolio/pkg/integrations/prisma#TransactionModel"
+        ExchangeTradedAsset: "@perfolio/pkg/integrations/prisma#ExchangeTradedAssetModel"
+        Asset: "@perfolio/pkg/integrations/prisma#AssetModel"
 
       # Required for apollo server
       # see https://www.graphql-code-generator.com/docs/plugins/typescript-resolvers#integration-with-apollo-server

@@ -1,5 +1,5 @@
 import { useAuth0, } from "@auth0/auth0-react"
-import { CreateSettingsMutation, CreateSettingsMutationVariables, } from "@perfolio/pkg/api/graphql"
+import { CreateSettingsMutation, CreateSettingsMutationVariables, } from "@perfolio/pkg/api"
 import { useMutation, useQueryClient, } from "react-query"
 import { client, } from "../client"
 import { USE_USER_QUERY_KEY, } from "../queries/useUser"

@@ -1,4 +1,4 @@
-import { Exchange, ResolverFn, } from "@perfolio/pkg/api/graphql"
+import { Exchange, ResolverFn, } from "@perfolio/pkg/api"
 import { ApolloCache, Key, } from "@perfolio/pkg/integrations/redis"
 import { Context, } from "../../context"
 

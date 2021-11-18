@@ -1,8 +1,5 @@
 import { useAuth0, } from "@auth0/auth0-react"
-import {
-  ExchangeTradedAssetQuery,
-  ExchangeTradedAssetQueryVariables,
-} from "@perfolio/pkg/api/graphql"
+import { ExchangeTradedAssetQuery, ExchangeTradedAssetQueryVariables, } from "@perfolio/pkg/api"
 import { useQuery, } from "react-query"
 import { client, } from "../client"
 

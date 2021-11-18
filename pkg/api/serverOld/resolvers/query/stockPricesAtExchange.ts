@@ -1,4 +1,4 @@
-import { ResolverFn, ValueAtTime, } from "@perfolio/pkg/api/graphql"
+import { ResolverFn, ValueAtTime, } from "@perfolio/pkg/api"
 import { Context, } from "../../context"
 
 export const stockPricesAtExchange: ResolverFn<

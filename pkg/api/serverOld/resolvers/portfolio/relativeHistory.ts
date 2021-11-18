@@ -1,7 +1,7 @@
 import { rebalance, toTimeseries, } from "@perfolio/pkg/finance/returns"
 import { ApolloCache, Key, } from "@perfolio/pkg/integrations/redis"
 
-import { ValueAtTime, } from "@perfolio/pkg/api/graphql"
+import { ValueAtTime, } from "@perfolio/pkg/api"
 import { Context, } from "../../context"
 import { getAbsolutePortfolioHistory, } from "./absoluteHistory"
 

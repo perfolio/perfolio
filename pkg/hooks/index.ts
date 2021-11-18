@@ -13,6 +13,7 @@ export * from "./queries/useSearch"
 export * from "./queries/useStandardDeviation"
 export * from "./queries/useUser"
 
+export * from "./mutations/createExchangeTradedAsset"
 export * from "./mutations/createSettings"
 export * from "./mutations/createTransaction"
 export * from "./mutations/deleteTransaction"

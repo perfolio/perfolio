@@ -1,5 +1,5 @@
 import { env, } from "@chronark/env"
-import { Server, } from "@perfolio/pkg/api/server"
+import { server, } from "@perfolio/pkg/api/server"
 import { JWT, } from "@perfolio/pkg/auth"
 import { NextApiRequest, NextApiResponse, } from "next"
 
@@ -17,12 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
     return res.end()
   }
 
-  const server = Server()
-  await server.start()
+  const srv = server()
+  await srv.start()
   /**
    * Handle graphql request
    */
-  const handler = server.createHandler({ path: "/api/graphql", },)
+  const handler = srv.createHandler({ path: "/api/graphql", },)
   await handler(req, res,)
 }
 

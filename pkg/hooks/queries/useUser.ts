@@ -1,5 +1,5 @@
 import { useAuth0, } from "@auth0/auth0-react"
-import { UserQuery, } from "@perfolio/pkg/api/graphql"
+import { UserQuery, } from "@perfolio/pkg/api"
 import { useQuery, } from "react-query"
 import { client, } from "../client"
 export const USE_USER_QUERY_KEY = "getUser"

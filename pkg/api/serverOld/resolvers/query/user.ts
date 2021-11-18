@@ -1,4 +1,4 @@
-import { ResolverFn, } from "@perfolio/pkg/api/graphql"
+import { ResolverFn, } from "@perfolio/pkg/api"
 import { User as UserModel, } from "@perfolio/pkg/integrations/prisma"
 import { Context, } from "../../context"
 export const user: ResolverFn<UserModel | null, unknown, Context, { userId: string }> = async (

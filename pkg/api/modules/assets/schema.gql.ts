@@ -154,4 +154,9 @@ export default gql `
     """
     assetHistory(exchangeId: ID!, start: Int!, end: Int!): [ValueAndQuantityAtTime!]!
   }
+
+
+  extend type Mutation {
+    createExchangeTradedAsset(isin: String!): ExchangeTradedAsset
+  }
 `

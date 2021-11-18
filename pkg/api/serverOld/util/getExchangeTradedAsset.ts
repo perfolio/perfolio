@@ -1,6 +1,6 @@
 import { ApolloCache, Key, } from "@perfolio/pkg/integrations/redis"
 
-import { Company, Crypto, } from "@perfolio/pkg/api/graphql"
+import { Company, Crypto, } from "@perfolio/pkg/api"
 import { Context, } from "../context"
 import { getTickerFromIsin, } from "./getTickerFromIsin"
 

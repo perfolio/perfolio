@@ -1,4 +1,4 @@
-import { ValueAtTime, } from "@perfolio/pkg/api/graphql"
+import { ValueAtTime, } from "@perfolio/pkg/api"
 import { Mean, } from "@perfolio/pkg/finance/kpis"
 import { useQuery, } from "react-query"
 

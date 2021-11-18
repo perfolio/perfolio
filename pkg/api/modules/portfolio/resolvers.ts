@@ -1,3 +1,4 @@
+import { newId, } from "@perfolio/pkg/id"
 import { Context, } from "../../context"
 import { Resolvers, } from "../../generated/schema-types"
 
@@ -6,8 +7,9 @@ export const resolvers: Resolvers<Context> = {
     portfolio: async (user, { portfolioId, }, ctx,) => {
       ctx.authorizeUser((claims,) => claims.sub === user.id)
       return (
-        (await ctx.dataSources.db.portfolio.findUnique({ where: { id: portfolioId, }, },))
-          ?? undefined
+        (await ctx.dataSources.db.portfolio.findUnique({
+          where: { id: portfolioId, },
+        },)) ?? undefined
       )
     },
     portfolios: async (user, _args, ctx,) => {
@@ -33,6 +35,26 @@ export const resolvers: Resolvers<Context> = {
       }
       ctx.authorizeUser((claims,) => claims.sub === p.user.id)
       return p.user
+    },
+    transactions: async (portfolio, _args, ctx,) => {
+      ctx.authorizeUser((claims,) => claims.sub === portfolio.userId)
+      return await ctx.dataSources.db.transaction.findMany({
+        where: {
+          portfolioId: portfolio.id,
+        },
+      },)
+    },
+  },
+  Transaction: {
+    asset: async (transaction, _args, ctx,) => {
+      ctx.authorizeUser(() => true)
+      const asset = await ctx.dataSources.db.exchangeTradedAsset.findUnique({
+        where: { id: transaction.assetId, },
+      },)
+      if (!asset) {
+        throw new Error(`Asset was not found in db: ${transaction.assetId}`,)
+      }
+      return asset
     },
   },
   Query: {
@@ -84,7 +106,59 @@ export const resolvers: Resolvers<Context> = {
       }
       ctx.authorizeUser((claims,) => claims.sub === portfolio.userId)
 
-      return await ctx.dataSources.db.portfolio.delete({ where: { id: portfolioId, }, },)
+      return await ctx.dataSources.db.portfolio.delete({
+        where: { id: portfolioId, },
+      },)
+    },
+    createTransaction: async (_root, { transaction, }, ctx,) => {
+      const portfolio = await ctx.dataSources.db.portfolio.findUnique({
+        where: { id: transaction.portfolioId, },
+      },)
+      if (!portfolio) {
+        throw new Error(`Portfolio ${transaction.portfolioId} does not exist`,)
+      }
+      ctx.authorizeUser((claims,) => claims.sub === portfolio.userId)
+
+      return await ctx.dataSources.db.transaction.create({
+        data: {
+          id: newId("transaction",),
+          ...transaction,
+        },
+      },)
+    },
+    updateTransaction: async (_root, { transaction, }, ctx,) => {
+      const existingTransaction = await ctx.dataSources.db.transaction.findUnique({
+        where: { id: transaction.id, },
+        include: { portfolio: true, },
+      },)
+      if (!existingTransaction) {
+        throw new Error(`Transaction ${transaction.id} does not exist`,)
+      }
+      ctx.authorizeUser(
+        (claims,) => claims.sub === existingTransaction.portfolio.userId,
+      )
+
+      return await ctx.dataSources.db.transaction.update({
+        where: {
+          id: transaction.id,
+        },
+        data: transaction,
+      },)
+    },
+    deleteTransaction: async (_root, { transactionId, }, ctx,) => {
+      const transaction = await ctx.dataSources.db.transaction.findUnique({
+        where: { id: transactionId, },
+        include: { portfolio: true, },
+      },)
+      if (!transaction) {
+        throw new Error(`Transaction ${transactionId} does not exist`,)
+      }
+      ctx.authorizeUser(
+        (claims,) => claims.sub === transaction.portfolio.userId,
+      )
+      return await ctx.dataSources.db.transaction.delete({
+        where: { id: transactionId, },
+      },)
     },
   },
 }

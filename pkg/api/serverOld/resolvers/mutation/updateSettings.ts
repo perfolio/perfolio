@@ -1,4 +1,4 @@
-import { Exchange, ResolverFn, Settings, UpdateSettings, } from "@perfolio/pkg/api/graphql"
+import { Exchange, ResolverFn, Settings, UpdateSettings, } from "@perfolio/pkg/api"
 import { Currency, } from "@perfolio/pkg/integrations/prisma"
 import { Context, } from "../../context"
 export const updateSettings: ResolverFn<Settings, unknown, Context, { settings: UpdateSettings }> =

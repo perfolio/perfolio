@@ -1,4 +1,4 @@
-import { Exchange, } from "@perfolio/pkg/api/graphql"
+import { Exchange, } from "@perfolio/pkg/api"
 import { Context, } from "../context"
 
 export const getExchangeFromMic = async (ctx: Context, mic: string,): Promise<Exchange> => {

@@ -1,5 +1,5 @@
 import { useAuth0, } from "@auth0/auth0-react"
-import { ExchangesQuery, } from "@perfolio/pkg/api/graphql"
+import { ExchangesQuery, } from "@perfolio/pkg/api"
 import { useQuery, } from "react-query"
 import { client, } from "../client"
 

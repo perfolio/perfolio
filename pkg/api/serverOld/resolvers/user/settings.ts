@@ -1,4 +1,4 @@
-import { Settings, } from "@perfolio/pkg/api/graphql"
+import { Settings, } from "@perfolio/pkg/api"
 import { Context, } from "../../context"
 
 export const getSettingsFromUser = async (

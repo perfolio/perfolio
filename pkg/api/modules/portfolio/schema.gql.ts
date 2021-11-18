@@ -87,6 +87,64 @@ export default gql `
     """
     mic: String
   }
+  input CreateTransaction {
+    """
+    Reference to the actual asset
+    """
+    assetId: String!
+    """
+    A timestamp when the transaction was executed in unix time
+    """
+    executedAt: Int!
+
+    """
+    The portfolio of this transaction
+    """
+    portfolioId: ID!
+    """
+    How much each share/item was bought/sold for
+    """
+    value: Float!
+    """
+    How many shares/items the user bought or sold
+    negative if sold
+    """
+    volume: Float!
+    """
+    The market identifier code where the user intends to sell this asset
+    """
+    mic: String!
+  }
+
+  input UpdateTransaction {
+    id: ID!
+    """
+    Reference to the actual asset
+    """
+    assetId: String
+    """
+    A timestamp when the transaction was executed in unix time
+    """
+    executedAt: Int
+
+    """
+    The portfolio of this transaction
+    """
+    portfolioId: ID
+    """
+    How much each share/item was bought/sold for
+    """
+    value: Float
+    """
+    How many shares/items the user bought or sold
+    negative if sold
+    """
+    volume: Float
+    """
+    The market identifier code where the user intends to sell this asset
+    """
+    mic: String
+  }
 
   extend type User {
     portfolio(portfolioId: ID!): Portfolio
@@ -113,5 +171,9 @@ export default gql `
     Clone a portfolio with all its transactions and return the clone
     """
     clonePortfolio(portfolioId: ID!): Portfolio!
+
+    createTransaction(transaction: CreateTransaction!): Transaction!
+    updateTransaction(transaction: UpdateTransaction!): Transaction!
+    deleteTransaction(transactionId: ID!): Transaction!
   }
 `

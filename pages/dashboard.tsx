@@ -253,13 +253,16 @@ const IndexPage: NextPage<PageProps> = ({ translations, },) => {
   return (
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
-        <Card>
+        <Heading h2 color="text-gray-50">Your portfolios</Heading>
+        {
+          /* <Card>
           <div className="flex flex-col items-center p-4 my-4 space-y-6 text-center sm:p-8 sm:my-8">
             <Card.Header>
               <Card.Header.Title title="Your portfolios"></Card.Header.Title>
             </Card.Header>
           </div>
-        </Card>
+        </Card> */
+        }
         {[...portfolios.sort((a, b,) => Number(a.primary,) - Number(b.primary,)),].map((p,) => (
           <PortfolioCard key={p.id} {...p} />
         ))}

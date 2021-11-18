@@ -1,6 +1,6 @@
 import * as cloud from "@perfolio/pkg/integrations/iexcloud"
 
-import { Company, Exchange, } from "@perfolio/pkg/api/graphql"
+import { Company, Exchange, } from "@perfolio/pkg/api"
 import {
   GetIsinMappingResponse,
   GetSymbolsAtExchangeResponse,

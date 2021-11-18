@@ -1,4 +1,4 @@
-import { Transaction, } from "@perfolio/pkg/api/graphql"
+import { Transaction, } from "@perfolio/pkg/api"
 import { useExchangeTradedAsset, usePortfolio, } from "@perfolio/pkg/hooks"
 import { useI18n, } from "@perfolio/pkg/i18n"
 import { Time, } from "@perfolio/pkg/util/time"

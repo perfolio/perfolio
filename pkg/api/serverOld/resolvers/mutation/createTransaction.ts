@@ -1,4 +1,4 @@
-import { CreateTransaction, ResolverFn, } from "@perfolio/pkg/api/graphql"
+import { CreateTransaction, ResolverFn, } from "@perfolio/pkg/api"
 import { newId, } from "@perfolio/pkg/id"
 import { Transaction as TransactionModel, } from "@perfolio/pkg/integrations/prisma"
 import { Context, } from "../../context"

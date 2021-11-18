@@ -1,16 +1,33 @@
-import { PortfolioModel, UserModel, } from "@perfolio/pkg/integrations/prisma"
+import {
+  AssetModel,
+  ExchangeTradedAssetModel,
+  PortfolioModel,
+  SettingsModel,
+  TransactionModel,
+  UserModel,
+} from "@perfolio/pkg/integrations/prisma"
 import { GraphQLResolveInfo, } from "graphql"
 import { DocumentNode, } from "graphql"
 import gql from "graphql-tag"
 export type Maybe<T,> = T | undefined
-export type Exact<T extends { [key: string]: unknown },> = { [K in keyof T]: T[K] }
-export type MakeOptional<T, K extends keyof T,> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T,> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
-export type RequireFields<T, K extends keyof T,> =
-  & { [X in Exclude<keyof T, K>]?: T[X] }
+export type Exact<T extends { [key: string]: unknown },> = {
+  [K in keyof T]: T[K]
+}
+export type MakeOptional<T, K extends keyof T,> =
+  & Omit<T, K>
   & {
-    [P in K]-?: NonNullable<T[P]>
+    [SubKey in K]?: Maybe<T[SubKey]>
   }
+export type MakeMaybe<T, K extends keyof T,> =
+  & Omit<T, K>
+  & {
+    [SubKey in K]: Maybe<T[SubKey]>
+  }
+export type RequireFields<T, K extends keyof T,> =
+  & {
+    [X in Exclude<keyof T, K>]?: T[X]
+  }
+  & { [P in K]-?: NonNullable<T[P]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -85,6 +102,24 @@ export type CreateSettings = {
   userId: Scalars["ID"]
 }
 
+export type CreateTransaction = {
+  /** Reference to the actual asset */
+  assetId: Scalars["String"]
+  /** A timestamp when the transaction was executed in unix time */
+  executedAt: Scalars["Int"]
+  /** The market identifier code where the user intends to sell this asset */
+  mic: Scalars["String"]
+  /** The portfolio of this transaction */
+  portfolioId: Scalars["ID"]
+  /** How much each share/item was bought/sold for */
+  value: Scalars["Float"]
+  /**
+   * How many shares/items the user bought or sold
+   * negative if sold
+   */
+  volume: Scalars["Float"]
+}
+
 /** Crypto */
 export type Crypto =
   & Asset
@@ -155,16 +190,24 @@ export type Mutation = {
   _?: Maybe<Scalars["Boolean"]>
   /** Clone a portfolio with all its transactions and return the clone */
   clonePortfolio: Portfolio
+  createExchangeTradedAsset?: Maybe<ExchangeTradedAsset>
   createPortfolio: Portfolio
   createSettings: Settings
+  createTransaction: Transaction
   deletePortfolio: Portfolio
+  deleteTransaction: Transaction
   updatePortfolio: Portfolio
   /** Only update some values in the user settings. */
   updateSettings: Settings
+  updateTransaction: Transaction
 }
 
 export type MutationClonePortfolioArgs = {
   portfolioId: Scalars["ID"]
+}
+
+export type MutationCreateExchangeTradedAssetArgs = {
+  isin: Scalars["String"]
 }
 
 export type MutationCreatePortfolioArgs = {
@@ -175,8 +218,16 @@ export type MutationCreateSettingsArgs = {
   settings: CreateSettings
 }
 
+export type MutationCreateTransactionArgs = {
+  transaction: CreateTransaction
+}
+
 export type MutationDeletePortfolioArgs = {
   portfolioId: Scalars["ID"]
+}
+
+export type MutationDeleteTransactionArgs = {
+  transactionId: Scalars["ID"]
 }
 
 export type MutationUpdatePortfolioArgs = {
@@ -185,6 +236,10 @@ export type MutationUpdatePortfolioArgs = {
 
 export type MutationUpdateSettingsArgs = {
   settings: UpdateSettings
+}
+
+export type MutationUpdateTransactionArgs = {
+  transaction: UpdateTransaction
 }
 
 export type Portfolio = {
@@ -305,6 +360,25 @@ export type UpdateSettings = {
   userId: Scalars["ID"]
 }
 
+export type UpdateTransaction = {
+  /** Reference to the actual asset */
+  assetId?: Maybe<Scalars["String"]>
+  /** A timestamp when the transaction was executed in unix time */
+  executedAt?: Maybe<Scalars["Int"]>
+  id: Scalars["ID"]
+  /** The market identifier code where the user intends to sell this asset */
+  mic?: Maybe<Scalars["String"]>
+  /** The portfolio of this transaction */
+  portfolioId?: Maybe<Scalars["ID"]>
+  /** How much each share/item was bought/sold for */
+  value?: Maybe<Scalars["Float"]>
+  /**
+   * How many shares/items the user bought or sold
+   * negative if sold
+   */
+  volume?: Maybe<Scalars["Float"]>
+}
+
 export type User = {
   __typename?: "User"
   id: Scalars["ID"]
@@ -381,8 +455,18 @@ export interface SubscriptionSubscriberObject<
   TContext,
   TArgs,
 > {
-  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>
-  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>
+  subscribe: SubscriptionSubscribeFn<
+    { [key in TKey]: TResult },
+    TParent,
+    TContext,
+    TArgs
+  >
+  resolve?: SubscriptionResolveFn<
+    TResult,
+    { [key in TKey]: TResult },
+    TContext,
+    TArgs
+  >
 }
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs,> {
@@ -390,7 +474,13 @@ export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs,> 
   resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>
 }
 
-export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs,> =
+export type SubscriptionObject<
+  TResult,
+  TKey extends string,
+  TParent,
+  TContext,
+  TArgs,
+> =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>
 
@@ -401,7 +491,9 @@ export type SubscriptionResolver<
   TContext = {},
   TArgs = {},
 > =
-  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+  | ((
+    ...args: any[]
+  ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {},> = (
@@ -418,7 +510,12 @@ export type IsTypeOfResolverFn<T = {}, TContext = {},> = (
 
 export type NextResolverFn<T,> = () => Promise<T>
 
-export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {},> = (
+export type DirectiveResolverFn<
+  TResult = {},
+  TParent = {},
+  TContext = {},
+  TArgs = {},
+> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
@@ -428,26 +525,28 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Asset: ResolversTypes["Company"] | ResolversTypes["Crypto"]
+  Asset: ResolverTypeWrapper<AssetModel>
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
   Company: ResolverTypeWrapper<Company>
   CreatePortfolio: CreatePortfolio
   CreateSettings: CreateSettings
+  CreateTransaction: CreateTransaction
   Crypto: ResolverTypeWrapper<Crypto>
   Exchange: ResolverTypeWrapper<Exchange>
-  ExchangeTradedAsset: ResolversTypes["Company"] | ResolversTypes["Crypto"]
+  ExchangeTradedAsset: ResolverTypeWrapper<ExchangeTradedAssetModel>
   Float: ResolverTypeWrapper<Scalars["Float"]>
   ID: ResolverTypeWrapper<Scalars["ID"]>
   Int: ResolverTypeWrapper<Scalars["Int"]>
   Mutation: ResolverTypeWrapper<{}>
   Portfolio: ResolverTypeWrapper<PortfolioModel>
   Query: ResolverTypeWrapper<{}>
-  Settings: ResolverTypeWrapper<Settings>
+  Settings: ResolverTypeWrapper<SettingsModel>
   Stock: ResolversTypes["Company"]
   String: ResolverTypeWrapper<Scalars["String"]>
-  Transaction: ResolverTypeWrapper<Transaction>
+  Transaction: ResolverTypeWrapper<TransactionModel>
   UpdatePortfolio: UpdatePortfolio
   UpdateSettings: UpdateSettings
+  UpdateTransaction: UpdateTransaction
   User: ResolverTypeWrapper<UserModel>
   ValueAndQuantityAtTime: ResolverTypeWrapper<ValueAndQuantityAtTime>
   ValueAtTime: ResolverTypeWrapper<ValueAtTime>
@@ -455,26 +554,28 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Asset: ResolversParentTypes["Company"] | ResolversParentTypes["Crypto"]
+  Asset: AssetModel
   Boolean: Scalars["Boolean"]
   Company: Company
   CreatePortfolio: CreatePortfolio
   CreateSettings: CreateSettings
+  CreateTransaction: CreateTransaction
   Crypto: Crypto
   Exchange: Exchange
-  ExchangeTradedAsset: ResolversParentTypes["Company"] | ResolversParentTypes["Crypto"]
+  ExchangeTradedAsset: ExchangeTradedAssetModel
   Float: Scalars["Float"]
   ID: Scalars["ID"]
   Int: Scalars["Int"]
   Mutation: {}
   Portfolio: PortfolioModel
   Query: {}
-  Settings: Settings
+  Settings: SettingsModel
   Stock: ResolversParentTypes["Company"]
   String: Scalars["String"]
-  Transaction: Transaction
+  Transaction: TransactionModel
   UpdatePortfolio: UpdatePortfolio
   UpdateSettings: UpdateSettings
+  UpdateTransaction: UpdateTransaction
   User: UserModel
   ValueAndQuantityAtTime: ValueAndQuantityAtTime
   ValueAtTime: ValueAtTime
@@ -550,7 +651,10 @@ export type ExchangeTradedAssetResolvers<
     Array<ResolversTypes["ValueAndQuantityAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<ExchangeTradedAssetAssetHistoryArgs, "end" | "exchangeId" | "start">
+    RequireFields<
+      ExchangeTradedAssetAssetHistoryArgs,
+      "end" | "exchangeId" | "start"
+    >
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -570,6 +674,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationClonePortfolioArgs, "portfolioId">
   >
+  createExchangeTradedAsset?: Resolver<
+    Maybe<ResolversTypes["ExchangeTradedAsset"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateExchangeTradedAssetArgs, "isin">
+  >
   createPortfolio?: Resolver<
     ResolversTypes["Portfolio"],
     ParentType,
@@ -582,11 +692,23 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateSettingsArgs, "settings">
   >
+  createTransaction?: Resolver<
+    ResolversTypes["Transaction"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateTransactionArgs, "transaction">
+  >
   deletePortfolio?: Resolver<
     ResolversTypes["Portfolio"],
     ParentType,
     ContextType,
     RequireFields<MutationDeletePortfolioArgs, "portfolioId">
+  >
+  deleteTransaction?: Resolver<
+    ResolversTypes["Transaction"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteTransactionArgs, "transactionId">
   >
   updatePortfolio?: Resolver<
     ResolversTypes["Portfolio"],
@@ -600,6 +722,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateSettingsArgs, "settings">
   >
+  updateTransaction?: Resolver<
+    ResolversTypes["Transaction"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateTransactionArgs, "transaction">
+  >
 }>
 
 export type PortfolioResolvers<
@@ -609,7 +737,11 @@ export type PortfolioResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   primary?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
-  transactions?: Resolver<Array<ResolversTypes["Transaction"]>, ParentType, ContextType>
+  transactions?: Resolver<
+    Array<ResolversTypes["Transaction"]>,
+    ParentType,
+    ContextType
+  >
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
@@ -618,7 +750,11 @@ export type QueryResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
-  exchanges?: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
+  exchanges?: Resolver<
+    Array<ResolversTypes["Exchange"]>,
+    ParentType,
+    ContextType
+  >
   healthCheck?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
   portfolio?: Resolver<
     Maybe<ResolversTypes["Portfolio"]>,
@@ -639,8 +775,16 @@ export type SettingsResolvers<
   ParentType extends ResolversParentTypes["Settings"] = ResolversParentTypes["Settings"],
 > = ResolversObject<{
   defaultCurrency?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  defaultExchange?: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
-  defaultExchangeMic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  defaultExchange?: Resolver<
+    ResolversTypes["Exchange"],
+    ParentType,
+    ContextType
+  >
+  defaultExchangeMic?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType
+  >
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -690,9 +834,17 @@ export type UserResolvers<
     ContextType,
     RequireFields<UserPortfolioArgs, "portfolioId">
   >
-  portfolios?: Resolver<Array<ResolversTypes["Portfolio"]>, ParentType, ContextType>
+  portfolios?: Resolver<
+    Array<ResolversTypes["Portfolio"]>,
+    ParentType,
+    ContextType
+  >
   settings?: Resolver<ResolversTypes["Settings"], ParentType, ContextType>
-  stripeCustomerId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  stripeCustomerId?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType
+  >
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -732,6 +884,28 @@ export type Resolvers<ContextType = GraphQLModules.Context,> = ResolversObject<{
   ValueAndQuantityAtTime?: ValueAndQuantityAtTimeResolvers<ContextType>
   ValueAtTime?: ValueAtTimeResolvers<ContextType>
 }>
+
+export type CreateExchangeTradedAssetMutationVariables = Exact<{
+  isin: Scalars["String"]
+}>
+
+export type CreateExchangeTradedAssetMutation = {
+  __typename?: "Mutation"
+  createExchangeTradedAsset?:
+    | { __typename?: "Company"; id: string }
+    | { __typename?: "Crypto"; id: string }
+    | null
+    | undefined
+}
+
+export type CreateTransactionMutationVariables = Exact<{
+  transaction: CreateTransaction
+}>
+
+export type CreateTransactionMutation = {
+  __typename?: "Mutation"
+  createTransaction: { __typename?: "Transaction"; id: string }
+}
 
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars["ID"]
@@ -783,7 +957,12 @@ export type GetUserPortfoliosQuery = {
   user?:
     | {
       __typename?: "User"
-      portfolios: Array<{ __typename?: "Portfolio"; name: string; id: string; primary: boolean }>
+      portfolios: Array<{
+        __typename?: "Portfolio"
+        name: string
+        id: string
+        primary: boolean
+      }>
     }
     | null
     | undefined
@@ -817,6 +996,20 @@ export type UserQuery = {
     | undefined
 }
 
+export const CreateExchangeTradedAssetDocument = gql `
+  mutation createExchangeTradedAsset($isin: String!) {
+    createExchangeTradedAsset(isin: $isin) {
+      id
+    }
+  }
+`
+export const CreateTransactionDocument = gql `
+  mutation createTransaction($transaction: CreateTransaction!) {
+    createTransaction(transaction: $transaction) {
+      id
+    }
+  }
+`
 export const PortfolioDocument = gql `
   query portfolio($portfolioId: ID!) {
     portfolio(portfolioId: $portfolioId) {
@@ -881,10 +1074,35 @@ export const UserDocument = gql `
     }
   }
 `
-export type Requester<C = {},> = <R, V,>(doc: DocumentNode, vars?: V, options?: C,) => Promise<R>
+export type Requester<C = {},> = <R, V,>(
+  doc: DocumentNode,
+  vars?: V,
+  options?: C,
+) => Promise<R>
 export function getSdk<C,>(requester: Requester<C>,) {
   return {
-    portfolio(variables: PortfolioQueryVariables, options?: C,): Promise<PortfolioQuery> {
+    createExchangeTradedAsset(
+      variables: CreateExchangeTradedAssetMutationVariables,
+      options?: C,
+    ): Promise<CreateExchangeTradedAssetMutation> {
+      return requester<
+        CreateExchangeTradedAssetMutation,
+        CreateExchangeTradedAssetMutationVariables
+      >(CreateExchangeTradedAssetDocument, variables, options,)
+    },
+    createTransaction(
+      variables: CreateTransactionMutationVariables,
+      options?: C,
+    ): Promise<CreateTransactionMutation> {
+      return requester<
+        CreateTransactionMutation,
+        CreateTransactionMutationVariables
+      >(CreateTransactionDocument, variables, options,)
+    },
+    portfolio(
+      variables: PortfolioQueryVariables,
+      options?: C,
+    ): Promise<PortfolioQuery> {
       return requester<PortfolioQuery, PortfolioQueryVariables>(
         PortfolioDocument,
         variables,
@@ -902,7 +1120,11 @@ export function getSdk<C,>(requester: Requester<C>,) {
       )
     },
     user(variables: UserQueryVariables, options?: C,): Promise<UserQuery> {
-      return requester<UserQuery, UserQueryVariables>(UserDocument, variables, options,)
+      return requester<UserQuery, UserQueryVariables>(
+        UserDocument,
+        variables,
+        options,
+      )
     },
   }
 }

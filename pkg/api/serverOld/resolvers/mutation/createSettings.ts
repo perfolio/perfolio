@@ -1,4 +1,4 @@
-import { CreateSettings, ResolverFn, Settings, } from "@perfolio/pkg/api/graphql"
+import { CreateSettings, ResolverFn, Settings, } from "@perfolio/pkg/api"
 import { Currency, } from "@perfolio/pkg/integrations/prisma"
 import { Context, } from "../../context"
 

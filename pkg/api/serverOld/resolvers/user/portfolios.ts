@@ -1,4 +1,4 @@
-import { Portfolio, } from "@perfolio/pkg/api/graphql"
+import { Portfolio, } from "@perfolio/pkg/api"
 import { Context, } from "../../context"
 
 export const getPortfoliosFromUser = async (
