@@ -1,6 +1,6 @@
-import React from "react"
+import { Root, } from "@radix-ui/react-accessible-icon"
 import cn from "classnames"
-import { Root } from "@radix-ui/react-accessible-icon"
+import React from "react"
 
 type Size = "xs" | "sm" | "md" | "lg"
 
@@ -14,7 +14,9 @@ export interface IconProps {
   color?: string
 }
 
-export const Icon: React.FC<IconProps> = ({ size = "md", label, children, color }): JSX.Element => {
+export const Icon: React.FC<IconProps> = (
+  { size = "md", label, children, color, },
+): JSX.Element => {
   return (
     <Root label={label}>
       <div
@@ -23,7 +25,7 @@ export const Icon: React.FC<IconProps> = ({ size = "md", label, children, color 
           "w-6 h-6 sm:w-8 sm:h-8": size === "sm",
           "w-8 h-8 sm:w-10 sm:h-10": size === "md",
           "w-14 h-14 sm:w-16 sm:h-16": size === "lg",
-        })}
+        },)}
       >
         {children}
       </div>

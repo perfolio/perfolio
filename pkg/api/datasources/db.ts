@@ -1,5 +1,5 @@
-import { DataSource } from "apollo-datasource"
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, } from "@prisma/client"
+import { DataSource, } from "apollo-datasource"
 /**
  * Wrapper around prisma to turn it into a DataSource
  */

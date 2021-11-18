@@ -1,4 +1,4 @@
-import { Logger } from "@perfolio/pkg/logger"
+import { Logger, } from "@perfolio/pkg/logger"
 export interface ErrorOptions {
   /**
    * Log the error.
@@ -11,38 +11,37 @@ export interface ErrorOptions {
    * Provide a function to render custom user facing errors for different
    * languages or whatever you want.
    *
-   *
    * The result will be returned by `error.publicMessage`
    *
    * @param errorCode Receives the error code as argument.
    * @defaults The error name will be returned..
    */
-  getPublicMessage?: (errorCode: string) => string
+  getPublicMessage?: (errorCode: string,) => string
 }
 
 export abstract class GenericError extends Error {
-  private getPublicMessage?: (errorCode: string) => string
+  private getPublicMessage?: (errorCode: string,) => string
 
-  constructor(name: string, message: string, { logLevel, getPublicMessage }: ErrorOptions) {
-    super(message)
+  constructor(name: string, message: string, { logLevel, getPublicMessage, }: ErrorOptions,) {
+    super(message,)
     this.name = name
 
     const logger = new Logger({
       name,
-    })
+    },)
 
     switch (logLevel) {
       case "debug":
-        logger.debug(message)
+        logger.debug(message,)
         break
       case "info":
-        logger.info(message)
+        logger.info(message,)
         break
       case "warn":
-        logger.warn(message)
+        logger.warn(message,)
         break
       case "error":
-        logger.error(message)
+        logger.error(message,)
         break
     }
 
@@ -50,6 +49,6 @@ export abstract class GenericError extends Error {
   }
 
   public get publicMessage(): string {
-    return this.getPublicMessage ? this.getPublicMessage(this.name) : this.message
+    return this.getPublicMessage ? this.getPublicMessage(this.name,) : this.message
   }
 }

@@ -1,5 +1,5 @@
-import React from "react"
 import cn from "classnames"
+import React from "react"
 
 export interface TextProps {
   size?: "xs" | "sm" | "md" | "lg" | "xl"
@@ -43,7 +43,7 @@ export const Text: React.FC<TextProps> = ({
   align,
   mono,
   truncate,
-}): JSX.Element => {
+},): JSX.Element => {
   return (
     <p
       className={cn(

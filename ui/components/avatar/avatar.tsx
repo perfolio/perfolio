@@ -1,8 +1,8 @@
-import React from "react"
+import { Fallback, Image, Root, } from "@radix-ui/react-avatar"
 import cn from "classnames"
-import { Root, Fallback, Image } from "@radix-ui/react-avatar"
+import React from "react"
 
-import { Text } from "../text/text"
+import { Text, } from "../text/text"
 type Size = "xs" | "sm" | "md" | "lg"
 
 export interface AvatarProps {
@@ -29,7 +29,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   size = "md",
   square,
   fallback,
-}): JSX.Element => {
+},): JSX.Element => {
   const shape = square ? "rounded" : "rounded-full"
 
   return (
@@ -41,7 +41,7 @@ export const Avatar: React.FC<AvatarProps> = ({
           "w-8 h-8": size === "sm",
           "w-10 h-10": size === "md",
           "w-16 h-16": size === "lg",
-        })}
+        },)}
         alt="Avatar"
       />
       <Fallback

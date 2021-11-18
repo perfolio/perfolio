@@ -1,5 +1,5 @@
-import React from "react"
 import Image from "next/image"
+import React from "react"
 
 export interface MemberProps {
   image: string
@@ -7,7 +7,7 @@ export interface MemberProps {
   title: string
 }
 
-export const Member: React.FC<MemberProps> = ({ image, name, title }): JSX.Element => {
+export const Member: React.FC<MemberProps> = ({ image, name, title, },): JSX.Element => {
   return (
     <div className="flex space-x-4">
       <Image

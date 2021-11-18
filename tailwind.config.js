@@ -1,11 +1,11 @@
-const colors = require("tailwindcss/colors")
-const defaultTheme = require("tailwindcss/defaultTheme")
+const colors = require("tailwindcss/colors",)
+const defaultTheme = require("tailwindcss/defaultTheme",)
 module.exports = {
   mode: "jit",
-  purge: ["./**/*.{tsx,html}"],
+  purge: ["./**/*.{tsx,html}",],
   darkMode: "class",
   variants: {
-    scale: ["responsive", "hover", "focus", "group-hover"],
+    scale: ["responsive", "hover", "focus", "group-hover",],
   },
   theme: {
     colors: {
@@ -69,14 +69,14 @@ module.exports = {
         ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
       },
       fontFamily: {
-        sans: ["Satoshi-Variable", ...defaultTheme.fontFamily.sans],
+        sans: ["Satoshi-Variable", ...defaultTheme.fontFamily.sans,],
         system: defaultTheme.fontFamily.sans,
       },
     },
   },
   plugins: [
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/custom-forms"),
-    require("tailwindcss-debug-screens"),
+    require("@tailwindcss/typography",),
+    require("@tailwindcss/custom-forms",),
+    require("tailwindcss-debug-screens",),
   ],
 }

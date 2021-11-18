@@ -1,34 +1,34 @@
 import "tailwindcss/tailwind.css"
 import "../public/fonts/css/satoshi.css"
 
-import type { AppProps } from "next/app"
+import type { AppProps, } from "next/app"
 
-import { I18nProvider } from "@perfolio/pkg/i18n"
-import { IdProvider } from "@radix-ui/react-id"
-import { PersistendQueryClient } from "@perfolio/pkg/query-client"
-import { QueryClientProvider } from "react-query"
-import { ToastProvider } from "@perfolio/pkg/toaster"
-import { Auth0Provider } from "@auth0/auth0-react"
-import { PageloadIndicator } from "@perfolio/ui/components"
+import { Auth0Provider, } from "@auth0/auth0-react"
+import { I18nProvider, } from "@perfolio/pkg/i18n"
+import { PersistendQueryClient, } from "@perfolio/pkg/query-client"
+import { ToastProvider, } from "@perfolio/pkg/toaster"
+import { PageloadIndicator, } from "@perfolio/ui/components"
+import { IdProvider, } from "@radix-ui/react-id"
+import { QueryClientProvider, } from "react-query"
 
 export default function MyApp({
   Component,
   pageProps: { accessToken, ...pageProps },
-}: AppProps<{ accessToken?: string }>) {
+}: AppProps<{ accessToken?: string }>,) {
   const auth0ClientId = process.env["NEXT_PUBLIC_AUTH0_CLIENT_ID"]
   if (!auth0ClientId) {
     throw new Error(`
-    Missing NEXT_PUBLIC_AUTH0_CLIENT_ID env`)
+    Missing NEXT_PUBLIC_AUTH0_CLIENT_ID env`,)
   }
   const auth0Domain = process.env["NEXT_PUBLIC_AUTH0_DOMAIN"]
   if (!auth0Domain) {
     throw new Error(`
-    Missing NEXT_PUBLIC_AUTH0_DOMAIN env`)
+    Missing NEXT_PUBLIC_AUTH0_DOMAIN env`,)
   }
   const auth0Audience = process.env["NEXT_PUBLIC_AUTH0_AUDIENCE"]
   if (!auth0Audience) {
     throw new Error(`
-    Missing NEXT_PUBLIC_AUTH0_AUDIENCE env`)
+    Missing NEXT_PUBLIC_AUTH0_AUDIENCE env`,)
   }
 
   const redirectUri = `${

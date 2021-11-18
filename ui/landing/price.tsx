@@ -1,7 +1,7 @@
-import React from "react"
-import { CheckIcon } from "@heroicons/react/outline"
-import { Button, Icon, Text } from "@perfolio/ui/components"
+import { CheckIcon, } from "@heroicons/react/outline"
+import { Button, Icon, Text, } from "@perfolio/ui/components"
 import cn from "classnames"
+import React from "react"
 
 export interface PriceProps {
   title: string
@@ -20,7 +20,7 @@ export const Price: React.FC<PriceProps> = ({
   href,
   highlighted,
   submitText,
-}) => {
+},) => {
   return (
     <div
       className={cn(
@@ -30,13 +30,15 @@ export const Price: React.FC<PriceProps> = ({
         },
       )}
     >
-      {highlighted ? (
-        <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
-          <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-cta to-secondary">
-            Most Popular
+      {highlighted
+        ? (
+          <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
+            <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-cta to-secondary">
+              Most Popular
+            </div>
           </div>
-        </div>
-      ) : null}
+        )
+        : null}
       <div className="text-center">
         <div className="text-lg font-semibold">{title}</div>
         <div className="flex items-center justify-center mt-2">
@@ -44,7 +46,7 @@ export const Price: React.FC<PriceProps> = ({
           {interval ? <div className="text-gray-700">/ {interval}</div> : null}
         </div>
         <div className="mt-8 space-y-3">
-          {features.map((feature) => (
+          {features.map((feature,) => (
             <div key={feature} className="flex items-center gap-2">
               <Icon label="Checkmark" size="xs">
                 <CheckIcon className="text-black" />

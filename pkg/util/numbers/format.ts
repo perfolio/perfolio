@@ -13,7 +13,7 @@ export type FormatOptions = {
   sign?: boolean
 }
 
-export function format(n: number, opts?: FormatOptions): string {
+export function format(n: number, opts?: FormatOptions,): string {
   n ??= 0
   if (opts?.percent) {
     n *= 100
@@ -21,7 +21,7 @@ export function format(n: number, opts?: FormatOptions): string {
   const s = n.toLocaleString(undefined, {
     minimumFractionDigits: opts?.fractionDigits ?? 2,
     maximumFractionDigits: opts?.fractionDigits ?? 2,
-  })
+  },)
 
   return `${opts?.sign && n > 0 ? "+" : ""}${opts?.prefix ?? ""}${s}${opts?.suffix ?? ""}`
 }

@@ -1,5 +1,5 @@
+import { Loading, } from "@perfolio/ui/components"
 import React from "react"
-import { Loading } from "@perfolio/ui/components"
 
 import cn from "classnames"
 
@@ -32,7 +32,7 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
   loading,
   disabled,
   children,
-}): JSX.Element => {
+},): JSX.Element => {
   return (
     <div
       className={cn(

@@ -1,6 +1,6 @@
-import { gql } from "graphql-modules"
+import { gql, } from "graphql-modules"
 
-export default gql`
+export default gql `
   """
   Common fields on all assets
   """

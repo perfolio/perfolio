@@ -1,5 +1,5 @@
-import { DB } from "./db"
-import { IEX } from "./iex"
+import { DB, } from "./db"
+import { IEX, } from "./iex"
 
 export type DataSources = {
   db: DB

@@ -1,5 +1,5 @@
+import { Icon, } from "@perfolio/ui/components"
 import React from "react"
-import { Icon } from "@perfolio/ui/components"
 /* eslint-disable-next-line */
 export interface FeatureProps {
   title: string
@@ -7,12 +7,13 @@ export interface FeatureProps {
   icon: React.ReactNode
 }
 
-export const Feature: React.FC<FeatureProps> = ({ title, description, icon }): JSX.Element => {
+export const Feature: React.FC<FeatureProps> = ({ title, description, icon, },): JSX.Element => {
   return (
     <div className="flex flex-col items-center justify-center space-y-2 md:space-y-0 md:flex-row md:items-start">
       <div className="md:mr-4">
         <Icon size="sm" label={title} color="text-gray-900">
-          {icon}{" "}
+          {icon}
+          {" "}
         </Icon>
       </div>
       <div>

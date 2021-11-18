@@ -1,4 +1,4 @@
-import { Resolvers } from "../../generated/schema-types"
-import { Context } from "../../context"
+import { Context, } from "../../context"
+import { Resolvers, } from "../../generated/schema-types"
 
 export const resolvers: Resolvers<Context> = {}

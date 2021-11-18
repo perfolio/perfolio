@@ -1,19 +1,19 @@
-import { Server } from "@perfolio/pkg/api/server"
-import { NextApiRequest, NextApiResponse } from "next"
-import { env } from "@chronark/env"
-import { JWT } from "@perfolio/pkg/auth"
+import { env, } from "@chronark/env"
+import { Server, } from "@perfolio/pkg/api/server"
+import { JWT, } from "@perfolio/pkg/auth"
+import { NextApiRequest, NextApiResponse, } from "next"
 
-JWT.init(`https://${env.require("NEXT_PUBLIC_AUTH0_DOMAIN")}/.well-known/jwks.json`, {
-  audience: env.require("NEXT_PUBLIC_AUTH0_AUDIENCE"),
-  issuer: env.require("NEXT_PUBLIC_AUTH0_ISSUER"),
-})
+JWT.init(`https://${env.require("NEXT_PUBLIC_AUTH0_DOMAIN",)}/.well-known/jwks.json`, {
+  audience: env.require("NEXT_PUBLIC_AUTH0_AUDIENCE",),
+  issuer: env.require("NEXT_PUBLIC_AUTH0_ISSUER",),
+},)
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse,) {
   /**
    * Return ok to preflight cors requests
    */
   if (req.method === "OPTIONS") {
-    res.status(200)
+    res.status(200,)
     return res.end()
   }
 
@@ -22,8 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   /**
    * Handle graphql request
    */
-  const handler = server.createHandler({ path: "/api/graphql" })
-  await handler(req, res)
+  const handler = server.createHandler({ path: "/api/graphql", },)
+  await handler(req, res,)
 }
 
 /**

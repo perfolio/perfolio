@@ -1,4 +1,4 @@
-import { largestTriangle } from "./largest-triangle"
+import { largestTriangle, } from "./largest-triangle"
 
 export const Downsampling = {
   largestTriangle,

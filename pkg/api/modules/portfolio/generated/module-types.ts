@@ -1,5 +1,5 @@
-import * as Types from "../../../generated/schema-types"
 import * as gm from "graphql-modules"
+import * as Types from "../../../generated/schema-types"
 export namespace PortfolioModule {
   interface DefinedFields {
     Portfolio: "id" | "name" | "user" | "primary" | "transactions"
@@ -13,14 +13,23 @@ export namespace PortfolioModule {
       | "volume"
       | "mic"
     Query: "portfolio"
+    Mutation: "createPortfolio" | "updatePortfolio" | "deletePortfolio" | "clonePortfolio"
     User: "portfolio" | "portfolios"
+  }
+
+  interface DefinedInputFields {
+    CreatePortfolio: "id" | "name" | "userId" | "primary"
+    UpdatePortfolio: "id" | "name" | "primary"
   }
 
   export type Portfolio = Pick<Types.Portfolio, DefinedFields["Portfolio"]>
   export type User = Types.User
   export type Transaction = Pick<Types.Transaction, DefinedFields["Transaction"]>
+  export type CreatePortfolio = Pick<Types.CreatePortfolio, DefinedInputFields["CreatePortfolio"]>
+  export type UpdatePortfolio = Pick<Types.UpdatePortfolio, DefinedInputFields["UpdatePortfolio"]>
   export type Asset = Types.Asset
   export type Query = Pick<Types.Query, DefinedFields["Query"]>
+  export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
   export type PortfolioResolvers = Pick<
     Types.PortfolioResolvers,
@@ -31,12 +40,14 @@ export namespace PortfolioModule {
     DefinedFields["Transaction"] | "__isTypeOf"
   >
   export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
+  export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields["Mutation"]>
   export type UserResolvers = Pick<Types.UserResolvers, DefinedFields["User"]>
 
   export interface Resolvers {
     Portfolio?: PortfolioResolvers
     Transaction?: TransactionResolvers
     Query?: QueryResolvers
+    Mutation?: MutationResolvers
     User?: UserResolvers
   }
 
@@ -71,6 +82,13 @@ export namespace PortfolioModule {
     Query?: {
       "*"?: gm.Middleware[]
       portfolio?: gm.Middleware[]
+    }
+    Mutation?: {
+      "*"?: gm.Middleware[]
+      createPortfolio?: gm.Middleware[]
+      updatePortfolio?: gm.Middleware[]
+      deletePortfolio?: gm.Middleware[]
+      clonePortfolio?: gm.Middleware[]
     }
   }
 }

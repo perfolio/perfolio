@@ -1,4 +1,4 @@
-import { AssetsOverTime, ValueAtTime } from "./types"
+import { AssetsOverTime, ValueAtTime, } from "./types"
 
 export const assetsOvertime: AssetsOverTime = {
   "1602633600": {

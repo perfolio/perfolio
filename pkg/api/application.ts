@@ -1,11 +1,11 @@
-import { createApplication } from "graphql-modules"
-import { baseModule } from "./modules/base"
-import { userModule } from "./modules/user"
-import { portfolioModule } from "./modules/portfolio"
-import { assetsModule } from "./modules/assets"
-import { settingsModule } from "./modules/settings"
-import { exchangeModule } from "./modules/exchange"
-import { utilModule } from "./modules/util"
+import { createApplication, } from "graphql-modules"
+import { assetsModule, } from "./modules/assets"
+import { baseModule, } from "./modules/base"
+import { exchangeModule, } from "./modules/exchange"
+import { portfolioModule, } from "./modules/portfolio"
+import { settingsModule, } from "./modules/settings"
+import { userModule, } from "./modules/user"
+import { utilModule, } from "./modules/util"
 
 export const application = createApplication({
   modules: [
@@ -17,4 +17,4 @@ export const application = createApplication({
     exchangeModule,
     utilModule,
   ],
-})
+},)

@@ -1,5 +1,5 @@
+import { Content, Overlay, Root, Trigger, } from "@radix-ui/react-dialog"
 import React from "react"
-import { Root, Trigger, Overlay, Content } from "@radix-ui/react-dialog"
 export interface ModalProps {
   /**
    * Element that opens the modal on click.
@@ -8,7 +8,7 @@ export interface ModalProps {
   trigger: React.ReactNode | null
 }
 
-export const Modal: React.FC<ModalProps> = ({ trigger, children }): JSX.Element => {
+export const Modal: React.FC<ModalProps> = ({ trigger, children, },): JSX.Element => {
   return (
     <Root open={trigger === null ?? undefined}>
       <Trigger>{trigger}</Trigger>

@@ -1,11 +1,9 @@
-import React from "react"
 import cn from "classnames"
+import React from "react"
 
 export interface HeadingProps {
   /**
    * Render this text as a h1.
-   *
-   *
    */
   h1?: boolean
   h2?: boolean
@@ -25,7 +23,7 @@ export const Heading: React.FC<HeadingProps> = ({
   h4,
   color,
   children,
-}): JSX.Element => {
+},): JSX.Element => {
   let heading = ""
   if (h4) heading = "h4"
   if (h3) heading = "h3"
@@ -33,7 +31,7 @@ export const Heading: React.FC<HeadingProps> = ({
   if (h1) heading = "h1"
 
   if (heading === "") {
-    throw new Error(`You must specify exactly one heading level`)
+    throw new Error(`You must specify exactly one heading level`,)
   }
 
   const wrapper = React.createElement(

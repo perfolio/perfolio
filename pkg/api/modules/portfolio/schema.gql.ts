@@ -1,6 +1,6 @@
-import { gql } from "graphql-modules"
+import { gql, } from "graphql-modules"
 
-export default gql`
+export default gql `
   type Portfolio {
     """
     unique id
@@ -33,6 +33,19 @@ export default gql`
     # Return all assets over time for a given user
     # """
     # absoluteHistory: [AssetHistory!]!
+  }
+
+  input CreatePortfolio {
+    id: ID!
+    name: String!
+    userId: ID!
+    primary: Boolean
+  }
+
+  input UpdatePortfolio {
+    id: ID!
+    name: String
+    primary: Boolean
   }
 
   """
@@ -90,5 +103,15 @@ export default gql`
       """
       portfolioId: ID!
     ): Portfolio
+  }
+
+  extend type Mutation {
+    createPortfolio(portfolio: CreatePortfolio!): Portfolio!
+    updatePortfolio(portfolio: UpdatePortfolio!): Portfolio!
+    deletePortfolio(portfolioId: ID!): Portfolio!
+    """
+    Clone a portfolio with all its transactions and return the clone
+    """
+    clonePortfolio(portfolioId: ID!): Portfolio!
   }
 `

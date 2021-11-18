@@ -1,9 +1,14 @@
-import { ResolverFn } from "@perfolio/pkg/api/graphql"
-import { Context } from "../../context"
+import { ResolverFn, } from "@perfolio/pkg/api/graphql"
+import { Context, } from "../../context"
 
 export const subscribeToNewsletter: ResolverFn<string, unknown, Context, { email: string }> =
-  async (_parent, { email }, ctx, _info) => {
-    ctx.logger.info("Newsletter2222", { email })
+  async (
+    _parent,
+    { email, },
+    ctx,
+    _info,
+  ) => {
+    ctx.logger.info("Newsletter2222", { email, },)
     try {
       const res = await ctx.prisma.newsletter.upsert({
         where: {
@@ -13,10 +18,10 @@ export const subscribeToNewsletter: ResolverFn<string, unknown, Context, { email
         create: {
           email,
         },
-      })
-      ctx.logger.info("Resposne", { res })
+      },)
+      ctx.logger.info("Resposne", { res, },)
     } catch (err) {
-      ctx.logger.error("Error", { err })
+      ctx.logger.error("Error", { err, },)
     }
 
     return email

@@ -1,22 +1,27 @@
-import { ResolverFn } from "@perfolio/pkg/api/graphql"
-import { Context } from "../../context"
+import { ResolverFn, } from "@perfolio/pkg/api/graphql"
+import { Context, } from "../../context"
 
 export const deleteTransaction: ResolverFn<string, unknown, Context, { transactionId: string }> =
-  async (_parent, { transactionId }, ctx, _info) => {
+  async (
+    _parent,
+    { transactionId, },
+    ctx,
+    _info,
+  ) => {
     await ctx.authenticateUser()
 
     const transaction = await ctx.dataSources.prisma.transaction.findUnique({
-      where: { id: transactionId },
+      where: { id: transactionId, },
       include: {
         portfolio: true,
       },
-    })
+    },)
     if (!transaction) {
-      throw new Error("No transaction found")
+      throw new Error("No transaction found",)
     }
 
-    await ctx.authorizeUser(({ sub }) => sub === transaction.portfolio.userId)
+    await ctx.authorizeUser(({ sub, },) => sub === transaction.portfolio.userId)
 
-    await ctx.dataSources.prisma.transaction.delete({ where: { id: transactionId } })
+    await ctx.dataSources.prisma.transaction.delete({ where: { id: transactionId, }, },)
     return transaction.id
   }

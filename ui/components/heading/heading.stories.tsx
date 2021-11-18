@@ -1,11 +1,11 @@
-import { Heading, HeadingProps } from "./heading"
+import { Heading, HeadingProps, } from "./heading"
 
 export default {
   title: "Heading",
   component: Heading,
 }
 
-export const Headings = (args: HeadingProps) => (
+export const Headings = (args: HeadingProps,) => (
   <div>
     <Heading {...args} h1>
       Heading
@@ -22,7 +22,7 @@ export const Headings = (args: HeadingProps) => (
   </div>
 )
 
-export const CustomColor = (args: HeadingProps) => (
+export const CustomColor = (args: HeadingProps,) => (
   <Heading h1 {...args}>
     Colors
   </Heading>

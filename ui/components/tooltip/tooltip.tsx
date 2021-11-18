@@ -1,7 +1,7 @@
-import React from "react"
-import { Root, Trigger, Content, Arrow } from "@radix-ui/react-tooltip"
-import { InformationCircleIcon } from "@heroicons/react/outline"
+import { InformationCircleIcon, } from "@heroicons/react/outline"
+import { Arrow, Content, Root, Trigger, } from "@radix-ui/react-tooltip"
 import cn from "classnames"
+import React from "react"
 export interface TooltipProps {
   side?: "top" | "right" | "bottom" | "left"
   size?: "sm" | "md" | "lg"
@@ -13,7 +13,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   side = "top",
   size = "md",
-}): JSX.Element => {
+},): JSX.Element => {
   return (
     <Root delayDuration={200}>
       <Trigger className="appearance-none">
@@ -23,7 +23,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
               "w-3 h-3": size === "sm",
               "w-4 h-4": size === "md",
               "w-6 h-6": size === "lg",
-            })}
+            },)}
           />
         )}
       </Trigger>

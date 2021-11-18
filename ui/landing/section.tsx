@@ -8,7 +8,7 @@ export interface SectionProps {
   id?: string
 }
 
-export const Section: React.FC<SectionProps> = ({ bg, className, id, children }): JSX.Element => {
+export const Section: React.FC<SectionProps> = ({ bg, className, id, children, },): JSX.Element => {
   return (
     <section className={bg} id={id}>
       <div className={className}>

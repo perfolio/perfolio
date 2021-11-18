@@ -1,7 +1,7 @@
-import { Time } from "@perfolio/pkg/util/time"
+import { HttpError, } from "@perfolio/pkg/util/errors"
+import { Time, } from "@perfolio/pkg/util/time"
 import * as z from "zod"
-import { Client } from "./client"
-import { HttpError } from "@perfolio/pkg/util/errors"
+import { Client, } from "./client"
 export const GetPriceResponseValidator = z.array(
   z
     .object({
@@ -9,7 +9,7 @@ export const GetPriceResponseValidator = z.array(
        * Fully adjusted for historical dates.
        */
       fClose: z.number(),
-    })
+    },)
     .nonstrict(),
 )
 
@@ -18,8 +18,8 @@ export const GetPriceResponseValidator = z.array(
  */
 export type GetPriceResponse = { close: number }
 
-export async function getPrice(symbol: string, time: Time): Promise<GetPriceResponse> {
-  const { year, month, day } = time.pad()
+export async function getPrice(symbol: string, time: Time,): Promise<GetPriceResponse> {
+  const { year, month, day, } = time.pad()
 
   const res = await new Client()
     .get({
@@ -28,8 +28,8 @@ export async function getPrice(symbol: string, time: Time): Promise<GetPriceResp
         chartByDay: "true",
         chartCloseOnly: "true",
       },
-    })
-    .catch((err) => {
+    },)
+    .catch((err,) => {
       /**
        * Just return -1 if the request was in the past where no price data was availabe.
        */
@@ -40,9 +40,9 @@ export async function getPrice(symbol: string, time: Time): Promise<GetPriceResp
       } else {
         throw err
       }
-    })
-  const validated = GetPriceResponseValidator.parse(res)
-  return { close: validated[0].fClose ?? -1 }
+    },)
+  const validated = GetPriceResponseValidator.parse(res,)
+  return { close: validated[0].fClose ?? -1, }
 }
 
 export const GetHistoryResponseValidator = z.array(
@@ -56,19 +56,19 @@ export const GetHistoryResponseValidator = z.array(
        * Actual closing price.
        */
       close: z.number(),
-    })
+    },)
     .nonstrict(),
 )
 
 export type GetHistoryResponse = z.infer<typeof GetHistoryResponseValidator>
 
-export async function getHistory(symbol: string): Promise<GetHistoryResponse> {
+export async function getHistory(symbol: string,): Promise<GetHistoryResponse> {
   const res = await new Client().get({
     path: `/stock/${symbol}/chart/max`,
     parameters: {
       chartCloseOnly: "true",
     },
-  })
+  },)
 
-  return GetHistoryResponseValidator.parse(res)
+  return GetHistoryResponseValidator.parse(res,)
 }

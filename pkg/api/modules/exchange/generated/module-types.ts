@@ -1,5 +1,5 @@
-import * as Types from "../../../generated/schema-types"
 import * as gm from "graphql-modules"
+import * as Types from "../../../generated/schema-types"
 export namespace ExchangeModule {
   interface DefinedFields {
     Exchange: "abbreviation" | "mic" | "name" | "region" | "suffix"

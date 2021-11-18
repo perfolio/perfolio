@@ -1,4 +1,4 @@
-import Document, { Html, Head, Main, NextScript } from "next/document"
+import Document, { Head, Html, Main, NextScript, } from "next/document"
 
 class MyDocument extends Document {
   override render() {
@@ -12,20 +12,22 @@ class MyDocument extends Document {
             type="image/png"
             sizes="96x96"
             href="/fav/favicon_96x96_dark_mode.png"
-          ></link>
+          >
+          </link>
           <link
             rel="icon"
             type="image/png"
             sizes="32x32"
             href="/fav/favicon_32x32_dark_mode.png"
-          ></link>
+          >
+          </link>
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
             href="/fav/favicon_16x16_dark_mode.png"
-          ></link>
-
+          >
+          </link>
         </Head>
         <body>
           <Main />

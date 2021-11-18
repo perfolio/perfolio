@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Client } from "./client"
+import { Client, } from "./client"
 
 export const GetCompanyResponseValidator = z.object({
   /**
@@ -55,7 +55,7 @@ export const GetCompanyResponseValidator = z.object({
    * empty - Other.
    */
   issueType: z
-    .enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt", ""])
+    .enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt", "",],)
     .nullable(),
   /**
    * Refers to the sector the company belongs to.
@@ -68,7 +68,7 @@ export const GetCompanyResponseValidator = z.object({
   /**
    * An array of strings used to classify the company.
    */
-  tags: z.array(z.string()).nullable(),
+  tags: z.array(z.string(),).nullable(),
   /**
    * Street address of the company if available.
    */
@@ -97,18 +97,18 @@ export const GetCompanyResponseValidator = z.object({
    * Phone number of the company if available.
    */
   phone: z.string().nullable(),
-})
+},)
 
 /**
  * Resonse from the `GET /stock/{asset}/company` endpoint.
  */
 export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator>
 
-export async function getCompany(symbol: string): Promise<GetCompanyResponse> {
+export async function getCompany(symbol: string,): Promise<GetCompanyResponse> {
   const client = new Client()
 
   const res = await client.get({
     path: `/stock/${symbol}/company`,
-  })
-  return GetCompanyResponseValidator.parse(res)
+  },)
+  return GetCompanyResponseValidator.parse(res,)
 }

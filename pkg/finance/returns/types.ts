@@ -42,7 +42,6 @@ export type ValueAtTime = {
  *
  * Most of our calculations are loops through time. Thus aggregatinv by
  * time first is the most convenient.
- *
  */
 export type AssetsOverTime = {
   [time: number]: {

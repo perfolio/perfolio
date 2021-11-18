@@ -1,17 +1,17 @@
-import React from "react"
-import { NavbarProps } from "./types"
-import { DesktopNavMenu } from "./desktopNavMenu"
-import { DesktopNavLink } from "./desktopNavLink"
-import { Icon, Logo, Loading } from "@perfolio/ui/components"
-import { Transition } from "@headlessui/react"
-import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
+import { useAuth0, } from "@auth0/auth0-react"
+import { Transition, } from "@headlessui/react"
+import { AdjustmentsIcon, LogoutIcon, } from "@heroicons/react/outline"
+import { Icon, Loading, Logo, } from "@perfolio/ui/components"
 import Link from "next/link"
-import { useIsFetching } from "react-query"
-import { useAuth0 } from "@auth0/auth0-react"
+import React from "react"
+import { useIsFetching, } from "react-query"
+import { DesktopNavLink, } from "./desktopNavLink"
+import { DesktopNavMenu, } from "./desktopNavMenu"
+import { NavbarProps, } from "./types"
 
-export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
+export const DesktopNavbar: React.FC<NavbarProps> = ({ items, },): JSX.Element => {
   const isFetching = useIsFetching()
-  const { logout } = useAuth0()
+  const { logout, } = useAuth0()
 
   return (
     <nav className="w-full">
@@ -24,13 +24,11 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
           </Link>
           <div className="2xl:ml-14">
             <ul className="flex items-center">
-              {items.map((item) => (
+              {items.map((item,) => (
                 <li key={item.label}>
-                  {item.menu ? (
-                    <DesktopNavMenu label={item.label} icon={item.icon} menu={item.menu} />
-                  ) : (
-                    <DesktopNavLink href={item.href ?? ""} label={item.label} icon={item.icon} />
-                  )}
+                  {item.menu
+                    ? <DesktopNavMenu label={item.label} icon={item.icon} menu={item.menu} />
+                    : <DesktopNavLink href={item.href ?? ""} label={item.label} icon={item.icon} />}
                 </li>
               ))}
             </ul>
@@ -38,17 +36,21 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
         </li>
         <li className="flex justify-end w-1/5">
           <ul className="flex items-center space-x-6 xl:space-x-9">
-            {/* <li>
+            {
+              /* <li>
               <ThemeSwitch />
-            </li> */}
-            {/* <li className="text-gray-200 hover:text-gray-50">
+            </li> */
+            }
+            {
+              /* <li className="text-gray-200 hover:text-gray-50">
               <div className="relative pb-1 cursor-pointer ">
                 <BellIcon className="w-6 h-6" />
                 <div className="w-4 h-4 rounded-full  bg-gray-800 flex items-center justify-center absolute top-0 right-0 -mr-1.5 -mt-0.5">
                   <p className="text-xs font-bold text-center text-gray-50">1</p>
                 </div>
               </div>
-            </li> */}
+            </li> */
+            }
             <li className="text-gray-200 hover:text-gray-50">
               <Icon size="sm" label="Fetching data">
                 <Transition
@@ -77,7 +79,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             <li className="text-gray-200 hover:text-gray-50">
               <button
                 className="focus:outline-none"
-                onClick={() => logout({ returnTo: "https://perfol.io" })}
+                onClick={() => logout({ returnTo: "https://perfol.io", },)}
               >
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />

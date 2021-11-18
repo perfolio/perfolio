@@ -1,23 +1,23 @@
-import React from "react"
-import Link from "next/link"
-import { useRouter } from "next/router"
+import { useI18n, } from "@perfolio/pkg/i18n"
 import cn from "classnames"
-import { useI18n } from "@perfolio/pkg/i18n"
+import Link from "next/link"
+import { useRouter, } from "next/router"
+import React from "react"
 export const SideNavbar: React.FC = (): JSX.Element => {
   const router = useRouter()
-  const { t } = useI18n()
+  const { t, } = useI18n()
 
   const links: { href: string; label: string }[] = [
     {
-      label: t("sideNavBarLabelAcc"),
+      label: t("sideNavBarLabelAcc",),
       href: "/settings/account",
     },
     {
-      label: t("sideNavBarLabelStocks"),
+      label: t("sideNavBarLabelStocks",),
       href: "/settings/stocks",
     },
     {
-      label: t("sideNavBarLabelPlans"),
+      label: t("sideNavBarLabelPlans",),
       href: "/settings/plans",
     },
   ]
@@ -25,7 +25,7 @@ export const SideNavbar: React.FC = (): JSX.Element => {
   return (
     <nav className="mt-8">
       <ul className="space-y-4">
-        {links.map(({ href, label }) => (
+        {links.map(({ href, label, },) => (
           <li>
             <Link href={href}>
               <a

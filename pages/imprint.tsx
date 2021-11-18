@@ -1,15 +1,15 @@
+import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
+import { Navbar, Section, } from "@perfolio/ui/landing"
+import { GetStaticProps, NextPage, } from "next"
 import React from "react"
-import { Navbar, Section } from "@perfolio/ui/landing"
-import { NextPage, GetStaticProps } from "next"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
-//import { IndexPageProps } from "."
+// import { IndexPageProps } from "."
 
 export interface ImprintPageProps {
   translations: Record<string, string>
 }
 
-export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
-  useI18n(translations)
+export const Imprint: NextPage<ImprintPageProps> = ({ translations, },) => {
+  useI18n(translations,)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -43,8 +43,8 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
           <h2>Online-Streitbeilegung (Art. 14 Abs. 1 ODR-Verordnung)</h2>
           <p>
             Die Europäische Kommission stellt unter{" "}
-            <a href="ec.europa.eu/consumers/odr">ec.europa.eu/consumers/odr</a> eine Plattform zur
-            Online-Streitbeilegung bereit.
+            <a href="ec.europa.eu/consumers/odr">ec.europa.eu/consumers/odr</a>{" "}
+            eine Plattform zur Online-Streitbeilegung bereit.
           </p>
 
           <h2>Verantwortliche im Sinne von § 18 Abs. 2 MStV</h2>
@@ -79,8 +79,8 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
 
 export default Imprint
 
-export const getStaticProps: GetStaticProps<ImprintPageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["landing"])
+export const getStaticProps: GetStaticProps<ImprintPageProps> = async ({ locale, },) => {
+  const translations = await getTranslations(locale, ["landing",],)
   return {
     props: {
       translations,

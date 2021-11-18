@@ -1,14 +1,14 @@
+import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
+import { Navbar, Section, } from "@perfolio/ui/landing"
+import { GetStaticProps, NextPage, } from "next"
 import React from "react"
-import { Navbar, Section } from "@perfolio/ui/landing"
-import { NextPage, GetStaticProps } from "next"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 
 export interface PrivacyPageProps {
   translations: Record<string, string>
 }
 
-export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
-  useI18n(translations)
+export const Privacy: NextPage<PrivacyPageProps> = ({ translations, },) => {
+  useI18n(translations,)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -132,8 +132,8 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
             90403 Nürnberg
           </p>
           <p>
-            <strong>Vertretungsberechtigte Personen:</strong> Nicolas Webersinke, Andreas Thomas,
-            Mads Jordt, Kevin Kohler
+            <strong>Vertretungsberechtigte Personen:</strong>{" "}
+            Nicolas Webersinke, Andreas Thomas, Mads Jordt, Kevin Kohler
           </p>
           <p>
             <strong>E-Mail-Adresse:</strong> <a href="mailto:info@perfol.io">info@perfol.io</a>
@@ -199,8 +199,8 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO)</strong> - Die betroffene
-              Person hat ihre Einwilligung in die Verarbeitung der sie betreffenden
+              <strong>Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO)</strong>{" "}
+              - Die betroffene Person hat ihre Einwilligung in die Verarbeitung der sie betreffenden
               personenbezogenen Daten für einen spezifischen Zweck oder mehrere bestimmte Zwecke
               gegeben.
             </li>
@@ -213,14 +213,14 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
               die auf Anfrage der betroffenen Person erfolgen.
             </li>
             <li>
-              <strong>Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO)</strong> - Die
-              Verarbeitung ist zur Erfüllung einer rechtlichen Verpflichtung erforderlich, der der
-              Verantwortliche unterliegt.
+              <strong>Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO)</strong>{" "}
+              - Die Verarbeitung ist zur Erfüllung einer rechtlichen Verpflichtung erforderlich, der
+              der Verantwortliche unterliegt.
             </li>
             <li>
-              <strong>Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO)</strong> - Die
-              Verarbeitung ist zur Wahrung der berechtigten Interessen des Verantwortlichen oder
-              eines Dritten erforderlich, sofern nicht die Interessen oder Grundrechte und
+              <strong>Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO)</strong>{" "}
+              - Die Verarbeitung ist zur Wahrung der berechtigten Interessen des Verantwortlichen
+              oder eines Dritten erforderlich, sofern nicht die Interessen oder Grundrechte und
               Grundfreiheiten der betroffenen Person, die den Schutz personenbezogener Daten
               erfordern, überwiegen.
             </li>
@@ -312,21 +312,21 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Temporäre Cookies (auch: Session- oder Sitzungs-Cookies):</strong> Temporäre
-              Cookies werden spätestens gelöscht, nachdem ein Nutzer ein Online-Angebot verlassen
-              und seinen Browser geschlossen hat.
+              <strong>Temporäre Cookies (auch: Session- oder Sitzungs-Cookies):</strong>{" "}
+              Temporäre Cookies werden spätestens gelöscht, nachdem ein Nutzer ein Online-Angebot
+              verlassen und seinen Browser geschlossen hat.
             </li>
             <li>
-              <strong>Permanente Cookies:</strong> Permanente Cookies bleiben auch nach dem
-              Schließen des Browsers gespeichert. So kann beispielsweise der Signin-Status
-              gespeichert oder bevorzugte Inhalte direkt angezeigt werden, wenn der Nutzer eine
-              Website erneut besucht. Ebenso können die Interessen von Nutzern, die zur
-              Reichweitenmessung oder zu Marketingzwecken verwendet werden, in einem solchen Cookie
-              gespeichert werden.
+              <strong>Permanente Cookies:</strong>{" "}
+              Permanente Cookies bleiben auch nach dem Schließen des Browsers gespeichert. So kann
+              beispielsweise der Signin-Status gespeichert oder bevorzugte Inhalte direkt angezeigt
+              werden, wenn der Nutzer eine Website erneut besucht. Ebenso können die Interessen von
+              Nutzern, die zur Reichweitenmessung oder zu Marketingzwecken verwendet werden, in
+              einem solchen Cookie gespeichert werden.
             </li>
             <li>
-              <strong>First-Party-Cookies:</strong> First-Party-Cookies werden von uns selbst
-              gesetzt.
+              <strong>First-Party-Cookies:</strong>{" "}
+              First-Party-Cookies werden von uns selbst gesetzt.
             </li>
             <li>
               <strong>Third-Party-Cookies (auch: Drittanbieter-Cookies)</strong>:
@@ -334,7 +334,8 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
               verwendet, um Benutzerinformationen zu verarbeiten.
             </li>
             <li>
-              <strong>Notwendige (auch: essentielle oder unbedingt erforderliche) Cookies:</strong>{" "}
+              <strong>Notwendige (auch: essentielle oder unbedingt erforderliche) Cookies:</strong>
+              {" "}
               Cookies können zum einen für den Betrieb einer Webseite unbedingt erforderlich sein
               (z.B. um Signins oder andere Nutzereingaben zu speichern oder aus Gründen der
               Sicherheit).
@@ -354,27 +355,27 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </ul>
 
           <p>
-            <strong>Hinweise zu Rechtsgrundlagen: </strong> Auf welcher Rechtsgrundlage wir Ihre
-            personenbezogenen Daten mit Hilfe von Cookies verarbeiten, hängt davon ab, ob wir Sie um
-            eine Einwilligung bitten. Falls dies zutrifft und Sie in die Nutzung von Cookies
-            einwilligen, ist die Rechtsgrundlage der Verarbeitung Ihrer Daten die erklärte
-            Einwilligung. Andernfalls werden die mithilfe von Cookies verarbeiteten Daten auf
-            Grundlage unserer berechtigten Interessen (z.B. an einem betriebswirtschaftlichen
-            Betrieb unseres Onlineangebotes und dessen Verbesserung) verarbeitet oder, wenn der
-            Einsatz von Cookies erforderlich ist, um unsere vertraglichen Verpflichtungen zu
-            erfüllen.
+            <strong>Hinweise zu Rechtsgrundlagen:</strong>{" "}
+            Auf welcher Rechtsgrundlage wir Ihre personenbezogenen Daten mit Hilfe von Cookies
+            verarbeiten, hängt davon ab, ob wir Sie um eine Einwilligung bitten. Falls dies zutrifft
+            und Sie in die Nutzung von Cookies einwilligen, ist die Rechtsgrundlage der Verarbeitung
+            Ihrer Daten die erklärte Einwilligung. Andernfalls werden die mithilfe von Cookies
+            verarbeiteten Daten auf Grundlage unserer berechtigten Interessen (z.B. an einem
+            betriebswirtschaftlichen Betrieb unseres Onlineangebotes und dessen Verbesserung)
+            verarbeitet oder, wenn der Einsatz von Cookies erforderlich ist, um unsere vertraglichen
+            Verpflichtungen zu erfüllen.
           </p>
           <p>
-            <strong>Speicherdauer: </strong>Sofern wir Ihnen keine expliziten Angaben zur
+            <strong>Speicherdauer:</strong>Sofern wir Ihnen keine expliziten Angaben zur
             Speicherdauer von permanenten Cookies mitteilen (z. B. im Rahmen eines sog.
             Cookie-Opt-Ins), gehen Sie bitte davon aus, dass die Speicherdauer bis zu zwei Jahre
             betragen kann.
           </p>
           <p>
-            <strong>Allgemeine Hinweise zum Widerruf und Widerspruch (Opt-Out): </strong> Abhängig
-            davon, ob die Verarbeitung auf Grundlage einer Einwilligung oder gesetzlichen Erlaubnis
-            erfolgt, haben Sie jederzeit die Möglichkeit, eine erteilte Einwilligung zu widerrufen
-            oder der Verarbeitung Ihrer Daten durch Cookie-Technologien zu widersprechen
+            <strong>Allgemeine Hinweise zum Widerruf und Widerspruch (Opt-Out):</strong>{" "}
+            Abhängig davon, ob die Verarbeitung auf Grundlage einer Einwilligung oder gesetzlichen
+            Erlaubnis erfolgt, haben Sie jederzeit die Möglichkeit, eine erteilte Einwilligung zu
+            widerrufen oder der Verarbeitung Ihrer Daten durch Cookie-Technologien zu widersprechen
             (zusammenfassend als &quot;Opt-Out&quot; bezeichnet). Sie können Ihren Widerspruch
             zunächst mittels der Einstellungen Ihres Browsers erklären, z.B., indem Sie die Nutzung
             von Cookies deaktivieren (wobei hierdurch auch die Funktionsfähigkeit unseres
@@ -400,17 +401,18 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Nutzungsdaten (z.B. besuchte Webseiten,
-              Interesse an Inhalten, Zugriffszeiten), Meta-/Kommunikationsdaten (z.B.
-              Geräte-Informationen, IP-Adressen).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Nutzungsdaten (z.B. besuchte Webseiten, Interesse an Inhalten, Zugriffszeiten),
+              Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
             </li>
             <li>
-              <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher, Nutzer von
-              Onlinediensten).
+              <strong>Betroffene Personen:</strong>{" "}
+              Nutzer (z.B. Webseitenbesucher, Nutzer von Onlinediensten).
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO),
-              Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO), Berechtigte Interessen (Art. 6 Abs. 1
+              S. 1 lit. f. DSGVO).
             </li>
           </ul>
 
@@ -484,25 +486,28 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Bestandsdaten (z.B. Namen, Adressen),
-              Zahlungsdaten (z.B. Bankverbindungen, Rechnungen, Zahlungshistorie), Kontaktdaten
-              (z.B. E-Mail, Telefonnummern), Vertragsdaten (z.B. Vertragsgegenstand, Laufzeit,
-              Kundenkategorie), Nutzungsdaten (z.B. besuchte Webseiten, Interesse an Inhalten,
-              Zugriffszeiten), Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Bestandsdaten (z.B. Namen, Adressen), Zahlungsdaten (z.B. Bankverbindungen,
+              Rechnungen, Zahlungshistorie), Kontaktdaten (z.B. E-Mail, Telefonnummern),
+              Vertragsdaten (z.B. Vertragsgegenstand, Laufzeit, Kundenkategorie), Nutzungsdaten
+              (z.B. besuchte Webseiten, Interesse an Inhalten, Zugriffszeiten),
+              Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
             </li>
             <li>
-              <strong>Betroffene Personen:</strong> Interessenten, Geschäfts- und Vertragspartner,
-              Kunden.
+              <strong>Betroffene Personen:</strong>{" "}
+              Interessenten, Geschäfts- und Vertragspartner, Kunden.
             </li>
             <li>
-              <strong>Zwecke der Verarbeitung:</strong> Vertragliche Leistungen und Service,
-              Kontaktanfragen und Kommunikation, Büro- und Organisationsverfahren, Verwaltung und
-              Beantwortung von Anfragen, Sicherheitsmaßnahmen.
+              <strong>Zwecke der Verarbeitung:</strong>{" "}
+              Vertragliche Leistungen und Service, Kontaktanfragen und Kommunikation, Büro- und
+              Organisationsverfahren, Verwaltung und Beantwortung von Anfragen,
+              Sicherheitsmaßnahmen.
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Vertragserfüllung und vorvertragliche Anfragen
-              (Art. 6 Abs. 1 S. 1 lit. b. DSGVO), Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit.
-              c. DSGVO), Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1 S. 1 lit. b. DSGVO),
+              Rechtliche Verpflichtung (Art. 6 Abs. 1 S. 1 lit. c. DSGVO), Berechtigte Interessen
+              (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
             </li>
           </ul>
 
@@ -547,20 +552,21 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Inhaltsdaten (z.B. Texteingaben,
-              Fotografien, Videos), Nutzungsdaten (z.B. besuchte Webseiten, Interesse an Inhalten,
-              Zugriffszeiten), Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Inhaltsdaten (z.B. Texteingaben, Fotografien, Videos), Nutzungsdaten (z.B. besuchte
+              Webseiten, Interesse an Inhalten, Zugriffszeiten), Meta-/Kommunikationsdaten (z.B.
+              Geräte-Informationen, IP-Adressen).
             </li>
             <li>
-              <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher, Nutzer von
-              Onlinediensten).
+              <strong>Betroffene Personen:</strong>{" "}
+              Nutzer (z.B. Webseitenbesucher, Nutzer von Onlinediensten).
             </li>
             <li>
               <strong>Zwecke der Verarbeitung:</strong> Content Delivery Network (CDN).
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f.
-              DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
             </li>
           </ul>
 
@@ -593,23 +599,25 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Bestandsdaten (z.B. Namen, Adressen),
-              Kontaktdaten (z.B. E-Mail, Telefonnummern), Inhaltsdaten (z.B. Texteingaben,
-              Fotografien, Videos), Meta-/Kommunikationsdaten (z.B. Geräte-Informationen,
-              IP-Adressen).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Bestandsdaten (z.B. Namen, Adressen), Kontaktdaten (z.B. E-Mail, Telefonnummern),
+              Inhaltsdaten (z.B. Texteingaben, Fotografien, Videos), Meta-/Kommunikationsdaten (z.B.
+              Geräte-Informationen, IP-Adressen).
             </li>
             <li>
-              <strong>Betroffene Personen:</strong> Nutzer (z.B. Webseitenbesucher, Nutzer von
-              Onlinediensten).
+              <strong>Betroffene Personen:</strong>{" "}
+              Nutzer (z.B. Webseitenbesucher, Nutzer von Onlinediensten).
             </li>
             <li>
-              <strong>Zwecke der Verarbeitung:</strong> Vertragliche Leistungen und Service,
-              Sicherheitsmaßnahmen, Verwaltung und Beantwortung von Anfragen.
+              <strong>Zwecke der Verarbeitung:</strong>{" "}
+              Vertragliche Leistungen und Service, Sicherheitsmaßnahmen, Verwaltung und Beantwortung
+              von Anfragen.
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO),
-              Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1 S. 1 lit. b. DSGVO),
-              Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO), Vertragserfüllung und vorvertragliche
+              Anfragen (Art. 6 Abs. 1 S. 1 lit. b. DSGVO), Berechtigte Interessen (Art. 6 Abs. 1 S.
+              1 lit. f. DSGVO).
             </li>
           </ul>
 
@@ -628,9 +636,9 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Bestandsdaten (z.B. Namen, Adressen),
-              Kontaktdaten (z.B. E-Mail, Telefonnummern), Inhaltsdaten (z.B. Texteingaben,
-              Fotografien, Videos).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Bestandsdaten (z.B. Namen, Adressen), Kontaktdaten (z.B. E-Mail, Telefonnummern),
+              Inhaltsdaten (z.B. Texteingaben, Fotografien, Videos).
             </li>
             <li>
               <strong>Betroffene Personen:</strong> Kommunikationspartner.
@@ -639,9 +647,9 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
               <strong>Zwecke der Verarbeitung:</strong> Kontaktanfragen und Kommunikation.
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Vertragserfüllung und vorvertragliche Anfragen
-              (Art. 6 Abs. 1 S. 1 lit. b. DSGVO), Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f.
-              DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1 S. 1 lit. b. DSGVO),
+              Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
             </li>
           </ul>
 
@@ -661,26 +669,26 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
             Newsletters erforderlich sind, zu tätigen.
           </p>
           <p>
-            <strong>Double-Opt-In-Verfahren:</strong> Die Anmeldung zu unserem Newsletter erfolgt
-            grundsätzlich in einem sogenannte Double-Opt-In-Verfahren. D.h., Sie erhalten nach der
-            Anmeldung eine E-Mail, in der Sie um die Bestätigung Ihrer Anmeldung gebeten werden.
-            Diese Bestätigung ist notwendig, damit sich niemand mit fremden E-Mail-Adressen anmelden
-            kann. Die Anmeldungen zum Newsletter werden protokolliert, um den Anmeldeprozess
-            entsprechend den rechtlichen Anforderungen nachweisen zu können. Hierzu gehört die
-            Speicherung des Anmelde- und des Bestätigungszeitpunkts als auch der IP-Adresse. Ebenso
-            werden die Änderungen Ihrer bei dem Versanddienstleister gespeicherten Daten
-            protokolliert.
+            <strong>Double-Opt-In-Verfahren:</strong>{" "}
+            Die Anmeldung zu unserem Newsletter erfolgt grundsätzlich in einem sogenannte
+            Double-Opt-In-Verfahren. D.h., Sie erhalten nach der Anmeldung eine E-Mail, in der Sie
+            um die Bestätigung Ihrer Anmeldung gebeten werden. Diese Bestätigung ist notwendig,
+            damit sich niemand mit fremden E-Mail-Adressen anmelden kann. Die Anmeldungen zum
+            Newsletter werden protokolliert, um den Anmeldeprozess entsprechend den rechtlichen
+            Anforderungen nachweisen zu können. Hierzu gehört die Speicherung des Anmelde- und des
+            Bestätigungszeitpunkts als auch der IP-Adresse. Ebenso werden die Änderungen Ihrer bei
+            dem Versanddienstleister gespeicherten Daten protokolliert.
           </p>
           <p>
-            <strong>Löschung und Einschränkung der Verarbeitung: </strong> Wir können die
-            ausgetragenen E-Mail-Adressen bis zu drei Jahren auf Grundlage unserer berechtigten
-            Interessen speichern, bevor wir sie löschen, um eine ehemals gegebene Einwilligung
-            nachweisen zu können. Die Verarbeitung dieser Daten wird auf den Zweck einer möglichen
-            Abwehr von Ansprüchen beschränkt. Ein individueller Löschungsantrag ist jederzeit
-            möglich, sofern zugleich das ehemalige Bestehen einer Einwilligung bestätigt wird. Im
-            Fall von Pflichten zur dauerhaften Beachtung von Widersprüchen behalten wir uns die
-            Speicherung der E-Mail-Adresse alleine zu diesem Zweck in einer Sperrliste (sogenannte
-            &quot;Blacklist&quot;) vor.
+            <strong>Löschung und Einschränkung der Verarbeitung:</strong>{" "}
+            Wir können die ausgetragenen E-Mail-Adressen bis zu drei Jahren auf Grundlage unserer
+            berechtigten Interessen speichern, bevor wir sie löschen, um eine ehemals gegebene
+            Einwilligung nachweisen zu können. Die Verarbeitung dieser Daten wird auf den Zweck
+            einer möglichen Abwehr von Ansprüchen beschränkt. Ein individueller Löschungsantrag ist
+            jederzeit möglich, sofern zugleich das ehemalige Bestehen einer Einwilligung bestätigt
+            wird. Im Fall von Pflichten zur dauerhaften Beachtung von Widersprüchen behalten wir uns
+            die Speicherung der E-Mail-Adresse alleine zu diesem Zweck in einer Sperrliste
+            (sogenannte &quot;Blacklist&quot;) vor.
           </p>
           <p>
             Die Protokollierung des Anmeldeverfahrens erfolgt auf Grundlage unserer berechtigten
@@ -689,18 +697,19 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
             unserer berechtigten Interessen an einem effizienten und sicheren Versandsystem.
           </p>
           <p>
-            <strong>Hinweise zu Rechtsgrundlagen:</strong> Der Versand der Newsletter erfolgt auf
-            Grundlage einer Einwilligung der Empfänger oder, falls eine Einwilligung nicht
-            erforderlich ist, auf Grundlage unserer berechtigten Interessen am Direktmarketing,
-            sofern und soweit diese gesetzlich, z.B. im Fall von Bestandskundenwerbung, erlaubt ist.
-            Soweit wir einen Dienstleister mit dem Versand von E-Mails beauftragen, geschieht dies
-            auf der Grundlage unserer berechtigten Interessen. Das Registrierungsverfahren wird auf
-            der Grundlage unserer berechtigten Interessen aufgezeichnet, um nachzuweisen, dass es in
-            Übereinstimmung mit dem Gesetz durchgeführt wurde.
+            <strong>Hinweise zu Rechtsgrundlagen:</strong>{" "}
+            Der Versand der Newsletter erfolgt auf Grundlage einer Einwilligung der Empfänger oder,
+            falls eine Einwilligung nicht erforderlich ist, auf Grundlage unserer berechtigten
+            Interessen am Direktmarketing, sofern und soweit diese gesetzlich, z.B. im Fall von
+            Bestandskundenwerbung, erlaubt ist. Soweit wir einen Dienstleister mit dem Versand von
+            E-Mails beauftragen, geschieht dies auf der Grundlage unserer berechtigten Interessen.
+            Das Registrierungsverfahren wird auf der Grundlage unserer berechtigten Interessen
+            aufgezeichnet, um nachzuweisen, dass es in Übereinstimmung mit dem Gesetz durchgeführt
+            wurde.
           </p>
           <p>
-            <strong>Inhalte:</strong> Informationen zu uns, unseren Leistungen, Aktionen und
-            Angeboten.
+            <strong>Inhalte:</strong>{" "}
+            Informationen zu uns, unseren Leistungen, Aktionen und Angeboten.
           </p>
           <p>
             <strong>Analyse und Erfolgsmessung</strong>: Die Newsletter enthalten einen sogenannte
@@ -736,28 +745,30 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Bestandsdaten (z.B. Namen, Adressen),
-              Kontaktdaten (z.B. E-Mail, Telefonnummern), Meta-/Kommunikationsdaten (z.B.
-              Geräte-Informationen, IP-Adressen), Nutzungsdaten (z.B. besuchte Webseiten, Interesse
-              an Inhalten, Zugriffszeiten).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Bestandsdaten (z.B. Namen, Adressen), Kontaktdaten (z.B. E-Mail, Telefonnummern),
+              Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen), Nutzungsdaten
+              (z.B. besuchte Webseiten, Interesse an Inhalten, Zugriffszeiten).
             </li>
             <li>
               <strong>Betroffene Personen:</strong> Kommunikationspartner.
             </li>
             <li>
-              <strong>Zwecke der Verarbeitung:</strong> Direktmarketing (z.B. per E-Mail oder
-              postalisch).
+              <strong>Zwecke der Verarbeitung:</strong>{" "}
+              Direktmarketing (z.B. per E-Mail oder postalisch).
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO),
-              Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO), Berechtigte Interessen (Art. 6 Abs. 1
+              S. 1 lit. f. DSGVO).
             </li>
             <li>
-              <strong>Widerspruchsmöglichkeit (Opt-Out):</strong> Sie können den Empfang unseres
-              Newsletters jederzeit kündigen, d.h. Ihre Einwilligungen widerrufen, bzw. dem weiteren
-              Empfang widersprechen. Einen Link zur Kündigung des Newsletters finden Sie entweder am
-              Ende eines jeden Newsletters oder können sonst eine der oben angegebenen
-              Kontaktmöglichkeiten, vorzugswürdig E-Mail, hierzu nutzen.
+              <strong>Widerspruchsmöglichkeit (Opt-Out):</strong>{" "}
+              Sie können den Empfang unseres Newsletters jederzeit kündigen, d.h. Ihre
+              Einwilligungen widerrufen, bzw. dem weiteren Empfang widersprechen. Einen Link zur
+              Kündigung des Newsletters finden Sie entweder am Ende eines jeden Newsletters oder
+              können sonst eine der oben angegebenen Kontaktmöglichkeiten, vorzugswürdig E-Mail,
+              hierzu nutzen.
             </li>
           </ul>
 
@@ -765,13 +776,15 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
             <strong>Eingesetzte Dienste und Diensteanbieter:</strong>
           </p>
 
-          {/*
-           */}
+          {
+            /*
+           */
+          }
           <ul>
             <li>
-              <strong>Mailchimp:</strong> E-Mail-Marketing-Plattform; Dienstanbieter:
-              &quot;Mailchimp&quot; - Rocket Science Group, LLC, 675 Ponce De Leon Ave NE #5000,
-              Atlanta, GA 30308, USA; Website:{" "}
+              <strong>Mailchimp:</strong>{" "}
+              E-Mail-Marketing-Plattform; Dienstanbieter: &quot;Mailchimp&quot; - Rocket Science
+              Group, LLC, 675 Ponce De Leon Ave NE #5000, Atlanta, GA 30308, USA; Website:{" "}
               <a href="https://mailchimp.com" target="_blank" rel="noreferrer">
                 https://mailchimp.com
               </a>
@@ -793,31 +806,33 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
             Wiederaufnahme der Umfrage zu ermöglichen) oder Nutzer eingewilligt haben.
           </p>
           <p>
-            <strong>Hinweise zu Rechtsgrundlagen:</strong> Sofern wir die Teilnehmer um eine
-            Einwilligung in die Verarbeitung iherer Daten bitten, ist diese Rechtsgrundlage der
-            Verarbeitung, ansonsten erfolgt die Verarbeitung der Daten der Teilnehmer auf Grundlage
-            unserer berechtigten Interessen an der Durchführung einer objektiven Umfrage.
+            <strong>Hinweise zu Rechtsgrundlagen:</strong>{" "}
+            Sofern wir die Teilnehmer um eine Einwilligung in die Verarbeitung iherer Daten bitten,
+            ist diese Rechtsgrundlage der Verarbeitung, ansonsten erfolgt die Verarbeitung der Daten
+            der Teilnehmer auf Grundlage unserer berechtigten Interessen an der Durchführung einer
+            objektiven Umfrage.
           </p>
           <ul>
             <li>
-              <strong>Verarbeitete Datenarten:</strong> Kontaktdaten (z.B. E-Mail, Telefonnummern),
-              Inhaltsdaten (z.B. Texteingaben, Fotografien, Videos), Nutzungsdaten (z.B. besuchte
-              Webseiten, Interesse an Inhalten, Zugriffszeiten), Meta-/Kommunikationsdaten (z.B.
-              Geräte-Informationen, IP-Adressen).
+              <strong>Verarbeitete Datenarten:</strong>{" "}
+              Kontaktdaten (z.B. E-Mail, Telefonnummern), Inhaltsdaten (z.B. Texteingaben,
+              Fotografien, Videos), Nutzungsdaten (z.B. besuchte Webseiten, Interesse an Inhalten,
+              Zugriffszeiten), Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).
             </li>
             <li>
-              <strong>Betroffene Personen:</strong> Kommunikationspartner, Nutzer (z.B.
-              Webseitenbesucher, Nutzer von Onlinediensten).
+              <strong>Betroffene Personen:</strong>{" "}
+              Kommunikationspartner, Nutzer (z.B. Webseitenbesucher, Nutzer von Onlinediensten).
             </li>
             <li>
-              <strong>Zwecke der Verarbeitung:</strong> Kontaktanfragen und Kommunikation,
-              Direktmarketing (z.B. per E-Mail oder postalisch), Tracking (z.B.
-              interessens-/verhaltensbezogenes Profiling, Nutzung von Cookies), Feedback (z.B.
-              Sammeln von Feedback via Online-Formular).
+              <strong>Zwecke der Verarbeitung:</strong>{" "}
+              Kontaktanfragen und Kommunikation, Direktmarketing (z.B. per E-Mail oder postalisch),
+              Tracking (z.B. interessens-/verhaltensbezogenes Profiling, Nutzung von Cookies),
+              Feedback (z.B. Sammeln von Feedback via Online-Formular).
             </li>
             <li>
-              <strong>Rechtsgrundlagen:</strong> Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO),
-              Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f. DSGVO).
+              <strong>Rechtsgrundlagen:</strong>{" "}
+              Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO), Berechtigte Interessen (Art. 6 Abs. 1
+              S. 1 lit. f. DSGVO).
             </li>
           </ul>
           <p>
@@ -825,9 +840,10 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul>
             <li>
-              <strong>Google-Formular:</strong> Google-Cloud-Formulare; Dienstanbieter: Google
-              Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland, Mutterunternehmen:
-              Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA; Website:{" "}
+              <strong>Google-Formular:</strong>{" "}
+              Google-Cloud-Formulare; Dienstanbieter: Google Ireland Limited, Gordon House, Barrow
+              Street, Dublin 4, Irland, Mutterunternehmen: Google LLC, 1600 Amphitheatre Parkway,
+              Mountain View, CA 94043, USA; Website:{" "}
               <a href="https://firebase.google.com" target="_blank" rel="noreferrer">
                 https://firebase.google.com
               </a>
@@ -912,38 +928,41 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
               </strong>
             </li>
             <li>
-              <strong>Widerrufsrecht bei Einwilligungen:</strong> Sie haben das Recht, erteilte
-              Einwilligungen jederzeit zu widerrufen.
+              <strong>Widerrufsrecht bei Einwilligungen:</strong>{" "}
+              Sie haben das Recht, erteilte Einwilligungen jederzeit zu widerrufen.
             </li>
             <li>
-              <strong>Auskunftsrecht:</strong> Sie haben das Recht, eine Bestätigung darüber zu
-              verlangen, ob betreffende Daten verarbeitet werden und auf Auskunft über diese Daten
-              sowie auf weitere Informationen und Kopie der Daten entsprechend den gesetzlichen
-              Vorgaben.
+              <strong>Auskunftsrecht:</strong>{" "}
+              Sie haben das Recht, eine Bestätigung darüber zu verlangen, ob betreffende Daten
+              verarbeitet werden und auf Auskunft über diese Daten sowie auf weitere Informationen
+              und Kopie der Daten entsprechend den gesetzlichen Vorgaben.
             </li>
             <li>
-              <strong>Recht auf Berichtigung:</strong> Sie haben entsprechend den gesetzlichen
-              Vorgaben das Recht, die Vervollständigung der Sie betreffenden Daten oder die
-              Berichtigung der Sie betreffenden unrichtigen Daten zu verlangen.
+              <strong>Recht auf Berichtigung:</strong>{" "}
+              Sie haben entsprechend den gesetzlichen Vorgaben das Recht, die Vervollständigung der
+              Sie betreffenden Daten oder die Berichtigung der Sie betreffenden unrichtigen Daten zu
+              verlangen.
             </li>
             <li>
-              <strong>Recht auf Löschung und Einschränkung der Verarbeitung:</strong> Sie haben nach
-              Maßgabe der gesetzlichen Vorgaben das Recht, zu verlangen, dass Sie betreffende Daten
-              unverzüglich gelöscht werden, bzw. alternativ nach Maßgabe der gesetzlichen Vorgaben
-              eine Einschränkung der Verarbeitung der Daten zu verlangen.
+              <strong>Recht auf Löschung und Einschränkung der Verarbeitung:</strong>{" "}
+              Sie haben nach Maßgabe der gesetzlichen Vorgaben das Recht, zu verlangen, dass Sie
+              betreffende Daten unverzüglich gelöscht werden, bzw. alternativ nach Maßgabe der
+              gesetzlichen Vorgaben eine Einschränkung der Verarbeitung der Daten zu verlangen.
             </li>
             <li>
-              <strong>Recht auf Datenübertragbarkeit:</strong> Sie haben das Recht, Sie betreffende
-              Daten, die Sie uns bereitgestellt haben, nach Maßgabe der gesetzlichen Vorgaben in
-              einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten oder deren
-              Übermittlung an einen anderen Verantwortlichen zu fordern.
+              <strong>Recht auf Datenübertragbarkeit:</strong>{" "}
+              Sie haben das Recht, Sie betreffende Daten, die Sie uns bereitgestellt haben, nach
+              Maßgabe der gesetzlichen Vorgaben in einem strukturierten, gängigen und
+              maschinenlesbaren Format zu erhalten oder deren Übermittlung an einen anderen
+              Verantwortlichen zu fordern.
             </li>
             <li>
-              <strong>Beschwerde bei Aufsichtsbehörde:</strong> Sie haben ferner nach Maßgabe der
-              gesetzlichen Vorgaben das Recht, bei einer Aufsichtsbehörde, insbesondere in dem
-              Mitgliedstaat Ihres gewöhnlichen Aufenthaltsorts, Ihres Arbeitsplatzes oder des Orts
-              des mutmaßlichen Verstoßes Beschwerde einzulegen, wenn Sie der Ansicht sind, dass die
-              Verarbeitung der Sie betreffenden personenbezogenen Daten gegen die DSGVO verstößt.
+              <strong>Beschwerde bei Aufsichtsbehörde:</strong>{" "}
+              Sie haben ferner nach Maßgabe der gesetzlichen Vorgaben das Recht, bei einer
+              Aufsichtsbehörde, insbesondere in dem Mitgliedstaat Ihres gewöhnlichen
+              Aufenthaltsorts, Ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes
+              Beschwerde einzulegen, wenn Sie der Ansicht sind, dass die Verarbeitung der Sie
+              betreffenden personenbezogenen Daten gegen die DSGVO verstößt.
             </li>
           </ul>
 
@@ -958,44 +977,45 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
           </p>
           <ul className="glossary">
             <li>
-              <strong>Content Delivery Network (CDN):</strong> Ein &quot;Content Delivery
-              Network&quot; (CDN) ist ein Dienst, mit dessen Hilfe Inhalte eines Onlineangebotes,
-              insbesondere große Mediendateien, wie Grafiken oder Programm-Skripte mit Hilfe
-              regional verteilter und über das Internet verbundener Server, schneller und sicherer
-              ausgeliefert werden können.{" "}
+              <strong>Content Delivery Network (CDN):</strong>{" "}
+              Ein &quot;Content Delivery Network&quot; (CDN) ist ein Dienst, mit dessen Hilfe
+              Inhalte eines Onlineangebotes, insbesondere große Mediendateien, wie Grafiken oder
+              Programm-Skripte mit Hilfe regional verteilter und über das Internet verbundener
+              Server, schneller und sicherer ausgeliefert werden können.{" "}
             </li>
             <li>
-              <strong>Personenbezogene Daten:</strong> &quot;Personenbezogene Daten&quot; sind alle
-              Informationen, die sich auf eine identifizierte oder identifizierbare natürliche
-              Person (im Folgenden &quot;betroffene Person&quot;) beziehen; als identifizierbar wird
-              eine natürliche Person angesehen, die direkt oder indirekt, insbesondere mittels
-              Zuordnung zu einer Kennung wie einem Namen, zu einer Kennnummer, zu Standortdaten, zu
-              einer Online-Kennung (z.B. Cookie) oder zu einem oder mehreren besonderen Merkmalen
-              identifiziert werden kann, die Ausdruck der physischen, physiologischen, genetischen,
-              psychischen, wirtschaftlichen, kulturellen oder sozialen Identität dieser natürlichen
-              Person sind.{" "}
+              <strong>Personenbezogene Daten:</strong>{" "}
+              &quot;Personenbezogene Daten&quot; sind alle Informationen, die sich auf eine
+              identifizierte oder identifizierbare natürliche Person (im Folgenden &quot;betroffene
+              Person&quot;) beziehen; als identifizierbar wird eine natürliche Person angesehen, die
+              direkt oder indirekt, insbesondere mittels Zuordnung zu einer Kennung wie einem Namen,
+              zu einer Kennnummer, zu Standortdaten, zu einer Online-Kennung (z.B. Cookie) oder zu
+              einem oder mehreren besonderen Merkmalen identifiziert werden kann, die Ausdruck der
+              physischen, physiologischen, genetischen, psychischen, wirtschaftlichen, kulturellen
+              oder sozialen Identität dieser natürlichen Person sind.{" "}
             </li>
             <li>
-              <strong>Tracking:</strong> Vom &quot;Tracking&quot; spricht man, wenn das Verhalten
-              von Nutzern über mehrere Onlineangebote hinweg nachvollzogen werden kann. Im Regelfall
-              werden im Hinblick auf die genutzten Onlineangebote Verhaltens- und
-              Interessensinformationen in Cookies oder auf Servern der Anbieter der
-              Trackingtechnologien gespeichert (sogenanntes Profiling). Diese Informationen können
-              anschließend z.B. eingesetzt werden, um den Nutzern Werbeanzeigen anzuzeigen, die
-              voraussichtlich deren Interessen entsprechen.
+              <strong>Tracking:</strong>{" "}
+              Vom &quot;Tracking&quot; spricht man, wenn das Verhalten von Nutzern über mehrere
+              Onlineangebote hinweg nachvollzogen werden kann. Im Regelfall werden im Hinblick auf
+              die genutzten Onlineangebote Verhaltens- und Interessensinformationen in Cookies oder
+              auf Servern der Anbieter der Trackingtechnologien gespeichert (sogenanntes Profiling).
+              Diese Informationen können anschließend z.B. eingesetzt werden, um den Nutzern
+              Werbeanzeigen anzuzeigen, die voraussichtlich deren Interessen entsprechen.
             </li>
             <li>
-              <strong>Verantwortlicher:</strong> Als &quot;Verantwortlicher&quot; wird die
-              natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die
-              allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von
-              personenbezogenen Daten entscheidet, bezeichnet.
+              <strong>Verantwortlicher:</strong>{" "}
+              Als &quot;Verantwortlicher&quot; wird die natürliche oder juristische Person, Behörde,
+              Einrichtung oder andere Stelle, die allein oder gemeinsam mit anderen über die Zwecke
+              und Mittel der Verarbeitung von personenbezogenen Daten entscheidet, bezeichnet.
             </li>
             <li>
-              <strong>Verarbeitung:</strong> &quot;Verarbeitung&quot; ist jeder mit oder ohne Hilfe
-              automatisierter Verfahren ausgeführte Vorgang oder jede solche Vorgangsreihe im
-              Zusammenhang mit personenbezogenen Daten. Der Begriff reicht weit und umfasst
-              praktisch jeden Umgang mit Daten, sei es das Erheben, das Auswerten, das Speichern,
-              das Übermitteln oder das Löschen.
+              <strong>Verarbeitung:</strong>{" "}
+              &quot;Verarbeitung&quot; ist jeder mit oder ohne Hilfe automatisierter Verfahren
+              ausgeführte Vorgang oder jede solche Vorgangsreihe im Zusammenhang mit
+              personenbezogenen Daten. Der Begriff reicht weit und umfasst praktisch jeden Umgang
+              mit Daten, sei es das Erheben, das Auswerten, das Speichern, das Übermitteln oder das
+              Löschen.
             </li>
           </ul>
           <p className="seal">
@@ -1016,8 +1036,8 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
 
 export default Privacy
 
-export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["landing"])
+export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale, },) => {
+  const translations = await getTranslations(locale, ["landing",],)
   return {
     props: {
       translations,
