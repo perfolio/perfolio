@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
+import { Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
 import { format } from "@perfolio/pkg/util/numbers"
 import { useCurrentPorfolioState, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
@@ -54,6 +54,14 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
         {
           Header: t("assetTableWeightHeader"),
           accessor: "chart",
+          tooltip: (
+            <Tooltip>
+              <Description title={t("assetTableWeightHeader")}>
+                {/* TODO: replace by localisation var */}
+                The percentage share of the asset in the total portfolio
+              </Description>
+            </Tooltip>
+          ),
         },
         {
           Header: t("assetTableQuantHeader"),
@@ -105,23 +113,9 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
               />
             ),
             chart: (
-              <Cell.Cell>
-                <Tooltip
-                  trigger={
-                    <div className="flex h-2 overflow-hidden rounded bg-primary-light">
-                      <div
-                        style={{ width: `${weight * 100}%` }}
-                        className="flex w-full h-2 mb-4 overflow-hidden rounded bg-primary"
-                      ></div>
-                    </div>
-                  }
-                >
-                  <Text>
-                    {holding.asset.name} {t("assetTableComposition1")}{" "}
-                    {format(weight, { percent: true, suffix: "%" })} {t("assetTableComposition2")}
-                  </Text>
-                </Tooltip>
-              </Cell.Cell>
+              <Cell.Text align="text-right">
+                {format(weight, { percent: true, suffix: "%" })}
+              </Cell.Text>
             ),
             quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
             costPerShare: (
