@@ -38,6 +38,7 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
             <span>Lukas Meister</span>
             <span>Andreas Thomas</span>
             <span>Nicolas Webersinke</span>
+            <span>Tobias Hassel</span>
           </div>
 
           <h2>Online-Streitbeilegung (Art. 14 Abs. 1 ODR-Verordnung)</h2>
