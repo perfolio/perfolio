@@ -1,4 +1,4 @@
-import { PortfolioQuery } from "@perfolio/pkg/api/graphql"
+import { PortfolioQuery } from "@perfolio/pkg/api"
 import { useQuery } from "react-query"
 import { useAuth0 } from "@auth0/auth0-react"
 import { client } from "../client"

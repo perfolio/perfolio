@@ -1,4 +1,4 @@
-import { Sdk, getSdk } from "@perfolio/pkg/api/graphql"
+import { Sdk, getSdk } from "@perfolio/pkg/api/sdk"
 import { DocumentNode } from "graphql"
 import { GraphqlError } from "@perfolio/pkg/util/errors"
 import { GraphQLClient } from "graphql-request"

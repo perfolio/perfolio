@@ -1,15 +1,14 @@
 import { Resolvers } from "../../generated/schema-types"
-import { Context } from "../../application/context"
+import { Context } from "../../context"
 
 export const resolvers: Resolvers<Context> = {
   Query: {
-    user: async (_parent, { id }, ctx) => {
-      return await ctx.dataSources.db.user.findUnique({ where: { id } })
+    user: async (_parent, { userId }, ctx) => {
+      return await ctx.dataSources.db.user.findUnique({ where: { id: userId } })
     },
   },
   User: {
-    id: (user) => {
-      return user.id
-    },
+    id: (user) => user.id,
+    stripeCustomerId: (user) => user.stripeCustomerId,
   },
 }

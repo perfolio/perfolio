@@ -13,6 +13,7 @@ query portfolio($portfolioId: ID!) {
         name
         ... on ExchangeTradedAsset {
           ticker
+          isin
           logo
           ... on Stock {
             __typename
@@ -22,7 +23,7 @@ query portfolio($portfolioId: ID!) {
           }
         }
       }
-      portfolioId
+
       executedAt
       value
       volume

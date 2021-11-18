@@ -26,7 +26,6 @@ class MyDocument extends Document {
             href="/fav/favicon_16x16_dark_mode.png"
           ></link>
 
-          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         </Head>
         <body>
           <Main />

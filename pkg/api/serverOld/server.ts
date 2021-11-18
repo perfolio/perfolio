@@ -11,7 +11,6 @@ import { dataSources } from "./datasources"
 
 export type ApolloHandlerConfig = {
   logger?: Logger
-  withCache?: boolean
 }
 
 export const Server = (config?: ApolloHandlerConfig): ApolloServer => {

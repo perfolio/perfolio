@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
 import { Logger } from "tslog"
 import { newId } from "@perfolio/pkg/id"
-import { PrismaClient, User } from "@perfolio/pkg/integrations/prisma"
+import { PrismaClient, UserModel } from "@perfolio/pkg/integrations/prisma"
 import { HttpError } from "@perfolio/pkg/util/errors"
 
 const validation = z.object({
@@ -34,7 +34,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const prisma = new PrismaClient()
-    let user: User | null
+    let user: UserModel | null
     user = await prisma.user.findUnique({
       where: {
         id: userId,

@@ -1,5 +1,5 @@
 import { Resolvers } from "../../generated/schema-types"
-import { Context } from "../../application/context"
+import { Context } from "../../context"
 
 export const resolvers: Resolvers<Context> = {
   User: {
@@ -21,6 +21,11 @@ export const resolvers: Resolvers<Context> = {
         include: { user: true },
       })
       return p!.user
+    },
+  },
+  Query: {
+    portfolio: async (_root, { id }, ctx) => {
+      return await ctx.dataSources.db.portfolio.findUnique({ where: { id } })
     },
   },
 }
