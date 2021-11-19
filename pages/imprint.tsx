@@ -32,6 +32,7 @@ export const Imprint: NextPage<ImprintPageProps> = ({ translations }) => {
           </div>
           <h2>Vertreten durch:</h2>
           <div className="flex flex-col">
+            <span>Tobias Hassel</span>
             <span>Mads Jordt</span>
             <span>Kevin Kohler</span>
             <span>Luis Meister</span>
