@@ -250,7 +250,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
             </div>
             <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
           </div>
-          <div className="mt-16">
+          <div className="mt-4 sm:mt-16">
             <div className="py-4 md:py-6">
               <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
