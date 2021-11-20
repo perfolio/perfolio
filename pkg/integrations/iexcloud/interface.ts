@@ -13,14 +13,14 @@ export type GetCompanyRequest = {
   /**
    * Ticker of the company.
    */
-  asset: string
+  ticker: string
 }
 
 export const GetCompanyResponseValidator = z.object({
   /**
    * Ticker of the company.
    */
-  asset: z.string(),
+  symbol: z.string(),
   /**
    * Name of the company.
    */
@@ -40,7 +40,7 @@ export const GetCompanyResponseValidator = z.object({
   /**
    * Website of the company.
    */
-  website: z.string().url(),
+  website: z.string().nullish(),
   /**
    * Description for the company.
    */

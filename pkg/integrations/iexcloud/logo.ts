@@ -1,6 +1,11 @@
 import * as z from "zod"
 import { Client } from "./client"
 
+
+export type GetLogoRequest = {
+  ticker: string
+}
+
 export const GetLogoResponseValidator = z.object({
   /**
    * Url of the logo
@@ -10,12 +15,10 @@ export const GetLogoResponseValidator = z.object({
 
 export type GetLogoResponse = z.infer<typeof GetLogoResponseValidator>
 
-export async function getLogo(symbol: string): Promise<GetLogoResponse> {
-  const client = new Client()
-
+export async function getLogo(client:Client, req: GetLogoRequest): Promise<GetLogoResponse> {
   let res = (await client
     .get({
-      path: `/stock/${symbol}/logo`,
+      path: `/stock/${req.ticker}/logo`,
     })
     .catch((err) => {
       client.logger.warn(err)

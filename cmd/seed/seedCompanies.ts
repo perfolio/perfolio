@@ -1,5 +1,5 @@
 import { getCompany, getIsinMapping, getLogo } from "@perfolio/pkg/integrations/iexcloud"
-import { PrismaClient } from "@perfolio/pkg/integrations/prisma"
+import { AssetType, PrismaClient } from "@perfolio/pkg/integrations/prisma"
 import { randomUUID } from "crypto"
 import fs from "fs"
 
@@ -56,6 +56,9 @@ async function main() {
         isin,
         ticker: company.symbol,
         name: company.companyName ?? "",
+        logo: "",
+        type: AssetType.COMMON_STOCK,
+        figi: "",
       },
     })
     assets.push(document)

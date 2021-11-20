@@ -9,9 +9,9 @@ const MappingValidation = z.object({
   compositeFIGI: z.string(),
   securityType: z.enum(["Common Stock", "ETP"]),
   marketSector: z.string(),
-  shareClassFIGI: z.string(),
+  shareClassFIGI: z.string().nullish(),
   securityType2: z.enum(["Common Stock", "Mutual Fund"]),
-  securityDescription: z.string(),
+  securityDescription: z.string().nullish(),
 })
 
 const MappingResponse = z
