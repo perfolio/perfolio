@@ -29,7 +29,7 @@ export class IEX extends DataSource {
       return null
     }
 
-    const logo = await this.service.getLogo({ticker})
+    const logo = await this.service.getLogo({ ticker })
 
     /**
      * Transform company from iex schema to one we want to use.

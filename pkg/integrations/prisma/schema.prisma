@@ -90,6 +90,8 @@ model Transaction {
     value       Float
     portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
     portfolioId String
+    // Market Identifier Code
+    mic         String
 }
 
 enum Currency {

@@ -1,13 +1,13 @@
-import * as z from "zod";
-import { Client } from "./client";
-import { HttpError } from "@perfolio/pkg/util/errors";
+import { HttpError } from "@perfolio/pkg/util/errors"
+import * as z from "zod"
+import { Client } from "./client"
 
 export type GetCompanyRequest = {
   /**
    * Ticker of the company.
    */
-  ticker: string;
-};
+  ticker: string
+}
 
 export const GetCompanyResponseValidator = z.object({
   /**
@@ -118,7 +118,7 @@ export const GetCompanyResponseValidator = z.object({
    * Phone number of the company if available.
    */
   phone: z.string().nullable(),
-});
+})
 
 /**
  * Resonse from the `GET /stock/{asset}/company` endpoint.
@@ -127,7 +127,7 @@ export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator> | n
 
 export async function getCompany(
   client: Client,
-  req: GetCompanyRequest
+  req: GetCompanyRequest,
 ): Promise<GetCompanyResponse> {
   return await client
     .get({
@@ -141,9 +141,9 @@ export async function getCompany(
          * can search for tickers.
          */
         if (err.status === 404) {
-          return null;
+          return null
         }
       }
-      throw err;
-    });
+      throw err
+    })
 }

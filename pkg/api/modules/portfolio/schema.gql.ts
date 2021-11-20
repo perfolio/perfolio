@@ -113,7 +113,7 @@ export default gql `
     """
     The market identifier code where the user intends to sell this asset
     """
-    mic: String!
+    mic: String
   }
 
   input UpdateTransaction {

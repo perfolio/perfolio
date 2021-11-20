@@ -1,5 +1,5 @@
-query exchangeTradedAsset($id: ID!) {
-  exchangeTradedAsset(id: $id) {
+query exchangeTradedAsset($assetId: ID!) {
+  exchangeTradedAsset(assetId: $assetId) {
     __typename
     id
     ticker

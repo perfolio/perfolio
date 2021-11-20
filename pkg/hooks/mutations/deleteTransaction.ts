@@ -3,7 +3,7 @@ import { DeleteTransactionMutation, DeleteTransactionMutationVariables } from "@
 import { useRouter } from "next/router"
 import { useMutation, useQueryClient } from "react-query"
 import { client } from "../client"
-import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
+import { USE_PORTFOLIO_QUERY_KEY } from "../queries/usePortfolio"
 
 export const useDeleteTransaction = () => {
   const { getAccessTokenSilently } = useAuth0()
@@ -20,7 +20,8 @@ export const useDeleteTransaction = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY(portfolioId))
+        console.log("I must refetch ", USE_PORTFOLIO_QUERY_KEY(portfolioId))
+        queryClient.invalidateQueries(USE_PORTFOLIO_QUERY_KEY(portfolioId))
       },
     },
   )

@@ -220,6 +220,10 @@ export default gql `
     type: AssetType!
   }
 
+  extend type Query {
+    exchangeTradedAsset(assetId: ID!): ExchangeTradedAsset
+  }
+
   extend type Mutation {
     createExchangeTradedAsset(isin: String!): ExchangeTradedAsset
   }

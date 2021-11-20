@@ -1,4 +1,4 @@
-import { Transaction } from "@perfolio/pkg/api"
+import { ExchangeTradedAsset, Transaction } from "@perfolio/pkg/api"
 import { useExchangeTradedAsset, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
 import { Time } from "@perfolio/pkg/util/time"
@@ -7,7 +7,7 @@ import cn from "classnames"
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
 import React from "react"
 interface TransactionActivityItemProps {
-  transaction: Omit<Transaction, "userId" | "assetId">
+  transaction: Transaction
   isFirst?: boolean
 }
 
@@ -16,31 +16,24 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   isFirst,
 }): JSX.Element => {
   const { t } = useI18n()
-  const { asset, isLoading } = useExchangeTradedAsset({
-    id: transaction.asset.id,
-  })
+  const asset = transaction.asset as ExchangeTradedAsset
   return (
     <div
       className={cn(" py-4", {
         "border-t border-gray-100": !isFirst,
       })}
     >
-      {isLoading || !asset ? <Loading /> : (
-        <>
-          <div className="flex items-center justify-between">
-            <Text size="sm" bold>
-              {t("activFeedNewTrans")}
-            </Text>
-            <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
-          </div>
-          <Text size="sm">
-            You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
-            <span className="font-semibold">{asset.ticker}</span> shares at ${transaction.value}
-            {" "}
-            per share.
-          </Text>
-        </>
-      )}
+      <div className="flex items-center justify-between">
+        <Text size="sm" bold>
+          {t("activFeedNewTrans")}
+        </Text>
+        <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
+      </div>
+      <Text size="sm">
+        You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
+        <span className="font-semibold">{asset.ticker}</span> shares at ${transaction.value}{" "}
+        per share.
+      </Text>
     </div>
   )
 }

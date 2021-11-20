@@ -112,7 +112,7 @@ export type CreateTransaction = {
   /** A timestamp when the transaction was executed in unix time */
   executedAt: Scalars["Int"]
   /** The market identifier code where the user intends to sell this asset */
-  mic: Scalars["String"]
+  mic?: Maybe<Scalars["String"]>
   /** The portfolio of this transaction */
   portfolioId: Scalars["ID"]
   /** How much each share/item was bought/sold for */
@@ -297,6 +297,7 @@ export type Portfolio = {
 
 export type Query = {
   __typename?: "Query"
+  exchangeTradedAsset?: Maybe<ExchangeTradedAsset>
   /**
    * "
    * Get a list of all availale exchanges
@@ -306,6 +307,10 @@ export type Query = {
   /** Return a portfolio by its id */
   portfolio?: Maybe<Portfolio>
   user?: Maybe<User>
+}
+
+export type QueryExchangeTradedAssetArgs = {
+  assetId: Scalars["ID"]
 }
 
 export type QueryPortfolioArgs = {
@@ -821,6 +826,12 @@ export type QueryResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
+  exchangeTradedAsset?: Resolver<
+    Maybe<ResolversTypes["ExchangeTradedAsset"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryExchangeTradedAssetArgs, "assetId">
+  >
   exchanges?: Resolver<
     Array<ResolversTypes["Exchange"]>,
     ParentType,
@@ -980,6 +991,47 @@ export type CreateTransactionMutation = {
   createTransaction: { __typename?: "Transaction"; id: string }
 }
 
+export type DeleteTransactionMutationVariables = Exact<{
+  transactionId: Scalars["ID"]
+}>
+
+export type DeleteTransactionMutation = {
+  __typename?: "Mutation"
+  deleteTransaction: { __typename?: "Transaction"; id: string }
+}
+
+export type ExchangeTradedAssetQueryVariables = Exact<{
+  assetId: Scalars["ID"]
+}>
+
+export type ExchangeTradedAssetQuery = {
+  __typename?: "Query"
+  exchangeTradedAsset?:
+    | {
+      __typename: "Company"
+      id: string
+      ticker: string
+      logo: string
+      name: string
+    }
+    | {
+      __typename: "Crypto"
+      id: string
+      ticker: string
+      logo: string
+      name: string
+    }
+    | {
+      __typename: "ETF"
+      id: string
+      ticker: string
+      logo: string
+      name: string
+    }
+    | null
+    | undefined
+}
+
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars["ID"]
 }>
@@ -995,6 +1047,8 @@ export type PortfolioQuery = {
       transactions: Array<{
         __typename?: "Transaction"
         id: string
+        portfolioId: string
+        assetId: string
         executedAt: number
         value: number
         volume: number
@@ -1091,6 +1145,30 @@ export const CreateTransactionDocument = gql `
     }
   }
 `
+export const DeleteTransactionDocument = gql `
+  mutation deleteTransaction($transactionId: ID!) {
+    deleteTransaction(transactionId: $transactionId) {
+      id
+    }
+  }
+`
+export const ExchangeTradedAssetDocument = gql `
+  query exchangeTradedAsset($assetId: ID!) {
+    exchangeTradedAsset(assetId: $assetId) {
+      __typename
+      id
+      ticker
+      logo
+      name
+      ... on Stock {
+        ... on Company {
+          sector
+          country
+        }
+      }
+    }
+  }
+`
 export const PortfolioDocument = gql `
   query portfolio($portfolioId: ID!) {
     portfolio(portfolioId: $portfolioId) {
@@ -1100,6 +1178,8 @@ export const PortfolioDocument = gql `
       primary
       transactions {
         id
+        portfolioId
+        assetId
         asset {
           __typename
           id
@@ -1179,6 +1259,24 @@ export function getSdk<C>(requester: Requester<C>) {
         CreateTransactionMutation,
         CreateTransactionMutationVariables
       >(CreateTransactionDocument, variables, options)
+    },
+    deleteTransaction(
+      variables: DeleteTransactionMutationVariables,
+      options?: C,
+    ): Promise<DeleteTransactionMutation> {
+      return requester<
+        DeleteTransactionMutation,
+        DeleteTransactionMutationVariables
+      >(DeleteTransactionDocument, variables, options)
+    },
+    exchangeTradedAsset(
+      variables: ExchangeTradedAssetQueryVariables,
+      options?: C,
+    ): Promise<ExchangeTradedAssetQuery> {
+      return requester<
+        ExchangeTradedAssetQuery,
+        ExchangeTradedAssetQueryVariables
+      >(ExchangeTradedAssetDocument, variables, options)
     },
     portfolio(
       variables: PortfolioQueryVariables,

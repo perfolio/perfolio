@@ -1,10 +1,26 @@
 import { newId } from "@perfolio/pkg/id"
-import { getCompany as getCompanyFromIex } from "@perfolio/pkg/integrations/iexcloud"
 import { AssetType } from "@perfolio/pkg/integrations/prisma"
 import { Context } from "../../context"
 import { Resolvers } from "../../generated/schema-types"
 
 export const resolvers: Resolvers<Context> = {
+  Asset: {
+    __resolveType(asset) {
+      if (asset.type === AssetType.COMMON_STOCK) {
+        return "Company"
+      }
+      if (asset.type === AssetType.MUTUAL_FUND) {
+        return "ETF"
+      }
+      throw new Error(
+        `Unable to decide what type of ExchangeTradedAsset this is: ${
+          JSON.stringify(
+            asset,
+          )
+        }`,
+      )
+    },
+  },
   ExchangeTradedAsset: {
     __resolveType: (asset) => {
       if (asset.type === AssetType.COMMON_STOCK) {
@@ -79,9 +95,11 @@ export const resolvers: Resolvers<Context> = {
         : [foundIsin.ticker, foundIsin.exchCode].join("-")
       ctx.logger.info("Using this ticker for lookup", { ticker })
       const company = await ctx.dataSources.iex.getCompany(ticker)
-ctx.logger.info("Company", {company})
+      ctx.logger.info("Company", { company })
       if (!company) {
-        throw new Error(`No Exchange traded asset exists for ticker: ${ticker}`)
+        throw new Error(
+          `No Exchange traded asset exists for ticker: ${ticker}`,
+        )
       }
 
       const asset = await ctx.dataSources.db.exchangeTradedAsset.upsert({
@@ -130,6 +148,12 @@ ctx.logger.info("Company", {company})
       })
 
       return asset
+    },
+  },
+  Query: {
+    exchangeTradedAsset: async (_root, { assetId }, ctx) => {
+      return await ctx.dataSources.db.exchangeTradedAsset.findUnique({ where: { id: assetId } })
+        ?? undefined
     },
   },
 }

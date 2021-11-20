@@ -10,7 +10,7 @@ type UserType = { claims?: Claims; root: boolean }
 export type Context = {
   dataSources: DataSources
   authenticateUser: () => Promise<UserType>
-  authorizeUser: (authorizer: (claims: Claims) => boolean) => Promise<void>
+  authorizeUser: (authorizer: (claims: Claims) => boolean) => Promise<Claims>
   logger: Logger
 }
 
@@ -38,10 +38,12 @@ export const context = (ctx: { req: IncomingMessage }) => {
     throw new AuthenticationError("Invalid token")
   }
 
-  const authorizeUser = async (authorize: (claims: Claims) => Promise<void>): Promise<void> => {
+  const authorizeUser = async (
+    authorize: (claims: Claims) => Promise<boolean>,
+  ): Promise<Claims> => {
     const { claims, root } = await authenticateUser()
     if (root) {
-      return
+      return { sub: "__ROOT__" } as Claims
     }
     if (!claims) {
       throw new AuthorizationError("No claims found")
@@ -50,6 +52,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
       logger.warn("claims", { claims })
       throw new AuthorizationError("UserId does not match")
     }
+    return claims
   }
 
   return {

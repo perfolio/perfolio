@@ -1,4 +1,5 @@
 import { newId } from "@perfolio/pkg/id"
+import { SettingsModel } from "@perfolio/pkg/integrations/prisma"
 import { Context } from "../../context"
 import { Resolvers } from "../../generated/schema-types"
 
@@ -117,12 +118,26 @@ export const resolvers: Resolvers<Context> = {
       if (!portfolio) {
         throw new Error(`Portfolio ${transaction.portfolioId} does not exist`)
       }
-      ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      const { sub: userId } = await ctx.authorizeUser(
+        (claims) => claims.sub === portfolio.userId,
+      )
+
+      let settings: SettingsModel | null = null
+      if (!transaction.mic) {
+        settings = await ctx.dataSources.db.settings.findUnique({
+          where: { userId },
+        })
+        if (!settings) {
+          throw new Error(`No settings found for user: ${userId}`)
+        }
+      }
+      let mic = transaction.mic ?? settings?.defaultExchangeMic!
 
       return await ctx.dataSources.db.transaction.create({
         data: {
           id: newId("transaction"),
           ...transaction,
+          mic,
         },
       })
     },

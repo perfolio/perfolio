@@ -3,7 +3,7 @@ import { CreateTransactionMutation, CreateTransactionMutationVariables } from "@
 import { useRouter } from "next/router"
 import { useMutation, useQueryClient } from "react-query"
 import { client } from "../client"
-import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
+import { USE_PORTFOLIO_QUERY_KEY } from "../queries/usePortfolio"
 
 export const useCreateTransaction = () => {
   const { getAccessTokenSilently } = useAuth0()
@@ -20,7 +20,7 @@ export const useCreateTransaction = () => {
     },
     {
       onSuccess: () => {
-        queryClient.resetQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY(portfolioId))
+        queryClient.resetQueries(USE_PORTFOLIO_QUERY_KEY(portfolioId))
       },
     },
   )

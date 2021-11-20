@@ -30,6 +30,7 @@ export namespace AssetsModule {
       | "logo"
       | "assetHistory"
       | "type"
+    Query: "exchangeTradedAsset"
     Mutation: "createExchangeTradedAsset"
     Asset: "id" | "name"
     ExchangeTradedAsset:
@@ -66,6 +67,7 @@ export namespace AssetsModule {
   export type Company = Pick<Types.Company, DefinedFields["Company"]>
   export type ETF = Pick<Types.Etf, DefinedFields["ETF"]>
   export type Crypto = Pick<Types.Crypto, DefinedFields["Crypto"]>
+  export type Query = Pick<Types.Query, DefinedFields["Query"]>
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
   export type CompanyResolvers = Pick<
@@ -79,6 +81,10 @@ export namespace AssetsModule {
   export type CryptoResolvers = Pick<
     Types.CryptoResolvers,
     DefinedFields["Crypto"] | "__isTypeOf"
+  >
+  export type QueryResolvers = Pick<
+    Types.QueryResolvers,
+    DefinedFields["Query"]
   >
   export type MutationResolvers = Pick<
     Types.MutationResolvers,
@@ -101,6 +107,7 @@ export namespace AssetsModule {
     Company?: CompanyResolvers
     ETF?: ETFResolvers
     Crypto?: CryptoResolvers
+    Query?: QueryResolvers
     Mutation?: MutationResolvers
   }
 
@@ -141,6 +148,10 @@ export namespace AssetsModule {
       logo?: gm.Middleware[]
       assetHistory?: gm.Middleware[]
       type?: gm.Middleware[]
+    }
+    Query?: {
+      "*"?: gm.Middleware[]
+      exchangeTradedAsset?: gm.Middleware[]
     }
     Mutation?: {
       "*"?: gm.Middleware[]

@@ -4,7 +4,8 @@ import { useRouter } from "next/router"
 import { useQuery } from "react-query"
 import { client } from "../client"
 
-const USE_PORTFOLIO_QUERY_KEY = (portfolioId: string) => `USE_PORTFOLIO_QUERY_KEY_${portfolioId}`
+export const USE_PORTFOLIO_QUERY_KEY = (portfolioId: string) =>
+  `USE_PORTFOLIO_QUERY_KEY_${portfolioId}`
 
 export const usePortfolio = () => {
   const { getAccessTokenSilently } = useAuth0()

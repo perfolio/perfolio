@@ -17,7 +17,7 @@ import router from "next/router"
 import React from "react"
 
 export interface TransactionItemProps {
-  transaction: Omit<Transaction, "assetId">
+  transaction: Omit<Transaction, "portfolioId">
   isLast: boolean
 }
 
@@ -26,10 +26,10 @@ const TransactionItem: React.FC<TransactionItemProps> = (
 ): JSX.Element => {
   const { t } = useI18n()
   const { addToast } = useToaster()
-  const { asset } = useExchangeTradedAsset({
-    id: transaction.asset.id,
-  })
+  console.log({ transaction })
   const deleteTransaction = useDeleteTransaction()
+
+  const asset = transaction.asset as ExchangeTradedAsset
 
   return (
     <div className="w-full md:flex">
@@ -40,7 +40,9 @@ const TransactionItem: React.FC<TransactionItemProps> = (
               {new Date(transaction.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-dark dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {asset?.logo ? <Avatar size="sm" src={asset.logo} /> : <Loading />}
+              {asset.logo
+                ? <Avatar size="sm" src={asset.logo} />
+                : <Loading />}
             </div>
           </div>
         </div>
@@ -54,11 +56,13 @@ const TransactionItem: React.FC<TransactionItemProps> = (
         )}
       >
         <div className="flex flex-grow gap-4">
-          {asset
+          {transaction.asset
             ? (
-              <Description title={asset.name}>
+              <Description title={transaction.asset.name}>
                 {`You ${
-                  transaction.volume > 0 ? t("transIndexInfoBought") : t("transIndexInfoSold")
+                  transaction.volume > 0
+                    ? t("transIndexInfoBought")
+                    : t("transIndexInfoSold")
                 } ${Math.abs(transaction.volume).toFixed(2)} share${
                   transaction.volume === 1 ? "" : "s"
                 } of ${asset.ticker} at $${transaction.value.toFixed(2)} per share`}
@@ -137,7 +141,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
                       >
                         <TransactionItem
                           key={tx.id}
-                          transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset }}
+                          transaction={tx}
                           isLast={i === portfolio.transactions.length - 1}
                         />
                       </motion.div>
