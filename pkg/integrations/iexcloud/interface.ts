@@ -1,12 +1,12 @@
-import { Time, } from "@perfolio/pkg/util/time"
+import { Time } from "@perfolio/pkg/util/time"
 import * as z from "zod"
 export interface IEXService {
-  getCompany(req: GetCompanyRequest,): Promise<GetCompanyResponse>
-  getLogo(req: GetLogoRequest,): Promise<GetLogoResponse>
-  getHistory(req: GetHistoryRequest,): Promise<GetHistoryResponse>
-  getPossibleAssets(req: GetPossibleAssetsRequest,): Promise<GetPossibleAssetsResponse>
-  getTickerFromFigi(req: getTickerFromFigiRequest,): Promise<getTickerFromFigiRespnse>
-  getCurrentPrice(req: GetCurrentPriceRequest,): Promise<GetCurrentPriceResponse>
+  getCompany(req: GetCompanyRequest): Promise<GetCompanyResponse>
+  getLogo(req: GetLogoRequest): Promise<GetLogoResponse>
+  getHistory(req: GetHistoryRequest): Promise<GetHistoryResponse>
+  getPossibleAssets(req: GetPossibleAssetsRequest): Promise<GetPossibleAssetsResponse>
+  getTickerFromFigi(req: getTickerFromFigiRequest): Promise<getTickerFromFigiRespnse>
+  getCurrentPrice(req: GetCurrentPriceRequest): Promise<GetCurrentPriceResponse>
 }
 
 export type GetCompanyRequest = {
@@ -69,7 +69,7 @@ export const GetCompanyResponseValidator = z.object({
    * wt - Warrant
    * empty - Other.
    */
-  issueType: z.enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt", "",],),
+  issueType: z.enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt", ""]),
   /**
    * Refers to the sector the company belongs to.
    */
@@ -81,7 +81,7 @@ export const GetCompanyResponseValidator = z.object({
   /**
    * An array of strings used to classify the company.
    */
-  tags: z.array(z.string(),),
+  tags: z.array(z.string()),
   /**
    * Street address of the company if available.
    */
@@ -110,7 +110,7 @@ export const GetCompanyResponseValidator = z.object({
    * Phone number of the company if available.
    */
   phone: z.string(),
-},)
+})
 
 /**
  * Resonse from the `GET /stock/{asset}/company` endpoint.
@@ -126,7 +126,7 @@ export interface GetLogoRequest {
 
 export const GetLogoResponseValidator = z.object({
   url: z.string().url(),
-},)
+})
 export type GetLogoResponse = z.infer<typeof GetLogoResponseValidator>
 export interface GetPriceRequest {
   /**
@@ -141,7 +141,7 @@ export interface GetPriceRequest {
 
 export const GetClosingPriceResponseValidator = z.object({
   close: z.number(),
-},)
+})
 export type GetClosingPriceResponse = z.infer<typeof GetClosingPriceResponseValidator>
 
 export interface GetHistoryRequest {

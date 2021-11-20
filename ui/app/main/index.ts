@@ -1,15 +1,15 @@
 import React from "react"
-import { MainContent, } from "./content"
-import { MainDivider, } from "./divider"
-import { MainHeader, MainHeaderProps, } from "./header"
-import { Root, RootProps, } from "./root"
-import { MainTitle, } from "./title"
+import { MainContent } from "./content"
+import { MainDivider } from "./divider"
+import { MainHeader, MainHeaderProps } from "./header"
+import { Root, RootProps } from "./root"
+import { MainTitle } from "./title"
 
-type NestedHeader<P = MainHeaderProps,> = React.FC<P> & {
+type NestedHeader<P = MainHeaderProps> = React.FC<P> & {
   Title: typeof MainTitle
 }
 
-type NestedMain<P = RootProps,> = React.FC<P> & {
+type NestedMain<P = RootProps> = React.FC<P> & {
   Header: NestedHeader
   Content: typeof MainContent
   Divider: typeof MainDivider

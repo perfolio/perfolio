@@ -1,7 +1,7 @@
-import { useContext, } from "react"
-import { v4 as uuid, } from "uuid"
-import { ToasterContext, } from "./provider"
-import { ToastProps, } from "./toast"
+import { useContext } from "react"
+import { v4 as uuid } from "uuid"
+import { ToasterContext } from "./provider"
+import { ToastProps } from "./toast"
 
 type CreateToastProps = Omit<ToastProps, "id" | "remove">
 
@@ -14,7 +14,7 @@ export type ToastHook = {
   /**
    * Push a new toast to the stack
    */
-  addToast: (toast: CreateToastProps,) => void
+  addToast: (toast: CreateToastProps) => void
   /**
    * Remove all toasts
    */
@@ -22,19 +22,19 @@ export type ToastHook = {
 }
 
 export const useToaster = (): ToastHook => {
-  const ctx = useContext(ToasterContext,)
+  const ctx = useContext(ToasterContext)
 
   return {
     getToasts: () => ctx.toasts,
-    addToast: (toast: CreateToastProps,) => {
+    addToast: (toast: CreateToastProps) => {
       ctx.setToasts([
         ...ctx.toasts,
         {
           ...toast,
           id: uuid(),
         },
-      ],)
+      ])
     },
-    clearToasts: () => ctx.setToasts([],),
+    clearToasts: () => ctx.setToasts([]),
   }
 }

@@ -1,9 +1,9 @@
 import React from "react"
-import { DrawerContent, } from "./content"
-import { Drawer as Root, DrawerProps as RootProps, } from "./drawer"
-import { DrawerFooter, } from "./footer"
+import { DrawerContent } from "./content"
+import { Drawer as Root, DrawerProps as RootProps } from "./drawer"
+import { DrawerFooter } from "./footer"
 
-type NestedDrawer<P = RootProps,> = React.FC<P> & {
+type NestedDrawer<P = RootProps> = React.FC<P> & {
   Footer: typeof DrawerFooter
   Content: typeof DrawerContent
 }

@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Client, } from "./client"
+import { Client } from "./client"
 
 export const GetVolumeByVendorResponseValidator = z.array(
   z
@@ -28,7 +28,7 @@ export const GetVolumeByVendorResponseValidator = z.array(
        * Refers to the 15 minute delayed percent of total stock volume traded by the venue
        */
       marketPercent: z.number(),
-    },)
+    })
     .nonstrict(),
 )
 
@@ -37,9 +37,9 @@ export const GetVolumeByVendorResponseValidator = z.array(
  */
 export type GetVolumeByVenue = z.infer<typeof GetVolumeByVendorResponseValidator>
 
-export async function getVolumeByVenue(symbol: string,): Promise<GetVolumeByVenue> {
+export async function getVolumeByVenue(symbol: string): Promise<GetVolumeByVenue> {
   const res = await new Client().get({
     path: `/stock/${symbol}/volume-by-venue`,
-  },)
-  return GetVolumeByVendorResponseValidator.parse(res,)
+  })
+  return GetVolumeByVendorResponseValidator.parse(res)
 }

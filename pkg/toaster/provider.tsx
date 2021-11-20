@@ -1,8 +1,8 @@
-import { AnimateSharedLayout, } from "framer-motion"
-import React, { createContext, useState, } from "react"
-import { Toast, ToastProps, } from "./toast"
+import { AnimateSharedLayout } from "framer-motion"
+import React, { createContext, useState } from "react"
+import { Toast, ToastProps } from "./toast"
 
-const ERROR_PROVIDER_NOT_USED = new Error("Please wrap your app with the provider first.",)
+const ERROR_PROVIDER_NOT_USED = new Error("Please wrap your app with the provider first.")
 
 export interface Toaster {
   /**
@@ -10,7 +10,7 @@ export interface Toaster {
    */
   toasts: ToastProps[]
 
-  setToasts: (toasts: ToastProps[],) => void
+  setToasts: (toasts: ToastProps[]) => void
 }
 
 /**
@@ -25,18 +25,18 @@ export const ToasterContext = createContext<Toaster>({
   setToasts: () => {
     throw ERROR_PROVIDER_NOT_USED
   },
-},)
+})
 
 /**
  * ToastProvider should be wrapped around your app in /pages/_app.ts.
  *
  * This sets up the toaster context.
  */
-export const ToastProvider: React.FC = ({ children, },) => {
+export const ToastProvider: React.FC = ({ children }) => {
   /**
    * Increment this version to invalidate the local storage on all clients.
    */
-  const [toasts, setToasts,] = useState<ToastProps[]>([],)
+  const [toasts, setToasts] = useState<ToastProps[]>([])
   return (
     <ToasterContext.Provider
       value={{
@@ -47,7 +47,7 @@ export const ToastProvider: React.FC = ({ children, },) => {
       {children}
       <div className="fixed bottom-0 right-0 flex flex-col gap-4 p-8 m-4">
         <AnimateSharedLayout>
-          {toasts.map((props,) => <Toast key={props.id} {...props} />)}
+          {toasts.map((props) => <Toast key={props.id} {...props} />)}
         </AnimateSharedLayout>
       </div>
       {/* <div className="absolute bottom-0 right-0 flex flex-col p-8 m-4" id="toasterPortal"></div> */}

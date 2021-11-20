@@ -1,7 +1,7 @@
-import { ExclamationCircleIcon, } from "@heroicons/react/outline"
+import { ExclamationCircleIcon } from "@heroicons/react/outline"
 import classNames from "classnames"
-import React, { useEffect, useState, } from "react"
-import { useFormContext, } from "react-hook-form"
+import React, { useEffect, useState } from "react"
+import { useFormContext } from "react-hook-form"
 export interface DigitInputProps {
   /**
    * Field name. Make sure this matches your schema.
@@ -13,40 +13,40 @@ export interface DigitInputProps {
   setFocusOnMe: () => void
 }
 
-export const Digit: React.FC<DigitInputProps> = ({ focus, onChange, name, setFocusOnMe, },) => {
+export const Digit: React.FC<DigitInputProps> = ({ focus, onChange, name, setFocusOnMe }) => {
   const {
     register,
-    formState: { isSubmitting, errors, },
+    formState: { isSubmitting, errors },
     setFocus,
   } = useFormContext()
-  const error = Array.isArray(errors[name],)
-    ? errors[name].join(", ",)
+  const error = Array.isArray(errors[name])
+    ? errors[name].join(", ")
     : errors[name]?.message || errors[name]
 
   useEffect(() => {
     if (focus) {
-      setFocus(name,)
+      setFocus(name)
     }
-  }, [focus, name, setFocus,],)
+  }, [focus, name, setFocus])
 
-  const [hasValue, setHasValue,] = useState(false,)
+  const [hasValue, setHasValue] = useState(false)
 
   return (
     <div>
       <input
-        onFocusCapture={(e,) => {
+        onFocusCapture={(e) => {
           setFocusOnMe()
           e.currentTarget.select()
         }}
         id={name}
-        {...register(name,)}
+        {...register(name)}
         autoComplete="off"
         maxLength={1}
         type="text"
         pattern="[\d]{1}"
-        onChange={(e,) => {
-          const { value, } = e.currentTarget
-          setHasValue(value !== "",)
+        onChange={(e) => {
+          const { value } = e.currentTarget
+          setHasValue(value !== "")
           if (onChange && value !== "") {
             onChange()
           }

@@ -1,9 +1,9 @@
-import { XIcon, } from "@heroicons/react/outline"
-import { Description, Icon, } from "@perfolio/ui/components"
+import { XIcon } from "@heroicons/react/outline"
+import { Description, Icon } from "@perfolio/ui/components"
 import cn from "classnames"
-import { AnimatePresence, motion, } from "framer-motion"
-import React, { useEffect, useState, } from "react"
-import { v4 as uuid, } from "uuid"
+import { AnimatePresence, motion } from "framer-motion"
+import React, { useEffect, useState } from "react"
+import { v4 as uuid } from "uuid"
 export interface ToastProps {
   /**
    * Unique id
@@ -27,17 +27,17 @@ export const Toast: React.FC<ToastProps> = ({
   title,
   icon,
   content,
-},): JSX.Element => {
-  const [visible, setVisible,] = useState(true,)
-  const remove = () => setVisible(false,)
+}): JSX.Element => {
+  const [visible, setVisible] = useState(true)
+  const remove = () => setVisible(false)
   useEffect(() => {
     if (ttl <= 0) {
       return
     }
     setTimeout(() => {
       remove()
-    }, ttl * 1000,)
-  }, [id, remove, ttl,],)
+    }, ttl * 1000)
+  }, [id, remove, ttl])
 
   return (
     <AnimatePresence>
@@ -46,10 +46,10 @@ export const Toast: React.FC<ToastProps> = ({
           <motion.div
             layout
             key={id}
-            initial={{ opacity: 0, x: 20, scale: 0.3, }}
-            animate={{ opacity: 1, x: 0, scale: 1, }}
-            exit={{ opacity: 0, y: 20, scale: 0.7, }}
-            transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1, }}
+            initial={{ opacity: 0, x: 20, scale: 0.3 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.7 }}
+            transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
             role={role}
             className={cn(
               "flex space-x-4 items-start relative px-6 py-4 rounded shadow-xl max-w-md",

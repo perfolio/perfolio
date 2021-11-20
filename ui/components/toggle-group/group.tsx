@@ -1,23 +1,23 @@
 import cn from "classnames"
-export type ToggleGroupProps<T extends string,> = {
+export type ToggleGroupProps<T extends string> = {
   size?: "sm" | "md" | "lg"
   options: { display: string; id: T }[]
   selected: T
-  setSelected: (value: T,) => void
+  setSelected: (value: T) => void
 }
 
-export function ToggleGroup<T extends string,>({
+export function ToggleGroup<T extends string>({
   size = "md",
   options,
   selected,
   setSelected,
-}: ToggleGroupProps<T>,): JSX.Element {
+}: ToggleGroupProps<T>): JSX.Element {
   return (
     <ul className="inline-flex overflow-hidden border border-gray-200 divide-x divide-gray-300 rounded">
-      {options.map(({ display, id, },) => (
+      {options.map(({ display, id }) => (
         <li key={id}>
           <button
-            onClick={() => setSelected(id,)}
+            onClick={() => setSelected(id)}
             className={cn(
               "bg-white text-black transition duration-150 ease-in-out  hover:text-gray-800 hover:bg-gray-100 focus:outline-none",
               {

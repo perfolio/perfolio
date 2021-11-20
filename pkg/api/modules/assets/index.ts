@@ -1,5 +1,5 @@
-import { createModule, } from "graphql-modules"
-import { resolvers, } from "./resolvers"
+import { createModule } from "graphql-modules"
+import { resolvers } from "./resolvers"
 import typeDefs from "./schema.gql"
 
 export const assetsModule = createModule({
@@ -7,4 +7,4 @@ export const assetsModule = createModule({
   dirname: __dirname,
   typeDefs,
   resolvers,
-},)
+})

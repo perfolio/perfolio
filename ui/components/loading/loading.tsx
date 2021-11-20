@@ -13,7 +13,7 @@ export interface LoadingProps {
   color?: string
 }
 
-export const Loading: React.FC<LoadingProps> = ({ size = "md", bg, color, },): JSX.Element => {
+export const Loading: React.FC<LoadingProps> = ({ size = "md", bg, color }): JSX.Element => {
   return (
     <div
       className={cn(
@@ -30,7 +30,7 @@ export const Loading: React.FC<LoadingProps> = ({ size = "md", bg, color, },): J
           "w-4 h-4": size === "sm",
           "w-6 h-6": size === "md",
           "w-8 h-8": size === "lg",
-        },)}
+        })}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

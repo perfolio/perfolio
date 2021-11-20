@@ -1,6 +1,6 @@
-import { env, } from "@chronark/env"
-import { Logger, } from "@perfolio/pkg/logger"
-import { HttpError, JsonUnmarshalError, } from "@perfolio/pkg/util/errors"
+import { env } from "@chronark/env"
+import { Logger } from "@perfolio/pkg/logger"
+import { HttpError, JsonUnmarshalError } from "@perfolio/pkg/util/errors"
 import fetch from "node-fetch"
 // import fetch from "node-fetch"
 /**
@@ -48,18 +48,18 @@ export class Client {
   private readonly token: string
   public readonly logger: Logger
 
-  constructor(config?: ApiConfig,) {
+  constructor(config?: ApiConfig) {
     this.baseUrl = config?.baseUrl ?? "https://cloud.iexapis.com/stable"
-    this.token = config?.token ?? env.require("IEX_TOKEN",)
+    this.token = config?.token ?? env.require("IEX_TOKEN")
     this.logger = new Logger({
       name: "IEX Client",
-    },)
+    })
   }
 
   /**
    * Make a GET request to iexcloud.
    */
-  public async get({ path, parameters, }: GetRequest,): Promise<unknown> {
+  public async get({ path, parameters }: GetRequest): Promise<unknown> {
     if (!parameters) {
       parameters = {}
     }
@@ -68,42 +68,42 @@ export class Client {
     /**
      * Flatten query.
      */
-    const query = Object.entries(parameters,)
-      .map(([k, v,],) => {
-        if (Array.isArray(v,)) {
-          v = v.join(",",)
+    const query = Object.entries(parameters)
+      .map(([k, v]) => {
+        if (Array.isArray(v)) {
+          v = v.join(",")
         }
         return `${k}=${v}`
-      },)
-      .join("&",)
+      })
+      .join("&")
 
     const url = `${this.baseUrl}${path}?${query}`
 
     for (let attempt = 1; attempt <= 5; attempt += 1) {
-      const backoff = Math.random() * 2 ** Math.min(attempt, 6,)
+      const backoff = Math.random() * 2 ** Math.min(attempt, 6)
 
       const res = await fetch(url, {
         method: "GET",
-      },)
+      })
       if (res.status === 429) {
-        this.logger.warn(`IEX Ratelimit reached [ ${path} ], waiting ${backoff.toFixed(0,)}s`,)
-        await new Promise((resolve,) => setTimeout(resolve, backoff * 1000,))
+        this.logger.warn(`IEX Ratelimit reached [ ${path} ], waiting ${backoff.toFixed(0)}s`)
+        await new Promise((resolve) => setTimeout(resolve, backoff * 1000))
         continue
       }
       /**
        * We need to handle some 400 errors specifically.
        */
       if (res.status === 400) {
-        throw new HttpError(res.status, `Unable to reach resource: ${path}: ${await res.text()}`,)
+        throw new HttpError(res.status, `Unable to reach resource: ${path}: ${await res.text()}`)
       }
 
       if (res.status !== 200) {
-        throw new HttpError(res.status, path,)
+        throw new HttpError(res.status, path)
       }
-      return res.json().catch((err,) => {
-        throw new JsonUnmarshalError(err,)
-      },)
+      return res.json().catch((err) => {
+        throw new JsonUnmarshalError(err)
+      })
     }
-    throw new Error(`Unable to fetch from iex, ran out of retries: ${path}`,)
+    throw new Error(`Unable to fetch from iex, ran out of retries: ${path}`)
   }
 }

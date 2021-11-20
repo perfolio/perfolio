@@ -1,9 +1,9 @@
-import { ExclamationCircleIcon, } from "@heroicons/react/outline"
-import { Tooltip, } from "@perfolio/ui/components"
+import { ExclamationCircleIcon } from "@heroicons/react/outline"
+import { Tooltip } from "@perfolio/ui/components"
 import classNames from "classnames"
 import cn from "classnames"
-import React, { useEffect, } from "react"
-import { useFormContext, } from "react-hook-form"
+import React, { useEffect } from "react"
+import { useFormContext } from "react-hook-form"
 
 type TextAlignment = "left" | "center" | "right"
 
@@ -47,28 +47,28 @@ export const Input: React.FC<InputProps> = ({
   placeholder,
   autoFocus = false,
   textAlignment = "center",
-},) => {
+}) => {
   const {
     register,
-    formState: { isSubmitting, errors, },
+    formState: { isSubmitting, errors },
     setValue,
   } = useFormContext()
-  const error = Array.isArray(errors[name],)
-    ? errors[name].join(", ",)
+  const error = Array.isArray(errors[name])
+    ? errors[name].join(", ")
     : errors[name]?.message || errors[name]
 
   useEffect(() => {
     if (defaultValue) {
-      setValue(name, defaultValue,)
+      setValue(name, defaultValue)
     }
-  }, [defaultValue, name, setValue,],)
+  }, [defaultValue, name, setValue])
   return (
     <div className="w-full text-gray-800">
       <label
         htmlFor={name}
         className={cn("flex items-center mb-1 gap-2 text-xs font-medium text-gray-700 uppercase", {
           "sr-only": hideLabel,
-        },)}
+        })}
       >
         {label}
         {help ? <Tooltip side="bottom">{help}</Tooltip> : null}
@@ -86,7 +86,7 @@ export const Input: React.FC<InputProps> = ({
         <input
           id={name}
           disabled={disabled || isSubmitting}
-          {...register(name,)}
+          {...register(name)}
           type={type}
           placeholder={placeholder}
           autoFocus={autoFocus}

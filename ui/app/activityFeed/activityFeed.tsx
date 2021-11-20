@@ -1,10 +1,10 @@
-import { Transaction, } from "@perfolio/pkg/api"
-import { useExchangeTradedAsset, usePortfolio, } from "@perfolio/pkg/hooks"
-import { useI18n, } from "@perfolio/pkg/i18n"
-import { Time, } from "@perfolio/pkg/util/time"
-import { Loading, Text, } from "@perfolio/ui/components"
+import { Transaction } from "@perfolio/pkg/api"
+import { useExchangeTradedAsset, usePortfolio } from "@perfolio/pkg/hooks"
+import { useI18n } from "@perfolio/pkg/i18n"
+import { Time } from "@perfolio/pkg/util/time"
+import { Loading, Text } from "@perfolio/ui/components"
 import cn from "classnames"
-import { AnimatePresence, AnimateSharedLayout, motion, } from "framer-motion"
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
 import React from "react"
 interface TransactionActivityItemProps {
   transaction: Omit<Transaction, "userId" | "assetId">
@@ -14,24 +14,24 @@ interface TransactionActivityItemProps {
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
-},): JSX.Element => {
-  const { t, } = useI18n()
-  const { asset, isLoading, } = useExchangeTradedAsset({
+}): JSX.Element => {
+  const { t } = useI18n()
+  const { asset, isLoading } = useExchangeTradedAsset({
     id: transaction.asset.id,
-  },)
+  })
   return (
     <div
       className={cn(" py-4", {
         "border-t border-gray-100": !isFirst,
-      },)}
+      })}
     >
       {isLoading || !asset ? <Loading /> : (
         <>
           <div className="flex items-center justify-between">
             <Text size="sm" bold>
-              {t("activFeedNewTrans",)}
+              {t("activFeedNewTrans")}
             </Text>
-            <Text size="xs">{Time.ago(transaction.executedAt,)}</Text>
+            <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
           </div>
           <Text size="sm">
             You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
@@ -46,25 +46,25 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const { portfolio, } = usePortfolio()
-  const { t, } = useI18n()
+  const { portfolio } = usePortfolio()
+  const { t } = useI18n()
   const last5Transactions = portfolio?.transactions
-    ? [...portfolio?.transactions,].sort((a, b,) => b.executedAt - a.executedAt).slice(0, 5,)
+    ? [...portfolio?.transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []
 
   return (
     <>
-      <p className="text-base font-semibold text-gray-800">{t("activFeedRecentActiv",)}</p>
+      <p className="text-base font-semibold text-gray-800">{t("activFeedRecentActiv")}</p>
       <AnimateSharedLayout>
         <AnimatePresence>
-          {last5Transactions?.map((tx, i,) => (
+          {last5Transactions?.map((tx, i) => (
             <motion.div
               layout
               key={tx.id}
-              initial={{ opacity: 0, scaleY: 0, }}
-              animate={{ opacity: 1, scaleY: 1, }}
-              exit={{ opacity: 0, scaleY: 0, }}
-              transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1, }}
+              initial={{ opacity: 0, scaleY: 0 }}
+              animate={{ opacity: 1, scaleY: 1 }}
+              exit={{ opacity: 0, scaleY: 0 }}
+              transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
             >
               <TransactionActivityItem transaction={tx} isFirst={i === 0} />
             </motion.div>

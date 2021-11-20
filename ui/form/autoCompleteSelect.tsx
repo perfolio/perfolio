@@ -1,10 +1,10 @@
-import { Transition, } from "@headlessui/react"
-import { useSearch, } from "@perfolio/pkg/hooks"
-import { Avatar, Description, Loading, Profile, Tooltip, } from "@perfolio/ui/components"
+import { Transition } from "@headlessui/react"
+import { useSearch } from "@perfolio/pkg/hooks"
+import { Avatar, Description, Loading, Profile, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
-import React, { Fragment, useEffect, useState, } from "react"
-import { useFormContext, } from "react-hook-form"
-export interface AutoCompleteSelectProps<Option,> {
+import React, { Fragment, useEffect, useState } from "react"
+import { useFormContext } from "react-hook-form"
+export interface AutoCompleteSelectProps<Option> {
   disabled?: boolean
   /**
    * Field name. Make sure this matches your schema.
@@ -18,10 +18,10 @@ export interface AutoCompleteSelectProps<Option,> {
 
   hideLabel?: boolean
 
-  onChange?: (option: Option,) => void
+  onChange?: (option: Option) => void
 
   help?: React.ReactNode
-  renderOption?: (option: Option,) => JSX.Element
+  renderOption?: (option: Option) => JSX.Element
 }
 
 enum State {
@@ -30,44 +30,44 @@ enum State {
   Done,
 }
 
-export function AutoCompleteSelect<Option,>({
+export function AutoCompleteSelect<Option>({
   onChange,
   label,
   hideLabel,
   help,
   name,
-}: AutoCompleteSelectProps<Option>,): JSX.Element {
-  const [state, setState,] = useState<State>(State.Start,)
+}: AutoCompleteSelectProps<Option>): JSX.Element {
+  const [state, setState] = useState<State>(State.Start)
   const {
     setValue,
     watch,
-    formState: { errors, isSubmitting, },
+    formState: { errors, isSubmitting },
   } = useFormContext()
 
-  const assetId = watch(name,)
+  const assetId = watch(name)
 
   /**
    * Carry onChange event to parent
    */
   useEffect(() => {
     if (onChange) {
-      onChange(assetId,)
+      onChange(assetId)
     }
-  }, [assetId, onChange,],)
+  }, [assetId, onChange])
 
   /**
    * User search value
    */
-  const [fragment, setFragment,] = useState("",)
+  const [fragment, setFragment] = useState("")
 
   /**
    * All matches on our database
    */
-  const { search, isLoading, } = useSearch(fragment,)
-  const options = search?.documents.map((d,) => d.content.asset) ?? []
-  const selected = options.find((o,) => o.id === assetId)
-  const error = Array.isArray(errors[name],)
-    ? errors[name].join(", ",)
+  const { search, isLoading } = useSearch(fragment)
+  const options = search?.documents.map((d) => d.content.asset) ?? []
+  const selected = options.find((o) => o.id === assetId)
+  const error = Array.isArray(errors[name])
+    ? errors[name].join(", ")
     : errors[name]?.message || errors[name]
   return (
     <div className="w-full text-gray-800">
@@ -75,7 +75,7 @@ export function AutoCompleteSelect<Option,>({
         htmlFor={name}
         className={cn("flex items-center mb-1 gap-2 text-xs font-medium text-gray-700 uppercase", {
           "sr-only": hideLabel,
-        },)}
+        })}
       >
         {label}
         {help ? <Tooltip side="bottom">{help}</Tooltip> : null}
@@ -99,8 +99,8 @@ export function AutoCompleteSelect<Option,>({
                  * Go back to the state where the user can enter a search and select an option.
                  * This also unmounts the button because value is now falsy
                  */
-                setValue(name, undefined,)
-                setState(State.Selecting,)
+                setValue(name, undefined)
+                setState(State.Selecting)
               }}
             />
           )
@@ -135,9 +135,9 @@ export function AutoCompleteSelect<Option,>({
                      * and the input loses focus.
                      */
                     value={fragment}
-                    onChange={(e,) => {
-                      setFragment(e.currentTarget.value,)
-                      setState(State.Selecting,)
+                    onChange={(e) => {
+                      setFragment(e.currentTarget.value)
+                      setState(State.Selecting)
                     }}
                   />
                 )}
@@ -166,14 +166,14 @@ export function AutoCompleteSelect<Option,>({
                     </li>
                   )
                   : (
-                    options.map((option, i,) => {
+                    options.map((option, i) => {
                       return (
                         <li key={i}>
                           <button
                             type="button"
                             onClick={() => {
-                              setValue(name, option?.id,)
-                              setState(State.Done,)
+                              setValue(name, option?.id)
+                              setState(State.Done)
                             }}
                             className={cn(
                               "relative p-2 cursor-pointer w-full focus:outline-none hover:bg-gray-50 duration-500 transform",
@@ -192,7 +192,7 @@ export function AutoCompleteSelect<Option,>({
                           </button>
                         </li>
                       )
-                    },)
+                    })
                   )}
               </ul>
             </Transition>

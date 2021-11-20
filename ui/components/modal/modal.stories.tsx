@@ -1,14 +1,14 @@
-import { XIcon, } from "@heroicons/react/outline"
-import { Card, } from "../card"
+import { XIcon } from "@heroicons/react/outline"
+import { Card } from "../card"
 import Icon from "../icon/icon"
-import { Modal, } from "."
-import { ModalProps, } from "./modal"
+import { Modal } from "."
+import { ModalProps } from "./modal"
 export default {
   title: "Modal",
   component: Modal,
 }
 
-export const Default = (args: ModalProps,) => (
+export const Default = (args: ModalProps) => (
   <Modal {...args}>
     <Card>
       <Card.Header>
@@ -32,7 +32,7 @@ Default.args = {
   trigger: "Trigger",
 }
 
-export const ForceOpen = (args: ModalProps,) => (
+export const ForceOpen = (args: ModalProps) => (
   <Modal {...args}>
     <Card>
       <Card.Header>

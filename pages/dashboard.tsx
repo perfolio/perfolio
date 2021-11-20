@@ -1,5 +1,5 @@
-import { withAuthenticationRequired, } from "@auth0/auth0-react"
-import { Popover, } from "@headlessui/react"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { Popover } from "@headlessui/react"
 import {
   DocumentAddIcon,
   DotsVerticalIcon,
@@ -7,40 +7,40 @@ import {
   TrashIcon,
   XIcon,
 } from "@heroicons/react/outline"
-import { zodResolver, } from "@hookform/resolvers/zod"
-import { usePortfolios, } from "@perfolio/pkg/hooks"
-import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
-import { AppLayout, } from "@perfolio/ui/app"
-import { InlineTotalAssetChart, } from "@perfolio/ui/app"
-import { Card, Icon, Text, Tooltip, } from "@perfolio/ui/components"
-import { Button, Heading, } from "@perfolio/ui/components"
-import { Confirmation, } from "@perfolio/ui/components"
-import { EmptyState, } from "@perfolio/ui/components/emptyState"
-import { Field, Form, handleSubmit, useForm, } from "@perfolio/ui/form"
-import { GetStaticProps, NextPage, } from "next"
-import React, { useState, } from "react"
-import { z, } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { usePortfolios } from "@perfolio/pkg/hooks"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { AppLayout } from "@perfolio/ui/app"
+import { InlineTotalAssetChart } from "@perfolio/ui/app"
+import { Card, Icon, Text, Tooltip } from "@perfolio/ui/components"
+import { Button, Heading } from "@perfolio/ui/components"
+import { Confirmation } from "@perfolio/ui/components"
+import { EmptyState } from "@perfolio/ui/components/emptyState"
+import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
+import { z } from "zod"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
   name,
   primary,
-},): JSX.Element => {
-  const [editMode, setEditMode,] = useState(false,)
-  const [submitting, setSubmitting,] = useState(false,)
-  const [formError, setFormError,] = useState<string | React.ReactNode | null>(null,)
-  const [confirmOpen, setConfirmOpen,] = useState(false,)
+}): JSX.Element => {
+  const [editMode, setEditMode] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const validation = z.object({
     title: z.string().nonempty(),
-  },)
+  })
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onSubmit",
-    resolver: zodResolver(validation,),
-  },)
+    resolver: zodResolver(validation),
+  })
 
   function classNames(...classes: string[]) {
-    return classes.filter(Boolean,).join(" ",)
+    return classes.filter(Boolean).join(" ")
   }
 
   return (
@@ -51,13 +51,13 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
         confirmLabel="Delete"
         open={confirmOpen}
         setOpen={setConfirmOpen}
-        onCancel={() => alert("cancel",)}
+        onCancel={() => alert("cancel")}
         onConfirm={() =>
-          new Promise((resolve,) =>
+          new Promise((resolve) =>
             setTimeout(() => {
               resolve()
-              alert("Hello",)
-            }, 2000,)
+              alert("Hello")
+            }, 2000)
           )}
       >
         <div className="space-y-4">
@@ -100,7 +100,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               : (
                 <Tooltip
                   trigger={
-                    <button className="cursor-text" onDoubleClick={() => setEditMode(true,)}>
+                    <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
                       <Card.Header.Title title={name} />
                     </button>
                   }
@@ -112,7 +112,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
           <div>
             <div>
               <Popover className="relative">
-                {({ open, close, },) => (
+                {({ open, close }) => (
                   <>
                     <Popover.Button
                       className={classNames(
@@ -133,7 +133,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                             htmlType="button"
                             size="sm"
                             onClick={() => {
-                              setEditMode(!editMode,)
+                              setEditMode(!editMode)
                               close()
                               open = false
                             }}
@@ -144,7 +144,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                           </Button>
 
                           <Button
-                            onClick={() => setConfirmOpen(true,)}
+                            onClick={() => setConfirmOpen(true)}
                             type="plain"
                             size="sm"
                             iconLeft={<TrashIcon />}
@@ -170,7 +170,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
             {editMode
               ? (
                 <>
-                  <Button type="secondary" size="block" onClick={() => setEditMode(false,)}>
+                  <Button type="secondary" size="block" onClick={() => setEditMode(false)}>
                     Cancel
                   </Button>
                   <Button
@@ -180,8 +180,8 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                       handleSubmit<z.infer<typeof validation>>(
                         ctx,
                         async () => {
-                          await new Promise((resolve,) => setTimeout(resolve, 1000,))
-                          setEditMode(false,)
+                          await new Promise((resolve) => setTimeout(resolve, 1000))
+                          setEditMode(false)
                         },
                         setSubmitting,
                         setFormError,
@@ -206,7 +206,7 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
               {editMode
                 ? (
                   <>
-                    <Button type="secondary" htmlType="button" onClick={() => setEditMode(false,)}>
+                    <Button type="secondary" htmlType="button" onClick={() => setEditMode(false)}>
                       Cancel
                     </Button>
                     <Button
@@ -215,8 +215,8 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                         handleSubmit<z.infer<typeof validation>>(
                           ctx,
                           async () => {
-                            await new Promise((resolve,) => setTimeout(resolve, 1000,))
-                            setEditMode(false,)
+                            await new Promise((resolve) => setTimeout(resolve, 1000))
+                            setEditMode(false)
                           },
                           setSubmitting,
                           setFormError,
@@ -247,9 +247,9 @@ interface PageProps {
   translations: Record<string, string>
 }
 
-const IndexPage: NextPage<PageProps> = ({ translations, },) => {
-  useI18n(translations,)
-  const { portfolios, } = usePortfolios()
+const IndexPage: NextPage<PageProps> = ({ translations }) => {
+  useI18n(translations)
+  const { portfolios } = usePortfolios()
   return (
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
@@ -263,7 +263,7 @@ const IndexPage: NextPage<PageProps> = ({ translations, },) => {
           </div>
         </Card> */
         }
-        {[...portfolios.sort((a, b,) => Number(a.primary,) - Number(b.primary,)),].map((p,) => (
+        {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
           <PortfolioCard key={p.id} {...p} />
         ))}
         <EmptyState href="#" icon={<DocumentAddIcon />}>
@@ -274,10 +274,10 @@ const IndexPage: NextPage<PageProps> = ({ translations, },) => {
   )
 }
 
-export default withAuthenticationRequired(IndexPage,)
+export default withAuthenticationRequired(IndexPage)
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale, },) => {
-  const translations = await getTranslations(locale, ["app",],)
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,

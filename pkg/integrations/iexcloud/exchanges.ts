@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Client, } from "./client"
+import { Client } from "./client"
 
 export const GetExchangesResponseValidation = z.array(
   z.object({
@@ -27,7 +27,7 @@ export const GetExchangesResponseValidation = z.array(
      * Exchange Suffix to be added for symbols on that exchange
      */
     exchangeSuffix: z.string(),
-  },),
+  }),
 )
 export type GetExchangesResponse = z.infer<typeof GetExchangesResponseValidation>
 
@@ -36,7 +36,7 @@ export async function getExchanges(): Promise<GetExchangesResponse> {
 
   const res = await client.get({
     path: "/ref-data/exchanges",
-  },)
+  })
 
-  return GetExchangesResponseValidation.parse(res,)
+  return GetExchangesResponseValidation.parse(res)
 }

@@ -1,6 +1,6 @@
-import { GenericError, } from "./error"
+import { GenericError } from "./error"
 export class JsonUnmarshalError extends GenericError {
-  constructor(err: Error,) {
-    super("JsonUnmarshalError", `Unable to unmarshal json: ${err}`, {},)
+  constructor(err: Error) {
+    super("JsonUnmarshalError", `Unable to unmarshal json: ${err}`, {})
   }
 }

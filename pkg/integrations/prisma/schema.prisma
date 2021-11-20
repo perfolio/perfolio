@@ -110,11 +110,20 @@ model Newsletter {
     createdAt DateTime @default(now())
 }
 
+enum AssetType {
+    MUTUAL_FUND
+    COMMON_STOCK
+    CRYPTO
+    TODO
+}
+
 model ExchangeTradedAsset {
-    id     String  @id
-    isin   String  @unique
-    ticker String  @unique
-    figi   String? @unique
+    id     String    @id
+    isin   String    @unique
+    ticker String    @unique
+    figi   String    @unique
+    logo   String
+    type   AssetType
 
     //    Human readable name
     name String

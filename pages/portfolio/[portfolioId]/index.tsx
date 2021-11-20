@@ -8,8 +8,8 @@ import {
   useStandardDeviation,
   useUser,
 } from "@perfolio/pkg/hooks"
-import { getCurrencySymbol, } from "@perfolio/pkg/util/currency"
-import { format, } from "@perfolio/pkg/util/numbers"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { format } from "@perfolio/pkg/util/numbers"
 import {
   ActivityFeed,
   AggregateOptions,
@@ -21,25 +21,25 @@ import {
   Main,
   Sidebar,
 } from "@perfolio/ui/app"
-import { Heading, Loading, ToggleGroup, Tooltip, } from "@perfolio/ui/components"
+import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
-import { GetStaticProps, NextPage, } from "next"
-import React, { useState, } from "react"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
 
-import { withAuthenticationRequired, } from "@auth0/auth0-react"
-import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
-import { Time, } from "@perfolio/pkg/util/time"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { Time } from "@perfolio/pkg/util/time"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
 const today = Time.today().unix()
 const ranges: Record<Range, number> = {
-  "1W": today - Time.toSeconds("7d",),
-  "1M": today - Time.toSeconds("30d",),
-  "3M": today - Time.toSeconds("90d",),
-  "6M": today - Time.toSeconds("180d",),
-  "1Y": today - Time.toSeconds("365d",),
-  YTD: new Date(new Date().getFullYear(), 0,).getTime() / 1000,
+  "1W": today - Time.toSeconds("7d"),
+  "1M": today - Time.toSeconds("30d"),
+  "3M": today - Time.toSeconds("90d"),
+  "6M": today - Time.toSeconds("180d"),
+  "1Y": today - Time.toSeconds("365d"),
+  YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
   ALL: Number.NEGATIVE_INFINITY,
 }
 
@@ -54,8 +54,8 @@ const KPI = ({
   value: number
   enableColor?: boolean
   isLoading?: boolean
-  format: (n: number,) => string
-},): JSX.Element => {
+  format: (n: number) => string
+}): JSX.Element => {
   return (
     <div className="flex justify-center">
       <div className="flex flex-col space-y-3">
@@ -72,7 +72,7 @@ const KPI = ({
               : "text-gray-800",
           )}
         >
-          {isLoading ? <Loading /> : format(value,)}
+          {isLoading ? <Loading /> : format(value)}
         </span>
       </div>
     </div>
@@ -83,20 +83,20 @@ interface PageProps {
   translations: Record<string, string>
 }
 
-const App: NextPage<PageProps> = ({ translations, },) => {
+const App: NextPage<PageProps> = ({ translations }) => {
   useUser()
-  const { t, } = useI18n(translations,)
+  const { t } = useI18n(translations)
 
-  const { currentAbsoluteValue, } = useCurrentAbsoluteValue()
-  const [range, setRange,] = useState<Range>("ALL",)
-  const { user, } = useUser()
+  const { currentAbsoluteValue } = useCurrentAbsoluteValue()
+  const [range, setRange] = useState<Range>("ALL")
+  const { user } = useUser()
 
-  const { portfolioHistory, } = usePortfolioHistory()
-  const { absolutePortfolioHistory, isLoading: absoluteIsLoading, } = useAbsolutePortfolioHistory(
+  const { portfolioHistory } = usePortfolioHistory()
+  const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
     portfolioHistory,
     ranges[range],
   )
-  const { relativePortfolioHistory, isLoading: relativeIsLoading, } = useRelativePortfolioHistory(
+  const { relativePortfolioHistory, isLoading: relativeIsLoading } = useRelativePortfolioHistory(
     ranges[range],
   )
 
@@ -107,13 +107,13 @@ const App: NextPage<PageProps> = ({ translations, },) => {
     ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
     : 0
 
-  const [aggregation, setAggregation,] = useState<AggregateOptions>("relative",)
+  const [aggregation, setAggregation] = useState<AggregateOptions>("relative")
 
-  const { absoluteMean, } = useAbsoluteMean(absolutePortfolioHistory,)
-  const { relativeMean, } = useRelativeMean(relativePortfolioHistory,)
+  const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
+  const { relativeMean } = useRelativeMean(relativePortfolioHistory)
 
-  const { standardDeviation: relativeSTD, } = useStandardDeviation(
-    relativePortfolioHistory.map(({ value, },) => value),
+  const { standardDeviation: relativeSTD } = useStandardDeviation(
+    relativePortfolioHistory.map(({ value }) => value),
   )
 
   return (
@@ -132,12 +132,12 @@ const App: NextPage<PageProps> = ({ translations, },) => {
       <Main>
         {/* <OnboardingModal /> */}
         <Main.Header>
-          <Main.Header.Title title={t("mainHeaderTitle",)} />
+          <Main.Header.Title title={t("mainHeaderTitle")} />
 
           <ToggleGroup<AggregateOptions>
             options={[
-              { display: t("relPicked",), id: "relative", },
-              { display: t("absPicked",), id: "absolute", },
+              { display: t("relPicked"), id: "relative" },
+              { display: t("absPicked"), id: "absolute" },
             ]}
             selected={aggregation}
             setSelected={setAggregation}
@@ -154,17 +154,17 @@ const App: NextPage<PageProps> = ({ translations, },) => {
               <Tooltip
                 trigger={
                   <KPI
-                    label={t("totalAssetsLabel",)}
+                    label={t("totalAssetsLabel")}
                     value={currentAbsoluteValue}
-                    format={(n,) =>
+                    format={(n) =>
                       format(n, {
-                        suffix: getCurrencySymbol(user?.settings?.defaultCurrency,),
-                      },)}
+                        suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                      })}
                     isLoading={aggregation === "absolute" && absoluteIsLoading}
                   />
                 }
               >
-                {t("totalAssetsTooltip",)}
+                {t("totalAssetsTooltip")}
               </Tooltip>
 
               <Tooltip
@@ -172,55 +172,55 @@ const App: NextPage<PageProps> = ({ translations, },) => {
                   <KPI
                     enableColor
                     label={aggregation === "absolute"
-                      ? t("meanChangeLabel",)
-                      : t("meanReturnLabel",)}
+                      ? t("meanChangeLabel")
+                      : t("meanReturnLabel")}
                     value={aggregation === "absolute" ? absoluteMean : relativeMean}
-                    format={(n,) =>
+                    format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                          suffix: getCurrencySymbol(user?.settings?.defaultCurrency,),
+                          suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                           sign: true,
-                        },)
-                        : format(n, { suffix: "%", percent: true, sign: true, },)}
+                        })
+                        : format(n, { suffix: "%", percent: true, sign: true })}
                     isLoading={(aggregation === "absolute" && absoluteIsLoading)
                       || (aggregation === "relative" && relativeIsLoading)}
                   />
                 }
               >
-                {t("meanReturnTooltip",)}
+                {t("meanReturnTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
                     isLoading={(aggregation === "absolute" && absoluteIsLoading)
                       || (aggregation === "relative" && relativeIsLoading)}
-                    label={t("stdDevLabel",)}
+                    label={t("stdDevLabel")}
                     value={relativeSTD}
-                    format={(n,) => format(n,)}
+                    format={(n) => format(n)}
                   />
                 }
               >
-                {t("stdDevTooltip",)}
+                {t("stdDevTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
-                    label={t("changeLabel",)}
+                    label={t("changeLabel")}
                     enableColor
                     isLoading={(aggregation === "absolute" && absoluteIsLoading)
                       || (aggregation === "relative" && relativeIsLoading)}
                     value={aggregation === "absolute" ? absoluteChange : relativeChange}
-                    format={(n,) =>
+                    format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                          suffix: getCurrencySymbol(user?.settings?.defaultCurrency,),
+                          suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                           sign: true,
-                        },)
-                        : format(n, { suffix: "%", percent: true, sign: true, },)}
+                        })
+                        : format(n, { suffix: "%", percent: true, sign: true })}
                   />
                 }
               >
-                {t("changeTooltip",)}
+                {t("changeTooltip")}
               </Tooltip>
             </div>
           </div>
@@ -229,13 +229,13 @@ const App: NextPage<PageProps> = ({ translations, },) => {
             <div className="flex justify-center md:justify-end">
               <ToggleGroup<Range>
                 options={[
-                  { display: "1W", id: "1W", },
-                  { display: "1M", id: "1M", },
-                  { display: "3M", id: "3M", },
-                  { display: "6M", id: "6M", },
-                  { display: t("index1Y",), id: "1Y", },
-                  { display: t("indexYTD",), id: "YTD", },
-                  { display: t("indexAll",), id: "ALL", },
+                  { display: "1W", id: "1W" },
+                  { display: "1M", id: "1M" },
+                  { display: "3M", id: "3M" },
+                  { display: "6M", id: "6M" },
+                  { display: t("index1Y"), id: "1Y" },
+                  { display: t("indexYTD"), id: "YTD" },
+                  { display: t("indexAll"), id: "ALL" },
                 ]}
                 selected={range}
                 setSelected={setRange}
@@ -245,7 +245,7 @@ const App: NextPage<PageProps> = ({ translations, },) => {
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">
-              <Heading h3>{t("assetTableHeading",)}</Heading>
+              <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
 
             <AssetTable aggregation={aggregation} />
@@ -256,7 +256,7 @@ const App: NextPage<PageProps> = ({ translations, },) => {
   )
 }
 
-export default withAuthenticationRequired(App,)
+export default withAuthenticationRequired(App)
 
 export async function getStaticPaths() {
   return {
@@ -265,8 +265,8 @@ export async function getStaticPaths() {
   }
 }
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale, },) => {
-  const translations = await getTranslations(locale, ["app",],)
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,

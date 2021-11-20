@@ -6,7 +6,7 @@ export interface LogoProps {
   withName?: boolean
 }
 
-export const Logo: React.FC<LogoProps> = ({ withName, imageColor, textColor, },): JSX.Element => {
+export const Logo: React.FC<LogoProps> = ({ withName, imageColor, textColor }): JSX.Element => {
   return (
     <div className="flex items-center space-x-2">
       <svg

@@ -1,8 +1,8 @@
 import Link from "next/link"
 import React from "react"
-import { NavLink, } from "./navLink"
-import { NavLinkProps, } from "./types"
-export const DesktopNavLink: React.FC<NavLinkProps> = ({ href, label, icon, },): JSX.Element => {
+import { NavLink } from "./navLink"
+import { NavLinkProps } from "./types"
+export const DesktopNavLink: React.FC<NavLinkProps> = ({ href, label, icon }): JSX.Element => {
   return (
     <Link href={href ?? ""}>
       <a className="focus:outline-none">

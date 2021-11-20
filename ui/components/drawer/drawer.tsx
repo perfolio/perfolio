@@ -1,11 +1,11 @@
-import { Dialog, Transition, } from "@headlessui/react"
-import { XIcon, } from "@heroicons/react/outline"
-import { Button, Heading, } from "@perfolio/ui/components"
-import { useRouter, } from "next/router"
-import React, { Fragment, useEffect, } from "react"
+import { Dialog, Transition } from "@headlessui/react"
+import { XIcon } from "@heroicons/react/outline"
+import { Button, Heading } from "@perfolio/ui/components"
+import { useRouter } from "next/router"
+import React, { Fragment, useEffect } from "react"
 export interface DrawerProps {
   open: boolean
-  setOpen: (b: boolean,) => void
+  setOpen: (b: boolean) => void
   title?: string | React.ReactNode
   subtitle?: string
 }
@@ -16,18 +16,18 @@ export const Drawer: React.FC<DrawerProps> = ({
   children,
   title,
   subtitle,
-},): JSX.Element => {
+}): JSX.Element => {
   const router = useRouter()
   useEffect(() => {
     router.events.on("routeChangeStart", () => {
-      setOpen(false,)
-    },)
+      setOpen(false)
+    })
     return () => {
       router.events.off("routeChangeStart", () => {
-        setOpen(false,)
-      },)
+        setOpen(false)
+      })
     }
-  }, [router, setOpen,],)
+  }, [router, setOpen])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -65,7 +65,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                         <p className="text-sm text-gray-500">{subtitle}</p>
                       </div>
                       <div className="flex items-center h-10">
-                        <Button type="plain" onClick={() => setOpen(false,)} icon={<XIcon />} />
+                        <Button type="plain" onClick={() => setOpen(false)} icon={<XIcon />} />
                       </div>
                     </div>
                     <div className="w-full h-full px-4 sm:px-6">{children}</div>

@@ -7,7 +7,7 @@ export interface MemberProps {
   title: string
 }
 
-export const Member: React.FC<MemberProps> = ({ image, name, title, },): JSX.Element => {
+export const Member: React.FC<MemberProps> = ({ image, name, title }): JSX.Element => {
   return (
     <div className="flex space-x-4">
       <Image

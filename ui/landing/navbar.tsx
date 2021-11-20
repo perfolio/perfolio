@@ -1,28 +1,28 @@
-import { useAuth0, } from "@auth0/auth0-react"
-import { Transition, } from "@headlessui/react"
-import { useI18n, } from "@perfolio/pkg/i18n"
-import { Button, Logo, } from "@perfolio/ui/components"
+import { useAuth0 } from "@auth0/auth0-react"
+import { Transition } from "@headlessui/react"
+import { useI18n } from "@perfolio/pkg/i18n"
+import { Button, Logo } from "@perfolio/ui/components"
 import NextLink from "next/link"
-import React, { useEffect, useState, } from "react"
+import React, { useEffect, useState } from "react"
 
 export const Navbar: React.FC = () => {
-  const { t, } = useI18n()
-  const { user, } = useAuth0()
-  const [scrolled, setScrolled,] = useState(false,)
+  const { t } = useI18n()
+  const { user } = useAuth0()
+  const [scrolled, setScrolled] = useState(false)
 
   const handleScroll = () => {
-    setScrolled(window.scrollY > 450,)
+    setScrolled(window.scrollY > 450)
   }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      window.addEventListener("scroll", handleScroll,)
+      window.addEventListener("scroll", handleScroll)
     }
 
     return () => {
-      window.removeEventListener("scroll", handleScroll,)
+      window.removeEventListener("scroll", handleScroll)
     }
-  }, [],)
+  }, [])
 
   return (
     <nav className="w-screen px-8">
@@ -44,10 +44,10 @@ export const Navbar: React.FC = () => {
             : (
               <>
                 <Button href="/dashboard" type="plain">
-                  {t("signInButton",)}
+                  {t("signInButton")}
                 </Button>
                 <Button type="cta" href="/dashboard">
-                  {t("startForFreeButton",)}
+                  {t("startForFreeButton")}
                 </Button>
               </>
             )}
@@ -71,7 +71,7 @@ export const Navbar: React.FC = () => {
             )
             : (
               <Button type="cta" href="/dashboard">
-                {t("signInButton",)}
+                {t("signInButton")}
               </Button>
             )}
         </Transition>

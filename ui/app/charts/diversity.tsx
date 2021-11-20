@@ -1,10 +1,10 @@
-import { useCurrentPorfolioState, } from "@perfolio/pkg/hooks"
-import { useI18n, } from "@perfolio/pkg/i18n"
-import { format, } from "@perfolio/pkg/util/numbers"
-import { Description, Heading, ToggleGroup, Tooltip, } from "@perfolio/ui/components"
-import { Loading, } from "@perfolio/ui/components"
-import React, { useEffect, useMemo, useState, } from "react"
-import { Cell, Pie, PieChart, ResponsiveContainer, Sector, } from "recharts"
+import { useCurrentPorfolioState } from "@perfolio/pkg/hooks"
+import { useI18n } from "@perfolio/pkg/i18n"
+import { format } from "@perfolio/pkg/util/numbers"
+import { Description, Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
+import { Loading } from "@perfolio/ui/components"
+import React, { useEffect, useMemo, useState } from "react"
+import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from "recharts"
 
 const COLORS = [
   "#D7DDFC",
@@ -19,8 +19,8 @@ const COLORS = [
 ].sort(() => Math.random() - 0.5)
 
 export const DiversificationChart: React.FC = (): JSX.Element => {
-  const { t, } = useI18n()
-  const { currentPorfolioState, } = useCurrentPorfolioState()
+  const { t } = useI18n()
+  const { currentPorfolioState } = useCurrentPorfolioState()
 
   /**
    * Aggregate by sector
@@ -31,9 +31,9 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       return tmp
     }
     currentPorfolioState
-      .filter((h,) => !!h)
-      .forEach((holding,) => {
-        console.log({ holding, },)
+      .filter((h) => !!h)
+      .forEach((holding) => {
+        console.log({ holding })
         const sector = holding.asset.__typename === "Company" ? holding.asset.sector : undefined
         if (sector) {
           if (!tmp[sector]) {
@@ -42,9 +42,9 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
 
           tmp[sector] += holding.quantity * holding.value
         }
-      },)
+      })
     return tmp
-  }, [currentPorfolioState,],)
+  }, [currentPorfolioState])
   /**
    * Aggregate by country
    */
@@ -54,8 +54,8 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       return tmp
     }
     currentPorfolioState
-      .filter((h,) => !!h)
-      .forEach((holding,) => {
+      .filter((h) => !!h)
+      .forEach((holding) => {
         if (holding) {
           const country = holding.asset.__typename === "Company"
             ? holding.asset.country
@@ -68,25 +68,25 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
             tmp[country] += holding.quantity * holding.value
           }
         }
-      },)
+      })
 
     return tmp
-  }, [currentPorfolioState,],)
+  }, [currentPorfolioState])
 
   /**
    * Selection can either be "sectors" or "countries"
    */
-  const [selected, setSelected,] = useState<"sectors" | "countries">("sectors",)
+  const [selected, setSelected] = useState<"sectors" | "countries">("sectors")
 
   const data = useMemo(
     () =>
-      Object.entries(selected === "countries" ? countries : sectors,).map(([name, value,],) => {
+      Object.entries(selected === "countries" ? countries : sectors).map(([name, value]) => {
         return {
           name,
           value,
         }
-      },),
-    [sectors, countries, selected,],
+      }),
+    [sectors, countries, selected],
   )
 
   /**
@@ -95,38 +95,38 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
   const defaultSection = useMemo(() => {
     let biggestIndex = -1
     let max = 0
-    data.forEach((d, i,) => {
+    data.forEach((d, i) => {
       if (d.value > max) {
         max = d.value
         biggestIndex = i
       }
-    },)
+    })
     return biggestIndex
-  }, [data,],)
+  }, [data])
 
-  const [activeIndex, setActiveIndex,] = useState(-1,)
+  const [activeIndex, setActiveIndex] = useState(-1)
 
   /**
    * Set the default index at the start
    */
   useEffect(() => {
-    setActiveIndex(defaultSection,)
-  }, [defaultSection,],)
+    setActiveIndex(defaultSection)
+  }, [defaultSection])
 
   return (
     <div className="w-full h-full space-y-2">
       <div className="flex justify-between">
         <div className="flex items-center space-x-2">
-          <Heading h4>{t("diversityHeading",)}</Heading>
+          <Heading h4>{t("diversityHeading")}</Heading>
           <Tooltip side="right">
-            <Description title={t("diversityTitle",)}>{t("diversityTooltip",)}</Description>
+            <Description title={t("diversityTitle")}>{t("diversityTooltip")}</Description>
           </Tooltip>
         </div>
         <ToggleGroup<"sectors" | "countries">
           size="sm"
           options={[
-            { display: t("diversityToggleSectors",), id: "sectors", },
-            { display: t("diversityToggleCountries",), id: "countries", },
+            { display: t("diversityToggleSectors"), id: "sectors" },
+            { display: t("diversityToggleCountries"), id: "countries" },
           ]}
           selected={selected}
           setSelected={setSelected}
@@ -165,7 +165,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                   endAngle: number
                   fill: string
                   percent: number
-                },) => {
+                }) => {
                   return (
                     <g>
                       <Sector
@@ -212,7 +212,7 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                         textAnchor="middle"
                         className="text-4xl font-semibold"
                       >
-                        {format(percent, { percent: true, suffix: "%", fractionDigits: 0, },)}
+                        {format(percent, { percent: true, suffix: "%", fractionDigits: 0 })}
                       </text>
                     </g>
                   )
@@ -224,18 +224,18 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                 innerRadius="80%"
                 outerRadius="100%"
                 dataKey="value"
-                onMouseEnter={(_: void, index: number,) => setActiveIndex(index,)}
-                onMouseLeave={({ name, }: { name: string },) =>
+                onMouseEnter={(_: void, index: number) => setActiveIndex(index)}
+                onMouseLeave={({ name }: { name: string }) =>
                   setTimeout(() => {
                     /**
                      * Do not remove the tooltip if the user has hovered a different part
                      */
                     if (name === data[activeIndex]?.name) {
-                      setActiveIndex(defaultSection,)
+                      setActiveIndex(defaultSection)
                     }
-                  }, 0,)}
+                  }, 0)}
               >
-                {data.map((_, index,) => (
+                {data.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

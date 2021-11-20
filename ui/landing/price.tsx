@@ -1,5 +1,5 @@
-import { CheckIcon, } from "@heroicons/react/outline"
-import { Button, Icon, Text, } from "@perfolio/ui/components"
+import { CheckIcon } from "@heroicons/react/outline"
+import { Button, Icon, Text } from "@perfolio/ui/components"
 import cn from "classnames"
 import React from "react"
 
@@ -20,7 +20,7 @@ export const Price: React.FC<PriceProps> = ({
   href,
   highlighted,
   submitText,
-},) => {
+}) => {
   return (
     <div
       className={cn(
@@ -46,7 +46,7 @@ export const Price: React.FC<PriceProps> = ({
           {interval ? <div className="text-gray-700">/ {interval}</div> : null}
         </div>
         <div className="mt-8 space-y-3">
-          {features.map((feature,) => (
+          {features.map((feature) => (
             <div key={feature} className="flex items-center gap-2">
               <Icon label="Checkmark" size="xs">
                 <CheckIcon className="text-black" />

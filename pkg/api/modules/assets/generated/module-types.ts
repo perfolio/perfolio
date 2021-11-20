@@ -11,8 +11,25 @@ export namespace AssetsModule {
       | "ticker"
       | "country"
       | "sector"
+      | "type"
       | "assetHistory"
-    Crypto: "id" | "isin" | "name" | "ticker" | "logo" | "assetHistory"
+    ETF:
+      | "id"
+      | "isin"
+      | "figi"
+      | "name"
+      | "logo"
+      | "ticker"
+      | "type"
+      | "assetHistory"
+    Crypto:
+      | "id"
+      | "isin"
+      | "name"
+      | "ticker"
+      | "logo"
+      | "assetHistory"
+      | "type"
     Mutation: "createExchangeTradedAsset"
     Asset: "id" | "name"
     ExchangeTradedAsset:
@@ -21,6 +38,7 @@ export namespace AssetsModule {
       | "ticker"
       | "name"
       | "logo"
+      | "type"
       | "assetHistory"
     Stock:
       | "id"
@@ -29,24 +47,34 @@ export namespace AssetsModule {
       | "name"
       | "logo"
       | "ticker"
-      | "country"
+      | "type"
       | "assetHistory"
   }
 
+  interface DefinedEnumValues {
+    AssetType: "MUTUAL_FUND" | "COMMON_STOCK" | "CRYPTO" | "TODO"
+  }
+
+  export type AssetType = DefinedEnumValues["AssetType"]
   export type Asset = Pick<Types.Asset, DefinedFields["Asset"]>
   export type ExchangeTradedAsset = Pick<
     Types.ExchangeTradedAsset,
     DefinedFields["ExchangeTradedAsset"]
   >
-  export type ValueAndQuantityAtTime = Types.ValueAndQuantityAtTime
+  export type ValueAtTime = Types.ValueAtTime
   export type Stock = Pick<Types.Stock, DefinedFields["Stock"]>
   export type Company = Pick<Types.Company, DefinedFields["Company"]>
+  export type ETF = Pick<Types.Etf, DefinedFields["ETF"]>
   export type Crypto = Pick<Types.Crypto, DefinedFields["Crypto"]>
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
   export type CompanyResolvers = Pick<
     Types.CompanyResolvers,
     DefinedFields["Company"] | "__isTypeOf"
+  >
+  export type ETFResolvers = Pick<
+    Types.EtfResolvers,
+    DefinedFields["ETF"] | "__isTypeOf"
   >
   export type CryptoResolvers = Pick<
     Types.CryptoResolvers,
@@ -71,6 +99,7 @@ export namespace AssetsModule {
 
   export interface Resolvers {
     Company?: CompanyResolvers
+    ETF?: ETFResolvers
     Crypto?: CryptoResolvers
     Mutation?: MutationResolvers
   }
@@ -89,6 +118,18 @@ export namespace AssetsModule {
       ticker?: gm.Middleware[]
       country?: gm.Middleware[]
       sector?: gm.Middleware[]
+      type?: gm.Middleware[]
+      assetHistory?: gm.Middleware[]
+    }
+    ETF?: {
+      "*"?: gm.Middleware[]
+      id?: gm.Middleware[]
+      isin?: gm.Middleware[]
+      figi?: gm.Middleware[]
+      name?: gm.Middleware[]
+      logo?: gm.Middleware[]
+      ticker?: gm.Middleware[]
+      type?: gm.Middleware[]
       assetHistory?: gm.Middleware[]
     }
     Crypto?: {
@@ -99,6 +140,7 @@ export namespace AssetsModule {
       ticker?: gm.Middleware[]
       logo?: gm.Middleware[]
       assetHistory?: gm.Middleware[]
+      type?: gm.Middleware[]
     }
     Mutation?: {
       "*"?: gm.Middleware[]

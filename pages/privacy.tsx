@@ -1,14 +1,14 @@
-import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
-import { Navbar, Section, } from "@perfolio/ui/landing"
-import { GetStaticProps, NextPage, } from "next"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { Navbar, Section } from "@perfolio/ui/landing"
+import { GetStaticProps, NextPage } from "next"
 import React from "react"
 
 export interface PrivacyPageProps {
   translations: Record<string, string>
 }
 
-export const Privacy: NextPage<PrivacyPageProps> = ({ translations, },) => {
-  useI18n(translations,)
+export const Privacy: NextPage<PrivacyPageProps> = ({ translations }) => {
+  useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -1036,8 +1036,8 @@ export const Privacy: NextPage<PrivacyPageProps> = ({ translations, },) => {
 
 export default Privacy
 
-export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale, },) => {
-  const translations = await getTranslations(locale, ["landing",],)
+export const getStaticProps: GetStaticProps<PrivacyPageProps> = async ({ locale }) => {
+  const translations = await getTranslations(locale, ["landing"])
   return {
     props: {
       translations,

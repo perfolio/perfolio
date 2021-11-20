@@ -1,4 +1,4 @@
-import { Description, } from "./description"
+import { Description } from "./description"
 export default {
   title: "Description",
   component: Description,

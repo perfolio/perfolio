@@ -1,6 +1,6 @@
-import { env, } from "@chronark/env"
+import { env } from "@chronark/env"
 import fs from "fs"
-import { resolve, } from "path"
+import { resolve } from "path"
 
 type Namespace = "landing" | "app"
 type Locale = "en" | "de"
@@ -13,28 +13,28 @@ const loadTranslation = async (
   locale: Locale,
 ): Promise<Record<string, string>> => {
   try {
-    const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`,]
-    switch (env.get("VERCEL_ENV",)) {
+    const relativePath = ["pkg", "i18n", "locales", locale, `${namespace}.json`]
+    switch (env.get("VERCEL_ENV")) {
       case "production":
       case "preview":
         const url = [
           "https://raw.githubusercontent.com/perfolio/perfolio",
-          env.require("VERCEL_GIT_COMMIT_REF",),
+          env.require("VERCEL_GIT_COMMIT_REF"),
           ...relativePath,
-        ].join("/",)
+        ].join("/")
         return JSON.parse(
-          await fetch(url,)
-            .then((res,) => res.text())
-            .catch((err,) => {
-              throw new Error(`Unable to get ${url}: ${err}`,)
-            },),
+          await fetch(url)
+            .then((res) => res.text())
+            .catch((err) => {
+              throw new Error(`Unable to get ${url}: ${err}`)
+            }),
         )
 
       default:
-        return JSON.parse(fs.readFileSync(resolve(...relativePath,),).toString(),)
+        return JSON.parse(fs.readFileSync(resolve(...relativePath)).toString())
     }
   } catch (err) {
-    throw new Error(`Unable to load locale "${locale}": ${err}`,)
+    throw new Error(`Unable to load locale "${locale}": ${err}`)
   }
 }
 
@@ -50,7 +50,7 @@ export async function getTranslations(
   return Object.assign(
     {},
     ...(await Promise.all(
-      namespaces.map(async (ns,) => await loadTranslation(ns, locale as Locale,)),
+      namespaces.map(async (ns) => await loadTranslation(ns, locale as Locale)),
     )),
   )
 }

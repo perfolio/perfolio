@@ -43,7 +43,7 @@ export const Text: React.FC<TextProps> = ({
   align,
   mono,
   truncate,
-},): JSX.Element => {
+}): JSX.Element => {
   return (
     <p
       className={cn(

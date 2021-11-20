@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Client, } from "./client"
+import { Client } from "./client"
 
 export const getSymbolsAtExchangeRequestValidation = z.array(
   z.object({
@@ -17,7 +17,7 @@ export const getSymbolsAtExchangeRequestValidation = z.array(
     figi: z.string().nullable(),
     cik: z.string().nullable(),
     lei: z.string().nullable(),
-  },),
+  }),
 )
 
 /**
@@ -34,6 +34,6 @@ export async function getSymbolsAtExchange(
 
   const res = await client.get({
     path: `/ref-data/exchange/${exchange}/symbols`,
-  },)
-  return getSymbolsAtExchangeRequestValidation.parse(res,)
+  })
+  return getSymbolsAtExchangeRequestValidation.parse(res)
 }

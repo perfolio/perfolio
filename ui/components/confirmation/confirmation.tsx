@@ -1,4 +1,4 @@
-import { Button, Drawer, } from "@perfolio/ui/components"
+import { Button, Drawer } from "@perfolio/ui/components"
 import React from "react"
 
 export interface ConfirmationProps {
@@ -30,7 +30,7 @@ export interface ConfirmationProps {
   /**
    * The react state dispatch function to open/close this panel
    */
-  setOpen: (b: boolean,) => void
+  setOpen: (b: boolean) => void
 
   /**
    * Override the default title
@@ -52,7 +52,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
   severity = "info",
   title,
   confirmLabel,
-},): JSX.Element => {
+}): JSX.Element => {
   const severityMapping: Record<string, "primary" | "error"> = {
     info: "primary",
     warning: "error",
@@ -72,7 +72,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
                 if (onCancel) {
                   await onCancel()
                 }
-                setOpen(false,)
+                setOpen(false)
               }}
             >
               Cancel
@@ -82,7 +82,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
               type={severityMapping[severity]}
               onClick={async () => {
                 await onConfirm()
-                setOpen(false,)
+                setOpen(false)
               }}
             >
               {confirmLabel ?? "Confirm"}

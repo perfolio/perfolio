@@ -1,18 +1,18 @@
-import { withAuthenticationRequired, } from "@auth0/auth0-react"
-import { DocumentAddIcon, } from "@heroicons/react/outline"
-import { ExchangeTradedAsset, } from "@perfolio/pkg/api"
-import { Transaction, } from "@perfolio/pkg/api"
-import { useDeleteTransaction, useExchangeTradedAsset, usePortfolio, } from "@perfolio/pkg/hooks"
-import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
-import { useToaster, } from "@perfolio/pkg/toaster"
-import { ActivityFeed, AppLayout, Main, Sidebar, } from "@perfolio/ui/app"
-import { Button, Text, } from "@perfolio/ui/components"
-import { Loading, } from "@perfolio/ui/components"
-import { Avatar, Description, } from "@perfolio/ui/components"
-import { EmptyState, } from "@perfolio/ui/components/emptyState"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { DocumentAddIcon } from "@heroicons/react/outline"
+import { ExchangeTradedAsset } from "@perfolio/pkg/api"
+import { Transaction } from "@perfolio/pkg/api"
+import { useDeleteTransaction, useExchangeTradedAsset, usePortfolio } from "@perfolio/pkg/hooks"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useToaster } from "@perfolio/pkg/toaster"
+import { ActivityFeed, AppLayout, Main, Sidebar } from "@perfolio/ui/app"
+import { Button, Text } from "@perfolio/ui/components"
+import { Loading } from "@perfolio/ui/components"
+import { Avatar, Description } from "@perfolio/ui/components"
+import { EmptyState } from "@perfolio/ui/components/emptyState"
 import classNames from "classnames"
-import { AnimatePresence, AnimateSharedLayout, motion, } from "framer-motion"
-import { GetStaticProps, NextPage, } from "next"
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
+import { GetStaticProps, NextPage } from "next"
 import router from "next/router"
 import React from "react"
 
@@ -22,13 +22,13 @@ export interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = (
-  { isLast, transaction, },
+  { isLast, transaction },
 ): JSX.Element => {
-  const { t, } = useI18n()
-  const { addToast, } = useToaster()
-  const { asset, } = useExchangeTradedAsset({
+  const { t } = useI18n()
+  const { addToast } = useToaster()
+  const { asset } = useExchangeTradedAsset({
     id: transaction.asset.id,
-  },)
+  })
   const deleteTransaction = useDeleteTransaction()
 
   return (
@@ -37,7 +37,7 @@ const TransactionItem: React.FC<TransactionItemProps> = (
         <div className="relative h-full pb-4 border-gray-300 md:border-r dark:border-gray-600 md:pb-0 md:pt-2">
           <div className="flex items-center justify-between w-full md:justify-end">
             <span className="text-gray-600 flexfont-medium md:pr-8 dark:text-blueGray-200 md:font-normal ">
-              {new Date(transaction.executedAt * 1000,).toLocaleDateString()}
+              {new Date(transaction.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-dark dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
               {asset?.logo ? <Avatar size="sm" src={asset.logo} /> : <Loading />}
@@ -58,10 +58,10 @@ const TransactionItem: React.FC<TransactionItemProps> = (
             ? (
               <Description title={asset.name}>
                 {`You ${
-                  transaction.volume > 0 ? t("transIndexInfoBought",) : t("transIndexInfoSold",)
-                } ${Math.abs(transaction.volume,).toFixed(2,)} share${
+                  transaction.volume > 0 ? t("transIndexInfoBought") : t("transIndexInfoSold")
+                } ${Math.abs(transaction.volume).toFixed(2)} share${
                   transaction.volume === 1 ? "" : "s"
-                } of ${asset.ticker} at $${transaction.value.toFixed(2,)} per share`}
+                } of ${asset.ticker} at $${transaction.value.toFixed(2)} per share`}
               </Description>
             )
             : null}
@@ -71,14 +71,14 @@ const TransactionItem: React.FC<TransactionItemProps> = (
             type="secondary"
             size="sm"
             onClick={async () => {
-              await deleteTransaction.mutateAsync({ transactionId: transaction.id, },)
+              await deleteTransaction.mutateAsync({ transactionId: transaction.id })
               addToast({
-                title: t("transIndexToastTitle",),
-                content: t("transIndexToastContent",) + `${transaction.id}`,
-              },)
+                title: t("transIndexToastTitle"),
+                content: t("transIndexToastContent") + `${transaction.id}`,
+              })
             }}
           >
-            {t("transIndexDeleteButton",)}
+            {t("transIndexDeleteButton")}
           </Button>
         </div>
       </div>
@@ -94,10 +94,10 @@ interface PageProps {
   translations: Record<string, string>
 }
 
-const TransactionsPage: NextPage<PageProps> = ({ translations, },) => {
-  const { t, } = useI18n(translations,)
+const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
 
-  const { portfolio, isLoading, error, } = usePortfolio()
+  const { portfolio, isLoading, error } = usePortfolio()
   return (
     <AppLayout
       sidebar={
@@ -108,10 +108,10 @@ const TransactionsPage: NextPage<PageProps> = ({ translations, },) => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title={t("transIndexHeader",)} />
+          <Main.Header.Title title={t("transIndexHeader")} />
         </Main.Header>
         <Main.Content>
-          {error ? <div>{JSON.stringify(error,)}</div> : null}
+          {error ? <div>{JSON.stringify(error)}</div> : null}
           {isLoading ? <Loading /> : !portfolio?.transactions || portfolio.transactions.length === 0
             ? (
               <EmptyState
@@ -124,20 +124,20 @@ const TransactionsPage: NextPage<PageProps> = ({ translations, },) => {
             : (
               <AnimateSharedLayout>
                 <AnimatePresence>
-                  {[...portfolio.transactions,]
-                    .sort((a, b,) => b.executedAt - a.executedAt)
-                    ?.map((tx, i,) => (
+                  {[...portfolio.transactions]
+                    .sort((a, b) => b.executedAt - a.executedAt)
+                    ?.map((tx, i) => (
                       <motion.div
                         layout
                         key={tx.id}
-                        initial={{ opacity: 0, scaleY: 0, }}
-                        animate={{ opacity: 1, scaleY: 1, }}
-                        exit={{ opacity: 0, scaleY: 0, }}
-                        transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1, }}
+                        initial={{ opacity: 0, scaleY: 0 }}
+                        animate={{ opacity: 1, scaleY: 1 }}
+                        exit={{ opacity: 0, scaleY: 0 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
                       >
                         <TransactionItem
                           key={tx.id}
-                          transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset, }}
+                          transaction={{ ...tx, asset: tx.asset as ExchangeTradedAsset }}
                           isLast={i === portfolio.transactions.length - 1}
                         />
                       </motion.div>
@@ -151,7 +151,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations, },) => {
   )
 }
 
-export default withAuthenticationRequired(TransactionsPage,)
+export default withAuthenticationRequired(TransactionsPage)
 
 export async function getStaticPaths() {
   return {
@@ -160,8 +160,8 @@ export async function getStaticPaths() {
   }
 }
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale, },) => {
-  const translations = await getTranslations(locale, ["app",],)
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,

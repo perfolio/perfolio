@@ -1,17 +1,17 @@
-import { zodResolver, } from "@hookform/resolvers/zod"
-import { useI18n, } from "@perfolio/pkg/i18n"
-import { Button, Text, } from "@perfolio/ui/components"
-import { Field, Form, handleSubmit, useForm, } from "@perfolio/ui/form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useI18n } from "@perfolio/pkg/i18n"
+import { Button, Text } from "@perfolio/ui/components"
+import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import Link from "next/link"
-import React, { useState, } from "react"
-import { z, } from "zod"
-import { useSubscribeToNewsletter, } from "../../pkg/hooks/mutations/subscribe"
+import React, { useState } from "react"
+import { z } from "zod"
+import { useSubscribeToNewsletter } from "../../pkg/hooks/mutations/subscribe"
 /* eslint-disable-next-line */
 export interface FooterProps {}
 
 const validation = z.object({
   email: z.string().email(),
-},)
+})
 
 const socialMedia = () => {
   return (
@@ -58,7 +58,7 @@ const socialMedia = () => {
   )
 }
 
-const FooterLink: React.FC<{ href: string }> = ({ href, children, },): JSX.Element => {
+const FooterLink: React.FC<{ href: string }> = ({ href, children }): JSX.Element => {
   return (
     <div>
       <Link href={href}>
@@ -73,7 +73,7 @@ const FooterLink: React.FC<{ href: string }> = ({ href, children, },): JSX.Eleme
   )
 }
 
-const FooterColumn: React.FC<{ title: string }> = ({ title, children, },): JSX.Element => {
+const FooterColumn: React.FC<{ title: string }> = ({ title, children }): JSX.Element => {
   return (
     <div className="flex items-start justify-between p-4 space-x-10 md:space-x-0 md:block">
       <p className="w-1/2 font-medium tracking-wide text-gray-200">{title}</p>
@@ -83,14 +83,14 @@ const FooterColumn: React.FC<{ title: string }> = ({ title, children, },): JSX.E
 }
 
 export const Footer = () => {
-  const { t, } = useI18n()
+  const { t } = useI18n()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onSubmit",
-    resolver: zodResolver(validation,),
-  },)
-  const [formError, setFormError,] = useState<string | React.ReactNode | null>(null,)
-  const [submitting, setSubmitting,] = useState(false,)
-  const [done, setDone,] = useState(false,)
+    resolver: zodResolver(validation),
+  })
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
   const subscribe = useSubscribeToNewsletter()
 
   return (
@@ -98,11 +98,11 @@ export const Footer = () => {
       <div className="container px-4 py-10 mx-auto md:py-12 lg:py-16 xl:py-20 xl:px-0">
         <div className="grid row-gap-10 mb-8 lg:grid-cols-6">
           <div className="grid grid-cols-1 gap-8 lg:col-span-4 md:grid-cols-4">
-            <FooterColumn title={t("footerColumnProduct",)}>
+            <FooterColumn title={t("footerColumnProduct")}>
               <FooterLink href="https://perfol.io/dashboard">Portfolio Analytics</FooterLink>
             </FooterColumn>
             <div className="hidden md:block">
-              <FooterColumn title={t("footerColumnMedia",)}>
+              <FooterColumn title={t("footerColumnMedia")}>
                 <FooterLink href="https://twitter.com/perfol_io">Twitter</FooterLink>
                 <FooterLink href="https://www.linkedin.com/company/perfolio">Linkedin</FooterLink>
                 <FooterLink href="https://instagram.com/perfol.io">Instagram</FooterLink>
@@ -110,22 +110,22 @@ export const Footer = () => {
               </FooterColumn>
             </div>
 
-            <FooterColumn title={t("footerColumnLegal",)}>
-              <FooterLink href="/imprint">{t("imprintFooter",)}</FooterLink>
-              <FooterLink href="/privacy">{t("privacyFooter",)}</FooterLink>
+            <FooterColumn title={t("footerColumnLegal")}>
+              <FooterLink href="/imprint">{t("imprintFooter")}</FooterLink>
+              <FooterLink href="/privacy">{t("privacyFooter")}</FooterLink>
             </FooterColumn>
-            <FooterColumn title={t("footerColumnContact",)}>
+            <FooterColumn title={t("footerColumnContact")}>
               <FooterLink href="mailto:info@perfol.io">info@perfol.io</FooterLink>
             </FooterColumn>
           </div>
           <div className="mt-16 lg:col-span-2 lg:mt-0">
             <p className="text-base font-medium tracking-wide text-center text-gray-200 md:text-left">
-              {t("footerSubs",)}
+              {t("footerSubs")}
             </p>
             {done
               ? (
                 <Text align="text-center md:text-left" color="text-gray-300">
-                  {t("footerSubsDone",)}
+                  {t("footerSubsDone")}
                 </Text>
               )
               : (
@@ -136,7 +136,7 @@ export const Footer = () => {
                 >
                   <Field.Input
                     hideLabel
-                    placeholder={t("footerSubsPlaceMail",)}
+                    placeholder={t("footerSubsPlaceMail")}
                     name="email"
                     type="email"
                     label="email"
@@ -147,15 +147,15 @@ export const Footer = () => {
                     onClick={() =>
                       handleSubmit<z.infer<typeof validation>>(
                         ctx,
-                        async ({ email, },) => {
+                        async ({ email }) => {
                           await subscribe
-                            .mutateAsync({ email, },)
-                            .catch((err,) => {
-                              setFormError(err.message,)
-                            },)
+                            .mutateAsync({ email })
+                            .catch((err) => {
+                              setFormError(err.message)
+                            })
                             .finally(() => {
-                              setDone(true,)
-                            },)
+                              setDone(true)
+                            })
                         },
                         setSubmitting,
                         setFormError,
@@ -165,7 +165,7 @@ export const Footer = () => {
                     htmlType="submit"
                     disabled={submitting}
                   >
-                    {t("footerSubsButton",)}
+                    {t("footerSubsButton")}
                   </Button>
                 </Form>
               )}
@@ -173,7 +173,7 @@ export const Footer = () => {
         </div>
         <div className="flex flex-col justify-between pt-5 pb-10 border-t border-gray-300 sm:flex-row">
           <p className="text-sm text-center text-gray-300">
-            © Copyright {new Date().getFullYear()}. {t("allRightsReserved",)}
+            © Copyright {new Date().getFullYear()}. {t("allRightsReserved")}
           </p>
           <div className="flex items-center justify-center mt-4 space-x-4 text-gray-300 sm:mt-0">
             {socialMedia()}

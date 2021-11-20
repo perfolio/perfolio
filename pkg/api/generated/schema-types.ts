@@ -6,24 +6,24 @@ import {
   TransactionModel,
   UserModel,
 } from "@perfolio/pkg/integrations/prisma"
-import { GraphQLResolveInfo, } from "graphql"
-import { DocumentNode, } from "graphql"
+import { GraphQLResolveInfo } from "graphql"
+import { DocumentNode } from "graphql"
 import gql from "graphql-tag"
-export type Maybe<T,> = T | undefined
-export type Exact<T extends { [key: string]: unknown },> = {
+export type Maybe<T> = T | undefined
+export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
-export type MakeOptional<T, K extends keyof T,> =
+export type MakeOptional<T, K extends keyof T> =
   & Omit<T, K>
   & {
     [SubKey in K]?: Maybe<T[SubKey]>
   }
-export type MakeMaybe<T, K extends keyof T,> =
+export type MakeMaybe<T, K extends keyof T> =
   & Omit<T, K>
   & {
     [SubKey in K]: Maybe<T[SubKey]>
   }
-export type RequireFields<T, K extends keyof T,> =
+export type RequireFields<T, K extends keyof T> =
   & {
     [X in Exclude<keyof T, K>]?: T[X]
   }
@@ -45,6 +45,8 @@ export type Asset = {
   name: Scalars["String"]
 }
 
+export type AssetType = "COMMON_STOCK" | "CRYPTO" | "MUTUAL_FUND" | "TODO"
+
 /** Company stocks */
 export type Company =
   & Asset
@@ -53,7 +55,7 @@ export type Company =
   & {
     __typename?: "Company"
     /** The asset value over time at a specific exchange */
-    assetHistory: Array<ValueAndQuantityAtTime>
+    assetHistory: Array<ValueAtTime>
     /** The country where this company is registered */
     country: Scalars["String"]
     /** Financial Instrument Global Identifier */
@@ -70,12 +72,14 @@ export type Company =
     sector: Scalars["String"]
     /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
     ticker: Scalars["String"]
+    /** The type of asset */
+    type: AssetType
   }
 
 /** Company stocks */
 export type CompanyAssetHistoryArgs = {
   end: Scalars["Int"]
-  exchangeId: Scalars["ID"]
+  mic: Scalars["ID"]
   start: Scalars["Int"]
 }
 
@@ -127,7 +131,7 @@ export type Crypto =
   & {
     __typename?: "Crypto"
     /** The asset value over time at a specific exchange */
-    assetHistory: Array<ValueAndQuantityAtTime>
+    assetHistory: Array<ValueAtTime>
     /** A globally unique id */
     id: Scalars["ID"]
     /** International Securities Identification Number */
@@ -138,12 +142,46 @@ export type Crypto =
     name: Scalars["String"]
     /** A */
     ticker: Scalars["String"]
+    /** The type of asset */
+    type: AssetType
   }
 
 /** Crypto */
 export type CryptoAssetHistoryArgs = {
   end: Scalars["Int"]
-  exchangeId: Scalars["ID"]
+  mic: Scalars["ID"]
+  start: Scalars["Int"]
+}
+
+/** Company stocks */
+export type Etf =
+  & Asset
+  & ExchangeTradedAsset
+  & Stock
+  & {
+    __typename?: "ETF"
+    /** The asset value over time at a specific exchange */
+    assetHistory: Array<ValueAtTime>
+    /** Financial Instrument Global Identifier */
+    figi: Scalars["String"]
+    /** A globally unique id */
+    id: Scalars["ID"]
+    /** International Securities Identification Number */
+    isin: Scalars["String"]
+    /** The companys logo url */
+    logo: Scalars["String"]
+    /** The companys name */
+    name: Scalars["String"]
+    /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
+    ticker: Scalars["String"]
+    /** The type of asset */
+    type: AssetType
+  }
+
+/** Company stocks */
+export type EtfAssetHistoryArgs = {
+  end: Scalars["Int"]
+  mic: Scalars["ID"]
   start: Scalars["Int"]
 }
 
@@ -165,7 +203,7 @@ export type Exchange = {
 /** A sub type of assets that are all traded at exchanges */
 export type ExchangeTradedAsset = {
   /** The asset value over time at a specific exchange */
-  assetHistory: Array<ValueAndQuantityAtTime>
+  assetHistory: Array<ValueAtTime>
   /** A globally unique id */
   id: Scalars["ID"]
   /** International Securities Identification Number */
@@ -176,12 +214,14 @@ export type ExchangeTradedAsset = {
   name: Scalars["String"]
   /** The ticker as used by the exchanges. */
   ticker: Scalars["String"]
+  /** The type of asset */
+  type: AssetType
 }
 
 /** A sub type of assets that are all traded at exchanges */
 export type ExchangeTradedAssetAssetHistoryArgs = {
   end: Scalars["Int"]
-  exchangeId: Scalars["ID"]
+  mic: Scalars["ID"]
   start: Scalars["Int"]
 }
 
@@ -290,9 +330,7 @@ export type Settings = {
 /** Stocks such as company shares and funds. */
 export type Stock = {
   /** The asset value over time at a specific exchange */
-  assetHistory: Array<ValueAndQuantityAtTime>
-  /** The country where this company is registered */
-  country: Scalars["String"]
+  assetHistory: Array<ValueAtTime>
   /** Financial Instrument Global Identifier */
   figi?: Maybe<Scalars["String"]>
   /** A globally unique id */
@@ -305,12 +343,14 @@ export type Stock = {
   name: Scalars["String"]
   /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
   ticker: Scalars["String"]
+  /** The type of asset */
+  type: AssetType
 }
 
 /** Stocks such as company shares and funds. */
 export type StockAssetHistoryArgs = {
   end: Scalars["Int"]
-  exchangeId: Scalars["ID"]
+  mic: Scalars["ID"]
   start: Scalars["Int"]
 }
 
@@ -415,33 +455,33 @@ export type ValueAtTime = {
   value: Scalars["Float"]
 }
 
-export type WithIndex<TObject,> = TObject & Record<string, any>
-export type ResolversObject<TObject,> = WithIndex<TObject>
+export type WithIndex<TObject> = TObject & Record<string, any>
+export type ResolversObject<TObject> = WithIndex<TObject>
 
-export type ResolverTypeWrapper<T,> = Promise<T> | T
+export type ResolverTypeWrapper<T> = Promise<T> | T
 
-export type ResolverWithResolve<TResult, TParent, TContext, TArgs,> = {
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>
 }
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {},> =
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
   | ResolverWithResolve<TResult, TParent, TContext, TArgs>
 
-export type ResolverFn<TResult, TParent, TContext, TArgs,> = (
+export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo,
 ) => Promise<TResult> | TResult
 
-export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs,> = (
+export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo,
 ) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>
 
-export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs,> = (
+export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
@@ -469,7 +509,7 @@ export interface SubscriptionSubscriberObject<
   >
 }
 
-export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs,> {
+export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
   subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>
   resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>
 }
@@ -496,19 +536,19 @@ export type SubscriptionResolver<
   ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>
 
-export type TypeResolveFn<TTypes, TParent = {}, TContext = {},> = (
+export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo,
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>
 
-export type IsTypeOfResolverFn<T = {}, TContext = {},> = (
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
   obj: T,
   context: TContext,
   info: GraphQLResolveInfo,
 ) => boolean | Promise<boolean>
 
-export type NextResolverFn<T,> = () => Promise<T>
+export type NextResolverFn<T> = () => Promise<T>
 
 export type DirectiveResolverFn<
   TResult = {},
@@ -526,12 +566,14 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Asset: ResolverTypeWrapper<AssetModel>
+  AssetType: AssetType
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
   Company: ResolverTypeWrapper<Company>
   CreatePortfolio: CreatePortfolio
   CreateSettings: CreateSettings
   CreateTransaction: CreateTransaction
   Crypto: ResolverTypeWrapper<Crypto>
+  ETF: ResolverTypeWrapper<Etf>
   Exchange: ResolverTypeWrapper<Exchange>
   ExchangeTradedAsset: ResolverTypeWrapper<ExchangeTradedAssetModel>
   Float: ResolverTypeWrapper<Scalars["Float"]>
@@ -541,7 +583,7 @@ export type ResolversTypes = ResolversObject<{
   Portfolio: ResolverTypeWrapper<PortfolioModel>
   Query: ResolverTypeWrapper<{}>
   Settings: ResolverTypeWrapper<SettingsModel>
-  Stock: ResolversTypes["Company"]
+  Stock: ResolversTypes["Company"] | ResolversTypes["ETF"]
   String: ResolverTypeWrapper<Scalars["String"]>
   Transaction: ResolverTypeWrapper<TransactionModel>
   UpdatePortfolio: UpdatePortfolio
@@ -561,6 +603,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateSettings: CreateSettings
   CreateTransaction: CreateTransaction
   Crypto: Crypto
+  ETF: Etf
   Exchange: Exchange
   ExchangeTradedAsset: ExchangeTradedAssetModel
   Float: Scalars["Float"]
@@ -570,7 +613,7 @@ export type ResolversParentTypes = ResolversObject<{
   Portfolio: PortfolioModel
   Query: {}
   Settings: SettingsModel
-  Stock: ResolversParentTypes["Company"]
+  Stock: ResolversParentTypes["Company"] | ResolversParentTypes["ETF"]
   String: Scalars["String"]
   Transaction: TransactionModel
   UpdatePortfolio: UpdatePortfolio
@@ -585,7 +628,11 @@ export type AssetResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Asset"] = ResolversParentTypes["Asset"],
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<"Company" | "Crypto", ParentType, ContextType>
+  __resolveType: TypeResolveFn<
+    "Company" | "Crypto" | "ETF",
+    ParentType,
+    ContextType
+  >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
 }>
@@ -595,10 +642,10 @@ export type CompanyResolvers<
   ParentType extends ResolversParentTypes["Company"] = ResolversParentTypes["Company"],
 > = ResolversObject<{
   assetHistory?: Resolver<
-    Array<ResolversTypes["ValueAndQuantityAtTime"]>,
+    Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<CompanyAssetHistoryArgs, "end" | "exchangeId" | "start">
+    RequireFields<CompanyAssetHistoryArgs, "end" | "mic" | "start">
   >
   country?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   figi?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -608,6 +655,7 @@ export type CompanyResolvers<
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   sector?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  type?: Resolver<ResolversTypes["AssetType"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -616,16 +664,37 @@ export type CryptoResolvers<
   ParentType extends ResolversParentTypes["Crypto"] = ResolversParentTypes["Crypto"],
 > = ResolversObject<{
   assetHistory?: Resolver<
-    Array<ResolversTypes["ValueAndQuantityAtTime"]>,
+    Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<CryptoAssetHistoryArgs, "end" | "exchangeId" | "start">
+    RequireFields<CryptoAssetHistoryArgs, "end" | "mic" | "start">
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  type?: Resolver<ResolversTypes["AssetType"], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}>
+
+export type EtfResolvers<
+  ContextType = GraphQLModules.Context,
+  ParentType extends ResolversParentTypes["ETF"] = ResolversParentTypes["ETF"],
+> = ResolversObject<{
+  assetHistory?: Resolver<
+    Array<ResolversTypes["ValueAtTime"]>,
+    ParentType,
+    ContextType,
+    RequireFields<EtfAssetHistoryArgs, "end" | "mic" | "start">
+  >
+  figi?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  type?: Resolver<ResolversTypes["AssetType"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -646,21 +715,23 @@ export type ExchangeTradedAssetResolvers<
   ParentType extends ResolversParentTypes["ExchangeTradedAsset"] =
     ResolversParentTypes["ExchangeTradedAsset"],
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<"Company" | "Crypto", ParentType, ContextType>
+  __resolveType: TypeResolveFn<
+    "Company" | "Crypto" | "ETF",
+    ParentType,
+    ContextType
+  >
   assetHistory?: Resolver<
-    Array<ResolversTypes["ValueAndQuantityAtTime"]>,
+    Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<
-      ExchangeTradedAssetAssetHistoryArgs,
-      "end" | "exchangeId" | "start"
-    >
+    RequireFields<ExchangeTradedAssetAssetHistoryArgs, "end" | "mic" | "start">
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  type?: Resolver<ResolversTypes["AssetType"], ParentType, ContextType>
 }>
 
 export type MutationResolvers<
@@ -792,20 +863,20 @@ export type StockResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Stock"] = ResolversParentTypes["Stock"],
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<"Company", ParentType, ContextType>
+  __resolveType: TypeResolveFn<"Company" | "ETF", ParentType, ContextType>
   assetHistory?: Resolver<
-    Array<ResolversTypes["ValueAndQuantityAtTime"]>,
+    Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<StockAssetHistoryArgs, "end" | "exchangeId" | "start">
+    RequireFields<StockAssetHistoryArgs, "end" | "mic" | "start">
   >
-  country?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   ticker?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  type?: Resolver<ResolversTypes["AssetType"], ParentType, ContextType>
 }>
 
 export type TransactionResolvers<
@@ -868,10 +939,11 @@ export type ValueAtTimeResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
-export type Resolvers<ContextType = GraphQLModules.Context,> = ResolversObject<{
+export type Resolvers<ContextType = GraphQLModules.Context> = ResolversObject<{
   Asset?: AssetResolvers<ContextType>
   Company?: CompanyResolvers<ContextType>
   Crypto?: CryptoResolvers<ContextType>
+  ETF?: EtfResolvers<ContextType>
   Exchange?: ExchangeResolvers<ContextType>
   ExchangeTradedAsset?: ExchangeTradedAssetResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
@@ -894,6 +966,7 @@ export type CreateExchangeTradedAssetMutation = {
   createExchangeTradedAsset?:
     | { __typename?: "Company"; id: string }
     | { __typename?: "Crypto"; id: string }
+    | { __typename?: "ETF"; id: string }
     | null
     | undefined
 }
@@ -936,6 +1009,14 @@ export type PortfolioQuery = {
           }
           | {
             __typename: "Crypto"
+            ticker: string
+            isin: string
+            logo: string
+            id: string
+            name: string
+          }
+          | {
+            __typename: "ETF"
             ticker: string
             isin: string
             logo: string
@@ -1074,12 +1155,12 @@ export const UserDocument = gql `
     }
   }
 `
-export type Requester<C = {},> = <R, V,>(
+export type Requester<C = {}> = <R, V>(
   doc: DocumentNode,
   vars?: V,
   options?: C,
 ) => Promise<R>
-export function getSdk<C,>(requester: Requester<C>,) {
+export function getSdk<C>(requester: Requester<C>) {
   return {
     createExchangeTradedAsset(
       variables: CreateExchangeTradedAssetMutationVariables,
@@ -1088,7 +1169,7 @@ export function getSdk<C,>(requester: Requester<C>,) {
       return requester<
         CreateExchangeTradedAssetMutation,
         CreateExchangeTradedAssetMutationVariables
-      >(CreateExchangeTradedAssetDocument, variables, options,)
+      >(CreateExchangeTradedAssetDocument, variables, options)
     },
     createTransaction(
       variables: CreateTransactionMutationVariables,
@@ -1097,7 +1178,7 @@ export function getSdk<C,>(requester: Requester<C>,) {
       return requester<
         CreateTransactionMutation,
         CreateTransactionMutationVariables
-      >(CreateTransactionDocument, variables, options,)
+      >(CreateTransactionDocument, variables, options)
     },
     portfolio(
       variables: PortfolioQueryVariables,
@@ -1119,7 +1200,7 @@ export function getSdk<C,>(requester: Requester<C>,) {
         options,
       )
     },
-    user(variables: UserQueryVariables, options?: C,): Promise<UserQuery> {
+    user(variables: UserQueryVariables, options?: C): Promise<UserQuery> {
       return requester<UserQuery, UserQueryVariables>(
         UserDocument,
         variables,

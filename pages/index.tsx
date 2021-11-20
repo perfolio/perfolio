@@ -8,7 +8,7 @@ import {
   Section,
   SectionTitle,
 } from "@perfolio/ui/landing"
-import { GetStaticProps, NextPage, } from "next"
+import { GetStaticProps, NextPage } from "next"
 import Image from "next/image"
 import React from "react"
 
@@ -20,16 +20,16 @@ import {
   HomeIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
-import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
-import { Text, } from "@perfolio/ui/components"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { Text } from "@perfolio/ui/components"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
   translations: Record<string, string>
 }
 
-const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
-  const { t, } = useI18n(translations,)
+const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
+  const { t } = useI18n(translations)
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -52,27 +52,27 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
           </div>
         </Section>
         <Section id="features" className="relative flex flex-col justify-center">
-          <SectionTitle tag={t("whyPerfolio",)} title={t("headerWhy",)} />
+          <SectionTitle tag={t("whyPerfolio")} title={t("headerWhy")} />
 
           <div className="grid max-w-screen-lg mx-auto space-y-16 lg:grid-cols-2 lg:space-y-0 lg:divide-x lg:divide-gray-300">
             <div className="flex flex-col items-center justify-center space-y-16 lg:pr-8">
               {[
                 {
                   icon: <FlagIcon />,
-                  title: t("independent",),
-                  description: t("independentDescription",),
+                  title: t("independent"),
+                  description: t("independentDescription"),
                 },
                 {
                   icon: <ChartSquareBarIcon />,
-                  title: t("complexMadeEasy",),
-                  description: t("complexMadeEasyDescription",),
+                  title: t("complexMadeEasy"),
+                  description: t("complexMadeEasyDescription"),
                 },
                 {
                   icon: <HomeIcon />,
-                  title: t("allInOnePlace",),
-                  description: t("allInOnePlaceDescription",),
+                  title: t("allInOnePlace"),
+                  description: t("allInOnePlaceDescription"),
                 },
-              ].map((f,) => {
+              ].map((f) => {
                 return (
                   <Feature
                     key={f.title}
@@ -82,27 +82,27 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
                   >
                   </Feature>
                 )
-              },)}
+              })}
             </div>
 
             <div className="flex flex-col items-center justify-center space-y-16 lg:pl-8">
               {[
                 {
                   icon: <DatabaseIcon />,
-                  title: t("highestDataQuality",),
-                  description: t("highestDataQualityDescription",),
+                  title: t("highestDataQuality"),
+                  description: t("highestDataQualityDescription"),
                 },
                 {
                   icon: <ShieldCheckIcon />,
-                  title: t("privacyAndSecurity",),
-                  description: t("privacyAndSecurityDescription",),
+                  title: t("privacyAndSecurity"),
+                  description: t("privacyAndSecurityDescription"),
                 },
                 {
                   icon: <CreditCardIcon />,
-                  title: t("fairPricing",),
-                  description: t("fairPricingDescription",),
+                  title: t("fairPricing"),
+                  description: t("fairPricingDescription"),
                 },
-              ].map((f,) => (
+              ].map((f) => (
                 <Feature
                   key={f.title}
                   icon={f.icon}
@@ -115,7 +115,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
           </div>
         </Section>
         <Section id="pricing" className="flex flex-col justify-center">
-          <SectionTitle tag={t("headerPricing",)} title={t("subheaderPricing",)} />
+          <SectionTitle tag={t("headerPricing")} title={t("subheaderPricing")} />
 
           <div className="flex flex-col items-center justify-center space-y-8 md:flex-row md:space-y-0 md:space-x-8">
             <Price
@@ -123,12 +123,12 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
               price={3.99}
               interval="month"
               features={[
-                t("basicPlanFeatureData",),
-                t("basicPlanFeaturePerformance",),
-                t("basicPlanFeatureChart",),
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="https://perfol.io/dashboard"
-              submitText={t("getStartedButton",)}
+              submitText={t("getStartedButton")}
               highlighted
             />
             <Price
@@ -136,22 +136,22 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
               price={8.99}
               interval="month"
               features={[
-                t("basicPlanFeatureData",),
-                t("basicPlanFeaturePerformance",),
-                t("basicPlanFeatureChart",),
+                t("basicPlanFeatureData"),
+                t("basicPlanFeaturePerformance"),
+                t("basicPlanFeatureChart"),
               ]}
               href="https://perfol.io/dashboard"
-              submitText={t("takeOffButton",)}
+              submitText={t("takeOffButton")}
             />
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <SectionTitle tag={t("teamHeader",)} title={t("teamSubheader",)} />
-          <Text align="text-center">{t("perfolioDescription",)}</Text>
+          <SectionTitle tag={t("teamHeader")} title={t("teamSubheader")} />
+          <Text align="text-center">{t("perfolioDescription")}</Text>
           <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
-            {members.map((m,) => {
+            {members.map((m) => {
               return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
-            },)}
+            })}
           </div>
         </Section>
       </div>
@@ -162,8 +162,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations, },) => {
 
 export default IndexPage
 
-export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale, },) => {
-  const translations = await getTranslations(locale, ["landing",],)
+export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
+  const translations = await getTranslations(locale, ["landing"])
   return {
     props: {
       members: [

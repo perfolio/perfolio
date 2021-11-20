@@ -1,22 +1,22 @@
 import React from "react"
-import { CardContent, } from "./content"
-import { CardFooter, CardFooterProps, } from "./footer"
-import { CardFooterActions, } from "./footer/actions"
-import { CardFooterStatus, } from "./footer/status"
-import { CardHeader, CardHeaderProps, } from "./header"
-import { CardHeaderTitle, } from "./header/title"
-import { Root, RootProps, } from "./root"
+import { CardContent } from "./content"
+import { CardFooter, CardFooterProps } from "./footer"
+import { CardFooterActions } from "./footer/actions"
+import { CardFooterStatus } from "./footer/status"
+import { CardHeader, CardHeaderProps } from "./header"
+import { CardHeaderTitle } from "./header/title"
+import { Root, RootProps } from "./root"
 
-type NestedHeader<P = CardHeaderProps,> = React.FC<P> & {
+type NestedHeader<P = CardHeaderProps> = React.FC<P> & {
   Title: typeof CardHeaderTitle
 }
 
-type NestedFooter<P = CardFooterProps,> = React.FC<P> & {
+type NestedFooter<P = CardFooterProps> = React.FC<P> & {
   Status: typeof CardFooterStatus
   Actions: typeof CardFooterActions
 }
 
-type NestedCard<P = RootProps,> = React.FC<P> & {
+type NestedCard<P = RootProps> = React.FC<P> & {
   Header: NestedHeader
   Content: typeof CardContent
   Footer: NestedFooter

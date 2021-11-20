@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@auth0/auth0-react': ^1.8.0
   '@chronark/env': ^0.0.2
+  '@chronark/prefixed-id': ^0.1.0
   '@commitlint/config-conventional': ^13.2.0
   '@graphql-codegen/cli': 2.2.1
   '@graphql-codegen/graphql-modules-preset': ^2.3.0
@@ -83,6 +84,7 @@ specifiers:
 dependencies:
   '@auth0/auth0-react': 1.8.0_react-dom@17.0.2+react@17.0.2
   '@chronark/env': 0.0.2
+  '@chronark/prefixed-id': 0.1.0
   '@headlessui/react': 1.4.2_react-dom@17.0.2+react@17.0.2
   '@heroicons/react': 1.0.5_react@17.0.2
   '@hookform/resolvers': 2.8.3_react-hook-form@7.19.5
@@ -940,6 +942,10 @@ packages:
 
   /@chronark/env/0.0.2:
     resolution: {integrity: sha512-lG+teF4Xh2smwQatelPHhJ7Uj/pNLM64p7l5vj6EV5AREZKJDlUSJU8Ay9wdp//uLvjSncVc1VEk3ik7EyCUVg==}
+    dev: false
+
+  /@chronark/prefixed-id/0.1.0:
+    resolution: {integrity: sha512-uq0wTKol4B0EneBMjc+7PA+z/uM9TBkAKMGgdxiYdDPYCGjGSgpWNCZXetJ7aFz4Fd/Y0D+qn8H4xeA7Qk/Itw==}
     dev: false
 
   /@commitlint/cli/13.2.1:

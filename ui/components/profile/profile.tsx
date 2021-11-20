@@ -1,4 +1,4 @@
-import { Avatar, Loading, Text, } from "@perfolio/ui/components"
+import { Avatar, Loading, Text } from "@perfolio/ui/components"
 import React from "react"
 export interface ProfileProps {
   image?: string | null
@@ -10,7 +10,7 @@ export interface ProfileProps {
   tag?: string | null
 }
 
-export const Profile: React.FC<ProfileProps> = ({ image, title, subtitle, tag, },): JSX.Element => {
+export const Profile: React.FC<ProfileProps> = ({ image, title, subtitle, tag }): JSX.Element => {
   return (
     <div className="flex items-center justify-between w-full gap-4 py-3">
       <div className="flex items-center gap-2">

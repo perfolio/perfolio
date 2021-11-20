@@ -1,4 +1,4 @@
-import { HttpError, JsonUnmarshalError, } from "@perfolio/pkg/util/errors"
+import { HttpError, JsonUnmarshalError } from "@perfolio/pkg/util/errors"
 export type Interval = "daily" | "monthly" | "annual"
 
 export const RF_IDENTIFIER_MAP: Record<Interval, string> = {
@@ -9,21 +9,21 @@ export const RF_IDENTIFIER_MAP: Record<Interval, string> = {
 
 export type RiskFreeRates = Record<string, number>
 
-export async function getRiskFreeRates(interval: Interval,): Promise<RiskFreeRates> {
+export async function getRiskFreeRates(interval: Interval): Promise<RiskFreeRates> {
   const identifier = RF_IDENTIFIER_MAP[interval]
 
   const url = `https://sdw-wsrest.ecb.europa.eu/service/data/${identifier}`
-  const res = await fetch(url,)
+  const res = await fetch(url)
   if (res.status !== 200) {
-    throw new HttpError(res.status, url,)
+    throw new HttpError(res.status, url)
   }
 
-  const data = (await res.json().catch((err,) => {
-    throw new JsonUnmarshalError(err,)
-  },)) as {
+  const data = (await res.json().catch((err) => {
+    throw new JsonUnmarshalError(err)
+  })) as {
     dataSets: {
       series: {
-        [k in "0:0:0" | "0:0:0:0:0:0:0"]: { observations: [number,][] }
+        [k in "0:0:0" | "0:0:0:0:0:0:0"]: { observations: [number][] }
       }
     }[]
     structure: {
@@ -37,10 +37,10 @@ export async function getRiskFreeRates(interval: Interval,): Promise<RiskFreeRat
 
   const series: number[] = Object.values(
     data.dataSets[0]!.series[identifier === "daily" ? "0:0:0" : "0:0:0:0:0:0:0"].observations.map(
-      (o,) => o[0],
+      (o) => o[0],
     ),
   )
-  const timestamps = data.structure.dimensions.observation[0]!.values.map((v,) => v.id)
+  const timestamps = data.structure.dimensions.observation[0]!.values.map((v) => v.id)
 
   const riskFreeRates: Record<string, number> = {}
 

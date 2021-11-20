@@ -1,5 +1,5 @@
-import { Text, } from "../text/text"
-import { Table, } from "./table"
+import { Text } from "../text/text"
+import { Table } from "./table"
 export default {
   title: "Table",
   component: Table,

@@ -1,17 +1,17 @@
-import { useAuth0, } from "@auth0/auth0-react"
-import { Transition, } from "@headlessui/react"
-import { AdjustmentsIcon, LogoutIcon, } from "@heroicons/react/outline"
-import { Icon, Loading, Logo, } from "@perfolio/ui/components"
+import { useAuth0 } from "@auth0/auth0-react"
+import { Transition } from "@headlessui/react"
+import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
+import { Icon, Loading, Logo } from "@perfolio/ui/components"
 import Link from "next/link"
 import React from "react"
-import { useIsFetching, } from "react-query"
-import { DesktopNavLink, } from "./desktopNavLink"
-import { DesktopNavMenu, } from "./desktopNavMenu"
-import { NavbarProps, } from "./types"
+import { useIsFetching } from "react-query"
+import { DesktopNavLink } from "./desktopNavLink"
+import { DesktopNavMenu } from "./desktopNavMenu"
+import { NavbarProps } from "./types"
 
-export const DesktopNavbar: React.FC<NavbarProps> = ({ items, },): JSX.Element => {
+export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const isFetching = useIsFetching()
-  const { logout, } = useAuth0()
+  const { logout } = useAuth0()
 
   return (
     <nav className="w-full">
@@ -24,7 +24,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items, },): JSX.Element =
           </Link>
           <div className="2xl:ml-14">
             <ul className="flex items-center">
-              {items.map((item,) => (
+              {items.map((item) => (
                 <li key={item.label}>
                   {item.menu
                     ? <DesktopNavMenu label={item.label} icon={item.icon} menu={item.menu} />
@@ -79,7 +79,7 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items, },): JSX.Element =
             <li className="text-gray-200 hover:text-gray-50">
               <button
                 className="focus:outline-none"
-                onClick={() => logout({ returnTo: "https://perfol.io", },)}
+                onClick={() => logout({ returnTo: "https://perfol.io" })}
               >
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />

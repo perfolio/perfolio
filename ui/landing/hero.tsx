@@ -1,27 +1,27 @@
-import { zodResolver, } from "@hookform/resolvers/zod"
-import { useI18n, } from "@perfolio/pkg/i18n"
-import { Field, Form, handleSubmit, useForm, } from "@perfolio/ui/form"
-import React, { useState, } from "react"
-import { z, } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useI18n } from "@perfolio/pkg/i18n"
+import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
+import React, { useState } from "react"
+import { z } from "zod"
 // import Link from "next/link"
-import { useAuth0, } from "@auth0/auth0-react"
-import { useSubscribeToNewsletter, } from "@perfolio/pkg/hooks"
-import { Button, Drawer, Heading, Text, } from "@perfolio/ui/components"
+import { useAuth0 } from "@auth0/auth0-react"
+import { useSubscribeToNewsletter } from "@perfolio/pkg/hooks"
+import { Button, Drawer, Heading, Text } from "@perfolio/ui/components"
 const validation = z.object({
   email: z.string().email(),
-},)
+})
 
 export const HeroSection: React.FC = (): JSX.Element => {
-  const { t, } = useI18n()
-  const { user, } = useAuth0()
+  const { t } = useI18n()
+  const { user } = useAuth0()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onSubmit",
-    resolver: zodResolver(validation,),
-  },)
-  const [open, setOpen,] = useState(false,)
-  const [formError, setFormError,] = useState<string | React.ReactNode | null>(null,)
-  const [submitting, setSubmitting,] = useState(false,)
-  const [done, setDone,] = useState(false,)
+    resolver: zodResolver(validation),
+  })
+  const [open, setOpen] = useState(false)
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
   const subscribe = useSubscribeToNewsletter()
   return (
     <div className="flex flex-col items-center w-full space-y-4 text-center md:space-y-8 xl:space-y-12">
@@ -39,7 +39,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
           >
             <Field.Input
               hideLabel
-              placeholder={t("footerSubsPlaceMail",)}
+              placeholder={t("footerSubsPlaceMail")}
               name="email"
               type="email"
               label="email"
@@ -50,16 +50,16 @@ export const HeroSection: React.FC = (): JSX.Element => {
               onClick={() =>
                 handleSubmit<z.infer<typeof validation>>(
                   ctx,
-                  async ({ email, },) => {
+                  async ({ email }) => {
                     await subscribe
-                      .mutateAsync({ email, },)
-                      .catch((err,) => {
-                        setFormError(err.message,)
-                      },)
+                      .mutateAsync({ email })
+                      .catch((err) => {
+                        setFormError(err.message)
+                      })
                       .finally(() => {
-                        setDone(true,)
-                        setTimeout(() => setOpen(false,), 1000,)
-                      },)
+                        setDone(true)
+                        setTimeout(() => setOpen(false), 1000)
+                      })
                   },
                   setSubmitting,
                   setFormError,
@@ -73,8 +73,8 @@ export const HeroSection: React.FC = (): JSX.Element => {
           </Form>
         )}
       </Drawer>
-      <Heading h1>{t("headline",)}</Heading>
-      <Text>{t("subheadline",)}</Text>
+      <Heading h1>{t("headline")}</Heading>
+      <Text>{t("subheadline")}</Text>
       {user
         ? (
           <div>
@@ -88,7 +88,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
             <div className="flex items-center justify-center md:hidden">
               <Button
                 onClick={() => {
-                  setOpen(true,)
+                  setOpen(true)
                 }}
                 type="plain"
                 size="lg"
@@ -111,7 +111,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
                   >
                     <Field.Input
                       hideLabel
-                      placeholder={t("footerSubsPlaceMail",)}
+                      placeholder={t("footerSubsPlaceMail")}
                       name="email"
                       type="email"
                       label="email"
@@ -122,15 +122,15 @@ export const HeroSection: React.FC = (): JSX.Element => {
                       onClick={() =>
                         handleSubmit<z.infer<typeof validation>>(
                           ctx,
-                          async ({ email, },) => {
+                          async ({ email }) => {
                             await subscribe
-                              .mutateAsync({ email, },)
-                              .catch((err,) => {
-                                setFormError(err.message,)
-                              },)
+                              .mutateAsync({ email })
+                              .catch((err) => {
+                                setFormError(err.message)
+                              })
                               .finally(() => {
-                                setDone(true,)
-                              },)
+                                setDone(true)
+                              })
                           },
                           setSubmitting,
                           setFormError,

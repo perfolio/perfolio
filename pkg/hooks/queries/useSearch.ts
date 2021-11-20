@@ -1,4 +1,4 @@
-import { useQuery, } from "react-query"
+import { useQuery } from "react-query"
 
 type Document = {
   id: string
@@ -25,17 +25,15 @@ type SearchResult = {
   duration: number
 }
 
-export const useSearch = (fragment: string,) => {
+export const useSearch = (fragment: string) => {
   const { data, ...meta } = useQuery<SearchResult, Error>(
-    ["search", fragment,],
+    ["search", fragment],
     async () =>
-      fetch(`https://search.chronark.workers.dev/perfolio?q=${fragment}`,).then((res,) =>
-        res.json()
-      ),
+      fetch(`https://search.chronark.workers.dev/perfolio?q=${fragment}`).then((res) => res.json()),
     {
       enabled: fragment.length > 0,
     },
   )
 
-  return { search: data, ...meta, }
+  return { search: data, ...meta }
 }

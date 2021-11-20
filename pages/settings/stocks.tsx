@@ -1,22 +1,22 @@
-import { withAuthenticationRequired, } from "@auth0/auth0-react"
-import { zodResolver, } from "@hookform/resolvers/zod"
-import { useExchanges, useUpdateSettings, useUser, } from "@perfolio/pkg/hooks"
-import { AppLayout, SideNavbar, } from "@perfolio/ui/app"
-import { Button, ButtonType, } from "@perfolio/ui/components"
-import { Card, } from "@perfolio/ui/components"
-import { Field, Form, handleSubmit, } from "@perfolio/ui/form"
-import { GetStaticProps, NextPage, } from "next"
-import React, { useState, } from "react"
-import { useForm, } from "react-hook-form"
-import { z, } from "zod"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useExchanges, useUpdateSettings, useUser } from "@perfolio/pkg/hooks"
+import { AppLayout, SideNavbar } from "@perfolio/ui/app"
+import { Button, ButtonType } from "@perfolio/ui/components"
+import { Card } from "@perfolio/ui/components"
+import { Field, Form, handleSubmit } from "@perfolio/ui/form"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { getTranslations, useI18n, } from "@perfolio/pkg/i18n"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 
 interface SettingProps {
   validation: z.AnyZodObject
   title: string
   footer: string
-  onSubmit: (values: Record<string, string | number>,) => Promise<void>
+  onSubmit: (values: Record<string, string | number>) => Promise<void>
   button?: {
     label?: string
     type?: ButtonType
@@ -30,14 +30,14 @@ const Setting: React.FC<SettingProps> = ({
   children,
   onSubmit,
   button,
-},): JSX.Element => {
+}): JSX.Element => {
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
-    resolver: zodResolver(validation,),
-  },)
-  const { t, } = useI18n()
-  const [formError, setFormError,] = useState<string | null>(null,)
-  const [submitting, setSubmitting,] = useState(false,)
+    resolver: zodResolver(validation),
+  })
+  const { t } = useI18n()
+  const [formError, setFormError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
   return (
     <Card>
       <Card.Header>
@@ -57,12 +57,12 @@ const Setting: React.FC<SettingProps> = ({
             // eslint-disable-next-line
             // @ts-ignore
             onClick={() =>
-              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError,)}
+              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)}
             type={button?.type ?? "primary"}
             htmlType="submit"
             disabled={ctx.formState.isSubmitting}
           >
-            {button?.label ?? t("setButtonLabelSave",)}
+            {button?.label ?? t("setButtonLabelSave")}
           </Button>
         </Card.Footer.Actions>
       </Card.Footer>
@@ -78,50 +78,50 @@ interface PageProps {
   translations: Record<string, string>
 }
 
-const SettingsPage: NextPage<PageProps> = ({ translations, },) => {
-  const { t, } = useI18n(translations,)
-  const { user, } = useUser()
+const SettingsPage: NextPage<PageProps> = ({ translations }) => {
+  const { t } = useI18n(translations)
+  const { user } = useUser()
 
-  const { exchanges, } = useExchanges()
+  const { exchanges } = useExchanges()
 
   /**
    * The current defaultExchange
    */
 
-  const currencyValidation = z.object({ defaultCurrency: z.string().min(3,).max(3,), },)
+  const currencyValidation = z.object({ defaultCurrency: z.string().min(3).max(3) })
 
   const updateSettings = useUpdateSettings()
-  const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>,): Promise<void> => {
+  const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
-      settings: { defaultCurrency: values.defaultCurrency as "EUR", },
-    },)
+      settings: { defaultCurrency: values.defaultCurrency as "EUR" },
+    })
   }
 
   const exchangeValidation = z.object({
     defaultRegion: z.string(),
     defaultExchange: z.string(),
-  },)
-  const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>,): Promise<void> => {
+  })
+  const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     await updateSettings.mutateAsync({
       settings: {
-        defaultExchange: exchanges?.find((e,) => e.name === values.defaultExchange)?.mic,
+        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic,
       },
-    },)
+    })
   }
 
-  const [region, setRegion,] = useState<string>(user?.settings?.defaultExchange?.region ?? "",)
+  const [region, setRegion] = useState<string>(user?.settings?.defaultExchange?.region ?? "")
 
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
       <div className="space-y-8">
         <Setting
-          title={t("setStocksCurrencyTitle",)}
-          footer={t("setStocksCurrencyFooter",)}
+          title={t("setStocksCurrencyTitle")}
+          footer={t("setStocksCurrencyFooter")}
           validation={currencyValidation}
-          onSubmit={onCurrencySubmit as (values: Record<string, string | number>,) => Promise<void>}
+          onSubmit={onCurrencySubmit as (values: Record<string, string | number>) => Promise<void>}
         >
           <Field.Input
-            label={t("setStocksCurrencyLabel",)}
+            label={t("setStocksCurrencyLabel")}
             hideLabel
             name="defaultCurrency"
             type="text"
@@ -129,22 +129,22 @@ const SettingsPage: NextPage<PageProps> = ({ translations, },) => {
           />
         </Setting>
         <Setting
-          title={t("setStocksStockExTitle",)}
-          footer={t("setStocksStockExFooter",)}
+          title={t("setStocksStockExTitle")}
+          footer={t("setStocksStockExFooter")}
           validation={exchangeValidation}
-          onSubmit={onExchangeSubmit as (values: Record<string, string | number>,) => Promise<void>}
+          onSubmit={onExchangeSubmit as (values: Record<string, string | number>) => Promise<void>}
         >
           <div className="items-center gap-4 md:flex">
             <Field.Select
               onChange={setRegion}
-              options={[...new Set(exchanges?.map((e,) => e.region),),] ?? []}
+              options={[...new Set(exchanges?.map((e) => e.region))] ?? []}
               label="Region"
               name="defaultRegion"
               defaultValue={user?.settings?.defaultExchange.region}
             />
             <Field.Select
-              options={exchanges?.filter((e,) => e.region === region).map((e,) => e.name) ?? []}
-              label={t("setStocksStockExSelect",)}
+              options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
+              label={t("setStocksStockExSelect")}
               name="defaultExchange"
               defaultValue={user?.settings?.defaultExchange?.name ?? ""}
             />
@@ -154,10 +154,10 @@ const SettingsPage: NextPage<PageProps> = ({ translations, },) => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(SettingsPage,)
+export default withAuthenticationRequired(SettingsPage)
 
-export const getStaticProps: GetStaticProps<PageProps> = async ({ locale, },) => {
-  const translations = await getTranslations(locale, ["app",],)
+export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
       translations,

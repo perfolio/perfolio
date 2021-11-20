@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { Client, } from "./client"
+import { Client } from "./client"
 
 export const SearchResponseValidator = z.array(
   z.object({
@@ -28,18 +28,18 @@ export const SearchResponseValidator = z.array(
       "wi",
       "wt",
       "",
-    ],),
+    ]),
     sector: z.string().nullable(),
-  },),
+  }),
 )
 
 export type SearchResponse = z.infer<typeof SearchResponseValidator>
 
-export async function search(fragment: string,): Promise<SearchResponse> {
+export async function search(fragment: string): Promise<SearchResponse> {
   const client = new Client()
 
   const res = await client.get({
     path: `/search/${fragment}`,
-  },)
-  return SearchResponseValidator.parse(res,)
+  })
+  return SearchResponseValidator.parse(res)
 }

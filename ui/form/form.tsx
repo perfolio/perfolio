@@ -1,20 +1,20 @@
-import { Text, } from "@perfolio/ui/components"
+import { Text } from "@perfolio/ui/components"
 import React from "react"
-import { FormProvider, UseFormReturn, } from "react-hook-form"
+import { FormProvider, UseFormReturn } from "react-hook-form"
 
-export interface FormProps<FieldValues,> {
+export interface FormProps<FieldValues> {
   ctx: UseFormReturn<FieldValues>
   formError: React.ReactNode | null
   children: React.ReactNode
   className?: string
 }
 
-export function Form<FieldValues,>({
+export function Form<FieldValues>({
   ctx,
   formError,
   children,
   className,
-}: FormProps<FieldValues>,): JSX.Element {
+}: FormProps<FieldValues>): JSX.Element {
   return (
     <FormProvider {...ctx}>
       <form className={className}>{children}</form>
@@ -31,22 +31,22 @@ export function Form<FieldValues,>({
   )
 }
 
-export async function handleSubmit<FieldValues,>(
+export async function handleSubmit<FieldValues>(
   ctx: UseFormReturn<FieldValues>,
-  onSubmit: (values: FieldValues,) => Promise<void>,
+  onSubmit: (values: FieldValues) => Promise<void>,
   setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
   setFormError: React.Dispatch<React.SetStateAction<string | null>>,
 ): Promise<void> {
   const values = ctx.getValues()
   await ctx.handleSubmit(
     async () => {
-      setSubmitting(true,)
-      await onSubmit(values as FieldValues,)
-        .catch((err,) => {
-          setFormError(err.message ?? null,)
-        },)
-        .finally(() => setSubmitting(false,))
+      setSubmitting(true)
+      await onSubmit(values as FieldValues)
+        .catch((err) => {
+          setFormError(err.message ?? null)
+        })
+        .finally(() => setSubmitting(false))
     },
-    (err,) => console.error("Form invalid", err,),
+    (err) => console.error("Form invalid", err),
   )()
 }

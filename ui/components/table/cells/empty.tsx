@@ -1,6 +1,6 @@
 import React from "react"
-import { Wrapper, } from "./wrapper"
+import { Wrapper } from "./wrapper"
 
-export const Empty: React.FC = ({ children, },): JSX.Element => {
+export const Empty: React.FC = ({ children }): JSX.Element => {
   return <Wrapper>{children}</Wrapper>
 }

@@ -1,8 +1,8 @@
-import { QueryClient, } from "react-query"
-import { persistQueryClient, } from "react-query/persistQueryClient-experimental"
+import { QueryClient } from "react-query"
+import { persistQueryClient } from "react-query/persistQueryClient-experimental"
 
-import { createWebStoragePersistor, } from "react-query/createWebStoragePersistor-experimental"
-import { QUERIES_KEY, } from "./keys"
+import { createWebStoragePersistor } from "react-query/createWebStoragePersistor-experimental"
+import { QUERIES_KEY } from "./keys"
 
 /**
  * EXPERIMENTAL!
@@ -28,7 +28,7 @@ export const PersistentQueryClient = (): QueryClient => {
         staleTime: process.env.NODE_ENV === "production" ? 60 * 60 * 1000 : 1 * 60 * 1000,
       },
     },
-  },)
+  })
   /**
    * Persist queries in localstorage can only work in the browser
    */
@@ -36,8 +36,8 @@ export const PersistentQueryClient = (): QueryClient => {
     const localStoragePersistor = createWebStoragePersistor({
       storage: window?.localStorage,
       key: QUERIES_KEY,
-    },)
-    persistQueryClient({ queryClient: client, persistor: localStoragePersistor, },)
+    })
+    persistQueryClient({ queryClient: client, persistor: localStoragePersistor })
   }
   return client
 }

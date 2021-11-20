@@ -1,6 +1,6 @@
 import cn from "classnames"
 import React from "react"
-import { Header, } from "../header/header"
+import { Header } from "../header/header"
 export interface AppLayoutProps {
   sidebar?: React.ReactNode | React.ReactNodeArray
   side?: "left" | "right"
@@ -13,7 +13,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   sidebar,
   children,
   side = "right",
-},): JSX.Element => {
+}): JSX.Element => {
   return (
     <>
       <div className="h-20 md:h-42 lg:h-56 ">
@@ -24,7 +24,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           <main
             className={cn("w-full  lg:-mt-28 ", {
               "xl:w-3/4 2xl:w-4/5": sidebar,
-            },)}
+            })}
           >
             {children}
           </main>
