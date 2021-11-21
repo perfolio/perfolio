@@ -1,41 +1,33 @@
-import React, { useMemo } from "react"
-import { AreaChart } from "@perfolio/ui/charts"
-import {
-  useAbsolutePortfolioHistory,
-  usePortfolioHistory,
-  useRelativePortfolioHistory,
-} from "@perfolio/pkg/hooks"
-import { format } from "@perfolio/pkg/util/numbers"
 import { Downsampling } from "@perfolio/pkg/downsampling"
+import { useAbsoluteTotalHistory, usePortfolioHistory } from "@perfolio/pkg/hooks"
+import { format } from "@perfolio/pkg/util/numbers"
 import { Time } from "@perfolio/pkg/util/time"
+import { AreaChart } from "@perfolio/ui/charts"
+import React, { useMemo } from "react"
 export type AggregateOptions = "relative" | "absolute"
 
 export interface AssetsOverTimeChartProps {
   /**
    * Time in seconds from the first datapoint til now.
    */
-  range: number
+  since: number
 
   aggregate: AggregateOptions
 }
 
 export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   aggregate = "absolute",
-  range,
+  since,
 }): JSX.Element => {
-  const { portfolioHistory } = usePortfolioHistory()
-  const { absolutePortfolioHistory, isLoading: absoluteLoading } = useAbsolutePortfolioHistory(
-    portfolioHistory,
-    range,
+  const { history, isLoading } = usePortfolioHistory({ since })
+  const { absoluteTotal } = useAbsoluteTotalHistory(
+    { since },
   )
-  const { relativePortfolioHistory, isLoading: relativeLoading } =
-    useRelativePortfolioHistory(range)
 
   const data = useMemo(() => {
-    const choice =
-      aggregate === "absolute"
-        ? absolutePortfolioHistory
-        : (relativePortfolioHistory as { time: number; value: number }[])
+    const choice = aggregate === "absolute"
+      ? absoluteTotal
+      : (history.relative)
 
     const downsampled = Downsampling.largestTriangle(
       choice.map(({ time, value }) => ({ x: time, y: value })),
@@ -45,11 +37,11 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
       time: Time.fromTimestamp(x).toDate().toLocaleDateString(),
       value: y,
     }))
-  }, [absolutePortfolioHistory, relativePortfolioHistory, aggregate])
+  }, [absoluteTotal, history, aggregate])
   return (
     <div className="w-full h-56">
       <AreaChart
-        isLoading={absoluteLoading || relativeLoading}
+        isLoading={isLoading}
         data={data}
         withXAxis
         tooltip={(n) => format(n, { suffix: aggregate === "absolute" ? "€" : undefined })}

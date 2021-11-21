@@ -1,6 +1,6 @@
 import React, { MouseEvent, useState } from "react"
+import { ButtonControllerProps, Controller, LinkControllerProps } from "./controller"
 import { ButtonStyle, ButtonStyleProps } from "./style"
-import { ButtonControllerProps, LinkControllerProps, Controller } from "./controller"
 
 export function Button(props: ButtonStyleProps & ButtonControllerProps): JSX.Element
 export function Button(props: ButtonStyleProps & LinkControllerProps): JSX.Element

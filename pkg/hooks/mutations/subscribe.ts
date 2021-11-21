@@ -1,8 +1,8 @@
-import { useMutation } from "react-query"
 import {
   SubscribeToNewsletterMutation,
   SubscribeToNewsletterMutationVariables,
-} from "@perfolio/pkg/api/graphql"
+} from "@perfolio/pkg/api"
+import { useMutation } from "react-query"
 import { client } from "../client"
 export const useSubscribeToNewsletter = () => {
   const { data, ...meta } = useMutation<

@@ -19,7 +19,8 @@ export const Avatars = (args: AvatarProps) => (
   </div>
 )
 Avatars.args = {
-  src: "https://avatars.githubusercontent.com/u/18246773?s=88&u=bf8234ff570924c4f709b05936e140df599c94a4&v=4",
+  src:
+    "https://avatars.githubusercontent.com/u/18246773?s=88&u=bf8234ff570924c4f709b05936e140df599c94a4&v=4",
 }
 
 export const Square = (args: AvatarProps) => (
@@ -36,7 +37,8 @@ export const Square = (args: AvatarProps) => (
   </div>
 )
 Square.args = {
-  src: "https://avatars.githubusercontent.com/u/18246773?s=88&u=bf8234ff570924c4f709b05936e140df599c94a4&v=4",
+  src:
+    "https://avatars.githubusercontent.com/u/18246773?s=88&u=bf8234ff570924c4f709b05936e140df599c94a4&v=4",
   square: true,
 }
 

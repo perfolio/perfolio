@@ -1,14 +1,14 @@
+import { GetStaticProps, NextPage } from "next"
 import React from "react"
-import { NextPage, GetStaticProps } from "next"
 
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 
-import { useRouter } from "next/router"
 import { Button } from "@perfolio/ui/components"
+import { useRouter } from "next/router"
 
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useUser } from "@perfolio/pkg/hooks"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 /**
  * / page.

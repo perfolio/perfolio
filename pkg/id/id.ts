@@ -1,19 +1,17 @@
 import { v4 as uuid } from "uuid"
 
 const perfolioIds = {
+  asset: "a",
   user: "u",
-  authenticationRequest: "ar",
   transaction: "tx",
   settings: "set",
   watchlist: "wl",
   notification: "n",
   portfolio: "p",
-  refreshToken: "rft",
 }
 
 /**
  * Generate ids similar to stripe
- *
  */
 class IdGenerator<TPrefixes extends string> {
   private prefixes: Record<TPrefixes, string>

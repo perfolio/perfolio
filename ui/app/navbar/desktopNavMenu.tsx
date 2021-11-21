@@ -1,8 +1,8 @@
 import { Popover, Transition } from "@headlessui/react"
 import { ChevronDownIcon } from "@heroicons/react/outline"
 import Link from "next/link"
-import { NavLink } from "./navLink"
 import React, { Fragment } from "react"
+import { NavLink } from "./navLink"
 import { MenuProps } from "./types"
 export const DesktopNavMenu: React.FC<MenuProps> = ({ label, icon, menu }): JSX.Element => {
   return (

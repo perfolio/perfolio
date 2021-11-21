@@ -1,7 +1,7 @@
+import { AbsoluteAssetHistory } from "@perfolio/pkg/api"
 import { Time } from "@perfolio/pkg/util/time"
-import { AssetsOverTime } from "./types"
 import { rebalance } from "./rebalance"
-import { AssetHistory } from "@perfolio/pkg/api/graphql"
+import { AssetsOverTime } from "./types"
 
 /**
  * Transform AssetsOverTime into a format readable by recharts.
@@ -20,7 +20,7 @@ export const plotAbsolute = (history: AssetsOverTime): { time: string; value: nu
 /**
  * Build an index and transform data to be readable by recharts
  */
-export const plotRelative = (history: AssetHistory): { time: string; value: number }[] => {
+export const plotRelative = (history: AbsoluteAssetHistory): { time: string; value: number }[] => {
   const timeline = toTimeseries([history])
   const index = rebalance(timeline)
   const data = Object.entries(index).map(([time, value]) => {
@@ -38,7 +38,7 @@ export const plotRelative = (history: AssetHistory): { time: string; value: numb
  * Sorting by time first, then assetId
  */
 export const toTimeseries = (
-  assetHistory: Omit<AssetHistory, "asset">[],
+  assetHistory: Omit<AbsoluteAssetHistory, "asset">[],
   since?: number,
 ): AssetsOverTime => {
   const timeline: AssetsOverTime = {}

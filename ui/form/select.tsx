@@ -1,9 +1,9 @@
-import React, { useEffect, Fragment } from "react"
-import { useFormContext } from "react-hook-form"
-import { Text } from "@perfolio/ui/components"
-import { SelectorIcon } from "@heroicons/react/outline"
-import cn from "classnames"
 import { Listbox, Transition } from "@headlessui/react"
+import { SelectorIcon } from "@heroicons/react/outline"
+import { Text } from "@perfolio/ui/components"
+import cn from "classnames"
+import React, { Fragment, useEffect } from "react"
+import { useFormContext } from "react-hook-form"
 export interface SelectProps {
   /**
    * Available options the user can choose from
@@ -64,13 +64,15 @@ export const Select: React.FC<SelectProps> = ({
         {label}
       </label>
       <div className="relative ">
-        {iconLeft ? (
-          <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
-            <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
-              {iconLeft}
-            </span>
-          </div>
-        ) : null}
+        {iconLeft
+          ? (
+            <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
+              <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
+                {iconLeft}
+              </span>
+            </div>
+          )
+          : null}
         <Listbox
           value={watch(name)}
           onChange={(value) => {
@@ -102,10 +104,8 @@ export const Select: React.FC<SelectProps> = ({
                     className={({ active, selected }) =>
                       cn("cursor-default select-none relative p-2 text-gray-800", {
                         "bg-gray-100": active,
-                        "bg-gradient-to-tr from-gray-900 to-primary-dark text-gray-50 font-semibold":
-                          selected,
-                      })
-                    }
+                        "bg-gray-900 text-gray-100 font-semibold": selected,
+                      })}
                     value={option}
                   >
                     <span>{option}</span>

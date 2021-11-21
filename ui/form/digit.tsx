@@ -1,7 +1,7 @@
+import { ExclamationCircleIcon } from "@heroicons/react/outline"
+import classNames from "classnames"
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import classNames from "classnames"
-import { ExclamationCircleIcon } from "@heroicons/react/outline"
 export interface DigitInputProps {
   /**
    * Field name. Make sure this matches your schema.
@@ -63,14 +63,16 @@ export const Digit: React.FC<DigitInputProps> = ({ focus, onChange, name, setFoc
         )}
       />
 
-      {error ? (
-        <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error">
-          <ExclamationCircleIcon className="w-4 h-4" />
-          <p>
-            <span className="font-semibold">Error:</span> {error}
-          </p>
-        </div>
-      ) : null}
+      {error
+        ? (
+          <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error">
+            <ExclamationCircleIcon className="w-4 h-4" />
+            <p>
+              <span className="font-semibold">Error:</span> {error}
+            </p>
+          </div>
+        )
+        : null}
     </div>
   )
 }

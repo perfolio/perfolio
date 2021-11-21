@@ -1,6 +1,6 @@
-import { GetUserPortfoliosQuery } from "@perfolio/pkg/api/graphql"
-import { useQuery } from "react-query"
 import { useAuth0 } from "@auth0/auth0-react"
+import { GetUserPortfoliosQuery } from "@perfolio/pkg/api"
+import { useQuery } from "react-query"
 import { client } from "../client"
 
 const USE_PORTFOLIOS_QUERY_KEY = "USE_PORTFOLIOS_QUERY_KEY"

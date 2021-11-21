@@ -1,8 +1,8 @@
 import { buildIndex } from "./buildIndex"
 import { calculateReturnsPerAsset } from "./returnsPerAsset"
-import { calculateWeight } from "./weights"
 import { calculateTotalReturns } from "./totalReturns"
 import { AssetsOverTime, ValueAtTime } from "./types"
+import { calculateWeight } from "./weights"
 
 export const rebalance = (assetsOvertime: AssetsOverTime): ValueAtTime => {
   const weights = calculateWeight(assetsOvertime)

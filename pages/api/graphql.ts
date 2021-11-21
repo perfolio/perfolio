@@ -1,14 +1,7 @@
-import { Server } from "@perfolio/pkg/api/server"
-import { NextApiRequest, NextApiResponse } from "next"
 import { env } from "@chronark/env"
+import { server } from "@perfolio/pkg/api/server"
 import { JWT } from "@perfolio/pkg/auth"
-
-/**
- * Vercel purges this automatially so we have to explicitely import it.
- * I have no idea what it is even for but the lambda will error out if it's not
- * loaded.
- */
-// import "ts-tiny-invariant"
+import { NextApiRequest, NextApiResponse } from "next"
 
 JWT.init(`https://${env.require("NEXT_PUBLIC_AUTH0_DOMAIN")}/.well-known/jwks.json`, {
   audience: env.require("NEXT_PUBLIC_AUTH0_AUDIENCE"),
@@ -24,12 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.end()
   }
 
-  const server = Server()
-  await server.start()
+  const srv = server()
+  await srv.start()
   /**
    * Handle graphql request
    */
-  const handler = server.createHandler({ path: "/api/graphql" })
+  const handler = srv.createHandler({ path: "/api/graphql" })
   await handler(req, res)
 }
 

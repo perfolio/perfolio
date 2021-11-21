@@ -1,7 +1,7 @@
-import React from "react"
-import { Wrapper } from "./wrapper"
-import { Text as TextComponent } from "../../text/text"
 import cn from "classnames"
+import React from "react"
+import { Text as TextComponent } from "../../text/text"
+import { Wrapper } from "./wrapper"
 type color = "primary" | "success" | "error" | "info"
 type shade = "" | "-light" | "-dark"
 export interface TagProps {

@@ -1,8 +1,8 @@
+import { useAuth0 } from "@auth0/auth0-react"
+import { UpdateSettings, UpdateSettingsMutation } from "@perfolio/pkg/api"
 import { useMutation, useQueryClient } from "react-query"
-import { UpdateSettingsMutation, UpdateSettings } from "@perfolio/pkg/api/graphql"
 import { client } from "../client"
 import { USE_USER_QUERY_KEY } from "../queries/useUser"
-import { useAuth0 } from "@auth0/auth0-react"
 
 export const useUpdateSettings = () => {
   const { getAccessTokenSilently, user } = useAuth0()

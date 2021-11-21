@@ -1,6 +1,6 @@
-import { resolve } from "path"
-import fs from "fs"
 import { env } from "@chronark/env"
+import fs from "fs"
+import { resolve } from "path"
 
 type Namespace = "landing" | "app"
 type Locale = "en" | "de"

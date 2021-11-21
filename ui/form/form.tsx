@@ -1,6 +1,6 @@
+import { Text } from "@perfolio/ui/components"
 import React from "react"
 import { FormProvider, UseFormReturn } from "react-hook-form"
-import { Text } from "@perfolio/ui/components"
 
 export interface FormProps<FieldValues> {
   ctx: UseFormReturn<FieldValues>
@@ -18,13 +18,15 @@ export function Form<FieldValues>({
   return (
     <FormProvider {...ctx}>
       <form className={className}>{children}</form>
-      {formError ? (
-        <div role="alert" className="pt-2 pb-4">
-          <Text color="text-error" size="sm">
-            <span className="font-semibold">Error:</span> {formError}
-          </Text>
-        </div>
-      ) : null}
+      {formError
+        ? (
+          <div role="alert" className="pt-2 pb-4">
+            <Text color="text-error" size="sm">
+              <span className="font-semibold">Error:</span> {formError}
+            </Text>
+          </div>
+        )
+        : null}
     </FormProvider>
   )
 }

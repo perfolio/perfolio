@@ -1,4 +1,4 @@
-import { ToggleGroupProps, ToggleGroup } from "./group"
+import { ToggleGroup, ToggleGroupProps } from "./group"
 
 export default {
   title: "ToggleGroup",

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
-import { z } from "zod"
 import jwksClient from "jwks-rsa"
+import { z } from "zod"
 
 export const payload = z.object({
   iss: z.string(),

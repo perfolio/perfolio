@@ -1,5 +1,13 @@
+import { HttpError } from "@perfolio/pkg/util/errors"
 import * as z from "zod"
 import { Client } from "./client"
+
+export type GetCompanyRequest = {
+  /**
+   * Ticker of the company.
+   */
+  ticker: string
+}
 
 export const GetCompanyResponseValidator = z.object({
   /**
@@ -55,7 +63,20 @@ export const GetCompanyResponseValidator = z.object({
    * empty - Other.
    */
   issueType: z
-    .enum(["ad", "cs", "cef", "et", "oef", "ps", "rt", "struct", "ut", "wi", "wt", ""])
+    .enum([
+      "ad",
+      "cs",
+      "cef",
+      "et",
+      "oef",
+      "ps",
+      "rt",
+      "struct",
+      "ut",
+      "wi",
+      "wt",
+      "",
+    ])
     .nullable(),
   /**
    * Refers to the sector the company belongs to.
@@ -102,13 +123,27 @@ export const GetCompanyResponseValidator = z.object({
 /**
  * Resonse from the `GET /stock/{asset}/company` endpoint.
  */
-export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator>
+export type GetCompanyResponse = z.infer<typeof GetCompanyResponseValidator> | null
 
-export async function getCompany(symbol: string): Promise<GetCompanyResponse> {
-  const client = new Client()
-
-  const res = await client.get({
-    path: `/stock/${symbol}/company`,
-  })
-  return GetCompanyResponseValidator.parse(res)
+export async function getCompany(
+  client: Client,
+  req: GetCompanyRequest,
+): Promise<GetCompanyResponse> {
+  return await client
+    .get({
+      path: `/stock/${req.ticker}/company`,
+    })
+    .then((res) => GetCompanyResponseValidator.parseAsync(res))
+    .catch((err) => {
+      if (err instanceof HttpError) {
+        /**
+         * 404 simply means the given ticker is invalid which can happen a lot when the user
+         * can search for tickers.
+         */
+        if (err.status === 404) {
+          return null
+        }
+      }
+      throw err
+    })
 }

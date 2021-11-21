@@ -1,6 +1,6 @@
+import cn from "classnames"
 import React from "react"
 import { Header } from "../header/header"
-import cn from "classnames"
 export interface AppLayoutProps {
   sidebar?: React.ReactNode | React.ReactNodeArray
   side?: "left" | "right"

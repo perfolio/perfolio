@@ -1,14 +1,16 @@
-import React, { useMemo } from "react"
-import { Text, Table, Cell, Tooltip, Description } from "@perfolio/ui/components"
-import { format } from "@perfolio/pkg/util/numbers"
 import { useCurrentPorfolioState, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
+import { format } from "@perfolio/pkg/util/numbers"
+import { Cell, Description, Table, Text, Tooltip } from "@perfolio/ui/components"
+import React, { useMemo } from "react"
 
 export interface AssetTableProps {
   aggregation: "absolute" | "relative"
 }
 
-export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
+export const AssetTable: React.FC<AssetTableProps> = ({
+  aggregation,
+}): JSX.Element => {
   const { portfolio } = usePortfolio()
   const { t } = useI18n()
 
@@ -38,13 +40,21 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
   }, [portfolio?.transactions])
 
   const { currentPorfolioState } = useCurrentPorfolioState()
+  console.log({ currentPorfolioState })
   const totalValue = (currentPorfolioState ?? []).reduce(
-    (acc, { value, quantity }) => acc + value * quantity,
+    (acc, { value, quantity }) => acc + (value ?? 0) * quantity,
     0,
   )
 
   return (
-    <Table<"asset" | "chart" | "quantity" | "costPerShare" | "pricePerShare" | "change">
+    <Table<
+      | "asset"
+      | "chart"
+      | "quantity"
+      | "costPerShare"
+      | "pricePerShare"
+      | "change"
+    >
       columns={[
         {
           Header: t("assetTableAssetHeader"),
@@ -90,10 +100,10 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
          */
         .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
         .map((holding) => {
-          const change =
-            aggregation === "absolute"
-              ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
-              : holding.value / costPerShare[holding.asset.id]! - 1
+          const change = aggregation === "absolute"
+            ? (holding.value - costPerShare[holding.asset.id]!)
+              * holding.quantity
+            : holding.value / costPerShare[holding.asset.id]! - 1
 
           const weight = (holding.quantity * holding.value) / totalValue
           return {
@@ -112,7 +122,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                       <div
                         style={{ width: `${weight * 100}%` }}
                         className="flex w-full h-2 mb-4 overflow-hidden rounded bg-primary"
-                      ></div>
+                      >
+                      </div>
                     </div>
                   }
                 >
@@ -123,14 +134,20 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                 </Tooltip>
               </Cell.Cell>
             ),
-            quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
+            quantity: (
+              <Cell.Text align="text-right">
+                {format(holding.quantity)}
+              </Cell.Text>
+            ),
             costPerShare: (
               <Cell.Text align="text-right">
                 {format(costPerShare[holding.asset.id], { suffix: "€" })}
               </Cell.Text>
             ),
             pricePerShare: (
-              <Cell.Text align="text-right">{format(holding.value, { suffix: "€" })}</Cell.Text>
+              <Cell.Text align="text-right">
+                {format(holding.value, { suffix: "€" })}
+              </Cell.Text>
             ),
             change: (
               <Cell.Tag

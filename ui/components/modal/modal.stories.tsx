@@ -1,8 +1,8 @@
+import { XIcon } from "@heroicons/react/outline"
+import { Card } from "../card"
+import Icon from "../icon/icon"
 import { Modal } from "."
 import { ModalProps } from "./modal"
-import { Card } from "../card"
-import { XIcon } from "@heroicons/react/outline"
-import Icon from "../icon/icon"
 export default {
   title: "Modal",
   component: Modal,

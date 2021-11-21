@@ -1,7 +1,7 @@
 import React from "react"
 import { Avatar } from "../../avatar/avatar"
-import { Wrapper } from "./wrapper"
 import { Loading } from "../../loading/loading"
+import { Wrapper } from "./wrapper"
 export interface ProfileProps {
   src: string | undefined
   title: string | undefined | null
@@ -15,7 +15,7 @@ export const Profile: React.FC<ProfileProps> = ({ src, title, subtitle }): JSX.E
         {src ? <Avatar src={src} /> : <Loading />}
         <div>
           <p className="font-medium">{title}</p>
-          <p className="text-xs text-gray-600">{subtitle} </p>
+          <p className="text-xs text-gray-600">{subtitle}</p>
         </div>
       </div>
     </Wrapper>

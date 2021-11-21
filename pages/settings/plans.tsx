@@ -1,16 +1,16 @@
-import React, { useState } from "react"
-import { NextPage, GetStaticProps } from "next"
-import { AppLayout, SideNavbar } from "@perfolio/ui/app"
-import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { AppLayout, SideNavbar } from "@perfolio/ui/app"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
 
-import { useRouter } from "next/router"
-import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"
-import { useUser } from "@perfolio/pkg/hooks"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { useUser } from "@perfolio/pkg/hooks"
+import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"
+import { useRouter } from "next/router"
 
-import { Card } from "@perfolio/ui/components"
 import { CheckCircleIcon } from "@heroicons/react/solid"
+import { Card } from "@perfolio/ui/components"
 type Price = {
   id: string
   value: number
@@ -76,9 +76,9 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
         </div>
         <div className="flex flex-col items-center justify-center h-full p-12 space-y-10 lg:absolute lg:right-0 lg:inset-y-0 lg:w-2/5 2xl:w-1/4 bg-gray-50">
           <div className="flex items-end justify-center">
-            <span className="text-5xl font-bold text-gray-800">{`${
-              prices[selected].value
-            }${getCurrencySymbol(prices[selected].currency)}`}</span>
+            <span className="text-5xl font-bold text-gray-800">
+              {`${prices[selected].value}${getCurrencySymbol(prices[selected].currency)}`}
+            </span>
             <span className="font-semibold text-gray-700 whitespace-nowrap">
               / {prices[selected].interval}
             </span>
@@ -92,7 +92,9 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
                 return
               }
               const res = await fetch(
-                `/api/stripe/checkout?priceId=${prices[selected].id}&customerId=${user.stripeCustomerId}`,
+                `/api/stripe/checkout?priceId=${
+                  prices[selected].id
+                }&customerId=${user.stripeCustomerId}`,
                 {
                   method: "POST",
                 },
@@ -128,7 +130,8 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
               <Card.Header.Title
                 title="Pricing Plans"
                 subtitle={t("setPlanPickPlanText")}
-              ></Card.Header.Title>
+              >
+              </Card.Header.Title>
             </Card.Header>
             <ToggleGroup
               options={[
@@ -142,7 +145,11 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
           </div>
         </Card>
         {products.map((product) => (
-          <ProductCard key={product.id} {...product} selected={selected} />
+          <ProductCard
+            key={product.id}
+            {...product}
+            selected={selected}
+          />
         ))}
       </div>
     </AppLayout>

@@ -1,2 +1,2 @@
-export * from "./mean"
 export * from "./math"
+export * from "./mean"

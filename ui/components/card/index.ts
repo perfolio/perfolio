@@ -1,11 +1,11 @@
-import { Root, RootProps } from "./root"
-import { CardHeaderTitle } from "./header/title"
-import { CardHeader, CardHeaderProps } from "./header"
+import React from "react"
 import { CardContent } from "./content"
 import { CardFooter, CardFooterProps } from "./footer"
-import { CardFooterStatus } from "./footer/status"
 import { CardFooterActions } from "./footer/actions"
-import React from "react"
+import { CardFooterStatus } from "./footer/status"
+import { CardHeader, CardHeaderProps } from "./header"
+import { CardHeaderTitle } from "./header/title"
+import { Root, RootProps } from "./root"
 
 type NestedHeader<P = CardHeaderProps> = React.FC<P> & {
   Title: typeof CardHeaderTitle

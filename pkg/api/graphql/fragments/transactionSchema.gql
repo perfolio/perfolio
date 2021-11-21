@@ -1,8 +1,0 @@
-fragment TransactionSchema on Transaction {
-  id
-  assetId
-  executedAt
-  value
-  volume
-  portfolioId
-}

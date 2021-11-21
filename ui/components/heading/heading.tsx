@@ -1,11 +1,9 @@
-import React from "react"
 import cn from "classnames"
+import React from "react"
 
 export interface HeadingProps {
   /**
    * Render this text as a h1.
-   *
-   *
    */
   h1?: boolean
   h2?: boolean

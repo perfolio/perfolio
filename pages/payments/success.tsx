@@ -1,7 +1,7 @@
-import { NextPage, GetStaticProps } from "next"
-import { useRouter } from "next/router"
-import { useI18n, getTranslations } from "@perfolio/pkg/i18n"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { GetStaticProps, NextPage } from "next"
+import { useRouter } from "next/router"
 
 interface PageProps {
   translations: Record<string, string>

@@ -3,13 +3,13 @@ import "../public/fonts/css/satoshi.css"
 
 import type { AppProps } from "next/app"
 
-import { I18nProvider } from "@perfolio/pkg/i18n"
-import { IdProvider } from "@radix-ui/react-id"
-import { PersistendQueryClient } from "@perfolio/pkg/query-client"
-import { QueryClientProvider } from "react-query"
-import { ToastProvider } from "@perfolio/pkg/toaster"
 import { Auth0Provider } from "@auth0/auth0-react"
+import { I18nProvider } from "@perfolio/pkg/i18n"
+import { PersistendQueryClient } from "@perfolio/pkg/query-client"
+import { ToastProvider } from "@perfolio/pkg/toaster"
 import { PageloadIndicator } from "@perfolio/ui/components"
+import { IdProvider } from "@radix-ui/react-id"
+import { QueryClientProvider } from "react-query"
 
 export default function MyApp({
   Component,

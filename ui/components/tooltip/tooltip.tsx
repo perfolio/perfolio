@@ -1,7 +1,7 @@
-import React from "react"
-import { Root, Trigger, Content, Arrow } from "@radix-ui/react-tooltip"
 import { InformationCircleIcon } from "@heroicons/react/outline"
+import { Arrow, Content, Root, Trigger } from "@radix-ui/react-tooltip"
 import cn from "classnames"
+import React from "react"
 export interface TooltipProps {
   side?: "top" | "right" | "bottom" | "left"
   size?: "sm" | "md" | "lg"

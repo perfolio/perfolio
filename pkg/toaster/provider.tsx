@@ -1,6 +1,6 @@
 import { AnimateSharedLayout } from "framer-motion"
 import React, { createContext, useState } from "react"
-import { ToastProps, Toast } from "./toast"
+import { Toast, ToastProps } from "./toast"
 
 const ERROR_PROVIDER_NOT_USED = new Error("Please wrap your app with the provider first.")
 
@@ -47,9 +47,7 @@ export const ToastProvider: React.FC = ({ children }) => {
       {children}
       <div className="fixed bottom-0 right-0 flex flex-col gap-4 p-8 m-4">
         <AnimateSharedLayout>
-          {toasts.map((props) => (
-            <Toast key={props.id} {...props} />
-          ))}
+          {toasts.map((props) => <Toast key={props.id} {...props} />)}
         </AnimateSharedLayout>
       </div>
       {/* <div className="absolute bottom-0 right-0 flex flex-col p-8 m-4" id="toasterPortal"></div> */}

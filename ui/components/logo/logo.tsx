@@ -20,11 +20,13 @@ export const Logo: React.FC<LogoProps> = ({ withName, imageColor, textColor }): 
         <path d="M247.35 70.671L176.678 0 0 176.678l35.336 35.336L176.678 70.671l35.336 35.336 35.336-35.336zM106.007 212.014l70.671 70.671 176.679-176.678-35.336-35.336-141.343 141.343-35.335-35.336-35.336 35.336z" />
       </svg>
 
-      {withName ? (
-        <div className={`text-lg tracking-tight font-semibold ${textColor}`}>
-          <span>PERFOLIO</span>
-        </div>
-      ) : null}
+      {withName
+        ? (
+          <div className={`text-lg tracking-tight font-semibold ${textColor}`}>
+            <span>PERFOLIO</span>
+          </div>
+        )
+        : null}
     </div>
   )
 }

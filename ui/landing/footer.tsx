@@ -1,10 +1,10 @@
-import React, { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
-import { z } from "zod"
-import Link from "next/link"
-import { Button, Text } from "@perfolio/ui/components"
 import { useI18n } from "@perfolio/pkg/i18n"
+import { Button, Text } from "@perfolio/ui/components"
+import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
+import Link from "next/link"
+import React, { useState } from "react"
+import { z } from "zod"
 import { useSubscribeToNewsletter } from "../../pkg/hooks/mutations/subscribe"
 /* eslint-disable-next-line */
 export interface FooterProps {}
@@ -122,52 +122,53 @@ export const Footer = () => {
             <p className="text-base font-medium tracking-wide text-center text-gray-200 md:text-left">
               {t("footerSubs")}
             </p>
-            {done ? (
-              <Text align="text-center md:text-left" color="text-gray-300">
-                {t("footerSubsDone")}
-              </Text>
-            ) : (
-              <Form
-                ctx={ctx}
-                formError={formError}
-                className="flex flex-col items-end gap-4 mt-4 sm:flex-row"
-              >
-                <Field.Input
-                  hideLabel
-                  placeholder={t("footerSubsPlaceMail")}
-                  name="email"
-                  type="email"
-                  label="email"
-                />
-
-                <Button
-                  loading={submitting}
-                  onClick={() =>
-                    handleSubmit<z.infer<typeof validation>>(
-                      ctx,
-                      async ({ email }) => {
-                        await subscribe
-                          .mutateAsync({ email })
-                          .catch((err) => {
-                            setFormError(err.message)
-                          })
-                          .finally(() => {
-                            setDone(true)
-                          })
-                      },
-                      setSubmitting,
-                      setFormError,
-                    )
-                  }
-                  type="cta"
-                  size="block"
-                  htmlType="submit"
-                  disabled={submitting}
+            {done
+              ? (
+                <Text align="text-center md:text-left" color="text-gray-300">
+                  {t("footerSubsDone")}
+                </Text>
+              )
+              : (
+                <Form
+                  ctx={ctx}
+                  formError={formError}
+                  className="flex flex-col items-end gap-4 mt-4 sm:flex-row"
                 >
-                  {t("footerSubsButton")}
-                </Button>
-              </Form>
-            )}
+                  <Field.Input
+                    hideLabel
+                    placeholder={t("footerSubsPlaceMail")}
+                    name="email"
+                    type="email"
+                    label="email"
+                  />
+
+                  <Button
+                    loading={submitting}
+                    onClick={() =>
+                      handleSubmit<z.infer<typeof validation>>(
+                        ctx,
+                        async ({ email }) => {
+                          await subscribe
+                            .mutateAsync({ email })
+                            .catch((err) => {
+                              setFormError(err.message)
+                            })
+                            .finally(() => {
+                              setDone(true)
+                            })
+                        },
+                        setSubmitting,
+                        setFormError,
+                      )}
+                    type="cta"
+                    size="block"
+                    htmlType="submit"
+                    disabled={submitting}
+                  >
+                    {t("footerSubsButton")}
+                  </Button>
+                </Form>
+              )}
           </div>
         </div>
         <div className="flex flex-col justify-between pt-5 pb-10 border-t border-gray-300 sm:flex-row">

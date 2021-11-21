@@ -1,5 +1,5 @@
-import { Modal as Root, ModalProps } from "./modal"
 import { Close } from "@radix-ui/react-dialog"
+import { Modal as Root, ModalProps } from "./modal"
 
 import React from "react"
 

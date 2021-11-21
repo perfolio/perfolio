@@ -1,12 +1,9 @@
-import { useMutation, useQueryClient } from "react-query"
-import {
-  CreateTransactionMutation,
-  CreateTransactionMutationVariables,
-} from "@perfolio/pkg/api/graphql"
-import { client } from "../client"
-import { USE_PORTFOLIO_HISTORY_QUERY_KEY } from "../queries/usePortfolioHistory"
 import { useAuth0 } from "@auth0/auth0-react"
+import { CreateTransactionMutation, CreateTransactionMutationVariables } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
+import { useMutation, useQueryClient } from "react-query"
+import { client } from "../client"
+import { USE_PORTFOLIO_QUERY_KEY } from "../queries/usePortfolio"
 
 export const useCreateTransaction = () => {
   const { getAccessTokenSilently } = useAuth0()
@@ -23,7 +20,7 @@ export const useCreateTransaction = () => {
     },
     {
       onSuccess: () => {
-        queryClient.resetQueries(USE_PORTFOLIO_HISTORY_QUERY_KEY(portfolioId))
+        queryClient.resetQueries(USE_PORTFOLIO_QUERY_KEY(portfolioId))
       },
     },
   )

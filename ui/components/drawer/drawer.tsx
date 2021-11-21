@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XIcon } from "@heroicons/react/outline"
 import { Button, Heading } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
+import React, { Fragment, useEffect } from "react"
 export interface DrawerProps {
   open: boolean
   setOpen: (b: boolean) => void

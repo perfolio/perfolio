@@ -1,4 +1,4 @@
-import { ReturnsPerAsset, AssetsOverTime } from "./types"
+import { AssetsOverTime, ReturnsPerAsset } from "./types"
 
 /**
  * Catch division by 0
@@ -30,8 +30,9 @@ export const calculateReturnsPerAsset = (assetsOverTime: AssetsOverTime): Return
       } catch {
         yesterday = undefined
       }
-      returns[time]![assetId] =
-        !yesterday || yesterday.value === 0 ? 0 : today.value / yesterday.value - 1
+      returns[time]![assetId] = !yesterday || yesterday.value === 0
+        ? 0
+        : today.value / yesterday.value - 1
       returns[time]![assetId] = calculateReturns(today.value, yesterday?.value ?? 0)
     })
   }

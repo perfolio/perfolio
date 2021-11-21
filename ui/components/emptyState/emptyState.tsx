@@ -1,10 +1,11 @@
 import React from "react"
-import { Controller, LinkControllerProps, ButtonControllerProps } from "../button/controller"
+import { ButtonControllerProps, Controller, LinkControllerProps } from "../button/controller"
 
 import { DefaultEmptyStateStyle, DefaultEmptyStateStyleProps } from "./defaultEmptyStateStyle"
 
-export type EmptyStateProps = (LinkControllerProps | ButtonControllerProps) &
-  DefaultEmptyStateStyleProps
+export type EmptyStateProps =
+  & (LinkControllerProps | ButtonControllerProps)
+  & DefaultEmptyStateStyleProps
 
 export const EmptyState: React.FC<EmptyStateProps> = (props): JSX.Element => {
   return (

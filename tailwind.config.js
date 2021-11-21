@@ -37,7 +37,9 @@ module.exports = {
       },
 
       cta: {
-        DEFAULT: "#3548c8",
+        light: "#FCD34D",
+        DEFAULT: "#F59E0B",
+        dark: "#EA580C",
       },
 
       success: {

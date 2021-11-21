@@ -1,11 +1,11 @@
-import { Stripe } from "stripe"
 import { env } from "@chronark/env"
-import { NextApiRequest, NextApiResponse } from "next"
-import { z } from "zod"
-import { Logger } from "tslog"
 import { newId } from "@perfolio/pkg/id"
-import { PrismaClient, User } from "@perfolio/pkg/integrations/prisma"
+import { PrismaClient, UserModel } from "@perfolio/pkg/integrations/prisma"
 import { HttpError } from "@perfolio/pkg/util/errors"
+import { NextApiRequest, NextApiResponse } from "next"
+import { Stripe } from "stripe"
+import { Logger } from "tslog"
+import { z } from "zod"
 
 const validation = z.object({
   headers: z.object({
@@ -34,7 +34,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const prisma = new PrismaClient()
-    let user: User | null
+    let user: UserModel | null
     user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -56,10 +56,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           items: [
             {
               // Growth subscription
-              price:
-                env.get("NODE_ENV") === "production"
-                  ? "price_1JU4LpG0ZLpKb1P6Szj2jJQr"
-                  : "plan_K9CYicTThbEqNP",
+              price: env.get("NODE_ENV") === "production"
+                ? "price_1JU4LpG0ZLpKb1P6Szj2jJQr"
+                : "plan_K9CYicTThbEqNP",
             },
           ],
         })
@@ -86,7 +85,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           settings: {
             create: {
               defaultCurrency: "EUR",
-              defaultExchangeMic: "xetr",
+              defaultExchangeId: "xetr",
             },
           },
         },

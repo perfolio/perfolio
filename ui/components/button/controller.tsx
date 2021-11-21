@@ -1,5 +1,5 @@
-import React, { MouseEvent } from "react"
 import Link from "next/link"
+import React, { MouseEvent } from "react"
 
 export interface ButtonControllerProps {
   htmlType?: "submit" | "button"
@@ -38,20 +38,22 @@ export function Controller(
   if (isLink(props)) {
     return (
       <Link href={props.href}>
-        {props.newTab ? (
-          <a
-            href={props.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full focus:outline-none"
-          >
-            {props.children}
-          </a>
-        ) : (
-          <a href={props.href} className="w-full focus:outline-none">
-            {props.children}
-          </a>
-        )}
+        {props.newTab
+          ? (
+            <a
+              href={props.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full focus:outline-none"
+            >
+              {props.children}
+            </a>
+          )
+          : (
+            <a href={props.href} className="w-full focus:outline-none">
+              {props.children}
+            </a>
+          )}
       </Link>
     )
   }

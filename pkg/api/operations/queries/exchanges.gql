@@ -1,0 +1,10 @@
+query exchanges {
+  exchanges {
+    __typename
+
+    description
+    region
+    mic
+    suffix
+  }
+}

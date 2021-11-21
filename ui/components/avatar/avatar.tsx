@@ -1,6 +1,6 @@
-import React from "react"
+import { Fallback, Image, Root } from "@radix-ui/react-avatar"
 import cn from "classnames"
-import { Root, Fallback, Image } from "@radix-ui/react-avatar"
+import React from "react"
 
 import { Text } from "../text/text"
 type Size = "xs" | "sm" | "md" | "lg"

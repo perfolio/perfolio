@@ -1,5 +1,5 @@
+import { Content, Overlay, Root, Trigger } from "@radix-ui/react-dialog"
 import React from "react"
-import { Root, Trigger, Overlay, Content } from "@radix-ui/react-dialog"
 export interface ModalProps {
   /**
    * Element that opens the modal on click.

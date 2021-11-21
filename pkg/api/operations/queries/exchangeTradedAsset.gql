@@ -1,0 +1,16 @@
+query exchangeTradedAsset($assetId: ID!) {
+  exchangeTradedAsset(assetId: $assetId) {
+    __typename
+    id
+    ticker
+    logo
+    name
+
+    ... on Stock {
+      ... on Company {
+        sector
+        country
+      }
+    }
+  }
+}

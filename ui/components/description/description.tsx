@@ -1,6 +1,6 @@
-import { Text } from "../text/text"
-import React from "react"
 import cn from "classnames"
+import React from "react"
+import { Text } from "../text/text"
 export interface DescriptionProps {
   title?: React.ReactNode | string
   noCaps?: boolean

@@ -1,34 +1,32 @@
-import React, { useState } from "react"
-import { NextPage, GetStaticProps } from "next"
 import {
-  AppLayout,
-  DiversificationChart,
-  AssetTable,
+  useAbsoluteMean,
+  useAbsoluteTotalHistory,
+  useCurrentAbsoluteValue,
+  usePortfolioHistory,
+  useRelativeMean,
+  useStandardDeviation,
+  useUser,
+} from "@perfolio/pkg/hooks"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { format } from "@perfolio/pkg/util/numbers"
+import {
   ActivityFeed,
-  AssetsOverTimeChart,
-  Main,
-  InlineTotalAssetChart,
   AggregateOptions,
+  AppLayout,
+  AssetsOverTimeChart,
+  AssetTable,
+  DiversificationChart,
+  Main,
   Sidebar,
 } from "@perfolio/ui/app"
 import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import cn from "classnames"
-import { format } from "@perfolio/pkg/util/numbers"
-import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
-import {
-  useRelativePortfolioHistory,
-  useStandardDeviation,
-  useUser,
-  useCurrentAbsoluteValue,
-  useAbsoluteMean,
-  useRelativeMean,
-  useAbsolutePortfolioHistory,
-  usePortfolioHistory,
-} from "@perfolio/pkg/hooks"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
 
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { Time } from "@perfolio/pkg/util/time"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
 
@@ -91,37 +89,34 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const [range, setRange] = useState<Range>("ALL")
   const { user } = useUser()
 
-  const { portfolioHistory } = usePortfolioHistory()
-  const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
-    portfolioHistory,
-    ranges[range],
-  )
-  const { relativePortfolioHistory, isLoading: relativeIsLoading } = useRelativePortfolioHistory(
-    ranges[range],
-  )
-
-  const absoluteChange =
-    absolutePortfolioHistory.length > 0
-      ? currentAbsoluteValue - absolutePortfolioHistory[0].value
-      : 0
-  const relativeChange =
-    relativePortfolioHistory.length > 0
-      ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
-      : 0
+  const { history, isLoading: historyLoading } = usePortfolioHistory({
+    since: ranges[range],
+  })
+  const { absoluteTotal } = useAbsoluteTotalHistory({
+    since: ranges[range],
+  })
+  const absoluteChange = 0
+  const relativeChange = 0
+  // const absoluteChange = aggregatedAbsolutePortfolioHistory.length > 0
+  //   ? currentAbsoluteValue - aggregatedAbsolutePortfolioHistory[0].value
+  //   : 0
+  // const relativeChange = portfolio?.relativeHistory.length > 0
+  //   ? portfolio?.relativeHistory[portfolio?.relativeHistory.length - 1].value - 1
+  //   : 0
 
   const [aggregation, setAggregation] = useState<AggregateOptions>("relative")
 
-  const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
-  const { relativeMean } = useRelativeMean(relativePortfolioHistory)
+  const { absoluteMean } = useAbsoluteMean(absoluteTotal)
+  const { relativeMean } = useRelativeMean(history.relative)
 
   const { standardDeviation: relativeSTD } = useStandardDeviation(
-    relativePortfolioHistory.map(({ value }) => value),
+    history.relative.map(({ value }) => value),
   )
 
   return (
     <AppLayout
       sidebar={
-        <Sidebar aboveFold={<InlineTotalAssetChart />}>
+        <Sidebar>
           <div className="w-full pb-4 md:w-full sm:w-1/2">
             <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
           </div>
@@ -146,9 +141,11 @@ const App: NextPage<PageProps> = ({ translations }) => {
           />
         </Main.Header>
         <Main.Content>
-          {/* {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
+          {
+            /* {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
             <NoTransactionsModal />
-          ) : null} */}
+          ) : null} */
+          }
           <div className="py-4 sm:py-6 md:py-8">
             <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
               <Tooltip
@@ -158,10 +155,11 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
-                        suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
-                      })
-                    }
-                    isLoading={aggregation === "absolute" && absoluteIsLoading}
+                        suffix: getCurrencySymbol(
+                          user?.settings?.defaultCurrency,
+                        ),
+                      })}
+                    isLoading={historyLoading}
                   />
                 }
               >
@@ -172,20 +170,20 @@ const App: NextPage<PageProps> = ({ translations }) => {
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === "absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
+                    label={aggregation === "absolute"
+                      ? t("meanChangeLabel")
+                      : t("meanReturnLabel")}
                     value={aggregation === "absolute" ? absoluteMean : relativeMean}
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                            suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
-                            sign: true,
-                          })
-                        : format(n, { suffix: "%", percent: true, sign: true })
-                    }
-                    isLoading={
-                      (aggregation === "absolute" && absoluteIsLoading) ||
-                      (aggregation === "relative" && relativeIsLoading)
-                    }
+                          suffix: getCurrencySymbol(
+                            user?.settings?.defaultCurrency,
+                          ),
+                          sign: true,
+                        })
+                        : format(n, { suffix: "%", percent: true, sign: true })}
+                    isLoading={historyLoading}
                   />
                 }
               >
@@ -194,10 +192,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Tooltip
                 trigger={
                   <KPI
-                    isLoading={
-                      (aggregation === "absolute" && absoluteIsLoading) ||
-                      (aggregation === "relative" && relativeIsLoading)
-                    }
+                    isLoading={historyLoading}
                     label={t("stdDevLabel")}
                     value={relativeSTD}
                     format={(n) => format(n)}
@@ -211,19 +206,19 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   <KPI
                     label={t("changeLabel")}
                     enableColor
-                    isLoading={
-                      (aggregation === "absolute" && absoluteIsLoading) ||
-                      (aggregation === "relative" && relativeIsLoading)
-                    }
-                    value={aggregation === "absolute" ? absoluteChange : relativeChange}
+                    isLoading={historyLoading}
+                    value={aggregation === "absolute"
+                      ? absoluteChange
+                      : relativeChange}
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                            suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
-                            sign: true,
-                          })
-                        : format(n, { suffix: "%", percent: true, sign: true })
-                    }
+                          suffix: getCurrencySymbol(
+                            user?.settings?.defaultCurrency,
+                          ),
+                          sign: true,
+                        })
+                        : format(n, { suffix: "%", percent: true, sign: true })}
                   />
                 }
               >
@@ -248,7 +243,10 @@ const App: NextPage<PageProps> = ({ translations }) => {
                 setSelected={setRange}
               />
             </div>
-            <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
+            <AssetsOverTimeChart
+              aggregate={aggregation}
+              since={ranges[range]}
+            />
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">

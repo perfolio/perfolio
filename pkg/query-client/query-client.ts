@@ -1,7 +1,7 @@
-import { QueryClient } from "react-query"
-import { persistQueryClient } from "react-query/persistQueryClient-experimental"
-import { createWebStoragePersistor } from "react-query/createWebStoragePersistor-experimental"
 import { env } from "@chronark/env"
+import { QueryClient } from "react-query"
+import { createWebStoragePersistor } from "react-query/createWebStoragePersistor-experimental"
+import { persistQueryClient } from "react-query/persistQueryClient-experimental"
 export const PersistendQueryClient = (): QueryClient => {
   const queryClient = new QueryClient({
     defaultOptions: {

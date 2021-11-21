@@ -1,16 +1,18 @@
-import React, { useState } from "react"
-import { NextPage, GetStaticProps } from "next"
-import { useForm } from "react-hook-form"
-import { AppLayout, SideNavbar } from "@perfolio/ui/app"
-import { z } from "zod"
-import { Button, ButtonType } from "@perfolio/ui/components"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useUser, useExchanges, useUpdateSettings } from "@perfolio/pkg/hooks"
+import { useExchanges, useUpdateSettings, useUser } from "@perfolio/pkg/hooks"
+import { AppLayout, SideNavbar } from "@perfolio/ui/app"
+import { Button, ButtonType } from "@perfolio/ui/components"
 import { Card } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit } from "@perfolio/ui/form"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
+import { CheckIcon } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useToaster } from "@perfolio/pkg/toaster"
 
 interface SettingProps {
   validation: z.AnyZodObject
@@ -57,8 +59,12 @@ const Setting: React.FC<SettingProps> = ({
             // eslint-disable-next-line
             // @ts-ignore
             onClick={() =>
-              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
-            }
+              handleSubmit<z.infer<typeof validation>>(
+                ctx,
+                onSubmit,
+                setSubmitting,
+                setFormError,
+              )}
             type={button?.type ?? "primary"}
             htmlType="submit"
             disabled={ctx.formState.isSubmitting}
@@ -82,19 +88,31 @@ interface PageProps {
 const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { user } = useUser()
+  console.log({ user })
 
   const { exchanges } = useExchanges()
+  console.log({ exchanges })
+  const toast = useToaster()
 
   /**
    * The current defaultExchange
    */
 
-  const currencyValidation = z.object({ defaultCurrency: z.string().min(3).max(3) })
+  const currencyValidation = z.object({
+    defaultCurrency: z.string().min(3).max(3),
+  })
 
   const updateSettings = useUpdateSettings()
-  const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
-    await updateSettings.mutateAsync({
-      settings: { defaultCurrency: values.defaultCurrency as "EUR" },
+  const onCurrencySubmit = async (
+    values: z.infer<typeof currencyValidation>,
+  ): Promise<void> => {
+    const res = await updateSettings.mutateAsync({
+      settings: { defaultCurrency: values.defaultCurrency },
+    })
+    toast.addToast({
+      icon: <CheckIcon />,
+      title: "Success",
+      content: `Updated currency to ${res.updateSettings.defaultCurrency}`,
     })
   }
 
@@ -102,15 +120,26 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     defaultRegion: z.string(),
     defaultExchange: z.string(),
   })
-  const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
-    await updateSettings.mutateAsync({
+  const onExchangeSubmit = async (
+    values: z.infer<typeof exchangeValidation>,
+  ): Promise<void> => {
+    const res = await updateSettings.mutateAsync({
       settings: {
-        defaultExchange: exchanges?.find((e) => e.name === values.defaultExchange)?.mic,
+        defaultExchangeId: exchanges?.find(
+          (e) => e.description === values.defaultExchange,
+        )?.mic,
       },
+    })
+    toast.addToast({
+      icon: <CheckIcon />,
+      title: "Success",
+      content: `Updated default exchange to ${res.updateSettings.defaultExchange.mic}`,
     })
   }
 
-  const [region, setRegion] = useState<string>(user?.settings?.defaultExchange?.region ?? "")
+  const [region, setRegion] = useState<string>(
+    user?.settings?.defaultExchange?.region ?? "",
+  )
 
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
@@ -119,7 +148,9 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
           title={t("setStocksCurrencyTitle")}
           footer={t("setStocksCurrencyFooter")}
           validation={currencyValidation}
-          onSubmit={onCurrencySubmit as (values: Record<string, string | number>) => Promise<void>}
+          onSubmit={onCurrencySubmit as (
+            values: Record<string, string | number>,
+          ) => Promise<void>}
         >
           <Field.Input
             label={t("setStocksCurrencyLabel")}
@@ -133,7 +164,9 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
           title={t("setStocksStockExTitle")}
           footer={t("setStocksStockExFooter")}
           validation={exchangeValidation}
-          onSubmit={onExchangeSubmit as (values: Record<string, string | number>) => Promise<void>}
+          onSubmit={onExchangeSubmit as (
+            values: Record<string, string | number>,
+          ) => Promise<void>}
         >
           <div className="items-center gap-4 md:flex">
             <Field.Select
@@ -144,10 +177,12 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
               defaultValue={user?.settings?.defaultExchange.region}
             />
             <Field.Select
-              options={exchanges?.filter((e) => e.region === region).map((e) => e.name) ?? []}
+              options={exchanges
+                ?.filter((e) => e.region === region)
+                .map((e) => e.description) ?? []}
               label={t("setStocksStockExSelect")}
               name="defaultExchange"
-              defaultValue={user?.settings?.defaultExchange?.name ?? ""}
+              defaultValue={user?.settings?.defaultExchange?.description ?? ""}
             />
           </div>
         </Setting>

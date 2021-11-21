@@ -1,0 +1,19 @@
+query user($userId: ID!) {
+  user(userId: $userId) {
+    __typename
+    id
+    stripeCustomerId
+    settings {
+      __typename
+
+      defaultCurrency
+      defaultExchange {
+        __typename
+        description
+        suffix
+        mic
+        region
+      }
+    }
+  }
+}

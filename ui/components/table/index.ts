@@ -1,2 +1,2 @@
-export * from "./table"
 export * from "./cells"
+export * from "./table"

@@ -1,10 +1,9 @@
-export { PrismaClient } from "@prisma/client"
+export { AssetType, PrismaClient } from "@prisma/client"
 export type {
-  Transaction,
-  User,
-  Settings,
-  Portfolio,
-  Currency,
-  Newsletter,
-  ExchangeTradedAsset,
+  ExchangeTradedAsset as ExchangeTradedAssetModel,
+  Newsletter as NewsletterModel,
+  Portfolio as PortfolioModel,
+  Settings as SettingsModel,
+  Transaction as TransactionModel,
+  User as UserModel,
 } from "@prisma/client"

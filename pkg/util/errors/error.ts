@@ -11,7 +11,6 @@ export interface ErrorOptions {
    * Provide a function to render custom user facing errors for different
    * languages or whatever you want.
    *
-   *
    * The result will be returned by `error.publicMessage`
    *
    * @param errorCode Receives the error code as argument.

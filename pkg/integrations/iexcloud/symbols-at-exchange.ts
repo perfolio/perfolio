@@ -25,7 +25,6 @@ export const getSymbolsAtExchangeRequestValidation = z.array(
  */
 export type GetSymbolsAtExchangeResponse = z.infer<typeof getSymbolsAtExchangeRequestValidation>
 /**
- *
  * @param exchange - The iex internal identifier. not MIC
  */
 export async function getSymbolsAtExchange(

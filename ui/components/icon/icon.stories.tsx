@@ -1,5 +1,5 @@
-import { Icon, IconProps } from "./icon"
 import { XIcon } from "@heroicons/react/outline"
+import { Icon, IconProps } from "./icon"
 export default {
   title: "Icon",
   component: Icon,

@@ -40,7 +40,6 @@ export function largestTriangle(data: Point[], threshold: number): Point[] {
   }
 
   /**
-   *
    * Split the data across all buckets.
    * The first bucket contains the first datapoint and the last bucket the last datapoint.
    * The rest is split evenly

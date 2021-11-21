@@ -1,6 +1,6 @@
 export * from "./avatar"
-export * from "./card"
 export * from "./button"
+export * from "./card"
 export * from "./confirmation"
 export * from "./description"
 export * from "./drawer"

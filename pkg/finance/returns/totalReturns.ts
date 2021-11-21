@@ -1,4 +1,4 @@
-import { Weights, ReturnsPerAsset, ValueAtTime } from "./types"
+import { ReturnsPerAsset, ValueAtTime, Weights } from "./types"
 
 /**
  * @webersni help :D

@@ -1,27 +1,38 @@
 import React, { useState } from "react"
 import { z } from "zod"
 
-import { Button, Description } from "@perfolio/ui/components"
-import { Main, AppLayout, Sidebar, ActivityFeed } from "@perfolio/ui/app"
-import { Time } from "@perfolio/pkg/util/time"
-import { NextPage, GetStaticProps } from "next"
-import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
-import Link from "next/link"
-import { Asset } from "@perfolio/pkg/api/graphql"
-import { CheckIcon } from "@heroicons/react/outline"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { CheckIcon } from "@heroicons/react/outline"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Asset } from "@perfolio/pkg/api"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { Time } from "@perfolio/pkg/util/time"
+import { AppLayout, Main, Sidebar } from "@perfolio/ui/app"
+import { Button, Description } from "@perfolio/ui/components"
+import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
+import { GetStaticProps, NextPage } from "next"
+import Link from "next/link"
 
-import { useUser, useCreateTransaction, usePortfolio } from "@perfolio/pkg/hooks"
+import {
+  useCreateExchangeTradedAsset,
+  useCreateTransaction,
+  usePortfolio,
+  useUser,
+} from "@perfolio/pkg/hooks"
 import { useToaster } from "@perfolio/pkg/toaster"
 import { useRouter } from "next/router"
 const validation = z.object({
+  assetId: z.string(),
+  volume: z.string().transform((x: string) => parseFloat(x)),
+  value: z.string().transform((x: string) => parseFloat(x)),
+  executedAt: z
+    .string()
+    .transform((x: string) => Time.fromDate(new Date(x)).unix()),
+})
+
+const createAssetValidation = z.object({
   isin: z.string(),
-  volume: z.string().transform((x: string) => parseInt(x)),
-  value: z.string().transform((x: string) => parseInt(x)),
-  executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
 })
 
 /**
@@ -38,14 +49,18 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   const { addToast } = useToaster()
   const router = useRouter()
   const portfolioId = router.query["portfolioId"] as string
-  const ctx = useForm<z.infer<typeof validation>>({
+  const newTransactionContext = useForm<z.infer<typeof validation>>({
     mode: "onBlur",
     resolver: zodResolver(validation),
   })
+  const createAssetContext = useForm<z.infer<typeof createAssetValidation>>({
+    mode: "onBlur",
+    resolver: zodResolver(createAssetValidation),
+  })
+  const createExchangeTradedAsset = useCreateExchangeTradedAsset()
   const createTransaction = useCreateTransaction()
   const { portfolio } = usePortfolio()
   const uniqueAssets: Record<string, Asset> = {}
-
   ;(portfolio?.transactions ?? [])
     .sort((a, b) => b.executedAt - a.executedAt)
     .forEach((tx) => {
@@ -53,14 +68,56 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
         uniqueAssets[tx.asset.id] = tx.asset as Asset
       }
     })
-  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(
+    null,
+  )
   const [submitting, setSubmitting] = useState(false)
 
   return (
     <AppLayout
       sidebar={
         <Sidebar>
-          <ActivityFeed />
+          <Form
+            ctx={createAssetContext}
+            formError={formError}
+            className="grid w-full grid-cols-1 gap-8 md:gap-10 lg:gap-12"
+          >
+            <Field.Input
+              name="isin"
+              label="Add new asset by isin"
+              type="text"
+            />
+
+            <Button
+              loading={submitting}
+              onClick={() =>
+                handleSubmit<z.infer<typeof createAssetValidation>>(
+                  createAssetContext,
+                  async ({ isin }) => {
+                    await createExchangeTradedAsset
+                      .mutateAsync({ isin })
+                      .catch((err) => {
+                        setFormError(
+                          t("transNewFormError") + `${err.toString()}`,
+                        )
+                      })
+                    addToast({
+                      icon: <CheckIcon />,
+                      role: "info",
+                      title: "Asset added",
+                      content: `It will be available in the search in a few minutes`,
+                      ttl: 30,
+                    })
+                  },
+                  setSubmitting,
+                  setFormError,
+                )}
+              size="block"
+              type="secondary"
+            >
+              Add asset
+            </Button>
+          </Form>
         </Sidebar>
       }
     >
@@ -72,18 +129,20 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
           <div className="grid grid-cols-1 gap-8 divide-y divide-gray-200 md:gap-10 lg:gap-12 lg:divide-x lg:divide-y-0 lg:grid-cols-1">
             <div className="w-full">
               <Form
-                ctx={ctx}
+                ctx={newTransactionContext}
                 formError={formError}
                 className="grid w-full grid-cols-1 gap-8 md:gap-10 lg:gap-12"
               >
                 <Field.AutoCompleteSelect
-                  name="isin"
+                  name="assetId"
                   label={t("transNewAssetLabel")}
                   help={
                     <Description title={t("transNewFieldDescrTitle")}>
                       {t("transNewFieldDescr")}
                       <Link href="/settings/stocks">
-                        <a className="underline text-info-400">{t("transNewFieldDescrLink")}</a>
+                        <a className="underline text-info-400">
+                          {t("transNewFieldDescrLink")}
+                        </a>
                       </Link>
                     </Description>
                   }
@@ -121,34 +180,39 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   loading={submitting}
                   onClick={() =>
                     handleSubmit<z.infer<typeof validation>>(
-                      ctx,
-                      async ({ isin, volume, value, executedAt }) => {
+                      newTransactionContext,
+                      async ({ assetId, volume, value, executedAt }) => {
                         const transaction = {
                           portfolioId,
                           volume: Number(volume),
                           value: Number(value),
-                          executedAt: Time.fromString(executedAt as unknown as string).unix(),
-                          assetId: isin,
+                          executedAt: Time.fromString(
+                            executedAt as unknown as string,
+                          ).unix(),
+                          assetId: assetId,
+                          mic: user?.settings?.defaultExchange.mic,
                         }
-                        await createTransaction.mutateAsync({ transaction }).catch((err) => {
-                          setFormError(t("transNewFormError") + `${err.toString()}`)
-                        })
+                        await createTransaction
+                          .mutateAsync({ transaction })
+                          .catch((err) => {
+                            setFormError(
+                              t("transNewFormError") + `${err.toString()}`,
+                            )
+                          })
                         addToast({
                           icon: <CheckIcon />,
                           role: "info",
                           title: t("transNewTransAdded"),
                           content: `You ${
                             volume > 0 ? "bought" : "sold"
-                          } ${volume} shares of ${isin}`,
+                          } ${volume} shares of ${assetId}`,
                         })
                       },
                       setSubmitting,
                       setFormError,
-                    )
-                  }
+                    )}
                   size="block"
                   type="primary"
-                  htmlType="submit"
                 >
                   {t("transNewAddTrans")}
                 </Button>

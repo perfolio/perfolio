@@ -1,9 +1,9 @@
+import { ExclamationCircleIcon } from "@heroicons/react/outline"
+import { Tooltip } from "@perfolio/ui/components"
+import classNames from "classnames"
+import cn from "classnames"
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import classNames from "classnames"
-import { ExclamationCircleIcon } from "@heroicons/react/outline"
-import cn from "classnames"
-import { Tooltip } from "@perfolio/ui/components"
 
 type TextAlignment = "left" | "center" | "right"
 
@@ -74,13 +74,15 @@ export const Input: React.FC<InputProps> = ({
         {help ? <Tooltip side="bottom">{help}</Tooltip> : null}
       </label>
       <div className="relative ">
-        {iconLeft ? (
-          <div className="absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-l pointer-events-none">
-            <div className="flex items-center justify-center w-10 h-10 overflow-hidden rounded-l">
-              <div className="w-8 h-8 p-1 border-r">{iconLeft}</div>
+        {iconLeft
+          ? (
+            <div className="absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-l pointer-events-none">
+              <div className="flex items-center justify-center w-10 h-10 overflow-hidden rounded-l">
+                <div className="w-8 h-8 p-1 border-r">{iconLeft}</div>
+              </div>
             </div>
-          </div>
-        ) : null}
+          )
+          : null}
         <input
           id={name}
           disabled={disabled || isSubmitting}
@@ -104,14 +106,16 @@ export const Input: React.FC<InputProps> = ({
         />
       </div>
 
-      {error ? (
-        <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error">
-          <ExclamationCircleIcon className="w-4 h-4" />
-          <p>
-            <span className="font-semibold">Error:</span> {error}
-          </p>
-        </div>
-      ) : null}
+      {error
+        ? (
+          <div className="flex items-center pt-2 pb-4 space-x-1 text-sm text-error">
+            <ExclamationCircleIcon className="w-4 h-4" />
+            <p>
+              <span className="font-semibold">Error:</span> {error}
+            </p>
+          </div>
+        )
+        : null}
     </div>
   )
 }

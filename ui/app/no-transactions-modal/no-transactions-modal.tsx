@@ -1,6 +1,6 @@
-import React from "react"
-import { Button, Modal, Card, Text } from "@perfolio/ui/components"
 import { useI18n } from "@perfolio/pkg/i18n"
+import { Button, Card, Modal, Text } from "@perfolio/ui/components"
+import React from "react"
 
 /**
  * Force the user to add a transaction

@@ -1,5 +1,5 @@
-import { createHash } from "crypto"
 import { env } from "@chronark/env"
+import { createHash } from "crypto"
 export class Key {
   public readonly parameters: string[] = []
   public readonly environment: string
@@ -62,7 +62,7 @@ export class Key {
   }
 
   public toString(): string {
-    return [this.environment, this.version, ...this.parameters].join(":")
+    return ["v3", this.environment, this.version, ...this.parameters].join(":")
   }
 }
 

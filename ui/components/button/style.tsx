@@ -1,5 +1,5 @@
-import React from "react"
 import { Loading } from "@perfolio/ui/components"
+import React from "react"
 
 import cn from "classnames"
 
@@ -75,7 +75,7 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
             type === "primary",
           "bg-white text-gray-900 border-gray-900 hover:bg-black hover:text-gray-50":
             type === "secondary",
-          "bg-gradient-to-tr from-cta to-secondary text-gray-50 hover:from-black hover:to-black shadow-cta border-transparent hover:border-white":
+          "bg-gradient-to-tr from-primary to-secondary text-gray-50 hover:from-black hover:to-black shadow-cta border-transparent hover:border-white":
             type === "cta",
           "text-gray-900  hover:text-primary border-0 shadow-none hover:shadow-none":
             type === "plain",

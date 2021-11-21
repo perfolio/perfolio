@@ -1,5 +1,5 @@
+import { Avatar, Loading, Text } from "@perfolio/ui/components"
 import React from "react"
-import { Text, Avatar, Loading } from "@perfolio/ui/components"
 export interface ProfileProps {
   image?: string | null
   title?: string | null

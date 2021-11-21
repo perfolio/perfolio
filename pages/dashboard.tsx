@@ -1,14 +1,5 @@
-import { NextPage, GetStaticProps } from "next"
-import { usePortfolios } from "@perfolio/pkg/hooks"
-import { AppLayout } from "@perfolio/ui/app"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
-import { Card, Tooltip, Text, Icon } from "@perfolio/ui/components"
-import { Button, Heading } from "@perfolio/ui/components"
-import React, { useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
-import { Field, Form, useForm, handleSubmit } from "@perfolio/ui/form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Popover } from "@headlessui/react"
 import {
   DocumentAddIcon,
   DotsVerticalIcon,
@@ -16,10 +7,19 @@ import {
   TrashIcon,
   XIcon,
 } from "@heroicons/react/outline"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { usePortfolios } from "@perfolio/pkg/hooks"
+import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { AppLayout } from "@perfolio/ui/app"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
+import { Card, Icon, Text, Tooltip } from "@perfolio/ui/components"
+import { Button, Heading } from "@perfolio/ui/components"
 import { Confirmation } from "@perfolio/ui/components"
-import { Popover } from "@headlessui/react"
 import { EmptyState } from "@perfolio/ui/components/emptyState"
+import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
+import { GetStaticProps, NextPage } from "next"
+import React, { useState } from "react"
+import { z } from "zod"
 
 const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
   id,
@@ -57,9 +57,8 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
             setTimeout(() => {
               resolve()
               alert("Hello")
-            }, 2000),
-          )
-        }
+            }, 2000)
+          )}
       >
         <div className="space-y-4">
           <div className="justify-center hidden w-full text-center md:flex ">
@@ -80,33 +79,35 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
       <Card>
         <Card.Header>
           <div className="flex items-center w-full h-12">
-            {editMode ? (
-              <Form
-                ctx={ctx}
-                formError={formError}
-                className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
-              >
-                <Field.Input
-                  name="title"
-                  type="text"
-                  label="Title"
-                  hideLabel={true}
-                  autoFocus={true}
-                  defaultValue={name}
-                  textAlignment="left"
-                />
-              </Form>
-            ) : (
-              <Tooltip
-                trigger={
-                  <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
-                    <Card.Header.Title title={name} />
-                  </button>
-                }
-              >
-                <Text>Double click the title to edit</Text>
-              </Tooltip>
-            )}
+            {editMode
+              ? (
+                <Form
+                  ctx={ctx}
+                  formError={formError}
+                  className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
+                >
+                  <Field.Input
+                    name="title"
+                    type="text"
+                    label="Title"
+                    hideLabel={true}
+                    autoFocus={true}
+                    defaultValue={name}
+                    textAlignment="left"
+                  />
+                </Form>
+              )
+              : (
+                <Tooltip
+                  trigger={
+                    <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
+                      <Card.Header.Title title={name} />
+                    </button>
+                  }
+                >
+                  <Text>Double click the title to edit</Text>
+                </Tooltip>
+              )}
           </div>
           <div>
             <div>
@@ -166,47 +167,14 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
         </Card.Content>
         <Card.Footer>
           <div className="block w-full space-y-4 sm:hidden">
-            {editMode ? (
-              <>
-                <Button type="secondary" size="block" onClick={() => setEditMode(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  size="block"
-                  loading={submitting}
-                  onClick={() =>
-                    handleSubmit<z.infer<typeof validation>>(
-                      ctx,
-                      async () => {
-                        await new Promise((resolve) => setTimeout(resolve, 1000))
-                        setEditMode(false)
-                      },
-                      setSubmitting,
-                      setFormError,
-                    )
-                  }
-                  type="primary"
-                  htmlType="submit"
-                  disabled={submitting}
-                >
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button size="block" href={`/portfolio/${id}`}>
-                Go to portfolio
-              </Button>
-            )}
-          </div>
-          <div className="items-center justify-between hidden sm:flex sm:w-full">
-            <Card.Footer.Status>{primary ? <Text>Primary</Text> : null}</Card.Footer.Status>
-            <Card.Footer.Actions>
-              {editMode ? (
+            {editMode
+              ? (
                 <>
-                  <Button type="secondary" htmlType="button" onClick={() => setEditMode(false)}>
+                  <Button type="secondary" size="block" onClick={() => setEditMode(false)}>
                     Cancel
                   </Button>
                   <Button
+                    size="block"
                     loading={submitting}
                     onClick={() =>
                       handleSubmit<z.infer<typeof validation>>(
@@ -217,21 +185,56 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
                         },
                         setSubmitting,
                         setFormError,
-                      )
-                    }
+                      )}
                     type="primary"
-                    size="md"
                     htmlType="submit"
                     disabled={submitting}
                   >
                     Save
                   </Button>
                 </>
-              ) : (
-                <>
-                  <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
-                </>
+              )
+              : (
+                <Button size="block" href={`/portfolio/${id}`}>
+                  Go to portfolio
+                </Button>
               )}
+          </div>
+          <div className="items-center justify-between hidden sm:flex sm:w-full">
+            <Card.Footer.Status>{primary ? <Text>Primary</Text> : null}</Card.Footer.Status>
+            <Card.Footer.Actions>
+              {editMode
+                ? (
+                  <>
+                    <Button type="secondary" htmlType="button" onClick={() => setEditMode(false)}>
+                      Cancel
+                    </Button>
+                    <Button
+                      loading={submitting}
+                      onClick={() =>
+                        handleSubmit<z.infer<typeof validation>>(
+                          ctx,
+                          async () => {
+                            await new Promise((resolve) => setTimeout(resolve, 1000))
+                            setEditMode(false)
+                          },
+                          setSubmitting,
+                          setFormError,
+                        )}
+                      type="primary"
+                      size="md"
+                      htmlType="submit"
+                      disabled={submitting}
+                    >
+                      Save
+                    </Button>
+                  </>
+                )
+                : (
+                  <>
+                    <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+                  </>
+                )}
             </Card.Footer.Actions>
           </div>
         </Card.Footer>
@@ -250,13 +253,16 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
   return (
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
-        <Card>
+        <Heading h2 color="text-gray-50">Your portfolios</Heading>
+        {
+          /* <Card>
           <div className="flex flex-col items-center p-4 my-4 space-y-6 text-center sm:p-8 sm:my-8">
             <Card.Header>
               <Card.Header.Title title="Your portfolios"></Card.Header.Title>
             </Card.Header>
           </div>
-        </Card>
+        </Card> */
+        }
         {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
           <PortfolioCard key={p.id} {...p} />
         ))}

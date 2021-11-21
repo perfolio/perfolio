@@ -36,7 +36,7 @@ export class Time {
     return Time.fromDate(new Date(s))
   }
 
-  /**.
+  /** .
    * Pads times with leading zeros
    *
    * @returns 2020 01 05

@@ -1,10 +1,7 @@
-import { useQuery } from "react-query"
-import {
-  ExchangeTradedAssetQuery,
-  ExchangeTradedAssetQueryVariables,
-} from "@perfolio/pkg/api/graphql"
-import { client } from "../client"
 import { useAuth0 } from "@auth0/auth0-react"
+import { ExchangeTradedAssetQuery, ExchangeTradedAssetQueryVariables } from "@perfolio/pkg/api"
+import { useQuery } from "react-query"
+import { client } from "../client"
 
 export const useExchangeTradedAsset = (variables: ExchangeTradedAssetQueryVariables) => {
   const { getAccessTokenSilently } = useAuth0()

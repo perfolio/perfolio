@@ -1,18 +1,17 @@
-import React from "react"
-import Image from "next/image"
-import { NextPage, GetStaticProps } from "next"
 import {
-  Navbar,
-  Member,
   Feature,
+  Footer,
+  HeroSection,
+  Member,
+  Navbar,
+  Price,
   Section,
   SectionTitle,
-  HeroSection,
-  Footer,
-  Price,
 } from "@perfolio/ui/landing"
+import { GetStaticProps, NextPage } from "next"
+import Image from "next/image"
+import React from "react"
 
-import { Text } from "@perfolio/ui/components"
 import {
   ChartSquareBarIcon,
   CreditCardIcon,
@@ -22,6 +21,7 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/outline"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { Text } from "@perfolio/ui/components"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
@@ -79,7 +79,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                     icon={f.icon}
                     title={f.title}
                     description={f.description}
-                  ></Feature>
+                  >
+                  </Feature>
                 )
               })}
             </div>
@@ -107,7 +108,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                   icon={f.icon}
                   title={f.title}
                   description={f.description}
-                ></Feature>
+                >
+                </Feature>
               ))}
             </div>
           </div>

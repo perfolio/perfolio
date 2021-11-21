@@ -1,27 +1,33 @@
-import { useQuery } from "react-query"
-import { PortfolioHistoryQuery } from "@perfolio/pkg/api/graphql"
-import { client } from "../client"
 import { useAuth0 } from "@auth0/auth0-react"
+import { PortfolioHistoryQuery } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
-export const USE_PORTFOLIO_HISTORY_QUERY_KEY = (portfolioId: string) =>
-  `USE_PORTFOLIO_HISTORY_QUERY_KEY_${portfolioId}`
+import { useQuery } from "react-query"
+import { client } from "../client"
 
-export const usePortfolioHistory = (portfolioId?: string) => {
+export const usePortfolioHistory = (opts?: {
+  portfolioId?: string
+  since?: number
+}) => {
   const { getAccessTokenSilently } = useAuth0()
   const router = useRouter()
-  if (!portfolioId) {
-    portfolioId = router.query["portfolioId"] as string
-  }
+  const portfolioId = opts?.portfolioId ?? (router.query["portfolioId"] as string)
   const { data, ...meta } = useQuery<PortfolioHistoryQuery, Error>(
-    [USE_PORTFOLIO_HISTORY_QUERY_KEY(portfolioId)],
-    async () => {
-      const token = await getAccessTokenSilently()
-      return await client(token).portfolioHistory({ portfolioId: portfolioId! })
-    },
+    ["PORTFOLIO", portfolioId, "HISTORY", opts?.since],
+    async () =>
+      client(await getAccessTokenSilently()).portfolioHistory({
+        portfolioId,
+        since: opts?.since,
+      }),
     {
       enabled: !!portfolioId,
     },
   )
 
-  return { portfolioHistory: data?.portfolio?.absoluteHistory ?? [], ...meta }
+  return {
+    history: {
+      relative: data?.portfolio?.relativeHistory ?? [],
+      absolute: data?.portfolio?.absoluteHistory ?? [],
+    },
+    ...meta,
+  }
 }

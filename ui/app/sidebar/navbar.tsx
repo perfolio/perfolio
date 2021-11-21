@@ -1,8 +1,8 @@
-import React from "react"
+import { useI18n } from "@perfolio/pkg/i18n"
+import cn from "classnames"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import cn from "classnames"
-import { useI18n } from "@perfolio/pkg/i18n"
+import React from "react"
 export const SideNavbar: React.FC = (): JSX.Element => {
   const router = useRouter()
   const { t } = useI18n()

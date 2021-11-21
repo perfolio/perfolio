@@ -1,8 +1,8 @@
-import React from "react"
-import { DesktopNavbar, MobileNavbar } from "../navbar"
-import { ChartSquareBarIcon, PlusIcon, BookOpenIcon } from "@heroicons/react/outline"
+import { BookOpenIcon, ChartSquareBarIcon, PlusIcon } from "@heroicons/react/outline"
 import { useI18n } from "@perfolio/pkg/i18n"
 import { useRouter } from "next/router"
+import React from "react"
+import { DesktopNavbar, MobileNavbar } from "../navbar"
 import { NavigationItem } from "../navbar/types"
 
 export const Header: React.FC = (): JSX.Element => {
