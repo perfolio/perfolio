@@ -49,7 +49,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
   return (
     <Table<
       | "asset"
-      | "chart"
+      | "weight"
       | "quantity"
       | "costPerShare"
       | "pricePerShare"
@@ -63,7 +63,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
         },
         {
           Header: t("assetTableWeightHeader"),
-          accessor: "chart",
+          accessor: "weight",
         },
         {
           Header: t("assetTableQuantHeader"),
@@ -114,16 +114,16 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                 subtitle={holding.asset.ticker}
               />
             ),
-            chart: (
+            weight: (
               <Cell.Cell>
                 <Tooltip
                   trigger={
                     <div className="flex h-2 overflow-hidden rounded bg-primary-light">
-                      <div
+                      <span
                         style={{ width: `${weight * 100}%` }}
                         className="flex w-full h-2 mb-4 overflow-hidden rounded bg-primary"
                       >
-                      </div>
+                      </span>
                     </div>
                   }
                 >
