@@ -29,16 +29,16 @@ export default gql `
     # """
     transactions: [Transaction!]!
 
-    # """
-    # Return an index for the performance of the users portfolio
-    # """
-    # relativeHistory("unix timestamp where to begin calculation" since: Int): [ValueAtTime!]!
+    """
+    Return an index for the performance of the users portfolio
+    """
+    relativeHistory("unix timestamp where to begin calculation" since: Int): [ValueAtTime!]!
 
     """
     Returns a history for each asset. This is not the absolute asset value but rather what
     each asset is worth at each point in time at the given exchange
     """
-    absoluteHistory: [AbsoluteAssetHistory!]!
+    absoluteHistory("unix timestamp where to begin calculation" since: Int): [AbsoluteAssetHistory!]!
   }
 
   input CreatePortfolio {
@@ -166,7 +166,6 @@ export default gql `
       The portfolio' unique id
       """
       portfolioId: ID!
-      withHistory: Boolean!
     ): Portfolio
   }
 

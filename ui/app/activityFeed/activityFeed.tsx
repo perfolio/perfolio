@@ -39,7 +39,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const { portfolio } = usePortfolio({ withHistory: false })
+  const { portfolio } = usePortfolio({ withHistorySince: false })
   const { t } = useI18n()
   const last5Transactions = portfolio?.transactions
     ? [...portfolio?.transactions]

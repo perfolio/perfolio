@@ -8,8 +8,11 @@ export interface AssetTableProps {
   aggregation: "absolute" | "relative"
 }
 
-export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const { portfolio } = usePortfolio({ withHistory: true })
+export const AssetTable: React.FC<AssetTableProps> = ({
+  aggregation,
+}): JSX.Element => {
+  const { portfolio } = usePortfolio()
+  console.log({ portfolio })
   const { t } = useI18n()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
@@ -39,12 +42,19 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
 
   const { currentPorfolioState } = useCurrentPorfolioState()
   const totalValue = (currentPorfolioState ?? []).reduce(
-    (acc, { value, quantity }) => acc + value * quantity,
+    (acc, { value, quantity }) => acc + (value ?? 0) * quantity,
     0,
   )
 
   return (
-    <Table<"asset" | "chart" | "quantity" | "costPerShare" | "pricePerShare" | "change">
+    <Table<
+      | "asset"
+      | "chart"
+      | "quantity"
+      | "costPerShare"
+      | "pricePerShare"
+      | "change"
+    >
       columns={[
         {
           Header: t("assetTableAssetHeader"),
@@ -91,7 +101,8 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
         .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
         .map((holding) => {
           const change = aggregation === "absolute"
-            ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
+            ? (holding.value - costPerShare[holding.asset.id]!)
+              * holding.quantity
             : holding.value / costPerShare[holding.asset.id]! - 1
 
           const weight = (holding.quantity * holding.value) / totalValue
@@ -123,14 +134,20 @@ export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Elem
                 </Tooltip>
               </Cell.Cell>
             ),
-            quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
+            quantity: (
+              <Cell.Text align="text-right">
+                {format(holding.quantity)}
+              </Cell.Text>
+            ),
             costPerShare: (
               <Cell.Text align="text-right">
                 {format(costPerShare[holding.asset.id], { suffix: "€" })}
               </Cell.Text>
             ),
             pricePerShare: (
-              <Cell.Text align="text-right">{format(holding.value, { suffix: "€" })}</Cell.Text>
+              <Cell.Text align="text-right">
+                {format(holding.value, { suffix: "€" })}
+              </Cell.Text>
             ),
             change: (
               <Cell.Tag

@@ -1,8 +1,8 @@
 import { Downsampling } from "@perfolio/pkg/downsampling"
 import {
-  useAbsolutePortfolioHistory,
-  usePortfolioHistory,
+  usePortfolio,
   useRelativePortfolioHistory,
+  useTotalAbsolutePortfolioHistory,
 } from "@perfolio/pkg/hooks"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Time } from "@perfolio/pkg/util/time"
@@ -23,19 +23,16 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   aggregate = "absolute",
   range,
 }): JSX.Element => {
-  const { portfolioHistory } = usePortfolioHistory()
-  const { absolutePortfolioHistory, isLoading: absoluteLoading } = useAbsolutePortfolioHistory(
-    portfolioHistory,
-    range,
-  )
-  const { relativePortfolioHistory, isLoading: relativeLoading } = useRelativePortfolioHistory(
+  const { portfolio, isLoading: portfolioLoading } = usePortfolio()
+  const { totalAbsolutePortfolioHistory } = useTotalAbsolutePortfolioHistory(
+    portfolio?.absoluteHistory,
     range,
   )
 
   const data = useMemo(() => {
     const choice = aggregate === "absolute"
-      ? absolutePortfolioHistory
-      : (relativePortfolioHistory as { time: number; value: number }[])
+      ? totalAbsolutePortfolioHistory
+      : ((portfolio?.relativeHistory ?? []) as { time: number; value: number }[])
 
     const downsampled = Downsampling.largestTriangle(
       choice.map(({ time, value }) => ({ x: time, y: value })),
@@ -45,11 +42,11 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
       time: Time.fromTimestamp(x).toDate().toLocaleDateString(),
       value: y,
     }))
-  }, [absolutePortfolioHistory, relativePortfolioHistory, aggregate])
+  }, [totalAbsolutePortfolioHistory, portfolio?.relativeHistory, aggregate])
   return (
     <div className="w-full h-56">
       <AreaChart
-        isLoading={absoluteLoading || relativeLoading}
+        isLoading={portfolioLoading}
         data={data}
         withXAxis
         tooltip={(n) => format(n, { suffix: aggregate === "absolute" ? "€" : undefined })}

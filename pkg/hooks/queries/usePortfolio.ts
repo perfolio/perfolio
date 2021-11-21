@@ -6,19 +6,21 @@ import { client } from "../client"
 
 export const USE_PORTFOLIO_QUERY_KEY = (
   portfolioId: string,
-  withHistory: boolean,
-) => `USE_PORTFOLIO_QUERY_KEY_${portfolioId}_${withHistory}`
+  withHistorySince: number | null,
+) => `USE_PORTFOLIO_QUERY_KEY_${portfolioId}_${withHistorySince}`
 
-export const usePortfolio = (opts: { withHistory: boolean } = { withHistory: false }) => {
+export const usePortfolio = (
+  opts: { since: number | null } = { since: null },
+) => {
   const { getAccessTokenSilently } = useAuth0()
   const router = useRouter()
   const portfolioId = router.query["portfolioId"] as string
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
-    USE_PORTFOLIO_QUERY_KEY(portfolioId, opts.withHistory),
+    USE_PORTFOLIO_QUERY_KEY(portfolioId, opts.since),
     async () =>
       client(await getAccessTokenSilently()).portfolio({
         portfolioId,
-        withHistory: opts.withHistory,
+        since: opts.since ?? undefined,
       }),
     {
       enabled: !!portfolioId,

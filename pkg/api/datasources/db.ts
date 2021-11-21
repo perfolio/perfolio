@@ -24,4 +24,7 @@ export class DB extends DataSource {
   public get exchangeTradedAsset() {
     return this.client.exchangeTradedAsset
   }
+  public get newsletter() {
+    return this.client.newsletter
+  }
 }

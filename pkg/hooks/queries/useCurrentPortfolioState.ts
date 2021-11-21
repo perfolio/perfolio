@@ -1,20 +1,20 @@
 import { ValueAndQuantityAtTime } from "@perfolio/pkg/api"
-import { usePortfolioHistory } from "./usePortfolioHistory"
+import { usePortfolio } from "./usePortfolio"
 
 export const useCurrentPorfolioState = () => {
-  const { portfolioHistory, ...meta } = usePortfolioHistory()
+  const { portfolio, ...meta } = usePortfolio()
   const getLastValid = (
     history: ValueAndQuantityAtTime[],
-  ): { quantity: number; value: number } => {
+  ): { quantity: number; value?: number | null } => {
     const sorted = [...history].sort((a, b) => b.time - a.time)
     for (const day of sorted) {
-      if (day.value > 0) {
+      if (day.value) {
         return day
       }
     }
     throw new Error("Nothing found")
   }
-  const currentPorfolioState = portfolioHistory?.map((h) => {
+  const currentPorfolioState = portfolio?.absoluteHistory?.map((h) => {
     return {
       asset: h.asset,
       ...getLastValid(h.history),

@@ -9,6 +9,7 @@ export namespace PortfolioModule {
       | "user"
       | "primary"
       | "transactions"
+      | "relativeHistory"
       | "absoluteHistory"
     Transaction:
       | "assetId"
@@ -63,6 +64,7 @@ export namespace PortfolioModule {
     Types.Transaction,
     DefinedFields["Transaction"]
   >
+  export type ValueAtTime = Types.ValueAtTime
   export type CreatePortfolio = Pick<
     Types.CreatePortfolio,
     DefinedInputFields["CreatePortfolio"]
@@ -130,6 +132,7 @@ export namespace PortfolioModule {
       user?: gm.Middleware[]
       primary?: gm.Middleware[]
       transactions?: gm.Middleware[]
+      relativeHistory?: gm.Middleware[]
       absoluteHistory?: gm.Middleware[]
     }
     Transaction?: {

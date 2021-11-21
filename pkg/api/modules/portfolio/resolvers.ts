@@ -1,3 +1,4 @@
+import { rebalance, toTimeseries } from "@perfolio/pkg/finance/returns"
 import { newId } from "@perfolio/pkg/id"
 import {
   ExchangeTradedAssetModel,
@@ -5,8 +6,10 @@ import {
   TransactionModel,
 } from "@perfolio/pkg/integrations/prisma"
 import { Time } from "@perfolio/pkg/util/time"
+import { NIL } from "uuid"
 import { Context } from "../../context"
 import { AbsoluteAssetHistory, Resolvers } from "../../generated/schema-types"
+import { getAbsoluteHistory } from "./util/getAbsoluteHistory"
 
 export const resolvers: Resolvers<Context> = {
   User: {
@@ -25,6 +28,19 @@ export const resolvers: Resolvers<Context> = {
           userId: user.id,
         },
       })
+    },
+  },
+
+  AbsoluteAssetHistory: {
+    asset: async (history, _args, ctx) => {
+      ctx.authorizeUser(() => true)
+      const asset = await ctx.dataSources.db.exchangeTradedAsset.findUnique({
+        where: { id: history.assetId },
+      })
+      if (!asset) {
+        throw new Error(`Asset was not found in db: ${history.assetId}`)
+      }
+      return asset
     },
   },
   Portfolio: {
@@ -50,108 +66,26 @@ export const resolvers: Resolvers<Context> = {
         },
       })
     },
+
+    relativeHistory: async (portfolio, { since }, ctx) => {
+      await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      let absoluteHistory = await getAbsoluteHistory(portfolio, ctx)
+
+      const series = toTimeseries(absoluteHistory, since)
+      const index = rebalance(series)
+      const value = Object.entries(index)
+        .map(([time, value]) => ({
+          time: Number(time),
+          value,
+        }))
+        .filter(({ value }) => !Number.isNaN(value))
+      return value
+    },
+
     absoluteHistory: async (portfolio, _args, ctx) => {
       await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
 
-      const transactions = await ctx.dataSources.db.transaction.findMany({
-        where: { portfolioId: portfolio.id },
-        include: { asset: true },
-      })
-
-      transactions.sort((a, b) => a.executedAt - b.executedAt)
-
-      const key = ctx.cache.key(...transactions)
-      const cachedValue = await ctx.cache.get<AbsoluteAssetHistory>(key)
-      if (cachedValue) {
-        ctx.logger.debug("Cache hit", { key, cachedValue })
-        return cachedValue
-      }
-
-      const assets: { [assetId: string]: ExchangeTradedAssetModel } = {}
-      for (const tx of transactions) {
-        assets[tx.assetId] = tx.asset
-      }
-
-      /**
-       * Aggregate transactions by assets
-       */
-      const transactionsByAsset: {
-        [assetId: string]: TransactionModel[]
-      } = {}
-      for (const tx of transactions) {
-        if (!transactionsByAsset[tx.assetId]) {
-          transactionsByAsset[tx.assetId] = []
-        }
-
-        transactionsByAsset[tx.assetId].push(tx)
-      }
-
-      const prices = await Promise.all(
-        Object.values(assets).map(async (asset) => {
-          const foundIsin = await ctx.dataSources.openFigi.findIsin({
-            isin: asset.isin,
-          })
-          if (!foundIsin) {
-            throw new Error(`Unable to find isin: ${asset.isin}`)
-          }
-
-          return {
-            assetId: asset.id,
-            history: await ctx.dataSources.iex.getHistory(
-              `${foundIsin.ticker}-${foundIsin.exchCode}`,
-            ),
-          }
-        }),
-      )
-
-      const historyByAsset: { [assetId: string]: { [time: number]: number } } = {}
-      for (const price of prices) {
-        historyByAsset[price.assetId] = price.history
-      }
-
-      const history: { [assetId: string]: { time: number; quantity: number; value?: number }[] } =
-        {}
-
-      const startDay = Time.fromTimestamp(transactions[0].executedAt)
-      for (
-        const [assetId, transactions] of Object.entries(
-          transactionsByAsset,
-        )
-      ) {
-        if (!history[assetId]) {
-          history[assetId] = []
-        }
-
-        let quantity = 0
-        for (
-          let currentDay = startDay;
-          currentDay.unix() <= Date.now() / 1000;
-          currentDay = currentDay.nextDay()
-        ) {
-          /**
-           * Get transactions that happened on this day
-           */
-          const txsToday = transactions.filter((tx) =>
-            Time.fromTimestamp(tx.executedAt).equals(currentDay)
-          )
-
-          for (const tx of txsToday) {
-            quantity += tx.volume
-          }
-          history[assetId]?.push({
-            time: currentDay.unix(),
-            quantity,
-            value: historyByAsset[assetId][currentDay.unix()],
-          })
-        }
-      }
-
-      const value = Object.entries(history).map(([assetId, history]) => ({
-        assetId,
-        history,
-      }))
-      // await ctx.cache.set("2h", { key, value })
-      return value
+      return await getAbsoluteHistory(portfolio, ctx)
     },
   },
   Transaction: {
@@ -168,14 +102,14 @@ export const resolvers: Resolvers<Context> = {
   },
   Query: {
     portfolio: async (_root, { portfolioId }, ctx) => {
-      ctx.authenticateUser()
+      await ctx.authenticateUser()
       const portfolio = await ctx.dataSources.db.portfolio.findUnique({
         where: { id: portfolioId },
       })
       if (!portfolio) {
         return undefined
       }
-      ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
       return portfolio
     },
   },

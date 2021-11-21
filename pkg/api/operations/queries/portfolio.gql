@@ -1,5 +1,5 @@
-query portfolio($portfolioId: ID!, $withHistory: Boolean!) {
-  portfolio(portfolioId: $portfolioId, withHistory: $withHistory) {
+query portfolio($portfolioId: ID!, $since: Int) {
+  portfolio(portfolioId: $portfolioId) {
     __typename
     id
     name
@@ -23,7 +23,6 @@ query portfolio($portfolioId: ID!, $withHistory: Boolean!) {
           ... on Crypto {
             __typename
           }
-          
         }
       }
 
@@ -31,15 +30,32 @@ query portfolio($portfolioId: ID!, $withHistory: Boolean!) {
       value
       volume
     }
-
-    absoluteHistory @include(if: $withHistory){
-      asset {
-        id
-      }
-    history {
+    relativeHistory(since: $since) {
       time
       value
     }
+    absoluteHistory(since: $since) {
+      asset {
+        __typename
+        id
+        name
+        ... on ExchangeTradedAsset {
+          ticker
+          isin
+          logo
+          ... on Stock {
+            __typename
+          }
+          ... on Crypto {
+            __typename
+          }
+        }
+      }
+      history {
+        time
+        value
+        quantity
+      }
     }
   }
 }

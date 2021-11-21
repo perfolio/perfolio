@@ -1,16 +1,16 @@
 import { useQuery } from "react-query"
-export const USE_ABSOLUTE_PORTFOLIO_HISTORY = "USE_ABSOLUTE_PORTFOLIO_HISTORY"
-import { AssetHistory } from "@perfolio/pkg/api"
+export const USE_AGGREGATED_ABSOLUTE_PORTFOLIO_HISTORY = "USE_AGGREGATED_ABSOLUTE_PORTFOLIO_HISTORY"
+import { AbsoluteAssetHistory } from "@perfolio/pkg/api"
 import { toTimeseries } from "@perfolio/pkg/finance/returns"
 
-export const useAbsolutePortfolioHistory = (
-  portfolioHistory: Omit<AssetHistory, "asset">[],
+export const useTotalAbsolutePortfolioHistory = (
+  portfolioHistory?: AbsoluteAssetHistory[] | null,
   since = Number.NEGATIVE_INFINITY,
 ) => {
   const { data, ...meta } = useQuery(
-    [USE_ABSOLUTE_PORTFOLIO_HISTORY, { portfolioHistory }],
+    [USE_AGGREGATED_ABSOLUTE_PORTFOLIO_HISTORY, { portfolioHistory }],
     () => {
-      const series = toTimeseries(portfolioHistory)
+      const series = toTimeseries(portfolioHistory!)
       return Object.entries(series)
         .map(([time, assets]) => ({
           time: Number(time),
@@ -20,7 +20,8 @@ export const useAbsolutePortfolioHistory = (
         }))
         .filter(({ time }) => time >= since)
     },
+    { enabled: !!portfolioHistory },
   )
 
-  return { absolutePortfolioHistory: data ?? [], ...meta }
+  return { totalAbsolutePortfolioHistory: data ?? [], ...meta }
 }

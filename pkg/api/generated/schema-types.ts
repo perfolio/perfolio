@@ -240,6 +240,7 @@ export type Mutation = {
   createTransaction: Transaction
   deletePortfolio: Portfolio
   deleteTransaction: Transaction
+  subscribeToNewsletter?: Maybe<Scalars["Boolean"]>
   updatePortfolio: Portfolio
   /** Only update some values in the user settings. */
   updateSettings: Settings
@@ -274,6 +275,10 @@ export type MutationDeleteTransactionArgs = {
   transactionId: Scalars["ID"]
 }
 
+export type MutationSubscribeToNewsletterArgs = {
+  email: Scalars["String"]
+}
+
 export type MutationUpdatePortfolioArgs = {
   portfolio: UpdatePortfolio
 }
@@ -299,9 +304,19 @@ export type Portfolio = {
   name: Scalars["String"]
   /** The primary portfolio will be displayed by default */
   primary: Scalars["Boolean"]
+  /** Return an index for the performance of the users portfolio */
+  relativeHistory: Array<ValueAtTime>
   transactions: Array<Transaction>
   /** The owner of this portfolio */
   user: User
+}
+
+export type PortfolioAbsoluteHistoryArgs = {
+  since?: Maybe<Scalars["Int"]>
+}
+
+export type PortfolioRelativeHistoryArgs = {
+  since?: Maybe<Scalars["Int"]>
 }
 
 export type Query = {
@@ -324,7 +339,6 @@ export type QueryExchangeTradedAssetArgs = {
 
 export type QueryPortfolioArgs = {
   portfolioId: Scalars["ID"]
-  withHistory: Scalars["Boolean"]
 }
 
 export type QueryUserArgs = {
@@ -818,6 +832,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeleteTransactionArgs, "transactionId">
   >
+  subscribeToNewsletter?: Resolver<
+    Maybe<ResolversTypes["Boolean"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSubscribeToNewsletterArgs, "email">
+  >
   updatePortfolio?: Resolver<
     ResolversTypes["Portfolio"],
     ParentType,
@@ -845,11 +865,18 @@ export type PortfolioResolvers<
   absoluteHistory?: Resolver<
     Array<ResolversTypes["AbsoluteAssetHistory"]>,
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<PortfolioAbsoluteHistoryArgs, never>
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   primary?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
+  relativeHistory?: Resolver<
+    Array<ResolversTypes["ValueAtTime"]>,
+    ParentType,
+    ContextType,
+    RequireFields<PortfolioRelativeHistoryArgs, never>
+  >
   transactions?: Resolver<
     Array<ResolversTypes["Transaction"]>,
     ParentType,
@@ -879,7 +906,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes["Portfolio"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryPortfolioArgs, "portfolioId" | "withHistory">
+    RequireFields<QueryPortfolioArgs, "portfolioId">
   >
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
@@ -1038,6 +1065,15 @@ export type DeleteTransactionMutation = {
   deleteTransaction: { __typename?: "Transaction"; id: string }
 }
 
+export type SubscribeToNewsletterMutationVariables = Exact<{
+  email: Scalars["String"]
+}>
+
+export type SubscribeToNewsletterMutation = {
+  __typename?: "Mutation"
+  subscribeToNewsletter?: boolean | null | undefined
+}
+
 export type UpdateSettingsMutationVariables = Exact<{
   settings: UpdateSettings
 }>
@@ -1098,7 +1134,7 @@ export type ExchangesQuery = {
 
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars["ID"]
-  withHistory: Scalars["Boolean"]
+  since?: Maybe<Scalars["Int"]>
 }>
 
 export type PortfolioQuery = {
@@ -1143,16 +1179,43 @@ export type PortfolioQuery = {
             name: string
           }
       }>
-      absoluteHistory?: Array<{
+      relativeHistory: Array<{
+        __typename?: "ValueAtTime"
+        time: number
+        value: number
+      }>
+      absoluteHistory: Array<{
         __typename?: "AbsoluteAssetHistory"
         asset:
-          | { __typename?: "Company"; id: string }
-          | { __typename?: "Crypto"; id: string }
-          | { __typename?: "ETF"; id: string }
+          | {
+            __typename: "Company"
+            ticker: string
+            isin: string
+            logo: string
+            id: string
+            name: string
+          }
+          | {
+            __typename: "Crypto"
+            ticker: string
+            isin: string
+            logo: string
+            id: string
+            name: string
+          }
+          | {
+            __typename: "ETF"
+            ticker: string
+            isin: string
+            logo: string
+            id: string
+            name: string
+          }
         history: Array<{
           __typename?: "ValueAndQuantityAtTime"
           time: number
           value?: number | null | undefined
+          quantity: number
         }>
       }>
     }
@@ -1228,6 +1291,11 @@ export const DeleteTransactionDocument = gql `
     }
   }
 `
+export const SubscribeToNewsletterDocument = gql `
+  mutation subscribeToNewsletter($email: String!) {
+    subscribeToNewsletter(email: $email)
+  }
+`
 export const UpdateSettingsDocument = gql `
   mutation updateSettings($settings: UpdateSettings!) {
     updateSettings(settings: $settings) {
@@ -1267,8 +1335,8 @@ export const ExchangesDocument = gql `
   }
 `
 export const PortfolioDocument = gql `
-  query portfolio($portfolioId: ID!, $withHistory: Boolean!) {
-    portfolio(portfolioId: $portfolioId, withHistory: $withHistory) {
+  query portfolio($portfolioId: ID!, $since: Int) {
+    portfolio(portfolioId: $portfolioId) {
       __typename
       id
       name
@@ -1297,13 +1365,31 @@ export const PortfolioDocument = gql `
         value
         volume
       }
-      absoluteHistory @include(if: $withHistory) {
+      relativeHistory(since: $since) {
+        time
+        value
+      }
+      absoluteHistory(since: $since) {
         asset {
+          __typename
           id
+          name
+          ... on ExchangeTradedAsset {
+            ticker
+            isin
+            logo
+            ... on Stock {
+              __typename
+            }
+            ... on Crypto {
+              __typename
+            }
+          }
         }
         history {
           time
           value
+          quantity
         }
       }
     }
@@ -1373,6 +1459,15 @@ export function getSdk<C>(requester: Requester<C>) {
         DeleteTransactionMutation,
         DeleteTransactionMutationVariables
       >(DeleteTransactionDocument, variables, options)
+    },
+    subscribeToNewsletter(
+      variables: SubscribeToNewsletterMutationVariables,
+      options?: C,
+    ): Promise<SubscribeToNewsletterMutation> {
+      return requester<
+        SubscribeToNewsletterMutation,
+        SubscribeToNewsletterMutationVariables
+      >(SubscribeToNewsletterDocument, variables, options)
     },
     updateSettings(
       variables: UpdateSettingsMutationVariables,

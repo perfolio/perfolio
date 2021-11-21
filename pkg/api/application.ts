@@ -2,6 +2,7 @@ import { createApplication } from "graphql-modules"
 import { assetsModule } from "./modules/assets"
 import { baseModule } from "./modules/base"
 import { exchangeModule } from "./modules/exchange"
+import { newsletterModule } from "./modules/newsletter"
 import { portfolioModule } from "./modules/portfolio"
 import { settingsModule } from "./modules/settings"
 import { userModule } from "./modules/user"
@@ -16,5 +17,6 @@ export const application = createApplication({
     settingsModule,
     exchangeModule,
     utilModule,
+    newsletterModule,
   ],
 })

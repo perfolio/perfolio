@@ -1,11 +1,10 @@
 import {
   useAbsoluteMean,
-  useAbsolutePortfolioHistory,
   useCurrentAbsoluteValue,
   usePortfolio,
   useRelativeMean,
-  useRelativePortfolioHistory,
   useStandardDeviation,
+  useTotalAbsolutePortfolioHistory,
   useUser,
 } from "@perfolio/pkg/hooks"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
@@ -91,30 +90,28 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const [range, setRange] = useState<Range>("ALL")
   const { user } = useUser()
 
-  const { portfolio } = usePortfolio({ withHistory: true })
+  const { portfolio, isLoading: portfolioLoading } = usePortfolio({ since: ranges[range] })
   console.log({ portfolio })
-  const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
-    portfolio?.absoluteHistory ?? [],
-    ranges[range],
-  )
-  const { relativePortfolioHistory, isLoading: relativeIsLoading } = useRelativePortfolioHistory(
-    ranges[range],
-  )
 
-  const absoluteChange = absolutePortfolioHistory.length > 0
-    ? currentAbsoluteValue - absolutePortfolioHistory[0].value
-    : 0
-  const relativeChange = relativePortfolioHistory.length > 0
-    ? relativePortfolioHistory[relativePortfolioHistory.length - 1].value - 1
-    : 0
+  const { aggregatedAbsolutePortfolioHistory } = useTotalAbsolutePortfolioHistory(
+    portfolio?.absoluteHistory,
+  )
+  const absoluteChange = 0
+  const relativeChange = 0
+  // const absoluteChange = aggregatedAbsolutePortfolioHistory.length > 0
+  //   ? currentAbsoluteValue - aggregatedAbsolutePortfolioHistory[0].value
+  //   : 0
+  // const relativeChange = portfolio?.relativeHistory.length > 0
+  //   ? portfolio?.relativeHistory[portfolio?.relativeHistory.length - 1].value - 1
+  //   : 0
 
   const [aggregation, setAggregation] = useState<AggregateOptions>("relative")
 
-  const { absoluteMean } = useAbsoluteMean(absolutePortfolioHistory)
-  const { relativeMean } = useRelativeMean(relativePortfolioHistory)
+  const { absoluteMean } = useAbsoluteMean(aggregatedAbsolutePortfolioHistory)
+  const { relativeMean } = useRelativeMean(portfolio?.relativeHistory)
 
   const { standardDeviation: relativeSTD } = useStandardDeviation(
-    relativePortfolioHistory.map(({ value }) => value),
+    portfolio?.relativeHistory.map(({ value }) => value),
   )
 
   return (
@@ -161,7 +158,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                       format(n, {
                         suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                       })}
-                    isLoading={aggregation === "absolute" && absoluteIsLoading}
+                    isLoading={portfolioLoading}
                   />
                 }
               >
@@ -183,8 +180,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                           sign: true,
                         })
                         : format(n, { suffix: "%", percent: true, sign: true })}
-                    isLoading={(aggregation === "absolute" && absoluteIsLoading)
-                      || (aggregation === "relative" && relativeIsLoading)}
+                    isLoading={portfolioLoading}
                   />
                 }
               >
@@ -193,8 +189,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Tooltip
                 trigger={
                   <KPI
-                    isLoading={(aggregation === "absolute" && absoluteIsLoading)
-                      || (aggregation === "relative" && relativeIsLoading)}
+                    isLoading={portfolioLoading}
                     label={t("stdDevLabel")}
                     value={relativeSTD}
                     format={(n) => format(n)}
@@ -208,8 +203,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   <KPI
                     label={t("changeLabel")}
                     enableColor
-                    isLoading={(aggregation === "absolute" && absoluteIsLoading)
-                      || (aggregation === "relative" && relativeIsLoading)}
+                    isLoading={portfolioLoading}
                     value={aggregation === "absolute" ? absoluteChange : relativeChange}
                     format={(n) =>
                       aggregation === "absolute"
