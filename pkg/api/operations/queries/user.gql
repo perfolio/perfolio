@@ -9,10 +9,9 @@ query user($userId: ID!) {
       defaultCurrency
       defaultExchange {
         __typename
-        abbreviation
+        description
         suffix
         mic
-        name
         region
       }
     }

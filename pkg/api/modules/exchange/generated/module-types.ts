@@ -2,7 +2,7 @@ import * as gm from "graphql-modules"
 import * as Types from "../../../generated/schema-types"
 export namespace ExchangeModule {
   interface DefinedFields {
-    Exchange: "abbreviation" | "mic" | "name" | "region" | "suffix"
+    Exchange: "mic" | "description" | "region" | "suffix"
     Query: "exchanges"
   }
 
@@ -29,9 +29,8 @@ export namespace ExchangeModule {
     }
     Exchange?: {
       "*"?: gm.Middleware[]
-      abbreviation?: gm.Middleware[]
       mic?: gm.Middleware[]
-      name?: gm.Middleware[]
+      description?: gm.Middleware[]
       region?: gm.Middleware[]
       suffix?: gm.Middleware[]
     }

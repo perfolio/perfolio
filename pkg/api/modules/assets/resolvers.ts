@@ -53,9 +53,7 @@ export const resolvers: Resolvers<Context> = {
         ? foundIsin.ticker
         : [foundIsin.ticker, foundIsin.exchCode].join("-")
 
-      const prices = await ctx.dataSources.iex.getPrices({
-        ticker,
-      })
+      const prices = await ctx.dataSources.iex.getHistory(ticker)
       return Object.entries(prices)
         .filter(([time]) => Number(time) >= start && Number(time) <= end)
         .map((time, value) => ({
@@ -67,14 +65,10 @@ export const resolvers: Resolvers<Context> = {
 
   Mutation: {
     createExchangeTradedAsset: async (_root, { isin }, ctx) => {
-      ctx.logger.info("Creating new ETA from isin", { isin })
-
       const foundIsin = await ctx.dataSources.openFigi.findIsin({ isin })
       if (!foundIsin) {
         throw new Error(`Isin not found: ${isin}`)
       }
-
-      ctx.logger.info("Found isin", { foundIsin })
 
       const assetTypeString = foundIsin.securityType === "ETP"
         ? foundIsin.securityType2
@@ -93,9 +87,7 @@ export const resolvers: Resolvers<Context> = {
       const ticker = foundIsin.compositeFIGI === foundIsin.figi
         ? foundIsin.ticker
         : [foundIsin.ticker, foundIsin.exchCode].join("-")
-      ctx.logger.info("Using this ticker for lookup", { ticker })
       const company = await ctx.dataSources.iex.getCompany(ticker)
-      ctx.logger.info("Company", { company })
       if (!company) {
         throw new Error(
           `No Exchange traded asset exists for ticker: ${ticker}`,
@@ -115,7 +107,6 @@ export const resolvers: Resolvers<Context> = {
           type: assetType,
         },
       })
-      ctx.logger.info("Stored asset in db", { asset: JSON.stringify(asset) })
 
       const document: {
         asset: {
@@ -143,17 +134,17 @@ export const resolvers: Resolvers<Context> = {
       if (!res.ok) {
         throw new Error(`Unable to ingest document into search`)
       }
-      ctx.logger.info("Stored document in search", {
-        document: JSON.stringify(document),
-      })
 
       return asset
     },
   },
   Query: {
     exchangeTradedAsset: async (_root, { assetId }, ctx) => {
-      return await ctx.dataSources.db.exchangeTradedAsset.findUnique({ where: { id: assetId } })
-        ?? undefined
+      return (
+        (await ctx.dataSources.db.exchangeTradedAsset.findUnique({
+          where: { id: assetId },
+        })) ?? undefined
+      )
     },
   },
 }

@@ -4,11 +4,11 @@ import { z } from "zod"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { CheckIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Asset, CreateTransactionDocument } from "@perfolio/pkg/api"
+import { Asset } from "@perfolio/pkg/api"
 import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import { Time } from "@perfolio/pkg/util/time"
-import { ActivityFeed, AppLayout, Main, Sidebar } from "@perfolio/ui/app"
+import { AppLayout, Main, Sidebar } from "@perfolio/ui/app"
 import { Button, Description } from "@perfolio/ui/components"
 import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
@@ -59,7 +59,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   })
   const createExchangeTradedAsset = useCreateExchangeTradedAsset()
   const createTransaction = useCreateTransaction()
-  const { portfolio } = usePortfolio()
+  const { portfolio } = usePortfolio({ withHistory: false })
   const uniqueAssets: Record<string, Asset> = {}
   ;(portfolio?.transactions ?? [])
     .sort((a, b) => b.executedAt - a.executedAt)

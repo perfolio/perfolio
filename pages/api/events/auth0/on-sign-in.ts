@@ -85,7 +85,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           settings: {
             create: {
               defaultCurrency: "EUR",
-              defaultExchangeMic: "xetr",
+              defaultExchangeId: "xetr",
             },
           },
         },

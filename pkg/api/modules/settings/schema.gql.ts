@@ -32,7 +32,7 @@ export default gql `
     The user's default exchange. At the start only 1 exchange can be used.
     This must be the MIC!
     """
-    defaultExchange: String!
+    defaultExchangeId: ID!
     """
     The unique user id
     """
@@ -50,7 +50,7 @@ export default gql `
     The user's default exchange. At the start only 1 exchange can be used.
     This must be the MIC!
     """
-    defaultExchange: String
+    defaultExchangeId: ID
     """
     The unique user id
     """

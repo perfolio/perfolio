@@ -2,10 +2,9 @@ query exchanges {
   exchanges {
     __typename
 
-    name
+    description
     region
     mic
     suffix
-    abbreviation
   }
 }

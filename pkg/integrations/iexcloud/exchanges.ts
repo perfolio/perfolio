@@ -31,9 +31,7 @@ export const GetExchangesResponseValidation = z.array(
 )
 export type GetExchangesResponse = z.infer<typeof GetExchangesResponseValidation>
 
-export async function getExchanges(): Promise<GetExchangesResponse> {
-  const client = new Client()
-
+export async function getExchanges(client: Client): Promise<GetExchangesResponse> {
   const res = await client.get({
     path: "/ref-data/exchanges",
   })

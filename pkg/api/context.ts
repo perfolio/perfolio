@@ -1,5 +1,6 @@
 import { env } from "@chronark/env"
 import { Claims, JWT } from "@perfolio/pkg/auth"
+import { ApolloCache, Key, Value } from "@perfolio/pkg/integrations/redis"
 import { Logger } from "@perfolio/pkg/logger"
 import { AuthenticationError, AuthorizationError } from "@perfolio/pkg/util/errors"
 import { createHash } from "crypto"
@@ -12,6 +13,18 @@ export type Context = {
   authenticateUser: () => Promise<UserType>
   authorizeUser: (authorizer: (claims: Claims) => boolean) => Promise<Claims>
   logger: Logger
+  cache: {
+    key: (
+      ...parameters: (
+        | Record<string, number | string | boolean | unknown | undefined>
+        | string
+        | undefined
+        | number
+      )[]
+    ) => Key
+    get: <T extends Value>(key: Key) => Promise<T | null>
+    set: (ttl: string, ...data: { key: Key; value: Value }[]) => Promise<void>
+  }
 }
 
 export const context = (ctx: { req: IncomingMessage }) => {
@@ -32,7 +45,10 @@ export const context = (ctx: { req: IncomingMessage }) => {
       }
       return { claims, root: false }
     }
-    if (createHash("sha256").update(token).digest("hex") === env.require("ROOT_TOKEN_HASH")) {
+    if (
+      createHash("sha256").update(token).digest("hex")
+        === env.require("ROOT_TOKEN_HASH")
+    ) {
       return { root: true }
     }
     throw new AuthenticationError("Invalid token")
@@ -55,10 +71,24 @@ export const context = (ctx: { req: IncomingMessage }) => {
     return claims
   }
 
+  const cache = new ApolloCache()
+
   return {
     ...ctx,
     authenticateUser,
     authorizeUser,
     logger,
+    cache: {
+      key: (
+        ...parameters: (
+          | Record<string, number | string | boolean | unknown | undefined>
+          | string
+          | undefined
+          | number
+        )[]
+      ) => new Key(...parameters),
+      get: cache.get,
+      set: cache.set,
+    },
   }
 }

@@ -9,7 +9,7 @@ export interface AssetTableProps {
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({ aggregation }): JSX.Element => {
-  const { portfolio } = usePortfolio()
+  const { portfolio } = usePortfolio({ withHistory: true })
   const { t } = useI18n()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {

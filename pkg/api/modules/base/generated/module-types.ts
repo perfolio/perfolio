@@ -3,7 +3,7 @@ import * as Types from "../../../generated/schema-types"
 export namespace BaseModule {
   interface DefinedFields {
     Query: "healthCheck"
-    Mutation: "_"
+    Mutation: "_empty"
   }
 
   export type Query = Pick<Types.Query, DefinedFields["Query"]>
@@ -33,7 +33,7 @@ export namespace BaseModule {
     }
     Mutation?: {
       "*"?: gm.Middleware[]
-      _?: gm.Middleware[]
+      _empty?: gm.Middleware[]
     }
   }
 }

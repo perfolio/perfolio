@@ -2,7 +2,7 @@ import {
   useAbsoluteMean,
   useAbsolutePortfolioHistory,
   useCurrentAbsoluteValue,
-  usePortfolioHistory,
+  usePortfolio,
   useRelativeMean,
   useRelativePortfolioHistory,
   useStandardDeviation,
@@ -91,9 +91,10 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const [range, setRange] = useState<Range>("ALL")
   const { user } = useUser()
 
-  const { portfolioHistory } = usePortfolioHistory()
+  const { portfolio } = usePortfolio({ withHistory: true })
+  console.log({ portfolio })
   const { absolutePortfolioHistory, isLoading: absoluteIsLoading } = useAbsolutePortfolioHistory(
-    portfolioHistory,
+    portfolio?.absoluteHistory ?? [],
     ranges[range],
   )
   const { relativePortfolioHistory, isLoading: relativeIsLoading } = useRelativePortfolioHistory(

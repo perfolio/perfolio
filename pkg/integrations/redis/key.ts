@@ -62,7 +62,7 @@ export class Key {
   }
 
   public toString(): string {
-    return ["v1", this.environment, this.version, ...this.parameters].join(":")
+    return ["v3", this.environment, this.version, ...this.parameters].join(":")
   }
 }
 

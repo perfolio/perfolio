@@ -1,6 +1,11 @@
 import { gql } from "graphql-modules"
 
 export default gql `
+  type AbsoluteAssetHistory {
+    assetId: ID!
+    asset: Asset!
+    history: [ValueAndQuantityAtTime!]!
+  }
   type Portfolio {
     """
     unique id
@@ -29,10 +34,11 @@ export default gql `
     # """
     # relativeHistory("unix timestamp where to begin calculation" since: Int): [ValueAtTime!]!
 
-    # """
-    # Return all assets over time for a given user
-    # """
-    # absoluteHistory: [AssetHistory!]!
+    """
+    Returns a history for each asset. This is not the absolute asset value but rather what
+    each asset is worth at each point in time at the given exchange
+    """
+    absoluteHistory: [AbsoluteAssetHistory!]!
   }
 
   input CreatePortfolio {
@@ -160,6 +166,7 @@ export default gql `
       The portfolio' unique id
       """
       portfolioId: ID!
+      withHistory: Boolean!
     ): Portfolio
   }
 

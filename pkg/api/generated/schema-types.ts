@@ -1,5 +1,4 @@
 import {
-  AssetModel,
   ExchangeTradedAssetModel,
   PortfolioModel,
   SettingsModel,
@@ -35,6 +34,13 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+}
+
+export type AbsoluteAssetHistory = {
+  __typename?: "AbsoluteAssetHistory"
+  asset: Asset
+  assetId: Scalars["ID"]
+  history: Array<ValueAndQuantityAtTime>
 }
 
 /** Common fields on all assets */
@@ -101,7 +107,7 @@ export type CreateSettings = {
    * The user's default exchange. At the start only 1 exchange can be used.
    * This must be the MIC!
    */
-  defaultExchange: Scalars["String"]
+  defaultExchangeId: Scalars["ID"]
   /** The unique user id */
   userId: Scalars["ID"]
 }
@@ -188,12 +194,10 @@ export type EtfAssetHistoryArgs = {
 /** An exchange where shares are traded */
 export type Exchange = {
   __typename?: "Exchange"
-  /** Exchange abbreviation */
-  abbreviation: Scalars["String"]
-  /** Market Identifier Code using ISO 10383 */
-  mic: Scalars["ID"]
   /** Full name of the exchange. */
-  name: Scalars["String"]
+  description: Scalars["String"]
+  /** "    Market Identifier Code using ISO 10383 */
+  mic: Scalars["ID"]
   /** 2 letter case insensitive string of country codes using ISO 3166-1 alpha-2 */
   region: Scalars["String"]
   /** Exchange Suffix to be added for symbols on that exchange */
@@ -227,7 +231,7 @@ export type ExchangeTradedAssetAssetHistoryArgs = {
 
 export type Mutation = {
   __typename?: "Mutation"
-  _?: Maybe<Scalars["Boolean"]>
+  _empty?: Maybe<Scalars["Boolean"]>
   /** Clone a portfolio with all its transactions and return the clone */
   clonePortfolio: Portfolio
   createExchangeTradedAsset?: Maybe<ExchangeTradedAsset>
@@ -284,6 +288,11 @@ export type MutationUpdateTransactionArgs = {
 
 export type Portfolio = {
   __typename?: "Portfolio"
+  /**
+   * Returns a history for each asset. This is not the absolute asset value but rather what
+   * each asset is worth at each point in time at the given exchange
+   */
+  absoluteHistory: Array<AbsoluteAssetHistory>
   /** unique id */
   id: Scalars["ID"]
   /** Human readable name for the portfolio */
@@ -315,6 +324,7 @@ export type QueryExchangeTradedAssetArgs = {
 
 export type QueryPortfolioArgs = {
   portfolioId: Scalars["ID"]
+  withHistory: Scalars["Boolean"]
 }
 
 export type QueryUserArgs = {
@@ -400,7 +410,7 @@ export type UpdateSettings = {
    * The user's default exchange. At the start only 1 exchange can be used.
    * This must be the MIC!
    */
-  defaultExchange?: Maybe<Scalars["String"]>
+  defaultExchangeId?: Maybe<Scalars["ID"]>
   /** The unique user id */
   userId: Scalars["ID"]
 }
@@ -448,7 +458,7 @@ export type ValueAndQuantityAtTime = {
   /** A timestamp when this value and quantity was */
   time: Scalars["Int"]
   /** The value of each share/item */
-  value: Scalars["Float"]
+  value?: Maybe<Scalars["Float"]>
 }
 
 /** Anything that has a changing value over time can use this. */
@@ -570,7 +580,11 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Asset: ResolverTypeWrapper<AssetModel>
+  AbsoluteAssetHistory: ResolverTypeWrapper<AbsoluteAssetHistory>
+  Asset:
+    | ResolversTypes["Company"]
+    | ResolversTypes["Crypto"]
+    | ResolversTypes["ETF"]
   AssetType: AssetType
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
   Company: ResolverTypeWrapper<Company>
@@ -601,7 +615,11 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Asset: AssetModel
+  AbsoluteAssetHistory: AbsoluteAssetHistory
+  Asset:
+    | ResolversParentTypes["Company"]
+    | ResolversParentTypes["Crypto"]
+    | ResolversParentTypes["ETF"]
   Boolean: Scalars["Boolean"]
   Company: Company
   CreatePortfolio: CreatePortfolio
@@ -627,6 +645,21 @@ export type ResolversParentTypes = ResolversObject<{
   User: UserModel
   ValueAndQuantityAtTime: ValueAndQuantityAtTime
   ValueAtTime: ValueAtTime
+}>
+
+export type AbsoluteAssetHistoryResolvers<
+  ContextType = GraphQLModules.Context,
+  ParentType extends ResolversParentTypes["AbsoluteAssetHistory"] =
+    ResolversParentTypes["AbsoluteAssetHistory"],
+> = ResolversObject<{
+  asset?: Resolver<ResolversTypes["Asset"], ParentType, ContextType>
+  assetId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  history?: Resolver<
+    Array<ResolversTypes["ValueAndQuantityAtTime"]>,
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
 export type AssetResolvers<
@@ -707,9 +740,8 @@ export type ExchangeResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Exchange"] = ResolversParentTypes["Exchange"],
 > = ResolversObject<{
-  abbreviation?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   mic?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   region?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   suffix?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -743,7 +775,7 @@ export type MutationResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
-  _?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>
+  _empty?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>
   clonePortfolio?: Resolver<
     ResolversTypes["Portfolio"],
     ParentType,
@@ -810,6 +842,11 @@ export type PortfolioResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Portfolio"] = ResolversParentTypes["Portfolio"],
 > = ResolversObject<{
+  absoluteHistory?: Resolver<
+    Array<ResolversTypes["AbsoluteAssetHistory"]>,
+    ParentType,
+    ContextType
+  >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   primary?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
@@ -842,7 +879,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes["Portfolio"]>,
     ParentType,
     ContextType,
-    RequireFields<QueryPortfolioArgs, "portfolioId">
+    RequireFields<QueryPortfolioArgs, "portfolioId" | "withHistory">
   >
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
@@ -937,7 +974,7 @@ export type ValueAndQuantityAtTimeResolvers<
 > = ResolversObject<{
   quantity?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   time?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
-  value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
+  value?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -951,6 +988,7 @@ export type ValueAtTimeResolvers<
 }>
 
 export type Resolvers<ContextType = GraphQLModules.Context> = ResolversObject<{
+  AbsoluteAssetHistory?: AbsoluteAssetHistoryResolvers<ContextType>
   Asset?: AssetResolvers<ContextType>
   Company?: CompanyResolvers<ContextType>
   Crypto?: CryptoResolvers<ContextType>
@@ -1000,6 +1038,19 @@ export type DeleteTransactionMutation = {
   deleteTransaction: { __typename?: "Transaction"; id: string }
 }
 
+export type UpdateSettingsMutationVariables = Exact<{
+  settings: UpdateSettings
+}>
+
+export type UpdateSettingsMutation = {
+  __typename?: "Mutation"
+  updateSettings: {
+    __typename?: "Settings"
+    defaultCurrency: string
+    defaultExchange: { __typename?: "Exchange"; mic: string }
+  }
+}
+
 export type ExchangeTradedAssetQueryVariables = Exact<{
   assetId: Scalars["ID"]
 }>
@@ -1032,8 +1083,22 @@ export type ExchangeTradedAssetQuery = {
     | undefined
 }
 
+export type ExchangesQueryVariables = Exact<{ [key: string]: never }>
+
+export type ExchangesQuery = {
+  __typename?: "Query"
+  exchanges: Array<{
+    __typename: "Exchange"
+    description: string
+    region: string
+    mic: string
+    suffix?: string | null | undefined
+  }>
+}
+
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars["ID"]
+  withHistory: Scalars["Boolean"]
 }>
 
 export type PortfolioQuery = {
@@ -1078,6 +1143,18 @@ export type PortfolioQuery = {
             name: string
           }
       }>
+      absoluteHistory?: Array<{
+        __typename?: "AbsoluteAssetHistory"
+        asset:
+          | { __typename?: "Company"; id: string }
+          | { __typename?: "Crypto"; id: string }
+          | { __typename?: "ETF"; id: string }
+        history: Array<{
+          __typename?: "ValueAndQuantityAtTime"
+          time: number
+          value?: number | null | undefined
+        }>
+      }>
     }
     | null
     | undefined
@@ -1119,10 +1196,9 @@ export type UserQuery = {
         defaultCurrency: string
         defaultExchange: {
           __typename: "Exchange"
-          abbreviation: string
+          description: string
           suffix?: string | null | undefined
           mic: string
-          name: string
           region: string
         }
       }
@@ -1152,6 +1228,16 @@ export const DeleteTransactionDocument = gql `
     }
   }
 `
+export const UpdateSettingsDocument = gql `
+  mutation updateSettings($settings: UpdateSettings!) {
+    updateSettings(settings: $settings) {
+      defaultCurrency
+      defaultExchange {
+        mic
+      }
+    }
+  }
+`
 export const ExchangeTradedAssetDocument = gql `
   query exchangeTradedAsset($assetId: ID!) {
     exchangeTradedAsset(assetId: $assetId) {
@@ -1169,9 +1255,20 @@ export const ExchangeTradedAssetDocument = gql `
     }
   }
 `
+export const ExchangesDocument = gql `
+  query exchanges {
+    exchanges {
+      __typename
+      description
+      region
+      mic
+      suffix
+    }
+  }
+`
 export const PortfolioDocument = gql `
-  query portfolio($portfolioId: ID!) {
-    portfolio(portfolioId: $portfolioId) {
+  query portfolio($portfolioId: ID!, $withHistory: Boolean!) {
+    portfolio(portfolioId: $portfolioId, withHistory: $withHistory) {
       __typename
       id
       name
@@ -1200,6 +1297,15 @@ export const PortfolioDocument = gql `
         value
         volume
       }
+      absoluteHistory @include(if: $withHistory) {
+        asset {
+          id
+        }
+        history {
+          time
+          value
+        }
+      }
     }
   }
 `
@@ -1225,10 +1331,9 @@ export const UserDocument = gql `
         defaultCurrency
         defaultExchange {
           __typename
-          abbreviation
+          description
           suffix
           mic
-          name
           region
         }
       }
@@ -1269,6 +1374,16 @@ export function getSdk<C>(requester: Requester<C>) {
         DeleteTransactionMutationVariables
       >(DeleteTransactionDocument, variables, options)
     },
+    updateSettings(
+      variables: UpdateSettingsMutationVariables,
+      options?: C,
+    ): Promise<UpdateSettingsMutation> {
+      return requester<UpdateSettingsMutation, UpdateSettingsMutationVariables>(
+        UpdateSettingsDocument,
+        variables,
+        options,
+      )
+    },
     exchangeTradedAsset(
       variables: ExchangeTradedAssetQueryVariables,
       options?: C,
@@ -1277,6 +1392,16 @@ export function getSdk<C>(requester: Requester<C>) {
         ExchangeTradedAssetQuery,
         ExchangeTradedAssetQueryVariables
       >(ExchangeTradedAssetDocument, variables, options)
+    },
+    exchanges(
+      variables?: ExchangesQueryVariables,
+      options?: C,
+    ): Promise<ExchangesQuery> {
+      return requester<ExchangesQuery, ExchangesQueryVariables>(
+        ExchangesDocument,
+        variables,
+        options,
+      )
     },
     portfolio(
       variables: PortfolioQueryVariables,

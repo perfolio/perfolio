@@ -8,6 +8,8 @@ export default gql `
     TODO
   }
 
+
+
   """
   Common fields on all assets
   """

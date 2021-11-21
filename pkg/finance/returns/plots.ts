@@ -1,4 +1,4 @@
-import { AssetHistory } from "@perfolio/pkg/api"
+import { AbsoluteAssetHistory } from "@perfolio/pkg/api"
 import { Time } from "@perfolio/pkg/util/time"
 import { rebalance } from "./rebalance"
 import { AssetsOverTime } from "./types"
@@ -20,7 +20,7 @@ export const plotAbsolute = (history: AssetsOverTime): { time: string; value: nu
 /**
  * Build an index and transform data to be readable by recharts
  */
-export const plotRelative = (history: AssetHistory): { time: string; value: number }[] => {
+export const plotRelative = (history: AbsoluteAssetHistory): { time: string; value: number }[] => {
   const timeline = toTimeseries([history])
   const index = rebalance(timeline)
   const data = Object.entries(index).map(([time, value]) => {
@@ -38,7 +38,7 @@ export const plotRelative = (history: AssetHistory): { time: string; value: numb
  * Sorting by time first, then assetId
  */
 export const toTimeseries = (
-  assetHistory: Omit<AssetHistory, "asset">[],
+  assetHistory: Omit<AbsoluteAssetHistory, "asset">[],
   since?: number,
 ): AssetsOverTime => {
   const timeline: AssetsOverTime = {}
@@ -46,7 +46,7 @@ export const toTimeseries = (
     ;[...history]
       .sort((a, b) => a.time - b.time)
       .forEach((day) => {
-        if (day.value > 0 && day.time >= (since ?? Number.NEGATIVE_INFINITY)) {
+        if (day.value && day.time >= (since ?? Number.NEGATIVE_INFINITY)) {
           if (!timeline[day.time]) {
             timeline[day.time] = {}
           }

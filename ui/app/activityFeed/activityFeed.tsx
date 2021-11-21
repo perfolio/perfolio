@@ -31,23 +31,27 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
       </div>
       <Text size="sm">
         You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
-        <span className="font-semibold">{asset.ticker}</span> shares at ${transaction.value}{" "}
-        per share.
+        <span className="font-semibold">{asset.ticker}</span> shares at $
+        {transaction.value} per share.
       </Text>
     </div>
   )
 }
 
 export const ActivityFeed: React.FC = (): JSX.Element => {
-  const { portfolio } = usePortfolio()
+  const { portfolio } = usePortfolio({ withHistory: false })
   const { t } = useI18n()
   const last5Transactions = portfolio?.transactions
-    ? [...portfolio?.transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
+    ? [...portfolio?.transactions]
+      .sort((a, b) => b.executedAt - a.executedAt)
+      .slice(0, 5)
     : []
 
   return (
     <>
-      <p className="text-base font-semibold text-gray-800">{t("activFeedRecentActiv")}</p>
+      <p className="text-base font-semibold text-gray-800">
+        {t("activFeedRecentActiv")}
+      </p>
       <AnimateSharedLayout>
         <AnimatePresence>
           {last5Transactions?.map((tx, i) => (
@@ -57,7 +61,12 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
               initial={{ opacity: 0, scaleY: 0 }}
               animate={{ opacity: 1, scaleY: 1 }}
               exit={{ opacity: 0, scaleY: 0 }}
-              transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 50,
+                mass: 1,
+              }}
             >
               <TransactionActivityItem transaction={tx} isFirst={i === 0} />
             </motion.div>

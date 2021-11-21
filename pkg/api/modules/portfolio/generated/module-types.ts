@@ -2,7 +2,14 @@ import * as gm from "graphql-modules"
 import * as Types from "../../../generated/schema-types"
 export namespace PortfolioModule {
   interface DefinedFields {
-    Portfolio: "id" | "name" | "user" | "primary" | "transactions"
+    AbsoluteAssetHistory: "assetId" | "asset" | "history"
+    Portfolio:
+      | "id"
+      | "name"
+      | "user"
+      | "primary"
+      | "transactions"
+      | "absoluteHistory"
     Transaction:
       | "assetId"
       | "asset"
@@ -44,6 +51,12 @@ export namespace PortfolioModule {
       | "mic"
   }
 
+  export type AbsoluteAssetHistory = Pick<
+    Types.AbsoluteAssetHistory,
+    DefinedFields["AbsoluteAssetHistory"]
+  >
+  export type Asset = Types.Asset
+  export type ValueAndQuantityAtTime = Types.ValueAndQuantityAtTime
   export type Portfolio = Pick<Types.Portfolio, DefinedFields["Portfolio"]>
   export type User = Types.User
   export type Transaction = Pick<
@@ -58,7 +71,6 @@ export namespace PortfolioModule {
     Types.UpdatePortfolio,
     DefinedInputFields["UpdatePortfolio"]
   >
-  export type Asset = Types.Asset
   export type CreateTransaction = Pick<
     Types.CreateTransaction,
     DefinedInputFields["CreateTransaction"]
@@ -70,6 +82,10 @@ export namespace PortfolioModule {
   export type Query = Pick<Types.Query, DefinedFields["Query"]>
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
+  export type AbsoluteAssetHistoryResolvers = Pick<
+    Types.AbsoluteAssetHistoryResolvers,
+    DefinedFields["AbsoluteAssetHistory"] | "__isTypeOf"
+  >
   export type PortfolioResolvers = Pick<
     Types.PortfolioResolvers,
     DefinedFields["Portfolio"] | "__isTypeOf"
@@ -89,6 +105,7 @@ export namespace PortfolioModule {
   export type UserResolvers = Pick<Types.UserResolvers, DefinedFields["User"]>
 
   export interface Resolvers {
+    AbsoluteAssetHistory?: AbsoluteAssetHistoryResolvers
     Portfolio?: PortfolioResolvers
     Transaction?: TransactionResolvers
     Query?: QueryResolvers
@@ -100,6 +117,12 @@ export namespace PortfolioModule {
     "*"?: {
       "*"?: gm.Middleware[]
     }
+    AbsoluteAssetHistory?: {
+      "*"?: gm.Middleware[]
+      assetId?: gm.Middleware[]
+      asset?: gm.Middleware[]
+      history?: gm.Middleware[]
+    }
     Portfolio?: {
       "*"?: gm.Middleware[]
       id?: gm.Middleware[]
@@ -107,6 +130,7 @@ export namespace PortfolioModule {
       user?: gm.Middleware[]
       primary?: gm.Middleware[]
       transactions?: gm.Middleware[]
+      absoluteHistory?: gm.Middleware[]
     }
     Transaction?: {
       "*"?: gm.Middleware[]

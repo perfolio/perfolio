@@ -5,18 +5,14 @@ export default gql `
   An exchange where shares are traded
   """
   type Exchange {
-    """
-    Exchange abbreviation
-    """
-    abbreviation: String!
-    """
-    Market Identifier Code using ISO 10383
+"""
+"    Market Identifier Code using ISO 10383
     """
     mic: ID!
     """
     Full name of the exchange.
     """
-    name: String!
+    description: String!
     """
     2 letter case insensitive string of country codes using ISO 3166-1 alpha-2
     """

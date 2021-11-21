@@ -17,15 +17,31 @@ export const resolvers: Resolvers<Context> = {
   Settings: {
     defaultExchange: async (settings, _args, ctx) => {
       ctx.authorizeUser((claims) => claims.sub === settings.userId)
-      const exchange = await ctx.dataSources.iex.getExchange({
-        mic: settings.defaultExchangeMic,
-      })
+      const allExchanges = await ctx.dataSources.iex.getExchanges()
+      const exchange = allExchanges.find(
+        (exchange) =>
+          exchange.mic.toLowerCase()
+            === settings.defaultExchangeId.toLowerCase(),
+      )
+
       if (!exchange) {
         throw new Error(
           `The user ${settings.userId} has no valid default exchange`,
         )
       }
       return exchange
+    },
+  },
+
+  Mutation: {
+    updateSettings: async (_root, { settings }, ctx) => {
+      await ctx.authorizeUser((claims) => claims.sub === settings.userId)
+      return await ctx.dataSources.db.settings.update({
+        where: { userId: settings.userId },
+        data: {
+          ...settings,
+        },
+      })
     },
   },
 }

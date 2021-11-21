@@ -5,6 +5,6 @@ export default gql `
     healthCheck: Boolean!
   }
   type Mutation {
-    _: Boolean
+    _empty: Boolean
   }
 `

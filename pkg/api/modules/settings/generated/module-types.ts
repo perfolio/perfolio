@@ -8,8 +8,8 @@ export namespace SettingsModule {
   }
 
   interface DefinedInputFields {
-    CreateSettings: "defaultCurrency" | "defaultExchange" | "userId"
-    UpdateSettings: "defaultCurrency" | "defaultExchange" | "userId"
+    CreateSettings: "defaultCurrency" | "defaultExchangeId" | "userId"
+    UpdateSettings: "defaultCurrency" | "defaultExchangeId" | "userId"
   }
 
   export type Settings = Pick<Types.Settings, DefinedFields["Settings"]>

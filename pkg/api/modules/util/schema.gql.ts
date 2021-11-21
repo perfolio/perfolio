@@ -17,7 +17,7 @@ export default gql `
     """
     The value of each share/item
     """
-    value: Float!
+    value: Float
   }
 
   """
