@@ -63,15 +63,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           ],
         })
         .catch((err) => {
-          throw new HttpError(500, `Unable to create subscription for user ${email}: ${err}`)
+          throw new HttpError(
+            500,
+            `Unable to create subscription for user ${email}: ${err}`,
+          )
         })
 
-      user = await prisma.user.create({
-        data: {
+      user = await prisma.user.upsert({
+        where: { id: userId },
+        update: {},
+        create: {
           id: userId,
           stripeCustomerId: customer.id,
           stripeSubscriptionId: subscription.id,
-          currentPaymentPeriodStart: new Date(subscription.current_period_start),
+          currentPaymentPeriodStart: new Date(
+            subscription.current_period_start,
+          ),
           currentPaymentPeriodEnd: new Date(subscription.current_period_end),
           portfolios: {
             create: [
