@@ -55,11 +55,13 @@ export async function getAbsoluteHistory(
         throw new Error(`Unable to find isin: ${asset.isin}`)
       }
 
+      const ticker = foundIsin.compositeFIGI === foundIsin.figi
+        ? foundIsin.ticker
+        : [foundIsin.ticker, foundIsin.exchCode].join("-")
+
       return {
         assetId: asset.id,
-        history: await ctx.dataSources.iex.getHistory(
-          `${foundIsin.ticker}-${foundIsin.exchCode}`,
-        ),
+        history: await ctx.dataSources.iex.getHistory(ticker),
       }
     }),
   )

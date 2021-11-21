@@ -59,7 +59,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
   })
   const createExchangeTradedAsset = useCreateExchangeTradedAsset()
   const createTransaction = useCreateTransaction()
-  const { portfolio } = usePortfolio({ withHistorySince: false })
+  const { portfolio } = usePortfolio()
   const uniqueAssets: Record<string, Asset> = {}
   ;(portfolio?.transactions ?? [])
     .sort((a, b) => b.executedAt - a.executedAt)

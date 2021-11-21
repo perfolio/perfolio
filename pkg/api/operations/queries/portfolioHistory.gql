@@ -1,14 +1,10 @@
-query portfolio($portfolioId: ID!) {
+query portfolioHistory($portfolioId: ID!, $since: Int) {
   portfolio(portfolioId: $portfolioId) {
-    __typename
-    id
-    name
-    primary
-
-    transactions {
-      id
-      portfolioId
-      assetId
+    relativeHistory(since: $since) {
+      time
+      value
+    }
+    absoluteHistory(since: $since) {
       asset {
         __typename
         id
@@ -19,21 +15,17 @@ query portfolio($portfolioId: ID!) {
           logo
           ... on Stock {
             __typename
-
-            ... on Company {
-              sector
-              country
-            }
           }
           ... on Crypto {
             __typename
           }
         }
       }
-
-      executedAt
-      value
-      volume
+      history {
+        time
+        value
+        quantity
+      }
     }
   }
 }

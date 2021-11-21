@@ -1,8 +1,8 @@
 import { ValueAndQuantityAtTime } from "@perfolio/pkg/api"
-import { usePortfolio } from "./usePortfolio"
+import { usePortfolioHistory } from ".."
 
 export const useCurrentPorfolioState = () => {
-  const { portfolio, ...meta } = usePortfolio()
+  const { history, ...meta } = usePortfolioHistory()
   const getLastValid = (
     history: ValueAndQuantityAtTime[],
   ): { quantity: number; value?: number | null } => {
@@ -14,7 +14,8 @@ export const useCurrentPorfolioState = () => {
     }
     throw new Error("Nothing found")
   }
-  const currentPorfolioState = portfolio?.absoluteHistory?.map((h) => {
+  console.log({ history })
+  const currentPorfolioState = history.absolute.map((h) => {
     return {
       asset: h.asset,
       ...getLastValid(h.history),

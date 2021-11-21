@@ -12,7 +12,6 @@ export const AssetTable: React.FC<AssetTableProps> = ({
   aggregation,
 }): JSX.Element => {
   const { portfolio } = usePortfolio()
-  console.log({ portfolio })
   const { t } = useI18n()
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
@@ -41,6 +40,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
   }, [portfolio?.transactions])
 
   const { currentPorfolioState } = useCurrentPorfolioState()
+  console.log({ currentPorfolioState })
   const totalValue = (currentPorfolioState ?? []).reduce(
     (acc, { value, quantity }) => acc + (value ?? 0) * quantity,
     0,

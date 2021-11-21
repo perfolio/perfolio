@@ -9,6 +9,7 @@ import { Time } from "@perfolio/pkg/util/time"
 import { NIL } from "uuid"
 import { Context } from "../../context"
 import { AbsoluteAssetHistory, Resolvers } from "../../generated/schema-types"
+import { resolvers as assetResolvers } from "../assets/resolvers"
 import { getAbsoluteHistory } from "./util/getAbsoluteHistory"
 
 export const resolvers: Resolvers<Context> = {
@@ -69,8 +70,9 @@ export const resolvers: Resolvers<Context> = {
 
     relativeHistory: async (portfolio, { since }, ctx) => {
       await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      console.time(portfolio.id)
       let absoluteHistory = await getAbsoluteHistory(portfolio, ctx)
-
+      console.timeLog(portfolio.id, "after absolute")
       const series = toTimeseries(absoluteHistory, since)
       const index = rebalance(series)
       const value = Object.entries(index)
@@ -79,6 +81,7 @@ export const resolvers: Resolvers<Context> = {
           value,
         }))
         .filter(({ value }) => !Number.isNaN(value))
+      console.timeEnd(portfolio.id)
       return value
     },
 
@@ -174,6 +177,13 @@ export const resolvers: Resolvers<Context> = {
         }
       }
       let mic = transaction.mic ?? settings?.defaultExchangeId!
+
+      const asset = await ctx.dataSources.db.exchangeTradedAsset.findUnique({
+        where: { id: transaction.assetId },
+      })
+      if (!asset) {
+        throw new Error(`No asset with id found: ${transaction.assetId}`)
+      }
 
       return await ctx.dataSources.db.transaction.create({
         data: {

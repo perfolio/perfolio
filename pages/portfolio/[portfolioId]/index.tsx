@@ -2,6 +2,7 @@ import {
   useAbsoluteMean,
   useCurrentAbsoluteValue,
   usePortfolio,
+  usePortfolioHistory,
   useRelativeMean,
   useStandardDeviation,
   useTotalAbsolutePortfolioHistory,
@@ -90,11 +91,11 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const [range, setRange] = useState<Range>("ALL")
   const { user } = useUser()
 
-  const { portfolio, isLoading: portfolioLoading } = usePortfolio({ since: ranges[range] })
-  console.log({ portfolio })
+  const { portfolio, isLoading: portfolioLoading } = usePortfolio()
 
+  const { history, isLoading: historyLoading } = usePortfolioHistory({ since: ranges[range] })
   const { aggregatedAbsolutePortfolioHistory } = useTotalAbsolutePortfolioHistory(
-    portfolio?.absoluteHistory,
+    history.absolute,
   )
   const absoluteChange = 0
   const relativeChange = 0
@@ -108,10 +109,10 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const [aggregation, setAggregation] = useState<AggregateOptions>("relative")
 
   const { absoluteMean } = useAbsoluteMean(aggregatedAbsolutePortfolioHistory)
-  const { relativeMean } = useRelativeMean(portfolio?.relativeHistory)
+  const { relativeMean } = useRelativeMean(history.relative)
 
   const { standardDeviation: relativeSTD } = useStandardDeviation(
-    portfolio?.relativeHistory.map(({ value }) => value),
+    history.relative.map(({ value }) => value),
   )
 
   return (
@@ -158,7 +159,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                       format(n, {
                         suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                       })}
-                    isLoading={portfolioLoading}
+                    isLoading={historyLoading}
                   />
                 }
               >
@@ -180,7 +181,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                           sign: true,
                         })
                         : format(n, { suffix: "%", percent: true, sign: true })}
-                    isLoading={portfolioLoading}
+                    isLoading={historyLoading}
                   />
                 }
               >
@@ -189,7 +190,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Tooltip
                 trigger={
                   <KPI
-                    isLoading={portfolioLoading}
+                    isLoading={historyLoading}
                     label={t("stdDevLabel")}
                     value={relativeSTD}
                     format={(n) => format(n)}
@@ -203,7 +204,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   <KPI
                     label={t("changeLabel")}
                     enableColor
-                    isLoading={portfolioLoading}
+                    isLoading={historyLoading}
                     value={aggregation === "absolute" ? absoluteChange : relativeChange}
                     format={(n) =>
                       aggregation === "absolute"

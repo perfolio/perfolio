@@ -4,23 +4,18 @@ import { useRouter } from "next/router"
 import { useQuery } from "react-query"
 import { client } from "../client"
 
-export const USE_PORTFOLIO_QUERY_KEY = (
-  portfolioId: string,
-  withHistorySince: number | null,
-) => `USE_PORTFOLIO_QUERY_KEY_${portfolioId}_${withHistorySince}`
+export const USE_PORTFOLIO_QUERY_KEY = (portfolioId: string) =>
+  `USE_PORTFOLIO_QUERY_KEY_${portfolioId}}`
 
-export const usePortfolio = (
-  opts: { since: number | null } = { since: null },
-) => {
+export const usePortfolio = (id?: string) => {
   const { getAccessTokenSilently } = useAuth0()
   const router = useRouter()
-  const portfolioId = router.query["portfolioId"] as string
+  const portfolioId = id ?? (router.query["portfolioId"] as string)
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
-    USE_PORTFOLIO_QUERY_KEY(portfolioId, opts.since),
+    ["PORTFOLIO", portfolioId],
     async () =>
       client(await getAccessTokenSilently()).portfolio({
         portfolioId,
-        since: opts.since ?? undefined,
       }),
     {
       enabled: !!portfolioId,

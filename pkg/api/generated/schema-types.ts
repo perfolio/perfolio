@@ -1134,7 +1134,6 @@ export type ExchangesQuery = {
 
 export type PortfolioQueryVariables = Exact<{
   portfolioId: Scalars["ID"]
-  since?: Maybe<Scalars["Int"]>
 }>
 
 export type PortfolioQuery = {
@@ -1179,6 +1178,21 @@ export type PortfolioQuery = {
             name: string
           }
       }>
+    }
+    | null
+    | undefined
+}
+
+export type PortfolioHistoryQueryVariables = Exact<{
+  portfolioId: Scalars["ID"]
+  since?: Maybe<Scalars["Int"]>
+}>
+
+export type PortfolioHistoryQuery = {
+  __typename?: "Query"
+  portfolio?:
+    | {
+      __typename?: "Portfolio"
       relativeHistory: Array<{
         __typename?: "ValueAtTime"
         time: number
@@ -1335,7 +1349,7 @@ export const ExchangesDocument = gql `
   }
 `
 export const PortfolioDocument = gql `
-  query portfolio($portfolioId: ID!, $since: Int) {
+  query portfolio($portfolioId: ID!) {
     portfolio(portfolioId: $portfolioId) {
       __typename
       id
@@ -1355,6 +1369,10 @@ export const PortfolioDocument = gql `
             logo
             ... on Stock {
               __typename
+              ... on Company {
+                sector
+                country
+              }
             }
             ... on Crypto {
               __typename
@@ -1365,6 +1383,12 @@ export const PortfolioDocument = gql `
         value
         volume
       }
+    }
+  }
+`
+export const PortfolioHistoryDocument = gql `
+  query portfolioHistory($portfolioId: ID!, $since: Int) {
+    portfolio(portfolioId: $portfolioId) {
       relativeHistory(since: $since) {
         time
         value
@@ -1504,6 +1528,16 @@ export function getSdk<C>(requester: Requester<C>) {
     ): Promise<PortfolioQuery> {
       return requester<PortfolioQuery, PortfolioQueryVariables>(
         PortfolioDocument,
+        variables,
+        options,
+      )
+    },
+    portfolioHistory(
+      variables: PortfolioHistoryQueryVariables,
+      options?: C,
+    ): Promise<PortfolioHistoryQuery> {
+      return requester<PortfolioHistoryQuery, PortfolioHistoryQueryVariables>(
+        PortfolioHistoryDocument,
         variables,
         options,
       )

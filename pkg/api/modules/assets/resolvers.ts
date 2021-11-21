@@ -65,6 +65,7 @@ export const resolvers: Resolvers<Context> = {
 
   Mutation: {
     createExchangeTradedAsset: async (_root, { isin }, ctx) => {
+      ctx.logger.debug("Adding asset", { isin })
       const foundIsin = await ctx.dataSources.openFigi.findIsin({ isin })
       if (!foundIsin) {
         throw new Error(`Isin not found: ${isin}`)
@@ -74,7 +75,7 @@ export const resolvers: Resolvers<Context> = {
         ? foundIsin.securityType2
         : foundIsin.securityType
 
-      const assetType = assetTypeString === "Common Stock"
+      const assetType = assetTypeString === "Common Stock" || assetTypeString === "REIT"
         ? AssetType.COMMON_STOCK
         : assetTypeString === "Mutual Fund"
         ? AssetType.MUTUAL_FUND
@@ -93,19 +94,22 @@ export const resolvers: Resolvers<Context> = {
           `No Exchange traded asset exists for ticker: ${ticker}`,
         )
       }
+      const create = {
+        id: newId("asset"),
+        isin,
+        name: company.name ?? "",
+        ticker,
+        figi: foundIsin.compositeFIGI,
+        logo: company.logo,
+        type: assetType,
+      }
+
+      ctx.logger.debug("Store asset in db", { create })
 
       const asset = await ctx.dataSources.db.exchangeTradedAsset.upsert({
         where: { isin },
         update: {},
-        create: {
-          id: newId("asset"),
-          isin,
-          name: company.name,
-          ticker,
-          figi: foundIsin.compositeFIGI,
-          logo: company.logo,
-          type: assetType,
-        },
+        create,
       })
 
       const document: {
