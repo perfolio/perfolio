@@ -1,4 +1,4 @@
-import { AbsoluteAssetHistory } from "@perfolio/pkg/api"
+import { AbsoluteAssetHistory, ValueAndQuantityAtTime } from "@perfolio/pkg/api"
 import { Context } from "@perfolio/pkg/api/context"
 import {
   ExchangeTradedAssetModel,
@@ -20,7 +20,7 @@ export async function getAbsoluteHistory(
 
   transactions.sort((a, b) => a.executedAt - b.executedAt)
 
-  const key = ctx.cache.key(...transactions)
+  // const key = ctx.cache.key(...transactions)
   // const cachedValue = await ctx.cache.get<AbsoluteAssetHistory[]>(key)
   // if (cachedValue) {
   //   ctx.logger.debug("Cache hit", { key, cachedValue })
@@ -72,7 +72,11 @@ export async function getAbsoluteHistory(
   }
 
   const history: {
-    [assetId: string]: { time: number; quantity: number; value?: number }[]
+    [assetId: string]: {
+      time: number
+      quantity: number
+      value: number | null
+    }[]
   } = {}
 
   const startDay = Time.fromTimestamp(transactions[0].executedAt)
@@ -100,15 +104,52 @@ export async function getAbsoluteHistory(
       history[assetId]?.push({
         time: currentDay.unix(),
         quantity,
-        value: historyByAsset[assetId][currentDay.unix()],
+        value: historyByAsset[assetId][currentDay.unix()] ?? null,
       })
     }
   }
 
-  const value = Object.entries(history).map(([assetId, history]) => ({
-    assetId,
-    history,
-  }))
+  const value: {
+    assetId: string
+    history: ValueAndQuantityAtTime[]
+  }[] = []
+
+  for (const [assetId, assetHistory] of Object.entries(history)) {
+    /**
+     * IEX does not return data on days where no trading takes place
+     * so we interpolated missing values
+     */
+    const interpolatedAssetHistory: ValueAndQuantityAtTime[] = []
+    for (let i = 0; i < assetHistory.length; i++) {
+      if (assetHistory[i].value) {
+        interpolatedAssetHistory.push(
+          assetHistory[i] as ValueAndQuantityAtTime,
+        )
+      } else {
+        if (i === 0) {
+          /**
+           * Set the value to 0 if it's the very first entry
+           */
+          interpolatedAssetHistory.push({
+            ...assetHistory[i],
+            value: 0,
+          })
+        } else {
+          /**
+           * Use the last known value
+           * The price of a stock should be the same on saturday as it was on friday.
+           */
+          if (i === 0) {
+            interpolatedAssetHistory.push({
+              ...assetHistory[i],
+              value: assetHistory[i - 1].value!,
+            })
+          }
+        }
+      }
+    }
+    value.push({ assetId, history: interpolatedAssetHistory })
+  }
   // await ctx.cache.set("2h", { key, value })
   return value
 }

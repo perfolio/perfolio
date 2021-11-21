@@ -1,11 +1,10 @@
 import {
   useAbsoluteMean,
+  useAbsoluteTotalHistory,
   useCurrentAbsoluteValue,
-  usePortfolio,
   usePortfolioHistory,
   useRelativeMean,
   useStandardDeviation,
-  useTotalAbsolutePortfolioHistory,
   useUser,
 } from "@perfolio/pkg/hooks"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
@@ -17,7 +16,6 @@ import {
   AssetsOverTimeChart,
   AssetTable,
   DiversificationChart,
-  InlineTotalAssetChart,
   Main,
   Sidebar,
 } from "@perfolio/ui/app"
@@ -91,12 +89,12 @@ const App: NextPage<PageProps> = ({ translations }) => {
   const [range, setRange] = useState<Range>("ALL")
   const { user } = useUser()
 
-  const { portfolio, isLoading: portfolioLoading } = usePortfolio()
-
-  const { history, isLoading: historyLoading } = usePortfolioHistory({ since: ranges[range] })
-  const { aggregatedAbsolutePortfolioHistory } = useTotalAbsolutePortfolioHistory(
-    history.absolute,
-  )
+  const { history, isLoading: historyLoading } = usePortfolioHistory({
+    since: ranges[range],
+  })
+  const { absoluteTotal } = useAbsoluteTotalHistory({
+    since: ranges[range],
+  })
   const absoluteChange = 0
   const relativeChange = 0
   // const absoluteChange = aggregatedAbsolutePortfolioHistory.length > 0
@@ -108,7 +106,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
 
   const [aggregation, setAggregation] = useState<AggregateOptions>("relative")
 
-  const { absoluteMean } = useAbsoluteMean(aggregatedAbsolutePortfolioHistory)
+  const { absoluteMean } = useAbsoluteMean(absoluteTotal)
   const { relativeMean } = useRelativeMean(history.relative)
 
   const { standardDeviation: relativeSTD } = useStandardDeviation(
@@ -118,7 +116,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
   return (
     <AppLayout
       sidebar={
-        <Sidebar aboveFold={<InlineTotalAssetChart />}>
+        <Sidebar>
           <div className="w-full pb-4 md:w-full sm:w-1/2">
             <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
           </div>
@@ -157,7 +155,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
-                        suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                        suffix: getCurrencySymbol(
+                          user?.settings?.defaultCurrency,
+                        ),
                       })}
                     isLoading={historyLoading}
                   />
@@ -177,7 +177,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                          suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                          suffix: getCurrencySymbol(
+                            user?.settings?.defaultCurrency,
+                          ),
                           sign: true,
                         })
                         : format(n, { suffix: "%", percent: true, sign: true })}
@@ -205,11 +207,15 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     label={t("changeLabel")}
                     enableColor
                     isLoading={historyLoading}
-                    value={aggregation === "absolute" ? absoluteChange : relativeChange}
+                    value={aggregation === "absolute"
+                      ? absoluteChange
+                      : relativeChange}
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                          suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                          suffix: getCurrencySymbol(
+                            user?.settings?.defaultCurrency,
+                          ),
                           sign: true,
                         })
                         : format(n, { suffix: "%", percent: true, sign: true })}
@@ -237,7 +243,10 @@ const App: NextPage<PageProps> = ({ translations }) => {
                 setSelected={setRange}
               />
             </div>
-            <AssetsOverTimeChart aggregate={aggregation} range={ranges[range]} />
+            <AssetsOverTimeChart
+              aggregate={aggregation}
+              since={ranges[range]}
+            />
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">

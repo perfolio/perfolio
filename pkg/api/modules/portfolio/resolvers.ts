@@ -1,15 +1,8 @@
 import { rebalance, toTimeseries } from "@perfolio/pkg/finance/returns"
 import { newId } from "@perfolio/pkg/id"
-import {
-  ExchangeTradedAssetModel,
-  SettingsModel,
-  TransactionModel,
-} from "@perfolio/pkg/integrations/prisma"
-import { Time } from "@perfolio/pkg/util/time"
-import { NIL } from "uuid"
+import { SettingsModel } from "@perfolio/pkg/integrations/prisma"
 import { Context } from "../../context"
-import { AbsoluteAssetHistory, Resolvers } from "../../generated/schema-types"
-import { resolvers as assetResolvers } from "../assets/resolvers"
+import { Company, Crypto, Etf, Resolvers } from "../../generated/schema-types"
 import { getAbsoluteHistory } from "./util/getAbsoluteHistory"
 
 export const resolvers: Resolvers<Context> = {
@@ -41,7 +34,7 @@ export const resolvers: Resolvers<Context> = {
       if (!asset) {
         throw new Error(`Asset was not found in db: ${history.assetId}`)
       }
-      return asset
+      return asset as Company | Crypto | Etf
     },
   },
   Portfolio: {
@@ -84,11 +77,19 @@ export const resolvers: Resolvers<Context> = {
       console.timeEnd(portfolio.id)
       return value
     },
-
-    absoluteHistory: async (portfolio, _args, ctx) => {
+    // @ts-ignore
+    absoluteHistory: async (portfolio, { since }, ctx) => {
       await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
 
-      return await getAbsoluteHistory(portfolio, ctx)
+      const history = await getAbsoluteHistory(portfolio, ctx)
+      if (since) {
+        for (const assetHistory of history) {
+          assetHistory.history = assetHistory.history.filter(
+            (t) => t.time >= since,
+          )
+        }
+      }
+      return history
     },
   },
   Transaction: {
@@ -100,7 +101,7 @@ export const resolvers: Resolvers<Context> = {
       if (!asset) {
         throw new Error(`Asset was not found in db: ${transaction.assetId}`)
       }
-      return asset
+      return asset as Company | Crypto | Etf
     },
   },
   Query: {

@@ -1,5 +1,5 @@
 import { Downsampling } from "@perfolio/pkg/downsampling"
-import { usePortfolio, useTotalAbsolutePortfolioHistory } from "@perfolio/pkg/hooks"
+import { useAbsoluteTotalHistory } from "@perfolio/pkg/hooks"
 import { useCurrentAbsoluteValue } from "@perfolio/pkg/hooks"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Time } from "@perfolio/pkg/util/time"
@@ -13,21 +13,18 @@ export interface InlineTotalAssetChartProps {
 export const InlineTotalAssetChart: React.FC<InlineTotalAssetChartProps> = ({
   portfolioId,
 }): JSX.Element => {
-  const { portfolio } = usePortfolio()
-  const { totalAbsolutePortfolioHistory, isLoading } = useTotalAbsolutePortfolioHistory(
-    portfolio?.absoluteHistory,
-  )
+  const { absoluteTotal, isLoading } = useAbsoluteTotalHistory({ portfolioId })
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const data = useMemo(() => {
     const downsampled = Downsampling.largestTriangle(
-      totalAbsolutePortfolioHistory.map(({ time, value }) => ({ x: time, y: value })),
+      absoluteTotal.map(({ time, value }) => ({ x: time, y: value })),
       500,
     )
     return downsampled.map(({ x, y }) => ({
       time: Time.fromTimestamp(x).toDate().toLocaleDateString(),
       value: y,
     }))
-  }, [totalAbsolutePortfolioHistory])
+  }, [absoluteTotal])
   return (
     <div className="flex flex-col justify-center w-full h-20 space-y-8 bg-gray-100 rounded">
       <div className="relative w-full h-full">

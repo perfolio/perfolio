@@ -22,6 +22,7 @@ export const usePortfolioHistory = (opts?: {
       enabled: !!portfolioId,
     },
   )
+
   return {
     history: {
       relative: data?.portfolio?.relativeHistory ?? [],

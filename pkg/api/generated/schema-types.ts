@@ -65,18 +65,18 @@ export type Company =
     /** The country where this company is registered */
     country: Scalars["String"]
     /** Financial Instrument Global Identifier */
-    figi: Scalars["String"]
+    figi?: Maybe<Scalars["String"]>
     /** A globally unique id */
     id: Scalars["ID"]
     /** International Securities Identification Number */
     isin: Scalars["String"]
-    /** The companys logo url */
+    /** URL to the logo or image */
     logo: Scalars["String"]
-    /** The companys name */
+    /** Human readable name */
     name: Scalars["String"]
     /** The sector of this company */
     sector: Scalars["String"]
-    /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
+    /** The ticker as used by the exchanges. */
     ticker: Scalars["String"]
     /** The type of asset */
     type: AssetType
@@ -142,11 +142,11 @@ export type Crypto =
     id: Scalars["ID"]
     /** International Securities Identification Number */
     isin: Scalars["String"]
-    /** B */
+    /** URL to the logo or image */
     logo: Scalars["String"]
-    /** Dummy field */
+    /** Human readable name */
     name: Scalars["String"]
-    /** A */
+    /** The ticker as used by the exchanges. */
     ticker: Scalars["String"]
     /** The type of asset */
     type: AssetType
@@ -169,16 +169,16 @@ export type Etf =
     /** The asset value over time at a specific exchange */
     assetHistory: Array<ValueAtTime>
     /** Financial Instrument Global Identifier */
-    figi: Scalars["String"]
+    figi?: Maybe<Scalars["String"]>
     /** A globally unique id */
     id: Scalars["ID"]
     /** International Securities Identification Number */
     isin: Scalars["String"]
-    /** The companys logo url */
+    /** URL to the logo or image */
     logo: Scalars["String"]
-    /** The companys name */
+    /** Human readable name */
     name: Scalars["String"]
-    /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
+    /** The ticker as used by the exchanges. */
     ticker: Scalars["String"]
     /** The type of asset */
     type: AssetType
@@ -366,11 +366,11 @@ export type Stock = {
   id: Scalars["ID"]
   /** International Securities Identification Number */
   isin: Scalars["String"]
-  /** The companys logo url */
+  /** URL to the logo or image */
   logo: Scalars["String"]
-  /** The companys name */
+  /** Human readable name */
   name: Scalars["String"]
-  /** The ticker of a stock. This does not include pre/suffixes for different exchanges */
+  /** The ticker as used by the exchanges. */
   ticker: Scalars["String"]
   /** The type of asset */
   type: AssetType
@@ -472,7 +472,7 @@ export type ValueAndQuantityAtTime = {
   /** A timestamp when this value and quantity was */
   time: Scalars["Int"]
   /** The value of each share/item */
-  value?: Maybe<Scalars["Float"]>
+  value: Scalars["Float"]
 }
 
 /** Anything that has a changing value over time can use this. */
@@ -700,7 +700,7 @@ export type CompanyResolvers<
     RequireFields<CompanyAssetHistoryArgs, "end" | "mic" | "start">
   >
   country?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  figi?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -740,7 +740,7 @@ export type EtfResolvers<
     ContextType,
     RequireFields<EtfAssetHistoryArgs, "end" | "mic" | "start">
   >
-  figi?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   logo?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -1001,7 +1001,7 @@ export type ValueAndQuantityAtTimeResolvers<
 > = ResolversObject<{
   quantity?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   time?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
-  value?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>
+  value?: Resolver<ResolversTypes["Float"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -1200,9 +1200,12 @@ export type PortfolioHistoryQuery = {
       }>
       absoluteHistory: Array<{
         __typename?: "AbsoluteAssetHistory"
+        assetId: string
         asset:
           | {
             __typename: "Company"
+            sector: string
+            country: string
             ticker: string
             isin: string
             logo: string
@@ -1228,7 +1231,7 @@ export type PortfolioHistoryQuery = {
         history: Array<{
           __typename?: "ValueAndQuantityAtTime"
           time: number
-          value?: number | null | undefined
+          value: number
           quantity: number
         }>
       }>
@@ -1394,20 +1397,22 @@ export const PortfolioHistoryDocument = gql `
         value
       }
       absoluteHistory(since: $since) {
+        assetId
         asset {
           __typename
           id
           name
+          ... on Company {
+            sector
+            country
+            ticker
+            isin
+            logo
+          }
           ... on ExchangeTradedAsset {
             ticker
             isin
             logo
-            ... on Stock {
-              __typename
-            }
-            ... on Crypto {
-              __typename
-            }
           }
         }
         history {

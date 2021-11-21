@@ -5,11 +5,12 @@ export * from "./queries/useCurrentPortfolioState"
 export * from "./queries/useExchanges"
 export * from "./queries/usePortfolio"
 export * from "./queries/usePortfolioHistory"
+
+export * from "./queries/useAbsoluteTotalHistory"
 export * from "./queries/usePortfolios"
 export * from "./queries/useRelativeMean"
 export * from "./queries/useSearch"
 export * from "./queries/useStandardDeviation"
-export * from "./queries/useTotalAbsolutePortfolioHistory"
 export * from "./queries/useUser"
 
 export * from "./mutations/createExchangeTradedAsset"

@@ -72,38 +72,38 @@ export default gql `
     """
     isin: String!
     """
-    Financial Instrument Global Identifier
+    The ticker as used by the exchanges.
     """
-    figi: String
+    ticker: String!
     """
-    The companys name
+    Human readable name
     """
     name: String!
     """
-    The companys logo url
+    URL to the logo or image
     """
     logo: String!
-    """
-    The ticker of a stock. This does not include pre/suffixes for different exchanges
-    """
-    ticker: String!
-
 
     """
     The type of asset
     """
     type: AssetType!
+
     """
     The asset value over time at a specific exchange
     """
     assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    """
+    Financial Instrument Global Identifier
+    """
+    figi: String
   }
 
   """
   Company stocks
   """
   type Company implements Stock & ExchangeTradedAsset & Asset {
-    """
+   """
     A globally unique id
     """
     id: ID!
@@ -112,21 +112,31 @@ export default gql `
     """
     isin: String!
     """
-    Financial Instrument Global Identifier
+    The ticker as used by the exchanges.
     """
-    figi: String!
+    ticker: String!
     """
-    The companys name
+    Human readable name
     """
     name: String!
     """
-    The companys logo url
+    URL to the logo or image
     """
     logo: String!
+
     """
-    The ticker of a stock. This does not include pre/suffixes for different exchanges
+    The type of asset
     """
-    ticker: String!
+    type: AssetType!
+
+    """
+    The asset value over time at a specific exchange
+    """
+    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    """
+    Financial Instrument Global Identifier
+    """
+    figi: String
     """
     The country where this company is registered
     """
@@ -136,15 +146,6 @@ export default gql `
     """
     sector: String!
 
-
-    """
-    The type of asset
-    """
-    type: AssetType!
-    """
-    The asset value over time at a specific exchange
-    """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
   }
 
   """
@@ -160,31 +161,31 @@ export default gql `
     """
     isin: String!
     """
-    Financial Instrument Global Identifier
+    The ticker as used by the exchanges.
     """
-    figi: String!
+    ticker: String!
     """
-    The companys name
+    Human readable name
     """
     name: String!
     """
-    The companys logo url
+    URL to the logo or image
     """
     logo: String!
-    """
-    The ticker of a stock. This does not include pre/suffixes for different exchanges
-    """
-    ticker: String!
 
-    
     """
     The type of asset
     """
     type: AssetType!
+
     """
     The asset value over time at a specific exchange
     """
     assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    """
+    Financial Instrument Global Identifier
+    """
+    figi: String
   }
   """
   Crypto
@@ -194,32 +195,32 @@ export default gql `
     A globally unique id
     """
     id: ID!
-
     """
     International Securities Identification Number
     """
     isin: String!
     """
-    Dummy field
-    """
-    name: String!
-    """
-    A
+    The ticker as used by the exchanges.
     """
     ticker: String!
     """
-    B
+    Human readable name
+    """
+    name: String!
+    """
+    URL to the logo or image
     """
     logo: String!
-    """
-    The asset value over time at a specific exchange
-    """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
 
     """
     The type of asset
     """
     type: AssetType!
+
+    """
+    The asset value over time at a specific exchange
+    """
+    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
   }
 
   extend type Query {

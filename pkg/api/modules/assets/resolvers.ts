@@ -21,6 +21,22 @@ export const resolvers: Resolvers<Context> = {
       )
     },
   },
+  Company: {
+    sector: async (company, _args, ctx) => {
+      const res = await ctx.dataSources.iex.getCompany(company.ticker)
+      if (!res) {
+        throw new Error(`No company found for ticker: ${company.ticker}`)
+      }
+      return res.sector
+    },
+    country: async (company, _args, ctx) => {
+      const res = await ctx.dataSources.iex.getCompany(company.ticker)
+      if (!res) {
+        throw new Error(`No company found for ticker: ${company.ticker}`)
+      }
+      return res.country
+    },
+  },
   ExchangeTradedAsset: {
     __resolveType: (asset) => {
       if (asset.type === AssetType.COMMON_STOCK) {

@@ -5,31 +5,31 @@ export namespace AssetsModule {
     Company:
       | "id"
       | "isin"
-      | "figi"
+      | "ticker"
       | "name"
       | "logo"
-      | "ticker"
-      | "country"
-      | "sector"
       | "type"
       | "assetHistory"
+      | "figi"
+      | "country"
+      | "sector"
     ETF:
       | "id"
       | "isin"
-      | "figi"
+      | "ticker"
       | "name"
       | "logo"
-      | "ticker"
       | "type"
       | "assetHistory"
+      | "figi"
     Crypto:
       | "id"
       | "isin"
-      | "name"
       | "ticker"
+      | "name"
       | "logo"
-      | "assetHistory"
       | "type"
+      | "assetHistory"
     Query: "exchangeTradedAsset"
     Mutation: "createExchangeTradedAsset"
     Asset: "id" | "name"
@@ -44,12 +44,12 @@ export namespace AssetsModule {
     Stock:
       | "id"
       | "isin"
-      | "figi"
+      | "ticker"
       | "name"
       | "logo"
-      | "ticker"
       | "type"
       | "assetHistory"
+      | "figi"
   }
 
   interface DefinedEnumValues {
@@ -119,35 +119,35 @@ export namespace AssetsModule {
       "*"?: gm.Middleware[]
       id?: gm.Middleware[]
       isin?: gm.Middleware[]
-      figi?: gm.Middleware[]
+      ticker?: gm.Middleware[]
       name?: gm.Middleware[]
       logo?: gm.Middleware[]
-      ticker?: gm.Middleware[]
-      country?: gm.Middleware[]
-      sector?: gm.Middleware[]
       type?: gm.Middleware[]
       assetHistory?: gm.Middleware[]
+      figi?: gm.Middleware[]
+      country?: gm.Middleware[]
+      sector?: gm.Middleware[]
     }
     ETF?: {
       "*"?: gm.Middleware[]
       id?: gm.Middleware[]
       isin?: gm.Middleware[]
-      figi?: gm.Middleware[]
+      ticker?: gm.Middleware[]
       name?: gm.Middleware[]
       logo?: gm.Middleware[]
-      ticker?: gm.Middleware[]
       type?: gm.Middleware[]
       assetHistory?: gm.Middleware[]
+      figi?: gm.Middleware[]
     }
     Crypto?: {
       "*"?: gm.Middleware[]
       id?: gm.Middleware[]
       isin?: gm.Middleware[]
-      name?: gm.Middleware[]
       ticker?: gm.Middleware[]
+      name?: gm.Middleware[]
       logo?: gm.Middleware[]
-      assetHistory?: gm.Middleware[]
       type?: gm.Middleware[]
+      assetHistory?: gm.Middleware[]
     }
     Query?: {
       "*"?: gm.Middleware[]

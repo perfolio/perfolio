@@ -46,7 +46,7 @@ export const toTimeseries = (
     ;[...history]
       .sort((a, b) => a.time - b.time)
       .forEach((day) => {
-        if (day.value && day.time >= (since ?? Number.NEGATIVE_INFINITY)) {
+        if (day.value > 0 && day.time >= (since ?? Number.NEGATIVE_INFINITY)) {
           if (!timeline[day.time]) {
             timeline[day.time] = {}
           }

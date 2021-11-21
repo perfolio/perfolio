@@ -1,5 +1,5 @@
 import { Downsampling } from "@perfolio/pkg/downsampling"
-import { usePortfolioHistory, useTotalAbsolutePortfolioHistory } from "@perfolio/pkg/hooks"
+import { useAbsoluteTotalHistory, usePortfolioHistory } from "@perfolio/pkg/hooks"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Time } from "@perfolio/pkg/util/time"
 import { AreaChart } from "@perfolio/ui/charts"
@@ -10,24 +10,23 @@ export interface AssetsOverTimeChartProps {
   /**
    * Time in seconds from the first datapoint til now.
    */
-  range: number
+  since: number
 
   aggregate: AggregateOptions
 }
 
 export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   aggregate = "absolute",
-  range,
+  since,
 }): JSX.Element => {
-  const { history, isLoading } = usePortfolioHistory()
-  const { totalAbsolutePortfolioHistory } = useTotalAbsolutePortfolioHistory(
-    history.absolute,
-    range,
+  const { history, isLoading } = usePortfolioHistory({ since })
+  const { absoluteTotal } = useAbsoluteTotalHistory(
+    { since },
   )
 
   const data = useMemo(() => {
     const choice = aggregate === "absolute"
-      ? totalAbsolutePortfolioHistory
+      ? absoluteTotal
       : (history.relative)
 
     const downsampled = Downsampling.largestTriangle(
@@ -38,7 +37,7 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
       time: Time.fromTimestamp(x).toDate().toLocaleDateString(),
       value: y,
     }))
-  }, [totalAbsolutePortfolioHistory, history, aggregate])
+  }, [absoluteTotal, history, aggregate])
   return (
     <div className="w-full h-56">
       <AreaChart

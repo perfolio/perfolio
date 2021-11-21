@@ -5,21 +5,25 @@ query portfolioHistory($portfolioId: ID!, $since: Int) {
       value
     }
     absoluteHistory(since: $since) {
+      assetId
       asset {
         __typename
         id
         name
-        ... on ExchangeTradedAsset {
+        ... on Company {
+          sector
+          country
           ticker
           isin
           logo
-          ... on Stock {
-            __typename
-          }
-          ... on Crypto {
-            __typename
-          }
         }
+
+        ... on ExchangeTradedAsset{
+          ticker 
+          isin 
+          logo
+        }
+        
       }
       history {
         time
