@@ -6,6 +6,7 @@ export interface TooltipProps {
   side?: "top" | "right" | "bottom" | "left"
   size?: "sm" | "md" | "lg"
   trigger?: React.ReactNode
+  asChild?: boolean
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
@@ -13,10 +14,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   side = "top",
   size = "md",
+  asChild,
 }): JSX.Element => {
   return (
     <Root delayDuration={200}>
-      <Trigger asChild className="appearance-none">
+      <Trigger asChild={asChild} className="appearance-none">
         {trigger ?? (
           <InformationCircleIcon
             className={cn("text-gray-600", {

@@ -117,6 +117,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
             weight: (
               <Cell.Cell>
                 <Tooltip
+                  asChild
                   trigger={
                     <div className="flex h-2 overflow-hidden rounded bg-primary-light">
                       <span
