@@ -105,10 +105,10 @@
   "lint-staged": {
     "*.{ts,tsx,js,html,graphql,gql}": [
       "eslint --fix --ext .js,.ts,.tsx",
-      "prettier --write"
+      "dprint fmt"
     ],
     "*.{yml,yaml,css,json}": [
-      "prettier --write"
+      "dprint fmt"
     ]
   },
   "commitlint": {
