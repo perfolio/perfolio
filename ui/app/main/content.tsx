@@ -4,5 +4,5 @@ import React from "react"
 export interface MainContentProps {}
 
 export const MainContent: React.FC<MainContentProps> = ({ children }): JSX.Element => {
-  return <div className="p-4 rounded-b md:p-6">{children}</div>
+  return <div className="sm:p-4 rounded-b md:p-6">{children}</div>
 }
