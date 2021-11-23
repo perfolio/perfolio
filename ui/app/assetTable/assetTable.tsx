@@ -1,7 +1,7 @@
 import { useCurrentPorfolioState, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
 import { format } from "@perfolio/pkg/util/numbers"
-import { Avatar, Cell, Description, Heading, Table, Text, Tooltip } from "@perfolio/ui/components"
+import { Avatar, Cell, Description, Drawer, Heading, Table, Text, Tooltip } from "@perfolio/ui/components"
 import React, { useMemo, useState } from "react"
 import cn from "classnames"
 
@@ -110,7 +110,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
              */
             .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
             .map((holding) => {
-              const change = aggregation === "absolute"
+              const change = displayAggregation === "absolute"
                 ? (holding.value - costPerShare[holding.asset.id]!)
                 * holding.quantity
                 : holding.value / costPerShare[holding.asset.id]! - 1
@@ -171,12 +171,14 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                     textColor={change > 0 ? "text-success-dark" : "text-error-dark"}
                     bgColor={change > 0 ? "bg-success-light" : "bg-error-light"}
                   >
-                    {format(
-                      change,
-                      aggregation === "absolute"
-                        ? { suffix: "€", sign: true }
-                        : { percent: true, suffix: "%", sign: true },
-                    )}
+                    <span onClick={() => setDisplayAggregation(displayAggregation === "absolute" ? "relative" : "absolute")}>
+                      {format(
+                        change,
+                        displayAggregation === "absolute"
+                          ? { suffix: "€", sign: true }
+                          : { percent: true, suffix: "%", sign: true },
+                      )}
+                    </span>
                   </Cell.Tag>
                 ),
               }
@@ -185,7 +187,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
       </div>
       <div className="flex sm:hidden">
         <div className="w-full bg-white overflow-hidden">
-          <ul role="list" className="divide-y">
+          <ul role="list">
             {(currentPorfolioState ?? [])
               /**
                * Sort by total value descending
@@ -194,7 +196,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
               .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
               .map((holding) => {
                 const change =
-                  aggregation === "absolute"
+                  displayAggregation === "absolute"
                     ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
                     : holding.value / costPerShare[holding.asset.id]! - 1
 
@@ -214,7 +216,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                           <Avatar size="sm" src={holding.asset.logo} />
                         </div>
                         <div>
-                          <Heading h4>{holding.asset.name}</Heading>
+                          <Text bold truncate>{holding.asset.name}</Text>
                           <div className="w-full flex space-x-2 justify-start">
                             <div className="bg-gray-200 self-center px-1 rounded">
                               <Text size="sm">{format(holding.quantity, { prefix: "x " })}</Text>
