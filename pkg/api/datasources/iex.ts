@@ -49,4 +49,7 @@ export class IEX extends DataSource {
   public async getExchanges() {
     return await this.service.getExchanges()
   }
+  public async findTicker(isin: string) {
+    return await this.service.findTicker({ isin })
+  }
 }

@@ -65,7 +65,6 @@ export const HeroSection: React.FC = (): JSX.Element => {
                   setFormError,
                 )}
               type="cta"
-              htmlType="submit"
               disabled={submitting}
             >
               Join the waitlist

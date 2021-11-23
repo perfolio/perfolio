@@ -84,7 +84,7 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
         disabled && {
           "bg-black text-gray-400": type === "primary",
           "bg-white text-gray-600 border-gray-60": type === "secondary",
-          "bg-gradient-to-tr from-cta to-secondary text-gray-400 shadow-cta": type === "cta",
+          "bg-gradient-to-tr from-primary to-secondary text-gray-400 shadow-cta": type === "cta",
           "text-gray-600 border-0 shadow-none": type === "plain",
           "bg-error-light text-gray-white border-error-light": type === "error",
         },
