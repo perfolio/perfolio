@@ -1,7 +1,7 @@
 import { useCurrentPorfolioState, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
 import { format } from "@perfolio/pkg/util/numbers"
-import { Avatar, Cell, Description, Drawer, Heading, Table, Text, Tooltip } from "@perfolio/ui/components"
+import { Avatar, Cell, Description, Table, Text, Tooltip } from "@perfolio/ui/components"
 import React, { useMemo, useState } from "react"
 import cn from "classnames"
 
