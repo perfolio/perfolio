@@ -10,10 +10,7 @@ export namespace UtilModule {
     Types.ValueAndQuantityAtTime,
     DefinedFields["ValueAndQuantityAtTime"]
   >
-  export type ValueAtTime = Pick<
-    Types.ValueAtTime,
-    DefinedFields["ValueAtTime"]
-  >
+  export type ValueAtTime = Pick<Types.ValueAtTime, DefinedFields["ValueAtTime"]>
 
   export type ValueAndQuantityAtTimeResolvers = Pick<
     Types.ValueAndQuantityAtTimeResolvers,

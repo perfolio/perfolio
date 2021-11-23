@@ -1,6 +1,7 @@
 import { ApiConfig, Client } from "./client"
 import { getCompany, GetCompanyRequest, GetCompanyResponse } from "./company"
 import { getExchanges, GetExchangesResponse } from "./exchanges"
+import { findTicker, FindTickerRequest, FindTickerResponse } from "./findTicker"
 import { getHistory, GetHistoryRequest, GetHistoryResponse } from "./history"
 import { getLogo, GetLogoRequest, GetLogoResponse } from "./logo"
 
@@ -24,5 +25,8 @@ export class IEXService {
 
   async getExchanges(): Promise<GetExchangesResponse> {
     return getExchanges(this.client)
+  }
+  async findTicker(req: FindTickerRequest): Promise<FindTickerResponse> {
+    return findTicker(this.client, req)
   }
 }

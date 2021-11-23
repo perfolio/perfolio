@@ -13,10 +13,7 @@ export namespace ExchangeModule {
     Types.ExchangeResolvers,
     DefinedFields["Exchange"] | "__isTypeOf"
   >
-  export type QueryResolvers = Pick<
-    Types.QueryResolvers,
-    DefinedFields["Query"]
-  >
+  export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
 
   export interface Resolvers {
     Exchange?: ExchangeResolvers

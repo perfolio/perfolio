@@ -9,23 +9,11 @@ import { GraphQLResolveInfo } from "graphql"
 import { DocumentNode } from "graphql"
 import gql from "graphql-tag"
 export type Maybe<T> = T | undefined
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K]
-}
-export type MakeOptional<T, K extends keyof T> =
-  & Omit<T, K>
-  & {
-    [SubKey in K]?: Maybe<T[SubKey]>
-  }
-export type MakeMaybe<T, K extends keyof T> =
-  & Omit<T, K>
-  & {
-    [SubKey in K]: Maybe<T[SubKey]>
-  }
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
 export type RequireFields<T, K extends keyof T> =
-  & {
-    [X in Exclude<keyof T, K>]?: T[X]
-  }
+  & { [X in Exclude<keyof T, K>]?: T[X] }
   & { [P in K]-?: NonNullable<T[P]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -51,36 +39,36 @@ export type Asset = {
   name: Scalars["String"]
 }
 
-export type AssetType = "COMMON_STOCK" | "CRYPTO" | "MUTUAL_FUND" | "TODO"
+export type AssetType =
+  | "COMMON_STOCK"
+  | "CRYPTO"
+  | "MUTUAL_FUND"
+  | "TODO"
 
 /** Company stocks */
-export type Company =
-  & Asset
-  & ExchangeTradedAsset
-  & Stock
-  & {
-    __typename?: "Company"
-    /** The asset value over time at a specific exchange */
-    assetHistory: Array<ValueAtTime>
-    /** The country where this company is registered */
-    country: Scalars["String"]
-    /** Financial Instrument Global Identifier */
-    figi?: Maybe<Scalars["String"]>
-    /** A globally unique id */
-    id: Scalars["ID"]
-    /** International Securities Identification Number */
-    isin: Scalars["String"]
-    /** URL to the logo or image */
-    logo: Scalars["String"]
-    /** Human readable name */
-    name: Scalars["String"]
-    /** The sector of this company */
-    sector: Scalars["String"]
-    /** The ticker as used by the exchanges. */
-    ticker: Scalars["String"]
-    /** The type of asset */
-    type: AssetType
-  }
+export type Company = Asset & ExchangeTradedAsset & Stock & {
+  __typename?: "Company"
+  /** The asset value over time at a specific exchange */
+  assetHistory: Array<ValueAtTime>
+  /** The country where this company is registered */
+  country: Scalars["String"]
+  /** Financial Instrument Global Identifier */
+  figi?: Maybe<Scalars["String"]>
+  /** A globally unique id */
+  id: Scalars["ID"]
+  /** International Securities Identification Number */
+  isin: Scalars["String"]
+  /** URL to the logo or image */
+  logo: Scalars["String"]
+  /** Human readable name */
+  name: Scalars["String"]
+  /** The sector of this company */
+  sector: Scalars["String"]
+  /** The ticker as used by the exchanges. */
+  ticker: Scalars["String"]
+  /** The type of asset */
+  type: AssetType
+}
 
 /** Company stocks */
 export type CompanyAssetHistoryArgs = {
@@ -131,26 +119,23 @@ export type CreateTransaction = {
 }
 
 /** Crypto */
-export type Crypto =
-  & Asset
-  & ExchangeTradedAsset
-  & {
-    __typename?: "Crypto"
-    /** The asset value over time at a specific exchange */
-    assetHistory: Array<ValueAtTime>
-    /** A globally unique id */
-    id: Scalars["ID"]
-    /** International Securities Identification Number */
-    isin: Scalars["String"]
-    /** URL to the logo or image */
-    logo: Scalars["String"]
-    /** Human readable name */
-    name: Scalars["String"]
-    /** The ticker as used by the exchanges. */
-    ticker: Scalars["String"]
-    /** The type of asset */
-    type: AssetType
-  }
+export type Crypto = Asset & ExchangeTradedAsset & {
+  __typename?: "Crypto"
+  /** The asset value over time at a specific exchange */
+  assetHistory: Array<ValueAtTime>
+  /** A globally unique id */
+  id: Scalars["ID"]
+  /** International Securities Identification Number */
+  isin: Scalars["String"]
+  /** URL to the logo or image */
+  logo: Scalars["String"]
+  /** Human readable name */
+  name: Scalars["String"]
+  /** The ticker as used by the exchanges. */
+  ticker: Scalars["String"]
+  /** The type of asset */
+  type: AssetType
+}
 
 /** Crypto */
 export type CryptoAssetHistoryArgs = {
@@ -160,29 +145,25 @@ export type CryptoAssetHistoryArgs = {
 }
 
 /** Company stocks */
-export type Etf =
-  & Asset
-  & ExchangeTradedAsset
-  & Stock
-  & {
-    __typename?: "ETF"
-    /** The asset value over time at a specific exchange */
-    assetHistory: Array<ValueAtTime>
-    /** Financial Instrument Global Identifier */
-    figi?: Maybe<Scalars["String"]>
-    /** A globally unique id */
-    id: Scalars["ID"]
-    /** International Securities Identification Number */
-    isin: Scalars["String"]
-    /** URL to the logo or image */
-    logo: Scalars["String"]
-    /** Human readable name */
-    name: Scalars["String"]
-    /** The ticker as used by the exchanges. */
-    ticker: Scalars["String"]
-    /** The type of asset */
-    type: AssetType
-  }
+export type Etf = Asset & ExchangeTradedAsset & Stock & {
+  __typename?: "ETF"
+  /** The asset value over time at a specific exchange */
+  assetHistory: Array<ValueAtTime>
+  /** Financial Instrument Global Identifier */
+  figi?: Maybe<Scalars["String"]>
+  /** A globally unique id */
+  id: Scalars["ID"]
+  /** International Securities Identification Number */
+  isin: Scalars["String"]
+  /** URL to the logo or image */
+  logo: Scalars["String"]
+  /** Human readable name */
+  name: Scalars["String"]
+  /** The ticker as used by the exchanges. */
+  ticker: Scalars["String"]
+  /** The type of asset */
+  type: AssetType
+}
 
 /** Company stocks */
 export type EtfAssetHistoryArgs = {
@@ -524,18 +505,8 @@ export interface SubscriptionSubscriberObject<
   TContext,
   TArgs,
 > {
-  subscribe: SubscriptionSubscribeFn<
-    { [key in TKey]: TResult },
-    TParent,
-    TContext,
-    TArgs
-  >
-  resolve?: SubscriptionResolveFn<
-    TResult,
-    { [key in TKey]: TResult },
-    TContext,
-    TArgs
-  >
+  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>
+  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>
 }
 
 export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
@@ -543,13 +514,7 @@ export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
   resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>
 }
 
-export type SubscriptionObject<
-  TResult,
-  TKey extends string,
-  TParent,
-  TContext,
-  TArgs,
-> =
+export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>
 
@@ -560,9 +525,7 @@ export type SubscriptionResolver<
   TContext = {},
   TArgs = {},
 > =
-  | ((
-    ...args: any[]
-  ) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
+  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>
 
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
@@ -579,12 +542,7 @@ export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
 
 export type NextResolverFn<T> = () => Promise<T>
 
-export type DirectiveResolverFn<
-  TResult = {},
-  TParent = {},
-  TContext = {},
-  TArgs = {},
-> = (
+export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
@@ -595,10 +553,7 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   AbsoluteAssetHistory: ResolverTypeWrapper<AbsoluteAssetHistory>
-  Asset:
-    | ResolversTypes["Company"]
-    | ResolversTypes["Crypto"]
-    | ResolversTypes["ETF"]
+  Asset: ResolversTypes["Company"] | ResolversTypes["Crypto"] | ResolversTypes["ETF"]
   AssetType: AssetType
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
   Company: ResolverTypeWrapper<Company>
@@ -668,11 +623,7 @@ export type AbsoluteAssetHistoryResolvers<
 > = ResolversObject<{
   asset?: Resolver<ResolversTypes["Asset"], ParentType, ContextType>
   assetId?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-  history?: Resolver<
-    Array<ResolversTypes["ValueAndQuantityAtTime"]>,
-    ParentType,
-    ContextType
-  >
+  history?: Resolver<Array<ResolversTypes["ValueAndQuantityAtTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -680,11 +631,7 @@ export type AssetResolvers<
   ContextType = GraphQLModules.Context,
   ParentType extends ResolversParentTypes["Asset"] = ResolversParentTypes["Asset"],
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<
-    "Company" | "Crypto" | "ETF",
-    ParentType,
-    ContextType
-  >
+  __resolveType: TypeResolveFn<"Company" | "Crypto" | "ETF", ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
 }>
@@ -766,11 +713,7 @@ export type ExchangeTradedAssetResolvers<
   ParentType extends ResolversParentTypes["ExchangeTradedAsset"] =
     ResolversParentTypes["ExchangeTradedAsset"],
 > = ResolversObject<{
-  __resolveType: TypeResolveFn<
-    "Company" | "Crypto" | "ETF",
-    ParentType,
-    ContextType
-  >
+  __resolveType: TypeResolveFn<"Company" | "Crypto" | "ETF", ParentType, ContextType>
   assetHistory?: Resolver<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
@@ -877,11 +820,7 @@ export type PortfolioResolvers<
     ContextType,
     RequireFields<PortfolioRelativeHistoryArgs, never>
   >
-  transactions?: Resolver<
-    Array<ResolversTypes["Transaction"]>,
-    ParentType,
-    ContextType
-  >
+  transactions?: Resolver<Array<ResolversTypes["Transaction"]>, ParentType, ContextType>
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
@@ -896,11 +835,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryExchangeTradedAssetArgs, "assetId">
   >
-  exchanges?: Resolver<
-    Array<ResolversTypes["Exchange"]>,
-    ParentType,
-    ContextType
-  >
+  exchanges?: Resolver<Array<ResolversTypes["Exchange"]>, ParentType, ContextType>
   healthCheck?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
   portfolio?: Resolver<
     Maybe<ResolversTypes["Portfolio"]>,
@@ -921,16 +856,8 @@ export type SettingsResolvers<
   ParentType extends ResolversParentTypes["Settings"] = ResolversParentTypes["Settings"],
 > = ResolversObject<{
   defaultCurrency?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  defaultExchange?: Resolver<
-    ResolversTypes["Exchange"],
-    ParentType,
-    ContextType
-  >
-  defaultExchangeMic?: Resolver<
-    ResolversTypes["String"],
-    ParentType,
-    ContextType
-  >
+  defaultExchange?: Resolver<ResolversTypes["Exchange"], ParentType, ContextType>
+  defaultExchangeMic?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -980,17 +907,9 @@ export type UserResolvers<
     ContextType,
     RequireFields<UserPortfolioArgs, "portfolioId">
   >
-  portfolios?: Resolver<
-    Array<ResolversTypes["Portfolio"]>,
-    ParentType,
-    ContextType
-  >
+  portfolios?: Resolver<Array<ResolversTypes["Portfolio"]>, ParentType, ContextType>
   settings?: Resolver<ResolversTypes["Settings"], ParentType, ContextType>
-  stripeCustomerId?: Resolver<
-    ResolversTypes["String"],
-    ParentType,
-    ContextType
-  >
+  stripeCustomerId?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -1094,27 +1013,9 @@ export type ExchangeTradedAssetQueryVariables = Exact<{
 export type ExchangeTradedAssetQuery = {
   __typename?: "Query"
   exchangeTradedAsset?:
-    | {
-      __typename: "Company"
-      id: string
-      ticker: string
-      logo: string
-      name: string
-    }
-    | {
-      __typename: "Crypto"
-      id: string
-      ticker: string
-      logo: string
-      name: string
-    }
-    | {
-      __typename: "ETF"
-      id: string
-      ticker: string
-      logo: string
-      name: string
-    }
+    | { __typename: "Company"; id: string; ticker: string; logo: string; name: string }
+    | { __typename: "Crypto"; id: string; ticker: string; logo: string; name: string }
+    | { __typename: "ETF"; id: string; ticker: string; logo: string; name: string }
     | null
     | undefined
 }
@@ -1123,13 +1024,15 @@ export type ExchangesQueryVariables = Exact<{ [key: string]: never }>
 
 export type ExchangesQuery = {
   __typename?: "Query"
-  exchanges: Array<{
-    __typename: "Exchange"
-    description: string
-    region: string
-    mic: string
-    suffix?: string | null | undefined
-  }>
+  exchanges: Array<
+    {
+      __typename: "Exchange"
+      description: string
+      region: string
+      mic: string
+      suffix?: string | null | undefined
+    }
+  >
 }
 
 export type PortfolioQueryVariables = Exact<{
@@ -1144,32 +1047,30 @@ export type PortfolioQuery = {
       id: string
       name: string
       primary: boolean
-      transactions: Array<{
-        __typename?: "Transaction"
-        id: string
-        portfolioId: string
-        assetId: string
-        executedAt: number
-        value: number
-        volume: number
-        asset:
-          | {
+      transactions: Array<
+        {
+          __typename?: "Transaction"
+          id: string
+          portfolioId: string
+          assetId: string
+          executedAt: number
+          value: number
+          volume: number
+          asset: {
             __typename: "Company"
             ticker: string
             isin: string
             logo: string
             id: string
             name: string
-          }
-          | {
+          } | {
             __typename: "Crypto"
             ticker: string
             isin: string
             logo: string
             id: string
             name: string
-          }
-          | {
+          } | {
             __typename: "ETF"
             ticker: string
             isin: string
@@ -1177,7 +1078,8 @@ export type PortfolioQuery = {
             id: string
             name: string
           }
-      }>
+        }
+      >
     }
     | null
     | undefined
@@ -1193,16 +1095,12 @@ export type PortfolioHistoryQuery = {
   portfolio?:
     | {
       __typename?: "Portfolio"
-      relativeHistory: Array<{
-        __typename?: "ValueAtTime"
-        time: number
-        value: number
-      }>
-      absoluteHistory: Array<{
-        __typename?: "AbsoluteAssetHistory"
-        assetId: string
-        asset:
-          | {
+      relativeHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      absoluteHistory: Array<
+        {
+          __typename?: "AbsoluteAssetHistory"
+          assetId: string
+          asset: {
             __typename: "Company"
             sector: string
             country: string
@@ -1211,16 +1109,14 @@ export type PortfolioHistoryQuery = {
             logo: string
             id: string
             name: string
-          }
-          | {
+          } | {
             __typename: "Crypto"
             ticker: string
             isin: string
             logo: string
             id: string
             name: string
-          }
-          | {
+          } | {
             __typename: "ETF"
             ticker: string
             isin: string
@@ -1228,13 +1124,11 @@ export type PortfolioHistoryQuery = {
             id: string
             name: string
           }
-        history: Array<{
-          __typename?: "ValueAndQuantityAtTime"
-          time: number
-          value: number
-          quantity: number
-        }>
-      }>
+          history: Array<
+            { __typename?: "ValueAndQuantityAtTime"; time: number; value: number; quantity: number }
+          >
+        }
+      >
     }
     | null
     | undefined
@@ -1249,12 +1143,7 @@ export type GetUserPortfoliosQuery = {
   user?:
     | {
       __typename?: "User"
-      portfolios: Array<{
-        __typename?: "Portfolio"
-        name: string
-        id: string
-        primary: boolean
-      }>
+      portfolios: Array<{ __typename?: "Portfolio"; name: string; id: string; primary: boolean }>
     }
     | null
     | undefined
@@ -1288,178 +1177,174 @@ export type UserQuery = {
 }
 
 export const CreateExchangeTradedAssetDocument = gql `
-  mutation createExchangeTradedAsset($isin: String!) {
-    createExchangeTradedAsset(isin: $isin) {
-      id
-    }
+    mutation createExchangeTradedAsset($isin: String!) {
+  createExchangeTradedAsset(isin: $isin) {
+    id
   }
-`
+}
+    `
 export const CreateTransactionDocument = gql `
-  mutation createTransaction($transaction: CreateTransaction!) {
-    createTransaction(transaction: $transaction) {
-      id
-    }
+    mutation createTransaction($transaction: CreateTransaction!) {
+  createTransaction(transaction: $transaction) {
+    id
   }
-`
+}
+    `
 export const DeleteTransactionDocument = gql `
-  mutation deleteTransaction($transactionId: ID!) {
-    deleteTransaction(transactionId: $transactionId) {
-      id
+    mutation deleteTransaction($transactionId: ID!) {
+  deleteTransaction(transactionId: $transactionId) {
+    id
+  }
+}
+    `
+export const SubscribeToNewsletterDocument = gql `
+    mutation subscribeToNewsletter($email: String!) {
+  subscribeToNewsletter(email: $email)
+}
+    `
+export const UpdateSettingsDocument = gql `
+    mutation updateSettings($settings: UpdateSettings!) {
+  updateSettings(settings: $settings) {
+    defaultCurrency
+    defaultExchange {
+      mic
     }
   }
-`
-export const SubscribeToNewsletterDocument = gql `
-  mutation subscribeToNewsletter($email: String!) {
-    subscribeToNewsletter(email: $email)
-  }
-`
-export const UpdateSettingsDocument = gql `
-  mutation updateSettings($settings: UpdateSettings!) {
-    updateSettings(settings: $settings) {
-      defaultCurrency
-      defaultExchange {
-        mic
+}
+    `
+export const ExchangeTradedAssetDocument = gql `
+    query exchangeTradedAsset($assetId: ID!) {
+  exchangeTradedAsset(assetId: $assetId) {
+    __typename
+    id
+    ticker
+    logo
+    name
+    ... on Stock {
+      ... on Company {
+        sector
+        country
       }
     }
   }
-`
-export const ExchangeTradedAssetDocument = gql `
-  query exchangeTradedAsset($assetId: ID!) {
-    exchangeTradedAsset(assetId: $assetId) {
-      __typename
+}
+    `
+export const ExchangesDocument = gql `
+    query exchanges {
+  exchanges {
+    __typename
+    description
+    region
+    mic
+    suffix
+  }
+}
+    `
+export const PortfolioDocument = gql `
+    query portfolio($portfolioId: ID!) {
+  portfolio(portfolioId: $portfolioId) {
+    __typename
+    id
+    name
+    primary
+    transactions {
       id
-      ticker
-      logo
-      name
-      ... on Stock {
+      portfolioId
+      assetId
+      asset {
+        __typename
+        id
+        name
+        ... on ExchangeTradedAsset {
+          ticker
+          isin
+          logo
+          ... on Stock {
+            __typename
+            ... on Company {
+              sector
+              country
+            }
+          }
+          ... on Crypto {
+            __typename
+          }
+        }
+      }
+      executedAt
+      value
+      volume
+    }
+  }
+}
+    `
+export const PortfolioHistoryDocument = gql `
+    query portfolioHistory($portfolioId: ID!, $since: Int) {
+  portfolio(portfolioId: $portfolioId) {
+    relativeHistory(since: $since) {
+      time
+      value
+    }
+    absoluteHistory(since: $since) {
+      assetId
+      asset {
+        __typename
+        id
+        name
         ... on Company {
           sector
           country
+          ticker
+          isin
+          logo
+        }
+        ... on ExchangeTradedAsset {
+          ticker
+          isin
+          logo
         }
       }
-    }
-  }
-`
-export const ExchangesDocument = gql `
-  query exchanges {
-    exchanges {
-      __typename
-      description
-      region
-      mic
-      suffix
-    }
-  }
-`
-export const PortfolioDocument = gql `
-  query portfolio($portfolioId: ID!) {
-    portfolio(portfolioId: $portfolioId) {
-      __typename
-      id
-      name
-      primary
-      transactions {
-        id
-        portfolioId
-        assetId
-        asset {
-          __typename
-          id
-          name
-          ... on ExchangeTradedAsset {
-            ticker
-            isin
-            logo
-            ... on Stock {
-              __typename
-              ... on Company {
-                sector
-                country
-              }
-            }
-            ... on Crypto {
-              __typename
-            }
-          }
-        }
-        executedAt
-        value
-        volume
-      }
-    }
-  }
-`
-export const PortfolioHistoryDocument = gql `
-  query portfolioHistory($portfolioId: ID!, $since: Int) {
-    portfolio(portfolioId: $portfolioId) {
-      relativeHistory(since: $since) {
+      history {
         time
         value
-      }
-      absoluteHistory(since: $since) {
-        assetId
-        asset {
-          __typename
-          id
-          name
-          ... on Company {
-            sector
-            country
-            ticker
-            isin
-            logo
-          }
-          ... on ExchangeTradedAsset {
-            ticker
-            isin
-            logo
-          }
-        }
-        history {
-          time
-          value
-          quantity
-        }
+        quantity
       }
     }
   }
-`
+}
+    `
 export const GetUserPortfoliosDocument = gql `
-  query getUserPortfolios($userId: ID!) {
-    user(userId: $userId) {
-      portfolios {
-        name
-        id
-        primary
-      }
-    }
-  }
-`
-export const UserDocument = gql `
-  query user($userId: ID!) {
-    user(userId: $userId) {
-      __typename
+    query getUserPortfolios($userId: ID!) {
+  user(userId: $userId) {
+    portfolios {
+      name
       id
-      stripeCustomerId
-      settings {
+      primary
+    }
+  }
+}
+    `
+export const UserDocument = gql `
+    query user($userId: ID!) {
+  user(userId: $userId) {
+    __typename
+    id
+    stripeCustomerId
+    settings {
+      __typename
+      defaultCurrency
+      defaultExchange {
         __typename
-        defaultCurrency
-        defaultExchange {
-          __typename
-          description
-          suffix
-          mic
-          region
-        }
+        description
+        suffix
+        mic
+        region
       }
     }
   }
-`
-export type Requester<C = {}> = <R, V>(
-  doc: DocumentNode,
-  vars?: V,
-  options?: C,
-) => Promise<R>
+}
+    `
+export type Requester<C = {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C>(requester: Requester<C>) {
   return {
     createExchangeTradedAsset(
@@ -1475,28 +1360,31 @@ export function getSdk<C>(requester: Requester<C>) {
       variables: CreateTransactionMutationVariables,
       options?: C,
     ): Promise<CreateTransactionMutation> {
-      return requester<
-        CreateTransactionMutation,
-        CreateTransactionMutationVariables
-      >(CreateTransactionDocument, variables, options)
+      return requester<CreateTransactionMutation, CreateTransactionMutationVariables>(
+        CreateTransactionDocument,
+        variables,
+        options,
+      )
     },
     deleteTransaction(
       variables: DeleteTransactionMutationVariables,
       options?: C,
     ): Promise<DeleteTransactionMutation> {
-      return requester<
-        DeleteTransactionMutation,
-        DeleteTransactionMutationVariables
-      >(DeleteTransactionDocument, variables, options)
+      return requester<DeleteTransactionMutation, DeleteTransactionMutationVariables>(
+        DeleteTransactionDocument,
+        variables,
+        options,
+      )
     },
     subscribeToNewsletter(
       variables: SubscribeToNewsletterMutationVariables,
       options?: C,
     ): Promise<SubscribeToNewsletterMutation> {
-      return requester<
-        SubscribeToNewsletterMutation,
-        SubscribeToNewsletterMutationVariables
-      >(SubscribeToNewsletterDocument, variables, options)
+      return requester<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>(
+        SubscribeToNewsletterDocument,
+        variables,
+        options,
+      )
     },
     updateSettings(
       variables: UpdateSettingsMutationVariables,
@@ -1512,25 +1400,20 @@ export function getSdk<C>(requester: Requester<C>) {
       variables: ExchangeTradedAssetQueryVariables,
       options?: C,
     ): Promise<ExchangeTradedAssetQuery> {
-      return requester<
-        ExchangeTradedAssetQuery,
-        ExchangeTradedAssetQueryVariables
-      >(ExchangeTradedAssetDocument, variables, options)
+      return requester<ExchangeTradedAssetQuery, ExchangeTradedAssetQueryVariables>(
+        ExchangeTradedAssetDocument,
+        variables,
+        options,
+      )
     },
-    exchanges(
-      variables?: ExchangesQueryVariables,
-      options?: C,
-    ): Promise<ExchangesQuery> {
+    exchanges(variables?: ExchangesQueryVariables, options?: C): Promise<ExchangesQuery> {
       return requester<ExchangesQuery, ExchangesQueryVariables>(
         ExchangesDocument,
         variables,
         options,
       )
     },
-    portfolio(
-      variables: PortfolioQueryVariables,
-      options?: C,
-    ): Promise<PortfolioQuery> {
+    portfolio(variables: PortfolioQueryVariables, options?: C): Promise<PortfolioQuery> {
       return requester<PortfolioQuery, PortfolioQueryVariables>(
         PortfolioDocument,
         variables,
@@ -1558,11 +1441,7 @@ export function getSdk<C>(requester: Requester<C>) {
       )
     },
     user(variables: UserQueryVariables, options?: C): Promise<UserQuery> {
-      return requester<UserQuery, UserQueryVariables>(
-        UserDocument,
-        variables,
-        options,
-      )
+      return requester<UserQuery, UserQueryVariables>(UserDocument, variables, options)
     },
   }
 }

@@ -13,43 +13,13 @@ export namespace AssetsModule {
       | "figi"
       | "country"
       | "sector"
-    ETF:
-      | "id"
-      | "isin"
-      | "ticker"
-      | "name"
-      | "logo"
-      | "type"
-      | "assetHistory"
-      | "figi"
-    Crypto:
-      | "id"
-      | "isin"
-      | "ticker"
-      | "name"
-      | "logo"
-      | "type"
-      | "assetHistory"
+    ETF: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory" | "figi"
+    Crypto: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory"
     Query: "exchangeTradedAsset"
     Mutation: "createExchangeTradedAsset"
     Asset: "id" | "name"
-    ExchangeTradedAsset:
-      | "id"
-      | "isin"
-      | "ticker"
-      | "name"
-      | "logo"
-      | "type"
-      | "assetHistory"
-    Stock:
-      | "id"
-      | "isin"
-      | "ticker"
-      | "name"
-      | "logo"
-      | "type"
-      | "assetHistory"
-      | "figi"
+    ExchangeTradedAsset: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory"
+    Stock: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory" | "figi"
   }
 
   interface DefinedEnumValues {
@@ -74,34 +44,16 @@ export namespace AssetsModule {
     Types.CompanyResolvers,
     DefinedFields["Company"] | "__isTypeOf"
   >
-  export type ETFResolvers = Pick<
-    Types.EtfResolvers,
-    DefinedFields["ETF"] | "__isTypeOf"
-  >
-  export type CryptoResolvers = Pick<
-    Types.CryptoResolvers,
-    DefinedFields["Crypto"] | "__isTypeOf"
-  >
-  export type QueryResolvers = Pick<
-    Types.QueryResolvers,
-    DefinedFields["Query"]
-  >
-  export type MutationResolvers = Pick<
-    Types.MutationResolvers,
-    DefinedFields["Mutation"]
-  >
-  export type AssetResolvers = Pick<
-    Types.AssetResolvers,
-    DefinedFields["Asset"]
-  >
+  export type ETFResolvers = Pick<Types.EtfResolvers, DefinedFields["ETF"] | "__isTypeOf">
+  export type CryptoResolvers = Pick<Types.CryptoResolvers, DefinedFields["Crypto"] | "__isTypeOf">
+  export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
+  export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields["Mutation"]>
+  export type AssetResolvers = Pick<Types.AssetResolvers, DefinedFields["Asset"]>
   export type ExchangeTradedAssetResolvers = Pick<
     Types.ExchangeTradedAssetResolvers,
     DefinedFields["ExchangeTradedAsset"]
   >
-  export type StockResolvers = Pick<
-    Types.StockResolvers,
-    DefinedFields["Stock"]
-  >
+  export type StockResolvers = Pick<Types.StockResolvers, DefinedFields["Stock"]>
 
   export interface Resolvers {
     Company?: CompanyResolvers

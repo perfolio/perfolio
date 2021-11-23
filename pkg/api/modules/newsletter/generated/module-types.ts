@@ -7,10 +7,7 @@ export namespace NewsletterModule {
 
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 
-  export type MutationResolvers = Pick<
-    Types.MutationResolvers,
-    DefinedFields["Mutation"]
-  >
+  export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields["Mutation"]>
 
   export interface Resolvers {
     Mutation?: MutationResolvers

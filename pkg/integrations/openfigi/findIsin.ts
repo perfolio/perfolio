@@ -17,16 +17,12 @@ const MappingValidation = z.object({
 const MappingResponse = z
   .array(
     z.object({
-      data: z
-        .array(
-          MappingValidation,
-        )
-        .nonempty(),
+      data: z.array(MappingValidation).nonempty(),
     }),
   )
   .nonempty()
 
-export type Isin = z.infer<typeof MappingValidation>
+export type FindIsinResponse = z.infer<typeof MappingValidation>[]
 
 export type FindIsinRequest = {
   isin: string
@@ -38,7 +34,7 @@ export type FindIsinRequest = {
  */
 export async function findIsin(
   req: FindIsinRequest,
-): Promise<Isin | null> {
+): Promise<FindIsinResponse> {
   const client = new Client()
   const res = await client.post({
     path: "/v3/mapping",
@@ -51,5 +47,5 @@ export async function findIsin(
     ],
   })
   const parsed = MappingResponse.parse(res)
-  return parsed[0].data[0]
+  return parsed[0].data
 }

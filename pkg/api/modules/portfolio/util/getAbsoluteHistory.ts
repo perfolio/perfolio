@@ -27,9 +27,11 @@ export async function getAbsoluteHistory(
   //   return cachedValue
   // }
 
-  const assets: { [assetId: string]: ExchangeTradedAssetModel } = {}
+  const assets: {
+    [assetId: string]: { asset: ExchangeTradedAssetModel; mic: string }
+  } = {}
   for (const tx of transactions) {
-    assets[tx.assetId] = tx.asset
+    assets[tx.assetId] = { asset: tx.asset, mic: tx.mic }
   }
 
   /**
@@ -47,13 +49,15 @@ export async function getAbsoluteHistory(
   }
 
   const prices = await Promise.all(
-    Object.values(assets).map(async (asset) => {
-      const foundIsin = await ctx.dataSources.openFigi.findIsin({
+    Object.values(assets).map(async ({ asset, mic }) => {
+      const foundIsins = await ctx.dataSources.openFigi.findIsin({
         isin: asset.isin,
+        micCode: mic,
       })
-      if (!foundIsin) {
+      if (foundIsins.length === 0) {
         throw new Error(`Unable to find isin: ${asset.isin}`)
       }
+      const foundIsin = foundIsins[0]
 
       const ticker = foundIsin.compositeFIGI === foundIsin.figi
         ? foundIsin.ticker

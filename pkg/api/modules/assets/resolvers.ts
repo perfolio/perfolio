@@ -55,19 +55,19 @@ export const resolvers: Resolvers<Context> = {
     },
 
     assetHistory: async (asset, { mic, start, end }, ctx) => {
-      const foundIsin = await ctx.dataSources.openFigi.findIsin({
+      const foundIsins = await ctx.dataSources.openFigi.findIsin({
         isin: asset.isin,
         micCode: mic,
       })
-      if (!foundIsin) {
+      if (foundIsins.length === 0) {
         throw new Error(
           `Unable to find the symbol for ${asset.isin} at exchange: ${mic}`,
         )
       }
 
-      const ticker = foundIsin.compositeFIGI === foundIsin.figi
-        ? foundIsin.ticker
-        : [foundIsin.ticker, foundIsin.exchCode].join("-")
+      const ticker = foundIsins[0].compositeFIGI === foundIsins[0].figi
+        ? foundIsins[0].ticker
+        : `${foundIsins[0].ticker}-${foundIsins[0].exchCode}`
 
       const prices = await ctx.dataSources.iex.getHistory(ticker)
       return Object.entries(prices)
@@ -82,11 +82,12 @@ export const resolvers: Resolvers<Context> = {
   Mutation: {
     createExchangeTradedAsset: async (_root, { isin }, ctx) => {
       ctx.logger.debug("Adding asset", { isin })
-      const foundIsin = await ctx.dataSources.openFigi.findIsin({ isin })
+      const foundIsins = await ctx.dataSources.openFigi.findIsin({ isin })
+
+      const foundIsin = foundIsins.find((i) => i.figi === i.compositeFIGI)
       if (!foundIsin) {
         throw new Error(`Isin not found: ${isin}`)
       }
-
       const assetTypeString = foundIsin.securityType === "ETP"
         ? foundIsin.securityType2
         : foundIsin.securityType
@@ -97,13 +98,10 @@ export const resolvers: Resolvers<Context> = {
         ? AssetType.MUTUAL_FUND
         : AssetType.TODO
 
-      /**
-       * IEX uses these composite tickers for lookups
-       */
+      const iexIsins = await ctx.dataSources.iex.findTicker(isin)
 
-      const ticker = foundIsin.compositeFIGI === foundIsin.figi
-        ? foundIsin.ticker
-        : [foundIsin.ticker, foundIsin.exchCode].join("-")
+      const ticker = iexIsins.find((i) => !i.symbol.includes("-"))!.symbol
+
       const company = await ctx.dataSources.iex.getCompany(ticker)
       if (!company) {
         throw new Error(
@@ -115,7 +113,7 @@ export const resolvers: Resolvers<Context> = {
         isin,
         name: company.name ?? "",
         ticker,
-        figi: foundIsin.compositeFIGI,
+        figi: foundIsin.figi,
         logo: company.logo,
         type: assetType,
       }
