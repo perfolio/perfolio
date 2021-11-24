@@ -1,4 +1,4 @@
-import { Navbar } from "@perfolio/ui/landing"
+import { Footer, Navbar } from "@perfolio/ui/landing"
 import { NextPage } from "next"
 import Image from "next/image"
 import React from "react"
@@ -25,7 +25,7 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
                 </span>
               </h1>
             </div>
-            <div className="mx-auto mt-6 prose prose-lg text-gray-500 prose-indigo">
+            <div className="mx-auto mt-6 prose prose-lg text-gray-500 prose-primary">
               <p>
                 The goal of Perfolio Analytics is to provide you all the valuable finance metrics at
                 a glance in a simple yet modern analytics application.
@@ -138,6 +138,7 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
