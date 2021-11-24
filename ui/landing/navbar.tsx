@@ -1,12 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import { Transition } from "@headlessui/react"
-import { useI18n } from "@perfolio/pkg/i18n"
 import { Button, Logo } from "@perfolio/ui/components"
 import NextLink from "next/link"
 import React, { useEffect, useState } from "react"
 
 export const Navbar: React.FC = () => {
-  const { t } = useI18n()
   const { user } = useAuth0()
   const [scrolled, setScrolled] = useState(false)
 
@@ -44,10 +42,10 @@ export const Navbar: React.FC = () => {
             : (
               <>
                 <Button href="/dashboard" type="plain">
-                  {t("signInButton")}
+                  Sign In
                 </Button>
                 <Button type="cta" href="/dashboard">
-                  {t("startForFreeButton")}
+                  Start for free
                 </Button>
               </>
             )}
@@ -71,7 +69,7 @@ export const Navbar: React.FC = () => {
             )
             : (
               <Button type="cta" href="/dashboard">
-                {t("signInButton")}
+                Sign in
               </Button>
             )}
         </Transition>
