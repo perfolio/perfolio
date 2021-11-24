@@ -221,7 +221,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                           </div>
                           <div className="flex space-x-2 justify-start">
                             <div className="bg-gray-200 self-center px-1 rounded whitespace-nowrap">
-                              <Text size="sm">{format(holding.quantity, { prefix: "x " })}</Text>
+                              <Text size="sm">{format(holding.quantity, { prefix: "x ", fractionDigits: 0 })}</Text>
                             </div>
                             <div className="whitespace-nowrap">
                               <Text>{format(holding.value * holding.quantity, { suffix: " €" })}</Text>
