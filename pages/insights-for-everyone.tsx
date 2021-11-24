@@ -15,7 +15,7 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
         <div className="relative py-16 mt-20 overflow-hidden bg-white">
           <div className="relative px-4 sm:px-6 lg:px-8">
             <div className="mx-auto text-lg max-w-prose">
-              <h1>
+              <h1 className="pt-20" id="simple-metrics">
                 <span className="block text-base font-semibold tracking-wide text-center text-transparent uppercase bg-clip-text bg-gradient-to-tr from-primary to-secondary">
                   Insights. For Everyone.
                 </span>
@@ -57,7 +57,9 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
                 You should see now that a robust, portfolio risk analytics strategy is essential.
                 Perfolio is your tool to help you with that!
               </p>
-              <h2>Perfolio: More than just your ordinary stock portfolio.</h2>
+              <h2 className="pt-20" id="intuitive-powerful">
+                Perfolio: More than just your ordinary stock portfolio.
+              </h2>
               <p>
                 Perfolio is your intuitive, all-in-one, independent and privacy-friendly extension
                 of your classical stock portfolio. One aspect that makes Perfolio different from all
@@ -85,7 +87,7 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
                 also help you to make future decisions based on data, not on gut feeling.
               </p>
 
-              <h2>
+              <h2 className="pt-20" id="sustainability-insights">
                 Perfolio: No longer need to panic when looking at sustainability ratings.
               </h2>
               <p>
@@ -118,7 +120,7 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
                   </figcaption>
                 </figure>
               </div>
-              <h2>Perfolio: Why metrics?</h2>
+              <h2 className="pt-20" id="why-metrics">Perfolio: Why metrics?</h2>
               <p>
                 Broken down, metrics are a measurement of anything. The most classic measurement in
                 the financial market is that of value. Be it, that of stocks, crypto or even real
