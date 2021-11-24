@@ -12,7 +12,7 @@ export const Profile: React.FC<ProfileProps> = ({ src, title, subtitle }): JSX.E
   return (
     <Wrapper>
       <div className="flex items-center space-x-2">
-        {src ? <Avatar src={src} /> : <Loading />}
+        {src ? <div className="flex-shrink-0"><Avatar src={src} /></div> : <Loading />}
         <div>
           <p className="font-medium">{title}</p>
           <p className="text-xs text-gray-600">{subtitle}</p>

@@ -50,7 +50,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
 
   return (
     <>
-      <div className="hidden sm:flex">
+      <div className="hidden md:flex">
         <Table<
           | "asset"
           | "weight"
@@ -185,7 +185,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
             })}
         />
       </div>
-      <div className="flex sm:hidden">
+      <div className="flex md:hidden">
         <div className="w-full bg-white overflow-hidden">
           <ul role="list">
             {(currentPorfolioState ?? [])
@@ -210,18 +210,22 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                       >
                       </span>
                     </div>
-                    <div className="w-full flex px-2 pb-4 sm:px-6 justify-between">
-                      <div className="flex w-full content-start space-x-2">
-                        <div className="w-8 h-8 self-center">
+                    <div className="w-full flex px-2 pb-4 md:px-6 ">
+                      <div className="flex w-full content-start space-x-2 min-w-0">
+                        <div className="relative left-0 flex-shrink-0 w-8 h-8 self-center">
                           <Avatar size="sm" src={holding.asset.logo} />
                         </div>
-                        <div>
-                          <Text bold truncate>{holding.asset.name}</Text>
-                          <div className="w-full flex space-x-2 justify-start">
-                            <div className="bg-gray-200 self-center px-1 rounded">
+                        <div className="w-full min-w-0">
+                          <div className="flex min-w-0">
+                            <Text bold truncate>{holding.asset.name}</Text>
+                          </div>
+                          <div className="flex space-x-2 justify-start">
+                            <div className="bg-gray-200 self-center px-1 rounded whitespace-nowrap">
                               <Text size="sm">{format(holding.quantity, { prefix: "x " })}</Text>
                             </div>
-                            <Text>{format(holding.value * holding.quantity, { suffix: " €" })}</Text>
+                            <div className="whitespace-nowrap">
+                              <Text>{format(holding.value * holding.quantity, { suffix: " €" })}</Text>
+                            </div>
                           </div>
                         </div>
                       </div>
