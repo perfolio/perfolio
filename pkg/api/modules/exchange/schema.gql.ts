@@ -4,7 +4,7 @@ export default gql `
   """
   An exchange where shares are traded
   """
-  type Exchange {
+  type Exchange @cacheControl(maxAge: 86400){
 """
 "    Market Identifier Code using ISO 10383
     """

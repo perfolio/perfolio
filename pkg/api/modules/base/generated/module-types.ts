@@ -6,6 +6,11 @@ export namespace BaseModule {
     Mutation: "_empty"
   }
 
+  interface DefinedEnumValues {
+    CacheControlScope: "PUBLIC" | "PRIVATE"
+  }
+
+  export type CacheControlScope = DefinedEnumValues["CacheControlScope"]
   export type Query = Pick<Types.Query, DefinedFields["Query"]>
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>
 

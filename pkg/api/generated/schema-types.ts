@@ -53,6 +53,8 @@ export type Asset = {
 
 export type AssetType = "COMMON_STOCK" | "CRYPTO" | "MUTUAL_FUND" | "TODO"
 
+export type CacheControlScope = "PRIVATE" | "PUBLIC"
+
 /** Company stocks */
 export type Company =
   & Asset
@@ -601,6 +603,7 @@ export type ResolversTypes = ResolversObject<{
     | ResolversTypes["ETF"]
   AssetType: AssetType
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>
+  CacheControlScope: CacheControlScope
   Company: ResolverTypeWrapper<Company>
   CreatePortfolio: CreatePortfolio
   CreateSettings: CreateSettings
@@ -660,6 +663,19 @@ export type ResolversParentTypes = ResolversObject<{
   ValueAndQuantityAtTime: ValueAndQuantityAtTime
   ValueAtTime: ValueAtTime
 }>
+
+export type CacheControlDirectiveArgs = {
+  inheritMaxAge?: Maybe<Scalars["Boolean"]>
+  maxAge?: Maybe<Scalars["Int"]>
+  scope?: Maybe<CacheControlScope>
+}
+
+export type CacheControlDirectiveResolver<
+  Result,
+  Parent,
+  ContextType = GraphQLModules.Context,
+  Args = CacheControlDirectiveArgs,
+> = DirectiveResolverFn<Result, Parent, ContextType, Args>
 
 export type AbsoluteAssetHistoryResolvers<
   ContextType = GraphQLModules.Context,
@@ -1031,6 +1047,10 @@ export type Resolvers<ContextType = GraphQLModules.Context> = ResolversObject<{
   User?: UserResolvers<ContextType>
   ValueAndQuantityAtTime?: ValueAndQuantityAtTimeResolvers<ContextType>
   ValueAtTime?: ValueAtTimeResolvers<ContextType>
+}>
+
+export type DirectiveResolvers<ContextType = GraphQLModules.Context> = ResolversObject<{
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>
 }>
 
 export type CreateExchangeTradedAssetMutationVariables = Exact<{
