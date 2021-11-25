@@ -138,10 +138,12 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                         </div>
                       }
                     >
-                      <Text>
+                      <div className="min-w-0">
+                      <Text truncate>
                         {holding.asset.name} {t("assetTableComposition1")}{" "}
                         {format(weight, { percent: true, suffix: "%" })} {t("assetTableComposition2")}
                       </Text>
+                      </div>
                     </Tooltip>
                   </Cell.Cell>
                 ),
