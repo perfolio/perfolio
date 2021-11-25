@@ -1,9 +1,9 @@
 import { Logger } from "@perfolio/pkg/logger"
-import * as redis from "@upstash/redis"
+// import * as redis from "@upstash/redis"
 import { ApolloServer } from "apollo-server-micro"
-import responseCachePlugin from "apollo-server-plugin-response-cache"
+// import responseCachePlugin from "apollo-server-plugin-response-cache"
 
-import { KeyValueCacheSetOptions } from ".pnpm/apollo-server-caching@3.3.0/node_modules/apollo-server-caching"
+// import { KeyValueCacheSetOptions } from ".pnpm/apollo-server-caching@3.3.0/node_modules/apollo-server-caching"
 import { env } from "@chronark/env"
 import { application } from "./application"
 import { context } from "./context"
