@@ -2,7 +2,7 @@ import { useCurrentPorfolioState, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Avatar, Cell, Description, Table, Text, Tooltip } from "@perfolio/ui/components"
-import React, { SetStateAction, useMemo } from "react"
+import React, { useMemo } from "react"
 import cn from "classnames"
 import { AggregateOptions } from ".."
 
