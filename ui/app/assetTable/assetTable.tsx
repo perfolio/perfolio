@@ -2,19 +2,21 @@ import { useCurrentPorfolioState, usePortfolio } from "@perfolio/pkg/hooks"
 import { useI18n } from "@perfolio/pkg/i18n"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Avatar, Cell, Description, Table, Text, Tooltip } from "@perfolio/ui/components"
-import React, { useMemo, useState } from "react"
+import React, { SetStateAction, useMemo } from "react"
 import cn from "classnames"
+import { AggregateOptions } from ".."
 
 export interface AssetTableProps {
-  aggregation: "absolute" | "relative"
+  aggregation: AggregateOptions
+  setAggregation: (value: React.SetStateAction<AggregateOptions>) => void
 }
 
 export const AssetTable: React.FC<AssetTableProps> = ({
   aggregation,
+  setAggregation
 }): JSX.Element => {
   const { portfolio } = usePortfolio()
   const { t } = useI18n()
-  const [displayAggregation, setDisplayAggregation] = useState(aggregation)
 
   const costPerShare: { [assetId: string]: number } = useMemo(() => {
     const transactionsFIFO: { [assetId: string]: number[] } = {}
@@ -110,7 +112,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
              */
             .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
             .map((holding) => {
-              const change = displayAggregation === "absolute"
+              const change = aggregation === "absolute"
                 ? (holding.value - costPerShare[holding.asset.id]!)
                 * holding.quantity
                 : holding.value / costPerShare[holding.asset.id]! - 1
@@ -138,12 +140,10 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                         </div>
                       }
                     >
-                      <div className="min-w-0">
-                      <Text truncate>
+                      <Text>
                         {holding.asset.name} {t("assetTableComposition1")}{" "}
                         {format(weight, { percent: true, suffix: "%" })} {t("assetTableComposition2")}
                       </Text>
-                      </div>
                     </Tooltip>
                   </Cell.Cell>
                 ),
@@ -168,20 +168,21 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                   </Cell.Text>
                 ),
                 change: (
-                  <Cell.Tag
-                    align="text-right"
-                    textColor={change > 0 ? "text-success-dark" : "text-error-dark"}
-                    bgColor={change > 0 ? "bg-success-light" : "bg-error-light"}
-                  >
-                    <span onClick={() => setDisplayAggregation(displayAggregation === "absolute" ? "relative" : "absolute")}>
+                  <button className="w-full" onClick={() => setAggregation(aggregation === "absolute" ? "relative" : "absolute")}>
+                    <Cell.Tag
+                      align="text-right"
+                      textColor={change > 0 ? "text-success-dark" : "text-error-dark"}
+                      bgColor={change > 0 ? "bg-success-light" : "bg-error-light"}
+                    >
                       {format(
                         change,
-                        displayAggregation === "absolute"
+                        aggregation === "absolute"
                           ? { suffix: "€", sign: true }
                           : { percent: true, suffix: "%", sign: true },
                       )}
-                    </span>
-                  </Cell.Tag>
+                    </Cell.Tag>
+                  </button>
+
                 ),
               }
             })}
@@ -198,7 +199,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
               .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
               .map((holding) => {
                 const change =
-                  displayAggregation === "absolute"
+                  aggregation === "absolute"
                     ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
                     : holding.value / costPerShare[holding.asset.id]! - 1
 
@@ -237,11 +238,11 @@ export const AssetTable: React.FC<AssetTableProps> = ({
                           change > 0 ? "bg-success-light" : "bg-error-light",
                           "self-center px-1 rounded",
                         )}
-                        onClick={() => setDisplayAggregation(displayAggregation === "absolute" ? "relative" : "absolute")}
+                        onClick={() => setAggregation(aggregation === "absolute" ? "relative" : "absolute")}
                       >
                         {format(
                           change,
-                          displayAggregation === "absolute"
+                          aggregation === "absolute"
                             ? { suffix: "€", sign: true }
                             : { percent: true, suffix: "%", sign: true },
                         )}

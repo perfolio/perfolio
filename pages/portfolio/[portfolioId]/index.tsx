@@ -253,7 +253,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
 
-            <AssetTable aggregation={aggregation} />
+            <AssetTable aggregation={aggregation} setAggregation={setAggregation} />
           </div>
         </Main.Content>
       </Main>
