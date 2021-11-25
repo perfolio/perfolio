@@ -34,7 +34,9 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
       .filter((h) => !!h)
       .forEach((holding) => {
         console.log({ holding })
-        const sector = holding.asset.__typename === "Company" ? holding.asset.sector : undefined
+        const sector = holding.asset.__typename === "Company"
+          ? holding.asset.sector
+          : undefined
         if (sector) {
           if (!tmp[sector]) {
             tmp[sector] = 0
@@ -80,12 +82,14 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
 
   const data = useMemo(
     () =>
-      Object.entries(selected === "countries" ? countries : sectors).map(([name, value]) => {
-        return {
-          name,
-          value,
-        }
-      }),
+      Object.entries(selected === "countries" ? countries : sectors).map(
+        ([name, value]) => {
+          return {
+            name,
+            value,
+          }
+        },
+      ),
     [sectors, countries, selected],
   )
 
@@ -119,19 +123,20 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
         <div className="flex items-center space-x-2">
           <Heading h4>{t("diversityHeading")}</Heading>
           <Tooltip side="right">
-            <Description title={t("diversityTitle")}>{t("diversityTooltip")}</Description>
+            <Description title={t("diversityTitle")}>
+              {t("diversityTooltip")}
+            </Description>
           </Tooltip>
         </div>
-        <ToggleGroup<"sectors" | "countries">
-          size="sm"
-          options={[
-            { display: t("diversityToggleSectors"), id: "sectors" },
-            { display: t("diversityToggleCountries"), id: "countries" },
-          ]}
-          selected={selected}
-          setSelected={setSelected}
-        />
       </div>
+      <ToggleGroup<"sectors" | "countries">
+        options={[
+          { display: t("diversityToggleSectors"), id: "sectors" },
+          { display: t("diversityToggleCountries"), id: "countries" },
+        ]}
+        selected={selected}
+        setSelected={setSelected}
+      />
       <ResponsiveContainer width="100%" height="100%">
         {!data || data.length === 0
           ? (
@@ -212,7 +217,11 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                         textAnchor="middle"
                         className="text-4xl font-semibold"
                       >
-                        {format(percent, { percent: true, suffix: "%", fractionDigits: 0 })}
+                        {format(percent, {
+                          percent: true,
+                          suffix: "%",
+                          fractionDigits: 0,
+                        })}
                       </text>
                     </g>
                   )
@@ -236,7 +245,10 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
                   }, 0)}
               >
                 {data.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
             </PieChart>
