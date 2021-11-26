@@ -15,7 +15,6 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
   const { currentPorfolioState } = useCurrentPorfolioState()
 
   return (
-    <div className="hidden md:flex w-full">
       <Table<
         | "asset"
         | "weight"
@@ -149,6 +148,5 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
             }
           })}
       />
-    </div>
   )
 }

@@ -41,7 +41,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                       >
                       </span>
                     </div>
-                    <div className="w-full flex px-2 pb-4 md:px-6 ">
+                    <div className="w-full flex px-2 pb-4 md:px-6 space-x-2 ">
                       <div className="flex w-full content-start space-x-2 min-w-0">
                         <div className="relative left-0 flex-shrink-0 w-8 h-8 self-center">
                           <Avatar size="sm" src={holding.asset.logo} />
