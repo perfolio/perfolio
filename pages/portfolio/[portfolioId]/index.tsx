@@ -228,7 +228,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
           </div>
           <Main.Divider />
           <div className="pt-2 space-y-8">
-            <div className="flex justify-center md:justify-end">
+            <div className="hidden md:flex md:justify-end">
               <ToggleGroup<Range>
                 options={[
                   { display: "1W", id: "1W" },
@@ -247,6 +247,23 @@ const App: NextPage<PageProps> = ({ translations }) => {
               aggregate={aggregation}
               since={ranges[range]}
             />
+            <div className="flex w-full md:hidden">
+              <ToggleGroup<Range>
+                block
+                size="lg"
+                options={[
+                  { display: "1W", id: "1W" },
+                  { display: "1M", id: "1M" },
+                  { display: "3M", id: "3M" },
+                  { display: "6M", id: "6M" },
+                  { display: t("index1Y"), id: "1Y" },
+                  { display: t("indexYTD"), id: "YTD" },
+                  { display: t("indexAll"), id: "ALL" },
+                ]}
+                selected={range}
+                setSelected={setRange}
+              />
+            </div>
           </div>
           <div className="mt-16">
             <div className="py-4 md:py-6">

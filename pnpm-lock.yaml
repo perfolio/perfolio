@@ -38,7 +38,9 @@ specifiers:
   '@upstash/redis': ^0.1.5
   apollo-datasource: ^3.3.0
   apollo-server: ^3.5.0
+  apollo-server-caching: ^3.3.0
   apollo-server-micro: ^3.5.0
+  apollo-server-plugin-response-cache: ^3.4.0
   autoprefixer: ^10.4.0
   change-case: ^4.1.2
   classnames: ^2.3.1
@@ -99,7 +101,9 @@ dependencies:
   '@upstash/redis': 0.1.5
   apollo-datasource: 3.3.0
   apollo-server: 3.5.0_graphql@15.7.2
+  apollo-server-caching: 3.3.0
   apollo-server-micro: 3.5.0_graphql@15.7.2+micro@9.3.4
+  apollo-server-plugin-response-cache: 3.4.0_graphql@15.7.2
   classnames: 2.3.1
   framer-motion: 5.3.0_react-dom@17.0.2+react@17.0.2
   fuse.js: 6.4.6
@@ -3281,6 +3285,18 @@ packages:
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
     dependencies:
+      apollo-server-types: 3.4.0_graphql@15.7.2
+      graphql: 15.7.2
+    dev: false
+
+  /apollo-server-plugin-response-cache/3.4.0_graphql@15.7.2:
+    resolution: {integrity: sha512-dy+a3R+kK4voXyBgiAtkOa/nB9B9W4qJbc8tDBrEY1UJY6zIa+6E89nU95J3S6nV43UqH+IrNALsIu7X96+K3A==}
+    engines: {node: '>=12.0'}
+    peerDependencies:
+      graphql: ^15.3.0 || ^16.0.0
+    dependencies:
+      apollo-server-caching: 3.3.0
+      apollo-server-plugin-base: 3.4.0_graphql@15.7.2
       apollo-server-types: 3.4.0_graphql@15.7.2
       graphql: 15.7.2
     dev: false
