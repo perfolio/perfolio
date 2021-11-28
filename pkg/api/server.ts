@@ -1,9 +1,10 @@
-import { ApolloServer } from "apollo-server-micro"
-
 import { Logger } from "@perfolio/pkg/logger"
+import { ApolloServer } from "apollo-server-micro"
+import responseCachePlugin from "apollo-server-plugin-response-cache"
 
 import { env } from "@chronark/env"
 import { application } from "./application"
+import { RedisCache } from "./cache"
 import { context } from "./context"
 import { dataSources } from "./datasources"
 
@@ -28,5 +29,10 @@ export const server = (config?: ServerConfig): ApolloServer => {
         graphVariant: env.require("APOLLO_GRAPH_VARIANT"),
       }
       : undefined,
+    plugins: [
+      responseCachePlugin({
+        cache: new RedisCache(),
+      }),
+    ],
   })
 }
