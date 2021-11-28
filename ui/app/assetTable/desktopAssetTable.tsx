@@ -15,6 +15,7 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
   const { currentPorfolioState } = useCurrentPorfolioState()
 
   return (
+    <div className="w-full">
       <Table<
         | "asset"
         | "weight"
@@ -147,6 +148,9 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
               ),
             }
           })}
+
       />
+    </div>
   )
+
 }
