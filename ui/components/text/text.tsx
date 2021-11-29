@@ -53,7 +53,7 @@ export const Text: React.FC<TextProps> = ({
           "font-semibold": bold,
           "break-words": lineBreak,
           "font-mono": mono,
-          "truncate overflow-ellipsis": truncate,
+          "truncate overflow-ellipsis whitespace-nowrap": truncate,
         },
         align,
         color,

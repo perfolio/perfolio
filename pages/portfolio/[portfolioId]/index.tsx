@@ -117,10 +117,10 @@ const App: NextPage<PageProps> = ({ translations }) => {
     <AppLayout
       sidebar={
         <Sidebar>
-          <div className="w-full pb-4 md:w-full sm:w-1/2">
+          <div className="w-full pb-4">
             <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
           </div>
-          <div className="w-full py-4 md:w-full sm:w-1/2">
+          <div className="w-full py-4">
             <ActivityFeed />
           </div>
         </Sidebar>
@@ -265,12 +265,12 @@ const App: NextPage<PageProps> = ({ translations }) => {
               />
             </div>
           </div>
-          <div className="mt-16">
+          <div className="mt-4 sm:mt-16">
             <div className="py-4 md:py-6">
               <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
 
-            <AssetTable aggregation={aggregation} />
+            <AssetTable aggregation={aggregation} setAggregation={setAggregation} />
           </div>
         </Main.Content>
       </Main>
