@@ -22,7 +22,7 @@ export const findTickerValidation = z.array(
      */
     region: z.string(),
   }),
-).nonempty()
+)
 
 /**
  * Resonse from the `GET /stock/{asset}/company` endpoint.

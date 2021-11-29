@@ -81,72 +81,62 @@ export const resolvers: Resolvers<Context> = {
 
   Mutation: {
     createExchangeTradedAsset: async (_root, { isin }, ctx) => {
-      ctx.logger.debug("Adding asset", { isin })
-      const foundIsins = await ctx.dataSources.openFigi.findIsin({ isin })
-
-      const foundIsin = foundIsins.find((i) => i.figi === i.compositeFIGI)
-      if (!foundIsin) {
-        throw new Error(`Isin not found: ${isin}`)
-      }
-      const assetTypeString = foundIsin.securityType === "ETP"
-        ? foundIsin.securityType2
-        : foundIsin.securityType
-
-      const assetType = assetTypeString === "Common Stock" || assetTypeString === "REIT"
-        ? AssetType.COMMON_STOCK
-        : assetTypeString === "Mutual Fund"
-        ? AssetType.MUTUAL_FUND
-        : AssetType.TODO
-
-      const iexIsins = await ctx.dataSources.iex.findTicker(isin)
-
-      const ticker = iexIsins.find((i) => !i.symbol.includes("-"))!.symbol
-
-      const company = await ctx.dataSources.iex.getCompany(ticker)
-      if (!company) {
-        throw new Error(
-          `No Exchange traded asset exists for ticker: ${ticker}`,
-        )
-      }
-      const create = {
-        id: newId("asset"),
-        isin,
-        name: company.name ?? "",
-        ticker,
-        figi: foundIsin.figi,
-        logo: company.logo,
-        type: assetType,
-      }
-
-      ctx.logger.debug("Store asset in db", { create })
-
-      const asset = await ctx.dataSources.db.exchangeTradedAsset.upsert({
+      let asset = await ctx.dataSources.db.exchangeTradedAsset.findUnique({
         where: { isin },
-        update: {},
-        create,
       })
+      if (!asset) {
+        ctx.logger.debug("Adding asset", { isin })
+        const foundIsins = await ctx.dataSources.openFigi.findIsin({ isin })
 
-      const document: {
-        asset: {
-          id: string
-          isin: string
-          logo: string
-          ticker: string
-          name: string
-          type: string
+        const foundIsin = foundIsins.find((i) => i.figi === i.compositeFIGI)
+        if (!foundIsin) {
+          throw new Error(`Isin not found: ${isin}`)
         }
-        meta: Record<string, unknown>
-      } = {
-        asset,
-        meta: {
-          ...company,
-        },
+        ctx.logger.debug("Found match", { foundIsin })
+        const assetTypeString = foundIsin.securityType === "ETP"
+          ? foundIsin.securityType2
+          : foundIsin.securityType
+
+        const assetType = assetTypeString === "Common Stock" || assetTypeString === "REIT"
+          ? AssetType.COMMON_STOCK
+          : assetTypeString === "Mutual Fund"
+          ? AssetType.MUTUAL_FUND
+          : AssetType.TODO
+
+        const iexIsins = await ctx.dataSources.iex.findTicker(isin)
+        ctx.logger.debug("IEX knows these stocks", { isin, iexIsins })
+        const ticker = iexIsins.find((i) => !i.symbol.includes("-"))!.symbol
+        ctx.logger.debug("Choosing ticker", { ticker })
+        const company = await ctx.dataSources.iex.getCompany(ticker)
+        if (!company) {
+          throw new Error(
+            `No Exchange traded asset exists for ticker: ${ticker}`,
+          )
+        }
+        const create = {
+          id: newId("asset"),
+          isin,
+          name: company.name ?? "",
+          ticker,
+          figi: foundIsin.figi,
+          logo: company.logo,
+          type: assetType,
+        }
+
+        ctx.logger.debug("Store asset in db", { create })
+
+        asset = await ctx.dataSources.db.exchangeTradedAsset.upsert({
+          where: { isin },
+          update: {},
+          create,
+        })
       }
+
       const res = await fetch(
         "https://search-l1vg.onrender.com/ingest/perfolio",
         {
           method: "POST",
-          body: JSON.stringify(document),
+          body: JSON.stringify({ asset }),
         },
       )
       if (!res.ok) {
