@@ -102,7 +102,7 @@ export default gql `
   """
   Company stocks
   """
-  type Company implements Stock & ExchangeTradedAsset & Asset {
+  type Company implements Stock & ExchangeTradedAsset & Asset @cacheControl(maxAge: 3600) {
    """
     A globally unique id
     """
@@ -132,7 +132,7 @@ export default gql `
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]! 
     """
     Financial Instrument Global Identifier
     """
@@ -151,7 +151,7 @@ export default gql `
   """
   Company stocks
   """
-  type ETF implements Stock & ExchangeTradedAsset & Asset {
+  type ETF implements Stock & ExchangeTradedAsset & Asset @cacheControl(maxAge: 3600){
     """
     A globally unique id
     """
@@ -190,7 +190,7 @@ export default gql `
   """
   Crypto
   """
-  type Crypto implements ExchangeTradedAsset & Asset {
+  type Crypto implements ExchangeTradedAsset & Asset @cacheControl(maxAge: 3600) {
     """
     A globally unique id
     """
