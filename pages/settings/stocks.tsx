@@ -88,10 +88,8 @@ interface PageProps {
 const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   const { t } = useI18n(translations)
   const { user } = useUser()
-  console.log({ user })
 
   const { exchanges } = useExchanges()
-  console.log({ exchanges })
   const toast = useToaster()
 
   /**

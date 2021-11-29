@@ -20,7 +20,6 @@ export const useDeleteTransaction = () => {
     },
     {
       onSuccess: () => {
-        console.log("I must refetch ", USE_PORTFOLIO_QUERY_KEY(portfolioId))
         queryClient.invalidateQueries(USE_PORTFOLIO_QUERY_KEY(portfolioId))
       },
     },

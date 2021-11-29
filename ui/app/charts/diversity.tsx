@@ -33,7 +33,6 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     currentPorfolioState
       .filter((h) => !!h)
       .forEach((holding) => {
-        console.log({ holding })
         const sector = holding.asset.__typename === "Company"
           ? holding.asset.sector
           : undefined

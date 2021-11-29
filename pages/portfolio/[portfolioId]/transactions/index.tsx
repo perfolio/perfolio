@@ -26,7 +26,6 @@ const TransactionItem: React.FC<TransactionItemProps> = (
 ): JSX.Element => {
   const { t } = useI18n()
   const { addToast } = useToaster()
-  console.log({ transaction })
   const deleteTransaction = useDeleteTransaction()
 
   const asset = transaction.asset as ExchangeTradedAsset
