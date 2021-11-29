@@ -32,7 +32,7 @@ export const useSearch = (fragment: string) => {
       fetch(`https://search.chronark.workers.dev/perfolio?q=${fragment}`).then((res) => res.json()),
     {
       enabled: fragment.length > 0,
-      cacheTime: 10_000,
+      cacheTime: 0,
     },
   )
 
