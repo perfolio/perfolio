@@ -8,8 +8,6 @@ import { AssetsOverTimeChart } from ".."
 import type { Range } from "@perfolio/pages/portfolio/[portfolioId]"
 import { KPI } from "@perfolio/ui/components/kpi"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
-import { string } from "prop-types"
-import { assetsModule } from "@perfolio/pkg/api/modules/assets"
 
 
 export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
