@@ -177,10 +177,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     : clickedAsset.value / costPerShare[clickedAsset.asset.id]! - 1}
                   format={(n) =>
                     format(
-                      clickedAsset === undefined ? 0 : aggregation === "absolute"
-                        ? (clickedAsset.value - costPerShare[clickedAsset.asset.id]!)
-                        * clickedAsset.quantity
-                        : clickedAsset.value / costPerShare[clickedAsset.asset.id]! - 1,
+                      n,
                       aggregation === "absolute"
                         ? { suffix: "€", sign: true }
                         : { percent: true, suffix: "%", sign: true },
