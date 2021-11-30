@@ -31,8 +31,8 @@ export function ToggleGroup<T extends string>({
               "bg-white text-gray-900": selected === option.id,
               "text-gray-500": selected !== option.id,
               "px-1 sm:px-2 text-xs h-3 sm:h-6": size === "sm",
-              "px-2 h-4 sm:px-4 text-sm sm:h-8": size === "md",
-              "px-3 sm:px-4 h-6 sm:h-10": size === "lg",
+              "px-1 h-4 sm:px-4 text-sm sm:h-8": size === "md",
+              "px-2 sm:px-4 h-6 sm:h-10": size === "lg",
             },
           )}
         >

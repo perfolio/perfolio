@@ -1,12 +1,15 @@
 import { format } from "@perfolio/pkg/util/numbers"
-import { Avatar, Button, Drawer, Text, ToggleGroup } from "@perfolio/ui/components"
+import { Avatar, Drawer, Text, ToggleGroup } from "@perfolio/ui/components"
 import React, { useState } from "react"
 import cn from "classnames"
 import { DetailAssetTableProps } from "./assetTable"
-import { useCurrentPorfolioState } from "@perfolio/pkg/hooks"
-import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
+import { useCurrentPorfolioState, useUser } from "@perfolio/pkg/hooks"
 import { AssetsOverTimeChart } from ".."
 import type { Range } from "@perfolio/pages/portfolio/[portfolioId]"
+import { KPI } from "@perfolio/ui/components/kpi"
+import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { string } from "prop-types"
+import { assetsModule } from "@perfolio/pkg/api/modules/assets"
 
 
 export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
@@ -21,6 +24,8 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
 }): JSX.Element => {
   const { currentPorfolioState } = useCurrentPorfolioState()
   const [open, setOpen] = useState(false);
+  const { user } = useUser()
+  const [clickedAsset, setClickedAsset] = useState(currentPorfolioState.at(0));
 
   return (
     <>
@@ -40,7 +45,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
 
               const weight = (holding.quantity * holding.value) / totalValue
               return (
-                <button key={holding.asset.id} className="w-full" onClick={() => setOpen(!open)}>
+                <button key={holding.asset.id} className="w-full" onClick={() => { setClickedAsset(holding), setOpen(!open) }}>
                   <div className="flex h-0.5 overflow-hidden rounded bg-gray-100">
                     <span
                       style={{ width: `${weight * 100}%` }}
@@ -89,9 +94,10 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
             })}
         </ul>
       </div>
-      <Drawer open={open} setOpen={setOpen}>
+      <Drawer open={open} setOpen={setOpen} title={clickedAsset?.asset.name}>
         <Drawer.Content>
-        <AssetsOverTimeChart
+          <div className="w-full h-[calc(75vh-5rem)] overflow-y-auto">
+            <AssetsOverTimeChart
               aggregate={aggregation}
               since={ranges[range]}
             />
@@ -112,24 +118,82 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                 setSelected={setRange}
               />
             </div>
+            <div className="py-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
+                <KPI
+                  label={"Total Value"}
+                  value={clickedAsset === undefined ? 0 : clickedAsset.value * clickedAsset.quantity}
+                  format={(n) =>
+                    format(n, {
+                      suffix: getCurrencySymbol(
+                        user?.settings?.defaultCurrency,
+                      ),
+                    })}
+                  isLoading={false}
+                />
+                <KPI
+                  label={"Quantity"}
+                  value={clickedAsset === undefined ? 0 : clickedAsset?.quantity}
+                  format={(n) =>
+                    format(n, {
+                      prefix: "x "
+                    })}
+                  isLoading={false}
+                />
+                <KPI
+                  label={"Weight"}
+                  value={clickedAsset === undefined ? 0 : ((clickedAsset?.quantity * clickedAsset?.value) / totalValue) * 100}
+                  format={(n) =>
+                    format(n, {
+                      suffix: "%"
+                    })}
+                  isLoading={false}
+                />
+                <KPI
+                  label={"Price per share"}
+                  value={clickedAsset === undefined ? 0 : clickedAsset.value}
+                  format={(n) =>
+                    format(n, {
+                      suffix: getCurrencySymbol(
+                        user?.settings?.defaultCurrency,
+                      ),
+                    })}
+                  isLoading={false}
+                />
+                <KPI
+                  label={"Cost per share"}
+                  value={clickedAsset === undefined ? 0 : costPerShare[clickedAsset.asset.id]}
+                  format={(n) =>
+                    format(n, {
+                      suffix: getCurrencySymbol(
+                        user?.settings?.defaultCurrency,
+                      ),
+                    })}
+                  isLoading={false}
+                />
+                <KPI
+                  label={"Change"}
+                  value={clickedAsset === undefined ? 0 : aggregation === "absolute"
+                    ? (clickedAsset.value - costPerShare[clickedAsset.asset.id]!)
+                    * clickedAsset.quantity
+                    : clickedAsset.value / costPerShare[clickedAsset.asset.id]! - 1}
+                  format={(n) =>
+                    format(
+                      clickedAsset === undefined ? 0 : aggregation === "absolute"
+                        ? (clickedAsset.value - costPerShare[clickedAsset.asset.id]!)
+                        * clickedAsset.quantity
+                        : clickedAsset.value / costPerShare[clickedAsset.asset.id]! - 1,
+                      aggregation === "absolute"
+                        ? { suffix: "€", sign: true }
+                        : { percent: true, suffix: "%", sign: true },
+                    )}
+                  isLoading={false}
+                />
+              </div>
+            </div>
+          </div>
         </Drawer.Content>
         <Drawer.Footer>
-          <ul className="flex items-center justify-center h-20 gap-4">
-            <li>
-              <Button type="plain" iconLeft={<AdjustmentsIcon />} href="/settings/account">
-                Settings
-              </Button>
-            </li>
-            <li>
-              <Button
-                type="plain"
-                onClick={() => alert("Test")}
-                iconLeft={<LogoutIcon />}
-              >
-                Sign out
-              </Button>
-            </li>
-          </ul>
         </Drawer.Footer>
       </Drawer>
     </>
