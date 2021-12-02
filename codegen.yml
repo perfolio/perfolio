@@ -28,4 +28,4 @@ generates:
       maybeValue: T | undefined
 hooks:
   afterOneFileWrite:
-    - prettier --write
+    - dprint fmt

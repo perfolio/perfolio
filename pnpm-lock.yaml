@@ -67,7 +67,6 @@ specifiers:
   node-fetch: ^3.1.0
   nprogress: ^0.2.0
   postcss: ^8.3.11
-  prettier: ^2.4.1
   prisma: ^3.5.0
   prop-types: ^15.7.2
   react: 17.0.2
@@ -163,7 +162,6 @@ devDependencies:
   lint-staged: 11.2.6
   node-fetch: 3.1.0
   postcss: 8.3.11
-  prettier: 2.4.1
   prisma: 3.5.0
   prop-types: 15.7.2
   tailwindcss: 2.2.19_0c54bdadaf9d9c9c6c134cb2c6c061a3
@@ -8718,12 +8716,6 @@ packages:
   /prepend-http/2.0.0:
     resolution: {integrity: sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=}
     engines: {node: '>=4'}
-    dev: true
-
-  /prettier/2.4.1:
-    resolution: {integrity: sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
     dev: true
 
   /pretty-format/27.3.1:
