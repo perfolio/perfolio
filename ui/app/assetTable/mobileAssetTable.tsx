@@ -8,6 +8,7 @@ import { AssetsOverTimeChart } from ".."
 import type { Range } from "@perfolio/pages/portfolio/[portfolioId]"
 import { KPI } from "@perfolio/ui/components/kpi"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import { Divider } from "@perfolio/ui/components/divider"
 
 
 export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
@@ -92,9 +93,16 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
             })}
         </ul>
       </div>
-      <Drawer open={open} setOpen={setOpen} title={clickedAsset?.asset.name}>
+      <Drawer open={open} setOpen={setOpen} height="100%" title={clickedAsset?.asset.name} subtitle={clickedAsset?.asset.ticker}>
         <Drawer.Content>
-          <div className="w-full h-[calc(75vh-5rem)] overflow-y-auto">
+          <div className="w-full h-[calc(100vh-5rem)] overflow-y-auto">
+            <div className="block">
+              <Text size="2xl" bold >{format(clickedAsset === undefined ? 0 : clickedAsset?.value, {
+                suffix: getCurrencySymbol(
+                  user?.settings?.defaultCurrency,
+                ),
+              })}</Text>
+            </div>
             <AssetsOverTimeChart
               aggregate={aggregation}
               since={ranges[range]}
@@ -116,6 +124,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                 setSelected={setRange}
               />
             </div>
+            <Divider height="sm"/>
             <div className="py-8">
               <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
                 <KPI
@@ -147,7 +156,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     })}
                   isLoading={false}
                 />
-                <KPI
+                {/* <KPI
                   label={"Price per share"}
                   value={clickedAsset === undefined ? 0 : clickedAsset.value}
                   format={(n) =>
@@ -157,7 +166,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                       ),
                     })}
                   isLoading={false}
-                />
+                /> */}
                 <KPI
                   label={"Cost per share"}
                   value={clickedAsset === undefined ? 0 : costPerShare[clickedAsset.asset.id]}

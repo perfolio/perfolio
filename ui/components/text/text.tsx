@@ -2,7 +2,7 @@ import cn from "classnames"
 import React from "react"
 
 export interface TextProps {
-  size?: "xs" | "sm" | "md" | "lg" | "xl"
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
   /**
    * Override default default colors.
    * You can even use gradients here.
@@ -47,8 +47,13 @@ export const Text: React.FC<TextProps> = ({
   return (
     <p
       className={cn(
-        `text-${size}`,
         {
+          "text-xs": size === "xs",
+          "text-sm": size === "sm",
+          "text-md": size === "md",
+          "text-lg": size === "lg",
+          "text-xl": size === "xl",
+          "text-2xl": size === "2xl",
           "text-gray-700": !color,
           "font-semibold": bold,
           "break-words": lineBreak,
