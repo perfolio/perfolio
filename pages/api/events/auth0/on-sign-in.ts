@@ -90,9 +90,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             ],
           },
           settings: {
-            create: {
-              defaultCurrency: "EUR",
-              defaultExchangeId: "xetr",
+            connectOrCreate: {
+              where: {
+                userId,
+              },
+              create: {
+                defaultCurrency: "EUR",
+                defaultExchangeId: "xetr",
+              },
             },
           },
         },
