@@ -31,7 +31,9 @@ export const HeroSection: React.FC = (): JSX.Element => {
         open={open}
         setOpen={setOpen}
       >
-        {done ? <Text align="text-center">Thank you, we'll get back to you</Text> : (
+        {done ? (
+          <Text align="text-center">Thank you, we&aposll get back to you</Text>
+        ) : (
           <Form
             ctx={ctx}
             formError={formError}
@@ -63,7 +65,8 @@ export const HeroSection: React.FC = (): JSX.Element => {
                   },
                   setSubmitting,
                   setFormError,
-                )}
+                )
+              }
               type="cta"
               disabled={submitting}
             >
@@ -74,78 +77,76 @@ export const HeroSection: React.FC = (): JSX.Element => {
       </Drawer>
       <Heading h1>{t("headline")}</Heading>
       <Text>{t("subheadline")}</Text>
-      {user
-        ? (
-          <div>
-            <Button href="/dashboard" type="cta" size="block">
-              Go to dashboard
+      {user ? (
+        <div>
+          <Button href="/dashboard" type="cta" size="block">
+            Go to dashboard
+          </Button>
+        </div>
+      ) : (
+        <div className="pt-8 md:pt-4">
+          <div className="flex items-center justify-center md:hidden">
+            <Button
+              onClick={() => {
+                setOpen(true)
+              }}
+              type="plain"
+              size="lg"
+              htmlType="submit"
+            >
+              Subscribe
+            </Button>
+            <Button href="/dashboard" type="cta" size="lg">
+              Sign in
             </Button>
           </div>
-        )
-        : (
-          <div className="pt-8 md:pt-4">
-            <div className="flex items-center justify-center md:hidden">
-              <Button
-                onClick={() => {
-                  setOpen(true)
-                }}
-                type="plain"
-                size="lg"
-                htmlType="submit"
+          <div className="hidden md:block">
+            {done ? (
+              <Text align="text-center">Thank you, we&aposll get back to you</Text>
+            ) : (
+              <Form
+                ctx={ctx}
+                formError={formError}
+                className="flex flex-col items-start gap-4 sm:flex-row"
               >
-                Subscribe
-              </Button>
-              <Button href="/dashboard" type="cta" size="lg">
-                Sign in
-              </Button>
-            </div>
-            <div className="hidden md:block">
-              {done
-                ? <Text align="text-center">Thank you, we'll get back to you</Text>
-                : (
-                  <Form
-                    ctx={ctx}
-                    formError={formError}
-                    className="flex flex-col items-start gap-4 sm:flex-row"
-                  >
-                    <Field.Input
-                      hideLabel
-                      placeholder={t("footerSubsPlaceMail")}
-                      name="email"
-                      type="email"
-                      label="email"
-                    />
+                <Field.Input
+                  hideLabel
+                  placeholder={t("footerSubsPlaceMail")}
+                  name="email"
+                  type="email"
+                  label="email"
+                />
 
-                    <Button
-                      loading={submitting}
-                      onClick={() =>
-                        handleSubmit<z.infer<typeof validation>>(
-                          ctx,
-                          async ({ email }) => {
-                            await subscribe
-                              .mutateAsync({ email })
-                              .catch((err) => {
-                                setFormError(err.message)
-                              })
-                              .finally(() => {
-                                setDone(true)
-                              })
-                          },
-                          setSubmitting,
-                          setFormError,
-                        )}
-                      type="cta"
-                      size="block"
-                      htmlType="submit"
-                      disabled={submitting}
-                    >
-                      Join the waitlist
-                    </Button>
-                  </Form>
-                )}
-            </div>
+                <Button
+                  loading={submitting}
+                  onClick={() =>
+                    handleSubmit<z.infer<typeof validation>>(
+                      ctx,
+                      async ({ email }) => {
+                        await subscribe
+                          .mutateAsync({ email })
+                          .catch((err) => {
+                            setFormError(err.message)
+                          })
+                          .finally(() => {
+                            setDone(true)
+                          })
+                      },
+                      setSubmitting,
+                      setFormError,
+                    )
+                  }
+                  type="cta"
+                  size="block"
+                  disabled={submitting}
+                >
+                  Join the waitlist
+                </Button>
+              </Form>
+            )}
           </div>
-        )}
+        </div>
+      )}
     </div>
   )
 }

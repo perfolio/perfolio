@@ -1,8 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm dprint check
+pnpm lint-staged
+pnpm prettier check
 terraform -chdir=deployments fmt -recursive .
 pnpm tsc
 pnpm test
-pnpm lint-staged

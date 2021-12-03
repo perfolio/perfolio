@@ -42,18 +42,14 @@ export function Table<Accessor extends string>({
               // eslint-disable-next-line react/jsx-key
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column, i) => {
-                  const align = columns.find((c) =>
-                    c.accessor === column.id
-                  )?.align ?? "text-left"
+                  const align = columns.find((c) => c.accessor === column.id)?.align ?? "text-left"
                   return (
                     // eslint-disable-next-line react/jsx-key
                     <th
                       {...column.getHeaderProps()}
                       className={cn(
                         "bg-gray-50 border-t border-b border-gray-200 w-full px-3 py-2 text-xs font-medium tracking-wider text-gray-700 uppercase whitespace-nowrap",
-                        columns.find((c) =>
-                          c.accessor === column.id
-                        )?.align ?? "text-left",
+                        columns.find((c) => c.accessor === column.id)?.align ?? "text-left",
                         {
                           "border-l rounded-l": i === 0,
                           "border-r rounded-r": i === headerGroup.headers.length - 1,

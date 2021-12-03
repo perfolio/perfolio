@@ -3,14 +3,13 @@ import { ButtonControllerProps, Controller, LinkControllerProps } from "../butto
 
 import { DefaultEmptyStateStyle, DefaultEmptyStateStyleProps } from "./defaultEmptyStateStyle"
 
-export type EmptyStateProps =
-  & (LinkControllerProps | ButtonControllerProps)
-  & DefaultEmptyStateStyleProps
+export type EmptyStateProps = (LinkControllerProps | ButtonControllerProps) &
+  DefaultEmptyStateStyleProps
 
 export const EmptyState: React.FC<EmptyStateProps> = (props): JSX.Element => {
   return (
     <Controller {...props}>
-      <DefaultEmptyStateStyle icon={props.icon}>{props.children}</DefaultEmptyStateStyle>,
+      <DefaultEmptyStateStyle icon={props.icon}>{props.children}</DefaultEmptyStateStyle>
     </Controller>
   )
 }

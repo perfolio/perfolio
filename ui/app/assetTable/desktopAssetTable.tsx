@@ -4,26 +4,19 @@ import { Cell, Description, Table, Text, Tooltip } from "@perfolio/ui/components
 import React from "react"
 import { DetailAssetTableProps } from "./assetTable"
 
-
 export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
   aggregation,
   setAggregation,
   costPerShare,
   totalValue,
-  //currentPortfolioState,
+  // currentPortfolioState,
 }): JSX.Element => {
   const { currentPorfolioState } = useCurrentPorfolioState()
 
   return (
     <div className="w-full">
       <Table<
-        | "asset"
-        | "weight"
-        | "quantity"
-        | "costPerShare"
-        | "pricePerShare"
-        | "totalValue"
-        | "change"
+        "asset" | "weight" | "quantity" | "costPerShare" | "pricePerShare" | "totalValue" | "change"
       >
         columns={[
           {
@@ -47,7 +40,8 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
             tooltip: (
               <Tooltip>
                 <Description title="Cost per share">
-                  The average cost you have to pay for a single portfolio position in a specified currency.
+                  The average cost you have to pay for a single portfolio position in a specified
+                  currency.
                 </Description>
               </Tooltip>
             ),
@@ -75,10 +69,10 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
            */
           .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
           .map((holding) => {
-            const change = aggregation === "absolute"
-              ? (holding.value - costPerShare[holding.asset.id]!)
-              * holding.quantity
-              : holding.value / costPerShare[holding.asset.id]! - 1
+            const change =
+              aggregation === "absolute"
+                ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
+                : holding.value / costPerShare[holding.asset.id]! - 1
 
             const weight = (holding.quantity * holding.value) / totalValue
             return {
@@ -98,31 +92,25 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
                         <span
                           style={{ width: `${weight * 100}%` }}
                           className="flex w-full h-2 mb-4 overflow-hidden rounded bg-primary"
-                        >
-                        </span>
+                        ></span>
                       </div>
                     }
                   >
                     <Text>
-                      {holding.asset.name} represents {format(weight, { percent: true, suffix: "%" })} of your portfolio.
+                      {holding.asset.name} represents{" "}
+                      {format(weight, { percent: true, suffix: "%" })} of your portfolio.
                     </Text>
                   </Tooltip>
                 </Cell.Cell>
               ),
-              quantity: (
-                <Cell.Text align="text-right">
-                  {format(holding.quantity)}
-                </Cell.Text>
-              ),
+              quantity: <Cell.Text align="text-right">{format(holding.quantity)}</Cell.Text>,
               costPerShare: (
                 <Cell.Text align="text-right">
                   {format(costPerShare[holding.asset.id], { suffix: "€" })}
                 </Cell.Text>
               ),
               pricePerShare: (
-                <Cell.Text align="text-right">
-                  {format(holding.value, { suffix: "€" })}
-                </Cell.Text>
+                <Cell.Text align="text-right">{format(holding.value, { suffix: "€" })}</Cell.Text>
               ),
               totalValue: (
                 <Cell.Text align="text-right">
@@ -130,7 +118,12 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
                 </Cell.Text>
               ),
               change: (
-                <button className="w-full" onClick={() => setAggregation(aggregation === "absolute" ? "relative" : "absolute")}>
+                <button
+                  className="w-full"
+                  onClick={() =>
+                    setAggregation(aggregation === "absolute" ? "relative" : "absolute")
+                  }
+                >
                   <Cell.Tag
                     align="text-right"
                     textColor={change > 0 ? "text-success-dark" : "text-error-dark"}
@@ -144,13 +137,10 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
                     )}
                   </Cell.Tag>
                 </button>
-
               ),
             }
           })}
-
       />
     </div>
   )
-
 }

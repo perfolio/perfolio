@@ -56,17 +56,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           items: [
             {
               // Growth subscription
-              price: env.get("NODE_ENV") === "production"
-                ? "price_1JU4LpG0ZLpKb1P6Szj2jJQr"
-                : "plan_K9CYicTThbEqNP",
+              price:
+                env.get("NODE_ENV") === "production"
+                  ? "price_1JU4LpG0ZLpKb1P6Szj2jJQr"
+                  : "plan_K9CYicTThbEqNP",
             },
           ],
         })
         .catch((err) => {
-          throw new HttpError(
-            500,
-            `Unable to create subscription for user ${email}: ${err}`,
-          )
+          throw new HttpError(500, `Unable to create subscription for user ${email}: ${err}`)
         })
 
       user = await prisma.user.upsert({
@@ -76,9 +74,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: userId,
           stripeCustomerId: customer.id,
           stripeSubscriptionId: subscription.id,
-          currentPaymentPeriodStart: new Date(
-            subscription.current_period_start,
-          ),
+          currentPaymentPeriodStart: new Date(subscription.current_period_start),
           currentPaymentPeriodEnd: new Date(subscription.current_period_end),
           portfolios: {
             create: [
@@ -90,9 +86,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             ],
           },
           settings: {
-            create: {
-              defaultCurrency: "EUR",
-              defaultExchangeId: "xetr",
+            connectOrCreate: {
+              where: {
+                userId,
+              },
+              create: {
+                defaultCurrency: "EUR",
+                defaultExchangeId: "xetr",
+              },
             },
           },
         },
