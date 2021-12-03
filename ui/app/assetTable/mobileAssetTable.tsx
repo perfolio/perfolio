@@ -1,5 +1,5 @@
 import { format } from "@perfolio/pkg/util/numbers"
-import { Avatar, Drawer, Text, ToggleGroup } from "@perfolio/ui/components"
+import { Avatar, Drawer, Heading, Text, ToggleGroup } from "@perfolio/ui/components"
 import React, { useState } from "react"
 import cn from "classnames"
 import { DetailAssetTableProps } from "./assetTable"
@@ -71,7 +71,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                         </div>
                       </div>
                     </div>
-                    <div
+                    <button
                       className={cn(
                         change > 0 ? "text-success-dark" : "text-error-dark",
                         change > 0 ? "bg-success-light" : "bg-error-light",
@@ -85,9 +85,8 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                           ? { suffix: "€", sign: true }
                           : { percent: true, suffix: "%", sign: true },
                       )}
-                    </div>
+                    </button>
                   </div>
-
                 </button>
               )
             })}
@@ -124,61 +123,65 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                 setSelected={setRange}
               />
             </div>
-            <Divider height="sm"/>
-            <div className="py-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
+            <Divider />
+            <div className="space-y-4">
+              <Heading h3>Depot</Heading>
+              <div className="flex justify-between">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-8 px-4 flex-row">
+                  <KPI
+                    justify="start"
+                    textAlignment="left"
+                    label={"Total Value"}
+                    value={clickedAsset === undefined ? 0 : clickedAsset.value * clickedAsset.quantity}
+                    format={(n) =>
+                      format(n, {
+                        suffix: getCurrencySymbol(
+                          user?.settings?.defaultCurrency,
+                        ),
+                      })}
+                    isLoading={false}
+                  />
+                  <KPI
+                    justify="start"
+                    textAlignment="left"
+                    label={"Quantity"}
+                    value={clickedAsset === undefined ? 0 : clickedAsset?.quantity}
+                    format={(n) =>
+                      format(n, {
+                        prefix: "x "
+                      })}
+                    isLoading={false}
+                  />
+                  <KPI
+                    justify="start"
+                    textAlignment="left"
+                    label={"Weight"}
+                    value={clickedAsset === undefined ? 0 : ((clickedAsset?.quantity * clickedAsset?.value) / totalValue) * 100}
+                    format={(n) =>
+                      format(n, {
+                        suffix: "%"
+                      })}
+                    isLoading={false}
+                  />
+                  <KPI
+                    justify="start"
+                    textAlignment="left"
+                    label={"Cost per share"}
+                    value={clickedAsset === undefined ? 0 : costPerShare[clickedAsset.asset.id]}
+                    format={(n) =>
+                      format(n, {
+                        suffix: getCurrencySymbol(
+                          user?.settings?.defaultCurrency,
+                        ),
+                      })}
+                    isLoading={false}
+                  />
+
+                </div>
                 <KPI
-                  label={"Total Value"}
-                  value={clickedAsset === undefined ? 0 : clickedAsset.value * clickedAsset.quantity}
-                  format={(n) =>
-                    format(n, {
-                      suffix: getCurrencySymbol(
-                        user?.settings?.defaultCurrency,
-                      ),
-                    })}
-                  isLoading={false}
-                />
-                <KPI
-                  label={"Quantity"}
-                  value={clickedAsset === undefined ? 0 : clickedAsset?.quantity}
-                  format={(n) =>
-                    format(n, {
-                      prefix: "x "
-                    })}
-                  isLoading={false}
-                />
-                <KPI
-                  label={"Weight"}
-                  value={clickedAsset === undefined ? 0 : ((clickedAsset?.quantity * clickedAsset?.value) / totalValue) * 100}
-                  format={(n) =>
-                    format(n, {
-                      suffix: "%"
-                    })}
-                  isLoading={false}
-                />
-                {/* <KPI
-                  label={"Price per share"}
-                  value={clickedAsset === undefined ? 0 : clickedAsset.value}
-                  format={(n) =>
-                    format(n, {
-                      suffix: getCurrencySymbol(
-                        user?.settings?.defaultCurrency,
-                      ),
-                    })}
-                  isLoading={false}
-                /> */}
-                <KPI
-                  label={"Cost per share"}
-                  value={clickedAsset === undefined ? 0 : costPerShare[clickedAsset.asset.id]}
-                  format={(n) =>
-                    format(n, {
-                      suffix: getCurrencySymbol(
-                        user?.settings?.defaultCurrency,
-                      ),
-                    })}
-                  isLoading={false}
-                />
-                <KPI
+                  justify="end"
+                  textAlignment="right"
+                  enableColor
                   label={"Change"}
                   value={clickedAsset === undefined ? 0 : aggregation === "absolute"
                     ? (clickedAsset.value - costPerShare[clickedAsset.asset.id]!)
@@ -191,9 +194,11 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                         ? { suffix: "€", sign: true }
                         : { percent: true, suffix: "%", sign: true },
                     )}
+                  onClickContent={() => setAggregation(aggregation === "absolute" ? "relative" : "absolute")}
                   isLoading={false}
                 />
               </div>
+              <Divider />
             </div>
           </div>
         </Drawer.Content>

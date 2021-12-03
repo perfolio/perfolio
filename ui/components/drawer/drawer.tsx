@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { XIcon } from "@heroicons/react/outline"
-import { Button, Heading } from "@perfolio/ui/components"
+import { Button, Heading, Text } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
 import React, { Fragment, useEffect } from "react"
 import cn from "classnames"
@@ -72,7 +72,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                         <Dialog.Title>
                           <Heading h3>{title}</Heading>
                         </Dialog.Title>
-                        <p className="text-sm text-gray-500">{subtitle}</p>
+                        <Text size="sm">{subtitle}</Text>
                       </div>
                       <div className="flex items-center h-10">
                         <Button type="plain" onClick={() => setOpen(false)} icon={<XIcon />} />

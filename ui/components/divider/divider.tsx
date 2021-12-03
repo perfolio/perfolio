@@ -16,7 +16,7 @@ export const Divider: React.FC<DividerProps> = ({
                 "h-1": height === "md",
                 "h-1.5": height === "lg",
             },
-            "my-4 bg-gray-600"
+            "my-4 bg-gray-400"
         )} />
     )
 }
