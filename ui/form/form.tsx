@@ -7,6 +7,7 @@ export interface FormProps<FieldValues> {
   formError: React.ReactNode | null
   children: React.ReactNode
   className?: string
+  onSubmit?: ()=>void
 }
 
 export function Form<FieldValues>({
@@ -14,10 +15,11 @@ export function Form<FieldValues>({
   formError,
   children,
   className,
+  onSubmit
 }: FormProps<FieldValues>): JSX.Element {
   return (
     <FormProvider {...ctx}>
-      <form className={className}>{children}</form>
+      <form className={className} onSubmit={onSubmit}>{children}</form>
       {formError
         ? (
           <div role="alert" className="pt-2 pb-4">
@@ -37,6 +39,7 @@ export async function handleSubmit<FieldValues>(
   setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
   setFormError: React.Dispatch<React.SetStateAction<string | null>>,
 ): Promise<void> {
+  
   const values = ctx.getValues()
   await ctx.handleSubmit(
     async () => {
