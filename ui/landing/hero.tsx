@@ -136,7 +136,6 @@ export const HeroSection: React.FC = (): JSX.Element => {
                         )}
                       type="cta"
                       size="block"
-                      htmlType="submit"
                       disabled={submitting}
                     >
                       Join the waitlist
