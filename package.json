@@ -29,7 +29,7 @@
     "@radix-ui/react-id": "^0.1.1",
     "@radix-ui/react-tooltip": "^0.1.1",
     "@sendgrid/mail": "^7.6.0",
-    "@upstash/redis": "^0.1.7",
+    "@upstash/redis": "0.1.6",
     "apollo-datasource": "^3.3.0",
     "apollo-server": "^3.5.0",
     "apollo-server-caching": "^3.3.0",
