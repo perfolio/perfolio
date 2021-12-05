@@ -1,5 +1,5 @@
-import * as gm from "graphql-modules"
 import * as Types from "../../../generated/schema-types"
+import * as gm from "graphql-modules"
 export namespace UtilModule {
   interface DefinedFields {
     ValueAndQuantityAtTime: "quantity" | "time" | "value"
@@ -10,10 +10,7 @@ export namespace UtilModule {
     Types.ValueAndQuantityAtTime,
     DefinedFields["ValueAndQuantityAtTime"]
   >
-  export type ValueAtTime = Pick<
-    Types.ValueAtTime,
-    DefinedFields["ValueAtTime"]
-  >
+  export type ValueAtTime = Pick<Types.ValueAtTime, DefinedFields["ValueAtTime"]>
 
   export type ValueAndQuantityAtTimeResolvers = Pick<
     Types.ValueAndQuantityAtTimeResolvers,

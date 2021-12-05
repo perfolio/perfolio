@@ -1,6 +1,6 @@
 import { gql } from "graphql-modules"
 
-export default gql `
+export default gql`
   enum CacheControlScope {
     PUBLIC
     PRIVATE

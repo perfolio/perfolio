@@ -1,6 +1,6 @@
 import { gql } from "graphql-modules"
 
-export default gql `
+export default gql`
   type AbsoluteAssetHistory {
     assetId: ID!
     asset: Asset!
@@ -38,7 +38,10 @@ export default gql `
     Returns a history for each asset. This is not the absolute asset value but rather what
     each asset is worth at each point in time at the given exchange
     """
-    absoluteHistory("unix timestamp where to begin calculation" since: Int): [AbsoluteAssetHistory!]!
+    absoluteHistory(
+      "unix timestamp where to begin calculation"
+      since: Int
+    ): [AbsoluteAssetHistory!]!
   }
 
   input CreatePortfolio {

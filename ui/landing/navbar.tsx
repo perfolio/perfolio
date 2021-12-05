@@ -105,12 +105,8 @@ export const Navbar: React.FC = () => {
                                   aria-hidden="true"
                                 />
                                 <div className="ml-4">
-                                  <p className="text-base font-medium">
-                                    {item.name}
-                                  </p>
-                                  <p className="mt-1 text-sm text-gray-500">
-                                    {item.description}
-                                  </p>
+                                  <p className="text-base font-medium">{item.name}</p>
+                                  <p className="mt-1 text-sm text-gray-500">{item.description}</p>
                                 </div>
                               </a>
                             </Link>
@@ -130,22 +126,20 @@ export const Navbar: React.FC = () => {
               )}
             </Popover>
           </Popover.Group>
-          {user
-            ? (
-              <Button href="/dashboard" type="primary" size="lg">
-                Go to dashboard
+          {user ? (
+            <Button href="/dashboard" type="primary" size="lg">
+              Go to dashboard
+            </Button>
+          ) : (
+            <>
+              <Button href="/dashboard" type="plain">
+                Sign In
               </Button>
-            )
-            : (
-              <>
-                <Button href="/dashboard" type="plain">
-                  Sign In
-                </Button>
-                <Button type="cta" href="/dashboard">
-                  Start for free
-                </Button>
-              </>
-            )}
+              <Button type="cta" href="/dashboard">
+                Start for free
+              </Button>
+            </>
+          )}
         </div>
         {/* Mobile */}
         <Transition
@@ -158,17 +152,15 @@ export const Navbar: React.FC = () => {
           leaveFrom="translate-y-0 opacity-100"
           leaveTo="-translate-y-full opacity-0"
         >
-          {user
-            ? (
-              <Button href="/dashboard" type="primary" size="lg">
-                Go to dashboard
-              </Button>
-            )
-            : (
-              <Button type="cta" href="/dashboard">
-                Sign in
-              </Button>
-            )}
+          {user ? (
+            <Button href="/dashboard" type="primary" size="lg">
+              Go to dashboard
+            </Button>
+          ) : (
+            <Button type="cta" href="/dashboard">
+              Sign in
+            </Button>
+          )}
         </Transition>
       </div>
     </nav>

@@ -18,12 +18,11 @@ query portfolioHistory($portfolioId: ID!, $since: Int) {
           logo
         }
 
-        ... on ExchangeTradedAsset{
-          ticker 
-          isin 
+        ... on ExchangeTradedAsset {
+          ticker
+          isin
           logo
         }
-        
       }
       history {
         time

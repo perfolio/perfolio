@@ -6,9 +6,8 @@ import { client } from "../client"
 export const useExchanges = () => {
   const { getAccessTokenSilently } = useAuth0()
 
-  const { data, ...meta } = useQuery<ExchangesQuery, Error>(
-    ["useExchanges"],
-    async () => client(await getAccessTokenSilently()).exchanges(),
+  const { data, ...meta } = useQuery<ExchangesQuery, Error>(["useExchanges"], async () =>
+    client(await getAccessTokenSilently()).exchanges(),
   )
 
   return { exchanges: data?.exchanges, ...meta }

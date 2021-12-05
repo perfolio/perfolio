@@ -1,5 +1,5 @@
-import * as gm from "graphql-modules"
 import * as Types from "../../../generated/schema-types"
+import * as gm from "graphql-modules"
 export namespace ExchangeModule {
   interface DefinedFields {
     Exchange: "mic" | "description" | "region" | "suffix"
@@ -13,10 +13,7 @@ export namespace ExchangeModule {
     Types.ExchangeResolvers,
     DefinedFields["Exchange"] | "__isTypeOf"
   >
-  export type QueryResolvers = Pick<
-    Types.QueryResolvers,
-    DefinedFields["Query"]
-  >
+  export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
 
   export interface Resolvers {
     Exchange?: ExchangeResolvers

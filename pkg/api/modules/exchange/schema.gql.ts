@@ -1,12 +1,12 @@
 import { gql } from "graphql-modules"
 
-export default gql `
+export default gql`
   """
   An exchange where shares are traded
   """
-  type Exchange @cacheControl(maxAge: 86400){
-"""
-"    Market Identifier Code using ISO 10383
+  type Exchange @cacheControl(maxAge: 86400) {
+    """
+    "    Market Identifier Code using ISO 10383
     """
     mic: ID!
     """

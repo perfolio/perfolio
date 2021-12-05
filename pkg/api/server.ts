@@ -22,13 +22,14 @@ export const server = (config?: ServerConfig): ApolloServer => {
     /**
      * Send metrics to apollo dashboard
      */
-    apollo: env.get("NODE_ENV") === "production"
-      ? {
-        key: env.require("APOLLO_KEY"),
-        graphId: env.require("APOLLO_GRAPH_ID"),
-        graphVariant: env.require("APOLLO_GRAPH_VARIANT"),
-      }
-      : undefined,
+    apollo:
+      env.get("NODE_ENV") === "production"
+        ? {
+            key: env.require("APOLLO_KEY"),
+            graphId: env.require("APOLLO_GRAPH_ID"),
+            graphVariant: env.require("APOLLO_GRAPH_VARIANT"),
+          }
+        : undefined,
     plugins: [
       responseCachePlugin({
         cache: new RedisCache(),

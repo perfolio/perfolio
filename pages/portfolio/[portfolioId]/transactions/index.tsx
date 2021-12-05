@@ -3,7 +3,9 @@ import { DocumentAddIcon } from "@heroicons/react/outline"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api"
 import { Transaction } from "@perfolio/pkg/api"
 import { useDeleteTransaction, usePortfolio } from "@perfolio/pkg/hooks"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import fs from "fs"
+import { useI18n } from "next-localization"
+
 import { useToaster } from "@perfolio/pkg/toaster"
 import { ActivityFeed, AppLayout, Main, Sidebar } from "@perfolio/ui/app"
 import { Button, Text } from "@perfolio/ui/components"
@@ -21,9 +23,7 @@ export interface TransactionItemProps {
   isLast: boolean
 }
 
-const TransactionItem: React.FC<TransactionItemProps> = (
-  { isLast, transaction },
-): JSX.Element => {
+const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
   const { t } = useI18n()
   const { addToast } = useToaster()
   console.log({ transaction })
@@ -40,9 +40,7 @@ const TransactionItem: React.FC<TransactionItemProps> = (
               {new Date(transaction.executedAt * 1000).toLocaleDateString()}
             </span>
             <div className="items-center justify-center hidden w-8 h-8 bg-white dark:text-black text-primary-dark dark:bg-primary-green md:inline-flex md:absolute md:-right-4">
-              {asset.logo
-                ? <Avatar size="sm" src={asset.logo} />
-                : <Loading />}
+              {asset.logo ? <Avatar size="sm" src={asset.logo} /> : <Loading />}
             </div>
           </div>
         </div>
@@ -56,33 +54,31 @@ const TransactionItem: React.FC<TransactionItemProps> = (
         )}
       >
         <div className="flex flex-grow gap-4">
-          {transaction.asset
-            ? (
-              <Description title={transaction.asset.name}>
-                {`You ${
-                  transaction.volume > 0
-                    ? t("transIndexInfoBought")
-                    : t("transIndexInfoSold")
-                } ${Math.abs(transaction.volume).toFixed(2)} share${
-                  transaction.volume === 1 ? "" : "s"
-                } of ${asset.ticker} at $${transaction.value.toFixed(2)} per share`}
-              </Description>
-            )
-            : null}
+          {transaction.asset ? (
+            <Description title={transaction.asset.name}>
+              {`You ${
+                transaction.volume > 0 ? t("app.transIndexInfoBought") : t("app.transIndexInfoSold")
+              } ${Math.abs(transaction.volume).toFixed(2)} share${
+                transaction.volume === 1 ? "" : "s"
+              } of ${asset.ticker} at $${transaction.value.toFixed(2)} per share`}
+            </Description>
+          ) : null}
         </div>
         <div className="flex-shrink-0">
           <Button
             type="secondary"
             size="sm"
             onClick={async () => {
-              await deleteTransaction.mutateAsync({ transactionId: transaction.id })
+              await deleteTransaction.mutateAsync({
+                transactionId: transaction.id,
+              })
               addToast({
-                title: t("transIndexToastTitle"),
-                content: t("transIndexToastContent") + `${transaction.id}`,
+                title: t("app.transIndexToastTitle"),
+                content: t("app.transIndexToastContent") + `${transaction.id}`,
               })
             }}
           >
-            {t("transIndexDeleteButton")}
+            {t("app.transIndexDeleteButton")}
           </Button>
         </div>
       </div>
@@ -94,12 +90,10 @@ const TransactionItem: React.FC<TransactionItemProps> = (
  * / page.
  */
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+const TransactionsPage: NextPage<PageProps> = () => {
+  const { t } = useI18n()
 
   const { portfolio, isLoading, error } = usePortfolio()
   return (
@@ -112,43 +106,48 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title={t("transIndexHeader")} />
+          <Main.Header.Title title={t("app.transIndexHeader")} />
         </Main.Header>
         <Main.Content>
           {error ? <div>{JSON.stringify(error)}</div> : null}
-          {isLoading ? <Loading /> : !portfolio?.transactions || portfolio.transactions.length === 0
-            ? (
-              <EmptyState
-                href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}
-                icon={<DocumentAddIcon />}
-              >
-                <Text>Add your first transaction</Text>
-              </EmptyState>
-            )
-            : (
-              <AnimateSharedLayout>
-                <AnimatePresence>
-                  {[...portfolio.transactions]
-                    .sort((a, b) => b.executedAt - a.executedAt)
-                    ?.map((tx, i) => (
-                      <motion.div
-                        layout
+          {isLoading ? (
+            <Loading />
+          ) : !portfolio?.transactions || portfolio.transactions.length === 0 ? (
+            <EmptyState
+              href={`/portfolio/${router.query["portfolioId"]}/transactions/new`}
+              icon={<DocumentAddIcon />}
+            >
+              <Text>Add your first transaction</Text>
+            </EmptyState>
+          ) : (
+            <AnimateSharedLayout>
+              <AnimatePresence>
+                {[...portfolio.transactions]
+                  .sort((a, b) => b.executedAt - a.executedAt)
+                  ?.map((tx, i) => (
+                    <motion.div
+                      layout
+                      key={tx.id}
+                      initial={{ opacity: 0, scaleY: 0 }}
+                      animate={{ opacity: 1, scaleY: 1 }}
+                      exit={{ opacity: 0, scaleY: 0 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 50,
+                        mass: 1,
+                      }}
+                    >
+                      <TransactionItem
                         key={tx.id}
-                        initial={{ opacity: 0, scaleY: 0 }}
-                        animate={{ opacity: 1, scaleY: 1 }}
-                        exit={{ opacity: 0, scaleY: 0 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
-                      >
-                        <TransactionItem
-                          key={tx.id}
-                          transaction={tx}
-                          isLast={i === portfolio.transactions.length - 1}
-                        />
-                      </motion.div>
-                    ))}
-                </AnimatePresence>
-              </AnimateSharedLayout>
-            )}
+                        transaction={tx}
+                        isLast={i === portfolio.transactions.length - 1}
+                      />
+                    </motion.div>
+                  ))}
+              </AnimatePresence>
+            </AnimateSharedLayout>
+          )}
         </Main.Content>
       </Main>
     </AppLayout>
@@ -165,10 +164,9 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

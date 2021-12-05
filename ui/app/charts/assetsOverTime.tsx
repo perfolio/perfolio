@@ -20,14 +20,10 @@ export const AssetsOverTimeChart: React.FC<AssetsOverTimeChartProps> = ({
   since,
 }): JSX.Element => {
   const { history, isLoading } = usePortfolioHistory({ since })
-  const { absoluteTotal } = useAbsoluteTotalHistory(
-    { since },
-  )
+  const { absoluteTotal } = useAbsoluteTotalHistory({ since })
 
   const data = useMemo(() => {
-    const choice = aggregate === "absolute"
-      ? absoluteTotal
-      : (history.relative)
+    const choice = aggregate === "absolute" ? absoluteTotal : history.relative
 
     const downsampled = Downsampling.largestTriangle(
       choice.map(({ time, value }) => ({ x: time, y: value })),

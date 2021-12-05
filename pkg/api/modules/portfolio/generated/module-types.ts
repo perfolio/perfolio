@@ -1,5 +1,5 @@
-import * as gm from "graphql-modules"
 import * as Types from "../../../generated/schema-types"
+import * as gm from "graphql-modules"
 export namespace PortfolioModule {
   interface DefinedFields {
     AbsoluteAssetHistory: "assetId" | "asset" | "history"
@@ -35,21 +35,8 @@ export namespace PortfolioModule {
   interface DefinedInputFields {
     CreatePortfolio: "id" | "name" | "userId" | "primary"
     UpdatePortfolio: "id" | "name" | "primary"
-    CreateTransaction:
-      | "assetId"
-      | "executedAt"
-      | "portfolioId"
-      | "value"
-      | "volume"
-      | "mic"
-    UpdateTransaction:
-      | "id"
-      | "assetId"
-      | "executedAt"
-      | "portfolioId"
-      | "value"
-      | "volume"
-      | "mic"
+    CreateTransaction: "assetId" | "executedAt" | "portfolioId" | "value" | "volume" | "mic"
+    UpdateTransaction: "id" | "assetId" | "executedAt" | "portfolioId" | "value" | "volume" | "mic"
   }
 
   export type AbsoluteAssetHistory = Pick<
@@ -60,19 +47,10 @@ export namespace PortfolioModule {
   export type ValueAndQuantityAtTime = Types.ValueAndQuantityAtTime
   export type Portfolio = Pick<Types.Portfolio, DefinedFields["Portfolio"]>
   export type User = Types.User
-  export type Transaction = Pick<
-    Types.Transaction,
-    DefinedFields["Transaction"]
-  >
+  export type Transaction = Pick<Types.Transaction, DefinedFields["Transaction"]>
   export type ValueAtTime = Types.ValueAtTime
-  export type CreatePortfolio = Pick<
-    Types.CreatePortfolio,
-    DefinedInputFields["CreatePortfolio"]
-  >
-  export type UpdatePortfolio = Pick<
-    Types.UpdatePortfolio,
-    DefinedInputFields["UpdatePortfolio"]
-  >
+  export type CreatePortfolio = Pick<Types.CreatePortfolio, DefinedInputFields["CreatePortfolio"]>
+  export type UpdatePortfolio = Pick<Types.UpdatePortfolio, DefinedInputFields["UpdatePortfolio"]>
   export type CreateTransaction = Pick<
     Types.CreateTransaction,
     DefinedInputFields["CreateTransaction"]
@@ -96,14 +74,8 @@ export namespace PortfolioModule {
     Types.TransactionResolvers,
     DefinedFields["Transaction"] | "__isTypeOf"
   >
-  export type QueryResolvers = Pick<
-    Types.QueryResolvers,
-    DefinedFields["Query"]
-  >
-  export type MutationResolvers = Pick<
-    Types.MutationResolvers,
-    DefinedFields["Mutation"]
-  >
+  export type QueryResolvers = Pick<Types.QueryResolvers, DefinedFields["Query"]>
+  export type MutationResolvers = Pick<Types.MutationResolvers, DefinedFields["Mutation"]>
   export type UserResolvers = Pick<Types.UserResolvers, DefinedFields["User"]>
 
   export interface Resolvers {

@@ -71,11 +71,9 @@ export async function getFXRates(interval: Interval, currency: Currency): Promis
     UsingCodes: "Y",
   }
   const res = await fetch(
-    `${url}?${
-      Object.entries(params)
-        .map(([key, val]) => `${key}=${val})`)
-        .join("&")
-    }`,
+    `${url}?${Object.entries(params)
+      .map(([key, val]) => `${key}=${val})`)
+      .join("&")}`,
   )
   if (res.status !== 200) {
     throw new HttpError(res.status, url)

@@ -1,4 +1,4 @@
-import { useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
 import cn from "classnames"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -26,7 +26,7 @@ export const SideNavbar: React.FC = (): JSX.Element => {
     <nav className="mt-8">
       <ul className="space-y-4">
         {links.map(({ href, label }) => (
-          <li>
+          <li key={label}>
             <Link href={href}>
               <a
                 className={cn(

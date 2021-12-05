@@ -1,6 +1,6 @@
 import { gql } from "graphql-modules"
 
-export default gql `
+export default gql`
   """
   Generic Value and Quantity over time.
   This is used for assets for example.

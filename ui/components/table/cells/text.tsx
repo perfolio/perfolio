@@ -6,9 +6,7 @@ export interface TextProps {
   mono?: boolean
 }
 
-export const Text: React.FC<TextProps> = (
-  { children, align = "text-left", mono },
-): JSX.Element => {
+export const Text: React.FC<TextProps> = ({ children, align = "text-left", mono }): JSX.Element => {
   return (
     <Wrapper>
       <TextComponent align={align} mono={mono}>
