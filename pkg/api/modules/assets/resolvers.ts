@@ -13,11 +13,7 @@ export const resolvers: Resolvers<Context> = {
         return "ETF"
       }
       throw new Error(
-        `Unable to decide what type of ExchangeTradedAsset this is: ${
-          JSON.stringify(
-            asset,
-          )
-        }`,
+        `Unable to decide what type of ExchangeTradedAsset this is: ${JSON.stringify(asset)}`,
       )
     },
   },
@@ -46,11 +42,7 @@ export const resolvers: Resolvers<Context> = {
         return "ETF"
       }
       throw new Error(
-        `Unable to decide what type of ExchangeTradedAsset this is: ${
-          JSON.stringify(
-            asset,
-          )
-        }`,
+        `Unable to decide what type of ExchangeTradedAsset this is: ${JSON.stringify(asset)}`,
       )
     },
 
@@ -60,14 +52,13 @@ export const resolvers: Resolvers<Context> = {
         micCode: mic,
       })
       if (foundIsins.length === 0) {
-        throw new Error(
-          `Unable to find the symbol for ${asset.isin} at exchange: ${mic}`,
-        )
+        throw new Error(`Unable to find the symbol for ${asset.isin} at exchange: ${mic}`)
       }
 
-      const ticker = foundIsins[0].compositeFIGI === foundIsins[0].figi
-        ? foundIsins[0].ticker
-        : `${foundIsins[0].ticker}-${foundIsins[0].exchCode}`
+      const ticker =
+        foundIsins[0].compositeFIGI === foundIsins[0].figi
+          ? foundIsins[0].ticker
+          : `${foundIsins[0].ticker}-${foundIsins[0].exchCode}`
 
       const prices = await ctx.dataSources.iex.getHistory(ticker)
       return Object.entries(prices)
@@ -93,15 +84,15 @@ export const resolvers: Resolvers<Context> = {
           throw new Error(`Isin not found: ${isin}`)
         }
         ctx.logger.debug("Found match", { foundIsin })
-        const assetTypeString = foundIsin.securityType === "ETP"
-          ? foundIsin.securityType2
-          : foundIsin.securityType
+        const assetTypeString =
+          foundIsin.securityType === "ETP" ? foundIsin.securityType2 : foundIsin.securityType
 
-        const assetType = assetTypeString === "Common Stock" || assetTypeString === "REIT"
-          ? AssetType.COMMON_STOCK
-          : assetTypeString === "Mutual Fund"
-          ? AssetType.MUTUAL_FUND
-          : AssetType.TODO
+        const assetType =
+          assetTypeString === "Common Stock" || assetTypeString === "REIT"
+            ? AssetType.COMMON_STOCK
+            : assetTypeString === "Mutual Fund"
+            ? AssetType.MUTUAL_FUND
+            : AssetType.TODO
 
         const iexIsins = await ctx.dataSources.iex.findTicker(isin)
         ctx.logger.debug("IEX knows these stocks", { isin, iexIsins })
@@ -109,9 +100,7 @@ export const resolvers: Resolvers<Context> = {
         ctx.logger.debug("Choosing ticker", { ticker })
         const company = await ctx.dataSources.iex.getCompany(ticker)
         if (!company) {
-          throw new Error(
-            `No Exchange traded asset exists for ticker: ${ticker}`,
-          )
+          throw new Error(`No Exchange traded asset exists for ticker: ${ticker}`)
         }
         const create = {
           id: newId("asset"),
@@ -132,13 +121,10 @@ export const resolvers: Resolvers<Context> = {
         })
       }
 
-      const res = await fetch(
-        "https://search-l1vg.onrender.com/ingest/perfolio",
-        {
-          method: "POST",
-          body: JSON.stringify({ asset }),
-        },
-      )
+      const res = await fetch("https://search-l1vg.onrender.com/ingest/perfolio", {
+        method: "POST",
+        body: JSON.stringify({ asset }),
+      })
       if (!res.ok) {
         throw new Error(`Unable to ingest document into search`)
       }

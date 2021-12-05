@@ -59,9 +59,10 @@ export async function getAbsoluteHistory(
       }
       const foundIsin = foundIsins[0]
 
-      const ticker = foundIsin.compositeFIGI === foundIsin.figi
-        ? foundIsin.ticker
-        : [foundIsin.ticker, foundIsin.exchCode].join("-")
+      const ticker =
+        foundIsin.compositeFIGI === foundIsin.figi
+          ? foundIsin.ticker
+          : [foundIsin.ticker, foundIsin.exchCode].join("-")
 
       return {
         assetId: asset.id,
@@ -99,7 +100,7 @@ export async function getAbsoluteHistory(
        * Get transactions that happened on this day
        */
       const txsToday = transactions.filter((tx) =>
-        Time.fromTimestamp(tx.executedAt).equals(currentDay)
+        Time.fromTimestamp(tx.executedAt).equals(currentDay),
       )
 
       for (const tx of txsToday) {
@@ -126,9 +127,7 @@ export async function getAbsoluteHistory(
     const interpolatedAssetHistory: ValueAndQuantityAtTime[] = []
     for (let i = 0; i < assetHistory.length; i++) {
       if (assetHistory[i].value) {
-        interpolatedAssetHistory.push(
-          assetHistory[i] as ValueAndQuantityAtTime,
-        )
+        interpolatedAssetHistory.push(assetHistory[i] as ValueAndQuantityAtTime)
       } else {
         if (i === 0) {
           /**

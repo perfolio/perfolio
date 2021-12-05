@@ -24,8 +24,7 @@ export async function getLogo(client: Client, req: GetLogoRequest): Promise<GetL
     })) as { url: string }
   if (!res?.url) {
     res = {
-      url:
-        "https://avatars.githubusercontent.com/u/67603535?s=400&u=cb14061ee696c1d3ca79760fcc80dd00ad93d8d3&v=4",
+      url: "https://avatars.githubusercontent.com/u/67603535?s=400&u=cb14061ee696c1d3ca79760fcc80dd00ad93d8d3&v=4",
     }
   }
   return GetLogoResponseValidator.parse(res)

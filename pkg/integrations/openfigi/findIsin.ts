@@ -32,9 +32,7 @@ export type FindIsinRequest = {
 /**
  * Return all associated figis
  */
-export async function findIsin(
-  req: FindIsinRequest,
-): Promise<FindIsinResponse> {
+export async function findIsin(req: FindIsinRequest): Promise<FindIsinResponse> {
   const client = new Client()
   const res = await client.post({
     path: "/v3/mapping",

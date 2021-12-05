@@ -1,4 +1,4 @@
-import { useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
 import { Button, Card, Modal, Text } from "@perfolio/ui/components"
 import React from "react"
 

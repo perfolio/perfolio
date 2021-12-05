@@ -60,8 +60,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
           setAggregation={setAggregation}
           costPerShare={costPerShare}
           totalValue={totalValue}
-        >
-        </DesktopAssetTable>
+        ></DesktopAssetTable>
       </div>
       <div className="flex md:hidden">
         <MobileAssetTable
@@ -69,8 +68,7 @@ export const AssetTable: React.FC<AssetTableProps> = ({
           setAggregation={setAggregation}
           costPerShare={costPerShare}
           totalValue={totalValue}
-        >
-        </MobileAssetTable>
+        ></MobileAssetTable>
       </div>
     </>
   )

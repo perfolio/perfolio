@@ -84,9 +84,7 @@ export const resolvers: Resolvers<Context> = {
       const history = await getAbsoluteHistory(portfolio, ctx)
       if (since) {
         for (const assetHistory of history) {
-          assetHistory.history = assetHistory.history.filter(
-            (t) => t.time >= since,
-          )
+          assetHistory.history = assetHistory.history.filter((t) => t.time >= since)
         }
       }
       return history
@@ -164,9 +162,7 @@ export const resolvers: Resolvers<Context> = {
       if (!portfolio) {
         throw new Error(`Portfolio ${transaction.portfolioId} does not exist`)
       }
-      const { sub: userId } = await ctx.authorizeUser(
-        (claims) => claims.sub === portfolio.userId,
-      )
+      const { sub: userId } = await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
 
       let settings: SettingsModel | null = null
       if (!transaction.mic) {
@@ -202,9 +198,7 @@ export const resolvers: Resolvers<Context> = {
       if (!existingTransaction) {
         throw new Error(`Transaction ${transaction.id} does not exist`)
       }
-      ctx.authorizeUser(
-        (claims) => claims.sub === existingTransaction.portfolio.userId,
-      )
+      ctx.authorizeUser((claims) => claims.sub === existingTransaction.portfolio.userId)
 
       return await ctx.dataSources.db.transaction.update({
         where: {
@@ -221,9 +215,7 @@ export const resolvers: Resolvers<Context> = {
       if (!transaction) {
         throw new Error(`Transaction ${transactionId} does not exist`)
       }
-      ctx.authorizeUser(
-        (claims) => claims.sub === transaction.portfolio.userId,
-      )
+      ctx.authorizeUser((claims) => claims.sub === transaction.portfolio.userId)
       return await ctx.dataSources.db.transaction.delete({
         where: { id: transactionId },
       })

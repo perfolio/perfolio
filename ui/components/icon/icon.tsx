@@ -14,9 +14,7 @@ export interface IconProps {
   color?: string
 }
 
-export const Icon: React.FC<IconProps> = (
-  { size = "md", label, children, color },
-): JSX.Element => {
+export const Icon: React.FC<IconProps> = ({ size = "md", label, children, color }): JSX.Element => {
   return (
     <Root label={label}>
       <div

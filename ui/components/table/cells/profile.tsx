@@ -14,16 +14,20 @@ export const Profile: React.FC<ProfileProps> = ({ src, title, subtitle }): JSX.E
   return (
     <Wrapper>
       <div className="flex items-center space-x-2 min-w-0">
-        {src
-          ? (
-            <div className="flex-shrink-0">
-              <Avatar src={src} />
-            </div>
-          )
-          : <Loading />}
+        {src ? (
+          <div className="flex-shrink-0">
+            <Avatar src={src} />
+          </div>
+        ) : (
+          <Loading />
+        )}
         <div className="min-w-0">
-          <Text bold truncate>{title}</Text>
-          <Text size="xs" truncate>{subtitle}</Text>
+          <Text bold truncate>
+            {title}
+          </Text>
+          <Text size="xs" truncate>
+            {subtitle}
+          </Text>
         </div>
       </div>
     </Wrapper>

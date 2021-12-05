@@ -25,9 +25,10 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
              */
             .sort((a, b) => b.quantity * b.value - a.quantity * a.value)
             .map((holding) => {
-              const change = aggregation === "absolute"
-                ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
-                : holding.value / costPerShare[holding.asset.id]! - 1
+              const change =
+                aggregation === "absolute"
+                  ? (holding.value - costPerShare[holding.asset.id]!) * holding.quantity
+                  : holding.value / costPerShare[holding.asset.id]! - 1
 
               const weight = (holding.quantity * holding.value) / totalValue
               return (
@@ -36,8 +37,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     <span
                       style={{ width: `${weight * 100}%` }}
                       className="flex w-full h-2 mb-4 overflow-hidden rounded bg-gray-300"
-                    >
-                    </span>
+                    ></span>
                   </div>
                   <div className="w-full flex px-2 pb-4 md:px-6 space-x-2 ">
                     <div className="flex w-full content-start space-x-2 min-w-0">
@@ -46,17 +46,24 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                       </div>
                       <div className="w-full min-w-0">
                         <div className="flex min-w-0">
-                          <Text bold truncate>{holding.asset.name}</Text>
+                          <Text bold truncate>
+                            {holding.asset.name}
+                          </Text>
                         </div>
                         <div className="flex space-x-2 justify-start">
                           <div className="bg-gray-200 self-center px-1 rounded whitespace-nowrap">
                             <Text size="sm">
-                              {format(holding.quantity, { prefix: "x ", fractionDigits: 0 })}
+                              {format(holding.quantity, {
+                                prefix: "x ",
+                                fractionDigits: 0,
+                              })}
                             </Text>
                           </div>
                           <div className="whitespace-nowrap">
                             <Text>
-                              {format(holding.value * holding.quantity, { suffix: " €" })}
+                              {format(holding.value * holding.quantity, {
+                                suffix: " €",
+                              })}
                             </Text>
                           </div>
                         </div>
@@ -69,7 +76,8 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                         "self-center px-1 rounded",
                       )}
                       onClick={() =>
-                        setAggregation(aggregation === "absolute" ? "relative" : "absolute")}
+                        setAggregation(aggregation === "absolute" ? "relative" : "absolute")
+                      }
                     >
                       {format(
                         change,

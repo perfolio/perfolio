@@ -3,9 +3,7 @@ import { usePortfolioHistory } from ".."
 
 export const useCurrentPorfolioState = () => {
   const { history, ...meta } = usePortfolioHistory()
-  const getLastValid = (
-    history: ValueAndQuantityAtTime[],
-  ): { quantity: number; value: number } => {
+  const getLastValid = (history: ValueAndQuantityAtTime[]): { quantity: number; value: number } => {
     const sorted = [...history].sort((a, b) => b.time - a.time)
     for (const day of sorted) {
       if (day.value >= 0) {

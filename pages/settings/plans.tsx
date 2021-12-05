@@ -1,9 +1,10 @@
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
+
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
-
+import fs from "fs"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useUser } from "@perfolio/pkg/hooks"
 import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"
@@ -31,7 +32,6 @@ type Product = {
 
 type PageProps = {
   products: Product[]
-  translations: Record<string, string>
 }
 
 const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
@@ -56,7 +56,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
               <div className="flex flex-col w-full space-y-8">
                 <div className="flex items-center">
                   <span className="font-semibold uppercase text-primary whitespace-nowrap">
-                    {t("setPlanWhatsIncl")}
+                    {t("app.setPlanWhatsIncl")}
                   </span>
                   <div className="flex-grow w-full mx-4 border-b border-primary"></div>
                 </div>
@@ -88,13 +88,11 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
             loading={isLoading}
             onClick={async () => {
               if (!user) {
-                console.error(t("setPlanUserError"))
+                console.error(t("app.setPlanUserError"))
                 return
               }
               const res = await fetch(
-                `/api/stripe/checkout?priceId=${
-                  prices[selected].id
-                }&customerId=${user.stripeCustomerId}`,
+                `/api/stripe/checkout?priceId=${prices[selected].id}&customerId=${user.stripeCustomerId}`,
                 {
                   method: "POST",
                 },
@@ -107,7 +105,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
             }}
             type="primary"
           >
-            {t("setPlanSwitchPlanText")}
+            {t("app.setPlanSwitchPlanText")}
           </Button>
         </div>
       </div>
@@ -118,8 +116,8 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
 /**
  * / page.
  */
-const Page: NextPage<PageProps> = ({ products, translations }) => {
-  const { t } = useI18n(translations)
+const Page: NextPage<PageProps> = ({ products }) => {
+  const { t } = useI18n()
   const [selected, setSelected] = useState<"monthly" | "yearly">("monthly")
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
@@ -129,27 +127,22 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
             <Card.Header>
               <Card.Header.Title
                 title="Pricing Plans"
-                subtitle={t("setPlanPickPlanText")}
-              >
-              </Card.Header.Title>
+                subtitle={t("app.setPlanPickPlanText")}
+              ></Card.Header.Title>
             </Card.Header>
             <ToggleGroup
               options={[
-                { display: t("setPlanMonthlyBill"), id: "monthly" },
-                { display: t("setPlanYearlyBill"), id: "yearly" },
+                { display: t("app.setPlanMonthlyBill"), id: "monthly" },
+                { display: t("app.setPlanYearlyBill"), id: "yearly" },
               ]}
               selected={selected}
               setSelected={setSelected}
             />
-            <Text size="sm">{t("setPlanYearlyDiscount")}</Text>
+            <Text size="sm">{t("app.setPlanYearlyDiscount")}</Text>
           </div>
         </Card>
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            {...product}
-            selected={selected}
-          />
+          <ProductCard key={product.id} {...product} selected={selected} />
         ))}
       </div>
     </AppLayout>
@@ -158,11 +151,9 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
 export default withAuthenticationRequired(Page)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
-
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
       products: [
         {
           id: "prod_K8L177Ou3esVrr",

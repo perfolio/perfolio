@@ -1,7 +1,12 @@
 import { format, FormatOptions } from "./format"
 
 describe("format", () => {
-  const testCases: { name: string; n: number; opts: FormatOptions; want: string }[] = [
+  const testCases: {
+    name: string
+    n: number
+    opts: FormatOptions
+    want: string
+  }[] = [
     {
       name: "adds the correct number of float digits to an integer",
       n: 1_000,

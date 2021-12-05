@@ -4,10 +4,7 @@ import { useRouter } from "next/router"
 import { useQuery } from "react-query"
 import { client } from "../client"
 
-export const usePortfolioHistory = (opts?: {
-  portfolioId?: string
-  since?: number
-}) => {
+export const usePortfolioHistory = (opts?: { portfolioId?: string; since?: number }) => {
   const { getAccessTokenSilently } = useAuth0()
   const router = useRouter()
   const portfolioId = opts?.portfolioId ?? (router.query["portfolioId"] as string)

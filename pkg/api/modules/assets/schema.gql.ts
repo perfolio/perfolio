@@ -1,14 +1,12 @@
 import { gql } from "graphql-modules"
 
-export default gql `
+export default gql`
   enum AssetType {
     MUTUAL_FUND
     COMMON_STOCK
-    CRYPTO,
+    CRYPTO
     TODO
   }
-
-
 
   """
   Common fields on all assets
@@ -103,7 +101,7 @@ export default gql `
   Company stocks
   """
   type Company implements Stock & ExchangeTradedAsset & Asset @cacheControl(maxAge: 3600) {
-   """
+    """
     A globally unique id
     """
     id: ID!
@@ -132,7 +130,7 @@ export default gql `
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]! 
+    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
     """
     Financial Instrument Global Identifier
     """
@@ -145,13 +143,12 @@ export default gql `
     The sector of this company
     """
     sector: String!
-
   }
 
   """
   Company stocks
   """
-  type ETF implements Stock & ExchangeTradedAsset & Asset @cacheControl(maxAge: 3600){
+  type ETF implements Stock & ExchangeTradedAsset & Asset @cacheControl(maxAge: 3600) {
     """
     A globally unique id
     """

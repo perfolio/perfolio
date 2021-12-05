@@ -2,7 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 pnpm lint-staged
-pnpm prettier check
 terraform -chdir=deployments fmt -recursive .
 pnpm tsc
 pnpm test

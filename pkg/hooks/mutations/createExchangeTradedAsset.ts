@@ -12,11 +12,9 @@ export const useCreateExchangeTradedAsset = () => {
     CreateExchangeTradedAssetMutation,
     Error,
     CreateExchangeTradedAssetMutationVariables
-  >(
-    async (variables) => {
-      return await client(await getAccessTokenSilently()).createExchangeTradedAsset(variables)
-    },
-  )
+  >(async (variables) => {
+    return await client(await getAccessTokenSilently()).createExchangeTradedAsset(variables)
+  })
 
   return { transaction: data?.createExchangeTradedAsset, ...meta }
 }

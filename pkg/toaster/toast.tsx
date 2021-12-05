@@ -41,46 +41,42 @@ export const Toast: React.FC<ToastProps> = ({
 
   return (
     <AnimatePresence>
-      {visible
-        ? (
-          <motion.div
-            layout
-            key={id}
-            initial={{ opacity: 0, x: 20, scale: 0.3 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.7 }}
-            transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
-            role={role}
-            className={cn(
-              "flex space-x-4 items-start relative px-6 py-4 rounded shadow-xl max-w-md",
-              {
-                "text-black bg-white": role === "info",
-                "bg-error text-white": role === "error",
-              },
-            )}
-          >
-            {icon
-              ? (
-                <Icon size="xs" label="Toast icon">
-                  {icon}
-                </Icon>
-              )
-              : null}
-            <div className="pr-4">
-              <Description title={title}>{content}</Description>
-            </div>
+      {visible ? (
+        <motion.div
+          layout
+          key={id}
+          initial={{ opacity: 0, x: 20, scale: 0.3 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.7 }}
+          transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
+          role={role}
+          className={cn(
+            "flex space-x-4 items-start relative px-6 py-4 rounded shadow-xl max-w-md",
+            {
+              "text-black bg-white": role === "info",
+              "bg-error text-white": role === "error",
+            },
+          )}
+        >
+          {icon ? (
+            <Icon size="xs" label="Toast icon">
+              {icon}
+            </Icon>
+          ) : null}
+          <div className="pr-4">
+            <Description title={title}>{content}</Description>
+          </div>
 
-            <button
-              className="absolute top-0 right-0 p-2 text-2xl font-semibold leading-none bg-transparent outline-none focus:outline-none"
-              onClick={() => remove()}
-            >
-              <Icon size="xs" label="close">
-                <XIcon></XIcon>
-              </Icon>
-            </button>
-          </motion.div>
-        )
-        : null}
+          <button
+            className="absolute top-0 right-0 p-2 text-2xl font-semibold leading-none bg-transparent outline-none focus:outline-none"
+            onClick={() => remove()}
+          >
+            <Icon size="xs" label="close">
+              <XIcon></XIcon>
+            </Icon>
+          </button>
+        </motion.div>
+      ) : null}
     </AnimatePresence>
   )
 }

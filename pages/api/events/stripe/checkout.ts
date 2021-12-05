@@ -24,7 +24,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       typescript: true,
     })
 
-    const activeSubscriptions = await stripe.subscriptions.list({ customer: customerId })
+    const activeSubscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+    })
 
     if (activeSubscriptions.data.length > 0) {
       /**

@@ -16,11 +16,7 @@ export class RedisCache implements KeyValueCache<string> {
     const res = await redis.get(key)
     return res.data ?? undefined
   }
-  async set(
-    key: string,
-    value: string,
-    options?: { ttl?: number },
-  ): Promise<void> {
+  async set(key: string, value: string, options?: { ttl?: number }): Promise<void> {
     typeof options?.ttl === "number"
       ? await redis.setex(key, options.ttl, value)
       : await redis.set(key, value)
