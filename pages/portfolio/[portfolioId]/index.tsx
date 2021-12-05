@@ -30,7 +30,7 @@ import { useI18n } from "next-localization"
 
 import { Time } from "@perfolio/pkg/util/time"
 
-type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
+type Range = "1W" | "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
 
 const today = Time.today().unix()
 const ranges: Record<Range, number> = {
@@ -38,8 +38,8 @@ const ranges: Record<Range, number> = {
   "1M": today - Time.toSeconds("30d"),
   "3M": today - Time.toSeconds("90d"),
   "6M": today - Time.toSeconds("180d"),
-  "1Y": today - Time.toSeconds("365d"),
   YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
+  "1Y": today - Time.toSeconds("365d"),
   ALL: Number.NEGATIVE_INFINITY,
 }
 
