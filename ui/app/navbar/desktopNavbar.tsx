@@ -64,7 +64,10 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             </li>
 
             <li className="text-gray-200 hover:text-gray-50">
-              <button className="focus:outline-none" onClick={() => logout({ returnTo: "/" })}>
+              <button
+                className="focus:outline-none"
+                onClick={() => logout({ returnTo: "https://perfol.io" })}
+              >
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />
                 </Icon>
