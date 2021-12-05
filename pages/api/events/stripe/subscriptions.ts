@@ -72,7 +72,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (!user) {
       throw new Error(
-        `User not found: ${JSON.stringify({ stripeCustomerId: subscription.customer })}`,
+        `User not found: ${JSON.stringify({
+          stripeCustomerId: subscription.customer,
+        })}`,
       )
     }
 

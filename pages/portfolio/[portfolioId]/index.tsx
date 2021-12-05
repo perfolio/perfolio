@@ -8,6 +8,7 @@ import {
   useUser,
 } from "@perfolio/pkg/hooks"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
+import fs from "fs"
 import { format } from "@perfolio/pkg/util/numbers"
 import {
   ActivityFeed,
@@ -23,11 +24,12 @@ import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
+
 import { Time } from "@perfolio/pkg/util/time"
 import KPI from "@perfolio/ui/components/kpi/kpi"
 
-export type Range = "1W" | "1M" | "3M" | "6M" | "1Y" | "YTD" | "ALL"
+export type Range = "1W" | "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
 
 const today = Time.today().unix()
 const ranges: Record<Range, number> = {
@@ -35,18 +37,16 @@ const ranges: Record<Range, number> = {
   "1M": today - Time.toSeconds("30d"),
   "3M": today - Time.toSeconds("90d"),
   "6M": today - Time.toSeconds("180d"),
-  "1Y": today - Time.toSeconds("365d"),
   YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
+  "1Y": today - Time.toSeconds("365d"),
   ALL: Number.NEGATIVE_INFINITY,
 }
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const App: NextPage<PageProps> = ({ translations }) => {
+const App: NextPage<PageProps> = () => {
   useUser()
-  const { t } = useI18n(translations)
+  const { t } = useI18n()
 
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
   const [range, setRange] = useState<Range>("ALL")
@@ -92,12 +92,12 @@ const App: NextPage<PageProps> = ({ translations }) => {
       <Main>
         {/* <OnboardingModal /> */}
         <Main.Header>
-          <Main.Header.Title title={t("mainHeaderTitle")} />
+          <Main.Header.Title title={t("app.mainHeaderTitle")} />
 
           <ToggleGroup<AggregateOptions>
             options={[
-              { display: t("relPicked"), id: "relative" },
-              { display: t("absPicked"), id: "absolute" },
+              { display: t("app.relPicked"), id: "relative" },
+              { display: t("app.absPicked"), id: "absolute" },
             ]}
             selected={aggregation}
             setSelected={setAggregation}
@@ -112,7 +112,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Tooltip
                 trigger={
                   <KPI
-                    label={t("totalAssetsLabel")}
+                    label={t("app.totalAssetsLabel")}
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
@@ -123,14 +123,18 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   />
                 }
               >
-                {t("totalAssetsTooltip")}
+                {t("app.totalAssetsTooltip")}
               </Tooltip>
 
               <Tooltip
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === "absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
+                    label={
+                      aggregation === "absolute"
+                        ? t("app.meanChangeLabel")
+                        : t("app.meanReturnLabel")
+                    }
                     value={aggregation === "absolute" ? absoluteMean : relativeMean}
                     format={(n) =>
                       aggregation === "absolute"
@@ -144,24 +148,24 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   />
                 }
               >
-                {t("meanReturnTooltip")}
+                {t("app.meanReturnTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
                     isLoading={historyLoading}
-                    label={t("stdDevLabel")}
+                    label={t("app.stdDevLabel")}
                     value={relativeSTD}
                     format={(n) => format(n)}
                   />
                 }
               >
-                {t("stdDevTooltip")}
+                {t("app.stdDevTooltip")}
               </Tooltip>
               <Tooltip
                 trigger={
                   <KPI
-                    label={t("changeLabel")}
+                    label={t("app.changeLabel")}
                     enableColor
                     isLoading={historyLoading}
                     value={aggregation === "absolute" ? absoluteChange : relativeChange}
@@ -176,7 +180,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   />
                 }
               >
-                {t("changeTooltip")}
+                {t("app.changeTooltip")}
               </Tooltip>
             </div>
           </div>
@@ -189,9 +193,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   { display: "1M", id: "1M" },
                   { display: "3M", id: "3M" },
                   { display: "6M", id: "6M" },
-                  { display: t("index1Y"), id: "1Y" },
-                  { display: t("indexYTD"), id: "YTD" },
-                  { display: t("indexAll"), id: "ALL" },
+                  { display: t("app.index1Y"), id: "1Y" },
+                  { display: t("app.indexYTD"), id: "YTD" },
+                  { display: t("app.indexAll"), id: "ALL" },
                 ]}
                 selected={range}
                 setSelected={setRange}
@@ -207,9 +211,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
                   { display: "1M", id: "1M" },
                   { display: "3M", id: "3M" },
                   { display: "6M", id: "6M" },
-                  { display: t("index1Y"), id: "1Y" },
-                  { display: t("indexYTD"), id: "YTD" },
-                  { display: t("indexAll"), id: "ALL" },
+                  { display: t("app.index1Y"), id: "1Y" },
+                  { display: t("app.indexYTD"), id: "YTD" },
+                  { display: t("app.indexAll"), id: "ALL" },
                 ]}
                 selected={range}
                 setSelected={setRange}
@@ -218,7 +222,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
           </div>
           <div className="mt-4 sm:mt-16">
             <div className="py-4 md:py-6">
-              <Heading h3>{t("assetTableHeading")}</Heading>
+              <Heading h3>{t("app.assetTableHeading")}</Heading>
             </div>
 
             <AssetTable
@@ -245,10 +249,9 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

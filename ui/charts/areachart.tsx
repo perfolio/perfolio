@@ -1,6 +1,7 @@
 import { Loading } from "@perfolio/ui/components"
 import React from "react"
 import { Area, AreaChart as Chart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { theme } from "tailwind.config"
 type Data = {
   time: string
   value: number
@@ -29,8 +30,8 @@ export const AreaChart: React.FC<AreaChartProps> = ({
         <Chart data={data}>
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="10%" stopColor="#3548c8" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#3548c8" stopOpacity={0} />
+              <stop offset="10%" stopColor={theme.colors.primary.DEFAULT} stopOpacity={0.3} />
+              <stop offset="100%" stopColor={theme.colors.primary.DEFAULT} stopOpacity={0} />
             </linearGradient>
           </defs>
           {tooltip ? (
@@ -46,7 +47,10 @@ export const AreaChart: React.FC<AreaChartProps> = ({
                   return null
                 }
 
-                const { time, value } = payload[0]?.payload ?? { time: "", value: 0 }
+                const { time, value } = payload[0]?.payload ?? {
+                  time: "",
+                  value: 0,
+                }
                 return (
                   <div className="flex flex-col p-4 text-center shadow-lg bg-gray-50">
                     <span className="text-xl font-medium">{tooltip(value)}</span>

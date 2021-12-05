@@ -85,7 +85,9 @@ export function Table<Accessor extends string>({
                     // eslint-disable-next-line react/jsx-key
                     <td
                       {...cell.getCellProps()}
-                      className={cn("py-2", { "border-t border-gray-200": i > 0 })}
+                      className={cn("py-2", {
+                        "border-t border-gray-200": i > 0,
+                      })}
                     >
                       {cell.render("Cell")}
                     </td>

@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { z } from "zod"
-
+import fs from "fs"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { CheckIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Asset } from "@perfolio/pkg/api"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
+
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import { Time } from "@perfolio/pkg/util/time"
 import { AppLayout, Main, Sidebar } from "@perfolio/ui/app"
@@ -37,12 +38,10 @@ const createAssetValidation = z.object({
  * / page.
  */
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+const NewTransactionPage: NextPage<PageProps> = () => {
+  const { t } = useI18n()
   const { user } = useUser()
   const { addToast } = useToaster()
   const router = useRouter()
@@ -87,7 +86,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   createAssetContext,
                   async ({ isin }) => {
                     await createExchangeTradedAsset.mutateAsync({ isin }).catch((err) => {
-                      setFormError(t("transNewFormError") + `${err.toString()}`)
+                      setFormError(t("app.transNewFormError") + `${err.toString()}`)
                     })
                     addToast({
                       icon: <CheckIcon />,
@@ -112,7 +111,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title={t("transNewHeader")} />
+          <Main.Header.Title title={t("app.transNewHeader")} />
         </Main.Header>
         <Main.Content>
           <div className="grid grid-cols-1 gap-8 divide-y divide-gray-200 md:gap-10 lg:gap-12 lg:divide-x lg:divide-y-0 lg:grid-cols-1">
@@ -124,12 +123,12 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
               >
                 <Field.AutoCompleteSelect
                   name="assetId"
-                  label={t("transNewAssetLabel")}
+                  label={t("app.transNewAssetLabel")}
                   help={
-                    <Description title={t("transNewFieldDescrTitle")}>
-                      {t("transNewFieldDescr")}
+                    <Description title={t("app.transNewFieldDescrTitle")}>
+                      {t("app.transNewFieldDescr")}
                       <Link href="/settings/stocks">
-                        <a className="underline text-info-400">{t("transNewFieldDescrLink")}</a>
+                        <a className="underline text-info-400">{t("app.transNewFieldDescrLink")}</a>
                       </Link>
                     </Description>
                   }
@@ -137,7 +136,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
 
                 <Field.Input
                   name="executedAt"
-                  label={t("transNewDateOfTrans")}
+                  label={t("app.transNewDateOfTrans")}
                   type="date"
                   // iconLeft={<MailIcon />}
                 />
@@ -145,13 +144,13 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                 <div className="grid grid-cols-2 gap-8 md:gap-10 lg:gap-12">
                   <Field.Input
                     name="volume"
-                    label={t("transNewNumberShares")}
+                    label={t("app.transNewNumberShares")}
                     type="number"
                     // iconLeft={<LockClosedIcon />}
                   />
                   <Field.Input
                     name="value"
-                    label={t("transNewCostPerShare")}
+                    label={t("app.transNewCostPerShare")}
                     type="number"
                     iconLeft={
                       <div className="flex items-center justify-center w-full h-full">
@@ -178,12 +177,12 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                           mic: user?.settings?.defaultExchange.mic,
                         }
                         await createTransaction.mutateAsync({ transaction }).catch((err) => {
-                          setFormError(t("transNewFormError") + `${err.toString()}`)
+                          setFormError(t("app.transNewFormError") + `${err.toString()}`)
                         })
                         addToast({
                           icon: <CheckIcon />,
                           role: "info",
-                          title: t("transNewTransAdded"),
+                          title: t("app.transNewTransAdded"),
                           content: `You ${
                             volume > 0 ? "bought" : "sold"
                           } ${volume} shares of ${assetId}`,
@@ -196,7 +195,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   size="block"
                   type="primary"
                 >
-                  {t("transNewAddTrans")}
+                  {t("app.transNewAddTrans")}
                 </Button>
               </Form>
             </div>
@@ -216,10 +215,9 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

@@ -81,7 +81,9 @@ export const Select: React.FC<SelectProps> = ({
             <Listbox.Button
               className={cn(
                 "text-center h-10 w-full px-3 focus:shadow placeholder-gray-500 transition duration-500 border  rounded  focus:outline-none",
-                { "animate-pulse bg-gray-50 text-opacity-0": options.length === 0 },
+                {
+                  "animate-pulse bg-gray-50 text-opacity-0": options.length === 0,
+                },
               )}
             >
               <Text>{watch(name)}</Text>

@@ -1,5 +1,5 @@
 import { BookOpenIcon, ChartSquareBarIcon, PlusIcon } from "@heroicons/react/outline"
-import { useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
 import { useRouter } from "next/router"
 import React from "react"
 import { DesktopNavbar, MobileNavbar } from "../navbar"
@@ -16,25 +16,25 @@ export const Header: React.FC = (): JSX.Element => {
   if ("portfolioId" in router.query) {
     const portfolioBasePath = `/portfolio/${router.query["portfolioId"]}`
     menu.items.push({
-      label: t("headerLabelDash"),
+      label: t("app.headerLabelDash"),
       icon: <ChartSquareBarIcon />,
       href: portfolioBasePath,
     })
     menu.items.push({
-      label: t("headerLabelTrans"),
+      label: t("app.headerLabelTrans"),
       icon: <BookOpenIcon />,
       menu: [
         {
-          name: t("headerLabelMyTrans"),
+          name: t("app.headerLabelMyTrans"),
           href: `${portfolioBasePath}/transactions`,
           icon: <BookOpenIcon />,
-          description: t("headerDescrMyTrans"),
+          description: t("app.headerDescrMyTrans"),
         },
         {
-          name: t("headerLabelAddTrans"),
+          name: t("app.headerLabelAddTrans"),
           href: `${portfolioBasePath}/transactions/new`,
           icon: <PlusIcon />,
-          description: t("headerDescrAddTrans"),
+          description: t("app.headerDescrAddTrans"),
         },
       ],
     })

@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from "@heroicons/react/outline"
-import { Arrow, Content, Root, Trigger } from "@radix-ui/react-tooltip"
+import { Arrow, Content, Root, Trigger } from "@radix-ui/react-hover-card"
 import cn from "classnames"
 import React from "react"
 export interface TooltipProps {
@@ -17,7 +17,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   asChild,
 }): JSX.Element => {
   return (
-    <Root delayDuration={200}>
+    <Root>
       <Trigger asChild={asChild} className="appearance-none">
         {trigger ?? (
           <InformationCircleIcon

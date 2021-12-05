@@ -3,7 +3,9 @@ import { DocumentAddIcon } from "@heroicons/react/outline"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api"
 import { Transaction } from "@perfolio/pkg/api"
 import { useDeleteTransaction, usePortfolio } from "@perfolio/pkg/hooks"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import fs from "fs"
+import { useI18n } from "next-localization"
+
 import { useToaster } from "@perfolio/pkg/toaster"
 import { ActivityFeed, AppLayout, Main, Sidebar } from "@perfolio/ui/app"
 import { Button, Text } from "@perfolio/ui/components"
@@ -55,7 +57,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
           {transaction.asset ? (
             <Description title={transaction.asset.name}>
               {`You ${
-                transaction.volume > 0 ? t("transIndexInfoBought") : t("transIndexInfoSold")
+                transaction.volume > 0 ? t("app.transIndexInfoBought") : t("app.transIndexInfoSold")
               } ${Math.abs(transaction.volume).toFixed(2)} share${
                 transaction.volume === 1 ? "" : "s"
               } of ${asset.ticker} at $${transaction.value.toFixed(2)} per share`}
@@ -67,14 +69,16 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             type="secondary"
             size="sm"
             onClick={async () => {
-              await deleteTransaction.mutateAsync({ transactionId: transaction.id })
+              await deleteTransaction.mutateAsync({
+                transactionId: transaction.id,
+              })
               addToast({
-                title: t("transIndexToastTitle"),
-                content: t("transIndexToastContent") + `${transaction.id}`,
+                title: t("app.transIndexToastTitle"),
+                content: t("app.transIndexToastContent") + `${transaction.id}`,
               })
             }}
           >
-            {t("transIndexDeleteButton")}
+            {t("app.transIndexDeleteButton")}
           </Button>
         </div>
       </div>
@@ -86,12 +90,10 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
  * / page.
  */
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+const TransactionsPage: NextPage<PageProps> = () => {
+  const { t } = useI18n()
 
   const { portfolio, isLoading, error } = usePortfolio()
   return (
@@ -104,7 +106,7 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
     >
       <Main>
         <Main.Header>
-          <Main.Header.Title title={t("transIndexHeader")} />
+          <Main.Header.Title title={t("app.transIndexHeader")} />
         </Main.Header>
         <Main.Content>
           {error ? <div>{JSON.stringify(error)}</div> : null}
@@ -129,7 +131,12 @@ const TransactionsPage: NextPage<PageProps> = ({ translations }) => {
                       initial={{ opacity: 0, scaleY: 0 }}
                       animate={{ opacity: 1, scaleY: 1 }}
                       exit={{ opacity: 0, scaleY: 0 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 50,
+                        mass: 1,
+                      }}
                     >
                       <TransactionItem
                         key={tx.id}
@@ -157,10 +164,9 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

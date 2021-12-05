@@ -1,6 +1,6 @@
 import { ExchangeTradedAsset, Transaction } from "@perfolio/pkg/api"
 import { usePortfolio } from "@perfolio/pkg/hooks"
-import { useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
 import { Time } from "@perfolio/pkg/util/time"
 import { Text } from "@perfolio/ui/components"
 import cn from "classnames"
@@ -25,7 +25,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
     >
       <div className="flex items-center justify-between">
         <Text size="sm" bold>
-          {t("activFeedNewTrans")}
+          {t("app.activFeedNewTrans")}
         </Text>
         <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
       </div>
@@ -47,7 +47,7 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <p className="text-base font-semibold text-gray-800">{t("activFeedRecentActiv")}</p>
+      <p className="text-base font-semibold text-gray-800">{t("app.activFeedRecentActiv")}</p>
       <AnimateSharedLayout>
         <AnimatePresence>
           {last5Transactions?.map((tx, i) => (

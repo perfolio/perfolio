@@ -51,7 +51,10 @@ export const toTimeseries = (
             timeline[day.time] = {}
           }
 
-          timeline[day.time][assetId] = { value: day.value, quantity: day.quantity }
+          timeline[day.time][assetId] = {
+            value: day.value,
+            quantity: day.quantity,
+          }
         }
       })
   })

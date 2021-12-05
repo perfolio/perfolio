@@ -9,9 +9,10 @@ import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import fs from "fs"
 import { CheckIcon } from "@heroicons/react/outline"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
+
 import { useToaster } from "@perfolio/pkg/toaster"
 
 interface SettingProps {
@@ -65,7 +66,7 @@ const Setting: React.FC<SettingProps> = ({
             htmlType="submit"
             disabled={ctx.formState.isSubmitting}
           >
-            {button?.label ?? t("setButtonLabelSave")}
+            {button?.label ?? t("app.setButtonLabelSave")}
           </Button>
         </Card.Footer.Actions>
       </Card.Footer>
@@ -77,12 +78,10 @@ const Setting: React.FC<SettingProps> = ({
  * / page.
  */
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const SettingsPage: NextPage<PageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+const SettingsPage: NextPage<PageProps> = () => {
+  const { t } = useI18n()
   const { user } = useUser()
   console.log({ user })
 
@@ -133,13 +132,13 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     <AppLayout side="left" sidebar={<SideNavbar />}>
       <div className="space-y-8">
         <Setting
-          title={t("setStocksCurrencyTitle")}
-          footer={t("setStocksCurrencyFooter")}
+          title={t("app.setStocksCurrencyTitle")}
+          footer={t("app.setStocksCurrencyFooter")}
           validation={currencyValidation}
           onSubmit={onCurrencySubmit as (values: Record<string, string | number>) => Promise<void>}
         >
           <Field.Input
-            label={t("setStocksCurrencyLabel")}
+            label={t("app.setStocksCurrencyLabel")}
             hideLabel
             name="defaultCurrency"
             type="text"
@@ -147,8 +146,8 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
           />
         </Setting>
         <Setting
-          title={t("setStocksStockExTitle")}
-          footer={t("setStocksStockExFooter")}
+          title={t("app.setStocksStockExTitle")}
+          footer={t("app.setStocksStockExFooter")}
           validation={exchangeValidation}
           onSubmit={onExchangeSubmit as (values: Record<string, string | number>) => Promise<void>}
         >
@@ -164,7 +163,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
               options={
                 exchanges?.filter((e) => e.region === region).map((e) => e.description) ?? []
               }
-              label={t("setStocksStockExSelect")}
+              label={t("app.setStocksStockExSelect")}
               name="defaultExchange"
               defaultValue={user?.settings?.defaultExchange?.description ?? ""}
             />
@@ -177,10 +176,9 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
 export default withAuthenticationRequired(SettingsPage)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

@@ -37,7 +37,10 @@ export const PersistentQueryClient = (): QueryClient => {
       storage: window?.localStorage,
       key: QUERIES_KEY,
     })
-    persistQueryClient({ queryClient: client, persistor: localStoragePersistor })
+    persistQueryClient({
+      queryClient: client,
+      persistor: localStoragePersistor,
+    })
   }
   return client
 }

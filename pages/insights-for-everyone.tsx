@@ -141,17 +141,20 @@ export const Privacy: NextPage<PrivacyPageProps> = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-4xl px-4 py-12 mx-auto sm:px-6 md:py-16 md:px-8 md:flex md:items-center md:justify-between">
-        <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          <span className="block">Ready to dive in?</span>
-          <span className="block text-indigo-600">Start your free trial today.</span>
-        </h2>
-        <div className="flex mt-8 md:mt-0 md:flex-shrink-0">
-          <Button type="cta" size="block" href="/dashboard">
-            Get started for free
-          </Button>
+      <div className="bg-gradient-to-tr from-primary to-secondary">
+        <div className="max-w-2xl px-4 py-16 mx-auto text-center sm:py-20 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
+            <span className="block">Ready to dive in?</span>
+            <span className="block text-gray-800">Start your free trial today</span>
+          </h2>
+          <div className="inline-flex mt-8">
+            <Button size="lg" type="primary">
+              Sign up for free
+            </Button>
+          </div>
         </div>
       </div>
+
       <Footer />
     </div>
   )

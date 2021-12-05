@@ -1,22 +1,14 @@
 import { useCurrentPorfolioState } from "@perfolio/pkg/hooks"
-import { useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Description, Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import { Loading } from "@perfolio/ui/components"
 import React, { useEffect, useMemo, useState } from "react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from "recharts"
 
-const COLORS = [
-  "#D7DDFC",
-  "#B0BCF9",
-  "#8595EE",
-  "#6375DE",
-  "#3548C8",
-  "#2636AC",
-  "#1A2690",
-  "#101974",
-  "#0A1060",
-].sort(() => Math.random() - 0.5)
+const COLORS = ["#3548C8", "#263594", "#131A47", "#161E54", "#0D1233"].sort(
+  () => Math.random() - 0.5,
+)
 
 export const DiversificationChart: React.FC = (): JSX.Element => {
   const { t } = useI18n()
@@ -115,16 +107,16 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
     <div className="w-full h-full space-y-2">
       <div className="flex justify-between">
         <div className="flex items-center space-x-2">
-          <Heading h4>{t("diversityHeading")}</Heading>
+          <Heading h4>{t("app.diversityHeading")}</Heading>
           <Tooltip side="right">
-            <Description title={t("diversityTitle")}>{t("diversityTooltip")}</Description>
+            <Description title={t("app.diversityTitle")}>{t("app.diversityTooltip")}</Description>
           </Tooltip>
         </div>
       </div>
       <ToggleGroup<"sectors" | "countries">
         options={[
-          { display: t("diversityToggleSectors"), id: "sectors" },
-          { display: t("diversityToggleCountries"), id: "countries" },
+          { display: t("app.diversityToggleSectors"), id: "sectors" },
+          { display: t("app.diversityToggleCountries"), id: "countries" },
         ]}
         selected={selected}
         setSelected={setSelected}

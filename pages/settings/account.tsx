@@ -1,6 +1,6 @@
 import { GetStaticProps, NextPage } from "next"
 import React from "react"
-
+import fs from "fs"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 
 import { Button } from "@perfolio/ui/components"
@@ -8,18 +8,16 @@ import { useRouter } from "next/router"
 
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useUser } from "@perfolio/pkg/hooks"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
 
 /**
  * / page.
  */
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const SettingsPage: NextPage<PageProps> = ({ translations }) => {
-  const { t } = useI18n(translations)
+const SettingsPage: NextPage<PageProps> = () => {
+  const { t } = useI18n()
   const router = useRouter()
   const { user } = useUser()
   return (
@@ -42,7 +40,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
           }}
           type="cta"
         >
-          {t("setBillingPortal")}
+          {t("app.setBillingPortal")}
         </Button>
         <Button
           onClick={async () => {
@@ -73,10 +71,9 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
 export default withAuthenticationRequired(SettingsPage)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

@@ -79,7 +79,9 @@ const FooterLink: React.FC<{ href: string; external?: boolean }> = ({
 const FooterColumn: React.FC<{ title: string }> = ({ title, children }): JSX.Element => {
   return (
     <div className="flex items-start justify-between p-4 space-x-10 md:space-x-0 md:block whitespace-nowrap">
-      <p className="w-1/2 font-medium tracking-wide text-gray-200">{title}</p>
+      <p className="w-1/2 font-medium tracking-wide text-right text-gray-200 md:text-left">
+        {title}
+      </p>
       <div className="w-1/2 space-y-2 md:mt-2">{children}</div>
     </div>
   )
@@ -96,10 +98,10 @@ export const Footer = () => {
   const subscribe = useSubscribeToNewsletter()
 
   return (
-    <footer id="footer" className="bg-black">
+    <footer id="footer" className="bg-radial-at-t from-gray-900 to-black">
       <div className="container px-4 py-10 mx-auto md:py-12 lg:py-16 xl:py-20 xl:px-0">
-        <div className="grid row-gap-10 mb-8 lg:grid-cols-6">
-          <div className="grid grid-cols-1 gap-8 lg:col-span-4 md:grid-cols-5">
+        <div className="grid row-gap-10 mb-8 lg:grid-cols-2 xl:grid-cols-6">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:col-span-4 lg:grid-cols-5">
             <FooterColumn title="Product">
               <FooterLink href="/dashboard">Portfolio Analytics</FooterLink>
             </FooterColumn>
@@ -137,7 +139,7 @@ export const Footer = () => {
             </p>
             {done ? (
               <Text align="text-center md:text-left" color="text-gray-300">
-                Thank you, we&#39ll get back to you
+                Thank you, we&#39;ll get back to you
               </Text>
             ) : (
               <Form

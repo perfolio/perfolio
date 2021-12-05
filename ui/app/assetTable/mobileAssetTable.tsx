@@ -28,7 +28,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
   //   clickedAsset = {value: 0, quantity: 0, asset: {__typename: "",}}
   return (
     <>
-      <div className="w-full bg-white overflow-hidden">
+      <div className="w-full overflow-hidden bg-white">
         <ul role="list">
           {(currentPorfolioState ?? [])
             /**
@@ -54,12 +54,12 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                   <div className="flex h-0.5 overflow-hidden rounded bg-gray-100">
                     <span
                       style={{ width: `${weight * 100}%` }}
-                      className="flex w-full h-2 mb-4 overflow-hidden rounded bg-gray-300"
+                      className="flex w-full h-2 mb-4 overflow-hidden bg-gray-300 rounded"
                     ></span>
                   </div>
-                  <div className="w-full flex px-2 pb-4 md:px-6 space-x-2 ">
-                    <div className="flex w-full content-start space-x-2 min-w-0">
-                      <div className="relative left-0 flex-shrink-0 w-8 h-8 self-center">
+                  <div className="flex w-full px-2 pb-4 space-x-2 md:px-6 ">
+                    <div className="flex content-start w-full min-w-0 space-x-2">
+                      <div className="relative left-0 self-center flex-shrink-0 w-8 h-8">
                         <Avatar size="sm" src={holding.asset.logo} />
                       </div>
                       <div className="w-full min-w-0">
@@ -68,15 +68,20 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                             {holding.asset.name}
                           </Text>
                         </div>
-                        <div className="flex space-x-2 justify-start">
-                          <div className="bg-gray-200 self-center px-1 rounded whitespace-nowrap">
+                        <div className="flex justify-start space-x-2">
+                          <div className="self-center px-1 bg-gray-200 rounded whitespace-nowrap">
                             <Text size="sm">
-                              {format(holding.quantity, { prefix: "x ", fractionDigits: 0 })}
+                              {format(holding.quantity, {
+                                prefix: "x ",
+                                fractionDigits: 0,
+                              })}
                             </Text>
                           </div>
                           <div className="whitespace-nowrap">
                             <Text>
-                              {format(holding.value * holding.quantity, { suffix: " €" })}
+                              {format(holding.value * holding.quantity, {
+                                suffix: " €",
+                              })}
                             </Text>
                           </div>
                         </div>
@@ -148,7 +153,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
             <div className="space-y-4">
               <Heading h3>Depot</Heading>
               <div className="flex justify-between">
-                <div className="grid grid-cols-2 gap-x-6 gap-y-8 px-4 flex-row">
+                <div className="grid flex-row grid-cols-2 px-4 gap-x-6 gap-y-8">
                   <KPI
                     justify="start"
                     textAlignment="left"

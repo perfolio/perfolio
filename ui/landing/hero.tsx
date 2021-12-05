@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useI18n } from "@perfolio/pkg/i18n"
+import { useI18n } from "next-localization"
+
 import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import React, { useState } from "react"
 import { z } from "zod"
@@ -32,20 +33,14 @@ export const HeroSection: React.FC = (): JSX.Element => {
         setOpen={setOpen}
       >
         {done ? (
-          <Text align="text-center">Thank you, we&aposll get back to you</Text>
+          <Text align="text-center">Thank you, we&#39;ll get back to you</Text>
         ) : (
           <Form
             ctx={ctx}
             formError={formError}
             className="flex flex-col items-start gap-4 sm:flex-row"
           >
-            <Field.Input
-              hideLabel
-              placeholder={t("footerSubsPlaceMail")}
-              name="email"
-              type="email"
-              label="email"
-            />
+            <Field.Input hideLabel name="email" type="email" label="email" />
 
             <Button
               loading={submitting}
@@ -75,8 +70,8 @@ export const HeroSection: React.FC = (): JSX.Element => {
           </Form>
         )}
       </Drawer>
-      <Heading h1>{t("headline")}</Heading>
-      <Text>{t("subheadline")}</Text>
+      <Heading h1>{t("landing.headline")}</Heading>
+      <Text>{t("landing.subheadline")}</Text>
       {user ? (
         <div>
           <Button href="/dashboard" type="cta" size="block">
@@ -102,7 +97,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
           </div>
           <div className="hidden md:block">
             {done ? (
-              <Text align="text-center">Thank you, we&aposll get back to you</Text>
+              <Text align="text-center">Thank you, we&#39;ll get back to you</Text>
             ) : (
               <Form
                 ctx={ctx}
@@ -111,7 +106,7 @@ export const HeroSection: React.FC = (): JSX.Element => {
               >
                 <Field.Input
                   hideLabel
-                  placeholder={t("footerSubsPlaceMail")}
+                  placeholder={t("landing.footerSubsPlaceMail")}
                   name="email"
                   type="email"
                   label="email"

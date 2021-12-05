@@ -1,5 +1,6 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Popover } from "@headlessui/react"
+import fs from "fs"
 import {
   DocumentAddIcon,
   DotsVerticalIcon,
@@ -9,7 +10,7 @@ import {
 } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { usePortfolios } from "@perfolio/pkg/hooks"
-import { getTranslations, useI18n } from "@perfolio/pkg/i18n"
+
 import { AppLayout } from "@perfolio/ui/app"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
 import { Card, Icon, Text, Tooltip } from "@perfolio/ui/components"
@@ -21,11 +22,11 @@ import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { z } from "zod"
 
-const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = ({
-  id,
-  name,
-  primary,
-}): JSX.Element => {
+const PortfolioCard: React.FC<{
+  id: string
+  name: string
+  primary: boolean
+}> = ({ id, name, primary }): JSX.Element => {
   const [editMode, setEditMode] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
@@ -240,12 +241,9 @@ const PortfolioCard: React.FC<{ id: string; name: string; primary: boolean }> = 
   )
 }
 
-interface PageProps {
-  translations: Record<string, string>
-}
+interface PageProps {}
 
-const IndexPage: NextPage<PageProps> = ({ translations }) => {
-  useI18n(translations)
+const IndexPage: NextPage<PageProps> = () => {
   const { portfolios } = usePortfolios()
   return (
     <AppLayout side="left">
@@ -274,10 +272,9 @@ const IndexPage: NextPage<PageProps> = ({ translations }) => {
 export default withAuthenticationRequired(IndexPage)
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
-  const translations = await getTranslations(locale, ["app"])
   return {
     props: {
-      translations,
+      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
   }
 }

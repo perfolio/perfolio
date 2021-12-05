@@ -9,17 +9,21 @@ export interface FeatureProps {
 
 export const Feature: React.FC<FeatureProps> = ({ title, description, icon }): JSX.Element => {
   return (
-    <div className="flex flex-col items-center justify-center space-y-2 md:space-y-0 md:flex-row md:items-start">
-      <div className="md:mr-4">
-        <Icon size="sm" label={title} color="text-gray-900">
-          {icon}{" "}
-        </Icon>
-      </div>
-      <div>
-        <h6 className="mb-3 text-xl font-bold leading-5 text-center uppercase md:text-left">
-          {title}
-        </h6>
-        <p className="text-sm text-center text-gray-900 md:text-left">{description}</p>
+    <div key={title} className="pt-6 text-center">
+      <div className="flow-root px-6 pb-8 bg-white rounded shadow-ambient">
+        <div className="-mt-6">
+          <div>
+            <span className="inline-flex items-center justify-center p-3 rounded-md shadow-lg bg-gradient-to-tr from-primary to-secondary">
+              <Icon size="sm" label={title} color="text-white">
+                {icon}
+              </Icon>
+            </span>
+          </div>
+          <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900 uppercase">
+            {title}
+          </h3>
+          <p className="mt-5 text-base text-gray-500">{description} </p>
+        </div>
       </div>
     </div>
   )

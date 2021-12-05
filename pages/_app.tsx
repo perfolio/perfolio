@@ -1,20 +1,22 @@
 import "tailwindcss/tailwind.css"
 import "../public/fonts/css/satoshi.css"
+import { I18nProvider } from "next-localization"
+import { useRouter } from "next/router"
 
 import type { AppProps } from "next/app"
 
 import { Auth0Provider } from "@auth0/auth0-react"
-import { I18nProvider } from "@perfolio/pkg/i18n"
+
 import { PersistendQueryClient } from "@perfolio/pkg/query-client"
 import { ToastProvider } from "@perfolio/pkg/toaster"
 import { PageloadIndicator } from "@perfolio/ui/components"
 import { IdProvider } from "@radix-ui/react-id"
 import { QueryClientProvider } from "react-query"
 
-export default function MyApp({
+const Perfolio = ({
   Component,
   pageProps: { accessToken, ...pageProps },
-}: AppProps<{ accessToken?: string }>) {
+}: AppProps<{ accessToken?: string }>) => {
   const auth0ClientId = process.env["NEXT_PUBLIC_AUTH0_CLIENT_ID"]
   if (!auth0ClientId) {
     throw new Error(`
@@ -35,8 +37,10 @@ export default function MyApp({
     typeof window !== "undefined" ? window.location.origin : "https://perfol.io"
   }/dashboard`
 
+  const router = useRouter()
+  const { translations, ...rest } = pageProps
   return (
-    <I18nProvider>
+    <I18nProvider lngDict={translations} locale={router.locale ?? "en"}>
       <IdProvider>
         <Auth0Provider
           domain={auth0Domain}
@@ -50,7 +54,7 @@ export default function MyApp({
             <QueryClientProvider client={PersistendQueryClient()}>
               <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
                 <PageloadIndicator />
-                <Component {...pageProps} />
+                <Component {...rest} />
               </div>
             </QueryClientProvider>
           </ToastProvider>
@@ -59,3 +63,5 @@ export default function MyApp({
     </I18nProvider>
   )
 }
+
+export default Perfolio
