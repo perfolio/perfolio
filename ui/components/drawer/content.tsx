@@ -4,9 +4,7 @@ export interface DrawerContentProps {
   center?: boolean
 }
 
-export const DrawerContent: React.FC<DrawerContentProps> = (
-  { children, center },
-): JSX.Element => {
+export const DrawerContent: React.FC<DrawerContentProps> = ({ children, center }): JSX.Element => {
   return (
     <div
       className={cn("w-full sm:px-2", {

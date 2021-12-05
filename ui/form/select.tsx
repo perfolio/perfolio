@@ -64,15 +64,13 @@ export const Select: React.FC<SelectProps> = ({
         {label}
       </label>
       <div className="relative ">
-        {iconLeft
-          ? (
-            <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
-              <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
-                {iconLeft}
-              </span>
-            </div>
-          )
-          : null}
+        {iconLeft ? (
+          <div className="absolute inset-y-0 left-0 overflow-hidden rounded-l pointer-events-none">
+            <span className="flex items-center justify-center w-10 h-10 p-2 overflow-hidden border-r rounded-l">
+              {iconLeft}
+            </span>
+          </div>
+        ) : null}
         <Listbox
           value={watch(name)}
           onChange={(value) => {
@@ -105,7 +103,8 @@ export const Select: React.FC<SelectProps> = ({
                       cn("cursor-default select-none relative p-2 text-gray-800", {
                         "bg-gray-100": active,
                         "bg-gray-900 text-gray-100 font-semibold": selected,
-                      })}
+                      })
+                    }
                     value={option}
                   >
                     <span>{option}</span>

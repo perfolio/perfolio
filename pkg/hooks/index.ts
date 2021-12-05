@@ -12,6 +12,7 @@ export * from "./queries/useRelativeMean"
 export * from "./queries/useSearch"
 export * from "./queries/useStandardDeviation"
 export * from "./queries/useUser"
+export * from "./queries/useAssetHistory"
 
 export * from "./mutations/createExchangeTradedAsset"
 export * from "./mutations/createTransaction"

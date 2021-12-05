@@ -7,17 +7,10 @@ export abstract class Cache {
     redis.auth({ ...opts, readFromEdge: true })
   }
 
-  public async set(
-    ttl: string,
-    ...data: { key: Key; value: Value }[]
-  ): Promise<void> {
+  public async set(ttl: string, ...data: { key: Key; value: Value }[]): Promise<void> {
     await Promise.all(
       data.map((d) =>
-        redis.setex(
-          d.key.toString(),
-          Time.toSeconds(ttl),
-          JSON.stringify(data[0]!.value),
-        )
+        redis.setex(d.key.toString(), Time.toSeconds(ttl), JSON.stringify(data[0]!.value)),
       ),
     )
   }

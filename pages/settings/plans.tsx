@@ -92,9 +92,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
                 return
               }
               const res = await fetch(
-                `/api/stripe/checkout?priceId=${
-                  prices[selected].id
-                }&customerId=${user.stripeCustomerId}`,
+                `/api/stripe/checkout?priceId=${prices[selected].id}&customerId=${user.stripeCustomerId}`,
                 {
                   method: "POST",
                 },
@@ -130,8 +128,7 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
               <Card.Header.Title
                 title="Pricing Plans"
                 subtitle={t("setPlanPickPlanText")}
-              >
-              </Card.Header.Title>
+              ></Card.Header.Title>
             </Card.Header>
             <ToggleGroup
               options={[
@@ -145,11 +142,7 @@ const Page: NextPage<PageProps> = ({ products, translations }) => {
           </div>
         </Card>
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            {...product}
-            selected={selected}
-          />
+          <ProductCard key={product.id} {...product} selected={selected} />
         ))}
       </div>
     </AppLayout>

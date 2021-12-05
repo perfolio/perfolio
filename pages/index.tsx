@@ -79,8 +79,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                     icon={f.icon}
                     title={f.title}
                     description={f.description}
-                  >
-                  </Feature>
+                  ></Feature>
                 )
               })}
             </div>
@@ -108,8 +107,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, translations }) => {
                   icon={f.icon}
                   title={f.title}
                   description={f.description}
-                >
-                </Feature>
+                ></Feature>
               ))}
             </div>
           </div>

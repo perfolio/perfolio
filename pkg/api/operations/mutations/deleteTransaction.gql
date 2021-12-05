@@ -1,5 +1,5 @@
 mutation deleteTransaction($transactionId: ID!) {
-  deleteTransaction(transactionId: $transactionId){
+  deleteTransaction(transactionId: $transactionId) {
     id
   }
 }

@@ -45,10 +45,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
       }
       return { claims, root: false }
     }
-    if (
-      createHash("sha256").update(token).digest("hex")
-        === env.require("ROOT_TOKEN_HASH")
-    ) {
+    if (createHash("sha256").update(token).digest("hex") === env.require("ROOT_TOKEN_HASH")) {
       return { root: true }
     }
     throw new AuthenticationError("Invalid token")

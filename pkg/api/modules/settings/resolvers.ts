@@ -19,15 +19,11 @@ export const resolvers: Resolvers<Context> = {
       ctx.authorizeUser((claims) => claims.sub === settings.userId)
       const allExchanges = await ctx.dataSources.iex.getExchanges()
       const exchange = allExchanges.find(
-        (exchange) =>
-          exchange.mic.toLowerCase()
-            === settings.defaultExchangeId.toLowerCase(),
+        (exchange) => exchange.mic.toLowerCase() === settings.defaultExchangeId.toLowerCase(),
       )
 
       if (!exchange) {
-        throw new Error(
-          `The user ${settings.userId} has no valid default exchange`,
-        )
+        throw new Error(`The user ${settings.userId} has no valid default exchange`)
       }
       return exchange
     },

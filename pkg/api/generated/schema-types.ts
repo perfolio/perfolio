@@ -1,26 +1,20 @@
+import { GraphQLResolveInfo } from "graphql"
 import {
-  ExchangeTradedAssetModel,
+  UserModel,
   PortfolioModel,
   SettingsModel,
   TransactionModel,
-  UserModel,
+  ExchangeTradedAssetModel,
 } from "@perfolio/pkg/integrations/prisma"
-import { GraphQLResolveInfo } from "graphql"
 import { DocumentNode } from "graphql"
 import gql from "graphql-tag"
 export type Maybe<T> = T | undefined
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K]
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & {
+  [P in K]-?: NonNullable<T[P]>
 }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>
-}
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>
-}
-export type RequireFields<T, K extends keyof T> = {
-  [X in Exclude<keyof T, K>]?: T[X]
-} & { [P in K]-?: NonNullable<T[P]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -78,9 +72,9 @@ export type Company = Asset &
 
 /** Company stocks */
 export type CompanyAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 export type CreatePortfolio = {
@@ -146,9 +140,9 @@ export type Crypto = Asset &
 
 /** Crypto */
 export type CryptoAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 /** Company stocks */
@@ -176,9 +170,9 @@ export type Etf = Asset &
 
 /** Company stocks */
 export type EtfAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 /** An exchange where shares are traded */
@@ -214,9 +208,9 @@ export type ExchangeTradedAsset = {
 
 /** A sub type of assets that are all traded at exchanges */
 export type ExchangeTradedAssetAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 export type Mutation = {
@@ -368,9 +362,9 @@ export type Stock = {
 
 /** Stocks such as company shares and funds. */
 export type StockAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 /**
@@ -666,7 +660,7 @@ export type CompanyResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<CompanyAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<CompanyAssetHistoryArgs, "mic">
   >
   country?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
@@ -688,7 +682,7 @@ export type CryptoResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<CryptoAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<CryptoAssetHistoryArgs, "mic">
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -707,7 +701,7 @@ export type EtfResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<EtfAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<EtfAssetHistoryArgs, "mic">
   >
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
@@ -739,7 +733,7 @@ export type ExchangeTradedAssetResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<ExchangeTradedAssetAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<ExchangeTradedAssetAssetHistoryArgs, "mic">
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -891,7 +885,7 @@ export type StockResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<StockAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<StockAssetHistoryArgs, "mic">
   >
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
@@ -1030,6 +1024,32 @@ export type UpdateSettingsMutation = {
   }
 }
 
+export type AssetHistoryQueryVariables = Exact<{
+  assetId: Scalars["ID"]
+  mic: Scalars["ID"]
+  start?: Maybe<Scalars["Int"]>
+  end?: Maybe<Scalars["Int"]>
+}>
+
+export type AssetHistoryQuery = {
+  __typename?: "Query"
+  exchangeTradedAsset?:
+    | {
+        __typename: "Company"
+        assetHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      }
+    | {
+        __typename: "Crypto"
+        assetHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      }
+    | {
+        __typename: "ETF"
+        assetHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      }
+    | null
+    | undefined
+}
+
 export type ExchangeTradedAssetQueryVariables = Exact<{
   assetId: Scalars["ID"]
 }>
@@ -1037,27 +1057,9 @@ export type ExchangeTradedAssetQueryVariables = Exact<{
 export type ExchangeTradedAssetQuery = {
   __typename?: "Query"
   exchangeTradedAsset?:
-    | {
-        __typename: "Company"
-        id: string
-        ticker: string
-        logo: string
-        name: string
-      }
-    | {
-        __typename: "Crypto"
-        id: string
-        ticker: string
-        logo: string
-        name: string
-      }
-    | {
-        __typename: "ETF"
-        id: string
-        ticker: string
-        logo: string
-        name: string
-      }
+    | { __typename: "Company"; id: string; ticker: string; logo: string; name: string }
+    | { __typename: "Crypto"; id: string; ticker: string; logo: string; name: string }
+    | { __typename: "ETF"; id: string; ticker: string; logo: string; name: string }
     | null
     | undefined
 }
@@ -1136,11 +1138,7 @@ export type PortfolioHistoryQuery = {
   portfolio?:
     | {
         __typename?: "Portfolio"
-        relativeHistory: Array<{
-          __typename?: "ValueAtTime"
-          time: number
-          value: number
-        }>
+        relativeHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
         absoluteHistory: Array<{
           __typename?: "AbsoluteAssetHistory"
           assetId: string
@@ -1192,12 +1190,7 @@ export type GetUserPortfoliosQuery = {
   user?:
     | {
         __typename?: "User"
-        portfolios: Array<{
-          __typename?: "Portfolio"
-          name: string
-          id: string
-          primary: boolean
-        }>
+        portfolios: Array<{ __typename?: "Portfolio"; name: string; id: string; primary: boolean }>
       }
     | null
     | undefined
@@ -1262,6 +1255,17 @@ export const UpdateSettingsDocument = gql`
       defaultCurrency
       defaultExchange {
         mic
+      }
+    }
+  }
+`
+export const AssetHistoryDocument = gql`
+  query assetHistory($assetId: ID!, $mic: ID!, $start: Int, $end: Int) {
+    exchangeTradedAsset(assetId: $assetId) {
+      __typename
+      assetHistory(mic: $mic, start: $start, end: $end) {
+        time
+        value
       }
     }
   }
@@ -1446,6 +1450,13 @@ export function getSdk<C>(requester: Requester<C>) {
     ): Promise<UpdateSettingsMutation> {
       return requester<UpdateSettingsMutation, UpdateSettingsMutationVariables>(
         UpdateSettingsDocument,
+        variables,
+        options,
+      )
+    },
+    assetHistory(variables: AssetHistoryQueryVariables, options?: C): Promise<AssetHistoryQuery> {
+      return requester<AssetHistoryQuery, AssetHistoryQueryVariables>(
+        AssetHistoryDocument,
         variables,
         options,
       )

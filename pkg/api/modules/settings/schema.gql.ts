@@ -1,6 +1,6 @@
 import { gql } from "graphql-modules"
 
-export default gql `
+export default gql`
   """
   Settings that can be customized by the user such as preferences as well as defaults
   """

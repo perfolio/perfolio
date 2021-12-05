@@ -104,11 +104,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
           />
         </Main.Header>
         <Main.Content>
-          {
-            /* {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
+          {/* {!portfolioHistoryIsLoading && portfolioHistory.length === 0 ? (
             <NoTransactionsModal />
-          ) : null} */
-          }
+          ) : null} */}
           <div className="py-4 sm:py-6 md:py-8">
             <div className="grid grid-cols-2 md:grid-cols-4 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-0">
               <Tooltip
@@ -118,10 +116,9 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     value={currentAbsoluteValue}
                     format={(n) =>
                       format(n, {
-                        suffix: getCurrencySymbol(
-                          user?.settings?.defaultCurrency,
-                        ),
-                      })}
+                        suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                      })
+                    }
                     isLoading={historyLoading}
                   />
                 }
@@ -133,19 +130,16 @@ const App: NextPage<PageProps> = ({ translations }) => {
                 trigger={
                   <KPI
                     enableColor
-                    label={aggregation === "absolute"
-                      ? t("meanChangeLabel")
-                      : t("meanReturnLabel")}
+                    label={aggregation === "absolute" ? t("meanChangeLabel") : t("meanReturnLabel")}
                     value={aggregation === "absolute" ? absoluteMean : relativeMean}
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                          suffix: getCurrencySymbol(
-                            user?.settings?.defaultCurrency,
-                          ),
-                          sign: true,
-                        })
-                        : format(n, { suffix: "%", percent: true, sign: true })}
+                            suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(n, { suffix: "%", percent: true, sign: true })
+                    }
                     isLoading={historyLoading}
                   />
                 }
@@ -170,18 +164,15 @@ const App: NextPage<PageProps> = ({ translations }) => {
                     label={t("changeLabel")}
                     enableColor
                     isLoading={historyLoading}
-                    value={aggregation === "absolute"
-                      ? absoluteChange
-                      : relativeChange}
+                    value={aggregation === "absolute" ? absoluteChange : relativeChange}
                     format={(n) =>
                       aggregation === "absolute"
                         ? format(n, {
-                          suffix: getCurrencySymbol(
-                            user?.settings?.defaultCurrency,
-                          ),
-                          sign: true,
-                        })
-                        : format(n, { suffix: "%", percent: true, sign: true })}
+                            suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
+                            sign: true,
+                          })
+                        : format(n, { suffix: "%", percent: true, sign: true })
+                    }
                   />
                 }
               >
@@ -206,10 +197,7 @@ const App: NextPage<PageProps> = ({ translations }) => {
                 setSelected={setRange}
               />
             </div>
-            <AssetsOverTimeChart
-              aggregate={aggregation}
-              since={ranges[range]}
-            />
+            <AssetsOverTimeChart aggregate={aggregation} since={ranges[range]} />
             <div className="flex w-full md:hidden">
               <ToggleGroup<Range>
                 block
@@ -233,7 +221,13 @@ const App: NextPage<PageProps> = ({ translations }) => {
               <Heading h3>{t("assetTableHeading")}</Heading>
             </div>
 
-            <AssetTable aggregation={aggregation} setAggregation={setAggregation} ranges={ranges} range={range} setRange={setRange} />
+            <AssetTable
+              aggregation={aggregation}
+              setAggregation={setAggregation}
+              ranges={ranges}
+              range={range}
+              setRange={setRange}
+            />
           </div>
         </Main.Content>
       </Main>

@@ -19,7 +19,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   children,
   title,
   subtitle,
-  height = "75%"
+  height = "75%",
 }): JSX.Element => {
   const router = useRouter()
   useEffect(() => {
@@ -48,13 +48,13 @@ export const Drawer: React.FC<DrawerProps> = ({
           >
             <Dialog.Overlay className="absolute inset-0 transition-opacity bg-black bg-opacity-50" />
           </Transition.Child>
-          <div className={cn("fixed bottom-0 flex md:right-0 md:h-full md:w-1/2 md:pt-0",
-            {
+          <div
+            className={cn("fixed bottom-0 flex md:right-0 md:h-full md:w-1/2 md:pt-0", {
               "h-3/4": height === "75%",
               "h-5/6": height === "83%",
               "h-full": height === "100%",
-            })
-          }>
+            })}
+          >
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"

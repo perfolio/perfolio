@@ -26,9 +26,7 @@ const validation = z.object({
   assetId: z.string(),
   volume: z.string().transform((x: string) => parseFloat(x)),
   value: z.string().transform((x: string) => parseFloat(x)),
-  executedAt: z
-    .string()
-    .transform((x: string) => Time.fromDate(new Date(x)).unix()),
+  executedAt: z.string().transform((x: string) => Time.fromDate(new Date(x)).unix()),
 })
 
 const createAssetValidation = z.object({
@@ -68,9 +66,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
         uniqueAssets[tx.asset.id] = tx.asset as Asset
       }
     })
-  const [formError, setFormError] = useState<string | React.ReactNode | null>(
-    null,
-  )
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   return (
@@ -82,11 +78,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
             formError={formError}
             className="grid w-full grid-cols-1 gap-8 md:gap-10 lg:gap-12"
           >
-            <Field.Input
-              name="isin"
-              label="Add new asset by isin"
-              type="text"
-            />
+            <Field.Input name="isin" label="Add new asset by isin" type="text" />
 
             <Button
               loading={submitting}
@@ -94,13 +86,9 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                 handleSubmit<z.infer<typeof createAssetValidation>>(
                   createAssetContext,
                   async ({ isin }) => {
-                    await createExchangeTradedAsset
-                      .mutateAsync({ isin })
-                      .catch((err) => {
-                        setFormError(
-                          t("transNewFormError") + `${err.toString()}`,
-                        )
-                      })
+                    await createExchangeTradedAsset.mutateAsync({ isin }).catch((err) => {
+                      setFormError(t("transNewFormError") + `${err.toString()}`)
+                    })
                     addToast({
                       icon: <CheckIcon />,
                       role: "info",
@@ -111,7 +99,8 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                   },
                   setSubmitting,
                   setFormError,
-                )}
+                )
+              }
               size="block"
               type="secondary"
             >
@@ -140,9 +129,7 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                     <Description title={t("transNewFieldDescrTitle")}>
                       {t("transNewFieldDescr")}
                       <Link href="/settings/stocks">
-                        <a className="underline text-info-400">
-                          {t("transNewFieldDescrLink")}
-                        </a>
+                        <a className="underline text-info-400">{t("transNewFieldDescrLink")}</a>
                       </Link>
                     </Description>
                   }
@@ -186,19 +173,13 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                           portfolioId,
                           volume: Number(volume),
                           value: Number(value),
-                          executedAt: Time.fromString(
-                            executedAt as unknown as string,
-                          ).unix(),
+                          executedAt: Time.fromString(executedAt as unknown as string).unix(),
                           assetId: assetId,
                           mic: user?.settings?.defaultExchange.mic,
                         }
-                        await createTransaction
-                          .mutateAsync({ transaction })
-                          .catch((err) => {
-                            setFormError(
-                              t("transNewFormError") + `${err.toString()}`,
-                            )
-                          })
+                        await createTransaction.mutateAsync({ transaction }).catch((err) => {
+                          setFormError(t("transNewFormError") + `${err.toString()}`)
+                        })
                         addToast({
                           icon: <CheckIcon />,
                           role: "info",
@@ -210,7 +191,8 @@ const NewTransactionPage: NextPage<PageProps> = ({ translations }) => {
                       },
                       setSubmitting,
                       setFormError,
-                    )}
+                    )
+                  }
                   size="block"
                   type="primary"
                 >

@@ -7,9 +7,7 @@ export class OpenFigi extends DataSource {
   constructor() {
     super()
   }
-  async findIsin(
-    req: FindIsinRequest,
-  ): Promise<FindIsinResponse> {
+  async findIsin(req: FindIsinRequest): Promise<FindIsinResponse> {
     return findIsin(req)
   }
 }

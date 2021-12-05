@@ -59,12 +59,8 @@ const Setting: React.FC<SettingProps> = ({
             // eslint-disable-next-line
             // @ts-ignore
             onClick={() =>
-              handleSubmit<z.infer<typeof validation>>(
-                ctx,
-                onSubmit,
-                setSubmitting,
-                setFormError,
-              )}
+              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
+            }
             type={button?.type ?? "primary"}
             htmlType="submit"
             disabled={ctx.formState.isSubmitting}
@@ -103,9 +99,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
   })
 
   const updateSettings = useUpdateSettings()
-  const onCurrencySubmit = async (
-    values: z.infer<typeof currencyValidation>,
-  ): Promise<void> => {
+  const onCurrencySubmit = async (values: z.infer<typeof currencyValidation>): Promise<void> => {
     const res = await updateSettings.mutateAsync({
       settings: { defaultCurrency: values.defaultCurrency },
     })
@@ -120,14 +114,10 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     defaultRegion: z.string(),
     defaultExchange: z.string(),
   })
-  const onExchangeSubmit = async (
-    values: z.infer<typeof exchangeValidation>,
-  ): Promise<void> => {
+  const onExchangeSubmit = async (values: z.infer<typeof exchangeValidation>): Promise<void> => {
     const res = await updateSettings.mutateAsync({
       settings: {
-        defaultExchangeId: exchanges?.find(
-          (e) => e.description === values.defaultExchange,
-        )?.mic,
+        defaultExchangeId: exchanges?.find((e) => e.description === values.defaultExchange)?.mic,
       },
     })
     toast.addToast({
@@ -137,9 +127,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
     })
   }
 
-  const [region, setRegion] = useState<string>(
-    user?.settings?.defaultExchange?.region ?? "",
-  )
+  const [region, setRegion] = useState<string>(user?.settings?.defaultExchange?.region ?? "")
 
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
@@ -148,9 +136,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
           title={t("setStocksCurrencyTitle")}
           footer={t("setStocksCurrencyFooter")}
           validation={currencyValidation}
-          onSubmit={onCurrencySubmit as (
-            values: Record<string, string | number>,
-          ) => Promise<void>}
+          onSubmit={onCurrencySubmit as (values: Record<string, string | number>) => Promise<void>}
         >
           <Field.Input
             label={t("setStocksCurrencyLabel")}
@@ -164,9 +150,7 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
           title={t("setStocksStockExTitle")}
           footer={t("setStocksStockExFooter")}
           validation={exchangeValidation}
-          onSubmit={onExchangeSubmit as (
-            values: Record<string, string | number>,
-          ) => Promise<void>}
+          onSubmit={onExchangeSubmit as (values: Record<string, string | number>) => Promise<void>}
         >
           <div className="items-center gap-4 md:flex">
             <Field.Select
@@ -177,9 +161,9 @@ const SettingsPage: NextPage<PageProps> = ({ translations }) => {
               defaultValue={user?.settings?.defaultExchange.region}
             />
             <Field.Select
-              options={exchanges
-                ?.filter((e) => e.region === region)
-                .map((e) => e.description) ?? []}
+              options={
+                exchanges?.filter((e) => e.region === region).map((e) => e.description) ?? []
+              }
               label={t("setStocksStockExSelect")}
               name="defaultExchange"
               defaultValue={user?.settings?.defaultExchange?.description ?? ""}

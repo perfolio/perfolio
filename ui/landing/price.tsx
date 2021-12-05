@@ -30,15 +30,13 @@ export const Price: React.FC<PriceProps> = ({
         },
       )}
     >
-      {highlighted
-        ? (
-          <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
-            <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-primary to-secondary">
-              Most Popular
-            </div>
+      {highlighted ? (
+        <div className="absolute inset-x-0 top-0 flex justify-center -mt-3">
+          <div className="inline-block px-3 py-1 text-xs font-medium tracking-wider text-white uppercase rounded bg-gradient-to-tr from-primary to-secondary">
+            Most Popular
           </div>
-        )
-        : null}
+        </div>
+      ) : null}
       <div className="text-center">
         <div className="text-lg font-semibold">{title}</div>
         <div className="flex items-center justify-center mt-2">

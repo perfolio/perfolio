@@ -1,0 +1,9 @@
+query assetHistory($assetId: ID!, $mic: ID!, $start: Int, $end: Int) {
+  exchangeTradedAsset(assetId: $assetId) {
+    __typename
+    assetHistory(mic: $mic, start: $start, end: $end) {
+      time
+      value
+    }
+  }
+}

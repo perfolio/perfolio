@@ -76,10 +76,7 @@ const FooterLink: React.FC<{ href: string; external?: boolean }> = ({
   )
 }
 
-const FooterColumn: React.FC<{ title: string }> = ({
-  title,
-  children,
-}): JSX.Element => {
+const FooterColumn: React.FC<{ title: string }> = ({ title, children }): JSX.Element => {
   return (
     <div className="flex items-start justify-between p-4 space-x-10 md:space-x-0 md:block whitespace-nowrap">
       <p className="w-1/2 font-medium tracking-wide text-gray-200">{title}</p>
@@ -93,9 +90,7 @@ export const Footer = () => {
     mode: "onSubmit",
     resolver: zodResolver(validation),
   })
-  const [formError, setFormError] = useState<string | React.ReactNode | null>(
-    null,
-  )
+  const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
   const subscribe = useSubscribeToNewsletter()
@@ -125,9 +120,7 @@ export const Footer = () => {
               </FooterColumn>
             </div>
             <FooterColumn title="Why Perfolio">
-              <FooterLink href="/insights-for-everyone">
-                Insights. For Everyone.
-              </FooterLink>
+              <FooterLink href="/insights-for-everyone">Insights. For Everyone.</FooterLink>
             </FooterColumn>
 
             <FooterColumn title="Legal">
@@ -135,61 +128,58 @@ export const Footer = () => {
               <FooterLink href="/privacy">Privacy</FooterLink>
             </FooterColumn>
             <FooterColumn title="Contact">
-              <FooterLink href="mailto:info@perfol.io">
-                info@perfol.io
-              </FooterLink>
+              <FooterLink href="mailto:info@perfol.io">info@perfol.io</FooterLink>
             </FooterColumn>
           </div>
           <div className="mt-16 lg:col-span-2 lg:mt-0">
             <p className="text-base font-medium tracking-wide text-center text-gray-200 md:text-left">
               Subscribe for updates
             </p>
-            {done
-              ? (
-                <Text align="text-center md:text-left" color="text-gray-300">
-                  Thank you, we'll get back to you
-                </Text>
-              )
-              : (
-                <Form
-                  ctx={ctx}
-                  formError={formError}
-                  className="flex flex-col items-end gap-4 mt-4 sm:flex-row"
-                >
-                  <Field.Input
-                    hideLabel
-                    placeholder="email@example.com"
-                    name="email"
-                    type="email"
-                    label="email"
-                  />
+            {done ? (
+              <Text align="text-center md:text-left" color="text-gray-300">
+                Thank you, we&#39ll get back to you
+              </Text>
+            ) : (
+              <Form
+                ctx={ctx}
+                formError={formError}
+                className="flex flex-col items-end gap-4 mt-4 sm:flex-row"
+              >
+                <Field.Input
+                  hideLabel
+                  placeholder="email@example.com"
+                  name="email"
+                  type="email"
+                  label="email"
+                />
 
-                  <Button
-                    loading={submitting}
-                    onClick={() =>
-                      handleSubmit<z.infer<typeof validation>>(
-                        ctx,
-                        async ({ email }) => {
-                          await subscribe
-                            .mutateAsync({ email })
-                            .catch((err) => {
-                              setFormError(err.message)
-                            })
-                            .finally(() => {
-                              setDone(true)
-                            })
-                        },
-                        setSubmitting,
-                        setFormError,
-                      )}
-                    type="cta"
-                    size="block"
-                    disabled={submitting}
-                  >
-                    Subscribe
-                  </Button>
-                </Form>
-              )}
+                <Button
+                  loading={submitting}
+                  onClick={() =>
+                    handleSubmit<z.infer<typeof validation>>(
+                      ctx,
+                      async ({ email }) => {
+                        await subscribe
+                          .mutateAsync({ email })
+                          .catch((err) => {
+                            setFormError(err.message)
+                          })
+                          .finally(() => {
+                            setDone(true)
+                          })
+                      },
+                      setSubmitting,
+                      setFormError,
+                    )
+                  }
+                  type="cta"
+                  size="block"
+                  disabled={submitting}
+                >
+                  Subscribe
+                </Button>
+              </Form>
+            )}
           </div>
         </div>
         <div className="flex flex-col justify-between pt-5 pb-10 border-t border-gray-300 sm:flex-row">

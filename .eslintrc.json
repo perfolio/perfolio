@@ -1,3 +1,4 @@
 {
+  "ignorePatterns": ["**/*.gql"],
   "extends": "next/core-web-vitals"
 }
