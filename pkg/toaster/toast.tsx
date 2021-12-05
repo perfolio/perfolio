@@ -2,7 +2,7 @@ import { XIcon } from "@heroicons/react/outline"
 import { Description, Icon } from "@perfolio/ui/components"
 import cn from "classnames"
 import { AnimatePresence, motion } from "framer-motion"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { v4 as uuid } from "uuid"
 export interface ToastProps {
   /**
@@ -29,7 +29,7 @@ export const Toast: React.FC<ToastProps> = ({
   content,
 }): JSX.Element => {
   const [visible, setVisible] = useState(true)
-  const remove = () => setVisible(false)
+  const remove = useCallback(() => setVisible(false), [])
   useEffect(() => {
     if (ttl <= 0) {
       return

@@ -1,9 +1,10 @@
 import { Avatar, AvatarProps } from "./avatar"
 
-export default {
+const component = {
   title: "Avatar",
   component: Avatar,
 }
+export default component
 
 export const Avatars = (args: AvatarProps) => (
   <div className="flex items-center gap-4">

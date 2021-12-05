@@ -20,17 +20,16 @@ import {
   Main,
   Sidebar,
 } from "@perfolio/ui/app"
-import { Heading, Loading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
-import cn from "classnames"
+import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
-
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useI18n } from "next-localization"
 
 import { Time } from "@perfolio/pkg/util/time"
+import KPI from "@perfolio/ui/components/kpi/kpi"
 
-type Range = "1W" | "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
+export type Range = "1W" | "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
 
 const today = Time.today().unix()
 const ranges: Record<Range, number> = {
@@ -41,42 +40,6 @@ const ranges: Record<Range, number> = {
   YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
   "1Y": today - Time.toSeconds("365d"),
   ALL: Number.NEGATIVE_INFINITY,
-}
-
-const KPI = ({
-  label,
-  value,
-  enableColor,
-  isLoading,
-  format,
-}: {
-  label: string
-  value: number
-  enableColor?: boolean
-  isLoading?: boolean
-  format: (n: number) => string
-}): JSX.Element => {
-  return (
-    <div className="flex justify-center">
-      <div className="flex flex-col space-y-3">
-        <h4 className="text-xs font-medium leading-none text-gray-900 uppercase dark:text-gray-400 md:text-sm whitespace-nowrap">
-          {label}
-        </h4>
-        <span
-          className={cn(
-            "text-lg font-bold leading-3 sm:text-xl md:text-2xl lg:text-3xl",
-            !isLoading && enableColor
-              ? value >= 0
-                ? "text-success"
-                : "text-error"
-              : "text-gray-800",
-          )}
-        >
-          {isLoading ? <Loading /> : format(value)}
-        </span>
-      </div>
-    </div>
-  )
 }
 
 interface PageProps {}
@@ -262,7 +225,13 @@ const App: NextPage<PageProps> = () => {
               <Heading h3>{t("app.assetTableHeading")}</Heading>
             </div>
 
-            <AssetTable aggregation={aggregation} setAggregation={setAggregation} />
+            <AssetTable
+              aggregation={aggregation}
+              setAggregation={setAggregation}
+              ranges={ranges}
+              range={range}
+              setRange={setRange}
+            />
           </div>
         </Main.Content>
       </Main>

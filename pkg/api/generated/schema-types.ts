@@ -72,9 +72,9 @@ export type Company = Asset &
 
 /** Company stocks */
 export type CompanyAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 export type CreatePortfolio = {
@@ -140,9 +140,9 @@ export type Crypto = Asset &
 
 /** Crypto */
 export type CryptoAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 /** Company stocks */
@@ -170,9 +170,9 @@ export type Etf = Asset &
 
 /** Company stocks */
 export type EtfAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 /** An exchange where shares are traded */
@@ -208,9 +208,9 @@ export type ExchangeTradedAsset = {
 
 /** A sub type of assets that are all traded at exchanges */
 export type ExchangeTradedAssetAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 export type Mutation = {
@@ -362,9 +362,9 @@ export type Stock = {
 
 /** Stocks such as company shares and funds. */
 export type StockAssetHistoryArgs = {
-  end: Scalars["Int"]
+  end?: Maybe<Scalars["Int"]>
   mic: Scalars["ID"]
-  start: Scalars["Int"]
+  start?: Maybe<Scalars["Int"]>
 }
 
 /**
@@ -660,7 +660,7 @@ export type CompanyResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<CompanyAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<CompanyAssetHistoryArgs, "mic">
   >
   country?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
@@ -682,7 +682,7 @@ export type CryptoResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<CryptoAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<CryptoAssetHistoryArgs, "mic">
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -701,7 +701,7 @@ export type EtfResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<EtfAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<EtfAssetHistoryArgs, "mic">
   >
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
@@ -733,7 +733,7 @@ export type ExchangeTradedAssetResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<ExchangeTradedAssetAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<ExchangeTradedAssetAssetHistoryArgs, "mic">
   >
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   isin?: Resolver<ResolversTypes["String"], ParentType, ContextType>
@@ -885,7 +885,7 @@ export type StockResolvers<
     Array<ResolversTypes["ValueAtTime"]>,
     ParentType,
     ContextType,
-    RequireFields<StockAssetHistoryArgs, "end" | "mic" | "start">
+    RequireFields<StockAssetHistoryArgs, "mic">
   >
   figi?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
@@ -1022,6 +1022,32 @@ export type UpdateSettingsMutation = {
     defaultCurrency: string
     defaultExchange: { __typename?: "Exchange"; mic: string }
   }
+}
+
+export type AssetHistoryQueryVariables = Exact<{
+  assetId: Scalars["ID"]
+  mic: Scalars["ID"]
+  start?: Maybe<Scalars["Int"]>
+  end?: Maybe<Scalars["Int"]>
+}>
+
+export type AssetHistoryQuery = {
+  __typename?: "Query"
+  exchangeTradedAsset?:
+    | {
+        __typename: "Company"
+        assetHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      }
+    | {
+        __typename: "Crypto"
+        assetHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      }
+    | {
+        __typename: "ETF"
+        assetHistory: Array<{ __typename?: "ValueAtTime"; time: number; value: number }>
+      }
+    | null
+    | undefined
 }
 
 export type ExchangeTradedAssetQueryVariables = Exact<{
@@ -1233,6 +1259,17 @@ export const UpdateSettingsDocument = gql`
     }
   }
 `
+export const AssetHistoryDocument = gql`
+  query assetHistory($assetId: ID!, $mic: ID!, $start: Int, $end: Int) {
+    exchangeTradedAsset(assetId: $assetId) {
+      __typename
+      assetHistory(mic: $mic, start: $start, end: $end) {
+        time
+        value
+      }
+    }
+  }
+`
 export const ExchangeTradedAssetDocument = gql`
   query exchangeTradedAsset($assetId: ID!) {
     exchangeTradedAsset(assetId: $assetId) {
@@ -1413,6 +1450,13 @@ export function getSdk<C>(requester: Requester<C>) {
     ): Promise<UpdateSettingsMutation> {
       return requester<UpdateSettingsMutation, UpdateSettingsMutationVariables>(
         UpdateSettingsDocument,
+        variables,
+        options,
+      )
+    },
+    assetHistory(variables: AssetHistoryQueryVariables, options?: C): Promise<AssetHistoryQuery> {
+      return requester<AssetHistoryQuery, AssetHistoryQueryVariables>(
+        AssetHistoryDocument,
         variables,
         options,
       )

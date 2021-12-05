@@ -34,7 +34,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         className="p-2 bg-white border border-gray-200 rounded shadow-lg lg:p-4 xl:p-6"
       >
         <Arrow />
-        <div className="max-w-md lg:max-w-lg xl:max-w-xl ">{children}</div>
+        <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl ">{children}</div>
       </Content>
     </Root>
   )

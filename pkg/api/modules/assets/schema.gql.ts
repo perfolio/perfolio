@@ -55,7 +55,7 @@ export default gql`
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    assetHistory(mic: ID!, start: Int, end: Int): [ValueAtTime!]!
   }
   """
   Stocks such as company shares and funds.
@@ -90,7 +90,7 @@ export default gql`
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    assetHistory(mic: ID!, start: Int, end: Int): [ValueAtTime!]!
     """
     Financial Instrument Global Identifier
     """
@@ -130,7 +130,7 @@ export default gql`
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    assetHistory(mic: ID!, start: Int, end: Int): [ValueAtTime!]!
     """
     Financial Instrument Global Identifier
     """
@@ -178,7 +178,7 @@ export default gql`
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    assetHistory(mic: ID!, start: Int, end: Int): [ValueAtTime!]!
     """
     Financial Instrument Global Identifier
     """
@@ -217,7 +217,7 @@ export default gql`
     """
     The asset value over time at a specific exchange
     """
-    assetHistory(mic: ID!, start: Int!, end: Int!): [ValueAtTime!]!
+    assetHistory(mic: ID!, start: Int, end: Int): [ValueAtTime!]!
   }
 
   extend type Query {
