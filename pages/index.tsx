@@ -54,11 +54,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
           </div>
         </Section>
         <Section id="features" className="relative flex flex-col justify-center">
-          <SectionTitle
-            tag={t("landing.whyPerfolio")}
-            title={t("landing.headerWhy")}
-            animate={true}
-          />
+          <SectionTitle tag={t("landing.whyPerfolio")} title={t("landing.headerWhy")} />
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[

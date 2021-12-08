@@ -89,23 +89,23 @@ export const HeroSection: React.FC = (): JSX.Element => {
       >
         <Text>{t("landing.subheadline")}</Text>
       </Transition>
-      {user ? (
-        <div>
-          <Button href="/dashboard" type="cta" size="block">
-            Go to dashboard
-          </Button>
-        </div>
-      ) : (
-        <Transition
-          appear={true}
-          show={true}
-          enter="ease-in-out duration-1000 delay-1000"
-          enterFrom="opacity-0 "
-          enterTo="opacity-100"
-          leave="ease-in-out duration-1000"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
+      <Transition
+        appear={true}
+        show={true}
+        enter="ease-in-out duration-1000 delay-1000"
+        enterFrom="opacity-0 "
+        enterTo="opacity-100"
+        leave="ease-in-out duration-1000"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        {user ? (
+          <div>
+            <Button href="/dashboard" type="cta" size="block">
+              Go to dashboard
+            </Button>
+          </div>
+        ) : (
           <div className="pt-8 md:pt-4">
             <div className="flex items-center justify-center md:hidden">
               <Button
@@ -168,8 +168,8 @@ export const HeroSection: React.FC = (): JSX.Element => {
               )}
             </div>
           </div>
-        </Transition>
-      )}
+        )}
+      </Transition>
     </div>
   )
 }
