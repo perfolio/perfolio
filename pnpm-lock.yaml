@@ -75,6 +75,7 @@ specifiers:
   react: 17.0.2
   react-dom: 17.0.2
   react-hook-form: ^7.20.5
+  react-in-viewport: ^1.0.0-alpha.20
   react-query: ^3.34.0
   react-table: ^7.7.0
   recharts: ^2.1.6
@@ -125,6 +126,7 @@ dependencies:
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-hook-form: 7.20.5_react@17.0.2
+  react-in-viewport: 1.0.0-alpha.20_react-dom@17.0.2+react@17.0.2
   react-query: 3.34.0_react-dom@17.0.2+react@17.0.2
   react-table: 7.7.0_react@17.0.2
   recharts: 2.1.6_9bdd65c2b60ce8638444b80b396a481b
@@ -9043,6 +9045,17 @@ packages:
       html-parse-stringify: 3.0.1
       i18next: 21.5.4
       react: 17.0.2
+    dev: false
+
+  /react-in-viewport/1.0.0-alpha.20_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-AW9kns8advQqY0CnBt6ZRgkvYp0Xxzqhd8ey0hjGTk5obGl4ZdxG3XMnHYmCjpsDYxQ1CPGqRf9VchL1VmIfhg==}
+    peerDependencies:
+      react: ^16.8.3 || ^17.0.0
+      react-dom: ^16.8.3 || ^17.0.0
+    dependencies:
+      hoist-non-react-statics: 3.3.2
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /react-is/16.13.1:

@@ -32,6 +32,7 @@ export interface IndexPageProps {
 
 const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
   const { t } = useI18n()
+
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -41,7 +42,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
         <Section className="relative py-20" id="index">
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
             <HeroSection />
-
             <div className="hidden max-w-screen-xl border rounded border-gray-50 shadow-ambient lg:block">
               <Image
                 className="border border-white rounded"
@@ -54,7 +54,11 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
           </div>
         </Section>
         <Section id="features" className="relative flex flex-col justify-center">
-          <SectionTitle tag={t("landing.whyPerfolio")} title={t("landing.headerWhy")} />
+          <SectionTitle
+            tag={t("landing.whyPerfolio")}
+            title={t("landing.headerWhy")}
+            animate={true}
+          />
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
@@ -95,6 +99,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                   icon={f.icon}
                   title={f.title}
                   description={f.description}
+                  animate={true}
                 ></Feature>
               )
             })}
@@ -146,7 +151,11 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <SectionTitle tag={t("landing.teamHeader")} title={t("landing.teamSubheader")} />
+          <SectionTitle
+            tag={t("landing.teamHeader")}
+            title={t("landing.teamSubheader")}
+            animate={true}
+          />
           <Text align="text-center">{t("perfolioDescription")}</Text>
           <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
             {members.map((m) => {
