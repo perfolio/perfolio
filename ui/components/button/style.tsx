@@ -2,13 +2,13 @@ import { Loading } from "@perfolio/ui/components"
 import React from "react"
 
 import cn from "classnames"
+import { Size } from "@perfolio/ui/types/size"
 
-type Size = "sm" | "md" | "lg" | "block"
 export type ButtonType = "primary" | "secondary" | "cta" | "warning" | "error" | "plain"
 type Justify = "start" | "end" | "center" | "between" | "around" | "evenly"
 
 export type ButtonStyleProps = React.PropsWithChildren<{
-  size?: Size
+  size?: Size | "block"
   type?: ButtonType
   justify?: Justify
 
@@ -55,7 +55,7 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
          * Size for regular buttons
          */
         !icon && {
-          "w-20 h-6 text-sm shadow-sm hover:shadow px-2 py-1": size === "sm",
+          "w-20 h-6 text-sm shadow-sm hover:shadow px-2 py-1": size === "sm" || size === "xs",
           "w-32 h-8 text-md shadow hover:shadow-md px-3 py-1": size === "md",
           "w-40 h-10 text-lg shadow-md hover:shadow-lg px-6 py-2": size === "lg",
           "w-full h-10 text-lg block shadow-md hover:shadow-xl px-6 py-2": size === "block",
@@ -63,7 +63,7 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
         /**
          * Edge case: single icon as button
          */ icon && {
-          "w-6 h-6 ": size === "sm",
+          "w-6 h-6 ": size === "sm" || size === "xs",
           "w-8 h-8 p-1": size === "md",
           "w-10 h-10 p-2": size === "lg" || size === "block",
         },
@@ -90,9 +90,29 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
         },
       )}
     >
-      {iconLeft ? <span>{iconLeft}</span> : null}
-      {loading ? <Loading /> : icon ? <span className="w-6 h-6">{icon}</span> : children}
-      {iconRight ? <span>{iconRight}</span> : null}
+      {iconLeft ? (
+        <span
+          className={cn({
+            "w-4 h-4 mr-1": size === "sm" || size === "xs",
+            "w-5 h-5 mr-2": size === "md",
+            "w-6 h-6 mr-2": size === "lg" || size === "block",
+          })}
+        >
+          {iconLeft}
+        </span>
+      ) : null}
+      {loading ? <Loading /> : icon ? <span>{icon}</span> : children}
+      {iconRight ? (
+        <span
+          className={cn({
+            "w-4 h-4 ml-1": size === "sm" || size === "xs",
+            "w-5 h-5 ml-2": size === "md",
+            "w-6 h-6 ml-2": size === "lg" || size === "block",
+          })}
+        >
+          {iconRight}
+        </span>
+      ) : null}
     </div>
   )
 }

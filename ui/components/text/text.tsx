@@ -1,8 +1,9 @@
+import { Size } from "@perfolio/ui/types/size"
 import cn from "classnames"
 import React from "react"
 
 export interface TextProps {
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+  size?: Size
   /**
    * Override default default colors.
    * You can even use gradients here.

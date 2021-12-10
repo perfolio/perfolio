@@ -40,7 +40,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                             <ButtonStyle
                               justify="start"
                               type="plain"
-                              size="lg"
+                              size="block"
                               iconLeft={item.icon}
                             >
                               {item.label}
@@ -66,7 +66,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                                   href={subitem.href}
                                   key={subitem.name}
                                   type="plain"
-                                  size="lg"
+                                  size="block"
                                   iconLeft={subitem.icon}
                                 >
                                   {subitem.name}
