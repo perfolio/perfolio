@@ -21,12 +21,12 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         </a>
       </NextLink>
       <div>
-        <button
-          className="flex items-center w-6 h-6 cursor-pointer justi text-gray-50"
+        <Button
+          size="sm"
+          type="plaininverted"
+          icon={open ? <XIcon /> : <DotsVerticalIcon />}
           onClick={() => setOpen(!open)}
-        >
-          {open ? <XIcon /> : <DotsVerticalIcon />}
-        </button>
+        />
         <Drawer open={open} setOpen={setOpen}>
           <Drawer.Content>
             <ul className="px-6 space-y-4">

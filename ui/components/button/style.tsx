@@ -4,7 +4,14 @@ import React from "react"
 import cn from "classnames"
 import { Size } from "@perfolio/ui/types/size"
 
-export type ButtonType = "primary" | "secondary" | "cta" | "warning" | "error" | "plain"
+export type ButtonType =
+  | "primary"
+  | "secondary"
+  | "cta"
+  | "warning"
+  | "error"
+  | "plain"
+  | "plaininverted"
 type Justify = "start" | "end" | "center" | "between" | "around" | "evenly"
 
 export type ButtonStyleProps = React.PropsWithChildren<{
@@ -62,7 +69,8 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
         },
         /**
          * Edge case: single icon as button
-         */ icon && {
+         */
+        icon && {
           "w-6 h-6 ": size === "sm" || size === "xs",
           "w-8 h-8 p-1": size === "md",
           "w-10 h-10 p-2": size === "lg" || size === "block",
@@ -79,6 +87,8 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
             type === "cta",
           "text-gray-900  hover:text-primary border-0 shadow-none hover:shadow-none":
             type === "plain",
+          "text-gray-50  hover:text-gray-900 border-0 shadow-none hover:shadow-none":
+            type === "plaininverted",
           "bg-error text-white border-error hover:bg-white hover:text-error": type === "error",
         },
         disabled && {
@@ -86,6 +96,7 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
           "bg-white text-gray-600 border-gray-60": type === "secondary",
           "bg-gradient-to-tr from-primary to-secondary text-gray-400 shadow-cta": type === "cta",
           "text-gray-600 border-0 shadow-none": type === "plain",
+          "text-gray-400 border-0 shadow-none": type === "plaininverted",
           "bg-error-light text-gray-white border-error-light": type === "error",
         },
       )}
@@ -101,7 +112,22 @@ export const ButtonStyle: React.FC<ButtonStyleProps> = ({
           {iconLeft}
         </span>
       ) : null}
-      {loading ? <Loading /> : icon ? <span>{icon}</span> : children}
+
+      {loading ? (
+        <Loading />
+      ) : icon ? (
+        <span
+          className={cn({
+            "w-6 h-6": size === "sm" || size === "xs",
+            "w-8 h-8": size === "md",
+            "w-10 h-10": size === "lg" || size === "block",
+          })}
+        >
+          {icon}
+        </span>
+      ) : (
+        children
+      )}
       {iconRight ? (
         <span
           className={cn({
