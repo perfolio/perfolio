@@ -1,5 +1,4 @@
 import { env } from "@chronark/env"
-import { newId } from "@perfolio/pkg/id"
 import { PrismaClient } from "@perfolio/pkg/integrations/prisma"
 import { Logger } from "@perfolio/pkg/logger"
 import { HttpError } from "@perfolio/pkg/util/errors"
@@ -7,6 +6,8 @@ import { buffer } from "micro"
 import { NextApiRequest, NextApiResponse } from "next"
 import { Stripe } from "stripe"
 import { z } from "zod"
+
+import { ManagementClient } from "auth0"
 
 const subscriptionValidation = z.object({
   id: z.string(),
@@ -84,50 +85,42 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new HttpError(500, `Product could not be found: ${err}`)
       })
 
+    const authRoles: {
+      [productId: string]: string
+    } = {
+      [env.require("STRIPE_PRODUCT_GROWTH")]: env.require("AUTH0_ROLE_GROWTH"),
+    }
     /**
      * New access role for the new subscribed plan
      */
-    const authRole = product.metadata["authRole"] as string | undefined
+    const authRole = authRoles[product.id]
     if (!authRole) {
-      throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
+      throw new Error(`Product ${product.name} is not associated with a role`)
     }
 
-    // let newRoles: Role[] = []
-    // switch (authRole) {
-    //   case "sub_growth":
-    //     newRoles = [Role.SUB_GROWTH]
-    //     break
-    //   case "sub_pro":
-    //     newRoles = [Role.SUB_PRO]
-    //     break
-    //   default:
-    //     break
-    // }
+    const auth0 = new ManagementClient({
+      domain: env.require("AUTH0_MANAGEMENT_DOMAIN"),
+      clientId: env.require("AUTH0_MANAGEMENT_CLIENT_ID"),
+      clientSecret: env.require("AUTH0_MANAGEMENT_CLIENT_SECRET"),
+      scope: "read:users update:users",
+    })
+
     /**
      * Act on the different types of events
      */
     switch (event.type) {
-      // case "customer.subscription.created":
-      //   await setRoles(prisma, user.id, newRoles)
-      //   break
-
-      // case "customer.subscription.updated":
-      //   await setRoles(prisma, user.id, newRoles)
-      //   break
-
-      // case "customer.subscription.deleted":
-      //   await setRoles(prisma, user.id, [])
-      //   break
-
-      case "customer.subscription.trial_will_end":
-        await prisma.notification.create({
-          data: {
-            id: newId("notification"),
-            userId: user.id,
-            message: "Your trial will end soon",
-          },
-        })
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+        await auth0.assignRolestoUser({ id: user.id }, { roles: [authRole] })
         break
+
+      case "customer.subscription.deleted":
+        await auth0.removeRolesFromUser({ id: user.id }, { roles: [authRole] })
+        break
+
+      // case "customer.subscription.trial_will_end":
+
+      // break
       default:
         break
     }

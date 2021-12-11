@@ -162,7 +162,10 @@ export const resolvers: Resolvers<Context> = {
       if (!portfolio) {
         throw new Error(`Portfolio ${transaction.portfolioId} does not exist`)
       }
-      const { sub: userId } = await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      const { sub: userId } = await ctx.authorizeUser(
+        (claims) =>
+          claims.sub === portfolio.userId && claims.permissions.includes("create:transaction"),
+      )
 
       let settings: SettingsModel | null = null
       if (!transaction.mic) {

@@ -1,4 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import {useAuth} from "@perfolio/pkg/auth"
+
 import { DeleteTransactionMutation, DeleteTransactionMutationVariables } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
 import { useMutation, useQueryClient } from "react-query"
@@ -6,7 +7,7 @@ import { client } from "../client"
 import { USE_PORTFOLIO_QUERY_KEY } from "../queries/usePortfolio"
 
 export const useDeleteTransaction = () => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
   const router = useRouter()
   const queryClient = useQueryClient()
   const portfolioId = router.query["portfolioId"] as string
@@ -16,7 +17,7 @@ export const useDeleteTransaction = () => {
     DeleteTransactionMutationVariables
   >(
     async (variables) => {
-      return client(await getAccessTokenSilently()).deleteTransaction(variables)
+      return client(await getAccessToken()).deleteTransaction(variables)
     },
     {
       onSuccess: () => {

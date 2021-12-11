@@ -1,4 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import {useAuth} from "@perfolio/pkg/auth"
+
 import { CreateTransactionMutation, CreateTransactionMutationVariables } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
 import { useMutation, useQueryClient } from "react-query"
@@ -6,7 +7,7 @@ import { client } from "../client"
 import { USE_PORTFOLIO_QUERY_KEY } from "../queries/usePortfolio"
 
 export const useCreateTransaction = () => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
   const queryClient = useQueryClient()
   const router = useRouter()
   const portfolioId = router.query["portfolioId"] as string
@@ -16,7 +17,7 @@ export const useCreateTransaction = () => {
     CreateTransactionMutationVariables
   >(
     async (variables) => {
-      return await client(await getAccessTokenSilently()).createTransaction(variables)
+      return await client(await getAccessToken()).createTransaction(variables)
     },
     {
       onSuccess: () => {

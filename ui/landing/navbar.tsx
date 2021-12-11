@@ -1,4 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import {useAuth} from "@perfolio/pkg/auth"
+
 import { Popover, Transition } from "@headlessui/react"
 import { AdjustmentsIcon, SparklesIcon, SunIcon, VariableIcon } from "@heroicons/react/outline"
 import { ChevronDownIcon } from "@heroicons/react/solid"

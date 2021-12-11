@@ -16,6 +16,8 @@ generator client {
 model User {
   id String @id
 
+  publicAddress String @unique
+
   settings Settings?
 
   notifications Notification[]
@@ -28,7 +30,28 @@ model User {
   currentPaymentPeriodStart DateTime
   currentPaymentPeriodEnd   DateTime
 
-  // roles Role[]
+  roles Role[]
+
+}
+
+model Role {
+  id          String @id
+  name        String @unique
+  description String @unique
+
+
+  users User[]
+
+  permissions Permission[]
+}
+
+model Permission {
+  id          String @id
+  name        String @unique
+  description String @unique
+
+  roles Role[]
+
 }
 
 enum Access {
@@ -53,11 +76,6 @@ model Portfolio {
 
   // Ids of users who have read access for this portfolio
   // grantReadAccess String[]
-}
-
-enum Role {
-  SUB_GROWTH
-  SUB_PRO
 }
 
 // Notifications can be displayed for a user
@@ -95,14 +113,13 @@ model Transaction {
   mic         String
 }
 
-
 model Settings {
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  defaultCurrency    String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  defaultCurrency   String
   defaultExchangeId String
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId             String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String   @unique
 }
 
 model Newsletter {
@@ -128,6 +145,6 @@ model ExchangeTradedAsset {
   //    Human readable name
   name String
 
-// Used by prisma
+  // Used by prisma
   Transaction Transaction[]
 }

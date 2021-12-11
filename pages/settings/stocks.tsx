@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useExchanges, useUpdateSettings, useUser } from "@perfolio/pkg/hooks"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
@@ -173,7 +172,7 @@ const SettingsPage: NextPage<PageProps> = () => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(SettingsPage)
+export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   return {

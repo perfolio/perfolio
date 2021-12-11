@@ -5,7 +5,8 @@ import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import React, { useState } from "react"
 import { z } from "zod"
 // import Link from "next/link"
-import { useAuth0 } from "@auth0/auth0-react"
+import {useAuth} from "@perfolio/pkg/auth"
+
 import { useSubscribeToNewsletter } from "@perfolio/pkg/hooks"
 import { Button, Drawer, Heading, Text } from "@perfolio/ui/components"
 const validation = z.object({

@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { DocumentAddIcon } from "@heroicons/react/outline"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api"
 import { Transaction } from "@perfolio/pkg/api"
@@ -154,7 +153,7 @@ const TransactionsPage: NextPage<PageProps> = () => {
   )
 }
 
-export default withAuthenticationRequired(TransactionsPage)
+export default TransactionsPage
 
 export async function getStaticPaths() {
   return {

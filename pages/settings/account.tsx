@@ -6,7 +6,6 @@ import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 import { Button } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
 
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useUser } from "@perfolio/pkg/hooks"
 import { useI18n } from "next-localization"
 
@@ -68,7 +67,7 @@ const SettingsPage: NextPage<PageProps> = () => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(SettingsPage)
+export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   return {

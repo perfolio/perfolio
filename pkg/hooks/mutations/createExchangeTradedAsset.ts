@@ -1,4 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import {useAuth} from "@perfolio/pkg/auth"
 import {
   CreateExchangeTradedAssetMutation,
   CreateExchangeTradedAssetMutationVariables,
@@ -7,13 +7,13 @@ import { useMutation } from "react-query"
 import { client } from "../client"
 
 export const useCreateExchangeTradedAsset = () => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
   const { data, ...meta } = useMutation<
     CreateExchangeTradedAssetMutation,
     Error,
     CreateExchangeTradedAssetMutationVariables
   >(async (variables) => {
-    return await client(await getAccessTokenSilently()).createExchangeTradedAsset(variables)
+    return await client(await getAccessToken()).createExchangeTradedAsset(variables)
   })
 
   return { transaction: data?.createExchangeTradedAsset, ...meta }

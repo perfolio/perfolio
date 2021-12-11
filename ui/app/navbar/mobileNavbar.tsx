@@ -1,4 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import {useAuth} from "@perfolio/pkg/auth"
+
 import { Disclosure, Transition } from "@headlessui/react"
 import { DotsVerticalIcon, LogoutIcon, XIcon } from "@heroicons/react/outline"
 import { ChevronUpIcon } from "@heroicons/react/outline"

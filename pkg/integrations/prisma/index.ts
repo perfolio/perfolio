@@ -6,4 +6,6 @@ export type {
   Settings as SettingsModel,
   Transaction as TransactionModel,
   User as UserModel,
+  Permission,
+  Role,
 } from "@prisma/client"

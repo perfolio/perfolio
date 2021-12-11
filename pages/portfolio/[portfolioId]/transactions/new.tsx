@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { z } from "zod"
 import fs from "fs"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { CheckIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Asset } from "@perfolio/pkg/api"
@@ -205,7 +204,7 @@ const NewTransactionPage: NextPage<PageProps> = () => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(NewTransactionPage)
+export default NewTransactionPage
 
 export async function getStaticPaths() {
   return {

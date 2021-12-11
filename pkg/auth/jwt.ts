@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
-import jwksClient from "jwks-rsa"
 import { z } from "zod"
+import { env } from "@chronark/env"
 
 export const payload = z.object({
   iss: z.string(),
@@ -8,62 +8,68 @@ export const payload = z.object({
   exp: z.number().int(),
   aud: z.array(z.string()),
   sub: z.string(),
+  // roles: z.array(z.enum(["subscription:growth", "subscription:pro", "admin"])),
+  permissions: z.array(z.string().nonempty()),
 })
 
 export type Claims = z.infer<typeof payload>
 export class JWT {
-  private static instance: JWT
-  private jwks: jwksClient.JwksClient
-  private audience: string
-  private issuer: string
-  private constructor(jwksUri: string, claims: { audience: string; issuer: string }) {
-    this.jwks = jwksClient({
-      jwksUri,
+  private static readonly issuer = "https://auth.perfol.io"
+  private static readonly audience = "https://api.perfol.io"
+  private static readonly algorithm = "HS256"
+
+  public static sign(subject: string, payload: { permissions: string[] }): string {
+    const secret = env.require("JWT_SIGNING_KEY")
+
+    return jwt.sign(payload, secret, {
+      algorithm: JWT.algorithm,
+      expiresIn: "5m",
+      audience: JWT.audience,
+      issuer: JWT.issuer,
+      subject,
     })
-    this.audience = claims.audience
-    this.issuer = claims.issuer
   }
 
-  public static getInstance(): JWT {
-    if (!JWT.instance) {
-      throw new Error("JWT is not yet initialized")
-    }
-    return JWT.instance
-  }
-
-  public static init(jwksUri: string, claims: { audience: string; issuer: string }): JWT {
-    if (JWT.instance) {
-      throw new Error(`JWT is already initialized`)
-    }
-    JWT.instance = new JWT(jwksUri, claims)
-    return JWT.instance
-  }
-
-  public async verify(encoded: string): Promise<Claims> {
-    const { header } = JWT.decode(encoded)
-    const key = await this.jwks.getSigningKey(header.kid)
-
-    const decoded = jwt.verify(encoded, key.getPublicKey(), {
-      audience: this.audience,
-      issuer: this.issuer,
+  public static verify(encoded: string): Claims {
+    const secret = env.require("JWT_SIGNING_KEY")
+    const decoded = jwt.verify(encoded, secret, {
+      audience: JWT.audience,
+      issuer: JWT.issuer,
     })
+
     return payload.parse(decoded)
   }
-  public async isValid(token: string): Promise<boolean> {
+  public static isValid(token: string): boolean {
     try {
-      await this.verify(token)
+      JWT.verify(token)
       return true
     } catch {
       return false
     }
   }
 
-  public static decode(token: string): jwt.Jwt {
-    const decoded = jwt.decode(token, { complete: true })
-    if (!decoded) {
+  public static decode(token: string): Claims {
+    const claims = jwt.decode(token)
+    if (!claims) {
       throw new Error(`Unable to decode token: ${token}`)
     }
+    if (typeof claims === "string") {
+      throw new Error(`Unable to parse claims: ${claims}`)
+    }
+    return payload.parse(claims)
+  }
+  /**
+   * Return in how many seconds the jwt will expire.
+   *
+   * Will be negative if it has expired already
+   */
+  public static expiresIn(token: string): number {
+    const claims = JWT.decode(token)
 
-    return decoded
+    return claims.exp ?? 0 - Math.floor(Date.now() / 1000)
+  }
+
+  public static isExpired(token: string): boolean {
+    return JWT.expiresIn(token) <= 0
   }
 }
