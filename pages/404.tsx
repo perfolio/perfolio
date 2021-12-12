@@ -10,7 +10,7 @@ const NotFoundPage: NextPage = (): JSX.Element => {
           <Navbar />
         </div>
         <div className="flex flex-col h-screen min-h-full pt-16 pb-12 bg-white">
-          <main className="flex flex-col justify-center flex-grow w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <main className="flex flex-col justify-center grow w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div className="py-16">
               <div className="text-center">
                 <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
