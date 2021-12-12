@@ -140,7 +140,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
               >
                 {features.map((feature) => (
                   <li key={feature} className="flex items-center">
-                    <CheckIcon className="flex-shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
+                    <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
                     <span className="ml-3 text-base text-gray-500">{feature}</span>
                   </li>
                 ))}

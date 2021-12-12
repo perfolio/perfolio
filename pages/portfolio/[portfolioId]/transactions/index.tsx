@@ -53,7 +53,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
           },
         )}
       >
-        <div className="flex flex-grow gap-4">
+        <div className="flex grow gap-4">
           {transaction.asset ? (
             <Description title={transaction.asset.name}>
               {`You ${
@@ -64,7 +64,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
             </Description>
           ) : null}
         </div>
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <Button
             type="secondary"
             size="sm"
