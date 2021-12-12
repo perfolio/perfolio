@@ -15,7 +15,7 @@ export const Profile: React.FC<ProfileProps> = ({ src, title, subtitle }): JSX.E
     <Wrapper>
       <div className="flex items-center space-x-2 min-w-0">
         {src ? (
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <Avatar src={src} />
           </div>
         ) : (

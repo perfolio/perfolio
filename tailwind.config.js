@@ -1,20 +1,15 @@
 const colors = require("tailwindcss/colors")
 const defaultTheme = require("tailwindcss/defaultTheme")
 module.exports = {
-  mode: "jit",
-  purge: ["./**/*.{tsx,html}"],
+  content: ["./**/*.{tsx,html}"],
   darkMode: "class",
-  variants: {
-    scale: ["responsive", "hover", "focus", "group-hover"],
-    linearGradients: ["hover", "responsive"],
-  },
   theme: {
     colors: {
       transparent: "transparent",
       current: colors.current,
       white: colors.white,
       black: "#0C0C0C",
-      gray: colors.gray,
+      gray: colors.zinc,
       // {
       //   50: "#FAFAFA",
       //   100: "#F4F4F5",
@@ -40,7 +35,7 @@ module.exports = {
 
       cta: {
         light: "#FCD34D",
-        DEFAULT: "#F59E0B",
+        DEFAULT: "#3548c866",
         dark: "#EA580C",
       },
 
@@ -69,7 +64,6 @@ module.exports = {
 
     extend: {
       boxShadow: {
-        cta: "0 10px 20px -5px rgba(53, 72, 200, 0.4)",
         ambient: "0 35px 120px -10px rgba(53, 72, 200, 0.1)",
       },
       fontFamily: {
