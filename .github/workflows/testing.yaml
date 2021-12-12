@@ -34,10 +34,7 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          NEXT_PUBLIC_AUTH0_AUDIENCE: https://api.perfol.io
-          NEXT_PUBLIC_AUTH0_ISSUER: https://perfolio.eu.auth0.com/
-          NEXT_PUBLIC_AUTH0_DOMAIN: perfolio.eu.auth0.com
-          NEXT_PUBLIC_AUTH0_CLIENT_ID: VrtJ4tiKVMU1NRPG0hN14NPfziE9rB8l
+          NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: pk_live_1A7FB5E5FA838C09
 
       - name: Lint
         run: pnpm fmt
