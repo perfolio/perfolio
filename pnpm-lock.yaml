@@ -26,7 +26,8 @@ specifiers:
   '@radix-ui/react-tooltip': ^0.1.1
   '@sendgrid/mail': ^7.6.0
   '@tailwindcss/custom-forms': ^0.2.1
-  '@tailwindcss/typography': ^0.4.1
+  '@tailwindcss/forms': ^0.4.0
+  '@tailwindcss/typography': ^0.5.0
   '@types/ioredis': ^4.28.1
   '@types/jest': ^27.0.3
   '@types/jsonwebtoken': ^8.5.6
@@ -145,7 +146,8 @@ devDependencies:
   '@graphql-codegen/typescript-operations': 2.1.8_graphql@15.7.2
   '@graphql-codegen/typescript-resolvers': 2.3.2_graphql@15.7.2
   '@tailwindcss/custom-forms': 0.2.1_tailwindcss@3.0.1
-  '@tailwindcss/typography': 0.4.1_tailwindcss@3.0.1
+  '@tailwindcss/forms': 0.4.0_tailwindcss@3.0.1
+  '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.1
   '@types/ioredis': 4.28.1
   '@types/jest': 27.0.3
   '@types/jsonwebtoken': 8.5.6
@@ -2569,10 +2571,19 @@ packages:
       traverse: 0.6.6
     dev: true
 
-  /@tailwindcss/typography/0.4.1_tailwindcss@3.0.1:
-    resolution: {integrity: sha512-ovPPLUhs7zAIJfr0y1dbGlyCuPhpuv/jpBoFgqAc658DWGGrOBWBMpAWLw2KlzbNeVk4YBJMzue1ekvIbdw6XA==}
+  /@tailwindcss/forms/0.4.0_tailwindcss@3.0.1:
+    resolution: {integrity: sha512-DeaQBx6EgEeuZPQACvC+mKneJsD8am1uiJugjgQK1+/Vt+Ai0GpFBC2T2fqnUad71WgOxyrZPE6BG1VaI6YqfQ==}
     peerDependencies:
-      tailwindcss: '>=2.0.0'
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.3
+      tailwindcss: 3.0.1_6b4e3d148bdcb715d5f821ed0a9c268b
+    dev: true
+
+  /@tailwindcss/typography/0.5.0_tailwindcss@3.0.1:
+    resolution: {integrity: sha512-1p/3C6C+JJziS/ghtG8ACYalbA2SyLJY27Pm33cVTlAoY6VQ7zfm2H64cPxUMBkVIlWXTtWHhZcZJPobMRmQAA==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || insiders'
     dependencies:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
