@@ -57,7 +57,7 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
                   <span className="font-semibold uppercase text-primary whitespace-nowrap">
                     {t("app.setPlanWhatsIncl")}
                   </span>
-                  <div className="flex-grow w-full mx-4 border-b border-primary"></div>
+                  <div className="grow w-full mx-4 border-b border-primary"></div>
                 </div>
                 <ul className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {features.map((feature) => (

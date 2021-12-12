@@ -47,18 +47,18 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                               {item.label}
                             </ButtonStyle>
                             <ChevronUpIcon
-                              className={cn("w-5 h-5 transform duration-500", {
+                              className={cn("w-5 h-5 duration-500", {
                                 "-rotate-180": open,
                               })}
                             />
                           </Disclosure.Button>
                           <Transition
                             enter="transition duration-500 ease-out"
-                            enterFrom="transform opacity-0"
-                            enterTo="transform opacity-100"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
                             leave="transition duration-500 ease-out"
-                            leaveFrom="transform opacity-100"
-                            leaveTo="transform opacity-0"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
                           >
                             <Disclosure.Panel className="ml-4">
                               {item.menu!.map((subitem) => (

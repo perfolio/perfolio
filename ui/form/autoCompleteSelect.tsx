@@ -166,7 +166,7 @@ export function AutoCompleteSelect<Option>({
                             setState(State.Done)
                           }}
                           className={cn(
-                            "relative p-2 cursor-pointer w-full focus:outline-none hover:bg-gray-50 duration-500 transform",
+                            "relative p-2 cursor-pointer w-full focus:outline-none hover:bg-gray-50 duration-500",
                             {
                               "bg-gray-100": option?.id === assetId,
                               "bg-gradient-to-tr from-gray-50 to-gray-100": assetId,

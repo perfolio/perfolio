@@ -94,14 +94,14 @@ export const Navbar: React.FC = () => {
                     leaveFrom="opacity-100 translate-y-0"
                     leaveTo="opacity-0 translate-y-1"
                   >
-                    <Popover.Panel className="absolute z-10 w-screen max-w-md px-2 mt-3 -ml-4 transform sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
+                    <Popover.Panel className="absolute z-10 w-screen max-w-md px-2 mt-3 -ml-4 sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
                       <div className="overflow-hidden rounded shadow-lg">
                         <div className="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:p-8">
                           {sellingPoints.map((item) => (
                             <Link key={item.name} href={item.href}>
                               <a className="flex items-start p-3 -m-3 rounded hover:bg-gray-50">
                                 <item.icon
-                                  className="flex-shrink-0 w-6 h-6 text-primary"
+                                  className="shrink-0 w-6 h-6 text-primary"
                                   aria-hidden="true"
                                 />
                                 <div className="ml-4">
@@ -145,10 +145,10 @@ export const Navbar: React.FC = () => {
         <Transition
           className="sm:hidden"
           show={scrolled}
-          enter="transition ease-in-out duration-500 transform"
+          enter="transition ease-in-out duration-500"
           enterFrom="-translate-y-full opacity-0"
           enterTo="translate-y-0 opacity-100"
-          leave="transition ease-in-out duration-500 transform"
+          leave="transition ease-in-out duration-500"
           leaveFrom="translate-y-0 opacity-100"
           leaveTo="-translate-y-full opacity-0"
         >

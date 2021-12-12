@@ -42,10 +42,10 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
               <Icon size="sm" label="Fetching data">
                 <Transition
                   show={isFetching > 0}
-                  enter="transition ease-in-out duration-1000 transform"
+                  enter="transition ease-in-out duration-1000"
                   enterFrom=" opacity-0"
                   enterTo="opacity-100"
-                  leave="transition ease-in-out duration-1000 transform"
+                  leave="transition ease-in-out duration-1000"
                   leaveFrom="opacity-100"
                   leaveTo=" opacity-0"
                 >
