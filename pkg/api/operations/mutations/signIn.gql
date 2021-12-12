@@ -1,0 +1,3 @@
+mutation signIn($didToken: String!) {
+  signIn(didToken: $didToken)
+}

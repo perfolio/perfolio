@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { Popover } from "@headlessui/react"
 import fs from "fs"
 import {
@@ -269,7 +268,7 @@ const IndexPage: NextPage<PageProps> = () => {
   )
 }
 
-export default withAuthenticationRequired(IndexPage)
+export default IndexPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   return {

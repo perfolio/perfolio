@@ -9,7 +9,6 @@ export const DesktopAssetTable: React.FC<DetailAssetTableProps> = ({
   setAggregation,
   costPerShare,
   totalValue,
-  // currentPortfolioState,
 }): JSX.Element => {
   const { currentPorfolioState } = useCurrentPorfolioState()
 

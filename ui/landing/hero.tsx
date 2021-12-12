@@ -4,9 +4,7 @@ import { useI18n } from "next-localization"
 import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import React, { useState } from "react"
 import { z } from "zod"
-// import Link from "next/link"
-import { useAuth0 } from "@auth0/auth0-react"
-import { useSubscribeToNewsletter } from "@perfolio/pkg/hooks"
+import { useSubscribeToNewsletter, useUser } from "@perfolio/pkg/hooks"
 import { Button, Drawer, Heading, Text } from "@perfolio/ui/components"
 const validation = z.object({
   email: z.string().email(),
@@ -14,7 +12,7 @@ const validation = z.object({
 
 export const HeroSection: React.FC = (): JSX.Element => {
   const { t } = useI18n()
-  const { user } = useAuth0()
+  const { user } = useUser()
   const ctx = useForm<z.infer<typeof validation>>({
     mode: "onSubmit",
     resolver: zodResolver(validation),
@@ -29,8 +27,8 @@ export const HeroSection: React.FC = (): JSX.Element => {
       <Drawer
         title="Join the waitlist"
         subtitle="We will invite you as soon as possible"
-        open={open}
-        setOpen={setOpen}
+        isOpen={open}
+        close={() => setOpen(false)}
       >
         {done ? (
           <Text align="text-center">Thank you, we&#39;ll get back to you</Text>

@@ -22,7 +22,9 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
   const { currentPorfolioState } = useCurrentPorfolioState()
   const [open, setOpen] = useState(false)
   const { user } = useUser()
-  let [clickedAsset, setClickedAsset] = useState(currentPorfolioState.at(0))
+  let [clickedAsset, setClickedAsset] = useState(
+    currentPorfolioState.length > 0 ? currentPorfolioState.at(0) : null,
+  )
 
   // if (!clickedAsset)
   //   clickedAsset = {value: 0, quantity: 0, asset: {__typename: "",}}
@@ -59,7 +61,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                   </div>
                   <div className="flex w-full px-2 pb-4 space-x-2 md:px-6 ">
                     <div className="flex content-start w-full min-w-0 space-x-2">
-                      <div className="relative left-0 self-center shrink-0 w-8 h-8">
+                      <div className="relative left-0 self-center w-8 h-8 shrink-0">
                         <Avatar size="sm" src={holding.asset.logo} />
                       </div>
                       <div className="w-full min-w-0">
@@ -112,8 +114,8 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
         </ul>
       </div>
       <Drawer
-        open={open}
-        setOpen={setOpen}
+        isOpen={open}
+        close={() => setOpen(false)}
         height="100%"
         title={clickedAsset?.asset.name}
         subtitle={clickedAsset?.asset.ticker}
@@ -122,7 +124,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
           <div className="w-full h-[calc(100vh-5rem)] overflow-y-auto">
             <div className="block">
               <Text size="2xl" bold>
-                {format(clickedAsset === undefined ? 0 : clickedAsset?.value, {
+                {format(clickedAsset?.value ?? 0, {
                   suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
                 })}
               </Text>
@@ -158,9 +160,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     justify="start"
                     textAlignment="left"
                     label={"Total Value"}
-                    value={
-                      clickedAsset === undefined ? 0 : clickedAsset.value * clickedAsset.quantity
-                    }
+                    value={clickedAsset ? clickedAsset.value * clickedAsset.quantity : 0}
                     format={(n) =>
                       format(n, {
                         suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
@@ -172,7 +172,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     justify="start"
                     textAlignment="left"
                     label={"Quantity"}
-                    value={clickedAsset === undefined ? 0 : clickedAsset?.quantity}
+                    value={clickedAsset?.quantity ?? 0}
                     format={(n) =>
                       format(n, {
                         prefix: "x ",
@@ -185,9 +185,9 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     textAlignment="left"
                     label={"Weight"}
                     value={
-                      clickedAsset === undefined
-                        ? 0
-                        : ((clickedAsset?.quantity * clickedAsset?.value) / totalValue) * 100
+                      clickedAsset
+                        ? ((clickedAsset?.quantity * clickedAsset?.value) / totalValue) * 100
+                        : 0
                     }
                     format={(n) =>
                       format(n, {
@@ -200,7 +200,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                     justify="start"
                     textAlignment="left"
                     label={"Cost per share"}
-                    value={clickedAsset === undefined ? 0 : costPerShare[clickedAsset.asset.id]}
+                    value={clickedAsset ? costPerShare[clickedAsset.asset.id] : 0}
                     format={(n) =>
                       format(n, {
                         suffix: getCurrencySymbol(user?.settings?.defaultCurrency),
@@ -215,12 +215,12 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                   enableColor
                   label={"Change"}
                   value={
-                    clickedAsset === undefined
-                      ? 0
-                      : aggregation === "absolute"
-                      ? (clickedAsset.value - costPerShare[clickedAsset.asset.id]!) *
-                        clickedAsset.quantity
-                      : clickedAsset.value / costPerShare[clickedAsset.asset.id]! - 1
+                    clickedAsset
+                      ? aggregation === "absolute"
+                        ? (clickedAsset.value - costPerShare[clickedAsset.asset.id]!) *
+                          clickedAsset.quantity
+                        : clickedAsset.value / costPerShare[clickedAsset.asset.id]! - 1
+                      : 0
                   }
                   format={(n) =>
                     format(

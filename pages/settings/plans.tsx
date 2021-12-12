@@ -5,7 +5,6 @@ import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import fs from "fs"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useUser } from "@perfolio/pkg/hooks"
 import { Button, Icon, Text, ToggleGroup } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
@@ -148,7 +147,7 @@ const Page: NextPage<PageProps> = ({ products }) => {
     </AppLayout>
   )
 }
-export default withAuthenticationRequired(Page)
+export default Page
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   return {
