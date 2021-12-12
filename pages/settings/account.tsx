@@ -25,7 +25,6 @@ const SettingsPage: NextPage<PageProps> = () => {
         <Button
           onClick={async () => {
             if (!user) {
-              console.error("User not yet loaded")
               return
             }
             const res = await fetch(`/api/stripe/create-portal-session/${user?.stripeCustomerId}`, {
@@ -44,7 +43,6 @@ const SettingsPage: NextPage<PageProps> = () => {
         <Button
           onClick={async () => {
             if (!user) {
-              console.error("User not yet loaded")
               return
             }
             const res = await fetch(

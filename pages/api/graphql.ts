@@ -1,7 +1,6 @@
 import { server } from "@perfolio/pkg/api/server"
 import { NextApiRequest, NextApiResponse } from "next"
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   /**
    * Return ok to preflight cors requests

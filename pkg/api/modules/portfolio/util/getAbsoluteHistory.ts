@@ -5,14 +5,18 @@ import {
   PortfolioModel,
   TransactionModel,
 } from "@perfolio/pkg/integrations/prisma"
+import { AuthorizationError } from "@perfolio/pkg/util/errors"
 import { Time } from "@perfolio/pkg/util/time"
 
 export async function getAbsoluteHistory(
   portfolio: PortfolioModel,
   ctx: Context,
 ): Promise<Omit<AbsoluteAssetHistory, "asset">[]> {
-  await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
-
+  await ctx.authorizeUser(["read:absoluteAssetHistory"], (claims) => {
+    if (claims.sub !== portfolio.userId) {
+      throw new AuthorizationError("Not allowed to access portfolio")
+    }
+  })
   const transactions = await ctx.dataSources.db.transaction.findMany({
     where: { portfolioId: portfolio.id },
     include: { asset: true },

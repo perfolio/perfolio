@@ -1,3 +1,6 @@
+import { magic } from "."
+import { client } from "../hooks/client"
+
 /**
  * Use this class to make sure to guarantee that only a single refresh token request
  * is sent at a time.
@@ -41,14 +44,15 @@ export class TokenRefreshRequester {
    * Perform the actual http request
    */
   private async makeRequest(): Promise<{ accessToken: string }> {
-    const res = await fetch("/api/auth/refresh", {
-      method: "POST",
-    })
-    if (!res.ok) {
-      throw new Error(`Refresh error: ${await res.text()}`)
-    }
+    const didToken = await magic()
+      .user.getIdToken()
+      .catch((err) => {
+        throw new Error(`Unable to get idToken: ${err}`)
+      })
 
-    return (await res.json()) as { accessToken: string }
+    const res = await client().refresh({ didToken })
+
+    return { accessToken: res.refresh }
   }
 
   /**
@@ -57,7 +61,6 @@ export class TokenRefreshRequester {
    * the previous promise instead.
    */
   public async refreshAccessToken(): Promise<{ accessToken: string }> {
-    console.log("Requested refresh", { inflight: !!this.inflightRequest })
     if (!this.inflightRequest) {
       this.inflightRequest = this.makeRequest()
     }

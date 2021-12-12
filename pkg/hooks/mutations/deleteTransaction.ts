@@ -1,4 +1,4 @@
-import {useAuth} from "@perfolio/pkg/auth"
+import { useAuth } from "@perfolio/pkg/auth"
 
 import { DeleteTransactionMutation, DeleteTransactionMutationVariables } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
@@ -21,7 +21,6 @@ export const useDeleteTransaction = () => {
     },
     {
       onSuccess: () => {
-        console.log("I must refetch ", USE_PORTFOLIO_QUERY_KEY(portfolioId))
         queryClient.invalidateQueries(USE_PORTFOLIO_QUERY_KEY(portfolioId))
       },
     },

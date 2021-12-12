@@ -1,9 +1,9 @@
-import {useAuth} from "@perfolio/pkg/auth"
-
 import { Transition } from "@headlessui/react"
 import { AdjustmentsIcon, LogoutIcon } from "@heroicons/react/outline"
+import { magic } from "@perfolio/pkg/auth"
 import { Icon, Loading, Logo } from "@perfolio/ui/components"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import React from "react"
 import { useIsFetching } from "react-query"
 import { DesktopNavLink } from "./desktopNavLink"
@@ -12,8 +12,7 @@ import { NavbarProps } from "./types"
 
 export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const isFetching = useIsFetching()
-  const { logout } = useAuth0()
-  console.log({ items })
+  const router = useRouter()
   return (
     <nav className="w-full">
       <ul className="flex items-center justify-between w-full">
@@ -67,7 +66,10 @@ export const DesktopNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => 
             <li className="text-gray-200 hover:text-gray-50">
               <button
                 className="focus:outline-none"
-                onClick={() => logout({ returnTo: "https://perfol.io" })}
+                onClick={async () => {
+                  await magic().user.logout()
+                  router.push("/")
+                }}
               >
                 <Icon size="sm" label="Sign out">
                   <LogoutIcon />

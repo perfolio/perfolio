@@ -1,4 +1,5 @@
 import { env } from "@chronark/env"
+import { Role } from "@perfolio/pkg/auth"
 import { PrismaClient } from "@perfolio/pkg/integrations/prisma"
 import { Logger } from "@perfolio/pkg/logger"
 import { HttpError } from "@perfolio/pkg/util/errors"
@@ -6,8 +7,6 @@ import { buffer } from "micro"
 import { NextApiRequest, NextApiResponse } from "next"
 import { Stripe } from "stripe"
 import { z } from "zod"
-
-import { ManagementClient } from "auth0"
 
 const subscriptionValidation = z.object({
   id: z.string(),
@@ -41,6 +40,50 @@ const requestValidation = z.object({
     "stripe-signature": z.string(),
   }),
 })
+
+async function addRole(prisma: PrismaClient, userId: string, role: string): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { id: userId }, include: { roles: true } })
+  if (!user) {
+    throw new Error("Unable to load user)")
+  }
+
+  if (user.roles.map((r) => r.name).includes(role)) {
+    return
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      roles: {
+        connect: {
+          name: role,
+        },
+      },
+    },
+  })
+}
+
+async function removeRole(prisma: PrismaClient, userId: string, role: string): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { id: userId }, include: { roles: true } })
+  if (!user) {
+    throw new Error("Unable to load user)")
+  }
+
+  if (!user.roles.map((r) => r.name).includes(role)) {
+    return
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      roles: {
+        disconnect: {
+          name: role,
+        },
+      },
+    },
+  })
+}
 
 const prisma = new PrismaClient()
 
@@ -86,9 +129,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       })
 
     const authRoles: {
-      [productId: string]: string
+      [productId: string]: Role
     } = {
-      [env.require("STRIPE_PRODUCT_GROWTH")]: env.require("AUTH0_ROLE_GROWTH"),
+      [env.require("STRIPE_PRODUCT_GROWTH")]: "subscription:growth",
     }
     /**
      * New access role for the new subscribed plan
@@ -98,28 +141,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error(`Product ${product.name} is not associated with a role`)
     }
 
-    const auth0 = new ManagementClient({
-      domain: env.require("AUTH0_MANAGEMENT_DOMAIN"),
-      clientId: env.require("AUTH0_MANAGEMENT_CLIENT_ID"),
-      clientSecret: env.require("AUTH0_MANAGEMENT_CLIENT_SECRET"),
-      scope: "read:users update:users",
-    })
-
     /**
      * Act on the different types of events
      */
     switch (event.type) {
       case "customer.subscription.created":
       case "customer.subscription.updated":
-        await auth0.assignRolestoUser({ id: user.id }, { roles: [authRole] })
+        await addRole(prisma, user.id, authRole)
         break
-
       case "customer.subscription.deleted":
-        await auth0.removeRolesFromUser({ id: user.id }, { roles: [authRole] })
+        await removeRole(prisma, user.id, authRole)
         break
-
       // case "customer.subscription.trial_will_end":
-
       // break
       default:
         break

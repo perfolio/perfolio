@@ -1,4 +1,4 @@
-import {useAuth} from "@perfolio/pkg/auth"
+import { useAuth } from "@perfolio/pkg/auth"
 
 import { GetUserPortfoliosQuery } from "@perfolio/pkg/api"
 import { useQuery } from "react-query"
@@ -13,7 +13,7 @@ export const usePortfolios = () => {
     USE_PORTFOLIOS_QUERY_KEY,
     async () => {
       const token = await getAccessToken()
-      const {sub} = await getClaims(token)
+      const { sub } = await getClaims(token)
       return client(token).getUserPortfolios({ userId: sub })
     },
   )

@@ -1,19 +1,19 @@
-import {useAuth} from "@perfolio/pkg/auth"
-
 import { Disclosure, Transition } from "@headlessui/react"
 import { DotsVerticalIcon, LogoutIcon, XIcon } from "@heroicons/react/outline"
 import { ChevronUpIcon } from "@heroicons/react/outline"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
+import { magic } from "@perfolio/pkg/auth"
 import { Button, Drawer, Logo } from "@perfolio/ui/components"
 import { ButtonStyle } from "@perfolio/ui/components"
 import cn from "classnames"
 import NextLink from "next/link"
+import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { NavbarProps } from "./types"
 
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const { logout } = useAuth0()
+  const router = useRouter()
   return (
     <nav className="flex items-center justify-between w-full">
       <NextLink href="/dashboard">
@@ -28,7 +28,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         >
           {open ? <XIcon /> : <DotsVerticalIcon />}
         </button>
-        <Drawer open={open} setOpen={setOpen}>
+        <Drawer isOpen={open} close={() => setOpen(false)}>
           <Drawer.Content>
             <ul className="px-6 space-y-4">
               {items.map((item) => (
@@ -103,7 +103,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <li>
                 <Button
                   type="plain"
-                  onClick={() => logout({ returnTo: "https://perfol.io" })}
+                  onClick={async () => {
+                    await magic().user.logout()
+                    router.push("/")
+                  }}
                   iconLeft={<LogoutIcon />}
                 >
                   Sign out

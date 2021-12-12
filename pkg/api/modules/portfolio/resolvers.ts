@@ -1,6 +1,7 @@
 import { rebalance, toTimeseries } from "@perfolio/pkg/finance/returns"
 import { newId } from "@perfolio/pkg/id"
 import { SettingsModel } from "@perfolio/pkg/integrations/prisma"
+import { AuthorizationError } from "@perfolio/pkg/util/errors"
 import { Context } from "../../context"
 import { Company, Crypto, Etf, Resolvers } from "../../generated/schema-types"
 import { getAbsoluteHistory } from "./util/getAbsoluteHistory"
@@ -8,7 +9,11 @@ import { getAbsoluteHistory } from "./util/getAbsoluteHistory"
 export const resolvers: Resolvers<Context> = {
   User: {
     portfolio: async (user, { portfolioId }, ctx) => {
-      ctx.authorizeUser((claims) => claims.sub === user.id)
+      ctx.authorizeUser(["read:portfolio"], (claims) => {
+        if (claims.sub !== user.id) {
+          throw new AuthorizationError("Not allowed to read this portfolio")
+        }
+      })
       return (
         (await ctx.dataSources.db.portfolio.findUnique({
           where: { id: portfolioId },
@@ -16,7 +21,11 @@ export const resolvers: Resolvers<Context> = {
       )
     },
     portfolios: async (user, _args, ctx) => {
-      ctx.authorizeUser((claims) => claims.sub === user.id)
+      ctx.authorizeUser(["read:portfolio"], (claims) => {
+        if (claims.sub !== user.id) {
+          throw new AuthorizationError("Not allowed to read this portfolio")
+        }
+      })
       return await ctx.dataSources.db.portfolio.findMany({
         where: {
           userId: user.id,
@@ -27,7 +36,7 @@ export const resolvers: Resolvers<Context> = {
 
   AbsoluteAssetHistory: {
     asset: async (history, _args, ctx) => {
-      ctx.authorizeUser(() => true)
+      ctx.authorizeUser(["read:absoluteAssetHistory"])
       const asset = await ctx.dataSources.db.exchangeTradedAsset.findUnique({
         where: { id: history.assetId },
       })
@@ -49,11 +58,19 @@ export const resolvers: Resolvers<Context> = {
           `Portfolio does not have a user attached, that should never be possible but you're out of luck.`,
         )
       }
-      ctx.authorizeUser((claims) => claims.sub === p.user.id)
+      ctx.authorizeUser(["read:user"], (claims) => {
+        if (claims.sub !== p.userId) {
+          throw new AuthorizationError("Not allowed to read user")
+        }
+      })
       return p.user
     },
     transactions: async (portfolio, _args, ctx) => {
-      ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      ctx.authorizeUser(["read:transaction"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to read this portfolio")
+        }
+      })
       return await ctx.dataSources.db.transaction.findMany({
         where: {
           portfolioId: portfolio.id,
@@ -62,10 +79,12 @@ export const resolvers: Resolvers<Context> = {
     },
 
     relativeHistory: async (portfolio, { since }, ctx) => {
-      await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
-      console.time(portfolio.id)
+      ctx.authorizeUser(["read:portfolio", "read:relativePortfolioHistory"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to read this portfolio")
+        }
+      })
       let absoluteHistory = await getAbsoluteHistory(portfolio, ctx)
-      console.timeLog(portfolio.id, "after absolute")
       const series = toTimeseries(absoluteHistory, since)
       const index = rebalance(series)
       const value = Object.entries(index)
@@ -74,12 +93,15 @@ export const resolvers: Resolvers<Context> = {
           value,
         }))
         .filter(({ value }) => !Number.isNaN(value))
-      console.timeEnd(portfolio.id)
       return value
     },
     // @ts-ignore
     absoluteHistory: async (portfolio, { since }, ctx) => {
-      await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      ctx.authorizeUser(["read:portfolio", "read:absolutePortfolioHistory"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to read this portfolio")
+        }
+      })
 
       const history = await getAbsoluteHistory(portfolio, ctx)
       if (since) {
@@ -92,7 +114,7 @@ export const resolvers: Resolvers<Context> = {
   },
   Transaction: {
     asset: async (transaction, _args, ctx) => {
-      ctx.authorizeUser(() => true)
+      ctx.authorizeUser(["read:transaction", "read:asset"])
       const asset = await ctx.dataSources.db.exchangeTradedAsset.findUnique({
         where: { id: transaction.assetId },
       })
@@ -111,13 +133,21 @@ export const resolvers: Resolvers<Context> = {
       if (!portfolio) {
         return undefined
       }
-      await ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      await ctx.authorizeUser(["read:portfolio"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
       return portfolio
     },
   },
   Mutation: {
     createPortfolio: async (_root, { portfolio }, ctx) => {
-      ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      await ctx.authorizeUser(["create:portfolio"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
       const createdPortfolio = await ctx.dataSources.db.portfolio.create({
         data: {
           ...portfolio,
@@ -134,7 +164,11 @@ export const resolvers: Resolvers<Context> = {
       if (!existingPortfolio) {
         throw new Error(`No portfolio exists with id: ${portfolio.id}`)
       }
-      ctx.authorizeUser((claims) => claims.sub === existingPortfolio.userId)
+      await ctx.authorizeUser(["update:portfolio"], (claims) => {
+        if (claims.sub !== existingPortfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
       return await ctx.dataSources.db.portfolio.update({
         where: { id: portfolio.id },
         data: portfolio,
@@ -149,7 +183,11 @@ export const resolvers: Resolvers<Context> = {
       if (!portfolio) {
         throw new Error(`No portfolio exists with id: ${portfolioId}`)
       }
-      ctx.authorizeUser((claims) => claims.sub === portfolio.userId)
+      await ctx.authorizeUser(["delete:portfolio"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
 
       return await ctx.dataSources.db.portfolio.delete({
         where: { id: portfolioId },
@@ -162,10 +200,11 @@ export const resolvers: Resolvers<Context> = {
       if (!portfolio) {
         throw new Error(`Portfolio ${transaction.portfolioId} does not exist`)
       }
-      const { sub: userId } = await ctx.authorizeUser(
-        (claims) =>
-          claims.sub === portfolio.userId && claims.permissions.includes("create:transaction"),
-      )
+      const { sub: userId } = await ctx.authorizeUser(["create:transaction"], (claims) => {
+        if (claims.sub !== portfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
 
       let settings: SettingsModel | null = null
       if (!transaction.mic) {
@@ -201,8 +240,11 @@ export const resolvers: Resolvers<Context> = {
       if (!existingTransaction) {
         throw new Error(`Transaction ${transaction.id} does not exist`)
       }
-      ctx.authorizeUser((claims) => claims.sub === existingTransaction.portfolio.userId)
-
+      await ctx.authorizeUser(["update:transaction"], (claims) => {
+        if (claims.sub !== existingTransaction.portfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
       return await ctx.dataSources.db.transaction.update({
         where: {
           id: transaction.id,
@@ -218,7 +260,11 @@ export const resolvers: Resolvers<Context> = {
       if (!transaction) {
         throw new Error(`Transaction ${transactionId} does not exist`)
       }
-      ctx.authorizeUser((claims) => claims.sub === transaction.portfolio.userId)
+      await ctx.authorizeUser(["delete:transaction"], (claims) => {
+        if (claims.sub !== transaction.portfolio.userId) {
+          throw new AuthorizationError("Not allowed to access portfolio")
+        }
+      })
       return await ctx.dataSources.db.transaction.delete({
         where: { id: transactionId },
       })

@@ -36,7 +36,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, accessToke
     }
     const tokenRequester = TokenRefreshRequester.new()
     const { accessToken } = await tokenRequester.refreshAccessToken()
-
     setToken(accessToken)
     return accessToken
   }
@@ -45,8 +44,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, accessToke
     getAccessToken()
       .then(setToken)
       .catch((err) => {
-        console.log(err)
+        console.warn(err)
       })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

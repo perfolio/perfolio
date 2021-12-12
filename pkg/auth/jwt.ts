@@ -1,15 +1,18 @@
 import jwt from "jsonwebtoken"
 import { z } from "zod"
 import { env } from "@chronark/env"
+import { permissionsValidation } from "./permissions"
+import { Role, rolesValidation } from "./roles"
+import { RBAC } from "./rbac"
 
 export const payload = z.object({
   iss: z.string(),
   iat: z.number(),
   exp: z.number().int(),
-  aud: z.array(z.string()),
+  aud: z.string(),
   sub: z.string(),
-  // roles: z.array(z.enum(["subscription:growth", "subscription:pro", "admin"])),
-  permissions: z.array(z.string().nonempty()),
+  roles: rolesValidation,
+  permissions: permissionsValidation,
 })
 
 export type Claims = z.infer<typeof payload>
@@ -18,16 +21,26 @@ export class JWT {
   private static readonly audience = "https://api.perfol.io"
   private static readonly algorithm = "HS256"
 
-  public static sign(subject: string, payload: { permissions: string[] }): string {
+  public static sign(subject: string, opts: { roles: Role[] }): string {
     const secret = env.require("JWT_SIGNING_KEY")
 
-    return jwt.sign(payload, secret, {
-      algorithm: JWT.algorithm,
-      expiresIn: "5m",
-      audience: JWT.audience,
-      issuer: JWT.issuer,
-      subject,
-    })
+    const { roles } = opts
+    const permissions = RBAC.getPermissions(roles)
+
+    return jwt.sign(
+      {
+        roles,
+        permissions,
+      },
+      secret,
+      {
+        algorithm: JWT.algorithm,
+        expiresIn: "15m",
+        audience: JWT.audience,
+        issuer: JWT.issuer,
+        subject,
+      },
+    )
   }
 
   public static verify(encoded: string): Claims {

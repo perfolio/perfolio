@@ -112,8 +112,8 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
         </ul>
       </div>
       <Drawer
-        open={open}
-        setOpen={setOpen}
+        isOpen={open}
+        close={() => setOpen(false)}
         height="100%"
         title={clickedAsset?.asset.name}
         subtitle={clickedAsset?.asset.ticker}

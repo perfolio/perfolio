@@ -1,4 +1,4 @@
-import {useAuth} from "@perfolio/pkg/auth"
+import { useAuth } from "@perfolio/pkg/auth"
 
 import { CreateTransactionMutation, CreateTransactionMutationVariables } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"

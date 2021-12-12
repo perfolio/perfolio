@@ -60,7 +60,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({
   }
 
   return (
-    <Drawer open={open} setOpen={setOpen} title={title}>
+    <Drawer isOpen={open} close={() => setOpen(false)} title={title}>
       <Drawer.Content center>
         <div className="flex flex-col items-center gap-8">
           {children}

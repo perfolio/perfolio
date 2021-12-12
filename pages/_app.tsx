@@ -7,7 +7,6 @@ import type { AppProps } from "next/app"
 import { PersistendQueryClient } from "@perfolio/pkg/query-client"
 import { ToastProvider } from "@perfolio/pkg/toaster"
 import { PageloadIndicator } from "@perfolio/ui/components"
-import { IdProvider } from "@radix-ui/react-id"
 import { QueryClientProvider } from "react-query"
 import { AuthProvider } from "@perfolio/pkg/auth"
 
@@ -19,18 +18,16 @@ const Perfolio = ({
 
   return (
     <I18nProvider lngDict={translations} locale={router.locale ?? "en"}>
-      <IdProvider>
-        <AuthProvider accessToken={accessToken}>
-          <ToastProvider>
-            <QueryClientProvider client={PersistendQueryClient()}>
-              <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
-                <PageloadIndicator />
-                <Component {...pageProps} />
-              </div>
-            </QueryClientProvider>
-          </ToastProvider>
-        </AuthProvider>
-      </IdProvider>
+      <AuthProvider accessToken={accessToken}>
+        <ToastProvider>
+          <QueryClientProvider client={PersistendQueryClient()}>
+            <div className={`${process.env.NODE_ENV !== "production" ? "debug-screens" : ""}`}>
+              <PageloadIndicator />
+              <Component {...pageProps} />
+            </div>
+          </QueryClientProvider>
+        </ToastProvider>
+      </AuthProvider>
     </I18nProvider>
   )
 }

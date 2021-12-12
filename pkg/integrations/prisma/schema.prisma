@@ -16,7 +16,8 @@ generator client {
 model User {
   id String @id
 
-  publicAddress String @unique
+  // The Decentralized ID of the user
+  magicId String @unique
 
   settings Settings?
 
@@ -42,17 +43,8 @@ model Role {
 
   users User[]
 
-  permissions Permission[]
 }
 
-model Permission {
-  id          String @id
-  name        String @unique
-  description String @unique
-
-  roles Role[]
-
-}
 
 enum Access {
   //  Everyone has access

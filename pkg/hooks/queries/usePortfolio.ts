@@ -1,4 +1,4 @@
-import {useAuth} from "@perfolio/pkg/auth"
+import { useAuth } from "@perfolio/pkg/auth"
 
 import { PortfolioQuery } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
@@ -14,12 +14,11 @@ export const usePortfolio = (id?: string) => {
   const portfolioId = id ?? (router.query["portfolioId"] as string)
   const { data, ...meta } = useQuery<PortfolioQuery, Error>(
     ["PORTFOLIO", portfolioId],
-    async () =>
-      client(
-        await getAccessToken(),
-      ).portfolio({
+    async () => {
+      return client(await getAccessToken()).portfolio({
         portfolioId,
-      }),
+      })
+    },
     {
       enabled: !!portfolioId,
     },

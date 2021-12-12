@@ -1,4 +1,4 @@
-import {useAuth} from "@perfolio/pkg/auth"
+import { useAuth } from "@perfolio/pkg/auth"
 
 import { ExchangeTradedAssetQuery, ExchangeTradedAssetQueryVariables } from "@perfolio/pkg/api"
 import { useQuery } from "react-query"

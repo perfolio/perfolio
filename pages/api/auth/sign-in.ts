@@ -1,6 +1,5 @@
 import { PrismaClient, UserModel } from "@perfolio/pkg/integrations/prisma"
 import { NextApiRequest, NextApiResponse } from "next"
-import { AuthCookie } from "pkg/auth"
 import { env } from "@chronark/env"
 import { Magic } from "@magic-sdk/admin"
 import { Logger } from "pkg/logger"
@@ -9,33 +8,27 @@ import { HttpError } from "@perfolio/pkg/util/errors"
 import { newId } from "@perfolio/pkg/id"
 
 export default async function signin(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  if (req.method !== "POST") {
-    res.status(405)
-    res.setHeader("Allow", "POST")
-    return res.end()
-  }
   const logger = new Logger({ name: "/api/auth/sign-in" })
   try {
     const prisma = new PrismaClient()
-    const didToken = req.headers.authorization?.substr(7)
+
+    const didToken = req.headers.authorization?.replace("Bearer ", "")
     if (!didToken) {
       throw new Error("Authorization Token undefined")
     }
     const magic = new Magic(env.require("MAGIC_SECRET_KEY"))
-    magic.token.validate(didToken)
-    new AuthCookie(req, res).set(didToken)
-    const meta = await magic.users.getMetadataByToken(didToken)
 
-    if (!meta.publicAddress) {
-      throw new Error("public address is null")
-    }
-    if (!meta.email) {
+    magic.token.validate(didToken)
+    const [, { iss: magicId }] = magic.token.decode(didToken)
+    const { email } = await magic.users.getMetadataByToken(didToken)
+
+    if (!email) {
       throw new Error("email address is null")
     }
     let user: UserModel | null
     user = await prisma.user.findUnique({
       where: {
-        id: meta.publicAddress,
+        magicId,
       },
     })
     if (!user) {
@@ -44,10 +37,8 @@ export default async function signin(req: NextApiRequest, res: NextApiResponse):
         typescript: true,
       })
 
-      console.log({ meta })
-
       const customer = await stripe.customers.create({
-        email: meta.email,
+        email,
       })
       const subscription = await stripe.subscriptions
         .create({
@@ -60,19 +51,19 @@ export default async function signin(req: NextApiRequest, res: NextApiResponse):
           ],
         })
         .catch((err) => {
-          throw new HttpError(500, `Unable to create subscription for user ${meta.email}: ${err}`)
+          throw new HttpError(500, `Unable to create subscription for user ${email}: ${err}`)
         })
 
       user = await prisma.user.upsert({
-        where: { id: meta.publicAddress },
+        where: { magicId },
         update: {},
         create: {
           id: newId("user"),
-          publicAddress: meta.publicAddress,
+          magicId,
           stripeCustomerId: customer.id,
           stripeSubscriptionId: subscription.id,
-          currentPaymentPeriodStart: new Date(subscription.current_period_start*1000),
-          currentPaymentPeriodEnd: new Date(subscription.current_period_end*1000),
+          currentPaymentPeriodStart: new Date(subscription.current_period_start * 1000),
+          currentPaymentPeriodEnd: new Date(subscription.current_period_end * 1000),
           portfolios: {
             create: [
               {
@@ -83,13 +74,20 @@ export default async function signin(req: NextApiRequest, res: NextApiResponse):
             ],
           },
           settings: {
+            create: {
+              defaultCurrency: "EUR",
+              defaultExchangeId: "xetr",
+            },
+          },
+          roles: {
             connectOrCreate: {
               where: {
-                userId: meta.publicAddress,
+                name: "subscription:growth",
               },
               create: {
-                defaultCurrency: "EUR",
-                defaultExchangeId: "xetr",
+                id: newId("role"),
+                name: "subscription:growth",
+                description: "All users with the growth subscription",
               },
             },
           },
@@ -97,7 +95,7 @@ export default async function signin(req: NextApiRequest, res: NextApiResponse):
       })
     }
 
-    res.send({ user })
+    res.redirect("/dashboard")
   } catch (err) {
     logger.error("Fatal error", { err: err as Error })
     res.status(500)

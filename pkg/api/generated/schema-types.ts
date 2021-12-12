@@ -224,6 +224,8 @@ export type Mutation = {
   createTransaction: Transaction
   deletePortfolio: Portfolio
   deleteTransaction: Transaction
+  refresh: Scalars["String"]
+  signIn?: Maybe<Scalars["Boolean"]>
   subscribeToNewsletter?: Maybe<Scalars["Boolean"]>
   updatePortfolio: Portfolio
   /** Only update some values in the user settings. */
@@ -257,6 +259,14 @@ export type MutationDeletePortfolioArgs = {
 
 export type MutationDeleteTransactionArgs = {
   transactionId: Scalars["ID"]
+}
+
+export type MutationRefreshArgs = {
+  didToken: Scalars["String"]
+}
+
+export type MutationSignInArgs = {
+  didToken: Scalars["String"]
 }
 
 export type MutationSubscribeToNewsletterArgs = {
@@ -790,6 +800,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeleteTransactionArgs, "transactionId">
   >
+  refresh?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRefreshArgs, "didToken">
+  >
+  signIn?: Resolver<
+    Maybe<ResolversTypes["Boolean"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSignInArgs, "didToken">
+  >
   subscribeToNewsletter?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,
@@ -1001,6 +1023,18 @@ export type DeleteTransactionMutation = {
   __typename?: "Mutation"
   deleteTransaction: { __typename?: "Transaction"; id: string }
 }
+
+export type RefreshMutationVariables = Exact<{
+  didToken: Scalars["String"]
+}>
+
+export type RefreshMutation = { __typename?: "Mutation"; refresh: string }
+
+export type SignInMutationVariables = Exact<{
+  didToken: Scalars["String"]
+}>
+
+export type SignInMutation = { __typename?: "Mutation"; signIn?: boolean | null | undefined }
 
 export type SubscribeToNewsletterMutationVariables = Exact<{
   email: Scalars["String"]
@@ -1244,6 +1278,16 @@ export const DeleteTransactionDocument = gql`
     }
   }
 `
+export const RefreshDocument = gql`
+  mutation refresh($didToken: String!) {
+    refresh(didToken: $didToken)
+  }
+`
+export const SignInDocument = gql`
+  mutation signIn($didToken: String!) {
+    signIn(didToken: $didToken)
+  }
+`
 export const SubscribeToNewsletterDocument = gql`
   mutation subscribeToNewsletter($email: String!) {
     subscribeToNewsletter(email: $email)
@@ -1433,6 +1477,16 @@ export function getSdk<C>(requester: Requester<C>) {
         variables,
         options,
       )
+    },
+    refresh(variables: RefreshMutationVariables, options?: C): Promise<RefreshMutation> {
+      return requester<RefreshMutation, RefreshMutationVariables>(
+        RefreshDocument,
+        variables,
+        options,
+      )
+    },
+    signIn(variables: SignInMutationVariables, options?: C): Promise<SignInMutation> {
+      return requester<SignInMutation, SignInMutationVariables>(SignInDocument, variables, options)
     },
     subscribeToNewsletter(
       variables: SubscribeToNewsletterMutationVariables,

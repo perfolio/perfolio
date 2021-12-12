@@ -1,4 +1,4 @@
-import {useAuth} from "@perfolio/pkg/auth"
+import { useAuth } from "@perfolio/pkg/auth"
 import {
   CreateExchangeTradedAssetMutation,
   CreateExchangeTradedAssetMutationVariables,
