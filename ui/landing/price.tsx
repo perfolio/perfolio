@@ -49,7 +49,7 @@ export const Price: React.FC<PriceProps> = ({
         <ul role="list" className="space-y-4">
           {features.map((feature) => (
             <li key={feature} className="flex items-start">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <CheckIcon className="w-6 h-6 text-primary" aria-hidden="true" />
               </div>
               <p className="ml-3 text-base text-gray-700">{feature}</p>

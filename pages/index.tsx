@@ -24,6 +24,7 @@ import {
   CheckIcon,
 } from "@heroicons/react/outline"
 import { Text, Button } from "@perfolio/ui/components"
+import { AnimateInViewport } from "@perfolio/ui/components/animateInViewport"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
@@ -90,13 +91,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
               },
             ].map((f) => {
               return (
-                <Feature
+                <AnimateInViewport
+                  enter="ease-in-out duration-1000"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
                   key={f.title}
-                  icon={f.icon}
-                  title={f.title}
-                  description={f.description}
-                  animate={true}
-                ></Feature>
+                >
+                  <Feature icon={f.icon} title={f.title} description={f.description} />
+                </AnimateInViewport>
               )
             })}
           </div>
@@ -138,7 +140,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
               >
                 {features.map((feature) => (
                   <li key={feature} className="flex items-center">
-                    <CheckIcon className="flex-shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
+                    <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
                     <span className="ml-3 text-base text-gray-500">{feature}</span>
                   </li>
                 ))}
@@ -147,11 +149,13 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <SectionTitle
-            tag={t("landing.teamHeader")}
-            title={t("landing.teamSubheader")}
-            animate={true}
-          />
+          <AnimateInViewport
+            enter="transform transition ease-in-out duration-500 "
+            enterFrom="-translate-x-full opacity-0"
+            enterTo="translate-x-0 opacity-100"
+          >
+            <SectionTitle tag={t("landing.teamHeader")} title={t("landing.teamSubheader")} />
+          </AnimateInViewport>
           <Text align="text-center">{t("perfolioDescription")}</Text>
           <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
             {members.map((m) => {

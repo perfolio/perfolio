@@ -30,7 +30,7 @@ export const SideNavbar: React.FC = (): JSX.Element => {
             <Link href={href}>
               <a
                 className={cn(
-                  "block px-4 py-2transition duration-500 ease-in-out transform focus:outline-none hover:text-black",
+                  "block px-4 py-2transition duration-500 ease-in-out focus:outline-none hover:text-black",
                   {
                     "font-semibold text-black": router.pathname === href,
                     "text-gray-500": router.pathname !== href,
