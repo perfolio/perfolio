@@ -25,6 +25,7 @@ import {
 } from "@heroicons/react/outline"
 import { Text, Button } from "@perfolio/ui/components"
 import { AnimateInViewport } from "@perfolio/ui/components/animateInViewport"
+import { Transition } from "@headlessui/react"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
@@ -44,13 +45,21 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
             <HeroSection />
             <div className="hidden max-w-screen-xl border rounded border-gray-50 shadow-ambient lg:block">
-              <Image
-                className="border border-white rounded"
-                src="/img/analytics_preview.png"
-                alt="Analytics Preview"
-                width="1908"
-                height="952"
-              />
+              <Transition
+                appear={true}
+                show={true}
+                enter="ease-in-out duration-1000 delay-1000"
+                enterFrom="opacity-0 "
+                enterTo="opacity-100"
+              >
+                <Image
+                  className="border border-white rounded"
+                  src="/img/analytics_preview.png"
+                  alt="Analytics Preview"
+                  width="1908"
+                  height="952"
+                />
+              </Transition>
             </div>
           </div>
         </Section>
