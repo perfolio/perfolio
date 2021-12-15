@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { DocumentAddIcon } from "@heroicons/react/outline"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api"
 import { Transaction } from "@perfolio/pkg/api"
@@ -15,7 +14,7 @@ import { EmptyState } from "@perfolio/ui/components/emptyState"
 import classNames from "classnames"
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
 import { GetStaticProps, NextPage } from "next"
-import router from "next/router"
+import { useRouter } from "next/router"
 import React from "react"
 
 export interface TransactionItemProps {
@@ -26,7 +25,7 @@ export interface TransactionItemProps {
 const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }): JSX.Element => {
   const { t } = useI18n()
   const { addToast } = useToaster()
-  console.log({ transaction })
+
   const deleteTransaction = useDeleteTransaction()
 
   const asset = transaction.asset as ExchangeTradedAsset
@@ -94,7 +93,7 @@ interface PageProps {}
 
 const TransactionsPage: NextPage<PageProps> = () => {
   const { t } = useI18n()
-
+  const router = useRouter()
   const { portfolio, isLoading, error } = usePortfolio()
   return (
     <AppLayout
@@ -154,7 +153,7 @@ const TransactionsPage: NextPage<PageProps> = () => {
   )
 }
 
-export default withAuthenticationRequired(TransactionsPage)
+export default TransactionsPage
 
 export async function getStaticPaths() {
   return {

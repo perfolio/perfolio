@@ -1,4 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth } from "@perfolio/pkg/auth"
+
 import { AssetHistoryQuery } from "@perfolio/pkg/api"
 import { useQuery } from "react-query"
 import { client } from "../client"
@@ -9,11 +10,11 @@ export const useAssetHistory = (opts: {
   start?: number
   end?: number
 }) => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
   const { data, ...meta } = useQuery<AssetHistoryQuery, Error>(
     ["ASSET", opts.assetId, "HISTORY", opts],
     async () =>
-      client(await getAccessTokenSilently()).assetHistory({
+      client(await getAccessToken()).assetHistory({
         assetId: opts.assetId!,
         mic: opts.mic!,
         ...opts,

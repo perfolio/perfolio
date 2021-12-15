@@ -5,13 +5,18 @@ import { Logger } from "@perfolio/pkg/logger"
 import { AuthenticationError, AuthorizationError } from "@perfolio/pkg/util/errors"
 import { createHash } from "crypto"
 import { IncomingMessage } from "http"
+import { z } from "zod"
+import { Permission, permissionsValidation } from "../auth/permissions"
 import { DataSources } from "./datasources"
 
 type UserType = { claims?: Claims; root: boolean }
 export type Context = {
   dataSources: DataSources
   authenticateUser: () => Promise<UserType>
-  authorizeUser: (authorizer: (claims: Claims) => boolean) => Promise<Claims>
+  authorizeUser: (
+    requiredPermissions: z.infer<typeof permissionsValidation>,
+    authorizer?: (claims: Claims) => void | Promise<void>,
+  ) => Promise<Claims>
   logger: Logger
   cache: {
     key: (
@@ -37,8 +42,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
     if (token.startsWith("Bearer ")) {
       let claims: Claims
       try {
-        const jwt = JWT.getInstance()
-        claims = await jwt.verify(token.replace("Bearer ", ""))
+        claims = JWT.verify(token.replace("Bearer ", ""))
       } catch (err) {
         logger.error((err as Error).message)
         throw new AuthenticationError("Unable to verify token")
@@ -52,7 +56,8 @@ export const context = (ctx: { req: IncomingMessage }) => {
   }
 
   const authorizeUser = async (
-    authorize: (claims: Claims) => Promise<boolean>,
+    requiredPermissions: Permission[],
+    authorize?: (claims: Claims) => Promise<void>,
   ): Promise<Claims> => {
     const { claims, root } = await authenticateUser()
     if (root) {
@@ -61,9 +66,25 @@ export const context = (ctx: { req: IncomingMessage }) => {
     if (!claims) {
       throw new AuthorizationError("No claims found")
     }
-    if (!authorize(claims)) {
-      logger.warn("claims", { claims })
-      throw new AuthorizationError("UserId does not match")
+
+    for (const requiredPermission of requiredPermissions) {
+      if (!claims.permissions.includes(requiredPermission)) {
+        throw new AuthorizationError(
+          `You do not have sufficient permissions, you require ${requiredPermission}`,
+        )
+      }
+    }
+    if (authorize) {
+      try {
+        await authorize(claims)
+      } catch (err) {
+        if (err instanceof AuthorizationError) {
+          throw err
+        }
+        throw new AuthorizationError(
+          `Unauthorized: ${(err as Error).message} - ${JSON.stringify(claims)}`,
+        )
+      }
     }
     return claims
   }

@@ -1,5 +1,5 @@
 import { env } from "@chronark/env"
-import { newId } from "@perfolio/pkg/id"
+import { Role } from "@perfolio/pkg/auth"
 import { PrismaClient } from "@perfolio/pkg/integrations/prisma"
 import { Logger } from "@perfolio/pkg/logger"
 import { HttpError } from "@perfolio/pkg/util/errors"
@@ -40,6 +40,50 @@ const requestValidation = z.object({
     "stripe-signature": z.string(),
   }),
 })
+
+async function addRole(prisma: PrismaClient, userId: string, role: string): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { id: userId }, include: { roles: true } })
+  if (!user) {
+    throw new Error("Unable to load user)")
+  }
+
+  if (user.roles.map((r) => r.name).includes(role)) {
+    return
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      roles: {
+        connect: {
+          name: role,
+        },
+      },
+    },
+  })
+}
+
+async function removeRole(prisma: PrismaClient, userId: string, role: string): Promise<void> {
+  const user = await prisma.user.findUnique({ where: { id: userId }, include: { roles: true } })
+  if (!user) {
+    throw new Error("Unable to load user)")
+  }
+
+  if (!user.roles.map((r) => r.name).includes(role)) {
+    return
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      roles: {
+        disconnect: {
+          name: role,
+        },
+      },
+    },
+  })
+}
 
 const prisma = new PrismaClient()
 
@@ -84,50 +128,32 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         throw new HttpError(500, `Product could not be found: ${err}`)
       })
 
+    const authRoles: {
+      [productId: string]: Role
+    } = {
+      [env.require("STRIPE_PRODUCT_GROWTH")]: "subscription:growth",
+    }
     /**
      * New access role for the new subscribed plan
      */
-    const authRole = product.metadata["authRole"] as string | undefined
+    const authRole = authRoles[product.id]
     if (!authRole) {
-      throw new Error(`Product ${product.name} is missing the "authRole" metadata`)
+      throw new Error(`Product ${product.name} is not associated with a role`)
     }
 
-    // let newRoles: Role[] = []
-    // switch (authRole) {
-    //   case "sub_growth":
-    //     newRoles = [Role.SUB_GROWTH]
-    //     break
-    //   case "sub_pro":
-    //     newRoles = [Role.SUB_PRO]
-    //     break
-    //   default:
-    //     break
-    // }
     /**
      * Act on the different types of events
      */
     switch (event.type) {
-      // case "customer.subscription.created":
-      //   await setRoles(prisma, user.id, newRoles)
-      //   break
-
-      // case "customer.subscription.updated":
-      //   await setRoles(prisma, user.id, newRoles)
-      //   break
-
-      // case "customer.subscription.deleted":
-      //   await setRoles(prisma, user.id, [])
-      //   break
-
-      case "customer.subscription.trial_will_end":
-        await prisma.notification.create({
-          data: {
-            id: newId("notification"),
-            userId: user.id,
-            message: "Your trial will end soon",
-          },
-        })
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+        await addRole(prisma, user.id, authRole)
         break
+      case "customer.subscription.deleted":
+        await removeRole(prisma, user.id, authRole)
+        break
+      // case "customer.subscription.trial_will_end":
+      // break
       default:
         break
     }

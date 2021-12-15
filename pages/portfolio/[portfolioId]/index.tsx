@@ -23,7 +23,6 @@ import {
 import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
 import { useI18n } from "next-localization"
 
 import { Time } from "@perfolio/pkg/util/time"
@@ -239,7 +238,7 @@ const App: NextPage<PageProps> = () => {
   )
 }
 
-export default withAuthenticationRequired(App)
+export default App
 
 export async function getStaticPaths() {
   return {

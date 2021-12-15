@@ -16,18 +16,18 @@ export class Logger {
   }
 
   public debug(message: string, ...fields: Field[]): void {
-    this.logger.debug(message, fields)
+    fields.length > 0 ? this.logger.debug(message, fields) : this.logger.debug(message)
   }
 
   public info(message: string, ...fields: Field[]): void {
-    this.logger.info(message, fields)
+    fields.length > 0 ? this.logger.info(message, fields) : this.logger.info(message)
   }
 
   public warn(message: string, ...fields: Field[]): void {
-    this.logger.warn(message, fields)
+    fields.length > 0 ? this.logger.warn(message, fields) : this.logger.warn(message)
   }
 
   public error(message: string, ...fields: Field[]): void {
-    this.logger.error(message, fields)
+    fields.length > 0 ? this.logger.error(message, fields) : this.logger.error(message)
   }
 }

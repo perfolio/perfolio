@@ -1,18 +1,19 @@
-import { useAuth0 } from "@auth0/auth0-react"
 import { Disclosure, Transition } from "@headlessui/react"
 import { DotsVerticalIcon, LogoutIcon, XIcon } from "@heroicons/react/outline"
 import { ChevronUpIcon } from "@heroicons/react/outline"
 import { AdjustmentsIcon } from "@heroicons/react/solid"
+import { magic } from "@perfolio/pkg/auth"
 import { Button, Drawer, Logo } from "@perfolio/ui/components"
 import { ButtonStyle } from "@perfolio/ui/components"
 import cn from "classnames"
 import NextLink from "next/link"
+import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { NavbarProps } from "./types"
 
 export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
   const [open, setOpen] = useState(false)
-  const { logout } = useAuth0()
+  const router = useRouter()
   return (
     <nav className="flex items-center justify-between w-full">
       <NextLink href="/dashboard">
@@ -21,13 +22,13 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
         </a>
       </NextLink>
       <div>
-        <Button
-          size="sm"
-          type="plaininverted"
-          icon={open ? <XIcon /> : <DotsVerticalIcon />}
+        <button
+          className="flex items-center w-6 h-6 cursor-pointer justi text-gray-50"
           onClick={() => setOpen(!open)}
-        />
-        <Drawer open={open} setOpen={setOpen}>
+        >
+          {open ? <XIcon /> : <DotsVerticalIcon />}
+        </button>
+        <Drawer isOpen={open} close={() => setOpen(false)}>
           <Drawer.Content>
             <ul className="px-6 space-y-4">
               {items.map((item) => (
@@ -40,7 +41,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                             <ButtonStyle
                               justify="start"
                               type="plain"
-                              size="block"
+                              size="lg"
                               iconLeft={item.icon}
                             >
                               {item.label}
@@ -66,7 +67,7 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
                                   href={subitem.href}
                                   key={subitem.name}
                                   type="plain"
-                                  size="block"
+                                  size="lg"
                                   iconLeft={subitem.icon}
                                 >
                                   {subitem.name}
@@ -102,7 +103,10 @@ export const MobileNavbar: React.FC<NavbarProps> = ({ items }): JSX.Element => {
               <li>
                 <Button
                   type="plain"
-                  onClick={() => logout({ returnTo: "https://perfol.io" })}
+                  onClick={async () => {
+                    await magic().user.logout()
+                    router.push("/")
+                  }}
                   iconLeft={<LogoutIcon />}
                 >
                   Sign out
