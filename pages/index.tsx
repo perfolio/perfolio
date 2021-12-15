@@ -102,8 +102,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
               return (
                 <AnimateInViewport
                   enter="ease-in-out duration-1000"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
+                  enterFrom="opacity-0 translate-y-16"
+                  enterTo="opacity-100 translate-y-0"
                   key={f.title}
                 >
                   <Feature icon={f.icon} title={f.title} description={f.description} />
@@ -135,42 +135,50 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                 </Button>
               </div>
             </div>
-            <div className="pt-16 border-t border-gray-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
-              <div>
-                <p className="text-3xl font-extrabold text-gray-900">All-in-one asset management</p>
-                <p className="mt-4 text-lg text-gray-500">
-                  Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada
-                  adipiscing sagittis vel nulla nec. Urna, sed a lectus elementum blandit et.
-                </p>
+            <AnimateInViewport
+              enter="ease-in-out duration-1000"
+              enterFrom="opacity-0 translate-y-16"
+              enterTo="opacity-100 translate-y-0"
+            >
+              <div className="pt-16 border-t border-gray-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
+                <div>
+                  <p className="text-3xl font-extrabold text-gray-900">
+                    All-in-one asset management
+                  </p>
+                  <p className="mt-4 text-lg text-gray-500">
+                    Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada
+                    adipiscing sagittis vel nulla nec. Urna, sed a lectus elementum blandit et.
+                  </p>
+                </div>
+                <ul
+                  role="list"
+                  className="gap-2 mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-8 xl:mt-0 xl:col-span-2 "
+                >
+                  {features.map((feature) => (
+                    <li key={feature} className="flex items-center">
+                      <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
+                      <span className="ml-3 text-base text-gray-500">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul
-                role="list"
-                className="gap-2 mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-8 xl:mt-0 xl:col-span-2 "
-              >
-                {features.map((feature) => (
-                  <li key={feature} className="flex items-center">
-                    <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
-                    <span className="ml-3 text-base text-gray-500">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </AnimateInViewport>
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
-          <AnimateInViewport
-            enter="transform transition ease-in-out duration-500 "
-            enterFrom="-translate-x-full opacity-0"
-            enterTo="translate-x-0 opacity-100"
-          >
-            <SectionTitle tag={t("landing.teamHeader")} title={t("landing.teamSubheader")} />
-          </AnimateInViewport>
+          <SectionTitle tag={t("landing.teamHeader")} title={t("landing.teamSubheader")} />
           <Text align="text-center">{t("perfolioDescription")}</Text>
-          <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
-            {members.map((m) => {
-              return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
-            })}
-          </div>
+          <AnimateInViewport
+            enter="ease-in-out duration-1000"
+            enterFrom="opacity-0 translate-y-16"
+            enterTo="opacity-100 translate-y-0"
+          >
+            <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
+              {members.map((m) => {
+                return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
+              })}
+            </div>
+          </AnimateInViewport>
         </Section>
       </div>
       <Footer />
