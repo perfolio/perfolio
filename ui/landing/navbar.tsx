@@ -1,13 +1,13 @@
-import { useAuth0 } from "@auth0/auth0-react"
 import { Popover, Transition } from "@headlessui/react"
 import { AdjustmentsIcon, SparklesIcon, SunIcon, VariableIcon } from "@heroicons/react/outline"
 import { ChevronDownIcon } from "@heroicons/react/solid"
+import { useUser } from "@perfolio/pkg/hooks"
 import { Button, ButtonStyle, Logo } from "@perfolio/ui/components"
 import cn from "classnames"
 import Link from "next/link"
 import React, { Fragment, useEffect, useState } from "react"
 export const Navbar: React.FC = () => {
-  const { user } = useAuth0()
+  const { user } = useUser()
   const [scrolled, setScrolled] = useState(false)
 
   const handleScroll = () => {
@@ -127,15 +127,15 @@ export const Navbar: React.FC = () => {
             </Popover>
           </Popover.Group>
           {user ? (
-            <Button href="/dashboard" type="primary" size="lg">
+            <Button href="/auth/sign-in" type="primary" size="lg">
               Go to dashboard
             </Button>
           ) : (
             <>
-              <Button href="/dashboard" type="plain">
+              <Button href="/auth/sign-in" type="plain">
                 Sign In
               </Button>
-              <Button type="cta" href="/dashboard">
+              <Button type="cta" href="/auth/sign-in">
                 Start for free
               </Button>
             </>

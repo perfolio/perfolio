@@ -1,0 +1,3 @@
+mutation refresh($didToken: String!) {
+  refresh(didToken: $didToken)
+}

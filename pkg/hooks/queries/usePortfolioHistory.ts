@@ -1,17 +1,18 @@
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth } from "@perfolio/pkg/auth"
+
 import { PortfolioHistoryQuery } from "@perfolio/pkg/api"
 import { useRouter } from "next/router"
 import { useQuery } from "react-query"
 import { client } from "../client"
 
 export const usePortfolioHistory = (opts?: { portfolioId?: string; since?: number }) => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessToken } = useAuth()
   const router = useRouter()
   const portfolioId = opts?.portfolioId ?? (router.query["portfolioId"] as string)
   const { data, ...meta } = useQuery<PortfolioHistoryQuery, Error>(
     ["PORTFOLIO", portfolioId, "HISTORY", opts?.since],
     async () =>
-      client(await getAccessTokenSilently()).portfolioHistory({
+      client(await getAccessToken()).portfolioHistory({
         portfolioId,
         since: opts?.since,
       }),

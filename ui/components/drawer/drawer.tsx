@@ -6,16 +6,16 @@ import React, { Fragment, useEffect } from "react"
 import cn from "classnames"
 
 export interface DrawerProps {
-  open: boolean
-  setOpen: (b: boolean) => void
+  isOpen: boolean
+  close?: () => void
   title?: string | React.ReactNode
   subtitle?: string
   height?: "75%" | "83%" | "100%"
 }
 
 export const Drawer: React.FC<DrawerProps> = ({
-  open,
-  setOpen,
+  isOpen,
+  close,
   children,
   title,
   subtitle,
@@ -23,19 +23,26 @@ export const Drawer: React.FC<DrawerProps> = ({
 }): JSX.Element => {
   const router = useRouter()
   useEffect(() => {
+    if (!close) {
+      return
+    }
     router.events.on("routeChangeStart", () => {
-      setOpen(false)
+      close()
     })
     return () => {
       router.events.off("routeChangeStart", () => {
-        setOpen(false)
+        close()
       })
     }
-  }, [router, setOpen])
+  }, [router, close])
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={setOpen}>
+    <Transition.Root show={isOpen} as={Fragment}>
+      <Dialog
+        as="div"
+        className="fixed inset-0 overflow-hidden"
+        onClose={(_v) => (close ? close() : {})}
+      >
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
             as={Fragment}
@@ -67,17 +74,21 @@ export const Drawer: React.FC<DrawerProps> = ({
               <div className="relative w-screen">
                 <div className="flex flex-col h-full bg-white">
                   <div className="flex-1 ">
-                    <div className="flex items-center justify-between w-full h-20 px-4 bg-gray-50 sm:px-6">
-                      <div>
-                        <Dialog.Title>
-                          <Heading h3>{title}</Heading>
-                        </Dialog.Title>
-                        <Text size="sm">{subtitle}</Text>
+                    {title || close ? (
+                      <div className="flex items-center justify-between w-full h-20 px-4 bg-gray-50 sm:px-6">
+                        <div>
+                          <Dialog.Title>
+                            <Heading h3>{title}</Heading>
+                          </Dialog.Title>
+                          <Text size="sm">{subtitle}</Text>
+                        </div>
+                        {close ? (
+                          <div className="flex items-center h-10">
+                            <Button type="plain" onClick={() => close()} icon={<XIcon />} />
+                          </div>
+                        ) : null}
                       </div>
-                      <div className="flex items-center h-10">
-                        <Button type="plain" onClick={() => setOpen(false)} icon={<XIcon />} />
-                      </div>
-                    </div>
+                    ) : null}
                     <div className="w-full h-full px-4 sm:px-6">{children}</div>
                   </div>
                 </div>

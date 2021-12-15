@@ -1,12 +1,5 @@
-import { env } from "@chronark/env"
 import { server } from "@perfolio/pkg/api/server"
-import { JWT } from "@perfolio/pkg/auth"
 import { NextApiRequest, NextApiResponse } from "next"
-
-JWT.init(`https://${env.require("NEXT_PUBLIC_AUTH0_DOMAIN")}/.well-known/jwks.json`, {
-  audience: env.require("NEXT_PUBLIC_AUTH0_AUDIENCE"),
-  issuer: env.require("NEXT_PUBLIC_AUTH0_ISSUER"),
-})
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   /**
