@@ -20,7 +20,6 @@ import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { z } from "zod"
-import { CardContent } from "@perfolio/ui/components/card/content"
 
 const PortfolioCard: React.FC<{
   id: string
@@ -260,11 +259,11 @@ const IndexPage: NextPage<PageProps> = () => {
         </Card>
         {portfoliosLoading ? (
           <Card>
-            <CardContent>
+            <Card.Content>
               <div className="h-64 sm:h-80">
                 <Loading size="xl"></Loading>
               </div>
-            </CardContent>
+            </Card.Content>
           </Card>
         ) : (
           <>
