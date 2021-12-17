@@ -167,7 +167,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
         </Section>
         <Section className="flex flex-col justify-center" id="team">
           <SectionTitle tag={t("landing.teamHeader")} title={t("landing.teamSubheader")} />
-          <Text align="text-center">{t("perfolioDescription")}</Text>
+          <Text align="text-center">{t("landing.perfolioDescription")}</Text>
           <AnimateInViewport
             enter="ease-in-out duration-1000"
             enterFrom="opacity-0 translate-y-16"
