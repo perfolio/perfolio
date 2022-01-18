@@ -11,7 +11,6 @@ import { z } from "zod"
 import fs from "fs"
 import { CheckIcon } from "@heroicons/react/outline"
 import { useI18n } from "next-localization"
-
 import { useToaster } from "@perfolio/pkg/toaster"
 
 interface SettingProps {
@@ -45,29 +44,49 @@ const Setting: React.FC<SettingProps> = ({
       <Card.Header>
         <Card.Header.Title title={title} />
       </Card.Header>
-
       <Card.Content>
         <Form ctx={ctx} formError={formError}>
           {children}
         </Form>
       </Card.Content>
       <Card.Footer>
-        <Card.Footer.Status>{footer}</Card.Footer.Status>
-        <Card.Footer.Actions>
-          <Button
-            loading={submitting}
-            // eslint-disable-next-line
-            // @ts-ignore
-            onClick={() =>
-              handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
-            }
-            type={button?.type ?? "primary"}
-            htmlType="submit"
-            disabled={ctx.formState.isSubmitting}
-          >
-            {button?.label ?? t("app.setButtonLabelSave")}
-          </Button>
-        </Card.Footer.Actions>
+        <div className="hidden justify-between sm:flex sm:w-full">
+          <Card.Footer.Status>{footer}</Card.Footer.Status>
+          <Card.Footer.Actions>
+            <Button
+              loading={submitting}
+              // eslint-disable-next-line
+              // @ts-ignore
+              onClick={() =>
+                handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
+              }
+              type={button?.type ?? "primary"}
+              htmlType="submit"
+              disabled={ctx.formState.isSubmitting}
+            >
+              {button?.label ?? t("app.setButtonLabelSave")}
+            </Button>
+          </Card.Footer.Actions>
+        </div>
+        <div className="block w-full sm:hidden space-y-2">
+          <Card.Footer.Status>{footer}</Card.Footer.Status>
+          <Card.Footer.Actions>
+            <Button
+              size="block"
+              loading={submitting}
+              // eslint-disable-next-line
+              // @ts-ignore
+              onClick={() =>
+                handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
+              }
+              type={button?.type ?? "primary"}
+              htmlType="submit"
+              disabled={ctx.formState.isSubmitting}
+            >
+              {button?.label ?? t("app.setButtonLabelSave")}
+            </Button>
+          </Card.Footer.Actions>
+        </div>
       </Card.Footer>
     </Card>
   )
