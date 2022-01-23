@@ -24,6 +24,8 @@ import {
   CheckIcon,
 } from "@heroicons/react/outline"
 import { Text, Button } from "@perfolio/ui/components"
+import { AnimateInViewport } from "@perfolio/ui/components/animateInViewport"
+import { Transition } from "@headlessui/react"
 
 export interface IndexPageProps {
   members: { name: string; title: string; image: string }[]
@@ -32,6 +34,7 @@ export interface IndexPageProps {
 
 const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
   const { t } = useI18n()
+
   return (
     <div>
       <div className="pt-16 -mt-16 bg-gray-50 ">
@@ -41,15 +44,22 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
         <Section className="relative py-20" id="index">
           <div className="flex flex-col items-center px-4 space-y-8 lg:space-y-16">
             <HeroSection />
-
             <div className="hidden max-w-screen-xl border rounded border-gray-50 shadow-ambient lg:block">
-              <Image
-                className="border border-white rounded"
-                src="/img/analytics_preview.png"
-                alt="Analytics Preview"
-                width="1908"
-                height="952"
-              />
+              <Transition
+                appear={true}
+                show={true}
+                enter="ease-in-out duration-1000 delay-1000"
+                enterFrom="opacity-0 "
+                enterTo="opacity-100"
+              >
+                <Image
+                  className="border border-white rounded"
+                  src="/img/analytics_preview.png"
+                  alt="Analytics Preview"
+                  width="1908"
+                  height="952"
+                />
+              </Transition>
             </div>
           </div>
         </Section>
@@ -90,12 +100,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
               },
             ].map((f) => {
               return (
-                <Feature
+                <AnimateInViewport
+                  enter="ease-in-out duration-1000"
+                  enterFrom="opacity-0 translate-y-16"
+                  enterTo="opacity-100 translate-y-0"
                   key={f.title}
-                  icon={f.icon}
-                  title={f.title}
-                  description={f.description}
-                ></Feature>
+                >
+                  <Feature icon={f.icon} title={f.title} description={f.description} />
+                </AnimateInViewport>
               )
             })}
           </div>
@@ -123,36 +135,50 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                 </Button>
               </div>
             </div>
-            <div className="pt-16 border-t border-gray-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
-              <div>
-                <p className="text-3xl font-extrabold text-gray-900">All-in-one asset management</p>
-                <p className="mt-4 text-lg text-gray-500">
-                  Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada
-                  adipiscing sagittis vel nulla nec. Urna, sed a lectus elementum blandit et.
-                </p>
+            <AnimateInViewport
+              enter="ease-in-out duration-1000"
+              enterFrom="opacity-0 translate-y-16"
+              enterTo="opacity-100 translate-y-0"
+            >
+              <div className="pt-16 border-t border-gray-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
+                <div>
+                  <p className="text-3xl font-extrabold text-gray-900">
+                    All-in-one asset management
+                  </p>
+                  <p className="mt-4 text-lg text-gray-500">
+                    Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada
+                    adipiscing sagittis vel nulla nec. Urna, sed a lectus elementum blandit et.
+                  </p>
+                </div>
+                <ul
+                  role="list"
+                  className="gap-2 mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-8 xl:mt-0 xl:col-span-2 "
+                >
+                  {features.map((feature) => (
+                    <li key={feature} className="flex items-center">
+                      <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
+                      <span className="ml-3 text-base text-gray-500">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul
-                role="list"
-                className="gap-2 mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-8 xl:mt-0 xl:col-span-2 "
-              >
-                {features.map((feature) => (
-                  <li key={feature} className="flex items-center">
-                    <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
-                    <span className="ml-3 text-base text-gray-500">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </AnimateInViewport>
           </div>
         </Section>
         <Section className="flex flex-col justify-center" id="team">
           <SectionTitle tag={t("landing.teamHeader")} title={t("landing.teamSubheader")} />
           <Text align="text-center">{t("perfolioDescription")}</Text>
-          <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
-            {members.map((m) => {
-              return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
-            })}
-          </div>
+          <AnimateInViewport
+            enter="ease-in-out duration-1000"
+            enterFrom="opacity-0 translate-y-16"
+            enterTo="opacity-100 translate-y-0"
+          >
+            <div className="grid justify-center w-full gap-10 row-gap-8 mx-auto mt-16 sm:row-gap-10 lg:max-w-screen-lg sm:grid-cols-2 lg:grid-cols-3">
+              {members.map((m) => {
+                return <Member key={m.name} name={m.name} title={m.title} image={m.image} />
+              })}
+            </div>
+          </AnimateInViewport>
         </Section>
       </div>
       <Footer />
