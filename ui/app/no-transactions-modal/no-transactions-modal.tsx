@@ -12,16 +12,16 @@ export const NoTransactionsModal: React.FC = (): JSX.Element => {
       <div>
         <Card>
           <Card.Header>
-            <Card.Header.Title title={t("noTransactionsTitle")} />
+            <Card.Header.Title title={t("app.noTransactionsTitle")} />
           </Card.Header>
           <Card.Content>
-            <Text>{t("noTransactionsText")}</Text>
+            <Text>{t("app.noTransactionsText")}</Text>
           </Card.Content>
           <Card.Footer>
             <Card.Footer.Status></Card.Footer.Status>
             <Card.Footer.Actions>
               <Button type="primary" href="/transactions/new">
-                {t("noTransactionsAdd")}
+                {t("app.noTransactionsAdd")}
               </Button>
             </Card.Footer.Actions>
           </Card.Footer>

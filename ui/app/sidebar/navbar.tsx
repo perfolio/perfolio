@@ -9,15 +9,15 @@ export const SideNavbar: React.FC = (): JSX.Element => {
 
   const links: { href: string; label: string }[] = [
     {
-      label: t("sideNavBarLabelAcc"),
+      label: t("app.sideNavBarLabelAcc"),
       href: "/settings/account",
     },
     {
-      label: t("sideNavBarLabelStocks"),
+      label: t("app.sideNavBarLabelStocks"),
       href: "/settings/stocks",
     },
     {
-      label: t("sideNavBarLabelPlans"),
+      label: t("app.sideNavBarLabelPlans"),
       href: "/settings/plans",
     },
   ]
