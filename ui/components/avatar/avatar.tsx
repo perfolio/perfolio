@@ -1,9 +1,9 @@
+import { Size } from "@perfolio/ui/types/size"
 import { Fallback, Image, Root } from "@radix-ui/react-avatar"
 import cn from "classnames"
 import React from "react"
 
 import { Text } from "../text/text"
-type Size = "xs" | "sm" | "md" | "lg"
 
 export interface AvatarProps {
   /**
@@ -40,7 +40,7 @@ export const Avatar: React.FC<AvatarProps> = ({
           "w-6 h-6": size === "xs",
           "w-8 h-8": size === "sm",
           "w-10 h-10": size === "md",
-          "w-16 h-16": size === "lg",
+          "w-16 h-16": size === "lg" || size === "xl" || size === "2xl",
         })}
         alt="Avatar"
       />

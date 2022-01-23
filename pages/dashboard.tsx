@@ -51,7 +51,7 @@ const PortfolioCard: React.FC<{
         confirmLabel="Delete"
         open={confirmOpen}
         setOpen={setConfirmOpen}
-        onCancel={() => alert("cancel")}
+        onCancel={() => setConfirmOpen(false)}
         onConfirm={() =>
           new Promise((resolve) =>
             setTimeout(() => {
