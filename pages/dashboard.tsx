@@ -12,7 +12,7 @@ import { usePortfolios } from "@perfolio/pkg/hooks"
 
 import { AppLayout } from "@perfolio/ui/app"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
-import { Card, Icon, Text, Tooltip } from "@perfolio/ui/components"
+import { Card, Icon, Loading, Text, Tooltip } from "@perfolio/ui/components"
 import { Button, Heading } from "@perfolio/ui/components"
 import { Confirmation } from "@perfolio/ui/components"
 import { EmptyState } from "@perfolio/ui/components/emptyState"
@@ -243,26 +243,38 @@ const PortfolioCard: React.FC<{
 interface PageProps {}
 
 const IndexPage: NextPage<PageProps> = () => {
-  const { portfolios } = usePortfolios()
+  const { portfolios, isLoading: portfoliosLoading } = usePortfolios()
   return (
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
-        <Heading h2 color="text-gray-50">
+        {/* <Heading h2 color="text-gray-50">
           Your portfolios
-        </Heading>
-        {/* <Card>
-          <div className="flex flex-col items-center p-4 my-4 space-y-6 text-center sm:p-8 sm:my-8">
+        </Heading> */}
+        <Card>
+          <div className="flex flex-col items-center p-2 my-2 space-y-6 text-center sm:p-8 sm:my-8">
             <Card.Header>
               <Card.Header.Title title="Your portfolios"></Card.Header.Title>
             </Card.Header>
           </div>
-        </Card> */}
-        {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
-          <PortfolioCard key={p.id} {...p} />
-        ))}
-        <EmptyState href="#" icon={<DocumentAddIcon />}>
-          <Text>Add another portfolio</Text>
-        </EmptyState>
+        </Card>
+        {portfoliosLoading ? (
+          <Card>
+            <Card.Content>
+              <div className="h-64 sm:h-80">
+                <Loading size="xl"></Loading>
+              </div>
+            </Card.Content>
+          </Card>
+        ) : (
+          <>
+            {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
+              <PortfolioCard key={p.id} {...p} />
+            ))}
+            <EmptyState href="#" icon={<DocumentAddIcon />}>
+              <Text>Add another portfolio</Text>
+            </EmptyState>
+          </>
+        )}
       </div>
     </AppLayout>
   )

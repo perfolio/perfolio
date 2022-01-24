@@ -1,7 +1,8 @@
+import { Size } from "@perfolio/ui/types/size"
 import cn from "classnames"
 import React from "react"
 export interface LoadingProps {
-  size?: "sm" | "md" | "lg"
+  size?: Size
   /**
    * Display a skeleton in this color during loading
    */
@@ -27,9 +28,12 @@ export const Loading: React.FC<LoadingProps> = ({ size = "md", bg, color }): JSX
     >
       <svg
         className={cn("animate-spin", {
+          "w-3 h-3": size === "xs",
           "w-4 h-4": size === "sm",
           "w-6 h-6": size === "md",
           "w-8 h-8": size === "lg",
+          "w-12 h-12": size === "xl",
+          "w-16 h-16": size === "2xl",
         })}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
