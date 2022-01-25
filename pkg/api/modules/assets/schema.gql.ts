@@ -222,6 +222,7 @@ export default gql`
 
   extend type Query {
     exchangeTradedAsset(assetId: ID!): ExchangeTradedAsset
+    search(fragment: String!): [ExchangeTradedAsset!]! @cacheControl(maxAge: 300)
   }
 
   extend type Mutation {

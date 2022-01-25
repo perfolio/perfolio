@@ -1,40 +1,18 @@
+import { SearchQuery } from "@perfolio/pkg/api"
+import { useAuth } from "@perfolio/pkg/auth"
 import { useQuery } from "react-query"
-
-type Document = {
-  id: string
-  score: number
-  content: {
-    asset: {
-      id: string
-      name: string
-      isin: string
-      logo: string
-      ticker: string
-    }
-  }
-}
-type SearchResult = {
-  cache: {
-    key: string
-    hit: boolean
-  }
-  documents: Document[]
-  /**
-   * How long the request took in milliseconds
-   */
-  duration: number
-}
+import { client } from "../client"
 
 export const useSearch = (fragment: string) => {
-  const { data, ...meta } = useQuery<SearchResult, Error>(
+  const { getAccessToken } = useAuth()
+  const { data, ...meta } = useQuery<SearchQuery, Error>(
     ["search", fragment],
-    async () =>
-      fetch(`https://search.chronark.workers.dev/perfolio?q=${fragment}`).then((res) => res.json()),
+    async () => await client(await getAccessToken()).search({ fragment }),
     {
       enabled: fragment.length > 0,
       cacheTime: 10_000,
     },
   )
 
-  return { search: data, ...meta }
+  return { search: data?.search ?? [], ...meta }
 }

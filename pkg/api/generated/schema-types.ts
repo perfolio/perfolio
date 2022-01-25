@@ -324,6 +324,7 @@ export type Query = {
   healthCheck: Scalars["Boolean"]
   /** Return a portfolio by its id */
   portfolio?: Maybe<Portfolio>
+  search: Array<ExchangeTradedAsset>
   user?: Maybe<User>
 }
 
@@ -333,6 +334,10 @@ export type QueryExchangeTradedAssetArgs = {
 
 export type QueryPortfolioArgs = {
   portfolioId: Scalars["ID"]
+}
+
+export type QuerySearchArgs = {
+  fragment: Scalars["String"]
 }
 
 export type QueryUserArgs = {
@@ -880,6 +885,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryPortfolioArgs, "portfolioId">
   >
+  search?: Resolver<
+    Array<ResolversTypes["ExchangeTradedAsset"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySearchArgs, "fragment">
+  >
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
     ParentType,
@@ -1230,6 +1241,26 @@ export type GetUserPortfoliosQuery = {
     | undefined
 }
 
+export type SearchQueryVariables = Exact<{
+  fragment: Scalars["String"]
+}>
+
+export type SearchQuery = {
+  __typename?: "Query"
+  search: Array<
+    | {
+        __typename: "Company"
+        id: string
+        isin: string
+        name: string
+        ticker: string
+        logo: string
+      }
+    | { __typename: "Crypto"; id: string; isin: string; name: string; ticker: string; logo: string }
+    | { __typename: "ETF"; id: string; isin: string; name: string; ticker: string; logo: string }
+  >
+}
+
 export type UserQueryVariables = Exact<{
   userId: Scalars["ID"]
 }>
@@ -1426,6 +1457,18 @@ export const GetUserPortfoliosDocument = gql`
     }
   }
 `
+export const SearchDocument = gql`
+  query search($fragment: String!) {
+    search(fragment: $fragment) {
+      __typename
+      id
+      isin
+      name
+      ticker
+      logo
+    }
+  }
+`
 export const UserDocument = gql`
   query user($userId: ID!) {
     user(userId: $userId) {
@@ -1558,6 +1601,9 @@ export function getSdk<C>(requester: Requester<C>) {
         variables,
         options,
       )
+    },
+    search(variables: SearchQueryVariables, options?: C): Promise<SearchQuery> {
+      return requester<SearchQuery, SearchQueryVariables>(SearchDocument, variables, options)
     },
     user(variables: UserQueryVariables, options?: C): Promise<UserQuery> {
       return requester<UserQuery, UserQueryVariables>(UserDocument, variables, options)

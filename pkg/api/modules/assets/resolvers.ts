@@ -1,5 +1,7 @@
 import { newId } from "@perfolio/pkg/id"
-import { AssetType } from "@perfolio/pkg/integrations/prisma"
+import { AssetType, ExchangeTradedAssetModel } from "@perfolio/pkg/integrations/prisma"
+import { Key } from "@perfolio/pkg/integrations/redis"
+import Fuse from "fuse.js"
 import { Context } from "../../context"
 import { Resolvers } from "../../generated/schema-types"
 
@@ -149,30 +151,6 @@ export const resolvers: Resolvers<Context> = {
         create,
       })
 
-      const document: {
-        asset: {
-          id: string
-          isin: string
-          logo: string
-          ticker: string
-          name: string
-          type: string
-        }
-        meta: Record<string, unknown>
-      } = {
-        asset,
-        meta: {
-          ...company,
-        },
-      }
-      const res = await fetch("https://search-l1vg.onrender.com/ingest/perfolio", {
-        method: "POST",
-        body: JSON.stringify(document),
-      })
-      if (!res.ok) {
-        throw new Error(`Unable to ingest document into search`)
-      }
-
       return asset
     },
   },
@@ -183,6 +161,36 @@ export const resolvers: Resolvers<Context> = {
           where: { id: assetId },
         })) ?? undefined
       )
+    },
+    search: async (_root, { fragment }, ctx) => {
+      await ctx.authorizeUser(["read:asset"])
+      console.time(`search.${fragment}`)
+      const assetKey = new Key("assets")
+      let assets = await ctx.cache.get<ExchangeTradedAssetModel[]>(assetKey)
+      if (!assets) {
+        assets = await ctx.dataSources.db.exchangeTradedAsset.findMany()
+        await ctx.cache.set("5m", { key: assetKey, value: assets })
+      }
+      const key = new Key("assetSearchIndex")
+      let rawIndex = await ctx.cache.get(key)
+      const options = { keys: ["isin", "ticker", "name"] }
+
+      let index: Fuse.FuseIndex<ExchangeTradedAssetModel>
+      if (rawIndex) {
+        index = Fuse.parseIndex(rawIndex)
+      } else {
+        ctx.logger.info("Building new search index")
+        index = Fuse.createIndex(options.keys, assets)
+        if (!index) {
+          throw new Error("Unable to generate search index")
+        }
+        await ctx.cache.set("5m", { key, value: index.toJSON() })
+      }
+      const fuse = new Fuse(assets ?? [], options, index)
+      const res = fuse.search(fragment, { limit: 10 })
+      console.timeEnd(`search.${fragment}`)
+
+      return res.map((asset) => asset.item)
     },
   },
 }
