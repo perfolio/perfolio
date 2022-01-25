@@ -14,6 +14,7 @@ export interface HeadingProps {
    * You can even use gradients here.
    */
   color?: string
+  uppercase?: boolean
 }
 
 export const Heading: React.FC<HeadingProps> = ({
@@ -22,6 +23,7 @@ export const Heading: React.FC<HeadingProps> = ({
   h3,
   h4,
   color,
+  uppercase = false,
   children,
 }): JSX.Element => {
   let heading = ""
@@ -45,6 +47,7 @@ export const Heading: React.FC<HeadingProps> = ({
           "text-xl font-bold": heading === "h3",
           "text-base font-semibold": heading === "h4",
         },
+        { uppercase: uppercase === true },
         color,
       ),
     },
