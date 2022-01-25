@@ -63,8 +63,7 @@ export function AutoCompleteSelect<Option>({
   /**
    * All matches on our database
    */
-  const { search, isLoading } = useSearch(fragment)
-  const options = search?.documents.map((d) => d.content.asset) ?? []
+  const { search: options, isLoading } = useSearch(fragment)
   const selected = options.find((o) => o.id === assetId)
   const error = Array.isArray(errors[name])
     ? errors[name].join(", ")

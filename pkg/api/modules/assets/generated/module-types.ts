@@ -15,7 +15,7 @@ export namespace AssetsModule {
       | "sector"
     ETF: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory" | "figi"
     Crypto: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory"
-    Query: "exchangeTradedAsset"
+    Query: "exchangeTradedAsset" | "search"
     Mutation: "createExchangeTradedAsset"
     Asset: "id" | "name"
     ExchangeTradedAsset: "id" | "isin" | "ticker" | "name" | "logo" | "type" | "assetHistory"
@@ -104,6 +104,7 @@ export namespace AssetsModule {
     Query?: {
       "*"?: gm.Middleware[]
       exchangeTradedAsset?: gm.Middleware[]
+      search?: gm.Middleware[]
     }
     Mutation?: {
       "*"?: gm.Middleware[]

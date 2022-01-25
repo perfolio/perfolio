@@ -1,0 +1,10 @@
+query search($fragment: String!) {
+  search(fragment: $fragment) {
+    __typename
+    id
+    isin
+    name
+    ticker
+    logo
+  }
+}
