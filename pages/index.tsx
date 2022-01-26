@@ -126,7 +126,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                   <span> and convince yourself</span>
                 </h1>
                 <p className="mt-5 text-xl text-gray-500">
-                  Get started with a free trial. Perfolio's advanced Pro version will be launched soon.
+                  Get started with a free trial. Perfolio&apos;s advanced Pro version will be launched soon.
                 </p>
               </div>
               <div className="inline-flex items-center justify-center mt-10 sm:w-auto xl:mt-0">
@@ -146,7 +146,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                     All-in-one asset management
                   </p>
                   <p className="mt-4 text-lg text-gray-500">
-                  Investors tend to lose sight of their portfolio. Perfolio's portfolio analytics solution puts you in control of your investments. See for yourself and take advantage of all the benefits that the beta version offers. Through your feedback we can continuously improve Perfolio to provide investors with the right tools for their investments.
+                  Investors tend to lose sight of their portfolio. Perfolio&apos;s portfolio analytics solution puts you in control of your investments. See for yourself and take advantage of all the benefits that the beta version offers. Through your feedback we can continuously improve Perfolio to provide investors with the right tools for their investments. 
                   </p>
                 </div>
                 <ul
