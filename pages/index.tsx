@@ -119,14 +119,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
             <div className="pb-16 xl:flex xl:items-center xl:justify-between">
               <div>
                 <h1 className="text-4xl font-extrabold sm:text-5xl sm:tracking-tight">
-                  <span className="text-gray-900">Everything you need for </span>
+                  <span className="text-gray-900">Become </span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-tr from-primary to-secondary">
-                    $3.99
+                    beta tester
                   </span>
-                  <span> a month</span>
+                  <span> and convince yourself</span>
                 </h1>
                 <p className="mt-5 text-xl text-gray-500">
-                  Get started with a 30 day free trial. No credit card required.
+                  Get started with a free trial. Perfolio&apos;s advanced Pro version will be launched soon.
                 </p>
               </div>
               <div className="inline-flex items-center justify-center mt-10 sm:w-auto xl:mt-0">
@@ -146,8 +146,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                     All-in-one asset management
                   </p>
                   <p className="mt-4 text-lg text-gray-500">
-                    Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada
-                    adipiscing sagittis vel nulla nec. Urna, sed a lectus elementum blandit et.
+                  Investors tend to lose sight of their portfolio. Perfolio&apos;s portfolio analytics solution puts you in control of your investments. See for yourself and take advantage of all the benefits that the beta version offers. Through your feedback we can continuously improve Perfolio to provide investors with the right tools for their investments. 
                   </p>
                 </div>
                 <ul
@@ -230,16 +229,12 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
       ],
 
       features: [
+        "Quick and easy manual data import",
         "Performance dashboard and key figures",
-        "Add assets from any broker",
+        "Assets from any broker",
         "Diversification analysis",
         "Breakdown of current assets",
-        "...1",
-        "...2",
-        "...3",
-        "...4",
-        "...5",
-        "...6",
+        "Share table with in-depth company information"
       ],
       translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
     },
