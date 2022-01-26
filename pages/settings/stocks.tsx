@@ -40,55 +40,67 @@ const Setting: React.FC<SettingProps> = ({
   const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   return (
-    <Card>
-      <Card.Header>
-        <Card.Header.Title title={title} />
-      </Card.Header>
-      <Card.Content>
-        <Form ctx={ctx} formError={formError}>
-          {children}
-        </Form>
-      </Card.Content>
-      <Card.Footer>
-        <div className="hidden justify-between sm:flex sm:w-full">
-          <Card.Footer.Status>{footer}</Card.Footer.Status>
-          <Card.Footer.Actions>
-            <Button
-              loading={submitting}
-              // eslint-disable-next-line
-              // @ts-ignore
-              onClick={() =>
-                handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
-              }
-              type={button?.type ?? "primary"}
-              htmlType="submit"
-              disabled={ctx.formState.isSubmitting}
-            >
-              {button?.label ?? t("app.setButtonLabelSave")}
-            </Button>
-          </Card.Footer.Actions>
-        </div>
-        <div className="block w-full sm:hidden space-y-2">
-          <Card.Footer.Status>{footer}</Card.Footer.Status>
-          <Card.Footer.Actions>
-            <Button
-              size="block"
-              loading={submitting}
-              // eslint-disable-next-line
-              // @ts-ignore
-              onClick={() =>
-                handleSubmit<z.infer<typeof validation>>(ctx, onSubmit, setSubmitting, setFormError)
-              }
-              type={button?.type ?? "primary"}
-              htmlType="submit"
-              disabled={ctx.formState.isSubmitting}
-            >
-              {button?.label ?? t("app.setButtonLabelSave")}
-            </Button>
-          </Card.Footer.Actions>
-        </div>
-      </Card.Footer>
-    </Card>
+    <div className="max-w-lg mx-auto rounded-lg shadow-lg overflow-hidden lg:max-w-none lg:flex">
+      <Card border={false}>
+        <Card.Header>
+          <Card.Header.Title title={title} />
+        </Card.Header>
+        <Card.Content>
+          <Form ctx={ctx} formError={formError}>
+            {children}
+          </Form>
+        </Card.Content>
+        <Card.Footer>
+          <div className="hidden justify-between sm:flex sm:w-full">
+            <Card.Footer.Status>{footer}</Card.Footer.Status>
+            <Card.Footer.Actions>
+              <Button
+                loading={submitting}
+                // eslint-disable-next-line
+                // @ts-ignore
+                onClick={() =>
+                  handleSubmit<z.infer<typeof validation>>(
+                    ctx,
+                    onSubmit,
+                    setSubmitting,
+                    setFormError,
+                  )
+                }
+                type={button?.type ?? "primary"}
+                htmlType="submit"
+                disabled={ctx.formState.isSubmitting}
+              >
+                {button?.label ?? t("app.setButtonLabelSave")}
+              </Button>
+            </Card.Footer.Actions>
+          </div>
+          <div className="block w-full sm:hidden space-y-2">
+            <Card.Footer.Status>{footer}</Card.Footer.Status>
+            <Card.Footer.Actions>
+              <Button
+                size="block"
+                loading={submitting}
+                // eslint-disable-next-line
+                // @ts-ignore
+                onClick={() =>
+                  handleSubmit<z.infer<typeof validation>>(
+                    ctx,
+                    onSubmit,
+                    setSubmitting,
+                    setFormError,
+                  )
+                }
+                type={button?.type ?? "primary"}
+                htmlType="submit"
+                disabled={ctx.formState.isSubmitting}
+              >
+                {button?.label ?? t("app.setButtonLabelSave")}
+              </Button>
+            </Card.Footer.Actions>
+          </div>
+        </Card.Footer>
+      </Card>
+    </div>
   )
 }
 
@@ -147,6 +159,23 @@ const SettingsPage: NextPage<PageProps> = () => {
   return (
     <AppLayout side="left" sidebar={<SideNavbar />}>
       <div className="space-y-8">
+        <Card>
+          <div className="bg-white">
+            <div className="max-w-7xl mx-auto py-8 px-4 sm:py-20 sm:px-6 lg:px-8">
+              <div className="text-center">
+                <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+                  {t("app.setStocks")}
+                </p>
+                <div className="space-y-6">
+                  <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
+                    Change your default currency or stock exchange.
+                  </p>
+                  {/* <Text size="sm">{t("app.setPlanYearlyDiscount")}</Text> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
         <Setting
           title={t("app.setStocksCurrencyTitle")}
           footer={t("app.setStocksCurrencyFooter")}
