@@ -157,7 +157,14 @@ const SettingsPage: NextPage<PageProps> = () => {
   const [region, setRegion] = useState<string>(user?.settings?.defaultExchange?.region ?? "")
 
   return (
-    <AppLayout side="left" sidebar={<SideNavbar />}>
+    <AppLayout
+      side="left"
+      sidebar={
+        <div className="hidden lg:flex">
+          <SideNavbar />
+        </div>
+      }
+    >
       <div className="space-y-8">
         <Card>
           <div className="bg-white">

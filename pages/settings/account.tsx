@@ -20,7 +20,14 @@ const SettingsPage: NextPage<PageProps> = () => {
   // const router = useRouter()
   // const { user } = useUser()
   return (
-    <AppLayout side="left" sidebar={<SideNavbar />}>
+    <AppLayout
+      side="left"
+      sidebar={
+        <div className="hidden lg:flex">
+          <SideNavbar />
+        </div>
+      }
+    >
       <Card>
         <div className="bg-white">
           <div className="max-w-7xl mx-auto py-8 px-4 sm:py-20 sm:px-6 lg:px-8">

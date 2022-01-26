@@ -135,7 +135,14 @@ const Page: NextPage<PageProps> = ({ products }) => {
   const { t } = useI18n()
   const [selected, setSelected] = useState<"monthly" | "yearly">("monthly")
   return (
-    <AppLayout side="left" sidebar={<SideNavbar />}>
+    <AppLayout
+      side="left"
+      sidebar={
+        <div className="hidden lg:flex">
+          <SideNavbar />
+        </div>
+      }
+    >
       <div className="flex flex-col space-y-16">
         <Card>
           <div className="bg-white">
