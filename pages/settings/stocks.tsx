@@ -189,11 +189,11 @@ const SettingsPage: NextPage<PageProps> = () => {
           validation={currencyValidation}
           onSubmit={onCurrencySubmit as (values: Record<string, string | number>) => Promise<void>}
         >
-          <Field.Input
+          <Field.Select
+            options={["USD", "EUR"]} // do not hardcode
             label={t("app.setStocksCurrencyLabel")}
             hideLabel
             name="defaultCurrency"
-            type="text"
             defaultValue={user?.settings?.defaultCurrency ?? ""}
           />
         </Setting>
