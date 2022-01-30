@@ -1,108 +1,15 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useExchanges, useUpdateSettings, useUser } from "@perfolio/pkg/hooks"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
-import { Button, ButtonType } from "@perfolio/ui/components"
 import { Card } from "@perfolio/ui/components"
-import { Field, Form, handleSubmit } from "@perfolio/ui/form"
+import { Field } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
-import { useForm } from "react-hook-form"
 import { z } from "zod"
 import fs from "fs"
 import { CheckIcon } from "@heroicons/react/outline"
 import { useI18n } from "next-localization"
 import { useToaster } from "@perfolio/pkg/toaster"
-
-interface SettingProps {
-  validation: z.AnyZodObject
-  title: string
-  footer: string
-  onSubmit: (values: Record<string, string | number>) => Promise<void>
-  button?: {
-    label?: string
-    type?: ButtonType
-  }
-}
-
-const Setting: React.FC<SettingProps> = ({
-  validation,
-  title,
-  footer,
-  children,
-  onSubmit,
-  button,
-}): JSX.Element => {
-  const ctx = useForm<z.infer<typeof validation>>({
-    mode: "onBlur",
-    resolver: zodResolver(validation),
-  })
-  const { t } = useI18n()
-  const [formError, setFormError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  return (
-    <div className="max-w-lg mx-auto rounded-lg shadow-lg overflow-hidden lg:max-w-none lg:flex">
-      <Card border={false}>
-        <Card.Header>
-          <Card.Header.Title title={title} />
-        </Card.Header>
-        <Card.Content>
-          <Form ctx={ctx} formError={formError}>
-            {children}
-          </Form>
-        </Card.Content>
-        <Card.Footer>
-          <div className="hidden justify-between sm:flex sm:w-full">
-            <Card.Footer.Status>{footer}</Card.Footer.Status>
-            <Card.Footer.Actions>
-              <Button
-                loading={submitting}
-                // eslint-disable-next-line
-                // @ts-ignore
-                onClick={() =>
-                  handleSubmit<z.infer<typeof validation>>(
-                    ctx,
-                    onSubmit,
-                    setSubmitting,
-                    setFormError,
-                  )
-                }
-                type={button?.type ?? "primary"}
-                htmlType="submit"
-                disabled={ctx.formState.isSubmitting}
-              >
-                {button?.label ?? t("app.setButtonLabelSave")}
-              </Button>
-            </Card.Footer.Actions>
-          </div>
-          <div className="block w-full sm:hidden space-y-2">
-            <Card.Footer.Status>{footer}</Card.Footer.Status>
-            <Card.Footer.Actions>
-              <Button
-                size="block"
-                loading={submitting}
-                // eslint-disable-next-line
-                // @ts-ignore
-                onClick={() =>
-                  handleSubmit<z.infer<typeof validation>>(
-                    ctx,
-                    onSubmit,
-                    setSubmitting,
-                    setFormError,
-                  )
-                }
-                type={button?.type ?? "primary"}
-                htmlType="submit"
-                disabled={ctx.formState.isSubmitting}
-              >
-                {button?.label ?? t("app.setButtonLabelSave")}
-              </Button>
-            </Card.Footer.Actions>
-          </div>
-        </Card.Footer>
-      </Card>
-    </div>
-  )
-}
+import { SettingCard } from "@perfolio/ui/components/settingcard"
 
 /**
  * / page.
@@ -183,7 +90,7 @@ const SettingsPage: NextPage<PageProps> = () => {
             </div>
           </div>
         </Card>
-        <Setting
+        <SettingCard
           title={t("app.setStocksCurrencyTitle")}
           footer={t("app.setStocksCurrencyFooter")}
           validation={currencyValidation}
@@ -196,8 +103,8 @@ const SettingsPage: NextPage<PageProps> = () => {
             name="defaultCurrency"
             defaultValue={user?.settings?.defaultCurrency ?? ""}
           />
-        </Setting>
-        <Setting
+        </SettingCard>
+        <SettingCard
           title={t("app.setStocksStockExTitle")}
           footer={t("app.setStocksStockExFooter")}
           validation={exchangeValidation}
@@ -220,7 +127,7 @@ const SettingsPage: NextPage<PageProps> = () => {
               defaultValue={user?.settings?.defaultExchange?.description ?? ""}
             />
           </div>
-        </Setting>
+        </SettingCard>
       </div>
     </AppLayout>
   )
