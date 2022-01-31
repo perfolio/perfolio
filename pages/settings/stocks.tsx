@@ -1,6 +1,5 @@
 import { useExchanges, useUpdateSettings, useUser } from "@perfolio/pkg/hooks"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
-import { Card } from "@perfolio/ui/components"
 import { Field } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
@@ -10,6 +9,7 @@ import { CheckIcon } from "@heroicons/react/outline"
 import { useI18n } from "next-localization"
 import { useToaster } from "@perfolio/pkg/toaster"
 import { SettingCard } from "@perfolio/ui/components/settingcard"
+import { HeadingCard } from "@perfolio/ui/components/headingcard"
 
 /**
  * / page.
@@ -73,23 +73,10 @@ const SettingsPage: NextPage<PageProps> = () => {
       }
     >
       <div className="space-y-8">
-        <Card>
-          <div className="bg-white">
-            <div className="max-w-7xl mx-auto py-8 px-4 sm:py-20 sm:px-6 lg:px-8">
-              <div className="text-center">
-                <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-                  {t("app.setStocks")}
-                </p>
-                <div className="space-y-6">
-                  <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
-                    Change your default currency or stock exchange.
-                  </p>
-                  {/* <Text size="sm">{t("app.setPlanYearlyDiscount")}</Text> */}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
+        <HeadingCard
+          title={t("app.setStocks")}
+          subtitle="Change your default currency or stock exchange."
+        />
         <SettingCard
           title={t("app.setStocksCurrencyTitle")}
           footer={t("app.setStocksCurrencyFooter")}

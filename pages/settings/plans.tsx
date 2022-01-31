@@ -9,6 +9,7 @@ import { Button, Text, ToggleGroup } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
 import { CheckCircleIcon } from "@heroicons/react/solid"
 import { Card } from "@perfolio/ui/components"
+import { HeadingCard } from "@perfolio/ui/components/headingcard"
 
 type Price = {
   id: string
@@ -144,33 +145,25 @@ const Page: NextPage<PageProps> = ({ products }) => {
       }
     >
       <div className="flex flex-col space-y-16">
-        <Card>
-          <div className="bg-white">
-            <div className="max-w-7xl mx-auto py-8 px-4 sm:py-20 sm:px-6 lg:px-8">
-              <div className="text-center">
-                <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-                  Pricing Plans
-                </p>
-                <div className="space-y-6">
-                  <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
-                    {t("app.setPlanPickPlanText")}
-                  </p>
-                  <div className="max-w-xl mx-auto">
-                    <ToggleGroup
-                      options={[
-                        { display: t("app.setPlanMonthlyBill"), id: "monthly" },
-                        { display: t("app.setPlanYearlyBill"), id: "yearly" },
-                      ]}
-                      selected={selected}
-                      setSelected={setSelected}
-                    />
-                  </div>
-                  <Text size="sm">{t("app.setPlanYearlyDiscount")}</Text>
-                </div>
+        <HeadingCard
+          title="Pricing Plans"
+          subtitle={t("app.setPlanPickPlanText")}
+          additionalContent={
+            <>
+              <div className="max-w-xl mx-auto">
+                <ToggleGroup
+                  options={[
+                    { display: t("app.setPlanMonthlyBill"), id: "monthly" },
+                    { display: t("app.setPlanYearlyBill"), id: "yearly" },
+                  ]}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </div>
-            </div>
-          </div>
-        </Card>
+              <Text size="sm">{t("app.setPlanYearlyDiscount")}</Text>
+            </>
+          }
+        />
         {products.map((product) => (
           <ProductCard key={product.id} {...product} selected={selected} />
         ))}

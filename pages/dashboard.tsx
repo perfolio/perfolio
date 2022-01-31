@@ -20,6 +20,7 @@ import { Field, Form, handleSubmit, useForm } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { z } from "zod"
+import { HeadingCard } from "@perfolio/ui/components/headingcard"
 
 const PortfolioCard: React.FC<{
   id: string
@@ -247,16 +248,7 @@ const IndexPage: NextPage<PageProps> = () => {
   return (
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
-        {/* <Heading h2 color="text-gray-50">
-          Your portfolios
-        </Heading> */}
-        <Card>
-          <div className="flex flex-col items-center p-2 my-2 space-y-6 text-center sm:p-8 sm:my-8">
-            <Card.Header>
-              <Card.Header.Title title="Your portfolios"></Card.Header.Title>
-            </Card.Header>
-          </div>
-        </Card>
+        <HeadingCard title="Your portfolios" subtitle="Get an overview of all your investments." />
         {portfoliosLoading ? (
           <Card>
             <Card.Content>
