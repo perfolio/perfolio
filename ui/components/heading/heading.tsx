@@ -23,7 +23,7 @@ export const Heading: React.FC<HeadingProps> = ({
   h3,
   h4,
   color,
-  uppercase = false,
+  uppercase,
   children,
 }): JSX.Element => {
   let heading = ""
