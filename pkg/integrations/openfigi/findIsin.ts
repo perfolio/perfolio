@@ -1,3 +1,4 @@
+import { Logger } from "tslog"
 import * as z from "zod"
 import { Client } from "./client"
 
@@ -16,9 +17,14 @@ const MappingValidation = z.object({
 
 const MappingResponse = z
   .array(
-    z.object({
-      data: z.array(MappingValidation).nonempty(),
-    }),
+    z.union([
+      z.object({
+        data: z.array(MappingValidation).nonempty(),
+      }),
+      z.object({
+        warning: z.string(),
+      }),
+    ]),
   )
   .nonempty()
 
@@ -44,6 +50,14 @@ export async function findIsin(req: FindIsinRequest): Promise<FindIsinResponse> 
       },
     ],
   })
+
   const parsed = MappingResponse.parse(res)
+  if (parsed.length === 0) {
+    return []
+  }
+  if ("warning" in parsed[0]) {
+    new Logger().warn(parsed[0].warning, req.isin, req.micCode)
+    return []
+  }
   return parsed[0].data
 }

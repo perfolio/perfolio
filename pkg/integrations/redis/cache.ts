@@ -3,8 +3,8 @@ import * as redis from "@upstash/redis"
 import { Key, Value } from "./key"
 
 export abstract class Cache {
-  constructor(opts: { url: string; token: string; edgeUrl: string }) {
-    redis.auth({ ...opts, readFromEdge: true })
+  constructor(opts: { url: string; token: string }) {
+    redis.auth({ url: opts.url, token: opts.token })
   }
 
   public async set(ttl: string, ...data: { key: Key; value: Value }[]): Promise<void> {
@@ -24,7 +24,12 @@ export abstract class Cache {
     if (res.error) {
       throw new Error(`Redis error: ${res.error}`)
     }
-
-    return res.data as T
+    try {
+      return JSON.parse(res.data) as T
+    } catch (err) {
+      throw new Error(
+        `Unable to unmarshal cached value, ${JSON.stringify({ key, cached: res.data })}`,
+      )
+    }
   }
 }

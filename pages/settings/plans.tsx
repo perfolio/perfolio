@@ -3,7 +3,6 @@ import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
-import fs from "fs"
 import { useUser } from "@perfolio/pkg/hooks"
 import { Button, Text, ToggleGroup } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
@@ -52,10 +51,10 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
               <Card.Header.Title title={name} subtitle={description} />
               <div className="mt-8">
                 <div className="flex items-center">
-                  <h4 className="flex-shrink-0 pr-4 bg-white text-sm tracking-wider font-semibold uppercase text-primary">
-                    What&#39;s included
-                  </h4>
-                  <div className="flex-1 border-t-2 border-gray-200" />
+                  <span className="font-semibold uppercase text-primary whitespace-nowrap">
+                    {t("app.setPlanWhatsIncl")}
+                  </span>
+                  <div className="w-full mx-4 border-b grow border-primary"></div>
                 </div>
                 <ul
                   role="list"
@@ -174,9 +173,11 @@ const Page: NextPage<PageProps> = ({ products }) => {
 export default Page
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations,
       products: [
         {
           id: "prod_K8L177Ou3esVrr",

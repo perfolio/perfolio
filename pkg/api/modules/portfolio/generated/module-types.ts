@@ -33,7 +33,7 @@ export namespace PortfolioModule {
   }
 
   interface DefinedInputFields {
-    CreatePortfolio: "id" | "name" | "userId" | "primary"
+    CreatePortfolio: "name" | "userId" | "primary"
     UpdatePortfolio: "id" | "name" | "primary"
     CreateTransaction: "assetId" | "executedAt" | "portfolioId" | "value" | "volume" | "mic"
     UpdateTransaction: "id" | "assetId" | "executedAt" | "portfolioId" | "value" | "volume" | "mic"

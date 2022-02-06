@@ -1,5 +1,4 @@
 import { Popover } from "@headlessui/react"
-import fs from "fs"
 import {
   DocumentAddIcon,
   DotsVerticalIcon,
@@ -8,7 +7,7 @@ import {
   XIcon,
 } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { usePortfolios } from "@perfolio/pkg/hooks"
+import { usePortfolios, useUser, useCreatePortfolio, useDeletePortfolio } from "@perfolio/pkg/hooks"
 
 import { AppLayout } from "@perfolio/ui/app"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
@@ -32,6 +31,7 @@ const PortfolioCard: React.FC<{
   const [formError, setFormError] = useState<string | React.ReactNode | null>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
 
+  const deletePortfolio = useDeletePortfolio()
   const validation = z.object({
     title: z.string().nonempty(),
   })
@@ -53,14 +53,9 @@ const PortfolioCard: React.FC<{
         open={confirmOpen}
         setOpen={setConfirmOpen}
         onCancel={() => setConfirmOpen(false)}
-        onConfirm={() =>
-          new Promise((resolve) =>
-            setTimeout(() => {
-              resolve()
-              alert("Hello")
-            }, 2000),
-          )
-        }
+        onConfirm={async () => {
+          await deletePortfolio.mutateAsync({ portfolioId: id }).catch((err) => alert(err))
+        }}
       >
         <div className="space-y-4">
           <div className="justify-center hidden w-full text-center md:flex ">
@@ -245,6 +240,8 @@ interface PageProps {}
 
 const IndexPage: NextPage<PageProps> = () => {
   const { portfolios, isLoading: portfoliosLoading } = usePortfolios()
+  const createPortfolio = useCreatePortfolio()
+  const { user } = useUser()
   return (
     <AppLayout side="left">
       <div className="flex flex-col space-y-16">
@@ -262,7 +259,25 @@ const IndexPage: NextPage<PageProps> = () => {
             {[...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => (
               <PortfolioCard key={p.id} {...p} />
             ))}
-            <EmptyState href="#" icon={<DocumentAddIcon />}>
+            <EmptyState
+              onClick={async () => {
+                if (!user) {
+                  console.error("No user found")
+                  return
+                }
+                try {
+                  await createPortfolio.mutateAsync({
+                    portfolio: {
+                      name: "New Portfolio, please rename me",
+                      userId: user.id,
+                    },
+                  })
+                } catch (err) {
+                  console.error(err)
+                }
+              }}
+              icon={<DocumentAddIcon />}
+            >
               <Text>Add another portfolio</Text>
             </EmptyState>
           </>
@@ -275,9 +290,11 @@ const IndexPage: NextPage<PageProps> = () => {
 export default IndexPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations,
     },
   }
 }

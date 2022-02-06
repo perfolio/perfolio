@@ -4,7 +4,7 @@ import responseCachePlugin from "apollo-server-plugin-response-cache"
 
 import { env } from "@chronark/env"
 import { application } from "./application"
-import { RedisCache } from "./cache"
+import { ApolloCache } from "./cache"
 import { context } from "./context"
 import { dataSources } from "./datasources"
 
@@ -32,7 +32,7 @@ export const server = (config?: ServerConfig): ApolloServer => {
         : undefined,
     plugins: [
       responseCachePlugin({
-        cache: new RedisCache(),
+        cache: new ApolloCache(),
       }),
     ],
   })

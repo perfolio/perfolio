@@ -4,7 +4,6 @@ import { Field } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { z } from "zod"
-import fs from "fs"
 import { CheckIcon } from "@heroicons/react/outline"
 import { useI18n } from "next-localization"
 import { useToaster } from "@perfolio/pkg/toaster"
@@ -122,9 +121,11 @@ const SettingsPage: NextPage<PageProps> = () => {
 export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations,
     },
   }
 }
