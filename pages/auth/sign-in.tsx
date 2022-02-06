@@ -91,7 +91,7 @@ const SigninPage: NextPage = () => {
                       throw new Error("Token is null")
                     }
 
-                    await signIn.mutateAsync({ didToken })
+                    signIn.mutateAsync({ didToken })
 
                     setOpen(false)
                     router.push("/dashboard")

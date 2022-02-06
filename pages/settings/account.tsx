@@ -1,6 +1,5 @@
 import { GetStaticProps, NextPage } from "next"
 import React from "react"
-import fs from "fs"
 import { AppLayout, SideNavbar } from "@perfolio/ui/app"
 
 import { Button } from "@perfolio/ui/components"
@@ -68,9 +67,11 @@ const SettingsPage: NextPage<PageProps> = () => {
 export default SettingsPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations,
     },
   }
 }
