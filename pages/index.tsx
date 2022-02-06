@@ -125,10 +125,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                   </span>
                   <span> and convince yourself</span>
                 </h1>
-                <p className="mt-5 text-xl text-gray-500">
-                  Get started with a free trial. Perfolio&apos;s advanced Pro version will be
-                  launched soon.
-                </p>
+                <p className="mt-5 text-xl text-gray-500">{t("landing.pricing.description")}</p>
               </div>
               <div className="inline-flex items-center justify-center mt-10 sm:w-auto xl:mt-0">
                 <Button type="cta" size="block">
