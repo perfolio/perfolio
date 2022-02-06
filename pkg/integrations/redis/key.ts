@@ -2,7 +2,7 @@ import { env } from "@chronark/env"
 import { createHash } from "crypto"
 export class Key {
   public readonly parameters: string[] = []
-  public readonly environment: string
+  public readonly scope: string
   public readonly version = "v2"
 
   constructor(
@@ -58,11 +58,12 @@ export class Key {
     /**
      * Sometimes during development I fill the cache with "bad" data
      */
-    this.environment = env.get("VERCEL_ENV") ?? env.get("NODE_ENV") ?? "development"
+    this.scope =
+      env.get("VERCEL_GIT_COMMIT_SHA") ?? env.get("VERCEL_ENV") ?? env.get("NODE_ENV") ?? "dev"
   }
 
   public toString(): string {
-    return ["v3", this.environment, this.version, ...this.parameters].join(":")
+    return [this.version, this.scope, ...this.parameters].join(":")
   }
 }
 

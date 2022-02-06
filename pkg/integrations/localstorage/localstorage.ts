@@ -34,7 +34,7 @@ export const PersistentQueryClient = (): QueryClient => {
    */
   if (typeof window !== "undefined") {
     const localStoragePersistor = createWebStoragePersistor({
-      storage: window?.localStorage,
+      storage: window?.sessionStorage,
       key: QUERIES_KEY,
     })
     persistQueryClient({

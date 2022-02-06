@@ -3,6 +3,7 @@ import {
   useAbsoluteTotalHistory,
   useCurrentAbsoluteValue,
   usePortfolioHistory,
+  usePrefetchPortfolioHistory,
   useRelativeMean,
   useStandardDeviation,
   useUser,
@@ -21,7 +22,7 @@ import {
 } from "@perfolio/ui/app"
 import { Heading, ToggleGroup, Tooltip } from "@perfolio/ui/components"
 import { GetStaticProps, NextPage } from "next"
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { useI18n } from "next-localization"
 
 import { Time } from "@perfolio/pkg/util/time"
@@ -29,21 +30,21 @@ import KPI from "@perfolio/ui/components/kpi/kpi"
 
 export type Range = "1W" | "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
 
-const today = Time.today().unix()
-const ranges: Record<Range, number> = {
-  "1W": today - Time.toSeconds("7d"),
-  "1M": today - Time.toSeconds("30d"),
-  "3M": today - Time.toSeconds("90d"),
-  "6M": today - Time.toSeconds("180d"),
-  YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
-  "1Y": today - Time.toSeconds("365d"),
-  ALL: Number.NEGATIVE_INFINITY,
-}
-
 interface PageProps {}
 
 const App: NextPage<PageProps> = () => {
   useUser()
+
+  const today = useMemo(() => Time.today().unix(), [])
+  const ranges: Record<Range, number> = {
+    "1W": today - Time.toSeconds("7d"),
+    "1M": today - Time.toSeconds("30d"),
+    "3M": today - Time.toSeconds("90d"),
+    "6M": today - Time.toSeconds("180d"),
+    YTD: new Date(new Date().getFullYear(), 0).getTime() / 1000,
+    "1Y": today - Time.toSeconds("365d"),
+    ALL: Number.NEGATIVE_INFINITY,
+  }
   const { t } = useI18n()
 
   const { currentAbsoluteValue } = useCurrentAbsoluteValue()
@@ -53,6 +54,12 @@ const App: NextPage<PageProps> = () => {
   const { history, isLoading: historyLoading } = usePortfolioHistory({
     since: ranges[range],
   })
+
+  /**
+   * Prefetch all history charts
+   */
+  usePrefetchPortfolioHistory(Object.values(ranges))
+
   const { absoluteTotal } = useAbsoluteTotalHistory({
     since: ranges[range],
   })

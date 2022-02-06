@@ -2,13 +2,11 @@ import { env } from "@chronark/env"
 import * as redis from "@upstash/redis"
 import { KeyValueCache } from "apollo-server-caching"
 
-export class RedisCache implements KeyValueCache<string> {
+export class ApolloCache implements KeyValueCache<string> {
   constructor() {
     redis.auth({
       url: env.require("APOLLO_REDIS_REST_URL"),
-      edgeUrl: env.require("APOLLO_REDIS_EDGE_URL"),
       token: env.require("APOLLO_REDIS_REST_TOKEN"),
-      readFromEdge: true,
     })
   }
 
