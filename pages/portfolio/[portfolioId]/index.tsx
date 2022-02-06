@@ -8,7 +8,6 @@ import {
   useUser,
 } from "@perfolio/pkg/hooks"
 import { getCurrencySymbol } from "@perfolio/pkg/util/currency"
-import fs from "fs"
 import { format } from "@perfolio/pkg/util/numbers"
 import {
   ActivityFeed,
@@ -248,11 +247,11 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(
-        fs.readFileSync(`${process.cwd()}/locales/${locale}.json`).toString(),
-      ),
+      translations,
     },
   }
 }

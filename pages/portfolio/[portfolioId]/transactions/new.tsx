@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { z } from "zod"
-import fs from "fs"
 import { CheckIcon } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Asset } from "@perfolio/pkg/api"
@@ -214,11 +213,11 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(
-        fs.readFileSync(`${process.cwd()}/locales/${locale}.json`).toString(),
-      ),
+      translations,
     },
   }
 }

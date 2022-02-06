@@ -1,5 +1,4 @@
 import { Popover } from "@headlessui/react"
-import fs from "fs"
 import {
   DocumentAddIcon,
   DotsVerticalIcon,
@@ -299,11 +298,11 @@ const IndexPage: NextPage<PageProps> = () => {
 export default IndexPage
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(
-        fs.readFileSync(`${process.cwd()}/locales/${locale}.json`).toString(),
-      ),
+      translations,
     },
   }
 }

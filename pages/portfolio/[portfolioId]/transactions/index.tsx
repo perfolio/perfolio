@@ -2,7 +2,7 @@ import { DocumentAddIcon } from "@heroicons/react/outline"
 import { ExchangeTradedAsset } from "@perfolio/pkg/api"
 import { Transaction } from "@perfolio/pkg/api"
 import { useDeleteTransaction, usePortfolio } from "@perfolio/pkg/hooks"
-import fs from "fs"
+
 import { useI18n } from "next-localization"
 
 import { useToaster } from "@perfolio/pkg/toaster"
@@ -52,7 +52,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ isLast, transaction }
           },
         )}
       >
-        <div className="flex grow gap-4">
+        <div className="flex gap-4 grow">
           {transaction.asset ? (
             <Description title={transaction.asset.name}>
               {`You ${
@@ -163,11 +163,11 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
+
   return {
     props: {
-      translations: JSON.parse(
-        fs.readFileSync(`${process.cwd()}/locales/${locale}.json`).toString(),
-      ),
+      translations,
     },
   }
 }
