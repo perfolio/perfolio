@@ -152,7 +152,9 @@ export default Page
 export const getStaticProps: GetStaticProps<PageProps> = async ({ locale }) => {
   return {
     props: {
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations: JSON.parse(
+        fs.readFileSync(`${process.cwd()}/public/locales/${locale}.json`).toString(),
+      ),
       products: [
         {
           id: "prod_K8L177Ou3esVrr",

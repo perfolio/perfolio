@@ -241,7 +241,9 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
         "Breakdown of current assets",
         "Share table with in-depth company information",
       ],
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations: JSON.parse(
+        fs.readFileSync(`${process.cwd()}/public/locales/${locale}.json`).toString(),
+      ),
     },
   }
 }
