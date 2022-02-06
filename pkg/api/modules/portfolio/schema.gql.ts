@@ -45,7 +45,6 @@ export default gql`
   }
 
   input CreatePortfolio {
-    id: ID!
     name: String!
     userId: ID!
     primary: Boolean

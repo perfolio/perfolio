@@ -78,7 +78,6 @@ export type CompanyAssetHistoryArgs = {
 }
 
 export type CreatePortfolio = {
-  id: Scalars["ID"]
   name: Scalars["String"]
   primary?: Maybe<Scalars["Boolean"]>
   userId: Scalars["ID"]
@@ -1017,6 +1016,15 @@ export type CreateExchangeTradedAssetMutation = {
     | undefined
 }
 
+export type CreatePortfolioMutationVariables = Exact<{
+  portfolio: CreatePortfolio
+}>
+
+export type CreatePortfolioMutation = {
+  __typename?: "Mutation"
+  createPortfolio: { __typename?: "Portfolio"; id: string }
+}
+
 export type CreateTransactionMutationVariables = Exact<{
   transaction: CreateTransaction
 }>
@@ -1024,6 +1032,15 @@ export type CreateTransactionMutationVariables = Exact<{
 export type CreateTransactionMutation = {
   __typename?: "Mutation"
   createTransaction: { __typename?: "Transaction"; id: string }
+}
+
+export type DeletePortfolioMutationVariables = Exact<{
+  portfolioId: Scalars["ID"]
+}>
+
+export type DeletePortfolioMutation = {
+  __typename?: "Mutation"
+  deletePortfolio: { __typename?: "Portfolio"; id: string }
 }
 
 export type DeleteTransactionMutationVariables = Exact<{
@@ -1295,9 +1312,23 @@ export const CreateExchangeTradedAssetDocument = gql`
     }
   }
 `
+export const CreatePortfolioDocument = gql`
+  mutation createPortfolio($portfolio: CreatePortfolio!) {
+    createPortfolio(portfolio: $portfolio) {
+      id
+    }
+  }
+`
 export const CreateTransactionDocument = gql`
   mutation createTransaction($transaction: CreateTransaction!) {
     createTransaction(transaction: $transaction) {
+      id
+    }
+  }
+`
+export const DeletePortfolioDocument = gql`
+  mutation deletePortfolio($portfolioId: ID!) {
+    deletePortfolio(portfolioId: $portfolioId) {
       id
     }
   }
@@ -1501,12 +1532,32 @@ export function getSdk<C>(requester: Requester<C>) {
         CreateExchangeTradedAssetMutationVariables
       >(CreateExchangeTradedAssetDocument, variables, options)
     },
+    createPortfolio(
+      variables: CreatePortfolioMutationVariables,
+      options?: C,
+    ): Promise<CreatePortfolioMutation> {
+      return requester<CreatePortfolioMutation, CreatePortfolioMutationVariables>(
+        CreatePortfolioDocument,
+        variables,
+        options,
+      )
+    },
     createTransaction(
       variables: CreateTransactionMutationVariables,
       options?: C,
     ): Promise<CreateTransactionMutation> {
       return requester<CreateTransactionMutation, CreateTransactionMutationVariables>(
         CreateTransactionDocument,
+        variables,
+        options,
+      )
+    },
+    deletePortfolio(
+      variables: DeletePortfolioMutationVariables,
+      options?: C,
+    ): Promise<DeletePortfolioMutation> {
+      return requester<DeletePortfolioMutation, DeletePortfolioMutationVariables>(
+        DeletePortfolioDocument,
         variables,
         options,
       )

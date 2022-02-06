@@ -151,6 +151,7 @@ export const resolvers: Resolvers<Context> = {
       const createdPortfolio = await ctx.dataSources.db.portfolio.create({
         data: {
           ...portfolio,
+          id: newId("portfolio"),
           primary: portfolio.primary || false,
         },
       })
