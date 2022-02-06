@@ -156,6 +156,9 @@
     "footerSubsDone": "Thank you, we'll get back to you",
     "footerSubsPlaceMail": "email@example.com",
     "footerSubsButton": "Subscribe",
-    "allRightsReserved": "All rights reserved."
+    "allRightsReserved": "All rights reserved.",
+    "pricing": {
+      "description": "Get started with a free trial. Perfolio's advanced Pro version will be launched soon"
+    }
   }
 }
