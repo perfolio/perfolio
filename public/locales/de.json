@@ -99,7 +99,14 @@
     "sideNavBarLabelPlans": "Alle Funktionen nutzen",
     "emailSubsMailError": "Deine E-Mail-Adresse kann im Moment nicht hinzugefügt werden, bitte versuche es es später nochmal",
     "paymentSuccess": "Zahlung erfolgreich!",
-    "assetSearchErrorTicker": "Es wurde kein Ticker für diese ISIN gefunden:"
+    "assetSearchErrorTicker": "Es wurde kein Ticker für diese ISIN gefunden:",
+    "setPlanWhatsIncl": "Darin enthalten",
+    "setPlanUserError": "Nutzer ist noch nicht geladen",
+    "setPlanSwitchPlanText": "Abonnement wechseln",
+    "setPlanPickPlanText": "Du kannst zwischen zwei verschiedenen Abonnements wählen.",
+    "setPlanMonthlyBill": "Monatliche Abbuchung",
+    "setPlanYearlyBill": "Jährliche Abbuchung",
+    "setPlanYearlyDiscount": "Bezahle früher und erhalte 2 Monate kostenlosen Zugang zu Perfolio."
   },
   "landing": {
     "headline": "Insights. For Everyone.",
