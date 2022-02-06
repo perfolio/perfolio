@@ -7,7 +7,7 @@ import {
   Section,
   SectionTitle,
 } from "@perfolio/ui/landing"
-import fs from "fs"
+
 import { useI18n } from "next-localization"
 
 import { GetStaticProps, NextPage } from "next"
@@ -160,7 +160,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
                 >
                   {features.map((feature) => (
                     <li key={feature} className="flex items-center">
-                      <CheckIcon className="shrink-0 w-6 h-6 text-primary" aria-hidden="true" />
+                      <CheckIcon className="w-6 h-6 shrink-0 text-primary" aria-hidden="true" />
                       <span className="ml-3 text-base text-gray-500">{feature}</span>
                     </li>
                   ))}
@@ -193,6 +193,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
 export default IndexPage
 
 export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale }) => {
+  const { default: translations } = await import(`@perfolio/public/locales/${locale}.json`)
   return {
     props: {
       members: [
@@ -241,7 +242,7 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
         "Breakdown of current assets",
         "Share table with in-depth company information",
       ],
-      translations: JSON.parse(fs.readFileSync(`public/locales/${locale}.json`).toString()),
+      translations,
     },
   }
 }

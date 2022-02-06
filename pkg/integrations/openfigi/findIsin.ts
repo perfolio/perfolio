@@ -51,7 +51,6 @@ export async function findIsin(req: FindIsinRequest): Promise<FindIsinResponse> 
     ],
   })
 
-  console.log(JSON.stringify({ res }, null, 2))
   const parsed = MappingResponse.parse(res)
   if (parsed.length === 0) {
     return []
