@@ -7,7 +7,7 @@ if (!key) {
 
 export const magic = () => {
   if (typeof window === "undefined") {
-    throw new Error("Window")
+    return {} as Magic
   }
   return new Magic(key, {
     extensions: [new OAuthExtension()],

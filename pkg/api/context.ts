@@ -1,6 +1,6 @@
 import { env } from "@chronark/env"
 import { Claims, JWT } from "@perfolio/pkg/auth"
-import { ApolloCache, Key, Value } from "@perfolio/pkg/integrations/redis"
+import { GenericCache, Key, Value } from "@perfolio/pkg/integrations/redis"
 import { Logger } from "@perfolio/pkg/logger"
 import { AuthenticationError, AuthorizationError } from "@perfolio/pkg/util/errors"
 import { createHash } from "crypto"
@@ -89,7 +89,7 @@ export const context = (ctx: { req: IncomingMessage }) => {
     return claims
   }
 
-  const cache = new ApolloCache()
+  const cache = new GenericCache()
 
   return {
     ...ctx,

@@ -10,6 +10,7 @@ export const resolvers: Resolvers<Context> = {
       // return cachedValue
       // }
       const exchanges = await ctx.dataSources.iex.getExchanges()
+
       const value = exchanges.filter((exchange) => exchange.region.toUpperCase() === "DE")
       // await ctx.cache.set("24h", { key, value })
       return value
