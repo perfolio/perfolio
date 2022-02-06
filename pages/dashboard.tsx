@@ -73,136 +73,103 @@ const PortfolioCard: React.FC<{
           </div>
         </div>
       </Confirmation>
-      <Card>
-        <Card.Header>
-          <div className="flex items-center w-full h-12">
-            {editMode ? (
-              <Form
-                ctx={ctx}
-                formError={formError}
-                className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
-              >
-                <Field.Input
-                  name="title"
-                  type="text"
-                  label="Title"
-                  hideLabel={true}
-                  autoFocus={true}
-                  defaultValue={name}
-                  textAlignment="left"
-                />
-              </Form>
-            ) : (
-              <Tooltip
-                trigger={
-                  <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
-                    <Card.Header.Title title={name} />
-                  </button>
-                }
-              >
-                <Text>Double click the title to edit</Text>
-              </Tooltip>
-            )}
-          </div>
-          <div>
-            <div>
-              <Popover className="relative">
-                {({ open, close }) => (
-                  <>
-                    <Popover.Button
-                      className={classNames(
-                        open ? "text-gray-900" : "text-gray-500",
-                        "group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-                      )}
-                    >
-                      <Icon size="sm" label="DotsMenu">
-                        {open ? <XIcon /> : <DotsVerticalIcon />}
-                      </Icon>
-                    </Popover.Button>
-
-                    <Popover.Panel className="absolute right-0 z-10 max-w-xs px-2 mt-2 transform sm:px-0">
-                      <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                        <div className="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:py-4 sm:px-8">
-                          <Button
-                            type="plain"
-                            htmlType="button"
-                            size="sm"
-                            onClick={() => {
-                              setEditMode(!editMode)
-                              close()
-                              open = false
-                            }}
-                            iconLeft={<PencilAltIcon />}
-                            justify="start"
-                          >
-                            Edit
-                          </Button>
-
-                          <Button
-                            onClick={() => setConfirmOpen(true)}
-                            type="plain"
-                            size="sm"
-                            iconLeft={<TrashIcon />}
-                            justify="start"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </Popover.Panel>
-                    {/* </Transition> */}
-                  </>
-                )}
-              </Popover>
-            </div>
-          </div>
-        </Card.Header>
-        <Card.Content>
-          <InlineTotalAssetChart portfolioId={id} />
-        </Card.Content>
-        <Card.Footer>
-          <div className="block w-full space-y-4 sm:hidden">
-            {editMode ? (
-              <>
-                <Button type="secondary" size="block" onClick={() => setEditMode(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  size="block"
-                  loading={submitting}
-                  onClick={() =>
-                    handleSubmit<z.infer<typeof validation>>(
-                      ctx,
-                      async () => {
-                        await new Promise((resolve) => setTimeout(resolve, 1000))
-                        setEditMode(false)
-                      },
-                      setSubmitting,
-                      setFormError,
-                    )
-                  }
-                  type="primary"
-                  htmlType="submit"
-                  disabled={submitting}
+      <div className="max-w-lg mx-auto w-full rounded-lg shadow-lg  lg:max-w-none lg:flex">
+        <Card>
+          <Card.Header>
+            <div className="flex items-center w-full h-12">
+              {editMode ? (
+                <Form
+                  ctx={ctx}
+                  formError={formError}
+                  className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
                 >
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button size="block" href={`/portfolio/${id}`}>
-                Go to portfolio
-              </Button>
-            )}
-          </div>
-          <div className="items-center justify-between hidden sm:flex sm:w-full">
-            <Card.Footer.Status>{primary ? <Text>Primary</Text> : null}</Card.Footer.Status>
-            <Card.Footer.Actions>
+                  <Field.Input
+                    name="title"
+                    type="text"
+                    label="Title"
+                    hideLabel={true}
+                    autoFocus={true}
+                    defaultValue={name}
+                    textAlignment="left"
+                  />
+                </Form>
+              ) : (
+                <Tooltip
+                  trigger={
+                    <button className="cursor-text" onDoubleClick={() => setEditMode(true)}>
+                      <Card.Header.Title title={name} />
+                    </button>
+                  }
+                >
+                  <Text>Double click the title to edit</Text>
+                </Tooltip>
+              )}
+            </div>
+            <div>
+              <div>
+                <Popover className="relative">
+                  {({ open, close }) => (
+                    <>
+                      <Popover.Button
+                        className={classNames(
+                          open ? "text-gray-900" : "text-gray-500",
+                          "group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                        )}
+                      >
+                        <Icon size="sm" label="DotsMenu">
+                          {open ? <XIcon /> : <DotsVerticalIcon />}
+                        </Icon>
+                      </Popover.Button>
+
+                      <Popover.Panel className="absolute right-0 z-10 max-w-xs px-2 mt-2 transform sm:px-0">
+                        <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                          <div className="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:py-4 sm:px-8">
+                            <Button
+                              type="plain"
+                              htmlType="button"
+                              size="sm"
+                              onClick={() => {
+                                setEditMode(!editMode)
+                                close()
+                                open = false
+                              }}
+                              iconLeft={<PencilAltIcon />}
+                              justify="start"
+                            >
+                              Edit
+                            </Button>
+
+                            <Button
+                              onClick={() => setConfirmOpen(true)}
+                              type="plain"
+                              size="sm"
+                              iconLeft={<TrashIcon />}
+                              justify="start"
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </div>
+                      </Popover.Panel>
+                      {/* </Transition> */}
+                    </>
+                  )}
+                </Popover>
+              </div>
+            </div>
+          </Card.Header>
+          <Card.Content>
+            <InlineTotalAssetChart portfolioId={id} />
+          </Card.Content>
+          <Card.Footer>
+            <div className="block w-full space-y-4 sm:hidden">
               {editMode ? (
                 <>
-                  <Button type="secondary" htmlType="button" onClick={() => setEditMode(false)}>
+                  <Button type="secondary" size="block" onClick={() => setEditMode(false)}>
                     Cancel
                   </Button>
                   <Button
+                    size="block"
                     loading={submitting}
                     onClick={() =>
                       handleSubmit<z.infer<typeof validation>>(
@@ -216,7 +183,6 @@ const PortfolioCard: React.FC<{
                       )
                     }
                     type="primary"
-                    size="md"
                     htmlType="submit"
                     disabled={submitting}
                   >
@@ -224,14 +190,50 @@ const PortfolioCard: React.FC<{
                   </Button>
                 </>
               ) : (
-                <>
-                  <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
-                </>
+                <Button size="block" href={`/portfolio/${id}`}>
+                  Go to portfolio
+                </Button>
               )}
-            </Card.Footer.Actions>
-          </div>
-        </Card.Footer>
-      </Card>
+            </div>
+            <div className="items-center justify-between hidden sm:flex sm:w-full">
+              <Card.Footer.Status>{primary ? <Text>Primary</Text> : null}</Card.Footer.Status>
+              <Card.Footer.Actions>
+                {editMode ? (
+                  <>
+                    <Button type="secondary" htmlType="button" onClick={() => setEditMode(false)}>
+                      Cancel
+                    </Button>
+                    <Button
+                      loading={submitting}
+                      onClick={() =>
+                        handleSubmit<z.infer<typeof validation>>(
+                          ctx,
+                          async () => {
+                            await new Promise((resolve) => setTimeout(resolve, 1000))
+                            setEditMode(false)
+                          },
+                          setSubmitting,
+                          setFormError,
+                        )
+                      }
+                      type="primary"
+                      size="md"
+                      htmlType="submit"
+                      disabled={submitting}
+                    >
+                      Save
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button href={`/portfolio/${id}`}>Go to portfolio</Button>
+                  </>
+                )}
+              </Card.Footer.Actions>
+            </div>
+          </Card.Footer>
+        </Card>
+      </div>
     </>
   )
 }

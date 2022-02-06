@@ -4,11 +4,17 @@ import { Field } from "@perfolio/ui/form"
 import { GetStaticProps, NextPage } from "next"
 import React, { useState } from "react"
 import { z } from "zod"
-import { CheckIcon } from "@heroicons/react/outline"
+import {
+  CheckIcon,
+  CurrencyDollarIcon,
+  TrendingUpIcon,
+  UserCircleIcon,
+} from "@heroicons/react/outline"
 import { useI18n } from "next-localization"
 import { useToaster } from "@perfolio/pkg/toaster"
 import { SettingCard } from "@perfolio/ui/components/settingcard"
 import { HeadingCard } from "@perfolio/ui/components/headingcard"
+import { TabBar } from "@perfolio/ui/components/tabbar"
 
 /**
  * / page.
@@ -22,6 +28,27 @@ const SettingsPage: NextPage<PageProps> = () => {
 
   const { exchanges } = useExchanges()
   const toast = useToaster()
+
+  const tabs = [
+    {
+      name: t("app.sideNavBarLabelAcc"),
+      href: "/settings/account",
+      icon: <UserCircleIcon />,
+      current: false,
+    },
+    {
+      name: t("app.sideNavBarLabelStocks"),
+      href: "/settings/stocks",
+      icon: <TrendingUpIcon />,
+      current: true,
+    },
+    {
+      name: t("app.sideNavBarLabelPlans"),
+      href: "/settings/plans",
+      icon: <CurrencyDollarIcon />,
+      current: false,
+    },
+  ]
 
   /**
    * The current defaultExchange
@@ -66,12 +93,13 @@ const SettingsPage: NextPage<PageProps> = () => {
     <AppLayout
       side="left"
       sidebar={
-        <div className="hidden lg:flex">
+        <div className="hidden xl:flex">
           <SideNavbar />
         </div>
       }
     >
       <div className="space-y-8">
+        <TabBar tabs={tabs} />
         <HeadingCard
           title={t("app.setStocks")}
           subtitle="Change your default currency or stock exchange."
