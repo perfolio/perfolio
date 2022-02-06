@@ -242,7 +242,7 @@ export const getStaticProps: GetStaticProps<IndexPageProps> = async ({ locale })
         "Share table with in-depth company information",
       ],
       translations: JSON.parse(
-        fs.readFileSync(`${process.cwd()}/public/locales/${locale}.json`).toString(),
+        fs.readFileSync(`${process.cwd()}/locales/${locale}.json`).toString(),
       ),
     },
   }
