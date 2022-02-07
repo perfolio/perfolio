@@ -19,7 +19,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
       <div className="h-20 md:h-42 lg:h-56 ">
         <Header />
       </div>
-      <div className="px-4 lg:mx-8 xl:mx-16">
+      <div className="px-4 lg:mx-8 xl:mx-16 pb-16">
         <div className={`xl:flex gap-6 ${side === "left" ? "flex-row-reverse" : "flex-row"}`}>
           <main
             className={cn("w-full  lg:-mt-28 ", {
