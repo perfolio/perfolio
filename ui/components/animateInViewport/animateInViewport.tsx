@@ -40,6 +40,7 @@ export const AnimateInViewport: React.FC<AnimateInViewportProps> = ({
           leave={leave}
           leaveFrom={leaveFrom}
           leaveTo={leaveTo}
+          className="h-full"
         >
           {children}
         </Transition>

@@ -9,8 +9,8 @@ export interface FeatureProps {
 
 export const Feature: React.FC<FeatureProps> = ({ title, description, icon }): JSX.Element => {
   return (
-    <div key={title} className="pt-6 text-center">
-      <div className="flow-root px-6 pb-8 bg-white rounded shadow-ambient">
+    <div key={title} className="pt-6 text-center h-full">
+      <div className="flow-root px-6 pb-8 bg-white rounded shadow-ambient h-full">
         <div className="-mt-6">
           <div>
             <span className="inline-flex items-center justify-center p-3 rounded-md shadow-lg bg-gradient-to-tr from-primary to-secondary">
