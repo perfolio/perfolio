@@ -30,7 +30,7 @@ export const AnimateInViewport: React.FC<AnimateInViewportProps> = ({
   const { inViewport, enterCount } = useInViewport(myRef)
 
   return (
-    <div ref={myRef} key={key}>
+    <div ref={myRef} key={key} className="h-full">
       {animate ? (
         <Transition
           show={animateOnlyFirstTime ? inViewport || enterCount >= 1 : inViewport}
