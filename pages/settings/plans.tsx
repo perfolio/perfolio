@@ -49,88 +49,85 @@ const ProductCard: React.FC<Product & { selected: "yearly" | "monthly" }> = ({
   const { user, isLoading } = useUser()
   const router = useRouter()
   return (
-    <Card border={false}>
-      <div className="relative">
-        <div className="relative mx-auto">
-          <div className="max-w-lg mx-auto rounded-lg shadow-lg overflow-hidden lg:max-w-none lg:flex">
-            <div className="flex-1 bg-white px-6 py-8 lg:p-12">
-              <Card.Header.Title title={name} subtitle={description} />
-              <div className="mt-8">
-                <div className="flex items-center">
-                  <span className="font-semibold uppercase text-primary whitespace-nowrap">
-                    {t("app.setPlanWhatsIncl")}
-                  </span>
-                  <div className="w-full mx-4 border-b grow border-primary"></div>
-                </div>
-                <ul
-                  role="list"
-                  className="mt-8 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-5"
-                >
-                  {features.map((feature) => (
-                    <li key={feature} className="flex items-start lg:col-span-1">
-                      <div className="flex-shrink-0">
-                        <CheckCircleIcon className="h-5 w-5 text-success" aria-hidden="true" />
-                      </div>
-                      <p className="ml-3 text-sm text-gray-700">{feature}</p>
-                    </li>
-                  ))}
-                </ul>
+    <div className="max-w-lg mx-auto rounded-lg shadow-lg overflow-hidden lg:max-w-none lg:flex">
+      <Card border={false}>
+        <div className="lg:max-w-none lg:flex">
+          <div className="flex-1 bg-white px-6 py-8 lg:p-12">
+            <Card.Header.Title title={name} subtitle={description} />
+            <div className="mt-8">
+              <div className="flex items-center">
+                <span className="font-semibold uppercase text-primary whitespace-nowrap">
+                  {t("app.setPlanWhatsIncl")}
+                </span>
+                <div className="w-full mx-4 border-b grow border-primary"></div>
               </div>
+              <ul
+                role="list"
+                className="mt-8 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-5"
+              >
+                {features.map((feature) => (
+                  <li key={feature} className="flex items-start lg:col-span-1">
+                    <div className="flex-shrink-0">
+                      <CheckCircleIcon className="h-5 w-5 text-success" aria-hidden="true" />
+                    </div>
+                    <p className="ml-3 text-sm text-gray-700">{feature}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="py-8 px-6 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12">
-              <p className="text-lg leading-6 font-medium text-gray-900">Lorem ipsum</p>
-              <div className="mt-4 flex items-center justify-center text-5xl font-extrabold text-gray-900">
-                <span>
-                  {" "}
-                  {`${prices[selected].value}${getCurrencySymbol(prices[selected].currency)}`}
-                </span>
-
-                <span className="ml-3 text-xl font-medium text-gray-500">
-                  / {prices[selected].interval}
-                </span>
-              </div>
-              <p className="mt-4 text-sm">
-                <a href="#" className="font-medium text-gray-500 underline">
-                  Learn about our membership policy
-                </a>
-              </p>
-              <div className="mt-6">
-                <Button
-                  disabled={!user}
-                  size="block"
-                  loading={isLoading}
-                  onClick={async () => {
-                    if (!user) {
-                      console.error(t("app.setPlanUserError"))
-                      return
-                    }
-                    const res = await fetch(
-                      `/api/stripe/checkout?priceId=${prices[selected].id}&customerId=${user.stripeCustomerId}`,
-                      {
-                        method: "POST",
-                      },
-                    )
-                    if (res.status !== 200) {
-                      console.error(res.body)
-                    }
-                    const { url } = (await res.json()) as { url: string }
-                    router.push(url)
-                  }}
-                  type="primary"
-                >
-                  {t("app.setPlanSwitchPlanText")}
-                </Button>
-              </div>
-              {/* <div className="mt-4 text-sm">
+          </div>
+          <div className="py-8 px-6 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12">
+            <p className="text-lg leading-6 font-medium text-gray-900">Lorem ipsum</p>
+            <div className="mt-4 flex items-center justify-center text-5xl font-extrabold text-gray-900">
+              <span>
+                {" "}
+                {`${prices[selected].value}${getCurrencySymbol(prices[selected].currency)}`}
+              </span>
+              <span className="ml-3 text-xl font-medium text-gray-500">
+                / {prices[selected].interval}
+              </span>
+            </div>
+            <p className="mt-4 text-sm">
+              <a href="#" className="font-medium text-gray-500 underline">
+                Learn about our membership policy
+              </a>
+            </p>
+            <div className="mt-6">
+              <Button
+                disabled={!user}
+                size="block"
+                loading={isLoading}
+                onClick={async () => {
+                  if (!user) {
+                    console.error(t("app.setPlanUserError"))
+                    return
+                  }
+                  const res = await fetch(
+                    `/api/stripe/checkout?priceId=${prices[selected].id}&customerId=${user.stripeCustomerId}`,
+                    {
+                      method: "POST",
+                    },
+                  )
+                  if (res.status !== 200) {
+                    console.error(res.body)
+                  }
+                  const { url } = (await res.json()) as { url: string }
+                  router.push(url)
+                }}
+                type="primary"
+              >
+                {t("app.setPlanSwitchPlanText")}
+              </Button>
+            </div>
+            {/* <div className="mt-4 text-sm">
                 <a href="#" className="font-medium text-gray-900">
                   Get a free sample <span className="font-normal text-gray-500">(20MB)</span>
                 </a>
               </div> */}
-            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </div>
   )
 }
 
