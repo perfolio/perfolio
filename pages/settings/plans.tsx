@@ -6,15 +6,10 @@ import React, { useState } from "react"
 import { useUser } from "@perfolio/pkg/hooks"
 import { Button, Text, ToggleGroup } from "@perfolio/ui/components"
 import { useRouter } from "next/router"
-import {
-  CheckCircleIcon,
-  CurrencyDollarIcon,
-  TrendingUpIcon,
-  UserCircleIcon,
-} from "@heroicons/react/solid"
+import { CheckCircleIcon } from "@heroicons/react/solid"
 import { Card } from "@perfolio/ui/components"
 import { HeadingCard } from "@perfolio/ui/components/headingcard"
-import { TabBar } from "@perfolio/ui/components/tabbar"
+import { SettingTabBar } from "@perfolio/ui/components/settingtabbar"
 
 type Price = {
   id: string
@@ -138,27 +133,6 @@ const Page: NextPage<PageProps> = ({ products }) => {
   const { t } = useI18n()
   const [selected, setSelected] = useState<"monthly" | "yearly">("monthly")
 
-  const tabs = [
-    {
-      name: t("app.sideNavBarLabelAcc"),
-      href: "/settings/account",
-      icon: <UserCircleIcon />,
-      current: false,
-    },
-    {
-      name: t("app.sideNavBarLabelStocks"),
-      href: "/settings/stocks",
-      icon: <TrendingUpIcon />,
-      current: false,
-    },
-    {
-      name: t("app.sideNavBarLabelPlans"),
-      href: "/settings/plans",
-      icon: <CurrencyDollarIcon />,
-      current: true,
-    },
-  ]
-
   return (
     <AppLayout
       side="left"
@@ -169,7 +143,7 @@ const Page: NextPage<PageProps> = ({ products }) => {
       }
     >
       <div className="flex flex-col space-y-8">
-        <TabBar tabs={tabs} />
+        <SettingTabBar />
         <HeadingCard
           title="Pricing Plans"
           subtitle={t("app.setPlanPickPlanText")}
