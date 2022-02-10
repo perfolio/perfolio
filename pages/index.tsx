@@ -65,7 +65,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
         </Section>
         <Section id="features" className="relative flex flex-col justify-center">
           <SectionTitle tag={t("landing.whyPerfolio")} title={t("landing.headerWhy")} />
-
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
@@ -100,14 +99,15 @@ const IndexPage: NextPage<IndexPageProps> = ({ members, features }) => {
               },
             ].map((f) => {
               return (
-                <AnimateInViewport
-                  enter="ease-in-out duration-1000"
-                  enterFrom="opacity-0 translate-y-16"
-                  enterTo="opacity-100 translate-y-0"
-                  key={f.title}
-                >
-                  <Feature icon={f.icon} title={f.title} description={f.description} />
-                </AnimateInViewport>
+                <div key={f.title}>
+                  <AnimateInViewport
+                    enter="ease-in-out duration-1000"
+                    enterFrom="opacity-0 translate-y-16"
+                    enterTo="opacity-100 translate-y-0"
+                  >
+                    <Feature icon={f.icon} title={f.title} description={f.description} />
+                  </AnimateInViewport>
+                </div>
               )
             })}
           </div>
