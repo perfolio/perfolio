@@ -1,12 +1,4 @@
-import {
-  AdjustmentsIcon,
-  BookOpenIcon,
-  ChartSquareBarIcon,
-  CurrencyDollarIcon,
-  PlusIcon,
-  TrendingUpIcon,
-  UserCircleIcon,
-} from "@heroicons/react/outline"
+import { BookOpenIcon, ChartSquareBarIcon, PlusIcon } from "@heroicons/react/outline"
 import { useI18n } from "next-localization"
 import { useRouter } from "next/router"
 import React from "react"
@@ -20,24 +12,6 @@ export const Header: React.FC = (): JSX.Element => {
   const menu: { items: NavigationItem[] } = {
     items: [],
   }
-
-  const links: { href: string; label: string; icon: JSX.Element }[] = [
-    {
-      label: t("app.sideNavBarLabelAcc"),
-      href: "/settings/account",
-      icon: <UserCircleIcon />,
-    },
-    {
-      label: t("app.sideNavBarLabelStocks"),
-      href: "/settings/stocks",
-      icon: <TrendingUpIcon />,
-    },
-    {
-      label: t("app.sideNavBarLabelPlans"),
-      href: "/settings/plans",
-      icon: <CurrencyDollarIcon />,
-    },
-  ]
 
   if ("portfolioId" in router.query) {
     const portfolioBasePath = `/portfolio/${router.query["portfolioId"]}`
@@ -63,30 +37,6 @@ export const Header: React.FC = (): JSX.Element => {
           description: t("app.headerDescrAddTrans"),
         },
       ],
-    })
-  } else if (router.pathname.includes("settings")) {
-    menu.items.push({
-      label: "Portfolios",
-      icon: <BookOpenIcon />,
-      href: "/dashboard",
-    })
-
-    let submenu: { icon: JSX.Element; name: string; href: string; description: string }[] = []
-
-    links.map((link) =>
-      submenu.push({
-        name: link.label,
-        icon: link.icon,
-        href: link.href,
-        description: "",
-      }),
-    )
-
-    menu.items.push({
-      label: "Settings",
-      icon: <AdjustmentsIcon />,
-      href: "/dashboard",
-      menu: submenu,
     })
   } else {
     menu.items.push({
