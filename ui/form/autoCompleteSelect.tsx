@@ -132,6 +132,7 @@ export function AutoCompleteSelect<Option>({
                     setFragment(e.currentTarget.value)
                     setState(State.Selecting)
                   }}
+                  onBlur={() => setState(State.Done)}
                 />
               )}
             </div>
@@ -143,7 +144,7 @@ export function AutoCompleteSelect<Option>({
               show={state === State.Selecting}
             >
               <ul className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded shadow-xl max-h-60 focus:outline-none">
-                {isLoading ? (
+                {fragment.trim() === "" ? null : isLoading ? (
                   <li className="w-full h-32">
                     <Loading bg="bg-gray-50" />
                   </li>
