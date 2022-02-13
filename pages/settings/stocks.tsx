@@ -90,7 +90,7 @@ const SettingsPage: NextPage<PageProps> = () => {
    */
 
   const currencyValidation = z.object({
-    defaultCurrency: z.string().min(3).max(3),
+    defaultCurrency: z.string().nonempty().min(3).max(3),
   })
 
   const updateSettings = useUpdateSettings()

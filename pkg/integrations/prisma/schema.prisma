@@ -68,6 +68,7 @@ model Portfolio {
 
   // Ids of users who have read access for this portfolio
   // grantReadAccess String[]
+  // @@unique([userId,name]) TODO: migrate db scheme, add description
 }
 
 // Notifications can be displayed for a user

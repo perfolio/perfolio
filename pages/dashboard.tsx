@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { usePortfolios, useUser, useCreatePortfolio, useDeletePortfolio } from "@perfolio/pkg/hooks"
+import { useUpdatePortfolio } from "@perfolio/pkg/hooks/mutations/updatePortfolio"
 
 import { AppLayout } from "@perfolio/ui/app"
 import { InlineTotalAssetChart } from "@perfolio/ui/app"
@@ -31,16 +32,30 @@ const PortfolioCard: React.FC<{
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   const deletePortfolio = useDeletePortfolio()
-  const validation = z.object({
-    title: z.string().nonempty(),
+  const updatePortfolio = useUpdatePortfolio()
+
+  const renamePortfolioValidation = z.object({
+    name: z.string().nonempty().max(36),
   })
-  const ctx = useForm<z.infer<typeof validation>>({
+  const ctx = useForm<z.infer<typeof renamePortfolioValidation>>({
     mode: "onSubmit",
-    resolver: zodResolver(validation),
+    resolver: zodResolver(renamePortfolioValidation),
   })
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ")
+  }
+
+  const onRenamePortfolioSubmit = async (
+    values: z.infer<typeof renamePortfolioValidation>,
+  ): Promise<void> => {
+    console.log(values)
+    await updatePortfolio
+      .mutateAsync({
+        portfolio: { id: id, name: values.name },
+      })
+      .catch((err) => alert(err))
+    setEditMode(false)
   }
 
   return (
@@ -82,7 +97,7 @@ const PortfolioCard: React.FC<{
                 className="flex flex-col items-start gap-4 mt-4 sm:flex-row"
               >
                 <Field.Input
-                  name="title"
+                  name="name"
                   type="text"
                   label="Title"
                   hideLabel={true}
@@ -170,12 +185,9 @@ const PortfolioCard: React.FC<{
                   size="block"
                   loading={submitting}
                   onClick={() =>
-                    handleSubmit<z.infer<typeof validation>>(
+                    handleSubmit<z.infer<typeof renamePortfolioValidation>>(
                       ctx,
-                      async () => {
-                        await new Promise((resolve) => setTimeout(resolve, 1000))
-                        setEditMode(false)
-                      },
+                      onRenamePortfolioSubmit,
                       setSubmitting,
                       setFormError,
                     )
@@ -204,12 +216,9 @@ const PortfolioCard: React.FC<{
                   <Button
                     loading={submitting}
                     onClick={() =>
-                      handleSubmit<z.infer<typeof validation>>(
+                      handleSubmit<z.infer<typeof renamePortfolioValidation>>(
                         ctx,
-                        async () => {
-                          await new Promise((resolve) => setTimeout(resolve, 1000))
-                          setEditMode(false)
-                        },
+                        onRenamePortfolioSubmit,
                         setSubmitting,
                         setFormError,
                       )
