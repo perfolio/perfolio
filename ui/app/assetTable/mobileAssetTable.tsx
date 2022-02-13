@@ -89,7 +89,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                         </div>
                       </div>
                     </div>
-                    <button
+                    <div
                       className={cn(
                         change > 0 ? "text-success-dark" : "text-error-dark",
                         change > 0 ? "bg-success-light" : "bg-error-light",
@@ -106,7 +106,7 @@ export const MobileAssetTable: React.FC<DetailAssetTableProps> = ({
                           ? { suffix: "€", sign: true }
                           : { percent: true, suffix: "%", sign: true },
                       )}
-                    </button>
+                    </div>
                   </div>
                 </button>
               )
