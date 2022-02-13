@@ -112,14 +112,16 @@ export const DiversificationChart: React.FC = (): JSX.Element => {
           </Tooltip>
         </div>
       </div>
-      <ToggleGroup<"sectors" | "countries">
-        options={[
-          { display: t("app.diversityToggleSectors"), id: "sectors" },
-          { display: t("app.diversityToggleCountries"), id: "countries" },
-        ]}
-        selected={selected}
-        setSelected={setSelected}
-      />
+      <div className="max-w-lg m-auto">
+        <ToggleGroup<"sectors" | "countries">
+          options={[
+            { display: t("app.diversityToggleSectors"), id: "sectors" },
+            { display: t("app.diversityToggleCountries"), id: "countries" },
+          ]}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      </div>
       <ResponsiveContainer width="100%" height="100%">
         {!data || data.length === 0 ? (
           <div className="flex items-center justify-center w-full h-full">
