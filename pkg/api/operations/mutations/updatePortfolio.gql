@@ -1,0 +1,5 @@
+mutation updatePortfolio($portfolio: UpdatePortfolio!) {
+  updatePortfolio(portfolio: $portfolio) {
+    id
+  }
+}

@@ -1,4 +1,5 @@
 import { BookOpenIcon, ChartSquareBarIcon, PlusIcon } from "@heroicons/react/outline"
+import { usePortfolios } from "@perfolio/pkg/hooks"
 import { useI18n } from "next-localization"
 import { useRouter } from "next/router"
 import React from "react"
@@ -8,6 +9,7 @@ import { NavigationItem } from "../navbar/types"
 export const Header: React.FC = (): JSX.Element => {
   const { t } = useI18n()
   const router = useRouter()
+  const { portfolios } = usePortfolios()
 
   const menu: { items: NavigationItem[] } = {
     items: [],
@@ -18,7 +20,12 @@ export const Header: React.FC = (): JSX.Element => {
     menu.items.push({
       label: t("app.headerLabelDash"),
       icon: <ChartSquareBarIcon />,
-      href: portfolioBasePath,
+      menu: [...portfolios.sort((a, b) => Number(a.primary) - Number(b.primary))].map((p) => ({
+        name: p.name,
+        href: `/portfolio/${p.id}`,
+        icon: <ChartSquareBarIcon />,
+        description: p.primary ? "Primary " : "",
+      })),
     })
     menu.items.push({
       label: t("app.headerLabelTrans"),

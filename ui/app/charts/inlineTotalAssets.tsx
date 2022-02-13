@@ -4,6 +4,7 @@ import { useCurrentAbsoluteValue } from "@perfolio/pkg/hooks"
 import { format } from "@perfolio/pkg/util/numbers"
 import { Time } from "@perfolio/pkg/util/time"
 import { AreaChart } from "@perfolio/ui/charts"
+import { useRouter } from "next/router"
 import React, { useMemo } from "react"
 
 export interface InlineTotalAssetChartProps {
@@ -13,8 +14,10 @@ export interface InlineTotalAssetChartProps {
 export const InlineTotalAssetChart: React.FC<InlineTotalAssetChartProps> = ({
   portfolioId,
 }): JSX.Element => {
+  const router = useRouter()
+  const portfolioIdToUse = portfolioId ?? (router.query["portfolioId"] as string)
   const { absoluteTotal, isLoading } = useAbsoluteTotalHistory({ portfolioId })
-  const { currentAbsoluteValue } = useCurrentAbsoluteValue()
+  const { currentAbsoluteValue } = useCurrentAbsoluteValue({ portfolioId: portfolioIdToUse })
   const data = useMemo(() => {
     const downsampled = Downsampling.largestTriangle(
       absoluteTotal.map(({ time, value }) => ({ x: time, y: value })),

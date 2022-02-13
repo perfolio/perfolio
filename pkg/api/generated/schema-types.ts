@@ -1073,6 +1073,15 @@ export type SubscribeToNewsletterMutation = {
   subscribeToNewsletter?: boolean | null | undefined
 }
 
+export type UpdatePortfolioMutationVariables = Exact<{
+  portfolio: UpdatePortfolio
+}>
+
+export type UpdatePortfolioMutation = {
+  __typename?: "Mutation"
+  updatePortfolio: { __typename?: "Portfolio"; id: string }
+}
+
 export type UpdateSettingsMutationVariables = Exact<{
   settings: UpdateSettings
 }>
@@ -1355,6 +1364,13 @@ export const SubscribeToNewsletterDocument = gql`
     subscribeToNewsletter(email: $email)
   }
 `
+export const UpdatePortfolioDocument = gql`
+  mutation updatePortfolio($portfolio: UpdatePortfolio!) {
+    updatePortfolio(portfolio: $portfolio) {
+      id
+    }
+  }
+`
 export const UpdateSettingsDocument = gql`
   mutation updateSettings($settings: UpdateSettings!) {
     updateSettings(settings: $settings) {
@@ -1588,6 +1604,16 @@ export function getSdk<C>(requester: Requester<C>) {
     ): Promise<SubscribeToNewsletterMutation> {
       return requester<SubscribeToNewsletterMutation, SubscribeToNewsletterMutationVariables>(
         SubscribeToNewsletterDocument,
+        variables,
+        options,
+      )
+    },
+    updatePortfolio(
+      variables: UpdatePortfolioMutationVariables,
+      options?: C,
+    ): Promise<UpdatePortfolioMutation> {
+      return requester<UpdatePortfolioMutation, UpdatePortfolioMutationVariables>(
+        UpdatePortfolioDocument,
         variables,
         options,
       )
