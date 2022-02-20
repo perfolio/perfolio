@@ -161,5 +161,34 @@
     "pricing": {
       "description": "Starte mit einer kostenlosen Probeversion. Perfolio's Pro Version wird bald verfügbar sein!"
     }
+  },
+  "whyperfolio": {
+    "headline": "Intuitives Analysetool, dass dir dabei hilft dein Portfolio zu optimieren und alle Risiken im Blick zu behalten",
+    "subtitle": "Das Ziel von Perfolio Analytics ist es, dir mit allen notwendigen Finanzmetriken zur Seite zu stehen. Dafür bieten wir dir eine moderne und intuitive Plattform.",
+    "initialquestionstatement": "Du fragst dich vermutlich:",
+    "initialquestionanswer": "Warum ist das ganze überhaupt wichtig?",
+    "IntroParagraphOne": "Professionelle Investoren folgen der Portfoliotheorie, nach der sie die Portfolios ihrer Kunden optimieren. Sie maximieren die Erträge ihrer Investments und halten die Risiken in vordefinierten, überschaubaren Rahmen.",
+    "IntroParagraphTwo": "Perfolio versorgt dich mit denselben Finanzinformationen, über die heutzutage nur professionelle Investoren verfügen. So ermöglichen wir dir datengestützte Entscheidungen zu deinen Investments zu treffen, immer orientiert an den neuesten Trends und Erkenntnissen aus der Forschung.",
+    "IntroParagraphThree": "Es gibt verschiedene Herangehensweisen ein Portfolio zu optimieren. Als aller erstes sollten Investoren festlegen, welches Level an Risiko für ihre Anlagestrategie geeignet ist, ob defensiver oder offensiver. ",
+    "IntroParagraphFour": "Professionelle Investment Manager versuchen stets die Risikobereitschaft ihrer Kunden zu verstehen um eine passende Strategie für ihr Portfolio zu entwickeln.",
+    "IntroParagraphFive": "Die Abwägung und Analyse von Risiken sind also unabdingbar für jeden Investoren, ob privat oder professionell. Portfolio hilft dir dabei, dein Risiko im Blick zu behalten!",
+    "titleOne": "Perfolio: Deine All-in-one Lösung.",
+    "titleTwo": "Perfolio: Wir nehmen dir die Sorge vor Nachhaltigkeits Ratings.",
+    "titleThree": "Perfolio: Metriken, wichtiger denn je.",
+    "ListPointZero": "Gibt es eine Möglichkeite meine verschiedenen Investments in Cryptowährungen, ETFs, Aktien und co. auf einer Plattform anzusehen und zu analysieren?",
+    "ListPointOne": "Wie nachhaltig sind meine Investitionen?",
+    "ListPointTwo": "Wie diversifiziert ist mein Portfolio?",
+    "ListPointThree": "Wo finde ich die neusten und vertrauenswürdige Finanzdaten?",
+    "FirstParagraphOne": "Perfolio ist deine intuitiv und unabhängige all-in-one Lösung für dein Portfolio. Im Unterschied zu den meisten Standard-Portfolios die Banken und Neo-Broker heutzutage anbieten, hat Perfolio einen wichtigen Vorteil: Wir zeigen dir alle deine Vermögenswerte auf einem Blick und bieten dir somit nie zuvor dagewesene Möglichkeiten.",
+    "FirstParagraphTwo": "Viele von euch werden sich die gleichen Fragen gestellt haben wie wir, als wir unsere Investment-Reise begonnen haben:",
+    "FirstParagraphThree": "Die Liste geht noch viel weiter. Perfolio ist dein Werkzeug um die wichtigsten Fragen rund um deinen Investments zu beantworten. Perfolio bringt nicht nur Transparenz in dein Portfolio, sondern hilft dir auch Entscheidungen basiert auf Daten zu treffen und nicht auf Vermutungen.",
+    "SecondParagraphOne": "Nachhaltigkeit wird hauptsächlich durch Messwerte in den Bereichen Umwelt, Soziales und Unternehmensführung (engl.: ESG) gemessen und damit die sogenannte “Corporate Social Responsibility” (CSR) des entsprechenden Unternehmens gemessen. Auch wenn diese Anhaltspunkte schon hilfreich sind, gibt es trotzdem noch ein Problem:",
+    "SecondParagraphTwo": "Die Messwerte am Finanzmarkt unterscheiden sich sehr. Finanzinstitute haben unterschiedliche herangehensweisen, um Unternehmen in ihrer Nachhaltigkeit zu beurteilen. So können für dasselbe Unternehmen verschiedene ESG-ratings entstehen. ",
+    "SecondParagraphThree": "Diese Umstände stellen eine Herausforderungen für jeden Privatinvestoren da. Perfolio hilft dabei den Überblick zu bewahren und Bewertungen zur Nachhaltigkeit besser zu verstehen.",
+    "ThirdParagraphOne": "Es gibt viele verschiedene Messwerte. Der wichtigste Messwerte am Finanzmarkt ist zum Beispiel die Werthaftigkeit eines Produkts, zum Beispiel einer Aktie, Immobilien oder Cryptowährung. Jeder Investor wird von Beginn an mit dieser Vielfalt an Messwerten konfrontiert. Um zu evaluieren ob die eigene Anlagestrategie gewinn- oder verlustbringend ist, werden genau diese Messwerte benötigt. Sie sind unabdingbar um die Performance des eigenen Portfolios zu bestimmen und effektive Entscheidungen zu treffen.",
+    "ThirdParagraphTwo": "Perfolio bietet daher nicht nur die einfachsten Messwerte wie die Werthaftigkeit von Finanzprodukten, sondern versorgt Investoren mit einer Vielzahl an etablierten Indikatoren. So ermöglichen wir unseren Nutzern tiefgreifende Einblicke über relevante Faktoren um bestmögliche Investmententscheidungen zu treffen. Und das für alle Assetklasseb über dein gesamtes Portfolio.",
+    "CalltoActiontitle": "Bereit loszulegen?",
+    "CalltoActionsubtitle": "Beginn deine kostenlose Version noch heute",
+    "CalltoActionbutton": "Melde dich kostenlos an"
   }
 }
