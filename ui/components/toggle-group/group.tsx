@@ -1,6 +1,8 @@
+import { Size } from "@perfolio/ui/types/size"
 import cn from "classnames"
+
 export type ToggleGroupProps<T extends string> = {
-  size?: "sm" | "md" | "lg"
+  size?: Size
   options: { display: string; id: T }[]
   selected: T
   setSelected: (value: T) => void
@@ -30,9 +32,12 @@ export function ToggleGroup<T extends string>({
             {
               "bg-white text-gray-900": selected === option.id,
               "text-gray-500": selected !== option.id,
-              "px-1 sm:px-2 text-xs h-3 sm:h-6": size === "sm",
-              "px-1 h-4 sm:px-4 text-sm sm:h-8": size === "md",
-              "px-2 sm:px-4 h-6 sm:h-10": size === "lg",
+              "px-2 text-xs h-4 sm:h-6 ": size === "xs",
+              "px-2 text-sm h-4 sm:h-6 ": size === "sm",
+              "px-2 h-8 sm:px-4 text-base sm:h-10": size === "md",
+              "px-2 sm:px-4 text-lg h-10 sm:h-12": size === "lg",
+              "px-4 h-14 sm:px-6 text-xl sm:h-16": size === "xl",
+              "px-4 sm:px-6 h-16 text-2xl sm:h-20": size === "2xl",
             },
           )}
         >

@@ -85,11 +85,11 @@ const App: NextPage<PageProps> = () => {
     <AppLayout
       sidebar={
         <Sidebar>
-          <div className="w-full pb-4">
-            <div className="w-full mb-8 h-60">{<DiversificationChart />}</div>
-          </div>
-          <div className="w-full py-4">
-            <ActivityFeed />
+          <div className="w-full space-y-4">
+            <div className="w-full mb-8">{<DiversificationChart />}</div>
+            <div className="w-full py-4">
+              <ActivityFeed />
+            </div>
           </div>
         </Sidebar>
       }
