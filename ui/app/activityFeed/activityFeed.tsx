@@ -5,18 +5,24 @@ import { Time } from "@perfolio/pkg/util/time"
 import { Text } from "@perfolio/ui/components"
 import cn from "classnames"
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
-import React from "react"
+import React, { useState } from "react"
+
 interface TransactionActivityItemProps {
   transaction: Transaction
   isFirst?: boolean
+  onDateTimeChanged?: (value: React.SetStateAction<boolean>) => void
+  dateTime?: boolean
 }
 
 const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
   transaction,
   isFirst,
+  onDateTimeChanged,
+  dateTime,
 }): JSX.Element => {
   const { t } = useI18n()
   const asset = transaction.asset as ExchangeTradedAsset
+
   return (
     <div
       className={cn(" py-4", {
@@ -27,7 +33,15 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
         <Text size="sm" bold>
           {t("app.activFeedNewTrans")}
         </Text>
-        <Text size="xs">{Time.ago(transaction.executedAt)}</Text>
+        <button
+          onClick={onDateTimeChanged != undefined ? () => onDateTimeChanged(!dateTime) : undefined}
+        >
+          <Text size="xs">
+            {dateTime
+              ? Time.fromTimestamp(transaction.executedAt).toString()
+              : Time.ago(transaction.executedAt)}
+          </Text>
+        </button>
       </div>
       <Text size="sm">
         You {transaction.volume > 0 ? "bought" : "sold"} {transaction.volume}{" "}
@@ -41,6 +55,7 @@ const TransactionActivityItem: React.FC<TransactionActivityItemProps> = ({
 export const ActivityFeed: React.FC = (): JSX.Element => {
   const { portfolio } = usePortfolio()
   const { t } = useI18n()
+  const [dateTime, setDateTime] = useState(true)
   const last5Transactions = portfolio?.transactions
     ? [...portfolio?.transactions].sort((a, b) => b.executedAt - a.executedAt).slice(0, 5)
     : []
@@ -64,7 +79,12 @@ export const ActivityFeed: React.FC = (): JSX.Element => {
                 mass: 1,
               }}
             >
-              <TransactionActivityItem transaction={tx} isFirst={i === 0} />
+              <TransactionActivityItem
+                transaction={tx}
+                isFirst={i === 0}
+                dateTime={dateTime}
+                onDateTimeChanged={setDateTime}
+              />
             </motion.div>
           ))}
         </AnimatePresence>
